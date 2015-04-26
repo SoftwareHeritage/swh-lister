@@ -1,3 +1,6 @@
+# Copyright (C) 2015  Stefano Zacchiroli <zack@upsilon.cc>
+# License: GNU General Public License version 3, or any later version
+# See top-level LICENSE file for more information
 
 # see https://developer.github.com/v3/ for GitHub API documentation
 
