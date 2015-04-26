@@ -112,9 +112,9 @@ def fetch(conf, mk_session, min_id=None, max_id=None):
             cred[key] = conf[key]
 
     while min_id <= next_id <= max_id:
-        logging.info('listing repos starting at %d' % (next_id - 1))
-        # "- 1" because ?since=... is '<' strict, not '<='
-        repos_res = gh_api_request('/repositories?since=%d' % next_id, **cred)
+        logging.info('listing repos starting at %d' % next_id)
+        since = next_id - 1  # github API ?since=... is '>' strict, not '>='
+        repos_res = gh_api_request('/repositories?since=%d' % since, **cred)
 
         if 'cache_dir' in conf:
             save_http_response(repos_res, conf['cache_dir'])
@@ -131,7 +131,7 @@ def fetch(conf, mk_session, min_id=None, max_id=None):
         if 'next' in repos_res.links:
             next_url = repos_res.links['next']['url']
             m = REPO_API_URL_RE.match(next_url)  # parse next_id
-            next_id = int(m.group(1))
+            next_id = int(m.group(1)) + 1
         else:
             logging.info('stopping after id %d, no next link found' % next_id)
             break
