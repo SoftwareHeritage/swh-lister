@@ -1,0 +1,21 @@
+
+Dependencies
+============
+
+- python3
+- python3-sqlalchemy
+- python3-requests
+
+
+Configuration file
+==================
+
+cat ~/.config/ghlister.ini
+
+        [main]
+        # see http://docs.sqlalchemy.org/en/latest/core/engines.html#database-urls
+        db_url = postgres:///github
+        cache_dir = cache
+        log_dir = log
+        username = foobar
+        password = quux
