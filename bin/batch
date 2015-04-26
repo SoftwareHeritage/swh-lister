@@ -19,7 +19,9 @@ min_id=$[ ($BATCH_NO - 1) * 1000000 + 1 ]
 max_id=$[ $BATCH_NO * 1000000 ]
 
 # allow min_id override on the command line
-min_id=$[ $MIN_ID > $min_id ? $MIN_ID : $min_id ]
+if [ -n "$MIN_ID" ] ; then
+    min_id=$[ $MIN_ID > $min_id ? $MIN_ID : $min_id ]
+fi
 
 cmd="bin/ghlister list ${min_id}-${max_id}"
 echo Running $cmd ...
