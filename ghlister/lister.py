@@ -18,8 +18,9 @@ from ghlister.models import Repository
 
 
 GH_API_URL = 'https://api.github.com'
-MAX_RETRIES = 5
+MAX_RETRIES = 7
 MAX_SLEEP = 3600  # 1 hour
+CONN_SLEEP = 10
 
 REPO_API_URL_RE = re.compile(r'^.*/repositories\?since=(\d+)')
 
@@ -50,7 +51,15 @@ def gh_api_request(path, username=None, password=None, headers={}):
     retries_left = MAX_RETRIES
     while retries_left > 0:
         logging.debug('sending API request: %s' % path)
-        r = requests.get(GH_API_URL + path, **params)
+        try:
+            r = requests.get(GH_API_URL + path, **params)
+        except requests.exceptions.ConnectionError:
+            # network-level connection error, try again
+            logging.warn('connection error upon %s: sleep for %d seconds' %
+                         (path, CONN_SLEEP))
+            time.sleep(CONN_SLEEP)
+            retries_left -= 1
+            continue
 
         if r.ok:  # all went well, do not retry
             break
