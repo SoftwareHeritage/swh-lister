@@ -1,0 +1,106 @@
+#!/usr/bin/python3
+
+import argparse
+import configparser
+import logging
+import os
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
+
+from ghlister import lister, models
+
+
+DEFAULT_CONF = {
+    'cache_dir': './cache',
+    'log_dir': './log',
+}
+
+
+# where to store raw json answers, for further processing/re-injection
+CACHE_DIR = 'cache'
+
+
+def db_connect(db_url):
+    engine = create_engine(db_url)
+    Session = sessionmaker(bind=engine)
+
+    return (engine, Session)
+
+
+def int_interval(s):
+    """parse an "N-M" string as an interval.
+
+    Return an (N,M) int (or None) pair
+
+    """
+    def not_an_interval():
+        raise argparse.ArgumentTypeError('not an interval: ' + s)
+
+    def parse_int(s):
+        if s:
+            return int(s)
+        else:
+            return None
+
+    if '-' not in s:
+        not_an_interval()
+    parts = s.split('-')
+    if len(parts) > 2:
+        not_an_interval()
+    return tuple([parse_int(p) for p in parts])
+
+
+def parse_args():
+    cli = argparse.ArgumentParser(
+        description='list GitHub repositories and load them into a DB')
+    cli.add_argument('--db-url', '-d', metavar='SQLALCHEMY_URL',
+                     help='SQLAlchemy DB URL (override conffile); see '
+        + '<http://docs.sqlalchemy.org/en/latest/core/engines.html#database-urls>')  # NOQA
+    cli.add_argument('--verbose', '-v', action='store_true',
+                     help='be verbose')
+
+    subcli = cli.add_subparsers(dest='action')
+    subcli.add_parser('createdb', help='initialize DB')
+    subcli.add_parser('dropdb', help='destroy DB')
+
+    list_cli = subcli.add_parser('list', help='list repositories')
+    list_cli.add_argument('interval',
+                          type=int_interval,
+                          help='interval of repository IDs to list, '
+                          + 'in N-M format; either N or M can be omitted.')
+
+    args = cli.parse_args()
+
+    return args
+
+
+def read_conf(args):
+    config = configparser.ConfigParser(defaults=DEFAULT_CONF)
+    config.read(os.path.expanduser('~/.config/ghlister.ini'))
+
+    conf = config._sections['main']
+
+    # overrides
+    if args.db_url:
+        conf['db_url'] = args.db_url
+
+    return conf
+
+
+if __name__ == '__main__':
+    logging.basicConfig(level=logging.INFO)  # XXX
+
+    args = parse_args()
+    conf = read_conf(args)
+
+    db_engine, mk_session = db_connect(conf['db_url'])
+
+    if args.action == 'createdb':
+        models.SQLBase.metadata.create_all(db_engine)
+    elif args.action == 'dropdb':
+        models.SQLBase.metadata.drop_all(db_engine)
+    elif args.action == 'list':
+        lister.fetch(conf,
+                     mk_session,
+                     min_id=args.interval[0],
+                     max_id=args.interval[1])

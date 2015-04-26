@@ -1,0 +1,26 @@
+#!/bin/bash
+
+PROXY="127.0.0.1:8118"  # use Tor
+
+BATCH_NO="$1"
+shift
+if [ -z "$BATCH_NO" ] ; then
+    echo "Usage: batch MILLION_NO [MIN_ID]"
+    exit 2
+fi
+
+MIN_ID="$1"
+shift
+
+export https_proxy=$PROXY
+export PYTHONPATH=`pwd`
+
+min_id=$[ ($BATCH_NO - 1) * 1000000 + 1 ]
+max_id=$[ $BATCH_NO * 1000000 ]
+
+# allow min_id override on the command line
+min_id=$[ $MIN_ID > $min_id ? $MIN_ID : $min_id ]
+
+cmd="bin/ghlister list ${min_id}-${max_id}"
+echo Running $cmd ...
+$cmd
