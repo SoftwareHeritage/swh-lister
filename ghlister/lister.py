@@ -12,6 +12,7 @@ import requests
 import time
 
 from pprint import pformat
+from sqlalchemy import func
 
 from ghlister.db_utils import session_scope
 from ghlister.models import Repository
@@ -87,6 +88,14 @@ def lookup_repo(db_session, repo_id):
     return db_session.query(Repository) \
                      .filter(Repository.id == repo_id) \
                      .first()
+
+
+def last_repo_id(db_session):
+    t = db_session.query(func.max(Repository.id)) \
+                  .first()
+    if t is not None:
+        return t[0]
+    # else: return None
 
 
 INJECT_KEYS = ['id', 'name', 'full_name', 'html_url', 'description', 'fork']
