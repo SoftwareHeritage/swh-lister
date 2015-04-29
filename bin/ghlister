@@ -81,6 +81,9 @@ def parse_args():
 
     args = cli.parse_args()
 
+    if not args.action:
+        cli.error('no action given')
+
     return args
 
 
