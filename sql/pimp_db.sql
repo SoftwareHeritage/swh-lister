@@ -16,3 +16,10 @@ CREATE INDEX ix_trgm_repos_description ON
 
 CREATE INDEX ix_trgm_repos_full_name ON
     repos USING gin (full_name gin_trgm_ops);
+
+CREATE TABLE repos_history (
+    ts          timestamp DEFAULT current_timestamp,
+    repos       integer NOT NULL,
+    fork_repos  integer,
+    orig_repos  integer
+);
