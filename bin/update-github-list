@@ -1,0 +1,17 @@
+#!/bin/bash
+
+dbservice=github
+dbconn="service=${dbservice}"
+psql="psql --no-psqlrc --pset t --pset format=unaligned ${dbconn}"
+
+export PYTHONPATH=$HOME/src/github-list-repos/
+logfile=$HOME/.cache/ghlister/log/ghlister.$(date +%Y%m%d).log
+
+# catchup with recent changes
+$HOME/src/github-list-repos/bin/ghlister catchup &> $logfile
+
+# compute and store current totals
+all_repos=$(echo "select count(*) from repos" | $psql)
+fork_repos=$(echo "select count(*) from fork_repos" | $psql)
+orig_repos=$(echo "select count(*) from orig_repos" | $psql)
+echo "insert into repos_history(repos, fork_repos, orig_repos) values (${all_repos}, ${fork_repos}, ${orig_repos})" | $psql > /dev/null
