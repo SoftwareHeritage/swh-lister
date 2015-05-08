@@ -23,3 +23,14 @@ CREATE TABLE repos_history (
     fork_repos  integer,
     orig_repos  integer
 );
+
+CREATE VIEW repo_creations AS
+    SELECT today.ts :: date as date,
+	   today.repos - yesterday.repos as repos,
+	   today.fork_repos - yesterday.fork_repos as fork_repos,
+	   today.orig_repos - yesterday.orig_repos as orig_repos
+    FROM repos_history today
+    JOIN repos_history yesterday ON
+	 (yesterday.ts = (SELECT max(ts)
+			  FROM repos_history
+			  WHERE ts < today.ts));
