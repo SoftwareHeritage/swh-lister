@@ -97,3 +97,18 @@ language plpgsql;
 -- end
 -- $$
 -- language plpgsql;
+
+create or replace function repos_well_known()
+returns setof repos as $$
+begin
+    return query
+        select * from repos
+	where full_name like 'apache/%'
+	   or full_name like 'eclipse/%'
+	   or full_name like 'mozilla/%'
+	   or full_name = 'torvalds/linux'
+	   or full_name = 'gcc-mirror/gcc';
+    return;
+end
+$$
+language plpgsql;
