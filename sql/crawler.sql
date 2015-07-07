@@ -76,3 +76,15 @@ begin
 end
 $$
 language plpgsql;
+
+create table crawl_history (
+    id       bigserial primary key,
+    repo     integer references repos(id),
+    task_id  uuid,  -- celery task id
+    date     timestamptz not null,
+    duration interval,
+    status   boolean,
+    result   json,
+    stdout   text,
+    stderr   text
+);
