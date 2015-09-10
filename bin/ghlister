@@ -23,10 +23,6 @@ DEFAULT_CONF = {
 }
 
 
-# where to store raw json answers, for further processing/re-injection
-CACHE_DIR = 'cache'
-
-
 def db_connect(db_url):
     engine = create_engine(db_url)
     Session = sessionmaker(bind=engine)
