@@ -1,5 +1,6 @@
 #    -*- mode: org -*-
 
+* TODO SQL: rework repo_history/repo_creations to use last_seen
 * TODO cache dir: split json data from other HTTP info
   for easier further processing of additional API data
 
