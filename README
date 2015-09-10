@@ -27,7 +27,7 @@ Dependencies
 Configuration file
 ==================
 
-cat ~/.config/ghlister.ini
+cat ~/.config/swh/lister-github.ini
 
         [main]
         # see http://docs.sqlalchemy.org/en/latest/core/engines.html#database-urls
