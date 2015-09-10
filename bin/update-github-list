@@ -3,10 +3,12 @@
 # PYTHONPATH should be set via cron
 # export PYTHONPATH=$HOME/src/swh-lister-github/
 
-logfile=$HOME/.cache/ghlister/log/ghlister.$(date +%Y%m%d).log
+log_dir=$(grep log_dir ~/.config/swh/lister-github.ini | cut -f 3 -d' ')
+test -d "$log_dir" || mkdir -p "$log_dir"
+logfile="${log_dir}/$(date +%Y%m%d).log"
 
 # catchup with recent changes
-$HOME/src/github-list-repos/bin/ghlister catchup &> $logfile
+$HOME/src/github-list-repos/bin/ghlister catchup &> "$logfile"
 
 # XXX: computing the following stats via this script forced to have double
 # configuration for shell-vs-python. Also it's unneeded: we can compute the
