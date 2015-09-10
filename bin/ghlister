@@ -86,7 +86,7 @@ def parse_args():
 
 def read_conf(args):
     config = configparser.ConfigParser(defaults=DEFAULT_CONF)
-    config.read(os.path.expanduser('~/.config/ghlister.ini'))
+    config.read(os.path.expanduser('~/.config/swh/lister-github.ini'))
 
     conf = config._sections['main']
 
