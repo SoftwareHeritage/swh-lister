@@ -18,8 +18,9 @@ from ghlister.db_utils import session_scope
 
 
 DEFAULT_CONF = {
-    'cache_dir': './cache',
-    'log_dir': './log',
+    'cache_dir':  './cache',
+    'log_dir':    './log',
+    'cache_json': 'False',
 }
 
 
@@ -92,6 +93,12 @@ def read_conf(args):
     # overrides
     if args.db_url:
         conf['db_url'] = args.db_url
+
+    # typing
+    if 'cache_json' in conf and conf['cache_json'].lower() == 'true':
+        conf['cache_json'] = True
+    else:
+        conf['cache_json'] = False
 
     return conf
 

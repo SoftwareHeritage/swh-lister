@@ -137,7 +137,7 @@ def fetch(conf, mk_session, min_id=None, max_id=None):
         since = next_id - 1  # github API ?since=... is '>' strict, not '>='
         repos_res = gh_api_request('/repositories?since=%d' % since, **cred)
 
-        if 'cache_dir' in conf:
+        if 'cache_dir' in conf and conf['cache_json']:
             save_http_response(repos_res, conf['cache_dir'])
         if not repos_res.ok:
             raise FetchError(repos_res)
