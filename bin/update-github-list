@@ -1,10 +1,8 @@
 #!/bin/bash
 
-dbservice=github
-dbconn="service=${dbservice}"
-psql="psql --no-psqlrc --pset t --pset format=unaligned ${dbconn}"
+# PYTHONPATH should be set via cron
+# export PYTHONPATH=$HOME/src/swh-lister-github/
 
-export PYTHONPATH=$HOME/src/github-list-repos/
 logfile=$HOME/.cache/ghlister/log/ghlister.$(date +%Y%m%d).log
 
 # catchup with recent changes
