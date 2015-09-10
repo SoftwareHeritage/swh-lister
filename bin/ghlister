@@ -58,7 +58,7 @@ def parse_args():
         description='list GitHub repositories and load them into a DB')
     cli.add_argument('--db-url', '-d', metavar='SQLALCHEMY_URL',
                      help='SQLAlchemy DB URL (override conffile); see '
-        + '<http://docs.sqlalchemy.org/en/latest/core/engines.html#database-urls>')  # NOQA
+                     '<http://docs.sqlalchemy.org/en/latest/core/engines.html#database-urls>')  # NOQA
     cli.add_argument('--verbose', '-v', action='store_true',
                      help='be verbose')
 
@@ -70,7 +70,7 @@ def parse_args():
     list_cli.add_argument('interval',
                           type=int_interval,
                           help='interval of repository IDs to list, '
-                          + 'in N-M format; either N or M can be omitted.')
+                          'in N-M format; either N or M can be omitted.')
 
     list_cli = subcli.add_parser('catchup',
                                  help='catchup with new repos since last time')
