@@ -1,2 +1,4 @@
+GHLISTER_ROOT=$HOME/src/swh-lister-github
+
 # m h  dom mon dow   command
-  0 8  *   *   *     $HOME/bin/update-github-list
+  0 8  *   *   *     PATH=$GHLISTER_ROOT/bin:$PATH PYTHONPATH=$GHLISTER_ROOT update-github-list
