@@ -1,3 +1,4 @@
+SHELL=/bin/bash
 GHLISTER_ROOT=~/src/swh-lister-github
 
 # m h  dom mon dow   command
