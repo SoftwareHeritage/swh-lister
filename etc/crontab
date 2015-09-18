@@ -1,5 +1,5 @@
 SHELL=/bin/bash
-GHLISTER_ROOT=~/src/swh-lister-github
+GHLISTER_ROOT=/home/zack/src/swh-lister-github
 
 # m h  dom mon dow   command
   0 8  *   *   *     PYTHONPATH=$GHLISTER_ROOT $GHLISTER_ROOT/bin/ghlister catchup >> ~/.cache/swh/lister-github/$(date +\%Y\%m\%d).log 2>&1
