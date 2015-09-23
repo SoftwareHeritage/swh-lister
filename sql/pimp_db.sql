@@ -1,36 +1,36 @@
 
-CREATE VIEW orig_repos AS
-    SELECT id, name, full_name, html_url, description, last_seen
-    FROM repos
-    WHERE NOT fork;
+create view orig_repos as
+    select id, name, full_name, html_url, description, last_seen
+    from repos
+    where not fork;
 
-CREATE VIEW fork_repos AS
-    SELECT id, name, full_name, html_url, description, last_seen
-    FROM repos
-    WHERE fork
+create view fork_repos as
+    select id, name, full_name, html_url, description, last_seen
+    from repos
+    where fork
 
-CREATE EXTENSION pg_trgm;
+create extension pg_trgm;
 
-CREATE INDEX ix_trgm_repos_description ON
-    repos USING gin (description gin_trgm_ops);
+create index ix_trgm_repos_description on
+    repos using gin (description gin_trgm_ops);
 
-CREATE INDEX ix_trgm_repos_full_name ON
-    repos USING gin (full_name gin_trgm_ops);
+create index ix_trgm_repos_full_name on
+    repos using gin (full_name gin_trgm_ops);
 
-CREATE TABLE repos_history (
-    ts          timestamp DEFAULT current_timestamp,
-    repos       integer NOT NULL,
+create table repos_history (
+    ts          timestamp default current_timestamp,
+    repos       integer not null,
     fork_repos  integer,
     orig_repos  integer
 );
 
-CREATE VIEW repo_creations AS
-    SELECT today.ts :: date as date,
+create view repo_creations as
+    select today.ts :: date as date,
            today.repos - yesterday.repos as repos,
            today.fork_repos - yesterday.fork_repos as fork_repos,
            today.orig_repos - yesterday.orig_repos as orig_repos
-    FROM repos_history today
-    JOIN repos_history yesterday ON
-         (yesterday.ts = (SELECT max(ts)
-                          FROM repos_history
-                          WHERE ts < today.ts));
+    from repos_history today
+    join repos_history yesterday on
+         (yesterday.ts = (select max(ts)
+                          from repos_history
+                          where ts < today.ts));
