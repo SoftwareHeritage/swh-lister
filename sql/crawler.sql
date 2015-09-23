@@ -88,3 +88,19 @@ create table crawl_history (
     stdout   text,
     stderr   text
 );
+
+create index on crawl_history (repo);
+
+create view missing_orig_repos AS
+    select *
+    from orig_repos as repos
+    where not exists
+        (select 1 from crawl_history as history
+	 where history.repo = repos.id);
+
+create view missing_fork_repos AS
+    select *
+    from fork_repos as repos
+    where not exists
+        (select 1 from crawl_history as history
+	 where history.repo = repos.id);
