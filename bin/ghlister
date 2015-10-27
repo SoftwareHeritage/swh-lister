@@ -26,9 +26,9 @@ DEFAULT_CONF = {
 
 def db_connect(db_url):
     engine = create_engine(db_url)
-    Session = sessionmaker(bind=engine)
+    session = sessionmaker(bind=engine)
 
-    return (engine, Session)
+    return (engine, session)
 
 
 def int_interval(s):

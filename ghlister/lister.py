@@ -27,11 +27,14 @@ REPO_API_URL_RE = re.compile(r'^.*/repositories\?since=(\d+)')
 
 
 def save_http_response(r, cache_dir):
-    escape_url_path = lambda p: p.replace('/', '__')
+    def escape_url_path(p):
+        return p.replace('/', '__')
+
     fname = os.path.join(cache_dir,
                          escape_url_path(r.request.path_url) + '.gz')
     with gzip.open(fname, 'w') as f:
-        emit = lambda s: f.write(bytes(s, 'UTF-8'))
+        def emit(s):
+            f.write(bytes(s, 'UTF-8'))
         emit(pformat(r.request.path_url))
         emit('\n#\n')
         emit(pformat(r.status_code))
