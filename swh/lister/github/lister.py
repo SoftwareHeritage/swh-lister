@@ -14,8 +14,8 @@ import time
 from pprint import pformat
 from sqlalchemy import func
 
-from ghlister.db_utils import session_scope
-from ghlister.models import Repository
+from swh.lister.github.db_utils import session_scope
+from swh.lister.github.models import Repository
 
 
 GH_API_URL = 'https://api.github.com'

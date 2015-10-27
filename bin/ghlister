@@ -13,8 +13,8 @@ import sys
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
-from ghlister import lister, models
-from ghlister.db_utils import session_scope
+from swh.lister.github import lister, models
+from swh.lister.github.db_utils import session_scope
 
 
 DEFAULT_CONF = {
