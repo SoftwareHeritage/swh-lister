@@ -18,30 +18,20 @@ along with this program.
 Dependencies
 ============
 
-- python3
-- python3-psycopg2
-- python3-requests
-- python3-sqlalchemy
-
+See requirements.txt
 
 Deployment
 ==========
 
-1. git clone under $GHLISTER_ROOT (of your choosing)
-2. mkdir ~/.config/swh/ ~/.cache/swh/lister-github/
-3. edit $GHLISTER_ROOT/etc/crontab and customize GHLISTER_ROOT
-4. crontab $GHLISTER_ROOT/etc/crontab
-5. create configuration file ~/.config/swh/lister-github.ini
+The github lister can be run standalone by using `python3 -m swh.lister.github.lister`.
 
 Sample configuration file
 -------------------------
 
-cat ~/.config/swh/lister-github.ini
+cat ~/.config/swh/lister/github.ini
 
         [main]
-        db_url = postgres:///github
-          # see http://docs.sqlalchemy.org/en/latest/core/engines.html#database-urls
-        cache_dir = /home/zack/.cache/swh/lister-github
-        log_dir =   /home/zack/.cache/swh/lister-github
-        username = foobar  # github username
-        password = quux    # github password
+        storage_class = local_storage
+        storage_args = dbname=softwareheritage-dev, /srv/softwareheritage/objects
+        queue_file = ~/.cache/swh/lister-github/queue.pickle
+        credentials = olasd:olasd_github_token, zacchiro:zacchiro_github_token

@@ -1,2 +1,5 @@
+dateutil
 requests
-SQLAlchemy
+
+swh.core
+swh.storage

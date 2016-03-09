@@ -1,13 +1,5 @@
 #    -*- mode: org -*-
 
-* TODO SQL: rework repo_history/repo_creations to use last_seen
-* TODO cache dir: split json data from other HTTP info
-  for easier further processing of additional API data
-
-* TODO cache dir: split in subdirs
-  to avoid hitting too hard on the filesystem due to the large amount of files
-  (200k+)
-
 * TODO network-level traceback
   Traceback (most recent call last):
     File "/usr/lib/python3/dist-packages/urllib3/response.py", line 186, in read
