@@ -50,3 +50,6 @@ def run_from_queue():
 
     finally:
         req_queue.dump_to_file(queue, queue_file)
+
+if __name__ == '__main__':
+    run_from_queue()
