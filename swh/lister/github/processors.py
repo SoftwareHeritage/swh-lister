@@ -2,6 +2,7 @@
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
 
+from math import ceil
 
 from . import github_api, req_queue, storage_utils
 
@@ -17,6 +18,12 @@ def repositories(item, queue, session, credentials, storage):
     if not repos['code'] == 200:
         raise ProcessError(item)
 
+    if 'next' in repos['links']:
+        req_queue.push(queue, {
+            'type': 'repositories',
+            'url': repos['links']['next']['url'],
+        })
+
     storage_utils.update_repo_entities(storage, repos['data'])
 
     for repo in repos['data']:
@@ -26,12 +33,6 @@ def repositories(item, queue, session, credentials, storage):
                 'repo_name': repo['full_name'],
                 'repo_id': repo['id'],
             })
-
-    if 'next' in repos['links']:
-        req_queue.push(queue, {
-            'type': 'repositories',
-            'url': repos['links']['next']['url'],
-        })
 
 
 def repository(item, queue, session, credentials, storage):
@@ -52,12 +53,15 @@ def repository(item, queue, session, credentials, storage):
         print('modified')
         storage_utils.update_repo_entities(storage, [data['data']])
         if data['data']['forks']:
-            req_queue.push(queue, {
-                'type': 'forks',
-                'repo_id': item['repo_id'],
-                'repo_name': item['repo_name'],
-                'forks_page': 1,
-            })
+            npages = ceil(data['data']['forks']/30)
+            for page in range(1, npages + 1):
+                req_queue.push(queue, {
+                    'type': 'forks',
+                    'repo_id': item['repo_id'],
+                    'repo_name': item['repo_name'],
+                    'forks_page': page,
+                    'check_next': page == npages,
+                })
         return
     else:
         print('Could not get reply for repository %s' % item['repo_name'])
@@ -73,12 +77,13 @@ def forks(item, queue, session, credentials, storage):
 
     storage_utils.update_repo_entities(storage, forks['data'])
 
-    if 'next' in forks['links']:
+    if item['check_next'] and 'next' in forks['links']:
         req_queue.push(queue, {
             'type': 'forks',
             'repo_id': item['repo_id'],
             'repo_name': item['repo_name'],
             'forks_page': item['forks_page'] + 1,
+            'check_next': True,
         })
 
 
