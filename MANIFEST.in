@@ -1,0 +1,4 @@
+include Makefile
+include README
+include requirements.txt
+include version.txt

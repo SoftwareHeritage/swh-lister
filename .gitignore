@@ -2,4 +2,8 @@
 *.sw?
 *~
 .coverage
+.eggs/
 __pycache__
+dist
+*.egg-info
+version.txt
