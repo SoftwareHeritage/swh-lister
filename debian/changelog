@@ -1,8 +1,9 @@
-swh-lister (0.0.1-1~swh1~bpo9+1) stretch-swh; urgency=medium
+swh-lister (0.0.2-1~swh1) unstable-swh; urgency=medium
 
-  * Rebuild for stretch-backports.
+  * Release swh.lister.github 0.0.2
+  * Move constants to a constants module to avoid circular imports
 
- -- Nicolas Dandrimont <nicolas@dandrimont.eu>  Thu, 17 Mar 2016 19:01:19 +0100
+ -- Nicolas Dandrimont <nicolas@dandrimont.eu>  Thu, 17 Mar 2016 20:35:11 +0100
 
 swh-lister (0.0.1-1~swh1) unstable-swh; urgency=medium
 
