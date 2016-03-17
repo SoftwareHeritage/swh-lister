@@ -2,26 +2,39 @@
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
 
+import redis
 
-GITHUB_USER_UUID_CACHE = {}
-GITHUB_REPO_UUID_CACHE = {}
+cache = None
+
+
+def init_cache(url):
+    global cache
+    cache = redis.StrictRedis.from_url(url, decode_responses=True)
+
+
+def _user_key(id):
+    return 'github:user:%d:uuid' % id
+
+
+def _repo_key(id):
+    return 'github:repo:%d:uuid' % id
 
 
 def get_user(id):
     """Get the cache value for user `id`"""
-    return GITHUB_USER_UUID_CACHE.get(id)
+    return cache.get(_user_key(id))
 
 
 def set_user(id, uuid):
     """Set the cache value for user `id`"""
-    GITHUB_USER_UUID_CACHE[id] = uuid
+    cache.set(_user_key(id), uuid)
 
 
 def get_repo(id):
     """Get the cache value for repo `id`"""
-    return GITHUB_REPO_UUID_CACHE.get(id)
+    return cache.get(_repo_key(id))
 
 
 def set_repo(id, uuid):
     """Set the cache value for repo `id`"""
-    GITHUB_REPO_UUID_CACHE[id] = uuid
+    return cache.set(_repo_key(id), uuid)
