@@ -1,5 +1,6 @@
-swh-lister-github (0.0.0-1) unstable; urgency=low
+swh-lister (0.0.1-1~swh1) unstable-swh; urgency=medium
 
- * Initial release
+  * Initial release
+  * Release swh.lister.github v0.0.1
 
- -- Nicolas Dandrimont <olasd@debian.org>  Thu, 17 Mar 2016 17:52:33 +0100
+ -- Nicolas Dandrimont <nicolas@dandrimont.eu>  Thu, 17 Mar 2016 19:01:20 +0100
