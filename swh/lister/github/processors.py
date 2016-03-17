@@ -3,6 +3,7 @@
 # See top-level LICENSE file for more information
 
 from math import ceil
+import time
 
 from . import github_api, req_queue, storage_utils
 
@@ -118,9 +119,19 @@ PROCESSORS = {
 
 
 def process_one_item(queue, session, credentials, storage):
-    item = req_queue.pop(queue)
+
+    job = None
+
+    while True:
+        job = req_queue.pop(queue)
+        if job:
+            break
+        time.sleep(0.1)
+
     try:
-        PROCESSORS[item['type']](item, queue, session, credentials, storage)
+        PROCESSORS[job.klass_name](job.data, queue, session, credentials,
+                                   storage)
     except Exception:
-        req_queue.push_front(queue, item)
         raise
+    else:
+        job.complete()
