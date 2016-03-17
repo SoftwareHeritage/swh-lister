@@ -1,5 +1,6 @@
 dateutil
 requests
+redis
 
 swh.core
 swh.storage
