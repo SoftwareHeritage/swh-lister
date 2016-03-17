@@ -115,7 +115,7 @@ def user_last_modified(storage, id):
         }]))[0]
 
         if entity['uuid']:
-            cache.set_repo(id, entity['uuid'])
+            cache.set_user(id, entity['uuid'])
 
     updated_at = entity.get('lister_metadata', {}).get('updated_at')
 
