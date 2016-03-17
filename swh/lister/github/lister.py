@@ -9,10 +9,11 @@ import requests
 from swh.core.config import load_named_config, prepare_folders
 from swh.storage import get_storage
 
-from . import req_queue, processors
+from . import req_queue, processors, cache
 
 DEFAULT_CONFIG = {
     'queue_file': ('str', '~/.cache/swh/lister-github/queue.pickle'),
+    'cache_url': ('str', 'redis://localhost'),
     'storage_class': ('str', 'local_storage'),
     'storage_args': ('list[str]', ['dbname=softwareheritage-dev',
                                    '/srv/softwareheritage/objects']),
@@ -24,6 +25,8 @@ CONFIG_NAME = 'lister/github.ini'
 
 def run_from_queue():
     config = load_named_config(CONFIG_NAME, DEFAULT_CONFIG)
+
+    cache.init_cache(config['cache_url'])
 
     queue_file = os.path.expanduser(config['queue_file'])
     prepare_folders(os.path.dirname(queue_file))
