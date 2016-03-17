@@ -25,7 +25,18 @@ def repositories(item, queue, session, credentials, storage):
             'url': repos['links']['next']['url'],
         })
 
-    storage_utils.update_repo_entities(storage, repos['data'])
+    users = {}
+    for repo in repos['data']:
+        users[repo['owner']['id']] = repo['owner']
+
+    for id, user in users.items():
+        jid = 'user-%d' % id
+        if not queue.client.jobs[jid]:
+            req_queue.push(queue, {
+                'type': 'user',
+                'user_login': user['login'],
+                'user_id': id,
+            }, jid=jid)
 
     for repo in repos['data']:
         if not repo['fork']:
@@ -34,6 +45,8 @@ def repositories(item, queue, session, credentials, storage):
                 'repo_name': repo['full_name'],
                 'repo_id': repo['id'],
             })
+
+    storage_utils.update_repo_entities(storage, repos['data'])
 
 
 def repository(item, queue, session, credentials, storage):
@@ -76,7 +89,18 @@ def forks(item, queue, session, credentials, storage):
     forks = github_api.forks(item['repo_id'], item['forks_page'], session,
                              credentials)
 
-    storage_utils.update_repo_entities(storage, forks['data'])
+    users = {}
+    for repo in forks['data']:
+        users[repo['owner']['id']] = repo['owner']
+
+    for id, user in users.items():
+        jid = 'user-%d' % id
+        if not queue.client.jobs[jid]:
+            req_queue.push(queue, {
+                'type': 'user',
+                'user_login': user['login'],
+                'user_id': id,
+            }, jid=jid)
 
     if item['check_next'] and 'next' in forks['links']:
         req_queue.push(queue, {
@@ -86,6 +110,8 @@ def forks(item, queue, session, credentials, storage):
             'forks_page': item['forks_page'] + 1,
             'check_next': True,
         })
+
+    storage_utils.update_repo_entities(storage, forks['data'])
 
 
 def user(item, queue, session, credentials, storage):
