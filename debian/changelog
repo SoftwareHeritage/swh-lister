@@ -1,0 +1,5 @@
+swh-lister-github (0.0.0-1) unstable; urgency=low
+
+ * Initial release
+
+ -- Nicolas Dandrimont <olasd@debian.org>  Thu, 17 Mar 2016 17:52:33 +0100
