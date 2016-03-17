@@ -1,0 +1,6 @@
+python-dateutil
+qless-py
+redis
+requests
+swh.core
+swh.storage

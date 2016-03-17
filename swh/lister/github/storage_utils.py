@@ -4,12 +4,7 @@
 
 import uuid
 
-from . import cache, converters
-
-
-GITHUB_ORGS_UUID = '9f7b34d9-aa98-44d4-8907-b332c1036bc3'
-GITHUB_USERS_UUID = 'ad6df473-c1d2-4f40-bc58-2b091d4a750e'
-GITHUB_LISTER_UUID = '34bd6b1b-463f-43e5-a697-785107f598e4'
+from . import cache, constants, converters
 
 
 def update_user_entities(storage, users):
@@ -19,7 +14,7 @@ def update_user_entities(storage, users):
     users = list(sorted(users, key=lambda u: u['id']))
 
     query = [{
-        'lister': GITHUB_LISTER_UUID,
+        'lister': constants.GITHUB_LISTER_UUID,
         'type': 'user',
         'id': user['id'],
     } for user in users]
@@ -59,7 +54,7 @@ def update_repo_entities(storage, repos):
         update_user_entities(storage, users.values())
 
     query = [{
-        'lister': GITHUB_LISTER_UUID,
+        'lister': constants.GITHUB_LISTER_UUID,
         'type': 'repository',
         'id': repo['id'],
     } for repo in repos]
@@ -89,7 +84,7 @@ def repo_last_modified(storage, id):
         entity = storage.entity_get_one(entity_id)
     else:
         entity = list(storage.entity_get_from_lister_metadata([{
-            'lister': GITHUB_LISTER_UUID,
+            'lister': constants.GITHUB_LISTER_UUID,
             'type': 'repository',
             'id': id,
         }]))[0]
@@ -109,7 +104,7 @@ def user_last_modified(storage, id):
         entity = storage.entity_get_one(entity_id)
     else:
         entity = list(storage.entity_get_from_lister_metadata([{
-            'lister': GITHUB_LISTER_UUID,
+            'lister': constants.GITHUB_LISTER_UUID,
             'type': 'user',
             'id': id,
         }]))[0]
