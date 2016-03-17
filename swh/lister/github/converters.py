@@ -8,7 +8,7 @@ from email.utils import format_datetime
 
 from dateutil.parser import parse as parse_datetime
 
-from . import cache, storage_utils
+from . import cache, constants
 
 
 def utcnow():
@@ -42,7 +42,7 @@ def repository_to_entity(orig_entity, repo):
     entity['active'] = True
     entity['generated'] = True
 
-    entity['lister_metadata']['lister'] = storage_utils.GITHUB_LISTER_UUID
+    entity['lister_metadata']['lister'] = constants.GITHUB_LISTER_UUID
     entity['lister_metadata']['type'] = 'repository'
     entity['lister_metadata']['id'] = repo['id']
     entity['lister_metadata']['fork'] = repo['fork']
@@ -61,10 +61,11 @@ def user_to_entity(orig_entity, user):
     entity = copy.deepcopy(orig_entity)
 
     if user['type'] == 'User':
-        parent = storage_utils.GITHUB_USERS_UUID
+        parent = constants.GITHUB_USERS_UUID
+
         type = 'person'
     elif user['type'] == 'Organization':
-        parent = storage_utils.GITHUB_ORGS_UUID
+        parent = constants.GITHUB_ORGS_UUID
         type = 'group_of_persons'
     else:
         raise ValueError("Unknown GitHub user type %s" % user['type'])
@@ -81,7 +82,7 @@ def user_to_entity(orig_entity, user):
     entity['active'] = True
     entity['generated'] = True
 
-    entity['lister_metadata']['lister'] = storage_utils.GITHUB_LISTER_UUID
+    entity['lister_metadata']['lister'] = constants.GITHUB_LISTER_UUID
     entity['lister_metadata']['type'] = 'user'
     entity['lister_metadata']['id'] = user['id']
     entity['lister_metadata']['login'] = user['login']
