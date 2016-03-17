@@ -1,5 +1,5 @@
-dateutil
-qless
+python-dateutil
+qless-py
 requests
 redis
 

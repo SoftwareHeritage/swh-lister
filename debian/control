@@ -5,6 +5,7 @@ Priority: optional
 Build-Depends: debhelper (>= 9),
                dh-python,
                python3-all,
+               python3-dateutil,
                python3-nose,
                python3-qless,
                python3-redis,
