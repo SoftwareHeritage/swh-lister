@@ -90,7 +90,7 @@ def forks(item, queue, session, credentials, storage):
 def user(item, queue, session, credentials, storage):
     print('Processing user %s (%s)' % (item['user_login'], item['user_id']))
 
-    last_modified = storage_utils.user_last_modified(storage, item['repo_id'])
+    last_modified = storage_utils.user_last_modified(storage, item['user_id'])
 
     data = github_api.user(item['user_id'], session, credentials,
                            last_modified)
