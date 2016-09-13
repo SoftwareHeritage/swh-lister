@@ -107,12 +107,16 @@ INJECT_KEYS = ['id', 'name', 'full_name', 'html_url', 'description', 'fork']
 
 def inject_repo(db_session, repo):
     logging.debug('injecting repo %d' % repo['id'])
-    if lookup_repo(db_session, repo['id']):
-        logging.info('not injecting already present repo %d' % repo['id'])
-        return
-    kwargs = {k: repo[k] for k in INJECT_KEYS if k in repo}
-    sql_repo = Repository(**kwargs)
-    db_session.add(sql_repo)
+    sql_repo = lookup_repo(db_session, repo['id'])
+    if not sql_repo:
+        kwargs = {k: repo[k] for k in INJECT_KEYS if k in repo}
+        sql_repo = Repository(**kwargs)
+        db_session.add(sql_repo)
+    else:
+        for k in INJECT_KEYS:
+            if k in repo:
+                setattr(sql_repo, k, repo[k])
+        db_session.commit()
 
 
 class FetchError(RuntimeError):
