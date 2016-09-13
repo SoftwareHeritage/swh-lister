@@ -16,7 +16,6 @@ import time
 from pprint import pformat
 from sqlalchemy import func
 
-from swh.lister.github.db_utils import session_scope
 from swh.lister.github.models import Repository
 
 
@@ -146,7 +145,8 @@ def fetch(conf, mk_session, min_id=None, max_id=None):
     next_id = min_id
 
     session = requests.Session()
-
+    db_session = mk_session()
+    loop_count = 0
     while min_id <= next_id <= max_id:
         logging.info('listing repos starting at %d' % next_id)
         since = next_id - 1  # github API ?since=... is '>' strict, not '>='
@@ -161,11 +161,10 @@ def fetch(conf, mk_session, min_id=None, max_id=None):
             raise FetchError(repos_res)
 
         repos = repos_res.json()
-        with session_scope(mk_session) as db_session:
-            for repo in repos:
-                if repo['id'] > max_id:  # do not overstep max_id
-                    break
-                inject_repo(db_session, repo)
+        for repo in repos:
+            if repo['id'] > max_id:  # do not overstep max_id
+                break
+            inject_repo(db_session, repo)
 
         if 'next' in repos_res.links:
             next_url = repos_res.links['next']['url']
@@ -174,3 +173,10 @@ def fetch(conf, mk_session, min_id=None, max_id=None):
         else:
             logging.info('stopping after id %d, no next link found' % next_id)
             break
+        loop_count += 1
+        if loop_count == 20:
+            logging.info('flushing updates')
+            loop_count = 0
+            db_session.commit()
+            db_session = mk_session()
+    db_session.commit()
