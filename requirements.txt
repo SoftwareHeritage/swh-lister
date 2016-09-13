@@ -1,7 +1,2 @@
-python-dateutil
-qless-py
 requests
-redis
-
-swh.core
-swh.storage
+SQLAlchemy
