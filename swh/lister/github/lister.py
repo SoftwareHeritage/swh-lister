@@ -127,7 +127,6 @@ def inject_repo(db_session, repo):
             if k in repo:
                 setattr(sql_repo, k, repo[k])
         sql_repo.last_seen = datetime.datetime.now()
-        db_session.commit()
 
 
 class FetchError(RuntimeError):
@@ -162,10 +161,10 @@ def fetch(conf, mk_session, min_id=None, max_id=None):
             raise FetchError(repos_res)
 
         repos = repos_res.json()
-        for repo in repos:
-            if repo['id'] > max_id:  # do not overstep max_id
-                break
-            with session_scope(mk_session) as db_session:
+        with session_scope(mk_session) as db_session:
+            for repo in repos:
+                if repo['id'] > max_id:  # do not overstep max_id
+                    break
                 inject_repo(db_session, repo)
 
         if 'next' in repos_res.links:
