@@ -4,6 +4,7 @@
 
 # see https://developer.github.com/v3/ for GitHub API documentation
 
+import datetime
 import gzip
 import logging
 import os
@@ -116,6 +117,7 @@ def inject_repo(db_session, repo):
         for k in INJECT_KEYS:
             if k in repo:
                 setattr(sql_repo, k, repo[k])
+        sql_repo.last_seen = datetime.datetime.now()
         db_session.commit()
 
 
