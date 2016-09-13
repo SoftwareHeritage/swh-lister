@@ -100,6 +100,21 @@ def read_conf(args):
     else:
         conf['cache_json'] = False
 
+    if 'credentials' in conf:
+        credentials = conf['credentials'].split()
+        conf['credentials'] = []
+        for user_pair in credentials:
+            username, password = user_pair.split(':')
+            conf['credentials'].append({
+                'username': username,
+                'password': password,
+            })
+    else:
+        conf['credentials'] = [{
+            'username': conf['username'],
+            'password': conf['password'],
+        }]
+
     return conf
 
 

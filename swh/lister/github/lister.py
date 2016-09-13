@@ -7,6 +7,7 @@
 import gzip
 import logging
 import os
+import random
 import re
 import requests
 import time
@@ -130,10 +131,7 @@ def fetch(conf, mk_session, min_id=None, max_id=None):
         max_id = float('inf')
     next_id = min_id
 
-    cred = {}
-    for key in ['username', 'password']:
-        if key in conf:
-            cred[key] = conf[key]
+    cred = random.choice(conf['credentials'])
 
     while min_id <= next_id <= max_id:
         logging.info('listing repos starting at %d' % next_id)
