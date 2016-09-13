@@ -137,11 +137,11 @@ def fetch(conf, mk_session, min_id=None, max_id=None):
         max_id = float('inf')
     next_id = min_id
 
-    cred = random.choice(conf['credentials'])
-
     while min_id <= next_id <= max_id:
         logging.info('listing repos starting at %d' % next_id)
         since = next_id - 1  # github API ?since=... is '>' strict, not '>='
+
+        cred = random.choice(conf['credentials'])
         repos_res = gh_api_request('/repositories?since=%d' % since, **cred)
 
         if 'cache_dir' in conf and conf['cache_json']:
