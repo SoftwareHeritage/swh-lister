@@ -46,19 +46,28 @@ def save_http_response(r, cache_dir):
         emit(pformat(r.json()))
 
 
-def gh_api_request(path, username=None, password=None, headers={}):
+def gh_api_request(path, username=None, password=None, session=None,
+                   headers=None):
     params = {}
+
+    if headers is None:
+        headers = {}
+
     if 'Accept' not in headers:  # request version 3 of the API
         headers['Accept'] = 'application/vnd.github.v3+json'
+
     params['headers'] = headers
     if username is not None and password is not None:
         params['auth'] = (username, password)
+
+    if session is None:
+        session = requests
 
     retries_left = MAX_RETRIES
     while retries_left > 0:
         logging.debug('sending API request: %s' % path)
         try:
-            r = requests.get(GH_API_URL + path, **params)
+            r = session.get(GH_API_URL + path, **params)
         except requests.exceptions.ConnectionError:
             # network-level connection error, try again
             logging.warn('connection error upon %s: sleep for %d seconds' %
@@ -137,12 +146,15 @@ def fetch(conf, mk_session, min_id=None, max_id=None):
         max_id = float('inf')
     next_id = min_id
 
+    session = requests.Session()
+
     while min_id <= next_id <= max_id:
         logging.info('listing repos starting at %d' % next_id)
         since = next_id - 1  # github API ?since=... is '>' strict, not '>='
 
         cred = random.choice(conf['credentials'])
-        repos_res = gh_api_request('/repositories?since=%d' % since, **cred)
+        repos_res = gh_api_request('/repositories?since=%d' % since,
+                                   session=session, **cred)
 
         if 'cache_dir' in conf and conf['cache_json']:
             save_http_response(repos_res, conf['cache_dir'])
