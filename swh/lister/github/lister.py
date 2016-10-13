@@ -60,7 +60,7 @@ def gh_api_request(path, username=None, password=None, session=None,
         params['auth'] = (username, password)
 
     if session is None:
-        session = requests
+        session = requests.Session()
 
     retries_left = MAX_RETRIES
     while retries_left > 0:
