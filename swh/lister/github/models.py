@@ -28,8 +28,11 @@ class Repository(SQLBase):
 
     last_seen = Column(DateTime, nullable=False)
 
+    task_id = Column(Integer)
+    origin_id = Column(Integer)
+
     def __init__(self, id, name=None, full_name=None, html_url=None,
-                 description=None, fork=None):
+                 description=None, fork=None, task_id=None, origin_id=None):
         self.id = id
         self.last_seen = datetime.now()
         if name is not None:
@@ -42,3 +45,7 @@ class Repository(SQLBase):
             self.description = description
         if fork is not None:
             self.fork = fork
+        if task_id is not None:
+            self.task_id = task_id
+        if origin_id is not None:
+            self.origin_id = origin_id
