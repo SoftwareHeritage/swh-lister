@@ -38,8 +38,7 @@ class SWHLister(config.SWHConfig):
         Returns:
             a list of origin ids
         """
-
-        raise NotImplementedError
+        return self.storage.origin_add(origins)
 
     def create_tasks(self, tasks):
         """Create the tasks specified, and return their ids.
