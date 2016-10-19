@@ -1,2 +1,6 @@
 requests
 SQLAlchemy
+
+swh.core
+swh.storage
+swh.scheduler (>= 0.0.10)
