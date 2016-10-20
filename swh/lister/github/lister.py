@@ -25,6 +25,7 @@ from swh.lister.github.models import Repository
 
 
 GH_API_URL = 'https://api.github.com'
+GH_REPO_URL_TEMPLATE = 'https://github.com/%s'
 MAX_RETRIES = 7
 MAX_SLEEP = 3600  # 1 hour
 CONN_SLEEP = 10
@@ -176,6 +177,26 @@ class GitHubLister(SWHLister):
 
         return sql_repo
 
+    @staticmethod
+    def repo_to_origin(full_name):
+        return {
+            'type': 'git',
+            'url': GH_REPO_URL_TEMPLATE % full_name,
+        }
+
+    @staticmethod
+    def repo_to_task(full_name):
+        return {
+            'type': 'origin-update-git',
+            'arguments': {
+                'args': [
+                    GH_REPO_URL_TEMPLATE % full_name,
+                ],
+                'kwargs': {},
+            },
+            'next_run': datetime.datetime.now(),
+        }
+
     def fetch(self, min_id=None, max_id=None):
         if min_id is None:
             min_id = 1
@@ -213,11 +234,47 @@ class GitHubLister(SWHLister):
 
             repos = repos_res.json()
             mapped_repos = {}
+            tasks = {}
+            origins = {}
             for repo in repos:
                 if repo['id'] > max_id:  # do not overstep max_id
                     break
                 full_name = repo['full_name']
                 mapped_repos[full_name] = self.inject_repo(repo, db_session)
+
+            # Create missing origins
+            missing_origins = [
+                full_name for full_name in sorted(mapped_repos)
+                if full_name not in origins
+            ]
+
+            if missing_origins:
+                new_origins = [
+                    self.repo_to_origin(full_name)
+                    for full_name in missing_origins
+                ]
+                new_origin_ids = self.create_origins(new_origins)
+                origins.update(zip(missing_origins, new_origin_ids))
+
+            for full_name, origin_id in origins.items():
+                mapped_repos[full_name].origin_id = origin_id
+
+            # Create missing tasks
+            missing_tasks = [
+                full_name for full_name in sorted(mapped_repos)
+                if full_name not in tasks
+            ]
+
+            if missing_tasks:
+                new_tasks = [
+                    self.repo_to_task(full_name)
+                    for full_name in missing_tasks
+                ]
+                new_task_ids = self.create_tasks(new_tasks)
+                tasks.update(zip(missing_tasks, new_task_ids))
+
+            for full_name, task_id in tasks.items():
+                mapped_repos[full_name].task_id = task_id
 
             if next_next_id is None:
                 logging.info('stopping after id %d, no next link found' %
