@@ -1,4 +1,5 @@
-# Copyright (C) 2015  Stefano Zacchiroli <zack@upsilon.cc>
+# Copyright (C) 2015 Stefano Zacchiroli <zack@upsilon.cc>
+# Copyright (C) 2016 The Software Heritage developers
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
 
