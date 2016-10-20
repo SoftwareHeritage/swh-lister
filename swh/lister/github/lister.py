@@ -205,6 +205,12 @@ class GitHubLister(SWHLister):
             if not repos_res.ok:
                 raise FetchError(repos_res)
 
+            next_next_id = None
+            if 'next' in repos_res.links:
+                next_url = repos_res.links['next']['url']
+                m = REPO_API_URL_RE.match(next_url)  # parse next_id
+                next_next_id = int(m.group(1)) + 1
+
             repos = repos_res.json()
             mapped_repos = {}
             for repo in repos:
@@ -213,14 +219,12 @@ class GitHubLister(SWHLister):
                 full_name = repo['full_name']
                 mapped_repos[full_name] = self.inject_repo(repo, db_session)
 
-            if 'next' in repos_res.links:
-                next_url = repos_res.links['next']['url']
-                m = REPO_API_URL_RE.match(next_url)  # parse next_id
-                next_id = int(m.group(1)) + 1
-            else:
+            if next_next_id is None:
                 logging.info('stopping after id %d, no next link found' %
                              next_id)
                 break
+            else:
+                next_id = next_next_id
 
             loop_count += 1
             if loop_count == 20:
