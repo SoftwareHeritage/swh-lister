@@ -1,0 +1,101 @@
+#!/usr/bin/python3
+
+# Copyright (C) 2015  Stefano Zacchiroli <zack@upsilon.cc>
+# License: GNU General Public License version 3, or any later version
+# See top-level LICENSE file for more information
+
+import argparse
+import logging
+import sys
+
+from swh.lister.github import models
+from swh.lister.github.lister import GitHubLister
+
+DEFAULT_CONF = {
+    'cache_dir':  './cache',
+    'log_dir':    './log',
+    'cache_json': 'False',
+}
+
+
+def int_interval(s):
+    """parse an "N-M" string as an interval.
+
+    Return an (N,M) int (or None) pair
+
+    """
+    def not_an_interval():
+        raise argparse.ArgumentTypeError('not an interval: ' + s)
+
+    def parse_int(s):
+        if s:
+            return int(s)
+        else:
+            return None
+
+    if '-' not in s:
+        not_an_interval()
+    parts = s.split('-')
+    if len(parts) > 2:
+        not_an_interval()
+    return tuple([parse_int(p) for p in parts])
+
+
+def parse_args():
+    cli = argparse.ArgumentParser(
+        description='list GitHub repositories and load them into a DB')
+    cli.add_argument('--db-url', '-d', metavar='SQLALCHEMY_URL',
+                     help='SQLAlchemy DB URL (override conffile); see '
+                     '<http://docs.sqlalchemy.org/en/latest/core/engines.html#database-urls>')  # NOQA
+    cli.add_argument('--verbose', '-v', action='store_true',
+                     help='be verbose')
+
+    subcli = cli.add_subparsers(dest='action')
+    subcli.add_parser('createdb', help='initialize DB')
+    subcli.add_parser('dropdb', help='destroy DB')
+
+    list_cli = subcli.add_parser('list', help='list repositories')
+    list_cli.add_argument('interval',
+                          type=int_interval,
+                          help='interval of repository IDs to list, '
+                          'in N-M format; either N or M can be omitted.')
+
+    list_cli = subcli.add_parser('catchup',
+                                 help='catchup with new repos since last time')
+
+    args = cli.parse_args()
+
+    if not args.action:
+        cli.error('no action given')
+
+    return args
+
+
+if __name__ == '__main__':
+    logging.basicConfig(level=logging.INFO)  # XXX
+
+    args = parse_args()
+
+    override_conf = {}
+    if args.db_url:
+        override_conf['lister_db_url'] = args.db_url
+
+    lister = GitHubLister(override_conf)
+
+    if args.action == 'createdb':
+        models.SQLBase.metadata.create_all(lister.db_engine)
+    elif args.action == 'dropdb':
+        models.SQLBase.metadata.drop_all(lister.db_engine)
+    elif args.action == 'list':
+        lister.fetch(min_id=args.interval[0],
+                     max_id=args.interval[1])
+    elif args.action == 'catchup':
+        last_known_id = lister.last_repo_id()
+        if last_known_id is not None:
+            logging.info('catching up from last known repo id: %d' %
+                         last_known_id)
+            lister.fetch(min_id=last_known_id + 1,
+                         max_id=None)
+        else:
+            logging.error('Cannot catchup: no last known id found. Abort.')
+            sys.exit(2)

@@ -1,8 +1,10 @@
-swh-lister (0.0.2-1~swh1~bpo9+1) stretch-swh; urgency=medium
+swh-lister (0.0.3-1~swh1) unstable-swh; urgency=medium
 
-  * Rebuild for stretch-backports.
+  * Release swh.lister.github v0.0.3
+  * Generate swh.scheduler tasks and swh.storage origins on the fly
+  * Use celery tasks to schedule own work
 
- -- Nicolas Dandrimont <nicolas@dandrimont.eu>  Thu, 17 Mar 2016 20:35:11 +0100
+ -- Nicolas Dandrimont <nicolas@dandrimont.eu>  Thu, 20 Oct 2016 17:30:39 +0200
 
 swh-lister (0.0.2-1~swh1) unstable-swh; urgency=medium
 
