@@ -168,7 +168,9 @@ class GitHubLister(SWHLister):
             for k in self.INJECT_KEYS:
                 if k in repo:
                     setattr(sql_repo, k, repo[k])
-                    sql_repo.last_seen = datetime.datetime.now()
+            sql_repo.last_seen = datetime.datetime.now()
+
+        return sql_repo
 
     def fetch(self, min_id=None, max_id=None):
         if min_id is None:
