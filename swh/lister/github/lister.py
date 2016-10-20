@@ -145,6 +145,16 @@ class GitHubLister(SWHLister):
                          .filter(Repository.id == repo_id) \
                          .first()
 
+    def lookup_full_names(self, full_names, db_session=None):
+        if not db_session:
+            with session_scope(self.mk_session) as db_session:
+                return self.lookup_full_names(full_names,
+                                              db_session=db_session)
+
+        return db_session.query(Repository) \
+                         .filter(Repository.full_name.in_(full_names)) \
+                         .all()
+
     def last_repo_id(self, db_session=None):
         if not db_session:
             with session_scope(self.mk_session) as db_session:
@@ -241,6 +251,18 @@ class GitHubLister(SWHLister):
                     break
                 full_name = repo['full_name']
                 mapped_repos[full_name] = self.inject_repo(repo, db_session)
+
+            # Retrieve and reset task and origin ids from existing repos
+            old_repos = self.lookup_full_names(list(mapped_repos.keys()),
+                                               db_session=db_session)
+            for old_repo in old_repos:
+                full_name = old_repo.full_name
+                if old_repo.task_id:
+                    tasks[full_name] = old_repo.task_id
+                    old_repo.task_id = None
+                if old_repo.origin_id:
+                    origins[full_name] = old_repo.origin_id
+                    old_repo.origin_id = None
 
             # Create missing origins
             missing_origins = [
