@@ -5,30 +5,17 @@
 # See top-level LICENSE file for more information
 
 import argparse
-import configparser
 import logging
-import os
 import sys
 
-from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker
-
-from swh.lister.github import lister, models
-from swh.lister.github.db_utils import session_scope
-
+from swh.lister.github import models
+from swh.lister.github.lister import GitHubLister
 
 DEFAULT_CONF = {
     'cache_dir':  './cache',
     'log_dir':    './log',
     'cache_json': 'False',
 }
-
-
-def db_connect(db_url):
-    engine = create_engine(db_url)
-    session = sessionmaker(bind=engine)
-
-    return (engine, session)
 
 
 def int_interval(s):
@@ -84,67 +71,31 @@ def parse_args():
     return args
 
 
-def read_conf(args):
-    config = configparser.ConfigParser(defaults=DEFAULT_CONF)
-    config.read(os.path.expanduser('~/.config/swh/lister-github.ini'))
-
-    conf = config._sections['main']
-
-    # overrides
-    if args.db_url:
-        conf['db_url'] = args.db_url
-
-    # typing
-    if 'cache_json' in conf and conf['cache_json'].lower() == 'true':
-        conf['cache_json'] = True
-    else:
-        conf['cache_json'] = False
-
-    if 'credentials' in conf:
-        credentials = conf['credentials'].split()
-        conf['credentials'] = []
-        for user_pair in credentials:
-            username, password = user_pair.split(':')
-            conf['credentials'].append({
-                'username': username,
-                'password': password,
-            })
-    else:
-        conf['credentials'] = [{
-            'username': conf['username'],
-            'password': conf['password'],
-        }]
-
-    return conf
-
-
 if __name__ == '__main__':
     logging.basicConfig(level=logging.INFO)  # XXX
 
     args = parse_args()
-    conf = read_conf(args)
 
-    db_engine, mk_session = db_connect(conf['db_url'])
+    override_conf = {}
+    if args.db_url:
+        override_conf['lister_db_url'] = args.db_url
+
+    lister = GitHubLister(override_conf)
 
     if args.action == 'createdb':
-        models.SQLBase.metadata.create_all(db_engine)
+        models.SQLBase.metadata.create_all(lister.db_engine)
     elif args.action == 'dropdb':
-        models.SQLBase.metadata.drop_all(db_engine)
+        models.SQLBase.metadata.drop_all(lister.db_engine)
     elif args.action == 'list':
-        lister.fetch(conf,
-                     mk_session,
-                     min_id=args.interval[0],
+        lister.fetch(min_id=args.interval[0],
                      max_id=args.interval[1])
     elif args.action == 'catchup':
-        with session_scope(mk_session) as db_session:
-            last_known_id = lister.last_repo_id(db_session)
-            if last_known_id is not None:
-                logging.info('catching up from last known repo id: %d' %
-                             last_known_id)
-                lister.fetch(conf,
-                             mk_session,
-                             min_id=last_known_id + 1,
-                             max_id=None)
-            else:
-                logging.error('Cannot catchup: no last known id found. Abort.')
-                sys.exit(2)
+        last_known_id = lister.last_repo_id()
+        if last_known_id is not None:
+            logging.info('catching up from last known repo id: %d' %
+                         last_known_id)
+            lister.fetch(min_id=last_known_id + 1,
+                         max_id=None)
+        else:
+            logging.error('Cannot catchup: no last known id found. Abort.')
+            sys.exit(2)

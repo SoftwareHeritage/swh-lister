@@ -14,8 +14,13 @@ import requests
 import time
 
 from pprint import pformat
-from sqlalchemy import func
 
+from sqlalchemy import create_engine, func
+from sqlalchemy.orm import sessionmaker
+
+from swh.core import config
+from swh.lister.github.base import SWHLister
+from swh.lister.github.db_utils import session_scope
 from swh.lister.github.models import Repository
 
 
@@ -25,6 +30,15 @@ MAX_SLEEP = 3600  # 1 hour
 CONN_SLEEP = 10
 
 REPO_API_URL_RE = re.compile(r'^.*/repositories\?since=(\d+)')
+
+
+class FetchError(RuntimeError):
+
+    def __init__(self, response):
+        self.response = response
+
+    def __str__(self):
+        return repr(self.response)
 
 
 def save_http_response(r, cache_dir):
@@ -97,86 +111,114 @@ def gh_api_request(path, username=None, password=None, session=None,
     return r
 
 
-def lookup_repo(db_session, repo_id):
-    return db_session.query(Repository) \
-                     .filter(Repository.id == repo_id) \
-                     .first()
+class GitHubLister(SWHLister):
+    CONFIG_BASE_FILENAME = 'lister-github'
+    ADDITIONAL_CONFIG = {
+        'lister_db_url': ('str', 'postgresql:///lister-github'),
+        'credentials': ('list[dict]', []),
+        'cache_json': ('bool', False),
+        'cache_dir': ('str', '~/.cache/swh/lister/github'),
+    }
 
+    def __init__(self, override_config=None):
+        super().__init__()
+        if override_config:
+            self.config.update(override_config)
 
-def last_repo_id(db_session):
-    t = db_session.query(func.max(Repository.id)) \
-                  .first()
-    if t is not None:
-        return t[0]
-    # else: return None
+        self.config['cache_dir'] = os.path.expanduser(self.config['cache_dir'])
+        if self.config['cache_json']:
+            config.prepare_folders(self.config, ['cache_dir'])
 
+        if not self.config['credentials']:
+            raise ValueError('The GitHub lister needs credentials for API')
 
-INJECT_KEYS = ['id', 'name', 'full_name', 'html_url', 'description', 'fork']
+        self.db_engine = create_engine(self.config['lister_db_url'])
+        self.mk_session = sessionmaker(bind=self.db_engine)
 
+    def lookup_repo(self, repo_id, db_session=None):
+        if not db_session:
+            with session_scope(self.mk_session) as db_session:
+                return self.lookup_repo(repo_id, db_session=db_session)
 
-def inject_repo(db_session, repo):
-    logging.debug('injecting repo %d' % repo['id'])
-    sql_repo = lookup_repo(db_session, repo['id'])
-    if not sql_repo:
-        kwargs = {k: repo[k] for k in INJECT_KEYS if k in repo}
-        sql_repo = Repository(**kwargs)
-        db_session.add(sql_repo)
-    else:
-        for k in INJECT_KEYS:
-            if k in repo:
-                setattr(sql_repo, k, repo[k])
-        sql_repo.last_seen = datetime.datetime.now()
+        return db_session.query(Repository) \
+                         .filter(Repository.id == repo_id) \
+                         .first()
 
+    def last_repo_id(self, db_session=None):
+        if not db_session:
+            with session_scope(self.mk_session) as db_session:
+                return self.last_repo_id(db_session=db_session)
 
-class FetchError(RuntimeError):
+        t = db_session.query(func.max(Repository.id)).first()
 
-    def __init__(self, response):
-        self.response = response
+        if t is not None:
+            return t[0]
 
-    def __str__(self):
-        return repr(self.response)
+    INJECT_KEYS = ['id', 'name', 'full_name', 'html_url', 'description',
+                   'fork']
 
-
-def fetch(conf, mk_session, min_id=None, max_id=None):
-    if min_id is None:
-        min_id = 1
-    if max_id is None:
-        max_id = float('inf')
-    next_id = min_id
-
-    session = requests.Session()
-    db_session = mk_session()
-    loop_count = 0
-    while min_id <= next_id <= max_id:
-        logging.info('listing repos starting at %d' % next_id)
-        since = next_id - 1  # github API ?since=... is '>' strict, not '>='
-
-        cred = random.choice(conf['credentials'])
-        repos_res = gh_api_request('/repositories?since=%d' % since,
-                                   session=session, **cred)
-
-        if 'cache_dir' in conf and conf['cache_json']:
-            save_http_response(repos_res, conf['cache_dir'])
-        if not repos_res.ok:
-            raise FetchError(repos_res)
-
-        repos = repos_res.json()
-        for repo in repos:
-            if repo['id'] > max_id:  # do not overstep max_id
-                break
-            inject_repo(db_session, repo)
-
-        if 'next' in repos_res.links:
-            next_url = repos_res.links['next']['url']
-            m = REPO_API_URL_RE.match(next_url)  # parse next_id
-            next_id = int(m.group(1)) + 1
+    def inject_repo(self, db_session, repo):
+        logging.debug('injecting repo %d' % repo['id'])
+        sql_repo = self.lookup_repo(repo['id'], db_session)
+        if not sql_repo:
+            kwargs = {k: repo[k] for k in self.INJECT_KEYS if k in repo}
+            sql_repo = Repository(**kwargs)
+            db_session.add(sql_repo)
         else:
-            logging.info('stopping after id %d, no next link found' % next_id)
-            break
-        loop_count += 1
-        if loop_count == 20:
-            logging.info('flushing updates')
-            loop_count = 0
-            db_session.commit()
-            db_session = mk_session()
-    db_session.commit()
+            for k in self.INJECT_KEYS:
+                if k in repo:
+                    setattr(sql_repo, k, repo[k])
+                    sql_repo.last_seen = datetime.datetime.now()
+
+    def fetch(self, min_id=None, max_id=None):
+        if min_id is None:
+            min_id = 1
+        if max_id is None:
+            max_id = float('inf')
+        next_id = min_id
+
+        do_cache = self.config['cache_json']
+        cache_dir = self.config['cache_dir']
+
+        session = requests.Session()
+        db_session = self.mk_session()
+        loop_count = 0
+        while min_id <= next_id <= max_id:
+            logging.info('listing repos starting at %d' % next_id)
+
+            # github API ?since=... is '>' strict, not '>='
+            since = next_id - 1
+
+            cred = random.choice(self.config['credentials'])
+            repos_res = gh_api_request('/repositories?since=%d' % since,
+                                       session=session, **cred)
+
+            if do_cache:
+                save_http_response(repos_res, cache_dir)
+
+            if not repos_res.ok:
+                raise FetchError(repos_res)
+
+            repos = repos_res.json()
+            for repo in repos:
+                if repo['id'] > max_id:  # do not overstep max_id
+                    break
+                self.inject_repo(db_session, repo)
+
+            if 'next' in repos_res.links:
+                next_url = repos_res.links['next']['url']
+                m = REPO_API_URL_RE.match(next_url)  # parse next_id
+                next_id = int(m.group(1)) + 1
+            else:
+                logging.info('stopping after id %d, no next link found' %
+                             next_id)
+                break
+
+            loop_count += 1
+            if loop_count == 20:
+                logging.info('flushing updates')
+                loop_count = 0
+                db_session.commit()
+                db_session = self.mk_session()
+
+        db_session.commit()

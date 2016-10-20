@@ -7,6 +7,8 @@ from swh.storage import get_storage
 from swh.scheduler.backend import SchedulerBackend
 
 
+# TODO: split this into a lister-agnostic module
+
 class SWHLister(config.SWHConfig):
     CONFIG_BASE_FILENAME = None
 
@@ -14,7 +16,7 @@ class SWHLister(config.SWHConfig):
         'storage_class': ('str', 'remote_storage'),
         'storage_args': ('list[str]', ['http://localhost:5000/']),
 
-        'scheduling_db': ('str', 'dbname=swh-scheduler'),
+        'scheduling_db': ('str', 'dbname=softwareheritage-scheduler'),
     }
 
     ADDITIONAL_CONFIG = {}
