@@ -56,8 +56,7 @@ class SWHLister(config.SWHConfig):
             a list of task ids
         """
         returned_tasks = self.scheduler.create_tasks(tasks)
-        id_index = self.scheduler.task_keys.index('id')
-        return [returned_task[id_index] for returned_task in returned_tasks]
+        return [returned_task['id'] for returned_task in returned_tasks]
 
     def disable_tasks(self, task_ids):
         """Disable the tasks identified by the given ids"""
