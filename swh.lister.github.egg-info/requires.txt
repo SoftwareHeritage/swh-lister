@@ -1,6 +1,5 @@
-python-dateutil
-qless-py
-redis
+SQLAlchemy
 requests
 swh.core
-swh.storage
+swh.scheduler>=0.0.10
+swh.storage>=0.0.69

@@ -22,7 +22,7 @@ setup(
     author_email='swh-devel@inria.fr',
     url='https://forge.softwareheritage.org/diffusion/DLSGH/',
     packages=['swh.lister.github'],
-    scripts=[],
+    scripts=['bin/ghlister'],
     install_requires=parse_requirements(),
     setup_requires=['vcversioner'],
     vcversioner={},
