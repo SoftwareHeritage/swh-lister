@@ -2,5 +2,5 @@ requests
 SQLAlchemy
 
 swh.core
-swh.storage (>= 0.0.69)
-swh.scheduler (>= 0.0.10)
+swh.storage >= 0.0.69
+swh.scheduler >= 0.0.10
