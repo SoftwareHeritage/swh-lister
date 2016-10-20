@@ -145,6 +145,15 @@ class GitHubLister(SWHLister):
                          .filter(Repository.id == repo_id) \
                          .first()
 
+    def query_range(self, start, end, db_session=None):
+        if not db_session:
+            with session_scope(self.mk_session) as db_session:
+                return self.query_range(start, end, db_session=db_session)
+
+        return db_session.query(Repository) \
+                         .filter(Repository.id >= start) \
+                         .filter(Repository.id <= end)
+
     def lookup_full_names(self, full_names, db_session=None):
         if not db_session:
             with session_scope(self.mk_session) as db_session:
@@ -246,9 +255,11 @@ class GitHubLister(SWHLister):
             mapped_repos = {}
             tasks = {}
             origins = {}
+            repo_ids = set()
             for repo in repos:
                 if repo['id'] > max_id:  # do not overstep max_id
                     break
+                repo_ids.add(repo['id'])
                 full_name = repo['full_name']
                 mapped_repos[full_name] = self.inject_repo(repo, db_session)
 
@@ -297,6 +308,27 @@ class GitHubLister(SWHLister):
 
             for full_name, task_id in tasks.items():
                 mapped_repos[full_name].task_id = task_id
+
+            # Disable tasks for deleted repos
+            if next_next_id is not None:
+                start, end = next_id, min(max_id, next_next_id)
+            else:
+                start, end = next_id, max_id
+
+            deleted_repos = self.query_range(start, end,
+                                             db_session=db_session) \
+                                .filter(~Repository.id.in_(repo_ids)) \
+                                .all()
+
+            if deleted_repos:
+                tasks_to_disable = []
+                for repo in deleted_repos:
+                    if repo.task_id is not None:
+                        tasks_to_disable.append(repo.task_id)
+                        repo.task_id = None
+
+                if tasks_to_disable:
+                    self.disable_tasks(tasks_to_disable)
 
             if next_next_id is None:
                 logging.info('stopping after id %d, no next link found' %
