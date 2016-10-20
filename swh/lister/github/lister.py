@@ -157,7 +157,11 @@ class GitHubLister(SWHLister):
     INJECT_KEYS = ['id', 'name', 'full_name', 'html_url', 'description',
                    'fork']
 
-    def inject_repo(self, db_session, repo):
+    def inject_repo(self, repo, db_session=None):
+        if not db_session:
+            with session_scope(self.mk_session) as db_session:
+                return self.inject_repo(repo, db_session=db_session)
+
         logging.debug('injecting repo %d' % repo['id'])
         sql_repo = self.lookup_repo(repo['id'], db_session)
         if not sql_repo:
@@ -202,10 +206,12 @@ class GitHubLister(SWHLister):
                 raise FetchError(repos_res)
 
             repos = repos_res.json()
+            mapped_repos = {}
             for repo in repos:
                 if repo['id'] > max_id:  # do not overstep max_id
                     break
-                self.inject_repo(db_session, repo)
+                full_name = repo['full_name']
+                mapped_repos[full_name] = self.inject_repo(repo, db_session)
 
             if 'next' in repos_res.links:
                 next_url = repos_res.links['next']['url']
