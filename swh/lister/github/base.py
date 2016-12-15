@@ -13,9 +13,12 @@ class SWHLister(config.SWHConfig):
     CONFIG_BASE_FILENAME = None
 
     DEFAULT_CONFIG = {
-        'storage_class': ('str', 'remote_storage'),
-        'storage_args': ('list[str]', ['http://localhost:5000/']),
-
+        'storage': ('dict', {
+            'cls': 'remote',
+            'args': {
+                'url': 'http://localhost:5000/'
+            },
+        }),
         'scheduling_db': ('str', 'dbname=softwareheritage-scheduler'),
     }
 
@@ -25,8 +28,7 @@ class SWHLister(config.SWHConfig):
         self.config = self.parse_config_file(
             additional_configs=[self.ADDITIONAL_CONFIG])
 
-        self.storage = get_storage(self.config['storage_class'],
-                                   self.config['storage_args'])
+        self.storage = get_storage(**self.config['storage'])
 
         self.scheduler = SchedulerBackend(
             scheduling_db=self.config['scheduling_db'],
