@@ -1,3 +1,10 @@
+swh-lister (0.0.4-1~swh1) unstable-swh; urgency=medium
+
+  * v0.0.4
+  * Update storage configuration reading
+
+ -- Antoine R. Dumont (@ardumont) <antoine.romain.dumont@gmail.com>  Thu, 15 Dec 2016 19:07:24 +0100
+
 swh-lister (0.0.3-1~swh1) unstable-swh; urgency=medium
 
   * Release swh.lister.github v0.0.3
