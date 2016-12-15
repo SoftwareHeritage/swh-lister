@@ -10,7 +10,7 @@ Build-Depends: debhelper (>= 9),
                python3-setuptools,
                python3-swh.core,
                python3-swh.scheduler (>= 0.0.10~),
-               python3-swh.storage (>= 0.0.69~),
+               python3-swh.storage (>= 0.0.76~),
                python3-vcversioner
 Standards-Version: 3.9.6
 Homepage: https://forge.softwareheritage.org/diffusion/DLSGH/
@@ -18,7 +18,7 @@ Homepage: https://forge.softwareheritage.org/diffusion/DLSGH/
 Package: python3-swh.lister.github
 Architecture: all
 Depends: python3-swh.scheduler (>= 0.0.10~),
-         python3-swh.storage (>= 0.0.69~),
+         python3-swh.storage (>= 0.0.76~),
          ${misc:Depends},
          ${python3:Depends}
 Description: Software Heritage GitHub lister
