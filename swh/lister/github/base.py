@@ -16,7 +16,7 @@ class SWHLister(config.SWHConfig):
         'storage': ('dict', {
             'cls': 'remote',
             'args': {
-                'url': 'http://localhost:5000/'
+                'url': 'http://localhost:5002/'
             },
         }),
         'scheduling_db': ('str', 'dbname=softwareheritage-scheduler'),
