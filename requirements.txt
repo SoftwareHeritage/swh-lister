@@ -5,4 +5,3 @@ setuptools
 SQLAlchemy
 testing.postgresql
 xmltodict
-celery
