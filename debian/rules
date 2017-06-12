@@ -1,6 +1,6 @@
 #!/usr/bin/make -f
 
-export PYBUILD_NAME=swh-lister-github
+export PYBUILD_NAME=swh-lister
 
 %:
 	dh $@ --with python3 --buildsystem=pybuild

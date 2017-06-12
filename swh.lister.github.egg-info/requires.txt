@@ -1,5 +1,0 @@
-SQLAlchemy
-requests
-swh.core
-swh.scheduler>=0.0.10
-swh.storage>=0.0.76
