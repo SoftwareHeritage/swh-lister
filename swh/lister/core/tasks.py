@@ -44,26 +44,26 @@ class ListerTaskBase(Task, metaclass=AbstractTaskMeta):
         pass
 
     @abc.abstractmethod
-    def run(self):
+    def run_task(self):
         pass
 
 
 class IndexingDiscoveryListerTask(ListerTaskBase):
-    def run(self):
+    def run_task(self):
         lister = self.new_lister()
-        lister.run(min_index=lister.db_last_index(), max_index=None)
+        return lister.run(min_index=lister.db_last_index(), max_index=None)
 
 
 class IndexingRangeListerTask(ListerTaskBase):
-    def run(self, start, end):
+    def run_task(self, start, end):
         lister = self.new_lister()
-        lister.run(min_index=start, max_index=end)
+        return lister.run(min_index=start, max_index=end)
 
 
 class IndexingRefreshListerTask(ListerTaskBase):
     GROUP_SPLIT = 10000
 
-    def run(self):
+    def run_task(self):
         lister = self.new_lister()
         ranges = lister.db_partition_indices(self.GROUP_SPLIT)
         random.shuffle(ranges)
