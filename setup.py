@@ -5,23 +5,23 @@ from setuptools import setup
 
 def parse_requirements():
     requirements = []
-    with open('requirements.txt') as f:
-        for line in f.readlines():
-            line = line.strip()
-            if not line or line.startswith('#'):
-                continue
-            requirements.append(line)
-
+    for reqf in ('requirements.txt', 'requirements-swh.txt'):
+        with open(reqf) as f:
+            for line in f.readlines():
+                line = line.strip()
+                if not line or line.startswith('#'):
+                    continue
+                requirements.append(line)
     return requirements
 
 
 setup(
-    name='swh.lister.github',
+    name='swh.lister',
     description='Software Heritage GitHub lister',
     author='Software Heritage developers',
     author_email='swh-devel@inria.fr',
     url='https://forge.softwareheritage.org/diffusion/DLSGH/',
-    packages=['swh.lister.github'],
+    packages=['swh.lister'],
     scripts=['bin/ghlister'],
     install_requires=parse_requirements(),
     setup_requires=['vcversioner'],
