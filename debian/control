@@ -1,4 +1,4 @@
-Source: swh-lister-github
+Source: swh-lister
 Maintainer: Software Heritage developers <swh-devel@inria.fr>
 Section: python
 Priority: optional
