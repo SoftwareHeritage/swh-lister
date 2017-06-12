@@ -16,12 +16,12 @@ def parse_requirements():
 
 
 setup(
-    name='swh.lister.github',
+    name='swh.lister',
     description='Software Heritage GitHub lister',
     author='Software Heritage developers',
     author_email='swh-devel@inria.fr',
     url='https://forge.softwareheritage.org/diffusion/DLSGH/',
-    packages=['swh.lister.github'],
+    packages=['swh.lister'],
     scripts=['bin/ghlister'],
     install_requires=parse_requirements(),
     setup_requires=['vcversioner'],
