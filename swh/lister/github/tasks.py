@@ -1,47 +1,27 @@
-# Copyright (C) 2016 the Software Heritage developers
+# Copyright (C) 2017 the Software Heritage developers
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
 
-import random
-
-from celery import group
-
-from swh.scheduler.task import Task
+from swh.lister.core.tasks import (IndexingDiscoveryListerTask,
+                                   IndexingRangeListerTask,
+                                   IndexingRefreshListerTask, ListerTaskBase)
 
 from .lister import GitHubLister
 
-GROUP_SPLIT = 10000
+
+class GitHubListerTask(ListerTaskBase):
+    def new_lister(self):
+        return GitHubLister(lister_name='github.com',
+                            api_baseurl='https://github.com')
 
 
-class IncrementalGitHubLister(Task):
-    task_queue = 'swh_lister_github_incremental'
-
-    def run(self):
-        lister = GitHubLister()
-        last_id = lister.last_repo_id()
-        lister.fetch(min_id=last_id + 1, max_id=None)
+class IncrementalGitHubLister(GitHubListerTask, IndexingDiscoveryListerTask):
+    task_queue = 'swh_lister_github_discover'
 
 
-class RangeGitHubLister(Task):
-    task_queue = 'swh_lister_github_full'
-
-    def run(self, start, end):
-        lister = GitHubLister()
-        lister.fetch(min_id=start, max_id=end)
+class RangeGitHubLister(GitHubListerTask, IndexingRangeListerTask):
+    task_queue = 'swh_lister_github_refresh'
 
 
-class FullGitHubLister(Task):
-    task_queue = 'swh_lister_github_full'
-
-    def run(self):
-        lister = GitHubLister()
-        last_id = lister.last_repo_id()
-        ranges = [
-            (i, min(last_id, i + GROUP_SPLIT - 1))
-            for i in range(1, last_id, GROUP_SPLIT)
-        ]
-
-        random.shuffle(ranges)
-
-        range_task = RangeGitHubLister()
-        group(range_task.s(min, max) for min, max in ranges)()
+class FullGitHubRelister(GitHubListerTask, IndexingRefreshListerTask):
+    task_queue = 'swh_lister_github_refresh'

@@ -1,8 +1,11 @@
-swh-lister (0.0.4-1~swh1~bpo9+1) stretch-swh; urgency=medium
+swh-lister (0.0.5-1~swh1) unstable-swh; urgency=medium
 
-  * Rebuild for stretch-backports.
+  * Release swh.lister 0.0.5
+  * Make the lister more generic
+  * Add bitbucket lister
+  * Update tasks to new swh.scheduler API
 
- -- Antoine R. Dumont (@ardumont) <antoine.romain.dumont@gmail.com>  Thu, 15 Dec 2016 19:07:24 +0100
+ -- Nicolas Dandrimont <nicolas@dandrimont.eu>  Mon, 12 Jun 2017 18:22:13 +0200
 
 swh-lister (0.0.4-1~swh1) unstable-swh; urgency=medium
 
