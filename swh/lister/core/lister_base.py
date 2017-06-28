@@ -449,7 +449,7 @@ class SWHListerBase(abc.ABC, config.SWHConfig):
             if not ir.task_id:
                 ir.task_id = self.scheduler.create_tasks(
                     [self.task_dict(m['origin_type'], m['origin_url'])]
-                )['id']
+                )[0]['id']
 
     def ingest_data(self, identifier):
         """The core data fetch sequence. Request server endpoint. Simplify and
