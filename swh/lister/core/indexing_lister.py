@@ -143,7 +143,7 @@ class SWHIndexingLister(SWHListerBase):
         deleted_repos = self.winnow_models(
             self.db_query_range(start, end), self.MODEL.uid, keep_these
         )
-        tasks_to_disable = [repo for repo in deleted_repos
+        tasks_to_disable = [repo.task_id for repo in deleted_repos
                             if repo.task_id is not None]
         if tasks_to_disable:
             self.scheduler.disable_tasks(tasks_to_disable)
