@@ -3,12 +3,12 @@
 # See top-level LICENSE file for more information
 
 import abc
+import datetime
 import gzip
 import logging
 import os
 import re
 import time
-from datetime import datetime
 
 from sqlalchemy import create_engine, func
 from sqlalchemy.orm import sessionmaker
@@ -18,6 +18,10 @@ from swh.scheduler.backend import SchedulerBackend
 from swh.storage import get_storage
 
 from .abstractattribute import AbstractAttribute
+
+
+def utcnow():
+    return datetime.datetime.now(tz=datetime.timezone.utc)
 
 
 class FetchError(RuntimeError):
@@ -349,7 +353,7 @@ class SWHListerBase(abc.ABC, config.SWHConfig):
         else:
             for k in model_dict:
                 setattr(sql_repo, k, model_dict[k])
-            sql_repo.last_seen = datetime.now()
+            sql_repo.last_seen = utcnow()
 
         return sql_repo
 
@@ -384,7 +388,7 @@ class SWHListerBase(abc.ABC, config.SWHConfig):
                 ],
                 'kwargs': {},
             },
-            'next_run': datetime.now(),
+            'next_run': utcnow(),
         }
 
     def string_pattern_check(self, a, b, c=None):
