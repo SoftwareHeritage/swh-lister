@@ -482,13 +482,13 @@ class SWHListerBase(abc.ABC, config.SWHConfig):
         Returns:
             nothing
         """
-        def escape_url_path(p):
-            return p.replace('/', '__')
+        datepath = utcnow().isoformat()
 
         fname = os.path.join(
-                             self.config['cache_dir'],
-                             escape_url_path(response.request.path_url) + '.gz'
-                             )
+            self.config['cache_dir'],
+            datepath + '.gz',
+        )
+
         with gzip.open(fname, 'w') as f:
             f.write(bytes(
                 self.transport_response_to_string(response),
