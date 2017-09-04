@@ -260,6 +260,7 @@ class SWHListerBase(abc.ABC, config.SWHConfig):
             server response
         """
         retries_left = self.MAX_RETRIES
+        do_cache = self.config['cache_responses']
         while retries_left > 0:
             try:
                 r = self.transport_request(identifier)
@@ -270,6 +271,9 @@ class SWHListerBase(abc.ABC, config.SWHConfig):
                 time.sleep(self.CONN_SLEEP)
                 retries_left -= 1
                 continue
+
+            if do_cache:
+                self.save_response(r)
 
             # detect throttling
             must_retry, delay = self.transport_quota_check(r)
@@ -284,10 +288,6 @@ class SWHListerBase(abc.ABC, config.SWHConfig):
 
         if not retries_left:
             logging.warn('giving up on %s: max retries exceeded' % identifier)
-
-        do_cache = self.config['cache_responses']
-        if do_cache:
-            self.save_response(r)
 
         return r
 
