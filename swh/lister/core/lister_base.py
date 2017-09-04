@@ -225,7 +225,7 @@ class SWHListerBase(abc.ABC, config.SWHConfig):
         )
         self.config['cache_dir'] = os.path.expanduser(self.config['cache_dir'])
         if self.config['cache_responses']:
-            config.prepare_folders(self.config, ['cache_dir'])
+            config.prepare_folders(self.config, 'cache_dir')
 
         if override_config:
             self.config.update(override_config)
