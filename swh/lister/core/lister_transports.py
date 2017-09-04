@@ -84,6 +84,7 @@ class SWHListerHttpTransport(abc.ABC):
             Requests responses.
         """
         s = pformat(response.request.path_url)
+        s += '\n#\n' + pformat(response.request.headers)
         s += '\n#\n' + pformat(response.status_code)
         s += '\n#\n' + pformat(response.headers)
         s += '\n#\n'
