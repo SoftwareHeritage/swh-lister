@@ -73,7 +73,7 @@ class SWHListerHttpTransport(abc.ABC):
         creds = self.config['credentials']
         auth = random.choice(creds) if creds else None
         if auth:
-            params['auth'] = auth
+            params['auth'] = (auth['username'], auth['password'])
         try:
             return self.session.get(self.api_baseurl + path, **params)
         except requests.exceptions.ConnectionError as e:
