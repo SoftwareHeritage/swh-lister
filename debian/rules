@@ -7,3 +7,6 @@ export PYBUILD_NAME=swh-lister
 
 
 override_dh_auto_test:
+	PYBUILD_SYSTEM=custom \
+        PYBUILD_TEST_ARGS="cd {build_dir}; python{version} -m nose swh -sv" \
+        dh_auto_test
