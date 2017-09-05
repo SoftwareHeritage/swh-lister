@@ -81,9 +81,9 @@ class SWHIndexingLister(SWHListerBase):
         """
         retlist = self.db_session.query(self.MODEL)
         if start is not None:
-            retlist.filter(self.MODEL.indexable >= start)
+            retlist = retlist.filter(self.MODEL.indexable >= start)
         if end is not None:
-            retlist.filter(self.MODEL.indexable <= end)
+            retlist = retlist.filter(self.MODEL.indexable <= end)
         return retlist
 
     def db_partition_indices(self, partition_size):
