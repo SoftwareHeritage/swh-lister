@@ -9,6 +9,7 @@ from email.utils import parsedate
 from pprint import pformat
 
 import requests
+import vcversioner
 import xmltodict
 
 from .abstractattribute import AbstractAttribute
@@ -36,7 +37,9 @@ class SWHListerHttpTransport(abc.ABC):
 
         MAY BE OVERRIDDEN if request headers are needed.
         """
-        return {}
+        return {
+            'User-Agent': 'Software Heritage lister (%s)' % self.lister_version
+        }
 
     def transport_quota_check(self, response):
         """Implements SWHListerBase.transport_quota_check with standard 429 code
@@ -65,6 +68,7 @@ class SWHListerHttpTransport(abc.ABC):
             raise NameError('HTTP Lister Transport requires api_baseurl.')
         self.api_baseurl = api_baseurl  # eg. 'https://api.github.com'
         self.session = requests.Session()
+        self.lister_version = vcversioner.find_version().version
 
     def transport_request(self, identifier):
         """Implements SWHListerBase.transport_request for HTTP using Requests.
