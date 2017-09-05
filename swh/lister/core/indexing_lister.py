@@ -13,22 +13,22 @@ from .lister_base import SWHListerBase
 
 class SWHIndexingLister(SWHListerBase):
     """Lister* intermediate class for any service that follows the pattern:
-        -- The service must report at least one stable unique identifier,
-            known herein as the UID value, for every listed repository.
-        -- If the service splits the list of repositories into sublists,
-            it must report at least one stable and sorted index identifier
-            for every listed repository, known herein as the indexable value,
-            which can be used as part of the service endpoint query to request
-            a sublist beginning from that index. This might be the UID if the
-            UID is monotonic.
-        -- Client sends a request to list repositories starting from a given
-            index.
-        -- Client receives structured (json/xml/etc) response with information
-            about a sequential series of repositories starting from that index
-            and, if necessary/available, some indication of the URL or index
-            for fetching the next series of repository data.
 
-        * - See swh.lister.core.lister_base.SWHListerBase for more details.
+    - The service must report at least one stable unique identifier, known
+      herein as the UID value, for every listed repository.
+    - If the service splits the list of repositories into sublists, it must
+      report at least one stable and sorted index identifier for every listed
+      repository, known herein as the indexable value, which can be used as
+      part of the service endpoint query to request a sublist beginning from
+      that index. This might be the UID if the UID is monotonic.
+    - Client sends a request to list repositories starting from a given
+      index.
+    - Client receives structured (json/xml/etc) response with information about
+      a sequential series of repositories starting from that index and, if
+      necessary/available, some indication of the URL or index for fetching the
+      next series of repository data.
+
+    See :py:class:`swh.lister.core.lister_base.SWHListerBase` for more details.
 
     This class cannot be instantiated. To create a new Lister for a source
     code listing service that follows the model described above, you must
@@ -36,8 +36,10 @@ class SWHIndexingLister(SWHListerBase):
     any unmet implementation/override requirements of this class's base.
     (see parent class and member docstrings for details)
 
-    Required Overrides:
+    Required Overrides::
+
         def get_next_target_from_response
+
     """
 
     @abc.abstractmethod

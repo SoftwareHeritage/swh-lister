@@ -6,16 +6,18 @@
 class AbstractAttribute:
     """AbstractAttributes in a base class must be overridden by the subclass.
 
-    It's like the @abc.abstractmethod decorator, but for things that are
-        explicitly attributes/properties, not methods, without the need for
-        empty method def boilerplate. Like abc.abstractmethod, the class
-        containing AbstractAttributes must inherit abc.ABC or use the
-        abc.ABCMeta metaclass.
+    It's like the :py:func:`abc.abstractmethod` decorator, but for things that
+    are explicitly attributes/properties, not methods, without the need for
+    empty method def boilerplate. Like abc.abstractmethod, the class containing
+    AbstractAttributes must inherit from :py:class:`abc.ABC` or use the
+    :py:class:`abc.ABCMeta` metaclass.
 
-    Usage Example:
+    Usage example::
+
         import abc
         class ClassContainingAnAbstractAttribute(abc.ABC):
             foo = AbstractAttribute('descriptive docstring for foo')
+
     """
     __isabstractmethod__ = True
 
