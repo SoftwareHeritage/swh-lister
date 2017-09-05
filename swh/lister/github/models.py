@@ -16,4 +16,5 @@ class GitHubModel(ModelBase):
     fork = Column(Boolean)
 
     def __init__(self, *args, **kwargs):
+        self.fork = kwargs.pop('fork', False)
         super().__init__(*args, **kwargs)
