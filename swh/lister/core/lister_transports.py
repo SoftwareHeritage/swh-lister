@@ -29,6 +29,8 @@ class SWHListerHttpTransport(abc.ABC):
                                       'To be implemented in the API-specific'
                                       ' class inheriting this.')
 
+    EXPECTED_STATUS_CODES = (200, 429, 403, 404)
+
     def request_headers(self):
         """Returns dictionary of any request headers needed by the server.
 
@@ -75,9 +77,13 @@ class SWHListerHttpTransport(abc.ABC):
         if auth:
             params['auth'] = (auth['username'], auth['password'])
         try:
-            return self.session.get(self.api_baseurl + path, **params)
+            response = self.session.get(self.api_baseurl + path, **params)
         except requests.exceptions.ConnectionError as e:
             raise FetchError(e)
+        else:
+            if response.status_code not in self.EXPECTED_STATUS_CODES:
+                raise FetchError(response)
+            return response
 
     def transport_response_to_string(self, response):
         """Implements SWHListerBase.transport_response_to_string for HTTP given
