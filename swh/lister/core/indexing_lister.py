@@ -28,7 +28,7 @@ class SWHIndexingLister(SWHListerBase):
       necessary/available, some indication of the URL or index for fetching the
       next series of repository data.
 
-    See :py:class:`swh.lister.core.lister_base.SWHListerBase` for more details.
+    See :class:`swh.lister.core.lister_base.SWHListerBase` for more details.
 
     This class cannot be instantiated. To create a new Lister for a source
     code listing service that follows the model described above, you must

@@ -28,7 +28,7 @@ class ListerTaskBase(Task, metaclass=AbstractTaskMeta):
         2. Refreshing the list of already discovered repositories.
 
         If the hosting service is indexable (according to the requirements of
-        :py:class:`SWHIndexingLister`), then we can optionally partition the
+        :class:`SWHIndexingLister`), then we can optionally partition the
         set of known repositories into sub-sets to distribute the work.
 
         This means that there is a third possible Task type for Indexing
