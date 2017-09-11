@@ -194,7 +194,7 @@ class SWHListerBase(abc.ABC, config.SWHConfig):
                 'url': 'http://localhost:5002/'
             },
         }),
-        'scheduling_db': ('str', 'dbname=softwareheritage-scheduler'),
+        'scheduling_db': ('str', 'dbname=softwareheritage-scheduler-dev'),
     }
 
     @property
