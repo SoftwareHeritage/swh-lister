@@ -147,7 +147,7 @@ class SWHListerBase(abc.ABC, config.SWHConfig):
         Returns:
             models_list with entries changed according to custom logic.
         """
-        pass
+        return models_list
 
     def is_within_bounds(self, inner, lower=None, upper=None):
         """See if a sortable value is inside the range [lower,upper].
