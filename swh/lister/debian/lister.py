@@ -104,7 +104,7 @@ class DebianLister(SWHListerHttpTransport, SWHListerBase):
                     for entry in src_pkg[field]:
                         name = entry['name']
                         files[name]['name'] = entry['name']
-                        files[name]['size'] = entry['size']
+                        files[name]['size'] = int(entry['size'], 10)
                         files[name][sum_name] = entry[sum_name]
 
             yield {
