@@ -177,18 +177,9 @@ class DebianLister(SWHListerHttpTransport, SWHListerBase):
         return
 
     def create_tasks_for_snapshot(self, snapshot):
-        packages = defaultdict(dict)
-        for area_snapshot in snapshot.areas:
-            area_name = area_snapshot.area.name
-            for package in area_snapshot.packages:
-                ref_name = '%s/%s' % (area_name, package.version)
-                packages[package.name][ref_name] = package.loader_dict()
-
         tasks = [
-            snapshot.task_for_package(
-                package_name, package_versions
-            )
-            for package_name, package_versions in packages.items()
+            snapshot.task_for_package(name, versions)
+            for name, versions in snapshot.get_packages().items()
         ]
 
         return self.scheduler.create_tasks(tasks)
