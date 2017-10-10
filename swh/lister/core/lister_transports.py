@@ -9,8 +9,12 @@ from email.utils import parsedate
 from pprint import pformat
 
 import requests
-import vcversioner
 import xmltodict
+
+try:
+    from swh.lister._version import __version__
+except ImportError:
+    __version__ = 'devel'
 
 from .abstractattribute import AbstractAttribute
 from .lister_base import FetchError
@@ -92,7 +96,7 @@ class SWHListerHttpTransport(abc.ABC):
             raise NameError('HTTP Lister Transport requires api_baseurl.')
         self.api_baseurl = api_baseurl  # eg. 'https://api.github.com'
         self.session = requests.Session()
-        self.lister_version = vcversioner.find_version().version
+        self.lister_version = __version__
 
     def transport_request(self, identifier):
         """Implements SWHListerBase.transport_request for HTTP using Requests.
