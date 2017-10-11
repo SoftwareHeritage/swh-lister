@@ -1,3 +1,9 @@
+swh-lister (0.0.6-1~swh1~bpo9+1) stretch-swh; urgency=medium
+
+  * Rebuild for stretch-backports.
+
+ -- Nicolas Dandrimont <nicolas@dandrimont.eu>  Wed, 11 Oct 2017 17:59:47 +0200
+
 swh-lister (0.0.6-1~swh1) unstable-swh; urgency=medium
 
   * Release swh.lister v0.0.6
