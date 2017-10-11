@@ -1,10 +1,11 @@
 SQLAlchemy
+arrow
 nose
 requests
 requests_mock
 setuptools
 swh.core
-swh.scheduler>=0.0.14
+swh.scheduler[schemata]>=0.0.14
 swh.storage>=0.0.76
 testing.postgresql
 xmltodict
