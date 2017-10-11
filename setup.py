@@ -25,6 +25,6 @@ setup(
     scripts=['bin/ghlister'],
     install_requires=parse_requirements(),
     setup_requires=['vcversioner'],
-    vcversioner={},
+    vcversioner={'version_module_paths': ['swh/lister/_version.py']},
     include_package_data=True,
 )

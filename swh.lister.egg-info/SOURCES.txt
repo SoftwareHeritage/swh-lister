@@ -14,11 +14,18 @@ bin/ghlister
 bin/reset.sh
 bin/status
 debian/changelog
+debian/clean
 debian/compat
 debian/control
 debian/copyright
 debian/rules
 debian/source/format
+docs/.gitignore
+docs/Makefile
+docs/conf.py
+docs/index.rst
+docs/_static/.placeholder
+docs/_templates/.placeholder
 etc/crontab
 sql/crawler.sql
 sql/pimp_db.sql
@@ -27,6 +34,7 @@ swh.lister.egg-info/SOURCES.txt
 swh.lister.egg-info/dependency_links.txt
 swh.lister.egg-info/requires.txt
 swh.lister.egg-info/top_level.txt
+swh/lister/_version.py
 swh/lister/bitbucket/lister.py
 swh/lister/bitbucket/models.py
 swh/lister/bitbucket/tasks.py
@@ -43,6 +51,8 @@ swh/lister/core/tasks.py
 swh/lister/core/tests/test_abstractattribute.py
 swh/lister/core/tests/test_lister.py
 swh/lister/core/tests/test_model.py
+swh/lister/debian/lister.py
+swh/lister/debian/utils.py
 swh/lister/github/lister.py
 swh/lister/github/models.py
 swh/lister/github/tasks.py

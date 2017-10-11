@@ -11,6 +11,11 @@ from pprint import pformat
 import requests
 import xmltodict
 
+try:
+    from swh.lister._version import __version__
+except ImportError:
+    __version__ = 'devel'
+
 from .abstractattribute import AbstractAttribute
 from .lister_base import FetchError
 
@@ -29,12 +34,40 @@ class SWHListerHttpTransport(abc.ABC):
                                       'To be implemented in the API-specific'
                                       ' class inheriting this.')
 
+    EXPECTED_STATUS_CODES = (200, 429, 403, 404)
+
     def request_headers(self):
         """Returns dictionary of any request headers needed by the server.
 
         MAY BE OVERRIDDEN if request headers are needed.
         """
-        return {}
+        return {
+            'User-Agent': 'Software Heritage lister (%s)' % self.lister_version
+        }
+
+    def request_uri(self, identifier):
+        """Get the full request URI given the transport_request identifier.
+
+        MAY BE OVERRIDDEN if something more complex than the PATH_TEMPLATE is
+        required.
+        """
+        path = self.PATH_TEMPLATE % identifier
+        return self.api_baseurl + path
+
+    def request_params(self, identifier):
+        """Get the full parameters passed to requests given the transport_request
+        identifier.
+
+        MAY BE OVERRIDDEN if something more complex than the request headers
+        ois needed.
+        """
+        params = {}
+        params['headers'] = self.request_headers() or {}
+        creds = self.config['credentials']
+        auth = random.choice(creds) if creds else None
+        if auth:
+            params['auth'] = (auth['username'], auth['password'])
+        return params
 
     def transport_quota_check(self, response):
         """Implements SWHListerBase.transport_quota_check with standard 429 code
@@ -63,27 +96,29 @@ class SWHListerHttpTransport(abc.ABC):
             raise NameError('HTTP Lister Transport requires api_baseurl.')
         self.api_baseurl = api_baseurl  # eg. 'https://api.github.com'
         self.session = requests.Session()
+        self.lister_version = __version__
 
     def transport_request(self, identifier):
         """Implements SWHListerBase.transport_request for HTTP using Requests.
         """
-        path = self.PATH_TEMPLATE % identifier
-        params = {}
-        params['headers'] = self.request_headers() or {}
-        creds = self.config['credentials']
-        auth = random.choice(creds) if creds else None
-        if auth:
-            params['auth'] = auth
+        path = self.request_uri(identifier)
+        params = self.request_params(identifier)
+
         try:
-            return self.session.get(self.api_baseurl + path, **params)
+            response = self.session.get(path, **params)
         except requests.exceptions.ConnectionError as e:
             raise FetchError(e)
+        else:
+            if response.status_code not in self.EXPECTED_STATUS_CODES:
+                raise FetchError(response)
+            return response
 
     def transport_response_to_string(self, response):
         """Implements SWHListerBase.transport_response_to_string for HTTP given
             Requests responses.
         """
         s = pformat(response.request.path_url)
+        s += '\n#\n' + pformat(response.request.headers)
         s += '\n#\n' + pformat(response.status_code)
         s += '\n#\n' + pformat(response.headers)
         s += '\n#\n'
