@@ -3,12 +3,12 @@
 # See top-level LICENSE file for more information
 
 import abc
+import datetime
 import gzip
 import logging
 import os
 import re
 import time
-from datetime import datetime
 
 from sqlalchemy import create_engine, func
 from sqlalchemy.orm import sessionmaker
@@ -18,6 +18,10 @@ from swh.scheduler.backend import SchedulerBackend
 from swh.storage import get_storage
 
 from .abstractattribute import AbstractAttribute
+
+
+def utcnow():
+    return datetime.datetime.now(tz=datetime.timezone.utc)
 
 
 class FetchError(RuntimeError):
@@ -143,7 +147,7 @@ class SWHListerBase(abc.ABC, config.SWHConfig):
         Returns:
             models_list with entries changed according to custom logic.
         """
-        pass
+        return models_list
 
     def is_within_bounds(self, inner, lower=None, upper=None):
         """See if a sortable value is inside the range [lower,upper].
@@ -190,7 +194,7 @@ class SWHListerBase(abc.ABC, config.SWHConfig):
                 'url': 'http://localhost:5002/'
             },
         }),
-        'scheduling_db': ('str', 'dbname=softwareheritage-scheduler'),
+        'scheduling_db': ('str', 'dbname=softwareheritage-scheduler-dev'),
     }
 
     @property
@@ -225,7 +229,7 @@ class SWHListerBase(abc.ABC, config.SWHConfig):
         )
         self.config['cache_dir'] = os.path.expanduser(self.config['cache_dir'])
         if self.config['cache_responses']:
-            config.prepare_folders(self.config, ['cache_dir'])
+            config.prepare_folders(self.config, 'cache_dir')
 
         if override_config:
             self.config.update(override_config)
@@ -260,6 +264,7 @@ class SWHListerBase(abc.ABC, config.SWHConfig):
             server response
         """
         retries_left = self.MAX_RETRIES
+        do_cache = self.config['cache_responses']
         while retries_left > 0:
             try:
                 r = self.transport_request(identifier)
@@ -270,6 +275,9 @@ class SWHListerBase(abc.ABC, config.SWHConfig):
                 time.sleep(self.CONN_SLEEP)
                 retries_left -= 1
                 continue
+
+            if do_cache:
+                self.save_response(r)
 
             # detect throttling
             must_retry, delay = self.transport_quota_check(r)
@@ -284,10 +292,6 @@ class SWHListerBase(abc.ABC, config.SWHConfig):
 
         if not retries_left:
             logging.warn('giving up on %s: max retries exceeded' % identifier)
-
-        do_cache = self.config['cache_responses']
-        if do_cache:
-            self.save_response(r)
 
         return r
 
@@ -349,7 +353,7 @@ class SWHListerBase(abc.ABC, config.SWHConfig):
         else:
             for k in model_dict:
                 setattr(sql_repo, k, model_dict[k])
-            sql_repo.last_seen = datetime.now()
+            sql_repo.last_seen = utcnow()
 
         return sql_repo
 
@@ -384,7 +388,7 @@ class SWHListerBase(abc.ABC, config.SWHConfig):
                 ],
                 'kwargs': {},
             },
-            'next_run': datetime.now(),
+            'next_run': utcnow(),
         }
 
     def string_pattern_check(self, a, b, c=None):
@@ -449,7 +453,7 @@ class SWHListerBase(abc.ABC, config.SWHConfig):
             if not ir.task_id:
                 ir.task_id = self.scheduler.create_tasks(
                     [self.task_dict(m['origin_type'], m['origin_url'])]
-                )['id']
+                )[0]['id']
 
     def ingest_data(self, identifier):
         """The core data fetch sequence. Request server endpoint. Simplify and
@@ -478,13 +482,13 @@ class SWHListerBase(abc.ABC, config.SWHConfig):
         Returns:
             nothing
         """
-        def escape_url_path(p):
-            return p.replace('/', '__')
+        datepath = utcnow().isoformat()
 
         fname = os.path.join(
-                             self.config['cache_dir'],
-                             escape_url_path(response.request.path_url) + '.gz'
-                             )
+            self.config['cache_dir'],
+            datepath + '.gz',
+        )
+
         with gzip.open(fname, 'w') as f:
             f.write(bytes(
                 self.transport_response_to_string(response),

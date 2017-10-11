@@ -24,16 +24,18 @@ class ListerTaskBase(Task, metaclass=AbstractTaskMeta):
 
         There are two main kinds of lister tasks:
 
-            1) Discovering new repositories.
-            2) Refreshing the list of already discovered repositories.
+        1. Discovering new repositories.
+        2. Refreshing the list of already discovered repositories.
 
         If the hosting service is indexable (according to the requirements of
-        SWHIndexingLister), then we can optionally partition the set of known
-        repositories into sub-sets to distribute the work.
+        :class:`SWHIndexingLister`), then we can optionally partition the
+        set of known repositories into sub-sets to distribute the work.
 
         This means that there is a third possible Task type for Indexing
         Listers:
-            3) Discover or refresh a specific range of indices.
+
+        3. Discover or refresh a specific range of indices.
+
     """
     task_queue = AbstractAttribute('Celery Task queue name')
 

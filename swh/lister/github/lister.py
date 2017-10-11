@@ -23,7 +23,8 @@ class GitHubLister(SWHIndexingHttpLister):
                 'html_url': repo['html_url'],
                 'origin_url': repo['html_url'],
                 'origin_type': 'git',
-                'description': repo['description']
+                'description': repo['description'],
+                'fork': repo['fork'],
                 }
 
     def transport_quota_check(self, response):

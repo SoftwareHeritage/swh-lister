@@ -12,7 +12,7 @@ from .lister import GitHubLister
 class GitHubListerTask(ListerTaskBase):
     def new_lister(self):
         return GitHubLister(lister_name='github.com',
-                            api_baseurl='https://github.com')
+                            api_baseurl='https://api.github.com')
 
 
 class IncrementalGitHubLister(GitHubListerTask, IndexingDiscoveryListerTask):
