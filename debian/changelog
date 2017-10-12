@@ -1,3 +1,10 @@
+swh-lister (0.0.7-1~swh1) unstable-swh; urgency=medium
+
+  * Release swh.lister version 0.0.7
+  * Update packaging runes
+
+ -- Nicolas Dandrimont <nicolas@dandrimont.eu>  Thu, 12 Oct 2017 18:07:52 +0200
+
 swh-lister (0.0.6-1~swh1) unstable-swh; urgency=medium
 
   * Release swh.lister v0.0.6
