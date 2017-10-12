@@ -29,12 +29,12 @@ docs/_templates/.placeholder
 etc/crontab
 sql/crawler.sql
 sql/pimp_db.sql
+swh/__init__.py
 swh.lister.egg-info/PKG-INFO
 swh.lister.egg-info/SOURCES.txt
 swh.lister.egg-info/dependency_links.txt
 swh.lister.egg-info/requires.txt
 swh.lister.egg-info/top_level.txt
-swh/lister/_version.py
 swh/lister/bitbucket/lister.py
 swh/lister/bitbucket/models.py
 swh/lister/bitbucket/tasks.py
