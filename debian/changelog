@@ -1,8 +1,9 @@
-swh-lister (0.0.7-1~swh1~bpo9+1) stretch-swh; urgency=medium
+swh-lister (0.0.8-1~swh1) unstable-swh; urgency=medium
 
-  * Rebuild for stretch-backports.
+  * Release swh.lister v0.0.8
+  * Add versioned dependency on sqlalchemy
 
- -- Nicolas Dandrimont <nicolas@dandrimont.eu>  Thu, 12 Oct 2017 18:07:53 +0200
+ -- Nicolas Dandrimont <nicolas@dandrimont.eu>  Fri, 13 Oct 2017 12:15:38 +0200
 
 swh-lister (0.0.7-1~swh1) unstable-swh; urgency=medium
 
