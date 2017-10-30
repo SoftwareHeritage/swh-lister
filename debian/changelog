@@ -1,3 +1,10 @@
+swh-lister (0.0.9-1~swh1) unstable-swh; urgency=medium
+
+  * Release swh.lister v0.0.9
+  * Add tasks for the Debian lister
+
+ -- Nicolas Dandrimont <nicolas@dandrimont.eu>  Mon, 30 Oct 2017 14:20:58 +0100
+
 swh-lister (0.0.8-1~swh1) unstable-swh; urgency=medium
 
   * Release swh.lister v0.0.8
