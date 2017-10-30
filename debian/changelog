@@ -1,3 +1,12 @@
+swh-lister (0.0.10-1~swh1) unstable-swh; urgency=medium
+
+  * Release swh.lister v0.0.10
+  * Add missing task_queue attribute for debian listing tasks
+  * Make sure tests run during build
+  * Clean up runtime dependencies
+
+ -- Nicolas Dandrimont <nicolas@dandrimont.eu>  Mon, 30 Oct 2017 17:37:25 +0100
+
 swh-lister (0.0.9-1~swh1) unstable-swh; urgency=medium
 
   * Release swh.lister v0.0.9
