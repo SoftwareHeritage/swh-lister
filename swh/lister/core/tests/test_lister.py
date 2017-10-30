@@ -8,7 +8,7 @@ from unittest import TestCase
 from unittest.mock import Mock, patch
 
 import requests_mock
-import testing.postgresql
+from testing.postgresql import Postgresql
 from nose.tools import istest
 from sqlalchemy import create_engine
 
@@ -77,12 +77,12 @@ class IndexingHttpListerTesterBase(abc.ABC):
         if self.request_index(request) == str(self.first_index):
             with open('swh/lister/%s/tests/%s' % (self.lister_subdir,
                                                   self.good_api_response_file),
-                      'r') as r:
+                      'r', encoding='utf-8') as r:
                 return r.read()
         else:
             with open('swh/lister/%s/tests/%s' % (self.lister_subdir,
                                                   self.bad_api_response_file),
-                      'r') as r:
+                      'r', encoding='utf-8') as r:
                 return r.read()
 
     def mock_limit_n_response(self, n, request, context):
@@ -212,7 +212,9 @@ class IndexingHttpListerTesterBase(abc.ABC):
     @istest
     def test_fetch_multiple_pages_yesdb(self, http_mocker):
         http_mocker.get(self.test_re, text=self.mock_response)
-        db = testing.postgresql.Postgresql()
+        initdb_args = Postgresql.DEFAULT_SETTINGS['initdb_args']
+        initdb_args = ' '.join([initdb_args, '-E UTF-8'])
+        db = Postgresql(initdb_args=initdb_args)
 
         fl = self.get_fl(override_config={'lister_db_url': db.url()})
         self.init_db(db, fl.MODEL)
