@@ -232,3 +232,5 @@ class DebianLister(SWHListerHttpTransport, SWHListerBase):
         self.create_tasks_for_snapshot(snapshot)
 
         self.db_session.commit()
+
+        return True
