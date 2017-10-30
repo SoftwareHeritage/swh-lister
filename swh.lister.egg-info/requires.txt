@@ -1,11 +1,9 @@
 SQLAlchemy
 arrow
-nose
+python_debian
 requests
-requests_mock
 setuptools
 swh.core
-swh.scheduler[schemata]>=0.0.14
-swh.storage>=0.0.76
-testing.postgresql
+swh.scheduler>=0.0.14
+swh.storage[schemata]>=0.0.76
 xmltodict

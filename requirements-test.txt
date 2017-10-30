@@ -1,0 +1,3 @@
+nose
+requests_mock
+testing.postgresql
