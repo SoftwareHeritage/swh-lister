@@ -1,8 +1,11 @@
-swh-lister (0.0.9-1~swh1~bpo9+1) stretch-swh; urgency=medium
+swh-lister (0.0.10-1~swh1) unstable-swh; urgency=medium
 
-  * Rebuild for stretch-backports.
+  * Release swh.lister v0.0.10
+  * Add missing task_queue attribute for debian listing tasks
+  * Make sure tests run during build
+  * Clean up runtime dependencies
 
- -- Nicolas Dandrimont <nicolas@dandrimont.eu>  Mon, 30 Oct 2017 14:20:59 +0100
+ -- Nicolas Dandrimont <nicolas@dandrimont.eu>  Mon, 30 Oct 2017 17:37:25 +0100
 
 swh-lister (0.0.9-1~swh1) unstable-swh; urgency=medium
 

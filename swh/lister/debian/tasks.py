@@ -8,6 +8,8 @@ from .lister import DebianLister
 
 
 class DebianListerTask(ListerTaskBase):
+    task_queue = 'swh_lister_debian'
+
     def new_lister(self):
         return DebianLister()
 

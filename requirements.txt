@@ -1,8 +1,6 @@
-arrow
-nose
-requests
-requests_mock
-setuptools
 SQLAlchemy
-testing.postgresql
+arrow
+python_debian
+requests
+setuptools
 xmltodict
