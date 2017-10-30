@@ -34,6 +34,7 @@ setup(
     scripts=['bin/ghlister'],
     install_requires=parse_requirements() + parse_requirements('swh'),
     test_requires=parse_requirements('test'),
+    test_suite='nose.collector',
     setup_requires=['vcversioner'],
     vcversioner={'version_module_paths': ['swh/lister/_version.py']},
     include_package_data=True,
