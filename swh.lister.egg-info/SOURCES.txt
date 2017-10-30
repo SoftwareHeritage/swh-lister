@@ -52,6 +52,7 @@ swh/lister/core/tests/test_abstractattribute.py
 swh/lister/core/tests/test_lister.py
 swh/lister/core/tests/test_model.py
 swh/lister/debian/lister.py
+swh/lister/debian/tasks.py
 swh/lister/debian/utils.py
 swh/lister/github/lister.py
 swh/lister/github/models.py
