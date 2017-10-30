@@ -2,4 +2,5 @@ include Makefile
 include README
 include requirements.txt
 include requirements-swh.txt
+include requirements-test.txt
 include version.txt
