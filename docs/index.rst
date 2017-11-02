@@ -1,3 +1,5 @@
+.. _swh-lister:
+
 Software Heritage - Development Documentation
 =============================================
 
