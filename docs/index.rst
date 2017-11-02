@@ -1,16 +1,21 @@
 .. _swh-lister:
 
-Software Heritage - Development Documentation
-=============================================
+Software Heritage listers
+=========================
 
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
 
 
+Overview
+--------
+
+* :ref:`lister-tutorial`
+
 
 Indices and tables
-==================
+------------------
 
 * :ref:`genindex`
 * :ref:`modindex`
