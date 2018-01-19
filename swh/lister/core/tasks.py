@@ -6,9 +6,8 @@ import abc
 import random
 
 from celery import group
-from celery.app.task import TaskType
 
-from swh.scheduler.task import Task
+from swh.scheduler.task import Task, TaskType
 
 from .abstractattribute import AbstractAttribute
 
