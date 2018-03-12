@@ -82,7 +82,7 @@ class SWHListerBase(abc.ABC, config.SWHConfig):
         Raises:
             Will catch internal transport-dependent connection exceptions and
             raise swh.lister.core.lister_base.FetchError instead. Other
-            non-connection exceptions should propogate unchanged.
+            non-connection exceptions should propagate unchanged.
         """
         pass
 
