@@ -268,13 +268,14 @@ We can also see that there are a few differences:
 * GitHub sends the next URL as part of the response header, while BitBucket
   sends it in the response body.
 
-* GitHub differentiates API versions with a request header (our HTTP transport
-mix-in will automatically use any headers provided by an optional
-request_headers method that we implement here), while BitBucket has it as part
-of their base service URL.  BitBucket uses the IETF standard HTTP 429 response
-code for their rate limit notifications (the HTTP transport mix-in
-automatically handles that), while GitHub uses their own custom response
-headers that need special treatment.
+* GitHub differentiates API versions with a request header (our HTTP
+  transport mix-in will automatically use any headers provided by an
+  optional request_headers method that we implement here), while
+  BitBucket has it as part of their base service URL.  BitBucket uses
+  the IETF standard HTTP 429 response code for their rate limit
+  notifications (the HTTP transport mix-in automatically handles
+  that), while GitHub uses their own custom response headers that need
+  special treatment.
 
 * But look at them! 58 lines of Python code, combined, to absorb all
   repositories from two of the largest and most influential source code hosting
