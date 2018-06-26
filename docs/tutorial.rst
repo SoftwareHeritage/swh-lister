@@ -167,15 +167,15 @@ This is the entire source code for the BitBucket repository lister::
     # Copyright (C) 2017 the Software Heritage developers
     # License: GNU General Public License version 3 or later
     # See top-level LICENSE file for more information
-     
+
     from urllib import parse
     from swh.lister.bitbucket.models import BitBucketModel
     from swh.lister.core.indexing_lister import SWHIndexingHttpLister
-     
+
     class BitBucketLister(SWHIndexingHttpLister):
         PATH_TEMPLATE = '/repositories?after=%s'
         MODEL = BitBucketModel
-     
+
         def get_model_from_repo(self, repo):
             return {'uid': repo['uuid'],
                     'indexable': repo['created_on'],
@@ -185,14 +185,14 @@ This is the entire source code for the BitBucket repository lister::
                     'origin_url': repo['links']['clone'][0]['href'],
                     'origin_type': repo['scm'],
                     'description': repo['description']}
-     
+
         def get_next_target_from_response(self, response):
             body = response.json()
             if 'next' in body:
                 return parse.unquote(body['next'].split('after=')[1])
             else:
                 return None
-     
+
         def transport_response_simplified(self, response):
             repos = response.json()['values']
             return [self.get_model_from_repo(repo) for repo in repos]
@@ -291,7 +291,7 @@ quasi-linear way…::
 
     # main task
 
-    ghl = GitHubLister(lister_name='github.com', 
+    ghl = GitHubLister(lister_name='github.com',
 		       api_baseurl='https://github.com')
     ghl.run()
 
@@ -300,7 +300,7 @@ quasi-linear way…::
     # SWHIndexingLister.run
 
     identifier = None
-    do 
+    do
 	response, repos = SWHListerBase.ingest_data(identifier)
 	identifier = GitHubLister.get_next_target_from_response(response)
     while(identifier)
@@ -330,7 +330,7 @@ quasi-linear way…::
 
     # SWHListerHttpTransport.transport_request
 
-    path = SWHListerBase.api_baseurl 
+    path = SWHListerBase.api_baseurl
 	 + SWHListerHttpTransport.PATH_TEMPLATE % identifier
     headers = SWHListerHttpTransport.request_headers()
     return http.get(path, headers)
