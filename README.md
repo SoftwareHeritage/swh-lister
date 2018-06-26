@@ -1,6 +1,8 @@
+swh-lister
+============
 
 Licensing
-=========
+----------
 
 This program is free software: you can redistribute it and/or modify it under
 the terms of the GNU General Public License as published by the Free Software
@@ -16,7 +18,7 @@ along with this program.
 
 
 Dependencies
-============
+------------
 
 - python3
 - python3-psycopg2
@@ -25,7 +27,7 @@ Dependencies
 
 
 Deployment
-==========
+-----------
 
 1. git clone under $GHLISTER_ROOT (of your choosing)
 2. mkdir ~/.config/swh/ ~/.cache/swh/lister-github/
