@@ -1,5 +1,14 @@
-swh-lister
+SWH-lister
 ============
+
+The Software Heritage Lister is both a library module to permit to
+centralize lister behaviors, and to provide lister implementations.
+
+Actual lister implementations are:
+
+- swh-lister-debian
+- swh-lister-github
+- swh-lister-bitbucket
 
 Licensing
 ----------
@@ -21,29 +30,30 @@ Dependencies
 ------------
 
 - python3
-- python3-psycopg2
 - python3-requests
 - python3-sqlalchemy
 
+More details in requirements*.txt
 
-Deployment
+
+Local deployment
 -----------
 
 1. git clone under $GHLISTER_ROOT (of your choosing)
-2. mkdir ~/.config/swh/ ~/.cache/swh/lister-github/
-3. edit $GHLISTER_ROOT/etc/crontab and customize GHLISTER_ROOT
-4. crontab $GHLISTER_ROOT/etc/crontab
-5. create configuration file ~/.config/swh/lister-github.ini
+2. mkdir ~/.config/swh/ ~/.cache/swh/lister/github.com/
+3. create configuration file ~/.config/swh/lister-github.com.yml
 
-Sample configuration file
+Configuration file samples
 -------------------------
 
-cat ~/.config/swh/lister-github.ini
+## github
 
-        [main]
-        db_url = postgres:///github
-          # see http://docs.sqlalchemy.org/en/latest/core/engines.html#database-urls
-        cache_dir = /home/zack/.cache/swh/lister-github
-        log_dir =   /home/zack/.cache/swh/lister-github
-        username = foobar  # github username
-        password = quux    # github password
+cat ~/.config/swh/lister-github.com.yml
+
+    # see http://docs.sqlalchemy.org/en/latest/core/engines.html#database-urls
+    db_url: postgres:///lister-github.com
+    credentials:
+      - username: foobar
+        password: quux
+    cache_response: yes
+    cache_dir: /home/zack/.cache/swh/lister/github.com/
