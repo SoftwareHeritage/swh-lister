@@ -48,7 +48,7 @@ Local deployment
 
 ``` sh
 $ createdb lister-github.com
-$ bin/ghlister --db-url postgres:///lister-github.com createdb
+$ python3 -m swh.lister.cli --db-url postgres:///lister-github.com github --createdb
 ```
 
 Configuration file samples
