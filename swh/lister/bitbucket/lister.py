@@ -1,4 +1,4 @@
-# Copyright (C) 2017 the Software Heritage developers
+# Copyright (C) 2017-2018 the Software Heritage developers
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
 
@@ -14,15 +14,15 @@ class BitBucketLister(SWHIndexingHttpLister):
 
     def get_model_from_repo(self, repo):
         return {
-                'uid': repo['uuid'],
-                'indexable': repo['created_on'],
-                'name': repo['name'],
-                'full_name': repo['full_name'],
-                'html_url': repo['links']['html']['href'],
-                'origin_url': repo['links']['clone'][0]['href'],
-                'origin_type': repo['scm'],
-                'description': repo['description']
-                }
+            'uid': repo['uuid'],
+            'indexable': repo['created_on'],
+            'name': repo['name'],
+            'full_name': repo['full_name'],
+            'html_url': repo['links']['html']['href'],
+            'origin_url': repo['links']['clone'][0]['href'],
+            'origin_type': repo['scm'],
+            'description': repo['description']
+        }
 
     def get_next_target_from_response(self, response):
         body = response.json()
