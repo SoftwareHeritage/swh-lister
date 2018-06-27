@@ -39,9 +39,17 @@ More details in requirements*.txt
 Local deployment
 -----------
 
+## lister-github
+
 1. git clone under $GHLISTER_ROOT (of your choosing)
 2. mkdir ~/.config/swh/ ~/.cache/swh/lister/github.com/
 3. create configuration file ~/.config/swh/lister-github.com.yml
+4. Bootstrap the db instance schema
+
+``` sh
+$ createdb lister-github.com
+$ bin/ghlister --db-url postgres:///lister-github.com createdb
+```
 
 Configuration file samples
 -------------------------
