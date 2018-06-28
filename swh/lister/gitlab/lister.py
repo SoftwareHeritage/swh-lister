@@ -32,7 +32,7 @@ class GitlabLister(SWHIndexingHttpLister):
             'name': repo['name'],
             'full_name': repo['path_with_namespace'],
             'html_url': repo['web_url'],
-            'origin_url': repo['web_url'],
+            'origin_url': repo['http_url_to_repo'],
             'origin_type': 'git',
             'description': repo['description'],
             # FIXME: How to determine the fork nature?
