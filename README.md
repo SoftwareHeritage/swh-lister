@@ -59,9 +59,12 @@ Configuration file samples
 cat ~/.config/swh/lister-github.com.yml
 
     # see http://docs.sqlalchemy.org/en/latest/core/engines.html#database-urls
-    db_url: postgres:///lister-github.com
-    credentials:
-      - username: foobar
-        password: quux
-    cache_response: yes
-    cache_dir: /home/zack/.cache/swh/lister/github.com/
+    lister_db_url: postgres:///lister-github.com
+    credentials: []
+    cache_responses: True
+    cache_dir: /home/zack/.cache/swh/lister/github.com
+
+    storage:
+      cls: remote
+      args:
+        url: http://localhost:5002/
