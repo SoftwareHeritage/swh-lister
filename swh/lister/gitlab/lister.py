@@ -18,6 +18,13 @@ class GitlabLister(SWHIndexingHttpLister):
     # id
     API_URL_INDEX_RE = re.compile(r'^.*/projects.*\&page=(\d+).*')
 
+    def filter_before_inject(self, models_list):
+        """We do not filter as we cannot. The indexable field and the page
+           identifier used for pagination are not related.
+
+        """
+        return models_list
+
     def get_model_from_repo(self, repo):
         return {
             'uid': repo['id'],
