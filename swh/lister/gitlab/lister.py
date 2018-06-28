@@ -11,10 +11,12 @@ from .models import GitlabModel
 
 class GitlabLister(SWHIndexingHttpLister):
     # Path to give and mentioning the last id for the next page
-    PATH_TEMPLATE = '/projects?since=%d&visibility=public'
+    PATH_TEMPLATE = '/projects?page=%d'
     # base orm model
     MODEL = GitlabModel
-    API_URL_INDEX_RE = re.compile(r'^.*/projects\?since=(\d+)&visibility=public')
+    # gitlab api do not have an indexable identifier so using the page
+    # id
+    API_URL_INDEX_RE = re.compile(r'^.*/projects.*\&page=(\d+).*')
 
     def get_model_from_repo(self, repo):
         return {
