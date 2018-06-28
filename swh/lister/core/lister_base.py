@@ -134,9 +134,9 @@ class SWHListerBase(abc.ABC, config.SWHConfig):
         pass
 
     def filter_before_inject(self, models_list):
-        """Function run after transport_response_simplified but before injection
-            into the local db and creation of workers. Can be used to eliminate
-            some of the results if necessary.
+        """Function run after transport_response_simplified but before
+           injection into the local db and creation of workers. Can be
+           used to eliminate some of the results if necessary.
 
         MAY BE OVERRIDDEN if an intermediate Lister class needs to filter
         results before injection without requiring every child class to do so.

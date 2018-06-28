@@ -55,11 +55,12 @@ class SWHListerHttpTransport(abc.ABC):
         return self.api_baseurl + path
 
     def request_params(self, identifier):
-        """Get the full parameters passed to requests given the transport_request
-        identifier.
+        """Get the full parameters passed to requests given the
+        transport_request identifier.
 
         MAY BE OVERRIDDEN if something more complex than the request headers
-        ois needed.
+        is needed.
+
         """
         params = {}
         params['headers'] = self.request_headers() or {}
@@ -70,12 +71,13 @@ class SWHListerHttpTransport(abc.ABC):
         return params
 
     def transport_quota_check(self, response):
-        """Implements SWHListerBase.transport_quota_check with standard 429 code
-            check for HTTP with Requests library.
+        """Implements SWHListerBase.transport_quota_check with standard 429
+            code check for HTTP with Requests library.
 
         MAY BE OVERRIDDEN if the server notifies about rate limits in a
             non-standard way that doesn't use HTTP 429 and the Retry-After
             response header. ( https://tools.ietf.org/html/rfc6585#section-4 )
+
         """
         if response.status_code == 429:  # HTTP too many requests
             retry_after = response.headers.get('Retry-After', self.back_off())
