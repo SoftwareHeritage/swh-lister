@@ -12,15 +12,17 @@ from .models import GitlabModel
 class GitlabLister(SWHIndexingHttpLister):
     # Path to give and mentioning the last id for the next page
     PATH_TEMPLATE = '/projects?page=%d'
-    # base orm model
-    MODEL = GitlabModel
     # gitlab api do not have an indexable identifier so using the page
     # id
     API_URL_INDEX_RE = re.compile(r'^.*/projects.*\&page=(\d+).*')
+    # The indexable field, the one we are supposed to use in the api
+    # query is not part of the lookup query. So, we cannot filter
+    # (method filter_before_inject), nor detect and disable origins
+    # (method disable_deleted_repo_tasks)
+    MODEL = GitlabModel
 
     def filter_before_inject(self, models_list):
-        """We do not filter as we cannot. The indexable field and the page
-           identifier used for pagination are not related.
+        """We cannot filter so returns the models_list as is.
 
         """
         return models_list
@@ -35,15 +37,20 @@ class GitlabLister(SWHIndexingHttpLister):
             'origin_url': repo['http_url_to_repo'],
             'origin_type': 'git',
             'description': repo['description'],
-            # FIXME: How to determine the fork nature?
+            # FIXME: How to determine the fork nature? Do we need that
+            # information? Variable `repo` holds a `count_fork` key
+            # which is the number of forks for that
+            # repository. Default to False for now.
             'fork': False,
         }
 
     def transport_quota_check(self, response):
-        """Deal with ratelimit
+        """Deal with rate limit
 
         """
         reqs_remaining = int(response.headers['RateLimit-Remaining'])
+        # TODO: need to dig further about the actual returned code
+        # (not seen yet in documentation)
         if response.status_code == 403 and reqs_remaining == 0:
             reset_at = int(response.headers['RateLimit-Reset'])
             delay = min(reset_at - time.time(), 3600)
