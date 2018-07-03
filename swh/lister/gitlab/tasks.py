@@ -6,23 +6,23 @@ from swh.lister.core.tasks import (IndexingDiscoveryListerTask,
                                    IndexingRangeListerTask,
                                    IndexingRefreshListerTask, ListerTaskBase)
 
-from .lister import GitlabLister
+from .lister import GitLabLister
 
 
-class GitlabDotComListerTask(ListerTaskBase):
+class GitLabDotComListerTask(ListerTaskBase):
     def new_lister(self):
-        return GitlabLister(lister_name='gitlab.com',
+        return GitLabLister(lister_name='gitlab.com',
                             api_baseurl='https://gitlab.com/api/v4')
 
 
-class IncrementalGitlabDotComLister(GitlabDotComListerTask,
+class IncrementalGitLabDotComLister(GitLabDotComListerTask,
                                     IndexingDiscoveryListerTask):
     task_queue = 'swh_lister_gitlab_discover'
 
 
-class RangeGitlabLister(GitlabDotComListerTask, IndexingRangeListerTask):
+class RangeGitLabLister(GitLabDotComListerTask, IndexingRangeListerTask):
     task_queue = 'swh_lister_gitlab_refresh'
 
 
-class FullGitlabRelister(GitlabDotComListerTask, IndexingRefreshListerTask):
+class FullGitLabRelister(GitLabDotComListerTask, IndexingRefreshListerTask):
     task_queue = 'swh_lister_gitlab_refresh'

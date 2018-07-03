@@ -6,10 +6,10 @@ import re
 import time
 
 from ..core.indexing_lister import SWHIndexingHttpLister
-from .models import GitlabModel
+from .models import GitLabModel
 
 
-class GitlabLister(SWHIndexingHttpLister):
+class GitLabLister(SWHIndexingHttpLister):
     # Path to give and mentioning the last id for the next page
     PATH_TEMPLATE = '/projects?page=%d'
     # gitlab api do not have an indexable identifier so using the page
@@ -19,7 +19,7 @@ class GitlabLister(SWHIndexingHttpLister):
     # query is not part of the lookup query. So, we cannot filter
     # (method filter_before_inject), nor detect and disable origins
     # (method disable_deleted_repo_tasks)
-    MODEL = GitlabModel
+    MODEL = GitLabModel
 
     def filter_before_inject(self, models_list):
         """We cannot filter so returns the models_list as is.

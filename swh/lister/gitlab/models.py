@@ -7,7 +7,7 @@ from sqlalchemy import Column, Boolean, Integer
 from ..core.models import ModelBase
 
 
-class GitlabModel(ModelBase):
+class GitLabModel(ModelBase):
     """a Gitlab repository"""
     __tablename__ = 'main_gitlab_repos'
 
