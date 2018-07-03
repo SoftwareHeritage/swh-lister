@@ -2,6 +2,7 @@
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
 
+import random
 import re
 import time
 
@@ -21,6 +22,55 @@ class GitLabLister(SWHIndexingHttpLister):
     # (method disable_deleted_repo_tasks)
     MODEL = GitLabModel
 
+    @property
+    def ADDITIONAL_CONFIG(self):
+        """Override additional config as the 'credentials' structure change
+           between the ancestor classes and the subclass.
+
+           cf. request_params method below
+
+        """
+        return {
+            'lister_db_url':
+                ('str', 'postgresql:///lister-%s' % self.lister_name),
+            'credentials':  # credentials is a dict
+                ('dict', {}),
+            'cache_responses':
+                ('bool', False),
+            'cache_dir':
+                ('str', '~/.cache/swh/lister/%s' % self.lister_name),
+        }
+
+    def request_params(self, identifier):
+        """Get the full parameters passed to requests given the
+        transport_request identifier.
+
+        For the gitlab lister, the 'credentials' entries is configured
+        per instance. For example:
+
+        - credentials:
+          - gitlab.com:
+            - username: user0
+              password: <pass>
+            - username: user1
+              password: <pass>
+            - ...
+          - other-gitlab-instance:
+            ...
+
+        """
+        params = {
+            'headers': self.request_headers() or {}
+        }
+        # Retrieve the credentials per instance
+        creds = self.config['credentials']
+        if creds:
+            creds_lister = creds[self.lister_name]
+            auth = random.choice(creds_lister) if creds else None
+            if auth:
+                params['auth'] = (auth['username'], auth['password'])
+        return params
+
     def filter_before_inject(self, models_list):
         """We cannot filter so returns the models_list as is.
 
@@ -29,6 +79,7 @@ class GitLabLister(SWHIndexingHttpLister):
 
     def get_model_from_repo(self, repo):
         return {
+            'instance': self.lister_name,
             'uid': repo['id'],
             'indexable': repo['id'],
             'name': repo['name'],
