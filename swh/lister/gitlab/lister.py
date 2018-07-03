@@ -12,7 +12,7 @@ from .models import GitLabModel
 
 class GitLabLister(SWHIndexingHttpLister):
     # Path to give and mentioning the last id for the next page
-    PATH_TEMPLATE = '/projects?page=%d'
+    PATH_TEMPLATE = '/projects?page=%d&order_by=id&sort=asc&simple=true'
     # gitlab api do not have an indexable identifier so using the page
     # id
     API_URL_INDEX_RE = re.compile(r'^.*/projects.*\&page=(\d+).*')
