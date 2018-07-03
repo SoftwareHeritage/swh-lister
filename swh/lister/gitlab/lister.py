@@ -96,11 +96,6 @@ class GitLabLister(SWHIndexingHttpLister):
             'origin_url': repo['http_url_to_repo'],
             'origin_type': 'git',
             'description': repo['description'],
-            # FIXME: How to determine the fork nature? Do we need that
-            # information? Variable `repo` holds a `count_fork` key
-            # which is the number of forks for that
-            # repository. Default to False for now.
-            'fork': False,
         }
 
     def transport_quota_check(self, response):
