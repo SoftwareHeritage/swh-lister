@@ -6,20 +6,14 @@ import random
 import re
 import time
 
-from ..core.indexing_lister import SWHIndexingHttpLister
+from ..core.paging_lister import SWHPagingHttpLister
 from .models import GitLabModel
 
 
-class GitLabLister(SWHIndexingHttpLister):
-    # Path to give and mentioning the last id for the next page
+class GitLabLister(SWHPagingHttpLister):
+    # Template path expecting an integer that represents the page id
     PATH_TEMPLATE = '/projects?page=%d&order_by=id&sort=asc&simple=true'
-    # gitlab api do not have an indexable identifier so using the page
-    # id
     API_URL_INDEX_RE = re.compile(r'^.*/projects.*\&page=(\d+).*')
-    # The indexable field, the one we are supposed to use in the api
-    # query is not part of the lookup query. So, we cannot filter
-    # (method filter_before_inject), nor detect and disable origins
-    # (method disable_deleted_repo_tasks)
     MODEL = GitLabModel
 
     @property
@@ -78,12 +72,6 @@ class GitLabLister(SWHIndexingHttpLister):
             if auth:
                 params['auth'] = (auth['username'], auth['password'])
         return params
-
-    def filter_before_inject(self, models_list):
-        """We cannot filter so returns the models_list as is.
-
-        """
-        return models_list
 
     def get_model_from_repo(self, repo):
         return {
