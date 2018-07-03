@@ -10,9 +10,10 @@ from .lister import GitLabLister
 
 
 class GitLabDotComListerTask(ListerTaskBase):
-    def new_lister(self):
-        return GitLabLister(lister_name='gitlab.com',
-                            api_baseurl='https://gitlab.com/api/v4')
+    def new_lister(self, lister_name='gitlab.com',
+                   api_baseurl='https://gitlab.com/api/v4'):
+        return GitLabLister(
+            lister_name=lister_name, api_baseurl=api_baseurl)
 
 
 class IncrementalGitLabDotComLister(GitLabDotComListerTask,

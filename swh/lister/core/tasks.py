@@ -1,4 +1,4 @@
-# Copyright (C) 2017 the Software Heritage developers
+# Copyright (C) 2017-2018 the Software Heritage developers
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
 
@@ -39,34 +39,35 @@ class ListerTaskBase(Task, metaclass=AbstractTaskMeta):
     task_queue = AbstractAttribute('Celery Task queue name')
 
     @abc.abstractmethod
-    def new_lister(self):
+    def new_lister(self, *args, **kwargs):
         """Return a new lister of the appropriate type.
         """
         pass
 
     @abc.abstractmethod
-    def run_task(self):
+    def run_task(self, *args, **kwargs):
         pass
 
 
 class IndexingDiscoveryListerTask(ListerTaskBase):
-    def run_task(self):
-        lister = self.new_lister()
+    def run_task(self, *args, **kwargs):
+        lister = self.new_lister(*args, **kwargs)
         return lister.run(min_index=lister.db_last_index(), max_index=None)
 
 
 class IndexingRangeListerTask(ListerTaskBase):
-    def run_task(self, start, end):
-        lister = self.new_lister()
+    def run_task(self, start, end, *args, **kwargs):
+        lister = self.new_lister(*args, **kwargs)
         return lister.run(min_index=start, max_index=end)
 
 
 class IndexingRefreshListerTask(ListerTaskBase):
     GROUP_SPLIT = 10000
 
-    def run_task(self):
-        lister = self.new_lister()
+    def run_task(self, *args, **kwargs):
+        lister = self.new_lister(*args, **kwargs)
         ranges = lister.db_partition_indices(self.GROUP_SPLIT)
         random.shuffle(ranges)
         range_task = IndexingRangeListerTask()
-        group(range_task.s(minv, maxv) for minv, maxv in ranges)()
+        group(range_task.s(minv, maxv, *args, **kwargs)
+              for minv, maxv in ranges)()
