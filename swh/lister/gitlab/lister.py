@@ -91,8 +91,6 @@ class GitLabLister(SWHPagingHttpLister):
 
         """
         reqs_remaining = int(response.headers['RateLimit-Remaining'])
-        # TODO: need to dig further about the actual returned code
-        # (not seen yet in documentation)
         if response.status_code == 403 and reqs_remaining == 0:
             reset_at = int(response.headers['RateLimit-Reset'])
             delay = min(reset_at - time.time(), 3600)
