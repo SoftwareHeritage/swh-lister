@@ -100,20 +100,39 @@ class SWHListerHttpTransport(abc.ABC):
         self.session = requests.Session()
         self.lister_version = __version__
 
-    def transport_request(self, identifier):
-        """Implements SWHListerBase.transport_request for HTTP using Requests.
+    def _transport_action(self, identifier, method='get'):
+        """Permit to ask information to the api prior to actually executing
+           query.
+
         """
         path = self.request_uri(identifier)
         params = self.request_params(identifier)
 
         try:
-            response = self.session.get(path, **params)
+            if method == 'head':
+                response = self.session.head(path, **params)
+            else:
+                response = self.session.get(path, **params)
         except requests.exceptions.ConnectionError as e:
             raise FetchError(e)
         else:
             if response.status_code not in self.EXPECTED_STATUS_CODES:
                 raise FetchError(response)
             return response
+
+    def transport_head(self, identifier):
+        """Retrieve head information on api.
+
+        """
+        return self._transport_action(identifier, method='head')
+
+    def transport_request(self, identifier):
+        """Implements SWHListerBase.transport_request for HTTP using Requests.
+
+        Retrieve get information on api.
+
+        """
+        return self._transport_action(identifier)
 
     def transport_response_to_string(self, response):
         """Implements SWHListerBase.transport_response_to_string for HTTP given

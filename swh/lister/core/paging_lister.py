@@ -57,6 +57,26 @@ class SWHPagingLister(SWHListerBase):
         """
         pass
 
+    @abc.abstractmethod
+    def get_pages_information(self):
+        """Find the total number of pages.
+
+        Implementation of this method depends on the server API spec
+        and the shape of the network response object returned by the
+        transport_request method.
+
+        For example, some api can use dedicated headers:
+        - x-total-pages to provide the total number of pages
+        - x-total to provide the total number of repositories
+        - x-per-page to provide the number of elements per page
+
+        Returns:
+            tuple (total number of repositories, total number of
+            pages, per_page)
+
+        """
+        pass
+
     # You probably don't need to override anything below this line.
 
     def run(self, min_index=None, max_index=None):
@@ -76,6 +96,7 @@ class SWHPagingLister(SWHListerBase):
         """
         index = min_index or ''
         loop_count = 0
+
         self.min_index = min_index
         self.max_index = max_index
 

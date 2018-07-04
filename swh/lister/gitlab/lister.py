@@ -100,13 +100,30 @@ class GitLabLister(SWHPagingHttpLister):
         return False, 0
 
     def get_next_target_from_response(self, response):
-        """Deal with pagination
+        """Determine the next page identifier.
 
         """
         if 'next' in response.links:
             next_url = response.links['next']['url']
             return int(self.API_URL_INDEX_RE.match(next_url).group(1))
         return None
+
+    def get_pages_information(self):
+        """Determine some pages information.
+
+        """
+        response = self.transport_head(identifier=1)
+        h = response.headers
+        total = h.get('x-total', h.get('X-Total'))
+        total_pages = h.get('x-total-pages', h.get('X-Total-Pages'))
+        per_page = h.get('x-per-page', h.get('X-Per-Page'))
+        if total is not None:
+            total = int(total)
+        if total_pages is not None:
+            total_pages = int(total_pages)
+        if per_page is not None:
+            per_page = int(per_page)
+        return total, total_pages, per_page
 
     def transport_response_simplified(self, response):
         repos = response.json()
