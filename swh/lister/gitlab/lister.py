@@ -27,7 +27,7 @@ class GitLabLister(SWHPagingHttpLister):
     @property
     def ADDITIONAL_CONFIG(self):
         """Override additional config as the 'credentials' structure change
-           between the ancestor classes and the subclass.
+           between the ancestor classes and this class.
 
            cf. request_params method below
 
