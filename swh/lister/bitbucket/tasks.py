@@ -1,9 +1,9 @@
-# Copyright (C) 2017 the Software Heritage developers
+# Copyright (C) 2017-2018 the Software Heritage developers
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
 
 from swh.lister.core.tasks import (IndexingDiscoveryListerTask,
-                                   IndexingRangeListerTask,
+                                   RangeListerTask,
                                    IndexingRefreshListerTask, ListerTaskBase)
 
 from .lister import BitBucketLister
@@ -20,7 +20,7 @@ class IncrementalBitBucketLister(BitBucketListerTask,
     task_queue = 'swh_lister_bitbucket_discover'
 
 
-class RangeBitBucketLister(BitBucketListerTask, IndexingRangeListerTask):
+class RangeBitBucketLister(BitBucketListerTask, RangeListerTask):
     task_queue = 'swh_lister_bitbucket_refresh'
 
 

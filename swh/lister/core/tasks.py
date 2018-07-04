@@ -49,25 +49,41 @@ class ListerTaskBase(Task, metaclass=AbstractTaskMeta):
         pass
 
 
-class IndexingDiscoveryListerTask(ListerTaskBase):
-    def run_task(self, *args, **kwargs):
-        lister = self.new_lister(*args, **kwargs)
-        return lister.run(min_index=lister.db_last_index(), max_index=None)
+# Paging/Indexing lister tasks derivatives
+# (cf. {github/bitbucket/gitlab}/tasks)
 
 
-class IndexingRangeListerTask(ListerTaskBase):
+class RangeListerTask(ListerTaskBase):
+    """Range lister task.
+
+    """
     def run_task(self, start, end, *args, **kwargs):
         lister = self.new_lister(*args, **kwargs)
         return lister.run(min_index=start, max_index=end)
 
 
+# Indexing Lister tasks derivatives (cf. {github/bitbucket}/tasks)
+
+
+class IndexingDiscoveryListerTask(ListerTaskBase):
+    """Incremental indexing lister task.
+
+    """
+    def run_task(self, *args, **kwargs):
+        lister = self.new_lister(*args, **kwargs)
+        return lister.run(min_index=lister.db_last_index(), max_index=None)
+
+
 class IndexingRefreshListerTask(ListerTaskBase):
+    """Full indexing lister task.
+
+    """
     GROUP_SPLIT = 10000
 
     def run_task(self, *args, **kwargs):
         lister = self.new_lister(*args, **kwargs)
         ranges = lister.db_partition_indices(self.GROUP_SPLIT)
         random.shuffle(ranges)
-        range_task = IndexingRangeListerTask()
+        range_task = RangeListerTask()
         group(range_task.s(minv, maxv, *args, **kwargs)
               for minv, maxv in ranges)()

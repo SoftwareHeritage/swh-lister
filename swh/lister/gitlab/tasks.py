@@ -2,9 +2,8 @@
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
 
-from swh.lister.core.tasks import (IndexingDiscoveryListerTask,
-                                   IndexingRangeListerTask,
-                                   IndexingRefreshListerTask, ListerTaskBase)
+from swh.lister.core.tasks import ListerTaskBase, RangeListerTask
+
 
 from .lister import GitLabLister
 
@@ -16,14 +15,10 @@ class GitLabDotComListerTask(ListerTaskBase):
             lister_name=lister_name, api_baseurl=api_baseurl)
 
 
-class IncrementalGitLabDotComLister(GitLabDotComListerTask,
-                                    IndexingDiscoveryListerTask):
-    task_queue = 'swh_lister_gitlab_discover'
+class RangeGitLabLister(GitLabDotComListerTask, RangeListerTask):
+    """GitLab lister working on specified range (start, end) arguments.
 
-
-class RangeGitLabLister(GitLabDotComListerTask, IndexingRangeListerTask):
+    """
     task_queue = 'swh_lister_gitlab_refresh'
 
 
-class FullGitLabRelister(GitLabDotComListerTask, IndexingRefreshListerTask):
-    task_queue = 'swh_lister_gitlab_refresh'
