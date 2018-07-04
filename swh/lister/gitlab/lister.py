@@ -87,14 +87,16 @@ class GitLabLister(SWHPagingHttpLister):
         }
 
     def transport_quota_check(self, response):
-        """Deal with rate limit
+        """Deal with rate limit if any.
 
         """
-        reqs_remaining = int(response.headers['RateLimit-Remaining'])
-        if response.status_code == 403 and reqs_remaining == 0:
-            reset_at = int(response.headers['RateLimit-Reset'])
-            delay = min(reset_at - time.time(), 3600)
-            return True, delay
+        # not all gitlab instance have rate limit
+        if 'RateLimit-Remaining' in response.headers:
+            reqs_remaining = int(response.headers['RateLimit-Remaining'])
+            if response.status_code == 403 and reqs_remaining == 0:
+                reset_at = int(response.headers['RateLimit-Reset'])
+                delay = min(reset_at - time.time(), 3600)
+                return True, delay
         return False, 0
 
     def get_next_target_from_response(self, response):
