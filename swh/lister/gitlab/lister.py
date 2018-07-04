@@ -23,6 +23,14 @@ class GitLabLister(SWHIndexingHttpLister):
     MODEL = GitLabModel
 
     @property
+    def CONFIG_BASE_FILENAME(self):
+        """One gitlab lister for all instances.  We discriminate between the
+        origin on a per instance basis in the table.
+
+        """
+        return 'lister-gitlab'
+
+    @property
     def ADDITIONAL_CONFIG(self):
         """Override additional config as the 'credentials' structure change
            between the ancestor classes and the subclass.
@@ -32,7 +40,7 @@ class GitLabLister(SWHIndexingHttpLister):
         """
         return {
             'lister_db_url':
-                ('str', 'postgresql:///lister-%s' % self.lister_name),
+                ('str', 'postgresql:///lister-gitlab'),
             'credentials':  # credentials is a dict
                 ('dict', {}),
             'cache_responses':
