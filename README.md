@@ -41,6 +41,8 @@ Local deployment
 
 ## lister-github
 
+### Preparation steps
+
 1. git clone under $GHLISTER_ROOT (of your choosing)
 2. mkdir ~/.config/swh/ ~/.cache/swh/lister/github.com/
 3. create configuration file ~/.config/swh/lister-github.com.yml
@@ -51,16 +53,11 @@ Local deployment
         --lister github \
         --create-tables
 
+### Configuration file sample
 
-Configuration file samples
--------------------------
-
-## github
-
-cat ~/.config/swh/lister-github.com.yml
-
+    $ cat ~/.config/swh/lister-github.com.yml
     # see http://docs.sqlalchemy.org/en/latest/core/engines.html#database-urls
-    lister_db_url: postgres:///lister-github.com
+    lister_db_url: postgres:///lister-github
     credentials: []
     cache_responses: True
     cache_dir: /home/zack/.cache/swh/lister/github.com
@@ -69,3 +66,16 @@ cat ~/.config/swh/lister-github.com.yml
       cls: remote
       args:
         url: http://localhost:5002/
+
+### Run
+
+    $ python3
+    >>> import logging
+    >>> logging.basicConfig(level=logging.DEBUG)
+    >>> from swh.lister.github.tasks import RangeGitHubLister
+    >>> RangeGitHubLister().run(364, 365)
+    INFO:root:listing repos starting at 364
+    DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): api.github.com
+    DEBUG:urllib3.connectionpool:https://api.github.com:443 "GET /repositories?since=364 HTTP/1.1" 200 None
+    DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost
+    DEBUG:urllib3.connectionpool:http://localhost:5002 "POST /origin/add HTTP/1.1" 200 1
