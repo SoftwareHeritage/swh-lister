@@ -13,7 +13,7 @@ from .models import GitLabModel
 class GitLabLister(SWHPagingHttpLister):
     # Template path expecting an integer that represents the page id
     PATH_TEMPLATE = '/projects?page=%d&order_by=id&sort=asc&simple=true'
-    API_URL_INDEX_RE = re.compile(r'^.*/projects.*\&page=(\d+).*')
+    API_URL_INDEX_RE = re.compile(r'^.*/projects.*page=(\d+).*')
     MODEL = GitLabModel
 
     @property
