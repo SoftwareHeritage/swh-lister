@@ -46,10 +46,11 @@ Local deployment
 3. create configuration file ~/.config/swh/lister-github.com.yml
 4. Bootstrap the db instance schema
 
-``` sh
-$ createdb lister-github.com
-$ python3 -m swh.lister.cli --db-url postgres:///lister-github.com github --createdb
-```
+    $ createdb lister-github
+    $ python3 -m swh.lister.cli --db-url postgres:///lister-github \
+        --lister github \
+        --create-tables
+
 
 Configuration file samples
 -------------------------
