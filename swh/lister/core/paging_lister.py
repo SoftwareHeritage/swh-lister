@@ -79,7 +79,14 @@ class PageByPageLister(SWHListerBase):
 
     # You probably don't need to override anything below this line.
 
-    def run(self, min_bound=None, max_bound=None):
+    def check_existence(self, injected_repos):
+        """Given a list of injected repos, check if we already have them.
+
+        """
+        # FIXME: Implement the check
+        return False
+
+    def run(self, min_bound=None, max_bound=None, check_existence=False):
         """Main entry function. Sequentially fetches repository data from the
            service according to the basic outline in the class
            docstring. Continually fetching sublists until either there
@@ -89,6 +96,9 @@ class PageByPageLister(SWHListerBase):
         Args:
             min_bound: optional page to start from
             max_bound: optional page to stop at
+            check_existence (bool): optional existence check (for
+                                    incremental lister whose sort
+                                    order is inverted)
 
         Returns:
             nothing
@@ -99,6 +109,7 @@ class PageByPageLister(SWHListerBase):
 
         self.min_page = min_bound
         self.max_page = max_bound
+        already_seen = False
 
         while self.is_within_bounds(page, self.min_page, self.max_page):
             logging.info('listing repos starting at %s' % page)
@@ -106,11 +117,17 @@ class PageByPageLister(SWHListerBase):
             response, injected_repos = self.ingest_data(page)
             next_page = self.get_next_target_from_response(response)
 
+            if check_existence:
+                already_seen = self.check_existence(injected_repos)
+
             # termination condition
 
             if (next_page is None) or (next_page == page):
                 logging.info('stopping after page %s, no next link found' %
                              page)
+                break
+            elif already_seen:
+                logging.info('Repositories already seen, stopping')
                 break
             else:
                 page = next_page

@@ -12,7 +12,7 @@ from .models import GitLabModel
 
 class GitLabLister(PageByPageHttpLister):
     # Template path expecting an integer that represents the page id
-    PATH_TEMPLATE = '/projects?page=%d&order_by=id&sort=asc&simple=true'
+    PATH_TEMPLATE = '/projects?page=%d&order_by=id'
     API_URL_INDEX_RE = re.compile(r'^.*/projects.*page=(\d+).*')
     MODEL = GitLabModel
     LISTER_NAME = 'gitlab'
@@ -103,7 +103,7 @@ class GitLabLister(PageByPageHttpLister):
         return None
 
     def get_pages_information(self):
-        """Determine some pages information.
+        """Determine pages information.
 
         """
         response = self.transport_head(identifier=1)

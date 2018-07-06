@@ -17,13 +17,16 @@ class GitLabListerTask(ListerTaskBase):
 
 
 class RangeGitLabLister(GitLabListerTask, RangeListerTask):
-    """GitLab lister working on specified range (start, end) arguments.
+    """Range GitLab lister (list available origins on specified range)
 
     """
     task_queue = 'swh_lister_gitlab_refresh'
 
 
 class FullGitLabRelister(GitLabListerTask):
+    """Full GitLab lister (list all available origins from the api).
+
+    """
     task_queue = 'swh_lister_gitlab_refresh'
 
     def run_task(self, *args, **kwargs):
@@ -41,3 +44,22 @@ class FullGitLabRelister(GitLabListerTask):
         range_task = RangeGitLabLister()
         group(range_task.s(minv, maxv, *args, **kwargs)
               for minv, maxv in ranges)()
+
+
+class IncrementalGitLabLister(ListerTaskBase):
+    """Incremental GitLab lister (list only new available origins).
+
+    """
+    task_queue = 'swh_lister_gitlab_discover'
+
+    def new_lister(self, api_baseurl='https://gitlab.com/api/v4',
+                   instance='gitlab.com',):
+        # will invert the order of the lister's result
+        return GitLabLister(instance=instance, api_baseurl=api_baseurl,
+                            sort='desc')
+
+    def run_task(self, *args, **kwargs):
+        lister = self.new_lister(*args, **kwargs)
+        # will check for existing data and exit when found
+        return lister.run(min_bound=None, max_bound=None,
+                          check_existence=True)
