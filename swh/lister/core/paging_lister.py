@@ -82,6 +82,8 @@ class PageByPageLister(SWHListerBase):
     def check_existence(self, injected_repos):
         """Given a list of injected repos, check if we already have them.
 
+        Attribute 'instance' variable is assumed to be populated.
+
         """
         # FIXME: Implement the check
         return False

@@ -54,12 +54,12 @@ class IncrementalGitLabLister(ListerTaskBase):
 
     def new_lister(self, api_baseurl='https://gitlab.com/api/v4',
                    instance='gitlab.com'):
-        # will invert the order of the lister's result
+        # assuming going forward in desc order, page 1 through <x-total-pages>
         return GitLabLister(instance=instance, api_baseurl=api_baseurl,
                             sort='desc')
 
     def run_task(self, *args, **kwargs):
         lister = self.new_lister(*args, **kwargs)
-        # will check for existing data and exit when found
-        return lister.run(min_bound=None, max_bound=None,
-                          check_existence=True)
+        total, _, _ = lister.get_pages_information()
+        # stopping as soon as existing origins for that instance are detected
+        return lister.run(min_bound=1, max_bound=total, check_existence=True)
