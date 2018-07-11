@@ -150,6 +150,25 @@ class SWHListerBase(abc.ABC, config.SWHConfig):
         """
         return models_list
 
+    def do_additional_checks(self, models_list):
+        """Execute some additional checks on the model list. For example, to
+           check for existing repositories in the db.
+
+        MAY BE OVERRIDDEN if an intermediate Lister class needs to
+        check some more the results before injection.
+
+        Checks are fine by default, returns the models_list as is by default.
+
+        Args:
+            models_list: list of dicts returned by
+                         transport_response_simplified.
+
+        Returns:
+            models_list with entries if checks ok, False otherwise
+
+        """
+        return models_list
+
     def is_within_bounds(self, inner, lower=None, upper=None):
         """See if a sortable value is inside the range [lower,upper].
 
@@ -453,18 +472,23 @@ class SWHListerBase(abc.ABC, config.SWHConfig):
                     [self.task_dict(m['origin_type'], m['origin_url'])]
                 )[0]['id']
 
-    def ingest_data(self, identifier):
+    def ingest_data(self, identifier, checks=False):
         """The core data fetch sequence. Request server endpoint. Simplify and
             filter response list of repositories. Inject repo information into
             local db. Queue loader tasks for linked repositories.
 
         Args:
             identifier: Resource identifier.
+            checks (bool): Additional checks required
         """
         # Request (partial?) list of repositories info
         response = self.safely_issue_request(identifier)
         models_list = self.transport_response_simplified(response)
         models_list = self.filter_before_inject(models_list)
+        if checks:
+            models_list = self.do_additional_checks(models_list)
+            if not models_list:
+                return response, []
         # inject into local db
         injected = self.inject_repo_data_into_db(models_list)
         # queue workers

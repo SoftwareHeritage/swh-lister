@@ -79,14 +79,18 @@ class PageByPageLister(SWHListerBase):
 
     # You probably don't need to override anything below this line.
 
-    def check_existence(self, injected_repos):
-        """Given a list of injected repos, check if we already have them.
+    def do_additional_checks(self, models_list):
+        """Potentially check for existence of repositories in models_list.
 
-        Attribute 'instance' variable is assumed to be populated.
+        This will be called only if check_existence is flipped on in
+        the run method below.
 
         """
-        # FIXME: Implement the check
-        return False
+        for m in models_list:
+            sql_repo = self.db_query_equal('uid', m['uid'])
+            if sql_repo:
+                return False
+        return models_list
 
     def run(self, min_bound=None, max_bound=None, check_existence=False):
         """Main entry function. Sequentially fetches repository data from the
@@ -111,25 +115,23 @@ class PageByPageLister(SWHListerBase):
 
         self.min_page = min_bound
         self.max_page = max_bound
-        already_seen = False
 
         while self.is_within_bounds(page, self.min_page, self.max_page):
             logging.info('listing repos starting at %s' % page)
 
-            response, injected_repos = self.ingest_data(page)
-            next_page = self.get_next_target_from_response(response)
+            response, injected_repos = self.ingest_data(page,
+                                                        checks=check_existence)
+            if not injected_repos:
+                logging.info('Repositories already seen, stopping')
+                break
 
-            if check_existence:
-                already_seen = self.check_existence(injected_repos)
+            next_page = self.get_next_target_from_response(response)
 
             # termination condition
 
             if (next_page is None) or (next_page == page):
                 logging.info('stopping after page %s, no next link found' %
                              page)
-                break
-            elif already_seen:
-                logging.info('Repositories already seen, stopping')
                 break
             else:
                 page = next_page
