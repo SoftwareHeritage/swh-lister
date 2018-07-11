@@ -53,7 +53,7 @@ class IncrementalGitLabLister(ListerTaskBase):
     task_queue = 'swh_lister_gitlab_discover'
 
     def new_lister(self, api_baseurl='https://gitlab.com/api/v4',
-                   instance='gitlab.com',):
+                   instance='gitlab.com'):
         # will invert the order of the lister's result
         return GitLabLister(instance=instance, api_baseurl=api_baseurl,
                             sort='desc')
