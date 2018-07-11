@@ -17,7 +17,7 @@ import click
 @click.option('--create-tables', is_flag=True, default=False,
               help='create tables')
 @click.option('--drop-tables', is_flag=True, default=False,
-              help='Drop db')
+              help='Drop tables')
 def cli(db_url, lister, create_tables, drop_tables):
     """Initialize db model according to lister.
 
