@@ -11,10 +11,9 @@ from .lister import GitLabLister
 
 
 class GitLabListerTask(ListerTaskBase):
-    def new_lister(self, lister_name='gitlab.com',
-                   api_baseurl='https://gitlab.com/api/v4'):
-        return GitLabLister(
-            lister_name=lister_name, api_baseurl=api_baseurl)
+    def new_lister(self, api_baseurl='https://gitlab.com/api/v4',
+                   instance='gitlab.com'):
+        return GitLabLister(api_baseurl=api_baseurl, instance=instance)
 
 
 class RangeGitLabLister(GitLabListerTask, RangeListerTask):

@@ -13,6 +13,7 @@ class GitHubLister(SWHIndexingHttpLister):
     PATH_TEMPLATE = '/repositories?since=%d'
     MODEL = GitHubModel
     API_URL_INDEX_RE = re.compile(r'^.*/repositories\?since=(\d+)')
+    LISTER_NAME = 'github.com'
 
     def get_model_from_repo(self, repo):
         return {

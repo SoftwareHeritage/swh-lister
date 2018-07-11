@@ -11,6 +11,7 @@ from swh.lister.core.indexing_lister import SWHIndexingHttpLister
 class BitBucketLister(SWHIndexingHttpLister):
     PATH_TEMPLATE = '/repositories?after=%s'
     MODEL = BitBucketModel
+    LISTER_NAME = 'bitbucket.com'
 
     def get_model_from_repo(self, repo):
         return {

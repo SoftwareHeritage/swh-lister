@@ -131,8 +131,6 @@ class SWHPagingHttpLister(SWHListerHttpTransport, SWHPagingLister):
        combining SWHPagingLister and SWHListerHttpTransport.
 
     """
-    def __init__(self, lister_name=None, api_baseurl=None,
-                 override_config=None):
+    def __init__(self, api_baseurl=None, override_config=None):
         SWHListerHttpTransport.__init__(self, api_baseurl=api_baseurl)
-        SWHPagingLister.__init__(self, lister_name=lister_name,
-                                 override_config=override_config)
+        SWHPagingLister.__init__(self, override_config=override_config)

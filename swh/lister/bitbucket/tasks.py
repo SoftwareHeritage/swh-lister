@@ -11,8 +11,7 @@ from .lister import BitBucketLister
 
 class BitBucketListerTask(ListerTaskBase):
     def new_lister(self):
-        return BitBucketLister(lister_name='bitbucket.com',
-                               api_baseurl='https://api.bitbucket.org/2.0')
+        return BitBucketLister(api_baseurl='https://api.bitbucket.org/2.0')
 
 
 class IncrementalBitBucketLister(BitBucketListerTask,

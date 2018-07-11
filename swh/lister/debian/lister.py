@@ -31,11 +31,11 @@ decompressors = {
 class DebianLister(SWHListerHttpTransport, SWHListerBase):
     MODEL = Package
     PATH_TEMPLATE = None
+    LISTER_NAME = 'debian'
 
     def __init__(self, override_config=None):
         SWHListerHttpTransport.__init__(self, api_baseurl="bogus")
-        SWHListerBase.__init__(self, lister_name='debian',
-                               override_config=override_config)
+        SWHListerBase.__init__(self, override_config=override_config)
 
     def transport_request(self, identifier):
         """Subvert SWHListerHttpTransport.transport_request, to try several

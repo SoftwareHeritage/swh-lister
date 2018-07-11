@@ -15,14 +15,14 @@ class GitLabLister(SWHPagingHttpLister):
     PATH_TEMPLATE = '/projects?page=%d&order_by=id&sort=asc&simple=true'
     API_URL_INDEX_RE = re.compile(r'^.*/projects.*page=(\d+).*')
     MODEL = GitLabModel
+    LISTER_NAME = 'gitlab'
 
-    @property
-    def CONFIG_BASE_FILENAME(self):
-        """One gitlab lister for all instances.  We discriminate between the
-        origin on a per instance basis in the table.
-
-        """
-        return 'lister-gitlab'
+    def __init__(self, api_baseurl=None, instance=None,
+                 override_config=None, sort='asc'):
+        super().__init__(api_baseurl=api_baseurl,
+                         override_config=override_config)
+        self.instance = instance
+        self.PATH_TEMPLATE = '%s&sort=%s' % (self.PATH_TEMPLATE, sort)
 
     @property
     def ADDITIONAL_CONFIG(self):
@@ -32,16 +32,10 @@ class GitLabLister(SWHPagingHttpLister):
            cf. request_params method below
 
         """
-        return {
-            'lister_db_url':
-                ('str', 'postgresql:///lister-gitlab'),
-            'credentials':  # credentials is a dict
-                ('dict', {}),
-            'cache_responses':
-                ('bool', False),
-            'cache_dir':
-                ('str', '~/.cache/swh/lister/%s' % self.lister_name),
-        }
+        default_config = super().ADDITIONAL_CONFIG
+        # 'credentials' is a dict of (instance, {username, password}) dict
+        default_config['credentials'] = ('dict', {})
+        return default_config
 
     def request_params(self, identifier):
         """Get the full parameters passed to requests given the
@@ -67,7 +61,7 @@ class GitLabLister(SWHPagingHttpLister):
         # Retrieve the credentials per instance
         creds = self.config['credentials']
         if creds:
-            creds_lister = creds[self.lister_name]
+            creds_lister = creds[self.instance]
             auth = random.choice(creds_lister) if creds else None
             if auth:
                 params['auth'] = (auth['username'], auth['password'])
@@ -75,7 +69,7 @@ class GitLabLister(SWHPagingHttpLister):
 
     def get_model_from_repo(self, repo):
         return {
-            'instance': self.lister_name,
+            'instance': self.instance,
             'uid': repo['id'],
             'indexable': repo['id'],
             'name': repo['name'],

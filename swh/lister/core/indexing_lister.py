@@ -205,8 +205,6 @@ class SWHIndexingLister(SWHListerBase):
 class SWHIndexingHttpLister(SWHListerHttpTransport, SWHIndexingLister):
     """Convenience class for ensuring right lookup and init order
         when combining SWHIndexingLister and SWHListerHttpTransport."""
-    def __init__(self, lister_name=None, api_baseurl=None,
-                 override_config=None):
+    def __init__(self, api_baseurl=None, override_config=None):
         SWHListerHttpTransport.__init__(self, api_baseurl=api_baseurl)
-        SWHIndexingLister.__init__(self, lister_name=lister_name,
-                                   override_config=override_config)
+        SWHIndexingLister.__init__(self, override_config=override_config)

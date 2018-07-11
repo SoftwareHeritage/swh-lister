@@ -64,6 +64,7 @@ class SWHListerBase(abc.ABC, config.SWHConfig):
     MODEL = AbstractAttribute('Subclass type (not instance)'
                               ' of swh.lister.core.models.ModelBase'
                               ' customized for a specific service.')
+    LISTER_NAME = AbstractAttribute("Lister's name")
 
     @abc.abstractmethod
     def transport_request(self, identifier):
@@ -199,30 +200,27 @@ class SWHListerBase(abc.ABC, config.SWHConfig):
 
     @property
     def CONFIG_BASE_FILENAME(self):  # noqa: N802
-        return 'lister-%s' % self.lister_name
+        return 'lister-%s' % self.LISTER_NAME
 
     @property
     def ADDITIONAL_CONFIG(self):  # noqa: N802
         return {
             'lister_db_url':
-                ('str', 'postgresql:///lister-%s' % self.lister_name),
+                ('str', 'postgresql:///lister-%s' % self.LISTER_NAME),
             'credentials':
                 ('list[dict]', []),
             'cache_responses':
                 ('bool', False),
             'cache_dir':
-                ('str', '~/.cache/swh/lister/%s' % self.lister_name),
+                ('str', '~/.cache/swh/lister/%s' % self.LISTER_NAME),
         }
 
     INITIAL_BACKOFF = 10
     MAX_RETRIES = 7
     CONN_SLEEP = 10
 
-    def __init__(self, lister_name=None, override_config=None):
+    def __init__(self, override_config=None):
         self.backoff = self.INITIAL_BACKOFF
-        if lister_name is None:
-            raise NameError("Every lister must be assigned a lister_name.")
-        self.lister_name = lister_name  # 'github?', 'bitbucket?', 'foo.com?'
         self.config = self.parse_config_file(
             base_filename=self.CONFIG_BASE_FILENAME,
             additional_configs=[self.ADDITIONAL_CONFIG]

@@ -39,6 +39,7 @@ class HttpListerTesterBase(abc.ABC):
     first_index = AbstractAttribute('First index in good_api_response')
     last_index = AbstractAttribute('Last index in good_api_response')
     entries_per_page = AbstractAttribute('Number of results in good response')
+    LISTER_NAME = 'fake-lister'
 
     # May need to override this if the headers are used for something
     def response_headers(self, request):
@@ -109,8 +110,7 @@ class HttpListerTesterBase(abc.ABC):
             with patch(
                 'swh.scheduler.backend.SchedulerBackend.reconnect', noop
             ):
-                self.fl = self.Lister(lister_name='fakelister',
-                                      api_baseurl='https://fakeurl',
+                self.fl = self.Lister(api_baseurl='https://fakeurl',
                                       override_config=override_config)
                 self.fl.INITIAL_BACKOFF = 1
 

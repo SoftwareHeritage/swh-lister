@@ -29,21 +29,18 @@ def cli(db_url, lister, create_tables, drop_tables):
         from .github import models
         from .github.lister import GitHubLister
 
-        _lister = GitHubLister(lister_name='github.com',
-                               api_baseurl='https://api.github.com',
+        _lister = GitHubLister(api_baseurl='https://api.github.com',
                                override_config=override_conf)
     elif lister == 'bitbucket':
         from .bitbucket import models
         from .bitbucket.lister import BitBucketLister
-        _lister = BitBucketLister(lister_name='bitbucket.com',
-                                  api_baseurl='https://api.bitbucket.org/2.0',
+        _lister = BitBucketLister(api_baseurl='https://api.bitbucket.org/2.0',
                                   override_config=override_conf)
 
     elif lister == 'gitlab':
         from .gitlab import models
         from .gitlab.lister import GitLabLister
-        _lister = GitLabLister(lister_name='gitlab.com',
-                               api_baseurl='https://gitlab.com/api/v4/',
+        _lister = GitLabLister(api_baseurl='https://gitlab.com/api/v4/',
                                override_config=override_conf)
     else:
         raise ValueError('Only supported listers are %s' % supported_listers)
