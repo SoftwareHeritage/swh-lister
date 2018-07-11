@@ -6,6 +6,7 @@ import random
 import re
 import time
 
+from .. import utils
 from ..core.paging_lister import PageByPageHttpLister
 from .models import GitLabModel
 
@@ -108,9 +109,9 @@ class GitLabLister(PageByPageHttpLister):
         """
         response = self.transport_head(identifier=1)
         h = response.headers
-        total = h.get('x-total', h.get('X-Total'))
-        total_pages = h.get('x-total-pages', h.get('X-Total-Pages'))
-        per_page = h.get('x-per-page', h.get('X-Per-Page'))
+        total = utils.get(h, ['X-Total', 'x-total'])
+        total_pages = utils.get(h, ['X-Total-Pages', 'x-total-pages'])
+        per_page = utils.get(h, ['X-Per-Page', 'x-per-page'])
         if total is not None:
             total = int(total)
         if total_pages is not None:
