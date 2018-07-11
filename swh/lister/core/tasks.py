@@ -59,7 +59,7 @@ class RangeListerTask(ListerTaskBase):
     """
     def run_task(self, start, end, *args, **kwargs):
         lister = self.new_lister(*args, **kwargs)
-        return lister.run(min_index=start, max_index=end)
+        return lister.run(min_bound=start, max_bound=end)
 
 
 # Indexing Lister tasks derivatives (cf. {github/bitbucket}/tasks)
@@ -71,7 +71,7 @@ class IndexingDiscoveryListerTask(ListerTaskBase):
     """
     def run_task(self, *args, **kwargs):
         lister = self.new_lister(*args, **kwargs)
-        return lister.run(min_index=lister.db_last_index(), max_index=None)
+        return lister.run(min_bound=lister.db_last_index(), max_bound=None)
 
 
 class IndexingRefreshListerTask(ListerTaskBase):

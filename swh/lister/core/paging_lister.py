@@ -79,41 +79,41 @@ class PageByPageLister(SWHListerBase):
 
     # You probably don't need to override anything below this line.
 
-    def run(self, min_index=None, max_index=None):
+    def run(self, min_bound=None, max_bound=None):
         """Main entry function. Sequentially fetches repository data from the
            service according to the basic outline in the class
            docstring. Continually fetching sublists until either there
-           is no next index reference given or the given next index is
-           greater than the desired max_index.
+           is no next page reference given or the given next page is
+           greater than the desired max_page.
 
         Args:
-            min_index (indexable type): optional index to start from
-            max_index (indexable type): optional index to stop at
+            min_bound: optional page to start from
+            max_bound: optional page to stop at
 
         Returns:
             nothing
 
         """
-        index = min_index or ''
+        page = min_bound or ''
         loop_count = 0
 
-        self.min_index = min_index
-        self.max_index = max_index
+        self.min_page = min_bound
+        self.max_page = max_bound
 
-        while self.is_within_bounds(index, self.min_index, self.max_index):
-            logging.info('listing repos starting at %s' % index)
+        while self.is_within_bounds(page, self.min_page, self.max_page):
+            logging.info('listing repos starting at %s' % page)
 
-            response, injected_repos = self.ingest_data(index)
-            next_index = self.get_next_target_from_response(response)
+            response, injected_repos = self.ingest_data(page)
+            next_page = self.get_next_target_from_response(response)
 
             # termination condition
 
-            if (next_index is None) or (next_index == index):
-                logging.info('stopping after index %s, no next link found' %
-                             index)
+            if (next_page is None) or (next_page == page):
+                logging.info('stopping after page %s, no next link found' %
+                             page)
                 break
             else:
-                index = next_index
+                page = next_page
 
             loop_count += 1
             if loop_count == 20:

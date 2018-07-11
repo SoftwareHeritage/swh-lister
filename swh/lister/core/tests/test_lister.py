@@ -189,7 +189,7 @@ class HttpListerTesterBase(abc.ABC):
         self.disable_storage_and_scheduler(fl)
         self.disable_db(fl)
 
-        fl.run(min_index=1, max_index=1)  # stores no results
+        fl.run(min_bound=1, max_bound=1)  # stores no results
 
     @istest
     def test_fetch_one_nodb(self, http_mocker):
@@ -199,7 +199,7 @@ class HttpListerTesterBase(abc.ABC):
         self.disable_storage_and_scheduler(fl)
         self.disable_db(fl)
 
-        fl.run(min_index=self.first_index, max_index=self.first_index)
+        fl.run(min_bound=self.first_index, max_bound=self.first_index)
 
     @istest
     def test_fetch_multiple_pages_nodb(self, http_mocker):
@@ -209,7 +209,7 @@ class HttpListerTesterBase(abc.ABC):
         self.disable_storage_and_scheduler(fl)
         self.disable_db(fl)
 
-        fl.run(min_index=self.first_index)
+        fl.run(min_bound=self.first_index)
 
     def init_db(self, db, model):
         engine = create_engine(db.url())
@@ -231,7 +231,7 @@ class HttpListerTesterBase(abc.ABC):
         # did not succeed yet
         if not hasattr(fl, 'db_last_index'):  # gitlab lister cannot pass here
             return
-        fl.run(min_index=self.first_index)
+        fl.run(min_bound=self.first_index)
 
         self.assertEqual(fl.db_last_index(), self.last_index)
         partitions = fl.db_partition_indices(5)
