@@ -6,11 +6,11 @@ import random
 import re
 import time
 
-from ..core.paging_lister import SWHPagingHttpLister
+from ..core.paging_lister import PageByPageHttpLister
 from .models import GitLabModel
 
 
-class GitLabLister(SWHPagingHttpLister):
+class GitLabLister(PageByPageHttpLister):
     # Template path expecting an integer that represents the page id
     PATH_TEMPLATE = '/projects?page=%d&order_by=id&sort=asc&simple=true'
     API_URL_INDEX_RE = re.compile(r'^.*/projects.*page=(\d+).*')

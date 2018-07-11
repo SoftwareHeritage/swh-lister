@@ -9,7 +9,7 @@ from .lister_transports import SWHListerHttpTransport
 from .lister_base import SWHListerBase
 
 
-class SWHPagingLister(SWHListerBase):
+class PageByPageLister(SWHListerBase):
     """Lister* intermediate class for any service that follows the simple
        pagination page pattern.
 
@@ -126,11 +126,11 @@ class SWHPagingLister(SWHListerBase):
         self.db_session = self.mk_session()
 
 
-class SWHPagingHttpLister(SWHListerHttpTransport, SWHPagingLister):
+class PageByPageHttpLister(SWHListerHttpTransport, PageByPageLister):
     """Convenience class for ensuring right lookup and init order when
-       combining SWHPagingLister and SWHListerHttpTransport.
+       combining PageByPageLister and SWHListerHttpTransport.
 
     """
     def __init__(self, api_baseurl=None, override_config=None):
         SWHListerHttpTransport.__init__(self, api_baseurl=api_baseurl)
-        SWHPagingLister.__init__(self, override_config=override_config)
+        PageByPageLister.__init__(self, override_config=override_config)
