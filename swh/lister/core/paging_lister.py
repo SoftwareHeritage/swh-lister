@@ -110,7 +110,7 @@ class PageByPageLister(SWHListerBase):
             nothing
 
         """
-        page = min_bound or ''
+        page = min_bound or 0
         loop_count = 0
 
         self.min_page = min_bound
