@@ -13,8 +13,7 @@ class GitLabModel(ModelBase):
     """
     __tablename__ = 'gitlab_repo'
 
-    id = Column(Integer, primary_key=True)
-    uid = Column(Integer, index=True)
+    uid = Column(String, primary_key=True)
     instance = Column(String, index=True)
 
     def __init__(self, uid=None, indexable=None, name=None,

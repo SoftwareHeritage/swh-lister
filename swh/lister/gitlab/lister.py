@@ -66,10 +66,13 @@ class GitLabLister(PageByPageHttpLister):
                 params['auth'] = (auth['username'], auth['password'])
         return params
 
+    def uid(self, repo):
+        return '%s/%s' % (self.instance, repo['path_with_namespace'])
+
     def get_model_from_repo(self, repo):
         return {
             'instance': self.instance,
-            'uid': repo['id'],
+            'uid': self.uid(repo),
             'name': repo['name'],
             'full_name': repo['path_with_namespace'],
             'html_url': repo['web_url'],
