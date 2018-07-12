@@ -6,11 +6,11 @@ import re
 import unittest
 from datetime import datetime, timedelta
 
-from swh.lister.core.tests.test_lister import HttpListerTesterBase
+from swh.lister.core.tests.test_lister import HttpListerTester
 from swh.lister.github.lister import GitHubLister
 
 
-class GitHubListerTester(HttpListerTesterBase, unittest.TestCase):
+class GitHubListerTester(HttpListerTester, unittest.TestCase):
     Lister = GitHubLister
     test_re = re.compile(r'/repositories\?since=([^?&]+)')
     lister_subdir = 'github'

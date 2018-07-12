@@ -6,10 +6,10 @@ import re
 import unittest
 
 from swh.lister.bitbucket.lister import BitBucketLister
-from swh.lister.core.tests.test_lister import HttpListerTesterBase
+from swh.lister.core.tests.test_lister import HttpListerTester
 
 
-class BitBucketListerTester(HttpListerTesterBase, unittest.TestCase):
+class BitBucketListerTester(HttpListerTester, unittest.TestCase):
     Lister = BitBucketLister
     test_re = re.compile(r'/repositories\?after=([^?&]+)')
     lister_subdir = 'bitbucket'

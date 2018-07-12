@@ -37,7 +37,6 @@ class HttpListerTesterBase(abc.ABC):
     good_api_response_file = AbstractAttribute('Example good response body')
     bad_api_response_file = AbstractAttribute('Example bad response body')
     first_index = AbstractAttribute('First index in good_api_response')
-    last_index = AbstractAttribute('Last index in good_api_response')
     entries_per_page = AbstractAttribute('Number of results in good response')
     LISTER_NAME = 'fake-lister'
 
@@ -215,6 +214,11 @@ class HttpListerTesterBase(abc.ABC):
         engine = create_engine(db.url())
         model.metadata.create_all(engine)
 
+
+class HttpListerTester(HttpListerTesterBase, abc.ABC):
+    last_index = AbstractAttribute('Last index in good_api_response')
+
+    @requests_mock.Mocker()
     @istest
     def test_fetch_multiple_pages_yesdb(self, http_mocker):
         http_mocker.get(self.test_re, text=self.mock_response)
@@ -227,10 +231,6 @@ class HttpListerTesterBase(abc.ABC):
 
         self.disable_storage_and_scheduler(fl)
 
-        # FIXME: Separate the tests properly for the gitlab lister
-        # did not succeed yet
-        if not hasattr(fl, 'db_last_index'):  # gitlab lister cannot pass here
-            return
         fl.run(min_bound=self.first_index)
 
         self.assertEqual(fl.db_last_index(), self.last_index)

@@ -2,6 +2,7 @@
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
 
+import re
 import unittest
 
 from datetime import datetime, timedelta
@@ -12,12 +13,11 @@ from swh.lister.core.tests.test_lister import HttpListerTesterBase
 
 class GitLabListerTester(HttpListerTesterBase, unittest.TestCase):
     Lister = GitLabLister
-    test_re = GitLabLister.API_URL_INDEX_RE
+    test_re = re.compile(r'^.*/projects.*page=(\d+).*')
     lister_subdir = 'gitlab'
     good_api_response_file = 'api_response.json'
     bad_api_response_file = 'api_empty_response.json'
     first_index = 1
-    last_index = 2
     entries_per_page = 10
 
     def response_headers(self, request):
