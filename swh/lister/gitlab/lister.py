@@ -70,7 +70,6 @@ class GitLabLister(PageByPageHttpLister):
         return {
             'instance': self.instance,
             'uid': repo['id'],
-            'indexable': repo['id'],
             'name': repo['name'],
             'full_name': repo['path_with_namespace'],
             'html_url': repo['web_url'],
