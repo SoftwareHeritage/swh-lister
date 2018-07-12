@@ -24,15 +24,7 @@ class GitLabListerTester(HttpListerTesterBase, unittest.TestCase):
         headers = {'RateLimit-Remaining': '1'}
         if self.request_index(request) == str(self.first_index):
             headers.update({
-                'Link': '<https://gitlab.com/v4/projects?page=2>;'
-                        ' rel="next",'
-                        '<https://gitlab.com/v4/projects{?page}>;'
-                        ' rel="first"'
-            })
-        else:
-            headers.update({
-                'Link': '<https://gitlab.com/v4/projects{?page}>;'
-                        ' rel="first"'
+                'x-next-page': '3',
             })
 
         return headers

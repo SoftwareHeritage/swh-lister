@@ -3,7 +3,6 @@
 # See top-level LICENSE file for more information
 
 import random
-import re
 import time
 
 from .. import utils
@@ -14,7 +13,6 @@ from .models import GitLabModel
 class GitLabLister(PageByPageHttpLister):
     # Template path expecting an integer that represents the page id
     PATH_TEMPLATE = '/projects?page=%d&order_by=id'
-    API_URL_INDEX_RE = re.compile(r'^.*/projects.*page=(\d+).*')
     MODEL = GitLabModel
     LISTER_NAME = 'gitlab'
 
@@ -98,10 +96,9 @@ class GitLabLister(PageByPageHttpLister):
         """Determine the next page identifier.
 
         """
-        if 'next' in response.links:
-            next_url = response.links['next']['url']
-            return int(self.API_URL_INDEX_RE.match(next_url).group(1))
-        return None
+        _next = utils.get(response.headers, ['X-Next-Page', 'x-next-page'])
+        if _next:
+            return int(_next)
 
     def get_pages_information(self):
         """Determine pages information.
