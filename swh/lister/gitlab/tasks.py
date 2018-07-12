@@ -6,6 +6,7 @@ import random
 
 from celery import group
 
+from .. import utils
 from ..core.tasks import ListerTaskBase, RangeListerTask
 from .lister import GitLabLister
 
@@ -29,17 +30,13 @@ class FullGitLabRelister(GitLabListerTask):
     """
     task_queue = 'swh_lister_gitlab_refresh'
 
+    # nb pages
+    nb_pages = 10
+
     def run_task(self, *args, **kwargs):
         lister = self.new_lister(*args, **kwargs)
-        total, _, per_page = lister.get_pages_information()
-
-        ranges = []
-        prev_index = None
-        for index in range(0, total, per_page):
-            if index is not None and prev_index is not None:
-                ranges.append((prev_index, index))
-            prev_index = index
-
+        _, total_pages, _ = lister.get_pages_information()
+        ranges = list(utils.split_range(total_pages, self.nb_pages))
         random.shuffle(ranges)
         range_task = RangeGitLabLister()
         group(range_task.s(minv, maxv, *args, **kwargs)

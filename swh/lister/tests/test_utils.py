@@ -49,3 +49,19 @@ class UtilsTest(unittest.TestCase):
             self.assertIsNone(utils.get({}, None))
         with self.assertRaises(AttributeError):
             self.assertIsNone(utils.get(None, ['a']))
+
+    @istest
+    def split_range(self):
+        actual_ranges = list(utils.split_range(14, 5))
+        self.assertEqual(actual_ranges, [(0, 5), (5, 10), (10, 14)])
+
+        actual_ranges = list(utils.split_range(19, 10))
+        self.assertEqual(actual_ranges, [(0, 10), (10, 19)])
+
+    @istest
+    def split_range_errors(self):
+        with self.assertRaises(TypeError):
+            list(utils.split_range(None, 1))
+
+        with self.assertRaises(TypeError):
+            list(utils.split_range(100, None))
