@@ -60,6 +60,7 @@ class IncrementalGitLabLister(ListerTaskBase):
 
     def run_task(self, *args, **kwargs):
         lister = self.new_lister(*args, **kwargs)
-        total, _, _ = lister.get_pages_information()
+        _, total_pages, _ = lister.get_pages_information()
         # stopping as soon as existing origins for that instance are detected
-        return lister.run(min_bound=1, max_bound=total, check_existence=True)
+        return lister.run(min_bound=1, max_bound=total_pages,
+                          check_existence=True)
