@@ -3,17 +3,6 @@
 # See top-level LICENSE file for more information
 
 
-def get(d, keys):
-    """Given a dict, lookup in order for keys with values not None.
-
-    """
-    for key in keys:
-        v = d.get(key)
-        if v is not None:
-            return v
-    return None
-
-
 def split_range(total_pages, nb_pages):
     prev_index = None
     for index in range(0, total_pages, nb_pages):

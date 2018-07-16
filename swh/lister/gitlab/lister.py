@@ -94,13 +94,16 @@ class GitLabLister(PageByPageHttpLister):
                 return True, delay
         return False, 0
 
+    def _get_int(self, headers, key):
+        _val = headers.get(key)
+        if _val:
+            return int(_val)
+
     def get_next_target_from_response(self, response):
         """Determine the next page identifier.
 
         """
-        _next = utils.get(response.headers, ['X-Next-Page', 'x-next-page'])
-        if _next:
-            return int(_next)
+        return self._get_int(response.headers, 'x-next-page')
 
     def get_pages_information(self):
         """Determine pages information.
@@ -108,16 +111,9 @@ class GitLabLister(PageByPageHttpLister):
         """
         response = self.transport_head(identifier=1)
         h = response.headers
-        total = utils.get(h, ['X-Total', 'x-total'])
-        total_pages = utils.get(h, ['X-Total-Pages', 'x-total-pages'])
-        per_page = utils.get(h, ['X-Per-Page', 'x-per-page'])
-        if total is not None:
-            total = int(total)
-        if total_pages is not None:
-            total_pages = int(total_pages)
-        if per_page is not None:
-            per_page = int(per_page)
-        return total, total_pages, per_page
+        return (self._get_int(h, 'x-total'),
+                self._get_int(h, 'x-total-pages'),
+                self._get_int('x-per-page'))
 
     def transport_response_simplified(self, response):
         repos = response.json()

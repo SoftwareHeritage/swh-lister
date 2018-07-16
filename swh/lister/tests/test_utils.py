@@ -12,45 +12,6 @@ from swh.lister import utils
 class UtilsTest(unittest.TestCase):
 
     @istest
-    def get(self):
-        data = {
-            'X-Next-Page': None,
-            'x-next-page': 1,
-        }
-        actual_value = utils.get(data, ['X-Next-Page', 'x-next-page'])
-
-        self.assertEqual(actual_value, 1)
-
-        data = {
-            'X-Next-Page': 10,
-            'x-next-page': 1,
-        }
-        actual_value = utils.get(data, ['X-Next-Page', 'x-next-page'])
-
-        self.assertEqual(actual_value, 10)
-
-        data = {
-            'x-next-page': 100,
-        }
-        actual_value = utils.get(data, ['X-Next-Page', 'x-next-page'])
-
-        self.assertEqual(actual_value, 100)
-
-    @istest
-    def get_empty(self):
-        self.assertIsNone(utils.get({}, []))
-        self.assertIsNone(utils.get({'a': 1}, ['b']))
-        self.assertIsNone(utils.get({'b': 2}, []))
-        self.assertIsNone(utils.get({'b': 2}, []))
-
-    @istest
-    def get_errors(self):
-        with self.assertRaises(TypeError):
-            self.assertIsNone(utils.get({}, None))
-        with self.assertRaises(AttributeError):
-            self.assertIsNone(utils.get(None, ['a']))
-
-    @istest
     def split_range(self):
         actual_ranges = list(utils.split_range(14, 5))
         self.assertEqual(actual_ranges, [(0, 5), (5, 10), (10, 14)])
