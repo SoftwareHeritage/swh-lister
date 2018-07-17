@@ -10,8 +10,8 @@ from .lister import GitHubLister
 
 
 class GitHubListerTask(ListerTaskBase):
-    def new_lister(self):
-        return GitHubLister(api_baseurl='https://api.github.com')
+    def new_lister(self, *, api_baseurl='https://api.github.com'):
+        return GitHubLister(api_baseurl=api_baseurl)
 
 
 class IncrementalGitHubLister(GitHubListerTask, IndexingDiscoveryListerTask):

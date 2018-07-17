@@ -114,11 +114,9 @@ Local deployment
     [GCC 8.1.0] on linux
     Type "help", "copyright", "credits" or "license" for more information.
     >>> from swh.lister.gitlab.tasks import RangeGitLabLister; RangeGitLabLister().run_task(1, 2,
-    instance='salsa.debian.org', api_baseurl='https://salsa.debian.org/api/v4')
-    >>> from swh.lister.gitlab.tasks import RangeGitLabLister; RangeGitLabLister().run_task(1, 2,
-    instance='gitlab.freedesktop.org', api_baseurl='https://gitlab.freedesktop.org/api/v4')
-    >>> from swh.lister.gitlab.tasks import RangeGitLabLister; RangeGitLabLister().run_task(1, 2,
-    instance='gitlab.gnome.org', api_baseurl='https://gitlab.gnome.org/api/v4')
-    >>> from swh.lister.gitlab.tasks import RangeGitLabLister; RangeGitLabLister().run_task(1, 2,
-    instance='gitlab.inria.fr', api_baseurl='https://gitlab.inria.fr/api/v4')
-    >>>
+      {'instance': 'debian', 'api_baseurl': 'https://salsa.debian.org/api/v4', 'sort': 'asc'})
+    >>> from swh.lister.gitlab.tasks import FullGitLabRelister; FullGitLabRelister().run_task(
+      {'instance':'0xacab', 'api_baseurl':'https://0xacab.org/api/v4', 'sort': 'asc'})
+    >>> from swh.lister.gitlab.tasks import IncrementalGitLabLister; IncrementalGitLabLister().run_task(
+      {'instance': 'freedesktop.org', 'api_baseurl': 'https://gitlab.freedesktop.org/api/v4',
+       'sort': 'asc'})

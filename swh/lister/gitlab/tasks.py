@@ -12,9 +12,10 @@ from .lister import GitLabLister
 
 
 class GitLabListerTask(ListerTaskBase):
-    def new_lister(self, api_baseurl='https://gitlab.com/api/v4',
-                   instance='gitlab.com'):
-        return GitLabLister(api_baseurl=api_baseurl, instance=instance)
+    def new_lister(self, *, api_baseurl='https://gitlab.com/api/v4',
+                   instance='gitlab.com', sort='asc'):
+        return GitLabLister(
+            api_baseurl=api_baseurl, instance=instance, sort=sort)
 
 
 class RangeGitLabLister(GitLabListerTask, RangeListerTask):
@@ -33,30 +34,29 @@ class FullGitLabRelister(GitLabListerTask):
     # nb pages
     nb_pages = 10
 
-    def run_task(self, *args, **kwargs):
-        lister = self.new_lister(*args, **kwargs)
+    def run_task(self, lister_args=None):
+        if lister_args is None:
+            lister_args = {}
+        lister = self.new_lister(**lister_args)
         _, total_pages, _ = lister.get_pages_information()
         ranges = list(utils.split_range(total_pages, self.nb_pages))
         random.shuffle(ranges)
         range_task = RangeGitLabLister()
-        group(range_task.s(minv, maxv, *args, **kwargs)
+        group(range_task.s(minv, maxv, lister_args=lister_args)
               for minv, maxv in ranges)()
 
 
-class IncrementalGitLabLister(ListerTaskBase):
+class IncrementalGitLabLister(GitLabListerTask):
     """Incremental GitLab lister (list only new available origins).
 
     """
     task_queue = 'swh_lister_gitlab_discover'
 
-    def new_lister(self, api_baseurl='https://gitlab.com/api/v4',
-                   instance='gitlab.com'):
-        # assuming going forward in desc order, page 1 through <x-total-pages>
-        return GitLabLister(instance=instance, api_baseurl=api_baseurl,
-                            sort='desc')
-
-    def run_task(self, *args, **kwargs):
-        lister = self.new_lister(*args, **kwargs)
+    def run_task(self, lister_args=None):
+        if lister_args is None:
+            lister_args = {}
+        lister_args['sort'] = 'desc'
+        lister = self.new_lister(**lister_args)
         _, total_pages, _ = lister.get_pages_information()
         # stopping as soon as existing origins for that instance are detected
         return lister.run(min_bound=1, max_bound=total_pages,

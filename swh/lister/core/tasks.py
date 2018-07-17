@@ -39,13 +39,13 @@ class ListerTaskBase(Task, metaclass=AbstractTaskMeta):
     task_queue = AbstractAttribute('Celery Task queue name')
 
     @abc.abstractmethod
-    def new_lister(self, *args, **kwargs):
+    def new_lister(self, **lister_args):
         """Return a new lister of the appropriate type.
         """
         pass
 
     @abc.abstractmethod
-    def run_task(self, *args, **kwargs):
+    def run_task(self, *, lister_args=None):
         pass
 
 
@@ -57,8 +57,10 @@ class RangeListerTask(ListerTaskBase):
     """Range lister task.
 
     """
-    def run_task(self, start, end, *args, **kwargs):
-        lister = self.new_lister(*args, **kwargs)
+    def run_task(self, start, end, lister_args=None):
+        if lister_args is None:
+            lister_args = {}
+        lister = self.new_lister(**lister_args)
         return lister.run(min_bound=start, max_bound=end)
 
 
@@ -69,8 +71,10 @@ class IndexingDiscoveryListerTask(ListerTaskBase):
     """Incremental indexing lister task.
 
     """
-    def run_task(self, *args, **kwargs):
-        lister = self.new_lister(*args, **kwargs)
+    def run_task(self, *, lister_args=None):
+        if lister_args is None:
+            lister_args = {}
+        lister = self.new_lister(**lister_args)
         return lister.run(min_bound=lister.db_last_index(), max_bound=None)
 
 
@@ -80,10 +84,12 @@ class IndexingRefreshListerTask(ListerTaskBase):
     """
     GROUP_SPLIT = 10000
 
-    def run_task(self, *args, **kwargs):
-        lister = self.new_lister(*args, **kwargs)
+    def run_task(self, *, lister_args=None):
+        if lister_args is None:
+            lister_args = {}
+        lister = self.new_lister(**lister_args)
         ranges = lister.db_partition_indices(self.GROUP_SPLIT)
         random.shuffle(ranges)
         range_task = RangeListerTask()
-        group(range_task.s(minv, maxv, *args, **kwargs)
+        group(range_task.s(minv, maxv, lister_args)
               for minv, maxv in ranges)()

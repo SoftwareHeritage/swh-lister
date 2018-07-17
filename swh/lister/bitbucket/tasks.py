@@ -10,8 +10,8 @@ from .lister import BitBucketLister
 
 
 class BitBucketListerTask(ListerTaskBase):
-    def new_lister(self):
-        return BitBucketLister(api_baseurl='https://api.bitbucket.org/2.0')
+    def new_lister(self, *, api_baseurl='https://api.bitbucket.org/2.0'):
+        return BitBucketLister(api_baseurl=api_baseurl)
 
 
 class IncrementalBitBucketLister(BitBucketListerTask,
