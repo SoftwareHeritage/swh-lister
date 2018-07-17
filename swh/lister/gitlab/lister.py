@@ -5,7 +5,6 @@
 import random
 import time
 
-from .. import utils
 from ..core.page_by_page_lister import PageByPageHttpLister
 from .models import GitLabModel
 
