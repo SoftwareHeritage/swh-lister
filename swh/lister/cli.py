@@ -26,19 +26,19 @@ def cli(db_url, lister, create_tables, drop_tables):
     override_conf = {'lister_db_url': db_url}
 
     if lister == 'github':
-        from .github import models
+        from .github.models import IndexingModelBase as ModelBase
         from .github.lister import GitHubLister
 
         _lister = GitHubLister(api_baseurl='https://api.github.com',
                                override_config=override_conf)
     elif lister == 'bitbucket':
-        from .bitbucket import models
+        from .bitbucket.models import IndexingModelBase as ModelBase
         from .bitbucket.lister import BitBucketLister
         _lister = BitBucketLister(api_baseurl='https://api.bitbucket.org/2.0',
                                   override_config=override_conf)
 
     elif lister == 'gitlab':
-        from .gitlab import models
+        from .gitlab.models import ModelBase
         from .gitlab.lister import GitLabLister
         _lister = GitLabLister(api_baseurl='https://gitlab.com/api/v4/',
                                override_config=override_conf)
@@ -46,10 +46,10 @@ def cli(db_url, lister, create_tables, drop_tables):
         raise ValueError('Only supported listers are %s' % supported_listers)
 
     if drop_tables:
-        models.ModelBase.metadata.drop_all(_lister.db_engine)
+        ModelBase.metadata.drop_all(_lister.db_engine)
 
     if create_tables:
-        models.ModelBase.metadata.create_all(_lister.db_engine)
+        ModelBase.metadata.create_all(_lister.db_engine)
 
 
 if __name__ == '__main__':
