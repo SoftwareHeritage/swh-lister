@@ -71,8 +71,7 @@ Local deployment
     $ python3
     >>> import logging
     >>> logging.basicConfig(level=logging.DEBUG)
-    >>> from swh.lister.github.tasks import RangeGitHubLister
-    >>> RangeGitHubLister().run(364, 365)
+    >>> from swh.lister.github.tasks import RangeGitHubLister; RangeGitHubLister().run(364, 365)
     INFO:root:listing repos starting at 364
     DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): api.github.com
     DEBUG:urllib3.connectionpool:https://api.github.com:443 "GET /repositories?since=364 HTTP/1.1" 200 None
