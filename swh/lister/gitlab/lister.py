@@ -113,7 +113,7 @@ class GitLabLister(PageByPageHttpLister):
         h = response.headers
         return (self._get_int(h, 'x-total'),
                 self._get_int(h, 'x-total-pages'),
-                self._get_int('x-per-page'))
+                self._get_int(h, 'x-per-page'))
 
     def transport_response_simplified(self, response):
         repos = response.json()
