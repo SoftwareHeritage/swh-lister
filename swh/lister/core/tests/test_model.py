@@ -7,7 +7,7 @@ import unittest
 from nose.tools import istest
 from sqlalchemy import Column, Integer
 
-from swh.lister.core.models import ModelBase
+from swh.lister.core.models import ModelBase, IndexingModelBase
 
 
 class BadSubclass1(ModelBase):
@@ -30,6 +30,27 @@ class GoodSubclass(BadSubclass2):
     indexable = Column(Integer, index=True)
 
 
+class IndexingBadSubclass(IndexingModelBase):
+    __abstract__ = True
+    pass
+
+
+class IndexingBadSubclass2(IndexingModelBase):
+    __abstract__ = True
+    __tablename__ = 'foo'
+
+
+class IndexingBadSubclass3(IndexingBadSubclass2):
+    __abstract__ = True
+    pass
+
+
+class IndexingGoodSubclass(IndexingModelBase):
+    uid = Column(Integer, primary_key=True)
+    indexable = Column(Integer, index=True)
+    __tablename__ = 'bar'
+
+
 class TestModel(unittest.TestCase):
     @istest
     def test_model_instancing(self):
@@ -46,8 +67,28 @@ class TestModel(unittest.TestCase):
             BadSubclass3()
 
         self.assertIsInstance(GoodSubclass(), GoodSubclass)
-        gsc = GoodSubclass(uid='uid', indexable='indexable')
+        gsc = GoodSubclass(uid='uid')
 
         self.assertEqual(gsc.__tablename__, 'foo')
+        self.assertEqual(gsc.uid, 'uid')
+
+    @istest
+    def test_indexing_model_instancing(self):
+        with self.assertRaises(TypeError):
+            IndexingModelBase()
+
+        with self.assertRaises(TypeError):
+            IndexingBadSubclass()
+
+        with self.assertRaises(TypeError):
+            IndexingBadSubclass2()
+
+        with self.assertRaises(TypeError):
+            IndexingBadSubclass3()
+
+        self.assertIsInstance(IndexingGoodSubclass(), IndexingGoodSubclass)
+        gsc = IndexingGoodSubclass(uid='uid', indexable='indexable')
+
+        self.assertEqual(gsc.__tablename__, 'bar')
         self.assertEqual(gsc.uid, 'uid')
         self.assertEqual(gsc.indexable, 'indexable')

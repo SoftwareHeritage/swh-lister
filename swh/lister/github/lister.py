@@ -1,4 +1,4 @@
-# Copyright (C) 2017 the Software Heritage developers
+# Copyright (C) 2017-2018 the Software Heritage developers
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
 
@@ -13,19 +13,20 @@ class GitHubLister(SWHIndexingHttpLister):
     PATH_TEMPLATE = '/repositories?since=%d'
     MODEL = GitHubModel
     API_URL_INDEX_RE = re.compile(r'^.*/repositories\?since=(\d+)')
+    LISTER_NAME = 'github.com'
 
     def get_model_from_repo(self, repo):
         return {
-                'uid': repo['id'],
-                'indexable': repo['id'],
-                'name': repo['name'],
-                'full_name': repo['full_name'],
-                'html_url': repo['html_url'],
-                'origin_url': repo['html_url'],
-                'origin_type': 'git',
-                'description': repo['description'],
-                'fork': repo['fork'],
-                }
+            'uid': repo['id'],
+            'indexable': repo['id'],
+            'name': repo['name'],
+            'full_name': repo['full_name'],
+            'html_url': repo['html_url'],
+            'origin_url': repo['html_url'],
+            'origin_type': 'git',
+            'description': repo['description'],
+            'fork': repo['fork'],
+        }
 
     def transport_quota_check(self, response):
         reqs_remaining = int(response.headers['X-RateLimit-Remaining'])

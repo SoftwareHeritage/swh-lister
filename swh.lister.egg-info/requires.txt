@@ -4,6 +4,6 @@ python_debian
 requests
 setuptools
 swh.core
-swh.scheduler>=0.0.14
+swh.scheduler>=0.0.30
 swh.storage[schemata]>=0.0.76
 xmltodict

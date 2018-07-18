@@ -1,4 +1,4 @@
-# Copyright (C) 2017 the Software Heritage developers
+# Copyright (C) 2017-2018 the Software Heritage developers
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
 
@@ -6,10 +6,10 @@ import re
 import unittest
 
 from swh.lister.bitbucket.lister import BitBucketLister
-from swh.lister.core.tests.test_lister import IndexingHttpListerTesterBase
+from swh.lister.core.tests.test_lister import HttpListerTester
 
 
-class BitBucketListerTester(IndexingHttpListerTesterBase, unittest.TestCase):
+class BitBucketListerTester(HttpListerTester, unittest.TestCase):
     Lister = BitBucketLister
     test_re = re.compile(r'/repositories\?after=([^?&]+)')
     lister_subdir = 'bitbucket'

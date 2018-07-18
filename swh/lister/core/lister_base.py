@@ -15,6 +15,7 @@ from sqlalchemy.orm import sessionmaker
 
 from swh.core import config
 from swh.scheduler.backend import SchedulerBackend
+from swh.scheduler import get_scheduler
 from swh.storage import get_storage
 
 from .abstractattribute import AbstractAttribute
@@ -64,6 +65,7 @@ class SWHListerBase(abc.ABC, config.SWHConfig):
     MODEL = AbstractAttribute('Subclass type (not instance)'
                               ' of swh.lister.core.models.ModelBase'
                               ' customized for a specific service.')
+    LISTER_NAME = AbstractAttribute("Lister's name")
 
     @abc.abstractmethod
     def transport_request(self, identifier):
@@ -82,7 +84,7 @@ class SWHListerBase(abc.ABC, config.SWHConfig):
         Raises:
             Will catch internal transport-dependent connection exceptions and
             raise swh.lister.core.lister_base.FetchError instead. Other
-            non-connection exceptions should propogate unchanged.
+            non-connection exceptions should propagate unchanged.
         """
         pass
 
@@ -134,9 +136,9 @@ class SWHListerBase(abc.ABC, config.SWHConfig):
         pass
 
     def filter_before_inject(self, models_list):
-        """Function run after transport_response_simplified but before injection
-            into the local db and creation of workers. Can be used to eliminate
-            some of the results if necessary.
+        """Function run after transport_response_simplified but before
+           injection into the local db and creation of workers. Can be
+           used to eliminate some of the results if necessary.
 
         MAY BE OVERRIDDEN if an intermediate Lister class needs to filter
         results before injection without requiring every child class to do so.
@@ -146,6 +148,25 @@ class SWHListerBase(abc.ABC, config.SWHConfig):
                          transport_response_simplified.
         Returns:
             models_list with entries changed according to custom logic.
+        """
+        return models_list
+
+    def do_additional_checks(self, models_list):
+        """Execute some additional checks on the model list. For example, to
+           check for existing repositories in the db.
+
+        MAY BE OVERRIDDEN if an intermediate Lister class needs to
+        check some more the results before injection.
+
+        Checks are fine by default, returns the models_list as is by default.
+
+        Args:
+            models_list: list of dicts returned by
+                         transport_response_simplified.
+
+        Returns:
+            models_list with entries if checks ok, False otherwise
+
         """
         return models_list
 
@@ -194,35 +215,37 @@ class SWHListerBase(abc.ABC, config.SWHConfig):
                 'url': 'http://localhost:5002/'
             },
         }),
-        'scheduling_db': ('str', 'dbname=softwareheritage-scheduler-dev'),
+        'scheduler': ('dict', {
+            'cls': 'remote',
+            'args': {
+                'url': 'http://localhost:5008/'
+            },
+        })
     }
 
     @property
     def CONFIG_BASE_FILENAME(self):  # noqa: N802
-        return 'lister-%s' % self.lister_name
+        return 'lister-%s' % self.LISTER_NAME
 
     @property
     def ADDITIONAL_CONFIG(self):  # noqa: N802
         return {
             'lister_db_url':
-                ('str', 'postgresql:///lister-%s' % self.lister_name),
+                ('str', 'postgresql:///lister-%s' % self.LISTER_NAME),
             'credentials':
                 ('list[dict]', []),
             'cache_responses':
                 ('bool', False),
             'cache_dir':
-                ('str', '~/.cache/swh/lister/%s' % self.lister_name),
+                ('str', '~/.cache/swh/lister/%s' % self.LISTER_NAME),
         }
 
     INITIAL_BACKOFF = 10
     MAX_RETRIES = 7
     CONN_SLEEP = 10
 
-    def __init__(self, lister_name=None, override_config=None):
+    def __init__(self, override_config=None):
         self.backoff = self.INITIAL_BACKOFF
-        if lister_name is None:
-            raise NameError("Every lister must be assigned a lister_name.")
-        self.lister_name = lister_name  # 'github?', 'bitbucket?', 'foo.com?'
         self.config = self.parse_config_file(
             base_filename=self.CONFIG_BASE_FILENAME,
             additional_configs=[self.ADDITIONAL_CONFIG]
@@ -235,9 +258,7 @@ class SWHListerBase(abc.ABC, config.SWHConfig):
             self.config.update(override_config)
 
         self.storage = get_storage(**self.config['storage'])
-        self.scheduler = SchedulerBackend(
-            scheduling_db=self.config['scheduling_db'],
-        )
+        self.scheduler = get_scheduler(**self.config['scheduler'])
         self.db_engine = create_engine(self.config['lister_db_url'])
         self.mk_session = sessionmaker(bind=self.db_engine)
         self.db_session = self.mk_session()
@@ -455,18 +476,23 @@ class SWHListerBase(abc.ABC, config.SWHConfig):
                     [self.task_dict(m['origin_type'], m['origin_url'])]
                 )[0]['id']
 
-    def ingest_data(self, identifier):
+    def ingest_data(self, identifier, checks=False):
         """The core data fetch sequence. Request server endpoint. Simplify and
             filter response list of repositories. Inject repo information into
             local db. Queue loader tasks for linked repositories.
 
         Args:
             identifier: Resource identifier.
+            checks (bool): Additional checks required
         """
         # Request (partial?) list of repositories info
         response = self.safely_issue_request(identifier)
         models_list = self.transport_response_simplified(response)
         models_list = self.filter_before_inject(models_list)
+        if checks:
+            models_list = self.do_additional_checks(models_list)
+            if not models_list:
+                return response, []
         # inject into local db
         injected = self.inject_repo_data_into_db(models_list)
         # queue workers

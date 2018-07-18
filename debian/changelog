@@ -1,8 +1,13 @@
-swh-lister (0.0.10-1~swh1~bpo9+1) stretch-swh; urgency=medium
+swh-lister (0.0.11-1~swh1) unstable-swh; urgency=medium
 
-  * Rebuild for stretch-backports.
+  * v0.0.11
+  * lister/gitlab: Add gitlab lister
+  * docs: Update documentation to demonstrate how to run a lister
+    locally
+  * core/lister: Make the listers' scheduler configuration adaptable
+  * debian/*: Fix debian packaging tests
 
- -- Nicolas Dandrimont <nicolas@dandrimont.eu>  Mon, 30 Oct 2017 17:37:25 +0100
+ -- Antoine R. Dumont (@ardumont) <antoine.romain.dumont@gmail.com>  Wed, 18 Jul 2018 14:16:56 +0200
 
 swh-lister (0.0.10-1~swh1) unstable-swh; urgency=medium
 
