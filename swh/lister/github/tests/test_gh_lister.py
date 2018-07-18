@@ -1,4 +1,4 @@
-# Copyright (C) 2017 the Software Heritage developers
+# Copyright (C) 2017-2018 the Software Heritage developers
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
 
@@ -6,11 +6,11 @@ import re
 import unittest
 from datetime import datetime, timedelta
 
-from swh.lister.core.tests.test_lister import IndexingHttpListerTesterBase
+from swh.lister.core.tests.test_lister import HttpListerTester
 from swh.lister.github.lister import GitHubLister
 
 
-class GitHubListerTester(IndexingHttpListerTesterBase, unittest.TestCase):
+class GitHubListerTester(HttpListerTester, unittest.TestCase):
     Lister = GitHubLister
     test_re = re.compile(r'/repositories\?since=([^?&]+)')
     lister_subdir = 'github'

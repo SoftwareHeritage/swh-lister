@@ -3,8 +3,7 @@ ACKNOWLEDGEMENTS
 LICENSE
 MANIFEST.in
 Makefile
-README
-TODO
+README.md
 requirements-swh.txt
 requirements-test.txt
 requirements.txt
@@ -25,9 +24,13 @@ docs/.gitignore
 docs/Makefile
 docs/conf.py
 docs/index.rst
+docs/tutorial.rst
 docs/_static/.placeholder
 docs/_templates/.placeholder
-etc/crontab
+docs/images/new_base.png
+docs/images/new_bitbucket_lister.png
+docs/images/new_github_lister.png
+docs/images/old_github_lister.png
 sql/crawler.sql
 sql/pimp_db.sql
 swh/__init__.py
@@ -38,6 +41,8 @@ swh.lister.egg-info/requires.txt
 swh.lister.egg-info/top_level.txt
 swh/lister/__init__.py
 swh/lister/_version.py
+swh/lister/cli.py
+swh/lister/utils.py
 swh/lister/bitbucket/__init__.py
 swh/lister/bitbucket/lister.py
 swh/lister/bitbucket/models.py
@@ -53,6 +58,7 @@ swh/lister/core/indexing_lister.py
 swh/lister/core/lister_base.py
 swh/lister/core/lister_transports.py
 swh/lister/core/models.py
+swh/lister/core/page_by_page_lister.py
 swh/lister/core/tasks.py
 swh/lister/core/tests/__init__.py
 swh/lister/core/tests/test_abstractattribute.py
@@ -70,3 +76,13 @@ swh/lister/github/tests/__init__.py
 swh/lister/github/tests/api_empty_response.json
 swh/lister/github/tests/api_response.json
 swh/lister/github/tests/test_gh_lister.py
+swh/lister/gitlab/__init__.py
+swh/lister/gitlab/lister.py
+swh/lister/gitlab/models.py
+swh/lister/gitlab/tasks.py
+swh/lister/gitlab/tests/__init__.py
+swh/lister/gitlab/tests/api_empty_response.json
+swh/lister/gitlab/tests/api_response.json
+swh/lister/gitlab/tests/test_gitlab_lister.py
+swh/lister/tests/__init__.py
+swh/lister/tests/test_utils.py

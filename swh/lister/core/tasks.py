@@ -1,4 +1,4 @@
-# Copyright (C) 2017 the Software Heritage developers
+# Copyright (C) 2017-2018 the Software Heritage developers
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
 
@@ -6,9 +6,8 @@ import abc
 import random
 
 from celery import group
-from celery.app.task import TaskType
 
-from swh.scheduler.task import Task
+from swh.scheduler.task import Task, TaskType
 
 from .abstractattribute import AbstractAttribute
 
@@ -40,34 +39,57 @@ class ListerTaskBase(Task, metaclass=AbstractTaskMeta):
     task_queue = AbstractAttribute('Celery Task queue name')
 
     @abc.abstractmethod
-    def new_lister(self):
+    def new_lister(self, **lister_args):
         """Return a new lister of the appropriate type.
         """
         pass
 
     @abc.abstractmethod
-    def run_task(self):
+    def run_task(self, *, lister_args=None):
         pass
 
 
+# Paging/Indexing lister tasks derivatives
+# (cf. {github/bitbucket/gitlab}/tasks)
+
+
+class RangeListerTask(ListerTaskBase):
+    """Range lister task.
+
+    """
+    def run_task(self, start, end, lister_args=None):
+        if lister_args is None:
+            lister_args = {}
+        lister = self.new_lister(**lister_args)
+        return lister.run(min_bound=start, max_bound=end)
+
+
+# Indexing Lister tasks derivatives (cf. {github/bitbucket}/tasks)
+
+
 class IndexingDiscoveryListerTask(ListerTaskBase):
-    def run_task(self):
-        lister = self.new_lister()
-        return lister.run(min_index=lister.db_last_index(), max_index=None)
+    """Incremental indexing lister task.
 
-
-class IndexingRangeListerTask(ListerTaskBase):
-    def run_task(self, start, end):
-        lister = self.new_lister()
-        return lister.run(min_index=start, max_index=end)
+    """
+    def run_task(self, *, lister_args=None):
+        if lister_args is None:
+            lister_args = {}
+        lister = self.new_lister(**lister_args)
+        return lister.run(min_bound=lister.db_last_index(), max_bound=None)
 
 
 class IndexingRefreshListerTask(ListerTaskBase):
+    """Full indexing lister task.
+
+    """
     GROUP_SPLIT = 10000
 
-    def run_task(self):
-        lister = self.new_lister()
+    def run_task(self, *, lister_args=None):
+        if lister_args is None:
+            lister_args = {}
+        lister = self.new_lister(**lister_args)
         ranges = lister.db_partition_indices(self.GROUP_SPLIT)
         random.shuffle(ranges)
-        range_task = IndexingRangeListerTask()
-        group(range_task.s(minv, maxv) for minv, maxv in ranges)()
+        range_task = RangeListerTask()
+        group(range_task.s(minv, maxv, lister_args)
+              for minv, maxv in ranges)()

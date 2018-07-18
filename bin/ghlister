@@ -80,12 +80,14 @@ if __name__ == '__main__':
     if args.db_url:
         override_conf['lister_db_url'] = args.db_url
 
-    lister = GitHubLister(override_conf)
+    lister = GitHubLister(lister_name='github.com',
+                          api_baseurl='https://api.github.com',
+                          override_config=override_conf)
 
     if args.action == 'createdb':
-        models.SQLBase.metadata.create_all(lister.db_engine)
+        models.ModelBase.metadata.create_all(lister.db_engine)
     elif args.action == 'dropdb':
-        models.SQLBase.metadata.drop_all(lister.db_engine)
+        models.ModelBase.metadata.drop_all(lister.db_engine)
     elif args.action == 'list':
         lister.fetch(min_id=args.interval[0],
                      max_id=args.interval[1])
