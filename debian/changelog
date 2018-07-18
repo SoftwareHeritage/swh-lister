@@ -1,3 +1,14 @@
+swh-lister (0.0.11-1~swh1) unstable-swh; urgency=medium
+
+  * v0.0.11
+  * lister/gitlab: Add gitlab lister
+  * docs: Update documentation to demonstrate how to run a lister
+    locally
+  * core/lister: Make the listers' scheduler configuration adaptable
+  * debian/*: Fix debian packaging tests
+
+ -- Antoine R. Dumont (@ardumont) <antoine.romain.dumont@gmail.com>  Wed, 18 Jul 2018 14:16:56 +0200
+
 swh-lister (0.0.10-1~swh1) unstable-swh; urgency=medium
 
   * Release swh.lister v0.0.10
