@@ -55,16 +55,16 @@ Local deployment
 
 ### Configuration file sample
 
+Minimalistic configuration:
+
     $ cat ~/.config/swh/lister-github.com.yml
     # see http://docs.sqlalchemy.org/en/latest/core/engines.html#database-urls
     lister_db_url: postgres:///lister-github
     credentials: []
     cache_responses: True
     cache_dir: /home/zack/.cache/swh/lister/github.com
-    storage:
-      cls: remote
-      args:
-        url: http://localhost:5002/
+
+Note: This expects storage (5002) and scheduler (5008) services to run locally
 
 ### Run
 
@@ -101,10 +101,8 @@ Local deployment
     credentials: []
     cache_responses: True
     cache_dir: /home/zack/.cache/swh/lister/gitlab
-    storage:
-      cls: remote
-      args:
-        url: http://localhost:5002/
+
+Note: This expects storage (5002) and scheduler (5008) services to run locally
 
 ### Run
 
