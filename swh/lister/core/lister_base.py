@@ -15,6 +15,7 @@ from sqlalchemy.orm import sessionmaker
 
 from swh.core import config
 from swh.scheduler.backend import SchedulerBackend
+from swh.scheduler import get_scheduler
 from swh.storage import get_storage
 
 from .abstractattribute import AbstractAttribute
@@ -214,7 +215,12 @@ class SWHListerBase(abc.ABC, config.SWHConfig):
                 'url': 'http://localhost:5002/'
             },
         }),
-        'scheduling_db': ('str', 'dbname=softwareheritage-scheduler-dev'),
+        'scheduler': ('dict', {
+            'cls': 'remote',
+            'args': {
+                'url': 'http://localhost:5008/'
+            },
+        })
     }
 
     @property
@@ -252,9 +258,7 @@ class SWHListerBase(abc.ABC, config.SWHConfig):
             self.config.update(override_config)
 
         self.storage = get_storage(**self.config['storage'])
-        self.scheduler = SchedulerBackend(
-            scheduling_db=self.config['scheduling_db'],
-        )
+        self.scheduler = get_scheduler(**self.config['scheduler'])
         self.db_engine = create_engine(self.config['lister_db_url'])
         self.mk_session = sessionmaker(bind=self.db_engine)
         self.db_session = self.mk_session()

@@ -106,12 +106,9 @@ class HttpListerTesterBase(abc.ABC):
 
         """
         if override_config or self.fl is None:
-            with patch(
-                'swh.scheduler.backend.SchedulerBackend.reconnect', noop
-            ):
-                self.fl = self.Lister(api_baseurl='https://fakeurl',
-                                      override_config=override_config)
-                self.fl.INITIAL_BACKOFF = 1
+            self.fl = self.Lister(api_baseurl='https://fakeurl',
+                                  override_config=override_config)
+            self.fl.INITIAL_BACKOFF = 1
 
         self.fl.reset_backoff()
         return self.fl
