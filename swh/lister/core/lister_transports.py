@@ -55,11 +55,12 @@ class SWHListerHttpTransport(abc.ABC):
         return self.api_baseurl + path
 
     def request_params(self, identifier):
-        """Get the full parameters passed to requests given the transport_request
-        identifier.
+        """Get the full parameters passed to requests given the
+        transport_request identifier.
 
         MAY BE OVERRIDDEN if something more complex than the request headers
-        ois needed.
+        is needed.
+
         """
         params = {}
         params['headers'] = self.request_headers() or {}
@@ -70,12 +71,13 @@ class SWHListerHttpTransport(abc.ABC):
         return params
 
     def transport_quota_check(self, response):
-        """Implements SWHListerBase.transport_quota_check with standard 429 code
-            check for HTTP with Requests library.
+        """Implements SWHListerBase.transport_quota_check with standard 429
+            code check for HTTP with Requests library.
 
         MAY BE OVERRIDDEN if the server notifies about rate limits in a
             non-standard way that doesn't use HTTP 429 and the Retry-After
             response header. ( https://tools.ietf.org/html/rfc6585#section-4 )
+
         """
         if response.status_code == 429:  # HTTP too many requests
             retry_after = response.headers.get('Retry-After', self.back_off())
@@ -98,20 +100,39 @@ class SWHListerHttpTransport(abc.ABC):
         self.session = requests.Session()
         self.lister_version = __version__
 
-    def transport_request(self, identifier):
-        """Implements SWHListerBase.transport_request for HTTP using Requests.
+    def _transport_action(self, identifier, method='get'):
+        """Permit to ask information to the api prior to actually executing
+           query.
+
         """
         path = self.request_uri(identifier)
         params = self.request_params(identifier)
 
         try:
-            response = self.session.get(path, **params)
+            if method == 'head':
+                response = self.session.head(path, **params)
+            else:
+                response = self.session.get(path, **params)
         except requests.exceptions.ConnectionError as e:
             raise FetchError(e)
         else:
             if response.status_code not in self.EXPECTED_STATUS_CODES:
                 raise FetchError(response)
             return response
+
+    def transport_head(self, identifier):
+        """Retrieve head information on api.
+
+        """
+        return self._transport_action(identifier, method='head')
+
+    def transport_request(self, identifier):
+        """Implements SWHListerBase.transport_request for HTTP using Requests.
+
+        Retrieve get information on api.
+
+        """
+        return self._transport_action(identifier)
 
     def transport_response_to_string(self, response):
         """Implements SWHListerBase.transport_response_to_string for HTTP given

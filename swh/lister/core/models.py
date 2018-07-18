@@ -24,10 +24,6 @@ class ModelBase(SQLBase, metaclass=ABCSQLMeta):
 
     uid = AbstractAttribute('Column(<uid_type>, primary_key=True)')
 
-    # The value used for sorting, segmenting, or api query paging,
-    # because uids aren't always sequential.
-    indexable = AbstractAttribute('Column(<indexable_type>, index=True)')
-
     name = Column(String, index=True)
     full_name = Column(String, index=True)
     html_url = Column(String)
@@ -40,14 +36,12 @@ class ModelBase(SQLBase, metaclass=ABCSQLMeta):
     task_id = Column(Integer)
     origin_id = Column(Integer)
 
-    def __init__(self, uid=None, indexable=None, name=None, full_name=None,
+    def __init__(self, uid=None, name=None, full_name=None,
                  html_url=None, origin_url=None, origin_type=None,
                  description=None, task_id=None, origin_id=None):
         self.uid = uid
         self.last_seen = datetime.now()
 
-        if indexable is not None:
-            self.indexable = indexable
         if name is not None:
             self.name = name
         if full_name is not None:
@@ -65,3 +59,24 @@ class ModelBase(SQLBase, metaclass=ABCSQLMeta):
             self.task_id = task_id
         if origin_id is not None:
             self.origin_id = origin_id
+
+
+class IndexingModelBase(ModelBase, metaclass=ABCSQLMeta):
+    __abstract__ = True
+    __tablename__ = AbstractAttribute
+
+    # The value used for sorting, segmenting, or api query paging,
+    # because uids aren't always sequential.
+    indexable = AbstractAttribute('Column(<indexable_type>, index=True)')
+
+    def __init__(self, uid=None, name=None, full_name=None,
+                 html_url=None, origin_url=None, origin_type=None,
+                 description=None, task_id=None, origin_id=None,
+                 indexable=None):
+        super().__init__(
+            uid=uid, name=name, full_name=full_name, html_url=html_url,
+            origin_url=origin_url, origin_type=origin_type,
+            description=description, task_id=task_id, origin_id=origin_id)
+
+        if indexable is not None:
+            self.indexable = indexable

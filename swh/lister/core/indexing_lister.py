@@ -152,23 +152,23 @@ class SWHIndexingLister(SWHListerBase):
         for repo in deleted_repos:
             repo.task_id = None
 
-    def run(self, min_index=None, max_index=None):
+    def run(self, min_bound=None, max_bound=None):
         """Main entry function. Sequentially fetches repository data
             from the service according to the basic outline in the class
             docstring, continually fetching sublists until either there
             is no next index reference given or the given next index is greater
-            than the desired max_index.
+            than the desired max_bound.
 
         Args:
-            min_index (indexable type): optional index to start from
-            max_index (indexable type): optional index to stop at
+            min_bound (indexable type): optional index to start from
+            max_bound (indexable type): optional index to stop at
         Returns:
             nothing
         """
-        index = min_index or ''
+        index = min_bound or ''
         loop_count = 0
-        self.min_index = min_index
-        self.max_index = max_index
+        self.min_index = min_bound
+        self.max_index = max_bound
 
         while self.is_within_bounds(index, self.min_index, self.max_index):
             logging.info('listing repos starting at %s' % index)
@@ -205,8 +205,6 @@ class SWHIndexingLister(SWHListerBase):
 class SWHIndexingHttpLister(SWHListerHttpTransport, SWHIndexingLister):
     """Convenience class for ensuring right lookup and init order
         when combining SWHIndexingLister and SWHListerHttpTransport."""
-    def __init__(self, lister_name=None, api_baseurl=None,
-                 override_config=None):
+    def __init__(self, api_baseurl=None, override_config=None):
         SWHListerHttpTransport.__init__(self, api_baseurl=api_baseurl)
-        SWHIndexingLister.__init__(self, lister_name=lister_name,
-                                   override_config=override_config)
+        SWHIndexingLister.__init__(self, override_config=override_config)

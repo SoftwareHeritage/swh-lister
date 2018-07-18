@@ -1,4 +1,4 @@
-# Copyright (C) 2017 the Software Heritage developers
+# Copyright (C) 2017-2018 the Software Heritage developers
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
 
@@ -20,12 +20,15 @@ def noop(*args, **kwargs):
 
 
 @requests_mock.Mocker()
-class IndexingHttpListerTesterBase(abc.ABC):
+class HttpListerTesterBase(abc.ABC):
     """Base testing class for subclasses of
-        swh.lister.core.indexing_lister.SWHIndexingHttpLister.
 
-        See swh.lister.github.tests.test_gh_lister for an example of how to
-        customize for a specific listing service.
+           swh.lister.core.indexing_lister.SWHIndexingHttpLister.
+           swh.lister.core.page_by_page_lister.PageByPageHttpLister
+
+    See swh.lister.github.tests.test_gh_lister for an example of how
+    to customize for a specific listing service.
+
     """
     Lister = AbstractAttribute('The lister class to test')
     test_re = AbstractAttribute('Compiled regex matching the server url. Must'
@@ -34,8 +37,8 @@ class IndexingHttpListerTesterBase(abc.ABC):
     good_api_response_file = AbstractAttribute('Example good response body')
     bad_api_response_file = AbstractAttribute('Example bad response body')
     first_index = AbstractAttribute('First index in good_api_response')
-    last_index = AbstractAttribute('Last index in good_api_response')
     entries_per_page = AbstractAttribute('Number of results in good response')
+    LISTER_NAME = 'fake-lister'
 
     # May need to override this if the headers are used for something
     def response_headers(self, request):
@@ -56,7 +59,7 @@ class IndexingHttpListerTesterBase(abc.ABC):
         self.response = None
         self.fl = None
         self.helper = None
-        if self.__class__ != IndexingHttpListerTesterBase:
+        if self.__class__ != HttpListerTesterBase:
             self.run = TestCase.run.__get__(self, self.__class__)
         else:
             self.run = noop
@@ -99,14 +102,13 @@ class IndexingHttpListerTesterBase(abc.ABC):
         return self.mock_limit_n_response(2, request, context)
 
     def get_fl(self, override_config=None):
+        """Retrieve an instance of fake lister (fl).
+
+        """
         if override_config or self.fl is None:
-            with patch(
-                'swh.scheduler.backend.SchedulerBackend.reconnect', noop
-            ):
-                self.fl = self.Lister(lister_name='fakelister',
-                                      api_baseurl='https://fakeurl',
-                                      override_config=override_config)
-                self.fl.INITIAL_BACKOFF = 1
+            self.fl = self.Lister(api_baseurl='https://fakeurl',
+                                  override_config=override_config)
+            self.fl.INITIAL_BACKOFF = 1
 
         self.fl.reset_backoff()
         return self.fl
@@ -164,7 +166,7 @@ class IndexingHttpListerTesterBase(abc.ABC):
         self.assertIsInstance(di, dict)
         pubs = [k for k in vars(fl.MODEL).keys() if not k.startswith('_')]
         for k in pubs:
-            if k not in ['last_seen', 'task_id', 'origin_id']:
+            if k not in ['last_seen', 'task_id', 'origin_id', 'id']:
                 self.assertIn(k, di)
 
     def disable_storage_and_scheduler(self, fl):
@@ -183,7 +185,7 @@ class IndexingHttpListerTesterBase(abc.ABC):
         self.disable_storage_and_scheduler(fl)
         self.disable_db(fl)
 
-        fl.run(min_index=1, max_index=1)  # stores no results
+        fl.run(min_bound=1, max_bound=1)  # stores no results
 
     @istest
     def test_fetch_one_nodb(self, http_mocker):
@@ -193,7 +195,7 @@ class IndexingHttpListerTesterBase(abc.ABC):
         self.disable_storage_and_scheduler(fl)
         self.disable_db(fl)
 
-        fl.run(min_index=self.first_index, max_index=self.first_index)
+        fl.run(min_bound=self.first_index, max_bound=self.first_index)
 
     @istest
     def test_fetch_multiple_pages_nodb(self, http_mocker):
@@ -203,12 +205,17 @@ class IndexingHttpListerTesterBase(abc.ABC):
         self.disable_storage_and_scheduler(fl)
         self.disable_db(fl)
 
-        fl.run(min_index=self.first_index)
+        fl.run(min_bound=self.first_index)
 
     def init_db(self, db, model):
         engine = create_engine(db.url())
         model.metadata.create_all(engine)
 
+
+class HttpListerTester(HttpListerTesterBase, abc.ABC):
+    last_index = AbstractAttribute('Last index in good_api_response')
+
+    @requests_mock.Mocker()
     @istest
     def test_fetch_multiple_pages_yesdb(self, http_mocker):
         http_mocker.get(self.test_re, text=self.mock_response)
@@ -221,7 +228,7 @@ class IndexingHttpListerTesterBase(abc.ABC):
 
         self.disable_storage_and_scheduler(fl)
 
-        fl.run(min_index=self.first_index)
+        fl.run(min_bound=self.first_index)
 
         self.assertEqual(fl.db_last_index(), self.last_index)
         partitions = fl.db_partition_indices(5)
