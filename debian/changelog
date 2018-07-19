@@ -1,3 +1,12 @@
+swh-lister (0.0.12-1~swh1) unstable-swh; urgency=medium
+
+  * v0.0.12
+  * swh.lister.gitlab.tasks: Use gitlab as instance name for gitlab.com
+  * README.md: Add gitlab to the lister implementations referenced
+  * core/lister_base: Remove unused import
+
+ -- Antoine R. Dumont (@ardumont) <antoine.romain.dumont@gmail.com>  Thu, 19 Jul 2018 11:29:14 +0200
+
 swh-lister (0.0.11-1~swh1) unstable-swh; urgency=medium
 
   * v0.0.11
