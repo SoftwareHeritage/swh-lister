@@ -8,6 +8,7 @@ Actual lister implementations are:
 
 - swh-lister-debian
 - swh-lister-github
+- swh-lister-gitlab
 - swh-lister-bitbucket
 
 Licensing
