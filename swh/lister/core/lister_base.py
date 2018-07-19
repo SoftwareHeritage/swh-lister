@@ -1,4 +1,4 @@
-# Copyright (C) 2015-2017 the Software Heritage developers
+# Copyright (C) 2015-2018 the Software Heritage developers
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
 
@@ -14,7 +14,6 @@ from sqlalchemy import create_engine, func
 from sqlalchemy.orm import sessionmaker
 
 from swh.core import config
-from swh.scheduler.backend import SchedulerBackend
 from swh.scheduler import get_scheduler
 from swh.storage import get_storage
 
