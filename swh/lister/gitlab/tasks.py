@@ -13,7 +13,7 @@ from .lister import GitLabLister
 
 class GitLabListerTask(ListerTaskBase):
     def new_lister(self, *, api_baseurl='https://gitlab.com/api/v4',
-                   instance='gitlab.com', sort='asc'):
+                   instance='gitlab', sort='asc'):
         return GitLabLister(
             api_baseurl=api_baseurl, instance=instance, sort=sort)
 
