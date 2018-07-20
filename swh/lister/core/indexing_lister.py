@@ -174,6 +174,9 @@ class SWHIndexingLister(SWHListerBase):
             logging.info('listing repos starting at %s' % index)
 
             response, injected_repos = self.ingest_data(index)
+            if not response and not injected_repos:
+                logging.info('No response from api server, stopping')
+                break
 
             next_index = self.get_next_target_from_response(response)
 
