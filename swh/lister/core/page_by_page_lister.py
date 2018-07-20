@@ -121,7 +121,10 @@ class PageByPageLister(SWHListerBase):
 
             response, injected_repos = self.ingest_data(page,
                                                         checks=check_existence)
-            if not injected_repos:
+            if not response and not injected_repos:
+                logging.info('No response from api server, stopping')
+                break
+            elif not injected_repos:
                 logging.info('Repositories already seen, stopping')
                 break
 
