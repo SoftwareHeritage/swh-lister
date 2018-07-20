@@ -112,9 +112,9 @@ Note: This expects storage (5002) and scheduler (5008) services to run locally
     [GCC 8.1.0] on linux
     Type "help", "copyright", "credits" or "license" for more information.
     >>> from swh.lister.gitlab.tasks import RangeGitLabLister; RangeGitLabLister().run_task(1, 2,
-      {'instance': 'debian', 'api_baseurl': 'https://salsa.debian.org/api/v4', 'sort': 'asc'})
+      {'instance': 'debian', 'api_baseurl': 'https://salsa.debian.org/api/v4', 'sort': 'asc', 'per_page': 20})
     >>> from swh.lister.gitlab.tasks import FullGitLabRelister; FullGitLabRelister().run_task(
-      {'instance':'0xacab', 'api_baseurl':'https://0xacab.org/api/v4', 'sort': 'asc'})
+      {'instance':'0xacab', 'api_baseurl':'https://0xacab.org/api/v4', 'sort': 'asc', 'per_page': 20})
     >>> from swh.lister.gitlab.tasks import IncrementalGitLabLister; IncrementalGitLabLister().run_task(
       {'instance': 'freedesktop.org', 'api_baseurl': 'https://gitlab.freedesktop.org/api/v4',
-       'sort': 'asc'})
+       'sort': 'asc', 'per_page': 20})
