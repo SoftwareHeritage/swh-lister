@@ -1,3 +1,14 @@
+swh-lister (0.0.13-1~swh1) unstable-swh; urgency=medium
+
+  * v0.0.13
+  * Fix missing use cases when unable to retrieve information from the
+    api
+  * server
+  * gitlab/lister: Allow specifying the number of elements to
+  * read (default is 20, same as the current gitlab api)
+
+ -- Antoine R. Dumont (@ardumont) <antoine.romain.dumont@gmail.com>  Fri, 20 Jul 2018 13:46:04 +0200
+
 swh-lister (0.0.12-1~swh1) unstable-swh; urgency=medium
 
   * v0.0.12
