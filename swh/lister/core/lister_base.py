@@ -285,6 +285,7 @@ class SWHListerBase(abc.ABC, config.SWHConfig):
         """
         retries_left = self.MAX_RETRIES
         do_cache = self.config['cache_responses']
+        r = None
         while retries_left > 0:
             try:
                 r = self.transport_request(identifier)
@@ -486,6 +487,8 @@ class SWHListerBase(abc.ABC, config.SWHConfig):
         """
         # Request (partial?) list of repositories info
         response = self.safely_issue_request(identifier)
+        if not response:
+            return response, []
         models_list = self.transport_response_simplified(response)
         models_list = self.filter_before_inject(models_list)
         if checks:
