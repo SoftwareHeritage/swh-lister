@@ -2,21 +2,23 @@
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
 
+import xmltodict
+
 from .models import PyPiModel
 
 from swh.scheduler import utils
 from swh.lister.core.simple_lister import SimpleLister
-from swh.lister.core.lister_transports import ListerXMLRPCTransport
+from swh.lister.core.lister_transports import ListerOnePageApiTransport
 
 
-class PyPiLister(ListerXMLRPCTransport, SimpleLister):
+class PyPiLister(ListerOnePageApiTransport, SimpleLister):
     # Template path expecting an integer that represents the page id
     MODEL = PyPiModel
     LISTER_NAME = 'pypi'
-    SERVER = 'https://pypi.org/pypi'
+    PAGE = 'https://pypi.org/simple/'
 
     def __init__(self, override_config=None):
-        ListerXMLRPCTransport.__init__(self)
+        ListerOnePageApiTransport .__init__(self)
         SimpleLister.__init__(self, override_config=override_config)
 
     def task_dict(self, origin_type, origin_url, **kwargs):
@@ -33,11 +35,13 @@ class PyPiLister(ListerXMLRPCTransport, SimpleLister):
             _type, _policy, origin_url,
             project_metadata_url=project_metadata_url)
 
-    def list_packages(self, client):
-        """(Override) List the actual pypi origins from the api.
+    def list_packages(self, response):
+        """(Override) List the actual pypi origins from the response.
 
         """
-        return client.list_packages()
+        result = xmltodict.parse(response.content)
+        _all = result['html']['body']['a']
+        return [package['#text'] for package in _all]
 
     def _compute_urls(self, repo_name):
         """Returns a tuple (project_url, project_metadata_url)

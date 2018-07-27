@@ -2,6 +2,7 @@
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
 
+import abc
 import logging
 
 from .lister_base import SWHListerBase
@@ -17,6 +18,13 @@ class SimpleLister(SWHListerBase):
       information and stores those in db
 
     """
+    @abc.abstractmethod
+    def list_packages(self, *args):
+        """Listing packages method.
+
+        """
+        pass
+
     def ingest_data(self, identifier, checks=False):
         """Rework the base ingest_data.
            Request server endpoint which gives all in one go.
@@ -32,6 +40,7 @@ class SimpleLister(SWHListerBase):
         """
         # Request (partial?) list of repositories info
         response = self.safely_issue_request(identifier)
+        response = self.list_packages(response)
         if not response:
             return response, []
         models_list = self.transport_response_simplified(response)

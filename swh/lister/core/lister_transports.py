@@ -7,6 +7,7 @@ import random
 from datetime import datetime
 from email.utils import parsedate
 from pprint import pformat
+from xmlrpc import client
 
 import requests
 import xmltodict
@@ -35,14 +36,7 @@ class ListerXMLRPCTransport(abc.ABC):
         """Initialize client to query for result
 
         """
-        from xmlrpc import client
         return client.ServerProxy(path)
-
-    def list_packages(self, client):
-        """Listing method
-
-        """
-        pass
 
     def request_uri(self, _):
         """Same uri called once
@@ -64,24 +58,22 @@ class ListerXMLRPCTransport(abc.ABC):
         return False, 0
 
     def transport_request(self, identifier):
-        """Implements SWHListerBase.transport_request for HTTP using Requests.
+        """Implements SWHListerBase.transport_request
 
         """
         path = self.request_uri(identifier)
-        # params = self.request_params(identifier)  # we cannot use this...
-
         try:
-            _client = self.get_client(path)
-            return self.list_packages(_client)
+            return self.get_client(path)
         except Exception as e:
             raise FetchError(e)
 
     def transport_response_to_string(self, response):
         """Implements SWHListerBase.transport_response_to_string for XMLRPC
            given responses.
+
         """
         s = pformat(self.SERVER)
-        s += '\n#\n' + pformat(response)
+        s += '\n#\n' + pformat(response)  # Note: will potentially be big
         return s
 
 
@@ -216,3 +208,25 @@ class SWHListerHttpTransport(abc.ABC):
             except Exception:  # not xml
                 s += pformat(response.text)
         return s
+
+
+class ListerOnePageApiTransport(SWHListerHttpTransport):
+    """Use the request library for retrieving a basic html page and parse
+       the result.
+
+       To be used in conjunction with SWHListerBase or a subclass of it.
+
+    """
+    PAGE = AbstractAttribute("The server api's unique page to retrieve and "
+                             "parse for information")
+    PATH_TEMPLATE = None  # we do not use it
+
+    def __init__(self, api_baseurl=None):
+        self.session = requests.Session()
+        self.lister_version = __version__
+
+    def request_uri(self, _):
+        """Get the full request URI given the transport_request identifier.
+
+        """
+        return self.PAGE
