@@ -21,15 +21,11 @@ SUPPORTED_LISTERS = ['github', 'gitlab', 'bitbucket', 'debian']
               help='create tables')
 @click.option('--drop-tables', is_flag=True, default=False,
               help='Drop tables')
-@click.option('--with-data', is_flag=True, default=False,
-              help='Insert minimum required data')
-def cli(db_url, lister, create_tables, drop_tables, with_data):
+def cli(db_url, lister, create_tables, drop_tables):
     """Initialize db model according to lister.
 
     """
     override_conf = {'lister_db_url': db_url}
-
-    insert_minimum_data = None
 
     if lister == 'github':
         from .github.models import IndexingModelBase as ModelBase
@@ -53,29 +49,6 @@ def cli(db_url, lister, create_tables, drop_tables, with_data):
         ModelBase = DebianLister.MODEL
         _lister = DebianLister()
 
-        def insert_minimum_data(lister):
-            from swh.storage.schemata.distribution import Distribution, Area
-            d = Distribution(
-                name='Debian',
-                type='deb',
-                mirror_uri='http://deb.debian.org/debian/')
-            lister.db_session.add(d)
-
-            areas = []
-            for distribution_name in ['stretch']:
-                for area_name in ['main', 'contrib', 'non-free']:
-                    areas.append(Area(
-                        name='%s/%s' % (distribution_name, area_name),
-                        distribution=d,
-                    ))
-            lister.db_session.add_all(areas)
-            lister.db_session.commit()
-
-    elif lister == 'pypi':
-        from .pypi.models import ModelBase
-        from .pypi.lister import PyPiLister
-        _lister = PyPiLister(override_config=override_conf)
-
     else:
         raise ValueError('Only supported listers are %s' % SUPPORTED_LISTERS)
 
@@ -84,9 +57,6 @@ def cli(db_url, lister, create_tables, drop_tables, with_data):
 
     if create_tables:
         ModelBase.metadata.create_all(_lister.db_engine)
-
-        if with_data and insert_minimum_data:
-            insert_minimum_data(_lister)
 
 
 if __name__ == '__main__':
