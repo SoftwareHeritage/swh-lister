@@ -14,7 +14,7 @@ from sqlalchemy import create_engine, func
 from sqlalchemy.orm import sessionmaker
 
 from swh.core import config
-from swh.scheduler import get_scheduler
+from swh.scheduler import get_scheduler, utils
 from swh.storage import get_storage
 
 from .abstractattribute import AbstractAttribute
@@ -392,7 +392,7 @@ class SWHListerBase(abc.ABC, config.SWHConfig):
             'url': origin_url,
         }
 
-    def task_dict(self, origin_type, origin_url):
+    def task_dict(self, origin_type, origin_url, **kwargs):
         """Return special dict format for the tasks list
 
         Args:
@@ -401,16 +401,9 @@ class SWHListerBase(abc.ABC, config.SWHConfig):
         Returns:
             the same information in a different form
         """
-        return {
-            'type': 'origin-update-%s' % origin_type,
-            'arguments': {
-                'args': [
-                    origin_url,
-                ],
-                'kwargs': {},
-            },
-            'next_run': utcnow(),
-        }
+        _type = 'origin-update-%s' % origin_type
+        _policy = 'recurring'
+        return utils.create_task_dict(_type, _policy, origin_url)
 
     def string_pattern_check(self, a, b, c=None):
         """When comparing indexable types in is_within_bounds, complex strings
@@ -473,7 +466,7 @@ class SWHListerBase(abc.ABC, config.SWHConfig):
                 )
             if not ir.task_id:
                 ir.task_id = self.scheduler.create_tasks(
-                    [self.task_dict(m['origin_type'], m['origin_url'])]
+                    [self.task_dict(**m)]
                 )[0]['id']
 
     def ingest_data(self, identifier, checks=False):
