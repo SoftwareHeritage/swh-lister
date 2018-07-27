@@ -1,4 +1,4 @@
-# Copyright (C) 2017 the Software Heritage developers
+# Copyright (C) 2017-2018 the Software Heritage developers
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
 
@@ -18,6 +18,71 @@ except ImportError:
 
 from .abstractattribute import AbstractAttribute
 from .lister_base import FetchError
+
+
+class ListerXMLRPCTransport(abc.ABC):
+    """Use the xmlrpc library for making Lister endpoint requests.
+
+    To be used in conjunction with SWHListerBase or a subclass of it.
+    """
+    SERVER = AbstractAttribute('string containing the server to contact for '
+                               'information')
+
+    def __init__(self):
+        self.lister_version = __version__
+
+    def get_client(self, path):
+        """Initialize client to query for result
+
+        """
+        from xmlrpc import client
+        return client.ServerProxy(path)
+
+    def list_packages(self, client):
+        """Listing method
+
+        """
+        pass
+
+    def request_uri(self, _):
+        """Same uri called once
+
+        """
+        return self.SERVER
+
+    def request_params(self, identifier):
+        """Cannot pass any parameters to query to the xmlrpc client so cannot
+           even pass our user-agent specifics.
+
+        """
+        return {}
+
+    def transport_quota_check(self, response):
+        """No rate limit dealing explained.
+
+        """
+        return False, 0
+
+    def transport_request(self, identifier):
+        """Implements SWHListerBase.transport_request for HTTP using Requests.
+
+        """
+        path = self.request_uri(identifier)
+        # params = self.request_params(identifier)  # we cannot use this...
+
+        try:
+            _client = self.get_client(path)
+            return self.list_packages(_client)
+        except Exception as e:
+            raise FetchError(e)
+
+    def transport_response_to_string(self, response):
+        """Implements SWHListerBase.transport_response_to_string for XMLRPC
+           given responses.
+        """
+        s = pformat(self.SERVER)
+        s += '\n#\n' + pformat(response)
+        return s
 
 
 class SWHListerHttpTransport(abc.ABC):
