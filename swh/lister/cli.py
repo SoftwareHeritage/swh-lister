@@ -6,13 +6,16 @@
 import click
 
 
+SUPPORTED_LISTERS = ['github', 'gitlab', 'bitbucket', 'debian']
+
+
 @click.command()
 @click.option(
     '--db-url', '-d', default='postgres:///lister-gitlab.com',
     help='SQLAlchemy DB URL; see '
          '<http://docs.sqlalchemy.org/en/latest/core/engines.html#database-urls>')  # noqa
 @click.option('--lister', required=1,
-              type=click.Choice(['github', 'gitlab', 'bitbucket', 'debian']),
+              type=click.Choice(SUPPORTED_LISTERS),
               help='Lister to act upon')
 @click.option('--create-tables', is_flag=True, default=False,
               help='create tables')
@@ -22,7 +25,6 @@ def cli(db_url, lister, create_tables, drop_tables):
     """Initialize db model according to lister.
 
     """
-    supported_listers = ['github', 'gitlab', 'bitbucket', 'debian']
     override_conf = {'lister_db_url': db_url}
 
     if lister == 'github':
@@ -48,7 +50,7 @@ def cli(db_url, lister, create_tables, drop_tables):
         _lister = DebianLister()
 
     else:
-        raise ValueError('Only supported listers are %s' % supported_listers)
+        raise ValueError('Only supported listers are %s' % SUPPORTED_LISTERS)
 
     if drop_tables:
         ModelBase.metadata.drop_all(_lister.db_engine)
