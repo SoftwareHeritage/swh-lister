@@ -47,7 +47,7 @@ class SimpleLister(SWHListerBase):
         models_list = self.filter_before_inject(models_list)
         from swh.core import utils
         all_injected = []
-        for models in utils.grouper(models_list, n=1000):
+        for models in utils.grouper(models_list, n=10000):
             models = list(models)
             logging.debug('models: %s' % len(models))
             # inject into local db
