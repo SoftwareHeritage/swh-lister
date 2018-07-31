@@ -6,24 +6,30 @@
 import click
 
 
+SUPPORTED_LISTERS = ['github', 'gitlab', 'bitbucket', 'debian']
+
+
 @click.command()
 @click.option(
     '--db-url', '-d', default='postgres:///lister-gitlab.com',
     help='SQLAlchemy DB URL; see '
          '<http://docs.sqlalchemy.org/en/latest/core/engines.html#database-urls>')  # noqa
 @click.option('--lister', required=1,
-              type=click.Choice(['github', 'gitlab', 'bitbucket']),
+              type=click.Choice(SUPPORTED_LISTERS),
               help='Lister to act upon')
 @click.option('--create-tables', is_flag=True, default=False,
               help='create tables')
 @click.option('--drop-tables', is_flag=True, default=False,
               help='Drop tables')
-def cli(db_url, lister, create_tables, drop_tables):
+@click.option('--with-data', is_flag=True, default=False,
+              help='Insert minimum required data')
+def cli(db_url, lister, create_tables, drop_tables, with_data):
     """Initialize db model according to lister.
 
     """
-    supported_listers = ['github', 'gitlab', 'bitbucket']
     override_conf = {'lister_db_url': db_url}
+
+    insert_minimum_data = None
 
     if lister == 'github':
         from .github.models import IndexingModelBase as ModelBase
@@ -42,14 +48,40 @@ def cli(db_url, lister, create_tables, drop_tables):
         from .gitlab.lister import GitLabLister
         _lister = GitLabLister(api_baseurl='https://gitlab.com/api/v4/',
                                override_config=override_conf)
+    elif lister == 'debian':
+        from .debian.lister import DebianLister
+        ModelBase = DebianLister.MODEL
+        _lister = DebianLister()
+
+        def insert_minimum_data(lister):
+            from swh.storage.schemata.distribution import Distribution, Area
+            d = Distribution(
+                name='Debian',
+                type='deb',
+                mirror_uri='http://deb.debian.org/debian/')
+            lister.db_session.add(d)
+
+            areas = []
+            for distribution_name in ['stretch']:
+                for area_name in ['main', 'contrib', 'non-free']:
+                    areas.append(Area(
+                        name='%s/%s' % (distribution_name, area_name),
+                        distribution=d,
+                    ))
+            lister.db_session.add_all(areas)
+            lister.db_session.commit()
+
     else:
-        raise ValueError('Only supported listers are %s' % supported_listers)
+        raise ValueError('Only supported listers are %s' % SUPPORTED_LISTERS)
 
     if drop_tables:
         ModelBase.metadata.drop_all(_lister.db_engine)
 
     if create_tables:
         ModelBase.metadata.create_all(_lister.db_engine)
+
+        if with_data and insert_minimum_data:
+            insert_minimum_data(_lister)
 
 
 if __name__ == '__main__':
