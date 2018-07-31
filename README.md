@@ -118,3 +118,45 @@ Note: This expects storage (5002) and scheduler (5008) services to run locally
     >>> from swh.lister.gitlab.tasks import IncrementalGitLabLister; IncrementalGitLabLister().run_task(
       {'instance': 'freedesktop.org', 'api_baseurl': 'https://gitlab.freedesktop.org/api/v4',
        'sort': 'asc', 'per_page': 20})
+
+## lister-debian
+
+### preparation steps
+
+1. git clone under $SWH_ENVIRONMENT_HOME/swh-lister (of your choosing)
+2. mkdir ~/.config/swh/ ~/.cache/swh/lister/debian/
+3. create configuration file ~/.config/swh/lister-debian.yml
+4. Bootstrap the db instance schema
+
+    $ createdb lister-debian
+    $ python3 -m swh.lister.cli --db-url postgres:///lister-debian \
+        --lister debian \
+        --create-tables \
+        --with-data
+
+    Note: This bootstraps a minimum data set needed for the debian
+    lister to run (for development)
+
+### Configuration file sample
+
+    $ cat ~/.config/swh/lister-debian.yml
+    # see http://docs.sqlalchemy.org/en/latest/core/engines.html#database-urls
+    lister_db_url: postgres:///lister-debian
+    credentials: []
+    cache_responses: True
+    cache_dir: /home/zack/.cache/swh/lister/debian
+
+Note: This expects storage (5002) and scheduler (5008) services to run locally
+
+### Run
+
+  $ python3
+  Python 3.6.6 (default, Jun 27 2018, 14:44:17)
+  [GCC 8.1.0] on linux
+  Type "help", "copyright", "credits" or "license" for more information.
+  >>> import logging; logging.basicConfig(level=logging.DEBUG); from swh.lister.debian.tasks import DebianListerTask; DebianListerTask().run_task('Debian')
+  DEBUG:root:Creating snapshot for distribution Distribution(Debian (deb) on http://deb.debian.org/debian/) on date 2018-07-27 09:22:50.461165+00:00
+  DEBUG:root:Processing area Area(stretch/main of Debian)
+  DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): deb.debian.org
+  DEBUG:urllib3.connectionpool:http://deb.debian.org:80 "GET /debian//dists/stretch/main/source/Sources.xz HTTP/1.1" 302 325
+  ...

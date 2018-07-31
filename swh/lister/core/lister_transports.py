@@ -84,7 +84,7 @@ class SWHListerHttpTransport(abc.ABC):
             try:
                 # might be seconds
                 return True, float(retry_after)
-            except:
+            except Exception:
                 # might be http-date
                 at_date = datetime(*parsedate(retry_after)[:6])
                 from_now = (at_date - datetime.today()).total_seconds() + 5
@@ -145,9 +145,9 @@ class SWHListerHttpTransport(abc.ABC):
         s += '\n#\n'
         try:  # json?
             s += pformat(response.json())
-        except:  # not json
+        except Exception:  # not json
             try:  # xml?
                 s += pformat(xmltodict.parse(response.text))
-            except:  # not xml
+            except Exception:  # not xml
                 s += pformat(response.text)
         return s
