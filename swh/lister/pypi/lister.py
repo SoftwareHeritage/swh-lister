@@ -21,7 +21,7 @@ class PyPiLister(ListerOnePageApiTransport, SimpleLister):
         ListerOnePageApiTransport .__init__(self)
         SimpleLister.__init__(self, override_config=override_config)
 
-    def task_dict(self, origin_type, origin_url, **kwargs):
+    def task_dict(self, origin_type, project_url, **kwargs):
         """(Override) Return task format dict
 
         This is overridden from the lister_base as more information is
@@ -30,9 +30,10 @@ class PyPiLister(ListerOnePageApiTransport, SimpleLister):
         """
         _type = 'origin-update-%s' % origin_type
         _policy = 'recurring'
+        project_name = kwargs.get('name')
         project_metadata_url = kwargs.get('html_url')
         return utils.create_task_dict(
-            _type, _policy, origin_url,
+            _type, _policy, project_name, project_url,
             project_metadata_url=project_metadata_url)
 
     def list_packages(self, response):
