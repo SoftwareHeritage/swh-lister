@@ -6,10 +6,11 @@ centralize lister behaviors, and to provide lister implementations.
 
 Actual lister implementations are:
 
+- swh-lister-bitbucket
 - swh-lister-debian
 - swh-lister-github
 - swh-lister-gitlab
-- swh-lister-bitbucket
+- swh-lister-pypi
 
 Licensing
 ----------
