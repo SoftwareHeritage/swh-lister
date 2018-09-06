@@ -2,6 +2,7 @@
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
 
+import random
 import xmltodict
 
 from .models import PyPiModel
@@ -41,8 +42,9 @@ class PyPiLister(ListerOnePageApiTransport, SimpleLister):
 
         """
         result = xmltodict.parse(response.content)
-        _all = result['html']['body']['a']
-        return [package['#text'] for package in _all]
+        _packages = [p['#text'] for p in result['html']['body']['a']]
+        random.shuffle(_packages)
+        return _packages
 
     def _compute_urls(self, repo_name):
         """Returns a tuple (project_url, project_metadata_url)
