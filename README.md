@@ -6,10 +6,11 @@ centralize lister behaviors, and to provide lister implementations.
 
 Actual lister implementations are:
 
+- swh-lister-bitbucket
 - swh-lister-debian
 - swh-lister-github
 - swh-lister-gitlab
-- swh-lister-bitbucket
+- swh-lister-pypi
 
 Licensing
 ----------
@@ -63,7 +64,7 @@ Minimalistic configuration:
     lister_db_url: postgres:///lister-github
     credentials: []
     cache_responses: True
-    cache_dir: /home/zack/.cache/swh/lister/github.com
+    cache_dir: /home/user/.cache/swh/lister/github.com
 
 Note: This expects storage (5002) and scheduler (5008) services to run locally
 
@@ -101,7 +102,7 @@ Note: This expects storage (5002) and scheduler (5008) services to run locally
     lister_db_url: postgres:///lister-gitlab
     credentials: []
     cache_responses: True
-    cache_dir: /home/zack/.cache/swh/lister/gitlab
+    cache_dir: /home/user/.cache/swh/lister/gitlab
 
 Note: This expects storage (5002) and scheduler (5008) services to run locally
 
@@ -144,7 +145,7 @@ Note: This expects storage (5002) and scheduler (5008) services to run locally
     lister_db_url: postgres:///lister-debian
     credentials: []
     cache_responses: True
-    cache_dir: /home/zack/.cache/swh/lister/debian
+    cache_dir: /home/user/.cache/swh/lister/debian
 
 Note: This expects storage (5002) and scheduler (5008) services to run locally
 
@@ -160,3 +161,42 @@ Note: This expects storage (5002) and scheduler (5008) services to run locally
   DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): deb.debian.org
   DEBUG:urllib3.connectionpool:http://deb.debian.org:80 "GET /debian//dists/stretch/main/source/Sources.xz HTTP/1.1" 302 325
   ...
+
+
+## lister-pypi
+
+### preparation steps
+
+1. git clone under $SWH_ENVIRONMENT_HOME/swh-lister (of your choosing)
+2. mkdir ~/.config/swh/ ~/.cache/swh/lister/pypi/
+3. create configuration file ~/.config/swh/lister-pypi.yml
+4. Bootstrap the db instance schema
+
+    $ createdb lister-pypi
+    $ python3 -m swh.lister.cli --db-url postgres:///lister-pypi \
+        --lister pypi \
+        --create-tables \
+        --with-data
+
+    Note: This bootstraps a minimum data set needed for the pypi
+    lister to run (for development)
+
+### Configuration file sample
+
+    $ cat ~/.config/swh/lister-pypi.yml
+    # see http://docs.sqlalchemy.org/en/latest/core/engines.html#database-urls
+    lister_db_url: postgres:///lister-pypi
+    credentials: []
+    cache_responses: True
+    cache_dir: /home/user/.cache/swh/lister/pypi
+
+Note: This expects storage (5002) and scheduler (5008) services to run locally
+
+### Run
+
+  $ python3
+  Python 3.6.6 (default, Jun 27 2018, 14:44:17)
+  [GCC 8.1.0] on linux
+  Type "help", "copyright", "credits" or "license" for more information.
+  >>> from swh.lister.pypi.tasks import PyPiListerTask; PyPiListerTask().run_task()
+  >>>

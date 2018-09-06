@@ -59,6 +59,7 @@ swh/lister/core/lister_base.py
 swh/lister/core/lister_transports.py
 swh/lister/core/models.py
 swh/lister/core/page_by_page_lister.py
+swh/lister/core/simple_lister.py
 swh/lister/core/tasks.py
 swh/lister/core/tests/__init__.py
 swh/lister/core/tests/test_abstractattribute.py
@@ -84,5 +85,9 @@ swh/lister/gitlab/tests/__init__.py
 swh/lister/gitlab/tests/api_empty_response.json
 swh/lister/gitlab/tests/api_response.json
 swh/lister/gitlab/tests/test_gitlab_lister.py
+swh/lister/pypi/__init__.py
+swh/lister/pypi/lister.py
+swh/lister/pypi/models.py
+swh/lister/pypi/tasks.py
 swh/lister/tests/__init__.py
 swh/lister/tests/test_utils.py

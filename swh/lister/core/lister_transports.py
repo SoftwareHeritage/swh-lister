@@ -1,4 +1,4 @@
-# Copyright (C) 2017 the Software Heritage developers
+# Copyright (C) 2017-2018 the Software Heritage developers
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
 
@@ -7,6 +7,7 @@ import random
 from datetime import datetime
 from email.utils import parsedate
 from pprint import pformat
+from xmlrpc import client
 
 import requests
 import xmltodict
@@ -18,6 +19,62 @@ except ImportError:
 
 from .abstractattribute import AbstractAttribute
 from .lister_base import FetchError
+
+
+class ListerXMLRPCTransport(abc.ABC):
+    """Use the xmlrpc library for making Lister endpoint requests.
+
+    To be used in conjunction with SWHListerBase or a subclass of it.
+    """
+    SERVER = AbstractAttribute('string containing the server to contact for '
+                               'information')
+
+    def __init__(self):
+        self.lister_version = __version__
+
+    def get_client(self, path):
+        """Initialize client to query for result
+
+        """
+        return client.ServerProxy(path)
+
+    def request_uri(self, _):
+        """Same uri called once
+
+        """
+        return self.SERVER
+
+    def request_params(self, identifier):
+        """Cannot pass any parameters to query to the xmlrpc client so cannot
+           even pass our user-agent specifics.
+
+        """
+        return {}
+
+    def transport_quota_check(self, response):
+        """No rate limit dealing explained.
+
+        """
+        return False, 0
+
+    def transport_request(self, identifier):
+        """Implements SWHListerBase.transport_request
+
+        """
+        path = self.request_uri(identifier)
+        try:
+            return self.get_client(path)
+        except Exception as e:
+            raise FetchError(e)
+
+    def transport_response_to_string(self, response):
+        """Implements SWHListerBase.transport_response_to_string for XMLRPC
+           given responses.
+
+        """
+        s = pformat(self.SERVER)
+        s += '\n#\n' + pformat(response)  # Note: will potentially be big
+        return s
 
 
 class SWHListerHttpTransport(abc.ABC):
@@ -151,3 +208,25 @@ class SWHListerHttpTransport(abc.ABC):
             except Exception:  # not xml
                 s += pformat(response.text)
         return s
+
+
+class ListerOnePageApiTransport(SWHListerHttpTransport):
+    """Leverage requests library to retrieve basic html page and parse
+       result.
+
+       To be used in conjunction with SWHListerBase or a subclass of it.
+
+    """
+    PAGE = AbstractAttribute("The server api's unique page to retrieve and "
+                             "parse for information")
+    PATH_TEMPLATE = None  # we do not use it
+
+    def __init__(self, api_baseurl=None):
+        self.session = requests.Session()
+        self.lister_version = __version__
+
+    def request_uri(self, _):
+        """Get the full request URI given the transport_request identifier.
+
+        """
+        return self.PAGE

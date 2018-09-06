@@ -6,7 +6,7 @@
 import click
 
 
-SUPPORTED_LISTERS = ['github', 'gitlab', 'bitbucket', 'debian']
+SUPPORTED_LISTERS = ['github', 'gitlab', 'bitbucket', 'debian', 'pypi']
 
 
 @click.command()
@@ -70,6 +70,11 @@ def cli(db_url, lister, create_tables, drop_tables, with_data):
                     ))
             lister.db_session.add_all(areas)
             lister.db_session.commit()
+
+    elif lister == 'pypi':
+        from .pypi.models import ModelBase
+        from .pypi.lister import PyPiLister
+        _lister = PyPiLister(override_config=override_conf)
 
     else:
         raise ValueError('Only supported listers are %s' % SUPPORTED_LISTERS)
