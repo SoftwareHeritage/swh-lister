@@ -5,6 +5,8 @@
 import abc
 import logging
 
+from swh.core import utils
+
 from .lister_base import SWHListerBase
 
 
@@ -38,14 +40,12 @@ class SimpleLister(SWHListerBase):
             checks (bool): Additional checks required (unused)
 
         """
-        # Request (partial?) list of repositories info
         response = self.safely_issue_request(identifier)
         response = self.list_packages(response)
         if not response:
             return response, []
         models_list = self.transport_response_simplified(response)
         models_list = self.filter_before_inject(models_list)
-        from swh.core import utils
         all_injected = []
         for models in utils.grouper(models_list, n=10000):
             models = list(models)
