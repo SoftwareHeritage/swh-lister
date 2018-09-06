@@ -211,8 +211,8 @@ class SWHListerHttpTransport(abc.ABC):
 
 
 class ListerOnePageApiTransport(SWHListerHttpTransport):
-    """Use the request library for retrieving a basic html page and parse
-       the result.
+    """Leverage requests library to retrieve basic html page and parse
+       result.
 
        To be used in conjunction with SWHListerBase or a subclass of it.
 

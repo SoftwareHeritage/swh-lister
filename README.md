@@ -64,7 +64,7 @@ Minimalistic configuration:
     lister_db_url: postgres:///lister-github
     credentials: []
     cache_responses: True
-    cache_dir: /home/zack/.cache/swh/lister/github.com
+    cache_dir: /home/user/.cache/swh/lister/github.com
 
 Note: This expects storage (5002) and scheduler (5008) services to run locally
 
@@ -102,7 +102,7 @@ Note: This expects storage (5002) and scheduler (5008) services to run locally
     lister_db_url: postgres:///lister-gitlab
     credentials: []
     cache_responses: True
-    cache_dir: /home/zack/.cache/swh/lister/gitlab
+    cache_dir: /home/user/.cache/swh/lister/gitlab
 
 Note: This expects storage (5002) and scheduler (5008) services to run locally
 
@@ -145,7 +145,7 @@ Note: This expects storage (5002) and scheduler (5008) services to run locally
     lister_db_url: postgres:///lister-debian
     credentials: []
     cache_responses: True
-    cache_dir: /home/zack/.cache/swh/lister/debian
+    cache_dir: /home/user/.cache/swh/lister/debian
 
 Note: This expects storage (5002) and scheduler (5008) services to run locally
 
@@ -163,7 +163,7 @@ Note: This expects storage (5002) and scheduler (5008) services to run locally
   ...
 
 
-## lister-debian
+## lister-pypi
 
 ### preparation steps
 
@@ -188,7 +188,7 @@ Note: This expects storage (5002) and scheduler (5008) services to run locally
     lister_db_url: postgres:///lister-pypi
     credentials: []
     cache_responses: True
-    cache_dir: /home/zack/.cache/swh/lister/pypi
+    cache_dir: /home/user/.cache/swh/lister/pypi
 
 Note: This expects storage (5002) and scheduler (5008) services to run locally
 

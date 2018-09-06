@@ -13,7 +13,6 @@ from swh.lister.core.lister_transports import ListerOnePageApiTransport
 
 
 class PyPiLister(ListerOnePageApiTransport, SimpleLister):
-    # Template path expecting an integer that represents the page id
     MODEL = PyPiModel
     LISTER_NAME = 'pypi'
     PAGE = 'https://pypi.org/simple/'
