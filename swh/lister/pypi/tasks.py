@@ -3,17 +3,17 @@
 # See top-level LICENSE file for more information
 
 from ..core.tasks import ListerTaskBase
-from .lister import PyPiLister
+from .lister import PyPILister
 
 
-class PyPiListerTask(ListerTaskBase):
-    """Full PyPi lister (list all available origins from the api).
+class PyPIListerTask(ListerTaskBase):
+    """Full PyPI lister (list all available origins from the api).
 
     """
     task_queue = 'swh_lister_pypi_refresh'
 
     def new_lister(self):
-        return PyPiLister()
+        return PyPILister()
 
     def run_task(self):
         lister = self.new_lister()
