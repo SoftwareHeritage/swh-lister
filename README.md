@@ -198,5 +198,5 @@ Note: This expects storage (5002) and scheduler (5008) services to run locally
   Python 3.6.6 (default, Jun 27 2018, 14:44:17)
   [GCC 8.1.0] on linux
   Type "help", "copyright", "credits" or "license" for more information.
-  >>> from swh.lister.pypi.tasks import PyPiListerTask; PyPiListerTask().run_task()
+  >>> from swh.lister.pypi.tasks import PyPIListerTask; PyPIListerTask().run_task()
   >>>
