@@ -5,15 +5,15 @@
 import random
 import xmltodict
 
-from .models import PyPiModel
+from .models import PyPIModel
 
 from swh.scheduler import utils
 from swh.lister.core.simple_lister import SimpleLister
 from swh.lister.core.lister_transports import ListerOnePageApiTransport
 
 
-class PyPiLister(ListerOnePageApiTransport, SimpleLister):
-    MODEL = PyPiModel
+class PyPILister(ListerOnePageApiTransport, SimpleLister):
+    MODEL = PyPIModel
     LISTER_NAME = 'pypi'
     PAGE = 'https://pypi.org/simple/'
 

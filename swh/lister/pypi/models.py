@@ -7,8 +7,8 @@ from sqlalchemy import Column, String
 from ..core.models import ModelBase
 
 
-class PyPiModel(ModelBase):
-    """a PyPi repository representation
+class PyPIModel(ModelBase):
+    """a PyPI repository representation
 
     """
     __tablename__ = 'pypi_repo'

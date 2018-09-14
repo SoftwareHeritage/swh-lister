@@ -73,8 +73,8 @@ def cli(db_url, lister, create_tables, drop_tables, with_data):
 
     elif lister == 'pypi':
         from .pypi.models import ModelBase
-        from .pypi.lister import PyPiLister
-        _lister = PyPiLister(override_config=override_conf)
+        from .pypi.lister import PyPILister
+        _lister = PyPILister(override_config=override_conf)
 
     else:
         raise ValueError('Only supported listers are %s' % SUPPORTED_LISTERS)
