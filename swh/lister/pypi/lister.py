@@ -50,7 +50,7 @@ class PyPILister(ListerOnePageApiTransport, SimpleLister):
 
         """
         return (
-            'https://pypi.org/pypi/%s/' % repo_name,
+            'https://pypi.org/project/%s/' % repo_name,
             'https://pypi.org/pypi/%s/json' % repo_name
         )
 
