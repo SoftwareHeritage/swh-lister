@@ -1,3 +1,10 @@
+swh-lister (0.0.17-1~swh1) unstable-swh; urgency=medium
+
+  * v0.0.17
+  * Change pypi project url to use the /project api
+
+ -- Antoine R. Dumont (@ardumont) <antoine.romain.dumont@gmail.com>  Tue, 18 Sep 2018 11:35:25 +0200
+
 swh-lister (0.0.16-1~swh1) unstable-swh; urgency=medium
 
   * v0.0.16
