@@ -2,7 +2,7 @@
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
 
-from sqlalchemy import Column, Integer, String
+from sqlalchemy import Column, String
 
 from ..core.models import ModelBase
 
