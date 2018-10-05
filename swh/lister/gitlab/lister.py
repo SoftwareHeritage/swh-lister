@@ -110,6 +110,9 @@ class GitLabLister(PageByPageHttpLister):
 
         """
         response = self.transport_head(identifier=1)
+        if not response.ok:
+            raise ValueError(
+                'Problem during information fetch: %s' % response.status_code)
         h = response.headers
         return (self._get_int(h, 'x-total'),
                 self._get_int(h, 'x-total-pages'),
