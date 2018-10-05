@@ -36,6 +36,7 @@ setup(
     test_requires=parse_requirements('test'),
     test_suite='nose.collector',
     setup_requires=['vcversioner'],
+    extras_require={'testing': parse_requirements('test')},
     vcversioner={'version_module_paths': ['swh/lister/_version.py']},
     include_package_data=True,
 )
