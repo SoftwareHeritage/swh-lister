@@ -1,3 +1,14 @@
+swh-lister (0.0.18-1~swh1) unstable-swh; urgency=medium
+
+  * v0.0.18
+  * docs: add title and brief module description
+  * gitlab.lister: Break asap when problem exists during fetch info
+  * gitlab.lister: Do not expect gitlab instances to have credentials
+  * setup: prepare for pypi upload
+  * gitlab/models.py: drop unused import
+
+ -- Antoine R. Dumont (@ardumont) <antoine.romain.dumont@gmail.com>  Mon, 08 Oct 2018 15:54:12 +0200
+
 swh-lister (0.0.17-1~swh1) unstable-swh; urgency=medium
 
   * v0.0.17
