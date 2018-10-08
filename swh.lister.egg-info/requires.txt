@@ -8,3 +8,8 @@ swh.scheduler>=0.0.31
 swh.storage>=0.0.103
 swh.storage[schemata]>=0.0.76
 xmltodict
+
+[testing]
+nose
+requests_mock
+testing.postgresql
