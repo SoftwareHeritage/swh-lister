@@ -4,7 +4,8 @@
 .coverage
 .eggs/
 __pycache__
-dist
+build/
+dist/
 *.egg-info
 version.txt
 swh/lister/_version.py

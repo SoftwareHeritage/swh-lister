@@ -59,11 +59,9 @@ class GitLabLister(PageByPageHttpLister):
         params = {
             'headers': self.request_headers() or {}
         }
-        # Retrieve the credentials per instance
-        creds = self.config['credentials']
-        if creds:
-            creds_lister = creds[self.instance]
-            auth = random.choice(creds_lister) if creds else None
+        creds_lister = self.config['credentials'].get(self.instance)
+        if creds_lister:
+            auth = random.choice(creds_lister)
             if auth:
                 params['auth'] = (auth['username'], auth['password'])
         return params
@@ -112,6 +110,9 @@ class GitLabLister(PageByPageHttpLister):
 
         """
         response = self.transport_head(identifier=1)
+        if not response.ok:
+            raise ValueError(
+                'Problem during information fetch: %s' % response.status_code)
         h = response.headers
         return (self._get_int(h, 'x-total'),
                 self._get_int(h, 'x-total-pages'),
