@@ -4,11 +4,10 @@
 
 import re
 import unittest
-
 from datetime import datetime, timedelta
 
-from swh.lister.gitlab.lister import GitLabLister
 from swh.lister.core.tests.test_lister import HttpListerTesterBase
+from swh.lister.gitlab.lister import GitLabLister
 
 
 class GitLabListerTester(HttpListerTesterBase, unittest.TestCase):

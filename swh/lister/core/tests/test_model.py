@@ -4,10 +4,9 @@
 
 import unittest
 
-from nose.tools import istest
 from sqlalchemy import Column, Integer
 
-from swh.lister.core.models import ModelBase, IndexingModelBase
+from swh.lister.core.models import IndexingModelBase, ModelBase
 
 
 class BadSubclass1(ModelBase):
@@ -52,7 +51,6 @@ class IndexingGoodSubclass(IndexingModelBase):
 
 
 class TestModel(unittest.TestCase):
-    @istest
     def test_model_instancing(self):
         with self.assertRaises(TypeError):
             ModelBase()
@@ -72,7 +70,6 @@ class TestModel(unittest.TestCase):
         self.assertEqual(gsc.__tablename__, 'foo')
         self.assertEqual(gsc.uid, 'uid')
 
-    @istest
     def test_indexing_model_instancing(self):
         with self.assertRaises(TypeError):
             IndexingModelBase()
