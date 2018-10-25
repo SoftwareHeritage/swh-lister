@@ -292,8 +292,9 @@ class SWHListerBase(abc.ABC, config.SWHConfig):
                 r = self.transport_request(identifier)
             except FetchError:
                 # network-level connection error, try again
-                logging.warn('connection error on %s: sleep for %d seconds' %
-                             (identifier, self.CONN_SLEEP))
+                logging.warning(
+                    'connection error on %s: sleep for %d seconds' %
+                    (identifier, self.CONN_SLEEP))
                 time.sleep(self.CONN_SLEEP)
                 retries_left -= 1
                 continue
@@ -304,8 +305,9 @@ class SWHListerBase(abc.ABC, config.SWHConfig):
             # detect throttling
             must_retry, delay = self.transport_quota_check(r)
             if must_retry:
-                logging.warn('rate limited on %s: sleep for %f seconds' %
-                             (identifier, delay))
+                logging.warning(
+                    'rate limited on %s: sleep for %f seconds' %
+                    (identifier, delay))
                 time.sleep(delay)
             else:  # request ok
                 break
@@ -313,7 +315,8 @@ class SWHListerBase(abc.ABC, config.SWHConfig):
             retries_left -= 1
 
         if not retries_left:
-            logging.warn('giving up on %s: max retries exceeded' % identifier)
+            logging.warning(
+                'giving up on %s: max retries exceeded' % identifier)
 
         return r
 
