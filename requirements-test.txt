@@ -1,3 +1,3 @@
-nose
+pytest
 requests_mock
 testing.postgresql
