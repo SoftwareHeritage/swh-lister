@@ -43,17 +43,17 @@ class GitLabLister(PageByPageHttpLister):
         transport_request identifier.
 
         For the gitlab lister, the 'credentials' entries is configured
-        per instance. For example:
+        per instance. For example::
 
-        - credentials:
-          - gitlab.com:
-            - username: user0
-              password: <pass>
-            - username: user1
-              password: <pass>
-            - ...
-          - other-gitlab-instance:
-            ...
+          - credentials:
+            - gitlab.com:
+              - username: user0
+                password: <pass>
+              - username: user1
+                password: <pass>
+              - ...
+            - other-gitlab-instance:
+              ...
 
         """
         params = {
