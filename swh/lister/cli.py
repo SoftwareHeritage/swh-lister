@@ -6,7 +6,7 @@
 import click
 
 
-SUPPORTED_LISTERS = ['github', 'gitlab', 'bitbucket', 'debian', 'pypi']
+SUPPORTED_LISTERS = ['github', 'gitlab', 'bitbucket', 'debian', 'pypi', 'npm']
 
 
 @click.command()
@@ -75,6 +75,11 @@ def cli(db_url, lister, create_tables, drop_tables, with_data):
         from .pypi.models import ModelBase
         from .pypi.lister import PyPILister
         _lister = PyPILister(override_config=override_conf)
+
+    elif lister == 'npm':
+        from .npm.models import IndexingModelBase as ModelBase
+        from .npm.lister import NpmLister
+        _lister = NpmLister(override_config=override_conf)
 
     else:
         raise ValueError('Only supported listers are %s' % SUPPORTED_LISTERS)
