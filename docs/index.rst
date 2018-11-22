@@ -9,20 +9,16 @@ enumerate the software origins (e.g., VCS, packages, etc.) available at a
 source code distribution place.
 
 
-.. toctree::
-   :maxdepth: 2
-   :caption: Contents:
-
-
 Overview
 --------
 
 * :ref:`lister-tutorial`
 
 
-Indices and tables
-------------------
+Reference Documentation
+-----------------------
 
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
+.. toctree::
+   :maxdepth: 2
+
+   /apidoc/swh.lister
