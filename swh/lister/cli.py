@@ -78,8 +78,13 @@ def cli(db_url, lister, create_tables, drop_tables, with_data):
 
     elif lister == 'npm':
         from .npm.models import IndexingModelBase as ModelBase
+        from .npm.models import NpmVisitModel
         from .npm.lister import NpmLister
         _lister = NpmLister(override_config=override_conf)
+        if drop_tables:
+            NpmVisitModel.metadata.drop_all(_lister.db_engine)
+        if create_tables:
+            NpmVisitModel.metadata.create_all(_lister.db_engine)
 
     else:
         raise ValueError('Only supported listers are %s' % SUPPORTED_LISTERS)
