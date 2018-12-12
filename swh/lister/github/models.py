@@ -13,8 +13,4 @@ class GitHubModel(IndexingModelBase):
 
     uid = Column(Integer, primary_key=True)
     indexable = Column(Integer, index=True)
-    fork = Column(Boolean)
-
-    def __init__(self, *args, **kwargs):
-        self.fork = kwargs.pop('fork', False)
-        super().__init__(*args, **kwargs)
+    fork = Column(Boolean, default=False)
