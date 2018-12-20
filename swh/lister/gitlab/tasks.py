@@ -6,58 +6,54 @@ import random
 
 from celery import group
 
+from swh.scheduler.celery_backend.config import app
+from swh.scheduler.task import SWHTask
+
 from .. import utils
-from ..core.tasks import ListerTaskBase, RangeListerTask
 from .lister import GitLabLister
 
 
-class GitLabListerTask(ListerTaskBase):
-    def new_lister(self, *, api_baseurl='https://gitlab.com/api/v4',
-                   instance='gitlab', sort='asc', per_page=20):
-        return GitLabLister(
-            api_baseurl=api_baseurl, instance=instance, sort=sort)
+NBPAGES = 10
 
 
-class RangeGitLabLister(GitLabListerTask, RangeListerTask):
-    """Range GitLab lister (list available origins on specified range)
-
-    """
-    task_queue = 'swh_lister_gitlab_refresh'
-
-
-class FullGitLabRelister(GitLabListerTask):
-    """Full GitLab lister (list all available origins from the api).
-
-    """
-    task_queue = 'swh_lister_gitlab_refresh'
-
-    # nb pages
-    nb_pages = 10
-
-    def run_task(self, lister_args=None):
-        if lister_args is None:
-            lister_args = {}
-        lister = self.new_lister(**lister_args)
-        _, total_pages, _ = lister.get_pages_information()
-        ranges = list(utils.split_range(total_pages, self.nb_pages))
-        random.shuffle(ranges)
-        range_task = RangeGitLabLister()
-        group(range_task.s(minv, maxv, lister_args=lister_args)
-              for minv, maxv in ranges)()
+def new_lister(api_baseurl='https://gitlab.com/api/v4',
+               instance='gitlab', sort='asc', per_page=20):
+    return GitLabLister(
+        api_baseurl=api_baseurl, instance=instance, sort=sort)
 
 
-class IncrementalGitLabLister(GitLabListerTask):
-    """Incremental GitLab lister (list only new available origins).
+@app.task(name='swh.lister.gitlab.tasks.IncrementalGitLabLister',
+          base=SWHTask, bind=True)
+def incremental_gitlab_lister(self, **lister_args):
+    self.log.debug('%s, lister_args=%s' % (
+        self.name, lister_args))
+    lister_args['sort'] = 'desc'
+    lister = new_lister(**lister_args)
+    total_pages = lister.get_pages_information()[1]
+    # stopping as soon as existing origins for that instance are detected
+    lister.run(min_bound=1, max_bound=total_pages, check_existence=True)
+    self.log.debug('%s OK' % (self.name))
 
-    """
-    task_queue = 'swh_lister_gitlab_discover'
 
-    def run_task(self, lister_args=None):
-        if lister_args is None:
-            lister_args = {}
-        lister_args['sort'] = 'desc'
-        lister = self.new_lister(**lister_args)
-        _, total_pages, _ = lister.get_pages_information()
-        # stopping as soon as existing origins for that instance are detected
-        return lister.run(min_bound=1, max_bound=total_pages,
-                          check_existence=True)
+@app.task(name='swh.lister.gitlab.tasks.RangeGitLabLister',
+          base=SWHTask, bind=True)
+def range_gitlab_lister(self, start, end, **lister_args):
+    self.log.debug('%s(start=%s, end=%d), lister_args=%s' % (
+        self.name, start, end, lister_args))
+    lister = new_lister(**lister_args)
+    lister.run(min_bound=start, max_bound=end)
+    self.log.debug('%s OK' % (self.name))
+
+
+@app.task(name='swh.lister.gitlab.tasks.FullGitLabRelister',
+          base=SWHTask, bind=True)
+def full_gitlab_relister(self, **lister_args):
+    self.log.debug('%s, lister_args=%s' % (
+        self.name, lister_args))
+    lister = new_lister(**lister_args)
+    _, total_pages, _ = lister.get_pages_information()
+    ranges = list(utils.split_range(total_pages, NBPAGES))
+    random.shuffle(ranges)
+    group(range_gitlab_lister.s(minv, maxv, **lister_args)
+          for minv, maxv in ranges)()
+    self.log.debug('%s OK (spawned %s subtasks)' % (self.name, len(ranges)))

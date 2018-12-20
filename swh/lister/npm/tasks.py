@@ -3,75 +3,62 @@
 # See top-level LICENSE file for more information
 
 from datetime import datetime
+from contextlib import contextmanager
 
-from swh.lister.core.tasks import ListerTaskBase
+from swh.scheduler.celery_backend.config import app
+from swh.scheduler.task import SWHTask
+
 from swh.lister.npm.lister import NpmLister, NpmIncrementalLister
 from swh.lister.npm.models import NpmVisitModel
 
 
-class _NpmListerTaskBase(ListerTaskBase):
+@contextmanager
+def save_registry_state(lister):
+    params = {'headers': lister.request_headers()}
+    registry_state = lister.session.get(lister.api_baseurl, **params)
+    registry_state = registry_state.json()
+    keys = ('doc_count', 'doc_del_count', 'update_seq', 'purge_seq',
+            'disk_size', 'data_size', 'committed_update_seq',
+            'compacted_seq')
 
-    task_queue = 'swh_lister_npm_refresh'
-
-    def _save_registry_state(self):
-        """Query the root endpoint from the npm registry and
-        backup values of interest for future listing
-        """
-        params = {'headers': self.lister.request_headers()}
-        registry_state = \
-            self.lister.session.get(self.lister.api_baseurl, **params)
-        registry_state = registry_state.json()
-        self.registry_state = {
-            'visit_date': datetime.now(),
-        }
-        for key in ('doc_count', 'doc_del_count', 'update_seq', 'purge_seq',
-                    'disk_size', 'data_size', 'committed_update_seq',
-                    'compacted_seq'):
-            self.registry_state[key] = registry_state[key]
-
-    def _store_registry_state(self):
-        """Store the backup npm registry state to database.
-        """
-        npm_visit = NpmVisitModel(**self.registry_state)
-        self.lister.db_session.add(npm_visit)
-        self.lister.db_session.commit()
+    state = {key: registry_state[key] for key in keys}
+    state['visit_date'] = datetime.now()
+    yield
+    npm_visit = NpmVisitModel(state)
+    lister.db_session.add(npm_visit)
+    lister.db_session.commit()
 
 
-class NpmListerTask(_NpmListerTaskBase):
-    """Full npm lister (list all available packages from the npm registry)
+def get_last_update_seq(lister):
+    """Get latest ``update_seq`` value for listing only updated packages.
     """
-
-    def new_lister(self):
-        return NpmLister()
-
-    def run_task(self):
-        self.lister = self.new_lister()
-        self._save_registry_state()
-        self.lister.run()
-        self._store_registry_state()
+    query = lister.db_session.query(NpmVisitModel.update_seq)
+    row = query.order_by(NpmVisitModel.uid.desc()).first()
+    if not row:
+        raise ValueError('No npm registry listing previously performed ! '
+                         'This is required prior to the execution of an '
+                         'incremental listing.')
+    return row[0]
 
 
-class NpmIncrementalListerTask(_NpmListerTaskBase):
-    """Incremental npm lister (list all updated packages since the last listing)
-    """
+@app.task(name='swh.lister.npm.tasks.NpmListerTask',
+          base=SWHTask, bind=True)
+def npm_lister(self, **lister_args):
+    self.log.debug('%s, lister_args=%s' % (
+        self.name, lister_args))
+    lister = NpmLister(**lister_args)
+    with save_registry_state(lister):
+        lister.run()
+    self.log.debug('%s OK' % (self.name))
 
-    def new_lister(self):
-        return NpmIncrementalLister()
 
-    def run_task(self):
-        self.lister = self.new_lister()
-        update_seq_start = self._get_last_update_seq()
-        self._save_registry_state()
-        self.lister.run(min_bound=update_seq_start)
-        self._store_registry_state()
-
-    def _get_last_update_seq(self):
-        """Get latest ``update_seq`` value for listing only updated packages.
-        """
-        query = self.lister.db_session.query(NpmVisitModel.update_seq)
-        row = query.order_by(NpmVisitModel.uid.desc()).first()
-        if not row:
-            raise ValueError('No npm registry listing previously performed ! '
-                             'This is required prior to the execution of an '
-                             'incremental listing.')
-        return row[0]
+@app.task(name='swh.lister.npm.tasks.NpmIncrementalListerTask',
+          base=SWHTask, bind=True)
+def npm_incremental_lister(self, **lister_args):
+    self.log.debug('%s, lister_args=%s' % (
+        self.name, lister_args))
+    lister = NpmIncrementalLister(**lister_args)
+    update_seq_start = get_last_update_seq(lister)
+    with save_registry_state(lister):
+        lister.run(min_bound=update_seq_start)
+    self.log.debug('%s OK' % (self.name))
