@@ -7,12 +7,12 @@ import random
 
 from celery import group
 
-from swh.scheduler.task import Task, TaskType
+from swh.scheduler.task import Task
 
 from .abstractattribute import AbstractAttribute
 
 
-class AbstractTaskMeta(abc.ABCMeta, TaskType):
+class AbstractTaskMeta(abc.ABCMeta):
     pass
 
 
