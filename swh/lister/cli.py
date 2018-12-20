@@ -50,8 +50,8 @@ def cli(db_url, lister, create_tables, drop_tables, with_data):
                                override_config=override_conf)
     elif lister == 'debian':
         from .debian.lister import DebianLister
-        ModelBase = DebianLister.MODEL
-        _lister = DebianLister()
+        ModelBase = DebianLister.MODEL  # noqa
+        _lister = DebianLister(override_config=override_conf)
 
         def insert_minimum_data(lister):
             from swh.storage.schemata.distribution import Distribution, Area
