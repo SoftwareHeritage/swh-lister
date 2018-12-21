@@ -17,3 +17,8 @@ def pypi_lister(self, **lister_args):
     self.log.debug('%s OK' % (self.name))
 
 
+@app.task(name='swh.lister.pypi.tasks.ping',
+          base=SWHTask, bind=True)
+def ping(self):
+    self.log.debug(self.name)
+    return 'OK'

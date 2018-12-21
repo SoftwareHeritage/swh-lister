@@ -51,3 +51,8 @@ def full_github_relister(self, split=None, **lister_args):
     self.log.debug('%s OK (spawned %s subtasks)' % (self.name, len(ranges)))
 
 
+@app.task(name='swh.lister.github.tasks.ping',
+          base=SWHTask, bind=True)
+def ping(self):
+    self.log.debug(self.name)
+    return 'OK'

@@ -62,3 +62,10 @@ def npm_incremental_lister(self, **lister_args):
     with save_registry_state(lister):
         lister.run(min_bound=update_seq_start)
     self.log.debug('%s OK' % (self.name))
+
+
+@app.task(name='swh.lister.npm.tasks.ping',
+          base=SWHTask, bind=True)
+def ping(self):
+    self.log.debug(self.name)
+    return 'OK'

@@ -57,3 +57,10 @@ def full_gitlab_relister(self, **lister_args):
     group(range_gitlab_lister.s(minv, maxv, **lister_args)
           for minv, maxv in ranges)()
     self.log.debug('%s OK (spawned %s subtasks)' % (self.name, len(ranges)))
+
+
+@app.task(name='swh.lister.gitlab.tasks.ping',
+          base=SWHTask, bind=True)
+def ping(self):
+    self.log.debug(self.name)
+    return 'OK'

@@ -15,3 +15,10 @@ def debian_lister(self, distribution, **lister_args):
         self.name, lister_args))
     DebianLister(**lister_args).run(distribution)
     self.log.debug('%s OK' % (self.name))
+
+
+@app.task(name='swh.lister.debian.tasks.ping',
+          base=SWHTask, bind=True)
+def ping(self):
+    self.log.debug(self.name)
+    return 'OK'
