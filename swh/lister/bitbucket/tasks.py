@@ -45,9 +45,11 @@ def full_bitbucket_relister(self, split=None, **lister_args):
     lister = new_lister(**lister_args)
     ranges = lister.db_partition_indices(split or GROUP_SPLIT)
     random.shuffle(ranges)
-    group(range_bitbucket_lister.s(minv, maxv, **lister_args)
-          for minv, maxv in ranges)()
+    promise = group(range_bitbucket_lister.s(minv, maxv, **lister_args)
+                    for minv, maxv in ranges)()
     self.log.debug('%s OK (spawned %s subtasks)' % (self.name, len(ranges)))
+    promise.save()  # so that we can restore the GroupResult in tests
+    return promise.id
 
 
 @app.task(name='swh.lister.bitbucket.tasks.ping',

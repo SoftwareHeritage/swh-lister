@@ -9,6 +9,7 @@ def celery_enable_logging():
 @pytest.fixture(scope='session')
 def celery_includes():
     return [
+        'swh.lister.bitbucket.tasks',
         'swh.lister.github.tasks',
     ]
 
