@@ -19,7 +19,8 @@ NBPAGES = 10
 def new_lister(api_baseurl='https://gitlab.com/api/v4',
                instance='gitlab', sort='asc', per_page=20):
     return GitLabLister(
-        api_baseurl=api_baseurl, instance=instance, sort=sort)
+        api_baseurl=api_baseurl, instance=instance, sort=sort,
+        per_page=per_page)
 
 
 @app.task(name='swh.lister.gitlab.tasks.IncrementalGitLabLister',
