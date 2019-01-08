@@ -10,6 +10,7 @@ def celery_enable_logging():
 def celery_includes():
     return [
         'swh.lister.bitbucket.tasks',
+        'swh.lister.debian.tasks',
         'swh.lister.github.tasks',
     ]
 
