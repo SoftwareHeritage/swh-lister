@@ -14,6 +14,7 @@ def celery_includes():
         'swh.lister.github.tasks',
         'swh.lister.gitlab.tasks',
         'swh.lister.npm.tasks',
+        'swh.lister.pypi.tasks',
     ]
 
 
