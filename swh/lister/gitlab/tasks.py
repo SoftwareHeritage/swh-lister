@@ -54,9 +54,11 @@ def full_gitlab_relister(self, **lister_args):
     _, total_pages, _ = lister.get_pages_information()
     ranges = list(utils.split_range(total_pages, NBPAGES))
     random.shuffle(ranges)
-    group(range_gitlab_lister.s(minv, maxv, **lister_args)
-          for minv, maxv in ranges)()
+    promise = group(range_gitlab_lister.s(minv, maxv, **lister_args)
+                    for minv, maxv in ranges)()
     self.log.debug('%s OK (spawned %s subtasks)' % (self.name, len(ranges)))
+    promise.save()
+    return promise.id
 
 
 @app.task(name='swh.lister.gitlab.tasks.ping',

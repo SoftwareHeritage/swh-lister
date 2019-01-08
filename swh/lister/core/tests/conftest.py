@@ -12,6 +12,7 @@ def celery_includes():
         'swh.lister.bitbucket.tasks',
         'swh.lister.debian.tasks',
         'swh.lister.github.tasks',
+        'swh.lister.gitlab.tasks',
     ]
 
 
