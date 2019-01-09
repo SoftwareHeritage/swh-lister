@@ -17,7 +17,7 @@ NBPAGES = 10
 
 
 def new_lister(api_baseurl='https://gitlab.com/api/v4',
-               instance='gitlab', sort='asc', per_page=20):
+               instance=None, sort='asc', per_page=20):
     return GitLabLister(
         api_baseurl=api_baseurl, instance=instance, sort=sort,
         per_page=per_page)
