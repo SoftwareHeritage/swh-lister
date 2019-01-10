@@ -7,7 +7,6 @@ import random
 from celery import group
 
 from swh.scheduler.celery_backend.config import app
-from swh.scheduler.task import SWHTask
 
 from .. import utils
 from .lister import GitLabLister
@@ -24,7 +23,7 @@ def new_lister(api_baseurl='https://gitlab.com/api/v4',
 
 
 @app.task(name='swh.lister.gitlab.tasks.IncrementalGitLabLister',
-          base=SWHTask, bind=True)
+          bind=True)
 def incremental_gitlab_lister(self, **lister_args):
     self.log.debug('%s, lister_args=%s' % (
         self.name, lister_args))
@@ -37,7 +36,7 @@ def incremental_gitlab_lister(self, **lister_args):
 
 
 @app.task(name='swh.lister.gitlab.tasks.RangeGitLabLister',
-          base=SWHTask, bind=True)
+          bind=True)
 def range_gitlab_lister(self, start, end, **lister_args):
     self.log.debug('%s(start=%s, end=%d), lister_args=%s' % (
         self.name, start, end, lister_args))
@@ -47,7 +46,7 @@ def range_gitlab_lister(self, start, end, **lister_args):
 
 
 @app.task(name='swh.lister.gitlab.tasks.FullGitLabRelister',
-          base=SWHTask, bind=True)
+          bind=True)
 def full_gitlab_relister(self, **lister_args):
     self.log.debug('%s, lister_args=%s' % (
         self.name, lister_args))
@@ -63,7 +62,7 @@ def full_gitlab_relister(self, **lister_args):
 
 
 @app.task(name='swh.lister.gitlab.tasks.ping',
-          base=SWHTask, bind=True)
+          bind=True)
 def ping(self):
     self.log.debug(self.name)
     return 'OK'

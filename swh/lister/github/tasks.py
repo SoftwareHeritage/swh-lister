@@ -7,7 +7,6 @@ import random
 from celery import group
 
 from swh.scheduler.celery_backend.config import app
-from swh.scheduler.task import SWHTask
 
 from swh.lister.github.lister import GitHubLister
 
@@ -19,7 +18,7 @@ def new_lister(api_baseurl='https://api.github.com', **kw):
 
 
 @app.task(name='swh.lister.github.tasks.IncrementalGitHubLister',
-          base=SWHTask, bind=True)
+          bind=True)
 def incremental_github_lister(self, **lister_args):
     self.log.debug('%s, lister_args=%s' % (
         self.name, lister_args))
@@ -29,7 +28,7 @@ def incremental_github_lister(self, **lister_args):
 
 
 @app.task(name='swh.lister.github.tasks.RangeGitHubLister',
-          base=SWHTask, bind=True)
+          bind=True)
 def range_github_lister(self, start, end, **lister_args):
     self.log.debug('%s(start=%s, end=%d), lister_args=%s' % (
         self.name, start, end, lister_args))
@@ -39,7 +38,7 @@ def range_github_lister(self, start, end, **lister_args):
 
 
 @app.task(name='swh.lister.github.tasks.FullGitHubRelister',
-          base=SWHTask, bind=True)
+          bind=True)
 def full_github_relister(self, split=None, **lister_args):
     self.log.debug('%s, lister_args=%s' % (
         self.name, lister_args))
@@ -54,7 +53,7 @@ def full_github_relister(self, split=None, **lister_args):
 
 
 @app.task(name='swh.lister.github.tasks.ping',
-          base=SWHTask, bind=True)
+          bind=True)
 def ping(self):
     self.log.debug(self.name)
     return 'OK'

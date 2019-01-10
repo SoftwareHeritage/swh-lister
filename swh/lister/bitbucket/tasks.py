@@ -6,7 +6,6 @@ import random
 from celery import group
 
 from swh.scheduler.celery_backend.config import app
-from swh.scheduler.task import SWHTask
 
 from .lister import BitBucketLister
 
@@ -18,7 +17,7 @@ def new_lister(api_baseurl='https://api.bitbucket.org/2.0'):
 
 
 @app.task(name='swh.lister.bitbucket.tasks.IncrementalBitBucketLister',
-          base=SWHTask, bind=True)
+          bind=True)
 def incremental_bitbucket_lister(self, **lister_args):
     self.log.debug('%s, lister_args=%s' % (
         self.name, lister_args))
@@ -28,7 +27,7 @@ def incremental_bitbucket_lister(self, **lister_args):
 
 
 @app.task(name='swh.lister.bitbucket.tasks.RangeBitBucketLister',
-          base=SWHTask, bind=True)
+          bind=True)
 def range_bitbucket_lister(self, start, end, **lister_args):
     self.log.debug('%s(start=%s, end=%d), lister_args=%s' % (
         self.name, start, end, lister_args))
@@ -38,7 +37,7 @@ def range_bitbucket_lister(self, start, end, **lister_args):
 
 
 @app.task(name='swh.lister.bitbucket.tasks.FullBitBucketRelister',
-          base=SWHTask, bind=True)
+          bind=True)
 def full_bitbucket_relister(self, split=None, **lister_args):
     self.log.debug('%s, lister_args=%s' % (
         self.name, lister_args))
@@ -53,7 +52,7 @@ def full_bitbucket_relister(self, split=None, **lister_args):
 
 
 @app.task(name='swh.lister.bitbucket.tasks.ping',
-          base=SWHTask, bind=True)
+          bind=True)
 def ping(self):
     self.log.debug(self.name)
     return 'OK'
