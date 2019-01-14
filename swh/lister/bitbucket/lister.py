@@ -35,3 +35,6 @@ class BitBucketLister(SWHIndexingHttpLister):
     def transport_response_simplified(self, response):
         repos = response.json()['values']
         return [self.get_model_from_repo(repo) for repo in repos]
+
+    def request_uri(self, identifier):
+        return super().request_uri(identifier or '1970-01-01')
