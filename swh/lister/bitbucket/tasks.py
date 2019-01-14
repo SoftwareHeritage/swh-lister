@@ -29,7 +29,7 @@ def incremental_bitbucket_lister(self, **lister_args):
 @app.task(name='swh.lister.bitbucket.tasks.RangeBitBucketLister',
           bind=True)
 def range_bitbucket_lister(self, start, end, **lister_args):
-    self.log.debug('%s(start=%s, end=%d), lister_args=%s' % (
+    self.log.debug('%s(start=%s, end=%s), lister_args=%s' % (
         self.name, start, end, lister_args))
     lister = new_lister(**lister_args)
     lister.run(min_bound=start, max_bound=end)
@@ -47,7 +47,10 @@ def full_bitbucket_relister(self, split=None, **lister_args):
     promise = group(range_bitbucket_lister.s(minv, maxv, **lister_args)
                     for minv, maxv in ranges)()
     self.log.debug('%s OK (spawned %s subtasks)' % (self.name, len(ranges)))
-    promise.save()  # so that we can restore the GroupResult in tests
+    try:
+        promise.save()  # so that we can restore the GroupResult in tests
+    except NotImplementedError:
+        self.log.info('Unable to call save_group with current result backend.')
     return promise.id
 
 

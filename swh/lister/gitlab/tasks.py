@@ -57,7 +57,10 @@ def full_gitlab_relister(self, **lister_args):
     promise = group(range_gitlab_lister.s(minv, maxv, **lister_args)
                     for minv, maxv in ranges)()
     self.log.debug('%s OK (spawned %s subtasks)' % (self.name, len(ranges)))
-    promise.save()
+    try:
+        promise.save()
+    except NotImplementedError:
+        self.log.info('Unable to call save_group with current result backend.')
     return promise.id
 
 

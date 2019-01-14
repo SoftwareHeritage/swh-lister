@@ -48,7 +48,10 @@ def full_github_relister(self, split=None, **lister_args):
     promise = group(range_github_lister.s(minv, maxv, **lister_args)
                     for minv, maxv in ranges)()
     self.log.debug('%s OK (spawned %s subtasks)' % (self.name, len(ranges)))
-    promise.save()  # so that we can restore the GroupResult in tests
+    try:
+        promise.save()  # so that we can restore the GroupResult in tests
+    except NotImplementedError:
+        self.log.info('Unable to call save_group with current result backend.')
     return promise.id
 
 
