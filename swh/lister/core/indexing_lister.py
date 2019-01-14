@@ -103,7 +103,7 @@ class SWHIndexingLister(SWHListerBase):
                 declare approximately equal-sized ranges of existing
                 repos
         """
-        n = self.db_num_entries()
+        n = max(self.db_num_entries(), 10)
 
         partitions = []
         partition_size = min(partition_size, n)
