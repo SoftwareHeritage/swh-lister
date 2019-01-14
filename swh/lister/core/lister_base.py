@@ -21,6 +21,9 @@ from swh.storage import get_storage
 from .abstractattribute import AbstractAttribute
 
 
+logger = logging.getLogger(__name__)
+
+
 def utcnow():
     return datetime.datetime.now(tz=datetime.timezone.utc)
 
@@ -246,6 +249,7 @@ class SWHListerBase(abc.ABC, config.SWHConfig):
 
     def __init__(self, override_config=None):
         self.backoff = self.INITIAL_BACKOFF
+        logging.debug('Loading config from %s' % self.CONFIG_BASE_FILENAME)
         self.config = self.parse_config_file(
             base_filename=self.CONFIG_BASE_FILENAME,
             additional_configs=[self.ADDITIONAL_CONFIG]
@@ -257,6 +261,7 @@ class SWHListerBase(abc.ABC, config.SWHConfig):
         if override_config:
             self.config.update(override_config)
 
+        logger.debug('%s CONFIG=%s' % (self, self.config))
         self.storage = get_storage(**self.config['storage'])
         self.scheduler = get_scheduler(**self.config['scheduler'])
         self.db_engine = create_engine(self.config['lister_db_url'])
