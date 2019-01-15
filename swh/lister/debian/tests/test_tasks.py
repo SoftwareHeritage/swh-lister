@@ -1,6 +1,3 @@
-from time import sleep
-from celery.result import GroupResult
-
 from unittest.mock import patch
 
 
