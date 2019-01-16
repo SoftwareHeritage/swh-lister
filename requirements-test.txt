@@ -1,3 +1,4 @@
-pytest
+pytest<4
+pytest-postgresql
 requests_mock
 testing.postgresql
