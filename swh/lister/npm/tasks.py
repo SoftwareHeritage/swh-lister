@@ -40,31 +40,21 @@ def get_last_update_seq(lister):
     return row[0]
 
 
-@app.task(name='swh.lister.npm.tasks.NpmListerTask',
-          bind=True)
-def npm_lister(self, **lister_args):
-    self.log.debug('%s, lister_args=%s' % (
-        self.name, lister_args))
+@app.task(name=__name__ + '.NpmListerTask')
+def npm_lister(**lister_args):
     lister = NpmLister(**lister_args)
     with save_registry_state(lister):
         lister.run()
-    self.log.debug('%s OK' % (self.name))
 
 
-@app.task(name='swh.lister.npm.tasks.NpmIncrementalListerTask',
-          bind=True)
-def npm_incremental_lister(self, **lister_args):
-    self.log.debug('%s, lister_args=%s' % (
-        self.name, lister_args))
+@app.task(name=__name__ + '.NpmIncrementalListerTask')
+def npm_incremental_lister(**lister_args):
     lister = NpmIncrementalLister(**lister_args)
     update_seq_start = get_last_update_seq(lister)
     with save_registry_state(lister):
         lister.run(min_bound=update_seq_start)
-    self.log.debug('%s OK' % (self.name))
 
 
-@app.task(name='swh.lister.npm.tasks.ping',
-          bind=True)
-def ping(self):
-    self.log.debug(self.name)
+@app.task(name=__name__ + '.ping')
+def ping():
     return 'OK'

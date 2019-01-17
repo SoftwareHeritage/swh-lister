@@ -7,17 +7,11 @@ from swh.scheduler.celery_backend.config import app
 from .lister import DebianLister
 
 
-@app.task(name='swh.lister.debian.tasks.DebianListerTask',
-          bind=True)
-def debian_lister(self, distribution, **lister_args):
-    self.log.debug('%s, lister_args=%s' % (
-        self.name, lister_args))
+@app.task(name=__name__ + '.DebianListerTask')
+def debian_lister(distribution, **lister_args):
     DebianLister(**lister_args).run(distribution)
-    self.log.debug('%s OK' % (self.name))
 
 
-@app.task(name='swh.lister.debian.tasks.ping',
-          bind=True)
-def ping(self):
-    self.log.debug(self.name)
+@app.task(name=__name__ + '.ping')
+def ping():
     return 'OK'
