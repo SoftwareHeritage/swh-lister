@@ -23,7 +23,7 @@ def save_registry_state(lister):
     state = {key: registry_state[key] for key in keys}
     state['visit_date'] = datetime.now()
     yield
-    npm_visit = NpmVisitModel(state)
+    npm_visit = NpmVisitModel(**state)
     lister.db_session.add(npm_visit)
     lister.db_session.commit()
 
