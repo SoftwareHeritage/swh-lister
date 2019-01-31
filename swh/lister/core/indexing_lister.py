@@ -112,6 +112,8 @@ class SWHIndexingLister(SWHListerBase):
             # indexable column from the ith row
             index = self.db_session.query(self.MODEL.indexable) \
                       .order_by(self.MODEL.indexable).offset(i).first()
+            if index:
+                index = index[0]
             if index is not None and prev_index is not None:
                 partitions.append((prev_index, index))
             prev_index = index
