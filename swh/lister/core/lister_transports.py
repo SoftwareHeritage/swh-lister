@@ -7,6 +7,7 @@ import random
 from datetime import datetime
 from email.utils import parsedate
 from pprint import pformat
+import logging
 
 import requests
 import xmltodict
@@ -18,6 +19,9 @@ except ImportError:
 
 from .abstractattribute import AbstractAttribute
 from .lister_base import FetchError
+
+
+logger = logging.getLogger(__name__)
 
 
 class SWHListerHttpTransport(abc.ABC):
@@ -114,6 +118,7 @@ class SWHListerHttpTransport(abc.ABC):
             else:
                 response = self.session.get(path, **params)
         except requests.exceptions.ConnectionError as e:
+            logger.warning('Failed to fetch %s: %s', path, e)
             raise FetchError(e)
         else:
             if response.status_code not in self.EXPECTED_STATUS_CODES:
