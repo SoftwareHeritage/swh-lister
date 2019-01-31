@@ -200,11 +200,11 @@ class SWHListerBase(abc.ABC, config.SWHConfig):
 
             self.string_pattern_check(inner, lower, upper)
         except Exception as e:
-            logging.error(str(e) + ': %s, %s, %s' %
-                          (('inner=%s%s' % (type(inner), inner)),
+            logger.error(str(e) + ': %s, %s, %s' %
+                         (('inner=%s%s' % (type(inner), inner)),
                           ('lower=%s%s' % (type(lower), lower)),
                           ('upper=%s%s' % (type(upper), upper)))
-                          )
+                         )
             raise
 
         return ret
@@ -249,7 +249,7 @@ class SWHListerBase(abc.ABC, config.SWHConfig):
 
     def __init__(self, override_config=None):
         self.backoff = self.INITIAL_BACKOFF
-        logging.debug('Loading config from %s' % self.CONFIG_BASE_FILENAME)
+        logger.debug('Loading config from %s' % self.CONFIG_BASE_FILENAME)
         self.config = self.parse_config_file(
             base_filename=self.CONFIG_BASE_FILENAME,
             additional_configs=[self.ADDITIONAL_CONFIG]
@@ -297,7 +297,7 @@ class SWHListerBase(abc.ABC, config.SWHConfig):
                 r = self.transport_request(identifier)
             except FetchError:
                 # network-level connection error, try again
-                logging.warning(
+                logger.warning(
                     'connection error on %s: sleep for %d seconds' %
                     (identifier, self.CONN_SLEEP))
                 time.sleep(self.CONN_SLEEP)
@@ -310,7 +310,7 @@ class SWHListerBase(abc.ABC, config.SWHConfig):
             # detect throttling
             must_retry, delay = self.transport_quota_check(r)
             if must_retry:
-                logging.warning(
+                logger.warning(
                     'rate limited on %s: sleep for %f seconds' %
                     (identifier, delay))
                 time.sleep(delay)
@@ -320,7 +320,7 @@ class SWHListerBase(abc.ABC, config.SWHConfig):
             retries_left -= 1
 
         if not retries_left:
-            logging.warning(
+            logger.warning(
                 'giving up on %s: max retries exceeded' % identifier)
 
         return r
@@ -438,7 +438,7 @@ class SWHListerBase(abc.ABC, config.SWHConfig):
                                re.escape(a))
             if (isinstance(b, str) and (re.match(a_pattern, b) is None)
                or isinstance(c, str) and (re.match(a_pattern, c) is None)):
-                logging.debug(a_pattern)
+                logger.debug(a_pattern)
                 raise TypeError('incomparable string patterns detected')
 
     def inject_repo_data_into_db(self, models_list):
