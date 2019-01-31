@@ -3,9 +3,14 @@
 # See top-level LICENSE file for more information
 
 from urllib import parse
+import logging
+import iso8601
 
 from swh.lister.bitbucket.models import BitBucketModel
 from swh.lister.core.indexing_lister import SWHIndexingHttpLister
+
+
+logger = logging.getLogger(__name__)
 
 
 class BitBucketLister(SWHIndexingHttpLister):
@@ -38,3 +43,29 @@ class BitBucketLister(SWHIndexingHttpLister):
 
     def request_uri(self, identifier):
         return super().request_uri(identifier or '1970-01-01')
+
+    def is_within_bounds(self, inner, lower=None, upper=None):
+        # values are expected to be str dates
+        try:
+            inner = iso8601.parse_date(inner)
+            if lower:
+                lower = iso8601.parse_date(lower)
+            if upper:
+                upper = iso8601.parse_date(upper)
+            if lower is None and upper is None:
+                return True
+            elif lower is None:
+                ret = inner <= upper
+            elif upper is None:
+                ret = inner >= lower
+            else:
+                ret = lower <= inner <= upper
+        except Exception as e:
+            logger.error(str(e) + ': %s, %s, %s' %
+                         (('inner=%s%s' % (type(inner), inner)),
+                          ('lower=%s%s' % (type(lower), lower)),
+                          ('upper=%s%s' % (type(upper), upper)))
+                         )
+            raise
+
+        return ret
