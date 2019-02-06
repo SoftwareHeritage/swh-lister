@@ -19,14 +19,9 @@ SUPPORTED_LISTERS = ['github', 'gitlab', 'bitbucket', 'debian', 'pypi', 'npm']
          '<http://docs.sqlalchemy.org/en/latest/core/engines.html#database-urls>')  # noqa
 @click.argument('listers', required=1, nargs=-1,
                 type=click.Choice(SUPPORTED_LISTERS + ['all']))
-#                help='Listers to act upon')
-@click.option('--create-tables', '-t', is_flag=True, default=False,
-              help='create tables')
 @click.option('--drop-tables', '-D', is_flag=True, default=False,
-              help='Drop tables')
-@click.option('--with-data', '-f', is_flag=True, default=False,
-              help='Insert minimum required data')
-def cli(db_url, listers, create_tables, drop_tables, with_data):
+              help='Drop tables before creating the database schema')
+def cli(db_url, listers, drop_tables):
     """Initialize db model according to lister.
 
     """
@@ -100,8 +95,7 @@ def cli(db_url, listers, create_tables, drop_tables, with_data):
             _lister = NpmLister(override_config=override_conf)
             if drop_tables:
                 NpmVisitModel.metadata.drop_all(_lister.db_engine)
-            if create_tables:
-                NpmVisitModel.metadata.create_all(_lister.db_engine)
+            NpmVisitModel.metadata.create_all(_lister.db_engine)
 
         else:
             raise ValueError(
@@ -112,17 +106,16 @@ def cli(db_url, listers, create_tables, drop_tables, with_data):
             logger.info('Dropping tables for %s', lister)
             ModelBase.metadata.drop_all(_lister.db_engine)
 
-        if create_tables:
-            logger.info('Creating tables for %s', lister)
-            ModelBase.metadata.create_all(_lister.db_engine)
+        logger.info('Creating tables for %s', lister)
+        ModelBase.metadata.create_all(_lister.db_engine)
 
-            if with_data and insert_minimum_data:
-                logger.info('Inserting minimal data for %s', lister)
-                try:
-                    insert_minimum_data(_lister)
-                except Exception:
-                    logger.warning(
-                        'Failed to insert minumum data in %s', lister)
+        if insert_minimum_data:
+            logger.info('Inserting minimal data for %s', lister)
+            try:
+                insert_minimum_data(_lister)
+            except Exception:
+                logger.warning(
+                    'Failed to insert minumum data in %s', lister)
 
 
 if __name__ == '__main__':
