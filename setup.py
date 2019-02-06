@@ -51,6 +51,10 @@ setup(
     extras_require={'testing': parse_requirements('test')},
     vcversioner={'version_module_paths': ['swh/lister/_version.py']},
     include_package_data=True,
+    entry_points='''
+        [console_scripts]
+        swh-lister=swh.lister.cli:cli
+    ''',
     classifiers=[
         "Programming Language :: Python :: 3",
         "Intended Audience :: Developers",
