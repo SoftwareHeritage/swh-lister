@@ -214,7 +214,12 @@ class HttpListerTester(HttpListerTesterBase, abc.ABC):
         initdb_args = ' '.join([initdb_args, '-E UTF-8'])
         db = Postgresql(initdb_args=initdb_args)
 
-        fl = self.get_fl(override_config={'lister_db_url': db.url()})
+        fl = self.get_fl(override_config={
+            'lister': {
+                'cls': 'local',
+                'args': {'db': db.url()}
+                }
+            })
         self.init_db(db, fl.MODEL)
 
         self.disable_storage_and_scheduler(fl)
