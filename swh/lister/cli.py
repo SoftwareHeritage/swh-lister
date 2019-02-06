@@ -3,8 +3,11 @@
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
 
+import logging
 import click
 
+
+logger = logging.getLogger(__name__)
 
 SUPPORTED_LISTERS = ['github', 'gitlab', 'bitbucket', 'debian', 'pypi', 'npm']
 
@@ -14,89 +17,112 @@ SUPPORTED_LISTERS = ['github', 'gitlab', 'bitbucket', 'debian', 'pypi', 'npm']
     '--db-url', '-d', default='postgres:///lister-gitlab.com',
     help='SQLAlchemy DB URL; see '
          '<http://docs.sqlalchemy.org/en/latest/core/engines.html#database-urls>')  # noqa
-@click.option('--lister', required=1,
-              type=click.Choice(SUPPORTED_LISTERS),
-              help='Lister to act upon')
-@click.option('--create-tables', is_flag=True, default=False,
+@click.argument('listers', required=1, nargs=-1,
+                type=click.Choice(SUPPORTED_LISTERS + ['all']))
+#                help='Listers to act upon')
+@click.option('--create-tables', '-t', is_flag=True, default=False,
               help='create tables')
-@click.option('--drop-tables', is_flag=True, default=False,
+@click.option('--drop-tables', '-D', is_flag=True, default=False,
               help='Drop tables')
-@click.option('--with-data', is_flag=True, default=False,
+@click.option('--with-data', '-f', is_flag=True, default=False,
               help='Insert minimum required data')
-def cli(db_url, lister, create_tables, drop_tables, with_data):
+def cli(db_url, listers, create_tables, drop_tables, with_data):
     """Initialize db model according to lister.
 
     """
-    override_conf = {'lister_db_url': db_url}
+    override_conf = {
+        'lister_db_url': db_url,
+        'lister': {
+            'cls': 'local',
+            'args': {'db': db_url}
+        }
+    }
 
     insert_minimum_data = None
+    if 'all' in listers:
+        listers = SUPPORTED_LISTERS
 
-    if lister == 'github':
-        from .github.models import IndexingModelBase as ModelBase
-        from .github.lister import GitHubLister
+    for lister in listers:
+        logger.info('Initializing lister %s', lister)
+        if lister == 'github':
+            from .github.models import IndexingModelBase as ModelBase
+            from .github.lister import GitHubLister
 
-        _lister = GitHubLister(api_baseurl='https://api.github.com',
-                               override_config=override_conf)
-    elif lister == 'bitbucket':
-        from .bitbucket.models import IndexingModelBase as ModelBase
-        from .bitbucket.lister import BitBucketLister
-        _lister = BitBucketLister(api_baseurl='https://api.bitbucket.org/2.0',
-                                  override_config=override_conf)
+            _lister = GitHubLister(
+                api_baseurl='https://api.github.com',
+                override_config=override_conf)
+        elif lister == 'bitbucket':
+            from .bitbucket.models import IndexingModelBase as ModelBase
+            from .bitbucket.lister import BitBucketLister
+            _lister = BitBucketLister(
+                api_baseurl='https://api.bitbucket.org/2.0',
+                override_config=override_conf)
 
-    elif lister == 'gitlab':
-        from .gitlab.models import ModelBase
-        from .gitlab.lister import GitLabLister
-        _lister = GitLabLister(api_baseurl='https://gitlab.com/api/v4/',
-                               override_config=override_conf)
-    elif lister == 'debian':
-        from .debian.lister import DebianLister
-        ModelBase = DebianLister.MODEL  # noqa
-        _lister = DebianLister(override_config=override_conf)
+        elif lister == 'gitlab':
+            from .gitlab.models import ModelBase
+            from .gitlab.lister import GitLabLister
+            _lister = GitLabLister(
+                api_baseurl='https://gitlab.com/api/v4/',
+                override_config=override_conf)
+        elif lister == 'debian':
+            from .debian.lister import DebianLister
+            ModelBase = DebianLister.MODEL  # noqa
+            _lister = DebianLister(override_config=override_conf)
 
-        def insert_minimum_data(lister):
-            from swh.storage.schemata.distribution import Distribution, Area
-            d = Distribution(
-                name='Debian',
-                type='deb',
-                mirror_uri='http://deb.debian.org/debian/')
-            lister.db_session.add(d)
+            def insert_minimum_data(lister):
+                from swh.storage.schemata.distribution import (
+                    Distribution, Area)
+                d = Distribution(
+                    name='Debian',
+                    type='deb',
+                    mirror_uri='http://deb.debian.org/debian/')
+                lister.db_session.add(d)
 
-            areas = []
-            for distribution_name in ['stretch']:
-                for area_name in ['main', 'contrib', 'non-free']:
-                    areas.append(Area(
-                        name='%s/%s' % (distribution_name, area_name),
-                        distribution=d,
-                    ))
-            lister.db_session.add_all(areas)
-            lister.db_session.commit()
+                areas = []
+                for distribution_name in ['stretch']:
+                    for area_name in ['main', 'contrib', 'non-free']:
+                        areas.append(Area(
+                            name='%s/%s' % (distribution_name, area_name),
+                            distribution=d,
+                        ))
+                lister.db_session.add_all(areas)
+                lister.db_session.commit()
 
-    elif lister == 'pypi':
-        from .pypi.models import ModelBase
-        from .pypi.lister import PyPILister
-        _lister = PyPILister(override_config=override_conf)
+        elif lister == 'pypi':
+            from .pypi.models import ModelBase
+            from .pypi.lister import PyPILister
+            _lister = PyPILister(override_config=override_conf)
 
-    elif lister == 'npm':
-        from .npm.models import IndexingModelBase as ModelBase
-        from .npm.models import NpmVisitModel
-        from .npm.lister import NpmLister
-        _lister = NpmLister(override_config=override_conf)
+        elif lister == 'npm':
+            from .npm.models import IndexingModelBase as ModelBase
+            from .npm.models import NpmVisitModel
+            from .npm.lister import NpmLister
+            _lister = NpmLister(override_config=override_conf)
+            if drop_tables:
+                NpmVisitModel.metadata.drop_all(_lister.db_engine)
+            if create_tables:
+                NpmVisitModel.metadata.create_all(_lister.db_engine)
+
+        else:
+            raise ValueError(
+                'Invalid lister %s: only supported listers are %s' %
+                (lister, SUPPORTED_LISTERS))
+
         if drop_tables:
-            NpmVisitModel.metadata.drop_all(_lister.db_engine)
+            logger.info('Dropping tables for %s', lister)
+            ModelBase.metadata.drop_all(_lister.db_engine)
+
         if create_tables:
-            NpmVisitModel.metadata.create_all(_lister.db_engine)
+            logger.info('Creating tables for %s', lister)
+            ModelBase.metadata.create_all(_lister.db_engine)
 
-    else:
-        raise ValueError('Only supported listers are %s' % SUPPORTED_LISTERS)
-
-    if drop_tables:
-        ModelBase.metadata.drop_all(_lister.db_engine)
-
-    if create_tables:
-        ModelBase.metadata.create_all(_lister.db_engine)
-
-        if with_data and insert_minimum_data:
-            insert_minimum_data(_lister)
+            if with_data and insert_minimum_data:
+                logger.info('Inserting minimal data for %s', lister)
+                try:
+                    insert_minimum_data(_lister)
+                except Exception:
+                    logger.warning(
+                        'Failed to insert minumum data in %s', lister)
 
 
 if __name__ == '__main__':
