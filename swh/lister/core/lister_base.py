@@ -223,7 +223,13 @@ class SWHListerBase(abc.ABC, config.SWHConfig):
             'args': {
                 'url': 'http://localhost:5008/'
             },
-        })
+        }),
+        'lister': ('dict', {
+            'cls': 'local',
+            'args': {
+                'db': 'postgresql:///lister',
+            },
+        }),
     }
 
     @property
@@ -233,8 +239,6 @@ class SWHListerBase(abc.ABC, config.SWHConfig):
     @property
     def ADDITIONAL_CONFIG(self):  # noqa: N802
         return {
-            'lister_db_url':
-                ('str', 'postgresql:///lister-%s' % self.LISTER_NAME),
             'credentials':
                 ('list[dict]', []),
             'cache_responses':
@@ -264,7 +268,7 @@ class SWHListerBase(abc.ABC, config.SWHConfig):
         logger.debug('%s CONFIG=%s' % (self, self.config))
         self.storage = get_storage(**self.config['storage'])
         self.scheduler = get_scheduler(**self.config['scheduler'])
-        self.db_engine = create_engine(self.config['lister_db_url'])
+        self.db_engine = create_engine(self.config['lister']['args']['db'])
         self.mk_session = sessionmaker(bind=self.db_engine)
         self.db_session = self.mk_session()
 
