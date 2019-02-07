@@ -1,0 +1,807 @@
+{
+  "total_rows": 839080,
+  "offset": 422482,
+  "rows": [
+
+    {
+      "id": "jquery",
+      "key": "jquery",
+      "value": {
+        "rev": "212-2eac7c93af4c8bccdf7317739f0319b6"
+      }
+    },
+
+    {
+      "id": "jquery-1.8",
+      "key": "jquery-1.8",
+      "value": {
+        "rev": "1-711ded49a7453adce85ce7a51c2157de"
+      }
+    },
+
+    {
+      "id": "jquery-1x",
+      "key": "jquery-1x",
+      "value": {
+        "rev": "1-c53fa04d9c8fb231336704508732c287"
+      }
+    },
+
+    {
+      "id": "jquery-2-typescript-async-await-adapter",
+      "key": "jquery-2-typescript-async-await-adapter",
+      "value": {
+        "rev": "8-5cfb484e9afaa6e326a97240fccd8f93"
+      }
+    },
+
+    {
+      "id": "jquery-accessible-accordion-aria",
+      "key": "jquery-accessible-accordion-aria",
+      "value": {
+        "rev": "15-9fc0df7cb2f1cd1001e2da302443b56e"
+      }
+    },
+
+    {
+      "id": "jquery-accessible-autocomplete-list-aria",
+      "key": "jquery-accessible-autocomplete-list-aria",
+      "value": {
+        "rev": "8-961b382442c1a5bafe58f0e05424701d"
+      }
+    },
+
+    {
+      "id": "jquery-accessible-carrousel-aria",
+      "key": "jquery-accessible-carrousel-aria",
+      "value": {
+        "rev": "9-f33f59d7f601bafe023bd711b551282b"
+      }
+    },
+
+    {
+      "id": "jquery-accessible-dialog-tooltip-aria",
+      "key": "jquery-accessible-dialog-tooltip-aria",
+      "value": {
+        "rev": "12-0a7b5ba6f7717c2c6603cabdb29de9ba"
+      }
+    },
+
+    {
+      "id": "jquery-accessible-hide-show-aria",
+      "key": "jquery-accessible-hide-show-aria",
+      "value": {
+        "rev": "10-5a03c47a8995b08246e4bc103782dafa"
+      }
+    },
+
+    {
+      "id": "jquery-accessible-modal-window-aria",
+      "key": "jquery-accessible-modal-window-aria",
+      "value": {
+        "rev": "18-50266e260f6b807019cfcfcd3a3685ab"
+      }
+    },
+
+    {
+      "id": "jquery-accessible-simple-tooltip-aria",
+      "key": "jquery-accessible-simple-tooltip-aria",
+      "value": {
+        "rev": "6-ea71aa37760790dc603b56117f054e1b"
+      }
+    },
+
+    {
+      "id": "jquery-accessible-subnav-dropdown",
+      "key": "jquery-accessible-subnav-dropdown",
+      "value": {
+        "rev": "2-496f017a9ac243655225e43b5697b09b"
+      }
+    },
+
+    {
+      "id": "jquery-accessible-tabpanel-aria",
+      "key": "jquery-accessible-tabpanel-aria",
+      "value": {
+        "rev": "11-659971471e6ac0fbb3b2f78ad208722a"
+      }
+    },
+
+    {
+      "id": "jquery-accessible-tabs-umd",
+      "key": "jquery-accessible-tabs-umd",
+      "value": {
+        "rev": "1-f92015de5bb36e411d8c0940cca2883f"
+      }
+    },
+
+    {
+      "id": "jquery-active-descendant",
+      "key": "jquery-active-descendant",
+      "value": {
+        "rev": "8-79aed7a6cbca4e1f3c3ac0570d0290de"
+      }
+    },
+
+    {
+      "id": "jquery-ada-validation",
+      "key": "jquery-ada-validation",
+      "value": {
+        "rev": "1-9aab9629027c29fbece90485dd9d3112"
+      }
+    },
+
+    {
+      "id": "jquery-adaptText",
+      "key": "jquery-adaptText",
+      "value": {
+        "rev": "3-2e15fc801ea8235b9180a3defc782ed0"
+      }
+    },
+
+    {
+      "id": "jquery-adapttr",
+      "key": "jquery-adapttr",
+      "value": {
+        "rev": "6-74585f2d4be60b3f493585a6d28b90bc"
+      }
+    },
+
+    {
+      "id": "jquery-add-prefixed-class",
+      "key": "jquery-add-prefixed-class",
+      "value": {
+        "rev": "1-9e43aee9758504b3f5271e9804a95f20"
+      }
+    },
+
+    {
+      "id": "jquery-address",
+      "key": "jquery-address",
+      "value": {
+        "rev": "1-64173ede32157b26f4de910ad0f49590"
+      }
+    },
+
+    {
+      "id": "jquery-address-suggestion",
+      "key": "jquery-address-suggestion",
+      "value": {
+        "rev": "6-18d9df51d472c365bcd84a61c9105774"
+      }
+    },
+
+    {
+      "id": "jquery-advscrollevent",
+      "key": "jquery-advscrollevent",
+      "value": {
+        "rev": "1-f6033de9ba0f8e364c42826441d93119"
+      }
+    },
+
+    {
+      "id": "jquery-affix",
+      "key": "jquery-affix",
+      "value": {
+        "rev": "6-777371f67df59abf18ec1fe326df3b82"
+      }
+    },
+
+    {
+      "id": "jquery-airload",
+      "key": "jquery-airload",
+      "value": {
+        "rev": "7-136d513d2604a25238eb88709d6d9003"
+      }
+    },
+
+    {
+      "id": "jquery-ajax",
+      "key": "jquery-ajax",
+      "value": {
+        "rev": "1-ee358f630d4c928b52c968c7667d0d31"
+      }
+    },
+
+    {
+      "id": "jquery-ajax-cache",
+      "key": "jquery-ajax-cache",
+      "value": {
+        "rev": "2-ca31e0d43ae28e9cea968f1f538f06d3"
+      }
+    },
+
+    {
+      "id": "jquery-ajax-chain",
+      "key": "jquery-ajax-chain",
+      "value": {
+        "rev": "1-dc0e5aee651c0128b7f411aac96132a2"
+      }
+    },
+
+    {
+      "id": "jquery-ajax-file-upload",
+      "key": "jquery-ajax-file-upload",
+      "value": {
+        "rev": "1-96147d8bf69245c622e76583bb615d49"
+      }
+    },
+
+    {
+      "id": "jquery-ajax-json",
+      "key": "jquery-ajax-json",
+      "value": {
+        "rev": "1-b47eec12168e4cb39b45f1523d7cd397"
+      }
+    },
+
+    {
+      "id": "jquery-ajax-markup",
+      "key": "jquery-ajax-markup",
+      "value": {
+        "rev": "1-8e65dc822cb63be76c62a1323666265e"
+      }
+    },
+
+    {
+      "id": "jquery-ajax-native",
+      "key": "jquery-ajax-native",
+      "value": {
+        "rev": "2-9d67b8d43713e3546ad50f817c040139"
+      }
+    },
+
+    {
+      "id": "jquery-ajax-request",
+      "key": "jquery-ajax-request",
+      "value": {
+        "rev": "1-fdc0960ec73667bc2b46adf493c05db4"
+      }
+    },
+
+    {
+      "id": "jquery-ajax-retry",
+      "key": "jquery-ajax-retry",
+      "value": {
+        "rev": "1-27ca186953e346aa9c0ca2310c732751"
+      }
+    },
+
+    {
+      "id": "jquery-ajax-tracking",
+      "key": "jquery-ajax-tracking",
+      "value": {
+        "rev": "3-d48876f3c115ee4743a6a94bb65bb01d"
+      }
+    },
+
+    {
+      "id": "jquery-ajax-transport-xdomainrequest",
+      "key": "jquery-ajax-transport-xdomainrequest",
+      "value": {
+        "rev": "1-ece69aa5b9f0c950a1fa2806cf74392d"
+      }
+    },
+
+    {
+      "id": "jquery-ajax-unobtrusive",
+      "key": "jquery-ajax-unobtrusive",
+      "value": {
+        "rev": "3-fb0daab8480b9a2cc9c6876e1c4874f4"
+      }
+    },
+
+    {
+      "id": "jquery-ajax-unobtrusive-multi",
+      "key": "jquery-ajax-unobtrusive-multi",
+      "value": {
+        "rev": "1-0a2ffdabaf5708d4ae3d9e29a3a9ef11"
+      }
+    },
+
+    {
+      "id": "jquery-ajaxreadystate",
+      "key": "jquery-ajaxreadystate",
+      "value": {
+        "rev": "1-5e618474fe2e77ad5869c206164f82bf"
+      }
+    },
+
+    {
+      "id": "jquery-albe-timeline",
+      "key": "jquery-albe-timeline",
+      "value": {
+        "rev": "2-3db2b43778b5c50db873e724d9940eb6"
+      }
+    },
+
+    {
+      "id": "jquery-all-attributes",
+      "key": "jquery-all-attributes",
+      "value": {
+        "rev": "1-89bb7e01ee312ad5d36d78a3aa2327e4"
+      }
+    },
+
+    {
+      "id": "jquery-alphaindex",
+      "key": "jquery-alphaindex",
+      "value": {
+        "rev": "4-7f61cde9cfb70617a6fbe992dfcbc10a"
+      }
+    },
+
+    {
+      "id": "jquery-always",
+      "key": "jquery-always",
+      "value": {
+        "rev": "1-0ad944881bbc39c67df0a694d80bebef"
+      }
+    },
+
+    {
+      "id": "jquery-amd",
+      "key": "jquery-amd",
+      "value": {
+        "rev": "1-931646c751bef740c361dd0f6e68653c"
+      }
+    },
+
+    {
+      "id": "jquery-anaglyph-image-effect",
+      "key": "jquery-anaglyph-image-effect",
+      "value": {
+        "rev": "1-9bf7afce2e1bc73747ef22abc859b22b"
+      }
+    },
+
+    {
+      "id": "jquery-analytics",
+      "key": "jquery-analytics",
+      "value": {
+        "rev": "1-d84b0c8ce886b9f01d2c5c1cf0a7317f"
+      }
+    },
+
+    {
+      "id": "jquery-ancestors",
+      "key": "jquery-ancestors",
+      "value": {
+        "rev": "1-49b30817a03558f1f585c8c0cd4b8afb"
+      }
+    },
+
+    {
+      "id": "jquery-angry-loader",
+      "key": "jquery-angry-loader",
+      "value": {
+        "rev": "1-31c9fd950d32b9d3a73829cde1dae577"
+      }
+    },
+
+    {
+      "id": "jquery-angular-shim",
+      "key": "jquery-angular-shim",
+      "value": {
+        "rev": "1-723e72b2981f02dd3abcfe6d2395d636"
+      }
+    },
+
+    {
+      "id": "jquery-animate-gradient",
+      "key": "jquery-animate-gradient",
+      "value": {
+        "rev": "5-a3e0fc89699237e7e7241cd608a0dcf7"
+      }
+    },
+
+    {
+      "id": "jquery-animate-scroll",
+      "key": "jquery-animate-scroll",
+      "value": {
+        "rev": "1-37d49d89fe99aa599540e6ff83b15888"
+      }
+    },
+
+    {
+      "id": "jquery-animated-headlines",
+      "key": "jquery-animated-headlines",
+      "value": {
+        "rev": "1-adf1d149bc83fa8445e141e3c900759e"
+      }
+    },
+
+    {
+      "id": "jquery-animation",
+      "key": "jquery-animation",
+      "value": {
+        "rev": "4-f51d0559010bbe9d74d70e58de9bd733"
+      }
+    },
+
+    {
+      "id": "jquery-animation-support",
+      "key": "jquery-animation-support",
+      "value": {
+        "rev": "1-9013bc4bdeb2bd70bedcc988a811fcc0"
+      }
+    },
+
+    {
+      "id": "jquery-aniview",
+      "key": "jquery-aniview",
+      "value": {
+        "rev": "3-5754524da237693458bcff19b626b875"
+      }
+    },
+
+    {
+      "id": "jquery-anything-clickable",
+      "key": "jquery-anything-clickable",
+      "value": {
+        "rev": "2-e1aaaf1a369f7796c438a3efbf05bcce"
+      }
+    },
+
+    {
+      "id": "jquery-app",
+      "key": "jquery-app",
+      "value": {
+        "rev": "6-4e0bf5abd71c72ced3c4cf3035116f70"
+      }
+    },
+
+    {
+      "id": "jquery-app-banner",
+      "key": "jquery-app-banner",
+      "value": {
+        "rev": "2-8a5b530eaab94315eb00c77acd13f2dd"
+      }
+    },
+
+    {
+      "id": "jquery-appear-poetic",
+      "key": "jquery-appear-poetic",
+      "value": {
+        "rev": "1-368094b72ed36d42cf2fca438fa4b344"
+      }
+    },
+
+    {
+      "id": "jquery-applyonscreen",
+      "key": "jquery-applyonscreen",
+      "value": {
+        "rev": "4-d76c18a6e66fffba01a9a774b40663f8"
+      }
+    },
+
+    {
+      "id": "jquery-apta",
+      "key": "jquery-apta",
+      "value": {
+        "rev": "1-c486380fedefd887e6293a00c3b6a222"
+      }
+    },
+
+    {
+      "id": "jquery-arrow-navigate",
+      "key": "jquery-arrow-navigate",
+      "value": {
+        "rev": "3-0efe881e01ef0eac24a92baf1eb6d8d1"
+      }
+    },
+
+    {
+      "id": "jquery-asAccordion",
+      "key": "jquery-asAccordion",
+      "value": {
+        "rev": "2-2d18d3fe9089dcf67de5f29d1763b4ce"
+      }
+    },
+
+    {
+      "id": "jquery-asBgPicker",
+      "key": "jquery-asBgPicker",
+      "value": {
+        "rev": "2-d1403cd306d5764ee0f5aa852c2bed8e"
+      }
+    },
+
+    {
+      "id": "jquery-asBreadcrumbs",
+      "key": "jquery-asBreadcrumbs",
+      "value": {
+        "rev": "2-77e566a07680005ce1cb322f2a733fe4"
+      }
+    },
+
+    {
+      "id": "jquery-asCheck",
+      "key": "jquery-asCheck",
+      "value": {
+        "rev": "2-d0b2741b70616c7d563419cc125d193d"
+      }
+    },
+
+    {
+      "id": "jquery-asChoice",
+      "key": "jquery-asChoice",
+      "value": {
+        "rev": "2-0eda5269cbd59976ee904b74da209389"
+      }
+    },
+
+    {
+      "id": "jquery-asColor",
+      "key": "jquery-asColor",
+      "value": {
+        "rev": "3-aa730d81322561c7a3174d5c7bb6b3b8"
+      }
+    },
+
+    {
+      "id": "jquery-asColorPicker",
+      "key": "jquery-asColorPicker",
+      "value": {
+        "rev": "2-6bbaecaf94a324331a3d1f5d3aad3b3d"
+      }
+    },
+
+    {
+      "id": "jquery-asDropdown",
+      "key": "jquery-asDropdown",
+      "value": {
+        "rev": "2-b29b187cdd0bdce502d11855415e6887"
+      }
+    },
+
+    {
+      "id": "jquery-asFontEditor",
+      "key": "jquery-asFontEditor",
+      "value": {
+        "rev": "2-132882375101062896413afdc93b4c8c"
+      }
+    },
+
+    {
+      "id": "jquery-asGalleryPicker",
+      "key": "jquery-asGalleryPicker",
+      "value": {
+        "rev": "1-864a80930d72c6150aa74969a28617e4"
+      }
+    },
+
+    {
+      "id": "jquery-asGmap",
+      "key": "jquery-asGmap",
+      "value": {
+        "rev": "2-b0c4330774137b2f1b91bd4686880f2a"
+      }
+    },
+
+    {
+      "id": "jquery-asGradient",
+      "key": "jquery-asGradient",
+      "value": {
+        "rev": "2-5184670a313d5e161cb62659de3db55c"
+      }
+    },
+
+    {
+      "id": "jquery-asHoverScroll",
+      "key": "jquery-asHoverScroll",
+      "value": {
+        "rev": "7-3f6efebf248bd27520d03eaac33d8ca2"
+      }
+    },
+
+    {
+      "id": "jquery-asIconPicker",
+      "key": "jquery-asIconPicker",
+      "value": {
+        "rev": "2-9070adda148ea75247c7cee810ae91e2"
+      }
+    },
+
+    {
+      "id": "jquery-asImagePicker",
+      "key": "jquery-asImagePicker",
+      "value": {
+        "rev": "2-fb3115c2296b0b07ed9e379176626e01"
+      }
+    },
+
+    {
+      "id": "jquery-asItemList",
+      "key": "jquery-asItemList",
+      "value": {
+        "rev": "2-88a7d2900f47c785c2a6cb764ac467d6"
+      }
+    },
+
+    {
+      "id": "jquery-asModal",
+      "key": "jquery-asModal",
+      "value": {
+        "rev": "2-1719b8e6a489e03cc3e22bd329148366"
+      }
+    },
+
+    {
+      "id": "jquery-asOffset",
+      "key": "jquery-asOffset",
+      "value": {
+        "rev": "2-e45a0077e5bc0bbf91b32dc76387c945"
+      }
+    },
+
+    {
+      "id": "jquery-asPaginator",
+      "key": "jquery-asPaginator",
+      "value": {
+        "rev": "2-0d279d2748fc5e875f5fb2a8d3d48377"
+      }
+    },
+
+    {
+      "id": "jquery-asPieProgress",
+      "key": "jquery-asPieProgress",
+      "value": {
+        "rev": "2-14dc464a19e9d3feaa532f62e45bbd26"
+      }
+    },
+
+    {
+      "id": "jquery-asProgress",
+      "key": "jquery-asProgress",
+      "value": {
+        "rev": "2-a58d7100f1a78f7753efcf0e34dfaf0e"
+      }
+    },
+
+    {
+      "id": "jquery-asRange",
+      "key": "jquery-asRange",
+      "value": {
+        "rev": "3-aa3d2f348a933161868ba6b6fd9eb881"
+      }
+    },
+
+    {
+      "id": "jquery-asScroll",
+      "key": "jquery-asScroll",
+      "value": {
+        "rev": "1-f4880ea057adbfebb912ba0157575ca1"
+      }
+    },
+
+    {
+      "id": "jquery-asScrollable",
+      "key": "jquery-asScrollable",
+      "value": {
+        "rev": "7-5c18eb2180d8aa85f0b5e940667c8344"
+      }
+    },
+
+    {
+      "id": "jquery-asScrollbar",
+      "key": "jquery-asScrollbar",
+      "value": {
+        "rev": "4-89420658c355a5584825b45ee4ef0beb"
+      }
+    },
+
+    {
+      "id": "jquery-asSelect",
+      "key": "jquery-asSelect",
+      "value": {
+        "rev": "2-caf3dc516665009b654236b876fe02bb"
+      }
+    },
+
+    {
+      "id": "jquery-asSpinner",
+      "key": "jquery-asSpinner",
+      "value": {
+        "rev": "2-bf26b5d9c77eb4b63acbf16019407834"
+      }
+    },
+
+    {
+      "id": "jquery-asSwitch",
+      "key": "jquery-asSwitch",
+      "value": {
+        "rev": "2-f738586946b432caa73297568b5f38ad"
+      }
+    },
+
+    {
+      "id": "jquery-asTooltip",
+      "key": "jquery-asTooltip",
+      "value": {
+        "rev": "2-80d3fe5cdae70d9310969723e7045384"
+      }
+    },
+
+    {
+      "id": "jquery-asTree",
+      "key": "jquery-asTree",
+      "value": {
+        "rev": "2-353063a563c0322cbc317af385f71b27"
+      }
+    },
+
+    {
+      "id": "jquery-ascolorpicker-flat",
+      "key": "jquery-ascolorpicker-flat",
+      "value": {
+        "rev": "11-1681d53cd475e7b6b9564baa51a79611"
+      }
+    },
+
+    {
+      "id": "jquery-aslider",
+      "key": "jquery-aslider",
+      "value": {
+        "rev": "1-2b3dd953493eeaa4dc329cbf0d81116a"
+      }
+    },
+
+    {
+      "id": "jquery-aspect-ratio-keeper",
+      "key": "jquery-aspect-ratio-keeper",
+      "value": {
+        "rev": "1-1ad8e5588218e1d38fff351858655eda"
+      }
+    },
+
+    {
+      "id": "jquery-assinadordigitaldiscus",
+      "key": "jquery-assinadordigitaldiscus",
+      "value": {
+        "rev": "1-897cd68ef3699551630bd3454dceb6f0"
+      }
+    },
+
+    {
+      "id": "jquery-async-gravatar",
+      "key": "jquery-async-gravatar",
+      "value": {
+        "rev": "3-a3192e741d14d57635f4ebfb41a904db"
+      }
+    },
+
+    {
+      "id": "jquery-asynclink",
+      "key": "jquery-asynclink",
+      "value": {
+        "rev": "1-2159a3c49e3c8fe9280c592770e83522"
+      }
+    },
+
+    {
+      "id": "jquery-atlas",
+      "key": "jquery-atlas",
+      "value": {
+        "rev": "1-6142c5a0af67a0470daf36151d3f9d8c"
+      }
+    },
+
+    {
+      "id": "jquery-atomic-nav",
+      "key": "jquery-atomic-nav",
+      "value": {
+        "rev": "1-18e4ef14be83a907cbee0cd0adee25d4"
+      }
+    },
+
+    {
+      "id": "jquery-attach",
+      "key": "jquery-attach",
+      "value": {
+        "rev": "8-da4f17596c25a02b0cce266e59706d5f"
+      }
+    }
+
+  ]
+}

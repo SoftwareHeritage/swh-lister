@@ -21,6 +21,9 @@ from swh.storage import get_storage
 from .abstractattribute import AbstractAttribute
 
 
+logger = logging.getLogger(__name__)
+
+
 def utcnow():
     return datetime.datetime.now(tz=datetime.timezone.utc)
 
@@ -197,11 +200,11 @@ class SWHListerBase(abc.ABC, config.SWHConfig):
 
             self.string_pattern_check(inner, lower, upper)
         except Exception as e:
-            logging.error(str(e) + ': %s, %s, %s' %
-                          (('inner=%s%s' % (type(inner), inner)),
+            logger.error(str(e) + ': %s, %s, %s' %
+                         (('inner=%s%s' % (type(inner), inner)),
                           ('lower=%s%s' % (type(lower), lower)),
                           ('upper=%s%s' % (type(upper), upper)))
-                          )
+                         )
             raise
 
         return ret
@@ -220,7 +223,13 @@ class SWHListerBase(abc.ABC, config.SWHConfig):
             'args': {
                 'url': 'http://localhost:5008/'
             },
-        })
+        }),
+        'lister': ('dict', {
+            'cls': 'local',
+            'args': {
+                'db': 'postgresql:///lister',
+            },
+        }),
     }
 
     @property
@@ -230,8 +239,6 @@ class SWHListerBase(abc.ABC, config.SWHConfig):
     @property
     def ADDITIONAL_CONFIG(self):  # noqa: N802
         return {
-            'lister_db_url':
-                ('str', 'postgresql:///lister-%s' % self.LISTER_NAME),
             'credentials':
                 ('list[dict]', []),
             'cache_responses':
@@ -246,6 +253,7 @@ class SWHListerBase(abc.ABC, config.SWHConfig):
 
     def __init__(self, override_config=None):
         self.backoff = self.INITIAL_BACKOFF
+        logger.debug('Loading config from %s' % self.CONFIG_BASE_FILENAME)
         self.config = self.parse_config_file(
             base_filename=self.CONFIG_BASE_FILENAME,
             additional_configs=[self.ADDITIONAL_CONFIG]
@@ -257,9 +265,10 @@ class SWHListerBase(abc.ABC, config.SWHConfig):
         if override_config:
             self.config.update(override_config)
 
+        logger.debug('%s CONFIG=%s' % (self, self.config))
         self.storage = get_storage(**self.config['storage'])
         self.scheduler = get_scheduler(**self.config['scheduler'])
-        self.db_engine = create_engine(self.config['lister_db_url'])
+        self.db_engine = create_engine(self.config['lister']['args']['db'])
         self.mk_session = sessionmaker(bind=self.db_engine)
         self.db_session = self.mk_session()
 
@@ -292,8 +301,9 @@ class SWHListerBase(abc.ABC, config.SWHConfig):
                 r = self.transport_request(identifier)
             except FetchError:
                 # network-level connection error, try again
-                logging.warn('connection error on %s: sleep for %d seconds' %
-                             (identifier, self.CONN_SLEEP))
+                logger.warning(
+                    'connection error on %s: sleep for %d seconds' %
+                    (identifier, self.CONN_SLEEP))
                 time.sleep(self.CONN_SLEEP)
                 retries_left -= 1
                 continue
@@ -304,8 +314,9 @@ class SWHListerBase(abc.ABC, config.SWHConfig):
             # detect throttling
             must_retry, delay = self.transport_quota_check(r)
             if must_retry:
-                logging.warn('rate limited on %s: sleep for %f seconds' %
-                             (identifier, delay))
+                logger.warning(
+                    'rate limited on %s: sleep for %f seconds' %
+                    (identifier, delay))
                 time.sleep(delay)
             else:  # request ok
                 break
@@ -313,7 +324,8 @@ class SWHListerBase(abc.ABC, config.SWHConfig):
             retries_left -= 1
 
         if not retries_left:
-            logging.warn('giving up on %s: max retries exceeded' % identifier)
+            logger.warning(
+                'giving up on %s: max retries exceeded' % identifier)
 
         return r
 
@@ -430,7 +442,7 @@ class SWHListerBase(abc.ABC, config.SWHConfig):
                                re.escape(a))
             if (isinstance(b, str) and (re.match(a_pattern, b) is None)
                or isinstance(c, str) and (re.match(a_pattern, c) is None)):
-                logging.debug(a_pattern)
+                logger.debug(a_pattern)
                 raise TypeError('incomparable string patterns detected')
 
     def inject_repo_data_into_db(self, models_list):

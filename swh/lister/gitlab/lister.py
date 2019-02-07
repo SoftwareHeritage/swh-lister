@@ -4,6 +4,7 @@
 
 import random
 import time
+from urllib3.util import parse_url
 
 from ..core.page_by_page_lister import PageByPageHttpLister
 from .models import GitLabModel
@@ -15,10 +16,12 @@ class GitLabLister(PageByPageHttpLister):
     MODEL = GitLabModel
     LISTER_NAME = 'gitlab'
 
-    def __init__(self, api_baseurl=None, instance=None,
+    def __init__(self, api_baseurl, instance=None,
                  override_config=None, sort='asc', per_page=20):
         super().__init__(api_baseurl=api_baseurl,
                          override_config=override_config)
+        if instance is None:
+            instance = parse_url(api_baseurl).host
         self.instance = instance
         self.PATH_TEMPLATE = '%s&sort=%s' % (self.PATH_TEMPLATE, sort)
         if per_page != 20:
@@ -43,17 +46,17 @@ class GitLabLister(PageByPageHttpLister):
         transport_request identifier.
 
         For the gitlab lister, the 'credentials' entries is configured
-        per instance. For example:
+        per instance. For example::
 
-        - credentials:
-          - gitlab.com:
-            - username: user0
-              password: <pass>
-            - username: user1
-              password: <pass>
-            - ...
-          - other-gitlab-instance:
-            ...
+          - credentials:
+            - gitlab.com:
+              - username: user0
+                password: <pass>
+              - username: user1
+                password: <pass>
+              - ...
+            - other-gitlab-instance:
+              ...
 
         """
         params = {

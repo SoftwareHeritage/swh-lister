@@ -5,8 +5,6 @@
 import abc
 import unittest
 
-from nose.tools import istest
-
 from swh.lister.core.abstractattribute import AbstractAttribute
 
 
@@ -38,7 +36,6 @@ class GoodSubclass(BaseClass):
 
 
 class TestAbstractAttributes(unittest.TestCase):
-    @istest
     def test_aa(self):
         with self.assertRaises(TypeError):
             BaseClass()
@@ -60,7 +57,6 @@ class TestAbstractAttributes(unittest.TestCase):
         self.assertEqual(gsc.v3, 'baz')
         self.assertEqual(gsc.v4, 'qux')
 
-    @istest
     def test_aa_docstrings(self):
         self.assertEqual(BaseClass.v1.__doc__, AbstractAttribute.__doc__)
         self.assertEqual(BaseClass.v2.__doc__, AbstractAttribute.__doc__)
