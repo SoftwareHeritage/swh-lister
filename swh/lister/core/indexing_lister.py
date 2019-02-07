@@ -4,11 +4,14 @@
 
 import abc
 import logging
+from itertools import count
 
 from sqlalchemy import func
 
 from .lister_transports import SWHListerHttpTransport
 from .lister_base import SWHListerBase
+
+logger = logging.getLogger(__name__)
 
 
 class SWHIndexingLister(SWHListerBase):
@@ -100,7 +103,7 @@ class SWHIndexingLister(SWHListerBase):
                 declare approximately equal-sized ranges of existing
                 repos
         """
-        n = self.db_num_entries()
+        n = max(self.db_num_entries(), 10)
 
         partitions = []
         partition_size = min(partition_size, n)
@@ -109,6 +112,8 @@ class SWHIndexingLister(SWHListerBase):
             # indexable column from the ith row
             index = self.db_session.query(self.MODEL.indexable) \
                       .order_by(self.MODEL.indexable).offset(i).first()
+            if index:
+                index = index[0]
             if index is not None and prev_index is not None:
                 partitions.append((prev_index, index))
             prev_index = index
@@ -165,39 +170,33 @@ class SWHIndexingLister(SWHListerBase):
         Returns:
             nothing
         """
-        index = min_bound or ''
-        loop_count = 0
         self.min_index = min_bound
         self.max_index = max_bound
 
-        while self.is_within_bounds(index, self.min_index, self.max_index):
-            logging.info('listing repos starting at %s' % index)
+        def ingest_indexes():
+            index = min_bound or ''
+            for i in count(1):
+                response, injected_repos = self.ingest_data(index)
+                if not response and not injected_repos:
+                    logger.info('No response from api server, stopping')
+                    return
 
-            response, injected_repos = self.ingest_data(index)
-            if not response and not injected_repos:
-                logging.info('No response from api server, stopping')
-                break
+                next_index = self.get_next_target_from_response(response)
+                # Determine if any repos were deleted, and disable their tasks.
+                keep_these = list(injected_repos.keys())
+                self.disable_deleted_repo_tasks(index, next_index, keep_these)
 
-            next_index = self.get_next_target_from_response(response)
-
-            # Determine if any repos were deleted, and disable their tasks.
-
-            keep_these = [k for k in injected_repos.keys()]
-            self.disable_deleted_repo_tasks(index, next_index, keep_these)
-
-            # termination condition
-
-            if (next_index is None) or (next_index == index):
-                logging.info('stopping after index %s, no next link found' %
-                             index)
-                break
-            else:
+                # termination condition
+                if next_index is None or next_index == index:
+                    logger.info('stopping after index %s, no next link found' %
+                                index)
+                    return
                 index = next_index
+                yield i
 
-            loop_count += 1
-            if loop_count == 20:
-                logging.info('flushing updates')
-                loop_count = 0
+        for i in ingest_indexes():
+            if (i % 20) == 0:
+                logger.info('flushing updates')
                 self.db_session.commit()
                 self.db_session = self.mk_session()
 

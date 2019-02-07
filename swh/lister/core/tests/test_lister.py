@@ -8,9 +8,8 @@ from unittest import TestCase
 from unittest.mock import Mock, patch
 
 import requests_mock
-from testing.postgresql import Postgresql
-from nose.tools import istest
 from sqlalchemy import create_engine
+from testing.postgresql import Postgresql
 
 from swh.lister.core.abstractattribute import AbstractAttribute
 
@@ -119,7 +118,6 @@ class HttpListerTesterBase(abc.ABC):
             self.response = fl.safely_issue_request(self.first_index)
         return self.response
 
-    @istest
     def test_is_within_bounds(self, http_mocker):
         fl = self.get_fl()
         self.assertFalse(fl.is_within_bounds(1, 2, 3))
@@ -141,14 +139,12 @@ class HttpListerTesterBase(abc.ABC):
         with self.assertRaises(TypeError):
             fl.is_within_bounds("A:B", "A::B", None)
 
-    @istest
     def test_api_request(self, http_mocker):
         http_mocker.get(self.test_re, text=self.mock_limit_twice_response)
         with patch.object(time, 'sleep', wraps=time.sleep) as sleepmock:
             self.get_api_response()
             self.assertEqual(sleepmock.call_count, 2)
 
-    @istest
     def test_repos_list(self, http_mocker):
         http_mocker.get(self.test_re, text=self.mock_response)
         li = self.get_fl().transport_response_simplified(
@@ -157,7 +153,6 @@ class HttpListerTesterBase(abc.ABC):
         self.assertIsInstance(li, list)
         self.assertEqual(len(li), self.entries_per_page)
 
-    @istest
     def test_model_map(self, http_mocker):
         http_mocker.get(self.test_re, text=self.mock_response)
         fl = self.get_fl()
@@ -177,7 +172,6 @@ class HttpListerTesterBase(abc.ABC):
         fl.db_inject_repo = Mock(return_value=fl.MODEL())
         fl.disable_deleted_repo_tasks = Mock(return_value=None)
 
-    @istest
     def test_fetch_none_nodb(self, http_mocker):
         http_mocker.get(self.test_re, text=self.mock_response)
         fl = self.get_fl()
@@ -187,7 +181,6 @@ class HttpListerTesterBase(abc.ABC):
 
         fl.run(min_bound=1, max_bound=1)  # stores no results
 
-    @istest
     def test_fetch_one_nodb(self, http_mocker):
         http_mocker.get(self.test_re, text=self.mock_response)
         fl = self.get_fl()
@@ -197,7 +190,6 @@ class HttpListerTesterBase(abc.ABC):
 
         fl.run(min_bound=self.first_index, max_bound=self.first_index)
 
-    @istest
     def test_fetch_multiple_pages_nodb(self, http_mocker):
         http_mocker.get(self.test_re, text=self.mock_response)
         fl = self.get_fl()
@@ -216,14 +208,18 @@ class HttpListerTester(HttpListerTesterBase, abc.ABC):
     last_index = AbstractAttribute('Last index in good_api_response')
 
     @requests_mock.Mocker()
-    @istest
     def test_fetch_multiple_pages_yesdb(self, http_mocker):
         http_mocker.get(self.test_re, text=self.mock_response)
         initdb_args = Postgresql.DEFAULT_SETTINGS['initdb_args']
         initdb_args = ' '.join([initdb_args, '-E UTF-8'])
         db = Postgresql(initdb_args=initdb_args)
 
-        fl = self.get_fl(override_config={'lister_db_url': db.url()})
+        fl = self.get_fl(override_config={
+            'lister': {
+                'cls': 'local',
+                'args': {'db': db.url()}
+                }
+            })
         self.init_db(db, fl.MODEL)
 
         self.disable_storage_and_scheduler(fl)

@@ -36,29 +36,9 @@ class ModelBase(SQLBase, metaclass=ABCSQLMeta):
     task_id = Column(Integer)
     origin_id = Column(Integer)
 
-    def __init__(self, uid=None, name=None, full_name=None,
-                 html_url=None, origin_url=None, origin_type=None,
-                 description=None, task_id=None, origin_id=None):
-        self.uid = uid
-        self.last_seen = datetime.now()
-
-        if name is not None:
-            self.name = name
-        if full_name is not None:
-            self.full_name = full_name
-        if html_url is not None:
-            self.html_url = html_url
-        if origin_url is not None:
-            self.origin_url = origin_url
-        if origin_type is not None:
-            self.origin_type = origin_type
-        if description is not None:
-            self.description = description
-
-        if task_id is not None:
-            self.task_id = task_id
-        if origin_id is not None:
-            self.origin_id = origin_id
+    def __init__(self, **kw):
+        kw['last_seen'] = datetime.now()
+        super().__init__(**kw)
 
 
 class IndexingModelBase(ModelBase, metaclass=ABCSQLMeta):
@@ -68,15 +48,3 @@ class IndexingModelBase(ModelBase, metaclass=ABCSQLMeta):
     # The value used for sorting, segmenting, or api query paging,
     # because uids aren't always sequential.
     indexable = AbstractAttribute('Column(<indexable_type>, index=True)')
-
-    def __init__(self, uid=None, name=None, full_name=None,
-                 html_url=None, origin_url=None, origin_type=None,
-                 description=None, task_id=None, origin_id=None,
-                 indexable=None):
-        super().__init__(
-            uid=uid, name=name, full_name=full_name, html_url=html_url,
-            origin_url=origin_url, origin_type=origin_type,
-            description=description, task_id=task_id, origin_id=origin_id)
-
-        if indexable is not None:
-            self.indexable = indexable

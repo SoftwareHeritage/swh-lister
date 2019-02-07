@@ -1,0 +1,906 @@
+{
+  "results": [
+    {
+      "seq": 6920644,
+      "id": "electron-scripts",
+      "changes": [
+        {
+          "rev": "3-a19944df5a3636bb225af9e0c8f9eedc"
+        }
+      ]
+    },
+    {
+      "seq": 6920649,
+      "id": "@crexi-dev/schematics",
+      "changes": [
+        {
+          "rev": "3-00188360eeca1f9123b2d7cd4b468c50"
+        }
+      ]
+    },
+    {
+      "seq": 6920651,
+      "id": "botfactory-conversation",
+      "changes": [
+        {
+          "rev": "50-f3667cde87637505528c46adc87f44e3"
+        }
+      ]
+    },
+    {
+      "seq": 6920667,
+      "id": "castle",
+      "changes": [
+        {
+          "rev": "3-d9adf9c9fd687cdaa2bf460c5bb523f0"
+        }
+      ]
+    },
+    {
+      "seq": 6920671,
+      "id": "rbc-wm-framework-vuejs",
+      "changes": [
+        {
+          "rev": "111-32bed479afacdd88aed9ac16dd135843"
+        }
+      ]
+    },
+    {
+      "seq": 6920678,
+      "id": "bitcoinfiles",
+      "changes": [
+        {
+          "rev": "22-ab3cd6b46f84d9aac1a24560cabdc9f0"
+        }
+      ]
+    },
+    {
+      "seq": 6920679,
+      "id": "jovo-core",
+      "changes": [
+        {
+          "rev": "2-d7440f1d17823e1a0760d9b3d4537c6e"
+        }
+      ]
+    },
+    {
+      "seq": 6920687,
+      "id": "jovo-framework",
+      "changes": [
+        {
+          "rev": "103-e4f46a3530514c2ee81a97d25fc8c8c9"
+        }
+      ]
+    },
+    {
+      "seq": 6920690,
+      "id": "smart-form-lib",
+      "changes": [
+        {
+          "rev": "18-3b6b6b2b0ea2e114a3f1335a8e798ade"
+        }
+      ]
+    },
+    {
+      "seq": 6920694,
+      "id": "bokehjs",
+      "changes": [
+        {
+          "rev": "18-115ce2d4bf4f281eb50c25f3203b3dd2"
+        }
+      ]
+    },
+    {
+      "seq": 6920701,
+      "id": "guijarro",
+      "changes": [
+        {
+          "rev": "14-82ece581d6a35d4e1d78e5292ca245c0"
+        }
+      ]
+    },
+    {
+      "seq": 6920702,
+      "id": "@kava-labs/crypto-rate-utils",
+      "changes": [
+        {
+          "rev": "3-cecc6a6c226a0590b1a685e3041028c6"
+        }
+      ]
+    },
+    {
+      "seq": 6920703,
+      "id": "@riouxjean/test",
+      "changes": [
+        {
+          "rev": "10-01e97dc7d0241dc49ea93b3468ec7b29"
+        }
+      ]
+    },
+    {
+      "seq": 6920704,
+      "id": "react-scrabblefy",
+      "changes": [
+        {
+          "rev": "7-970c8206f3b8744204f7dcb106f8462b"
+        }
+      ]
+    },
+    {
+      "seq": 6920706,
+      "id": "molart",
+      "changes": [
+        {
+          "rev": "14-416cd3cec62dd46f9b59a3bbe35308f6"
+        }
+      ]
+    },
+    {
+      "seq": 6920707,
+      "id": "@universal-material/angular",
+      "changes": [
+        {
+          "rev": "32-266ed3f67e1ddd0b4a37ca29f1cf5bf3"
+        }
+      ]
+    },
+    {
+      "seq": 6920708,
+      "id": "cozy-doctypes",
+      "changes": [
+        {
+          "rev": "68-8e90cc26e25da6c9430d373e43ac3c25"
+        }
+      ]
+    },
+    {
+      "seq": 6920710,
+      "id": "2o3t-ui",
+      "changes": [
+        {
+          "rev": "96-1e65d5320ea7c78525aba5daf328bd4b"
+        }
+      ]
+    },
+    {
+      "seq": 6920712,
+      "id": "ark-ts",
+      "changes": [
+        {
+          "rev": "24-033183c2f7f9cbb6e44d553213e525b6"
+        }
+      ]
+    },
+    {
+      "seq": 6920715,
+      "id": "mysqlconnector",
+      "changes": [
+        {
+          "rev": "19-f09bc0b82281ca486db5ebe83843679e"
+        }
+      ]
+    },
+    {
+      "seq": 6920716,
+      "id": "@innovexa/ng-form-creator-lib",
+      "changes": [
+        {
+          "rev": "147-480665ee17fa889dfec1aee75b907ff2"
+        }
+      ]
+    },
+    {
+      "seq": 6920717,
+      "id": "k-routes-example-basic",
+      "changes": [
+        {
+          "rev": "1-35142059e1c63cc724da71a9eebf229c"
+        }
+      ]
+    },
+    {
+      "seq": 6920718,
+      "id": "wloggertojs",
+      "changes": [
+        {
+          "rev": "29-5b5aa74bd30ff0fc86b39fba799befe2"
+        }
+      ]
+    },
+    {
+      "seq": 6920720,
+      "id": "wloggertofile",
+      "changes": [
+        {
+          "rev": "65-aa8d2005c1ecb90b8bd67b62daecfbb5"
+        }
+      ]
+    },
+    {
+      "seq": 6920721,
+      "id": "@brightcove/flashls",
+      "changes": [
+        {
+          "rev": "62-fbadb49476a58e98f0f136c86b614734"
+        }
+      ]
+    },
+    {
+      "seq": 6920722,
+      "id": "@brightcove/hls-fetcher",
+      "changes": [
+        {
+          "rev": "76-3341ed8ade38f3251a97c94c3a7af5ac"
+        }
+      ]
+    },
+    {
+      "seq": 6920723,
+      "id": "@brightcove/kacl",
+      "changes": [
+        {
+          "rev": "33-d0bc6b639cccb301086114d548ecfdbf"
+        }
+      ]
+    },
+    {
+      "seq": 6920724,
+      "id": "just-in-types",
+      "changes": [
+        {
+          "rev": "2-fc329aa885dc795aee340f36ec60f333"
+        }
+      ]
+    },
+    {
+      "seq": 6920725,
+      "id": "@brightcove/player-loader",
+      "changes": [
+        {
+          "rev": "56-9ff5aebc9743a44d46c182746313877d"
+        }
+      ]
+    },
+    {
+      "seq": 6920726,
+      "id": "@brightcove/player-loader-webpack-plugin",
+      "changes": [
+        {
+          "rev": "33-db8b4d6765f19e475e1c1d16843824cb"
+        }
+      ]
+    },
+    {
+      "seq": 6920727,
+      "id": "@brightcove/player-url",
+      "changes": [
+        {
+          "rev": "28-2e5c7fecca46bf0f341395a57dc6b3bc"
+        }
+      ]
+    },
+    {
+      "seq": 6920728,
+      "id": "@brightcove/react-player-loader",
+      "changes": [
+        {
+          "rev": "39-b7bf609de666ec7e71f517db53ab9c0a"
+        }
+      ]
+    },
+    {
+      "seq": 6920729,
+      "id": "vscode-theme-generator",
+      "changes": [
+        {
+          "rev": "21-bcb92281d6f7e37548bb18113681df88"
+        }
+      ]
+    },
+    {
+      "seq": 6920733,
+      "id": "@brightcove/typed-immutable-extensions",
+      "changes": [
+        {
+          "rev": "29-4f44b68fd5b8fdc0e499a8a93d8fbabe"
+        }
+      ]
+    },
+    {
+      "seq": 6920734,
+      "id": "@brightcove/typed-immutable-proptypes",
+      "changes": [
+        {
+          "rev": "27-e4802afc947c55d34f778864476c17e4"
+        }
+      ]
+    },
+    {
+      "seq": 6920737,
+      "id": "@brightcove/videojs-flashls-source-handler",
+      "changes": [
+        {
+          "rev": "59-faf69c49be866b2ab7faa7be9972e7a5"
+        }
+      ]
+    },
+    {
+      "seq": 6920738,
+      "id": "@brightcove/videojs-flashls-swf",
+      "changes": [
+        {
+          "rev": "60-04908466eaac2194bc3061e91f463dab"
+        }
+      ]
+    },
+    {
+      "seq": 6920739,
+      "id": "@noqcks/generated",
+      "changes": [
+        {
+          "rev": "2-e07d07614182d4beccc507ca199e612d"
+        }
+      ]
+    },
+    {
+      "seq": 6920740,
+      "id": "pkcs7",
+      "changes": [
+        {
+          "rev": "60-65ba116f3b6b705f472971b5c6a8f8d2"
+        }
+      ]
+    },
+    {
+      "seq": 6920741,
+      "id": "videojs-errors",
+      "changes": [
+        {
+          "rev": "57-c999abd162ca4b93412e363443aa688a"
+        }
+      ]
+    },
+    {
+      "seq": 6920742,
+      "id": "videojs-flashls-source-handler",
+      "changes": [
+        {
+          "rev": "59-46d62e18971a8c800710a8fbf985c1c5"
+        }
+      ]
+    },
+    {
+      "seq": 6920743,
+      "id": "videojs-playlist",
+      "changes": [
+        {
+          "rev": "97-d4b3492a94c1084c272162dd51901188"
+        }
+      ]
+    },
+    {
+      "seq": 6920745,
+      "id": "videojs-playlist-ui",
+      "changes": [
+        {
+          "rev": "95-ba97c44c354b2262e639f8c515bed9bc"
+        }
+      ]
+    },
+    {
+      "seq": 6920746,
+      "id": "fusion-apollo-universal-client",
+      "changes": [
+        {
+          "rev": "25-7123042a477cec67c7d5fc702254c7a3"
+        }
+      ]
+    },
+    {
+      "seq": 6920749,
+      "id": "msg-fabric-core",
+      "changes": [
+        {
+          "rev": "20-17c33e06faca357526c7395aca1113d2"
+        }
+      ]
+    },
+    {
+      "seq": 6920750,
+      "id": "@expo/schemer",
+      "changes": [
+        {
+          "rev": "62-3b1fc389ba4a6ecfc7a40f9c1b83016d"
+        }
+      ]
+    },
+    {
+      "seq": 6920752,
+      "id": "mathjs",
+      "changes": [
+        {
+          "rev": "115-bff8ab85ac0812cad09d37ddcbd8ac18"
+        }
+      ]
+    },
+    {
+      "seq": 6920758,
+      "id": "statesauce-ui",
+      "changes": [
+        {
+          "rev": "6-db9a39366c1a082c56a2212e368e3ae2"
+        }
+      ]
+    },
+    {
+      "seq": 6920782,
+      "id": "@catchandrelease/arbor",
+      "changes": [
+        {
+          "rev": "19-925648432b398ecadc98993e6fba2353"
+        }
+      ]
+    },
+    {
+      "seq": 6920784,
+      "id": "discover-shared-ebsco-ui-core",
+      "changes": [
+        {
+          "rev": "4-277063cbc6b71f969e5f0db8c371db65"
+        }
+      ]
+    },
+    {
+      "seq": 6920807,
+      "id": "react-apexcharts",
+      "changes": [
+        {
+          "rev": "13-18505be8026a50390c1ff1ba522cb9bd"
+        }
+      ]
+    },
+    {
+      "seq": 6920819,
+      "id": "zigbee-shepherd-converters",
+      "changes": [
+        {
+          "rev": "90-5819692a5a9679ff8669fb410e190515"
+        }
+      ]
+    },
+    {
+      "seq": 6920835,
+      "id": "honeycomb-grid",
+      "changes": [
+        {
+          "rev": "36-edd6733c80b04a72600558dc55348c73"
+        }
+      ]
+    },
+    {
+      "seq": 6920838,
+      "id": "pixl-config",
+      "changes": [
+        {
+          "rev": "7-5dd2b68d04fefb4039b3965b3497eda2"
+        }
+      ]
+    },
+    {
+      "seq": 6920842,
+      "id": "discover-shared-ebsco-ui-theming",
+      "changes": [
+        {
+          "rev": "4-e9d083825b1eae46f28c4def2d0db79f"
+        }
+      ]
+    },
+    {
+      "seq": 6920843,
+      "id": "common-oxgalaxy-lengua-app",
+      "changes": [
+        {
+          "rev": "66-8b64fa98b4c16b81fb906f0a1bb8539f"
+        }
+      ]
+    },
+    {
+      "seq": 6920845,
+      "id": "discover-shared-ebsco-ui-grid",
+      "changes": [
+        {
+          "rev": "2-6f71cf625a5232075071952b2adaa8f2"
+        }
+      ]
+    },
+    {
+      "seq": 6920847,
+      "id": "@auth0/cosmos-tokens",
+      "changes": [
+        {
+          "rev": "44-85cd3760dc5e7cfc2fa6330f12f04efb"
+        }
+      ]
+    },
+    {
+      "seq": 6920848,
+      "id": "@auth0/babel-preset-cosmos",
+      "changes": [
+        {
+          "rev": "43-d05d3779db08f08726ba048da298e046"
+        }
+      ]
+    },
+    {
+      "seq": 6920849,
+      "id": "jsrender",
+      "changes": [
+        {
+          "rev": "11-c949091592b3329d73ae564e45a3472d"
+        }
+      ]
+    },
+    {
+      "seq": 6920850,
+      "id": "discover-shared-ebsco-ui-container",
+      "changes": [
+        {
+          "rev": "2-c32089f76b7f253bc0d765da8b9f670d"
+        }
+      ]
+    },
+    {
+      "seq": 6920852,
+      "id": "@auth0/cosmos",
+      "changes": [
+        {
+          "rev": "42-5fdaf3d9063c20dac13dcf455c42773c"
+        }
+      ]
+    },
+    {
+      "seq": 6920853,
+      "id": "discover-shared-ebsco-ui-checkbox",
+      "changes": [
+        {
+          "rev": "2-06d9521b86f0dbf4a398726faead1212"
+        }
+      ]
+    },
+    {
+      "seq": 6920854,
+      "id": "@adunigan/toggles",
+      "changes": [
+        {
+          "rev": "1-c2a830cf814a9fe2d72084339c9c5d28"
+        }
+      ]
+    },
+    {
+      "seq": 6920855,
+      "id": "@spriteful/spriteful-lazy-carousel",
+      "changes": [
+        {
+          "rev": "8-28a4bbfe2d1ff24cddcc5aeba6c77837"
+        }
+      ]
+    },
+    {
+      "seq": 6920856,
+      "id": "react-modal-hook",
+      "changes": [
+        {
+          "rev": "2-364b39d6559364c41d5b852ccad4ce31"
+        }
+      ],
+      "deleted": true
+    },
+    {
+      "seq": 6920859,
+      "id": "@bellese/angular-design-system",
+      "changes": [
+        {
+          "rev": "39-3e297f85ce2d6a6b6d15fc26420fc471"
+        }
+      ]
+    },
+    {
+      "seq": 6920861,
+      "id": "@uifabric/styling",
+      "changes": [
+        {
+          "rev": "229-addf6cc0e74a335125c04d60047353f5"
+        }
+      ]
+    },
+    {
+      "seq": 6920862,
+      "id": "@uifabric/file-type-icons",
+      "changes": [
+        {
+          "rev": "37-8a7e43399d1bb9f17334b10995f78df4"
+        }
+      ]
+    },
+    {
+      "seq": 6920864,
+      "id": "throttlewrap",
+      "changes": [
+        {
+          "rev": "3-7ab31c0a6a02ed02b96734c747c8c6fa"
+        }
+      ]
+    },
+    {
+      "seq": 6920865,
+      "id": "airtable",
+      "changes": [
+        {
+          "rev": "16-d8aee935f6fa4c88057d75a0542bc58c"
+        }
+      ]
+    },
+    {
+      "seq": 6920866,
+      "id": "@csmart/ngc-smart-address",
+      "changes": [
+        {
+          "rev": "19-66a6ea868aae1912952f232d2c699f3a"
+        }
+      ]
+    },
+    {
+      "seq": 6920868,
+      "id": "office-ui-fabric-react",
+      "changes": [
+        {
+          "rev": "744-8542f4e04c0e9230e2ba19c9e0d7b461"
+        }
+      ]
+    },
+    {
+      "seq": 6920869,
+      "id": "@fuelrats/eslint-config",
+      "changes": [
+        {
+          "rev": "12-1b4c71b78fd078e3c1cba535e8541bed"
+        }
+      ]
+    },
+    {
+      "seq": 6920870,
+      "id": "@uifabric/date-time",
+      "changes": [
+        {
+          "rev": "2-f955fd46e3b7d3b70d1c82eeadd3f2ed"
+        }
+      ]
+    },
+    {
+      "seq": 6920872,
+      "id": "dark-client",
+      "changes": [
+        {
+          "rev": "11-a954c2a89a130ae73f064233d9b3bce2"
+        }
+      ]
+    },
+    {
+      "seq": 6920873,
+      "id": "@uifabric/variants",
+      "changes": [
+        {
+          "rev": "59-391c720194c663b9a5c59fe2c10a1535"
+        }
+      ]
+    },
+    {
+      "seq": 6920875,
+      "id": "discover-shared-ebsco-ui-header",
+      "changes": [
+        {
+          "rev": "2-efd8f0426a83422a6c8b7bff11054c72"
+        }
+      ]
+    },
+    {
+      "seq": 6920876,
+      "id": "react-responsive-picture",
+      "changes": [
+        {
+          "rev": "14-32a6d0850c8af33412cfdb23afd2ecfa"
+        }
+      ]
+    },
+    {
+      "seq": 6920877,
+      "id": "@uifabric/fluent-theme",
+      "changes": [
+        {
+          "rev": "16-39c29e00b81a0b654213a5a50d7e7f42"
+        }
+      ]
+    },
+    {
+      "seq": 6920878,
+      "id": "@uifabric/dashboard",
+      "changes": [
+        {
+          "rev": "82-04d6dc25b33e811c1d8c24566127b09c"
+        }
+      ]
+    },
+    {
+      "seq": 6920879,
+      "id": "ids-enterprise",
+      "changes": [
+        {
+          "rev": "201-dd709a3912f9832440320d448850b61a"
+        }
+      ]
+    },
+    {
+      "seq": 6920880,
+      "id": "@uifabric/experiments",
+      "changes": [
+        {
+          "rev": "224-efd1ef07f7640952c286488eae282367"
+        }
+      ]
+    },
+    {
+      "seq": 6920881,
+      "id": "@fuelrats/eslint-config-react",
+      "changes": [
+        {
+          "rev": "10-d872deb1eebced4d1d8c3ea6cb5d98bc"
+        }
+      ]
+    },
+    {
+      "seq": 6920883,
+      "id": "jsviews",
+      "changes": [
+        {
+          "rev": "11-44d8bedffc98cf6ac4aa669ba8844746"
+        }
+      ]
+    },
+    {
+      "seq": 6920885,
+      "id": "pixl-server",
+      "changes": [
+        {
+          "rev": "15-823f4598c3354500d8d2a266dd062502"
+        }
+      ]
+    },
+    {
+      "seq": 6920887,
+      "id": "@rrpm/netlify-cms-core",
+      "changes": [
+        {
+          "rev": "17-0dc4eafba1098806dd4cc0cb631eb5fa"
+        }
+      ]
+    },
+    {
+      "seq": 6920889,
+      "id": "lodash-a",
+      "changes": [
+        {
+          "rev": "2-6ee66153dbe611a080b40775387d2d45"
+        }
+      ]
+    },
+    {
+      "seq": 6920891,
+      "id": "meshcentral",
+      "changes": [
+        {
+          "rev": "499-6677ca74525ed2aa77644c68001382fe"
+        }
+      ]
+    },
+    {
+      "seq": 6920892,
+      "id": "vue-transition-collection",
+      "changes": [
+        {
+          "rev": "2-0510ee52c014c0d3b1e65f24376d76f0"
+        }
+      ]
+    },
+    {
+      "seq": 6920894,
+      "id": "fury-adapter-swagger",
+      "changes": [
+        {
+          "rev": "47-09f0c55d8574d654c67f9244c21d7ef7"
+        }
+      ]
+    },
+    {
+      "seq": 6920895,
+      "id": "@isobar-us/redux-form-gen",
+      "changes": [
+        {
+          "rev": "30-70d7d9210264a321092c832063934648"
+        }
+      ]
+    },
+    {
+      "seq": 6920896,
+      "id": "atomizer",
+      "changes": [
+        {
+          "rev": "19-129774900cb2a67a46871cc2c40c34d3"
+        }
+      ]
+    },
+    {
+      "seq": 6920904,
+      "id": "boom-js-client",
+      "changes": [
+        {
+          "rev": "15-fe8d703ddfdc0bd220c3c2f7ea46d2c9"
+        }
+      ]
+    },
+    {
+      "seq": 6920905,
+      "id": "@ts-common/json-parser",
+      "changes": [
+        {
+          "rev": "17-fe8cc9bc4a5021fde8629a8f880f64b3"
+        }
+      ]
+    },
+    {
+      "seq": 6920906,
+      "id": "rutt",
+      "changes": [
+        {
+          "rev": "13-78aab849cb00a6ef7ebc8165770b7d33"
+        }
+      ]
+    },
+    {
+      "seq": 6920907,
+      "id": "linear-react-components-ui",
+      "changes": [
+        {
+          "rev": "171-0307f1d69843b270e687371c67cbd1b0"
+        }
+      ]
+    },
+    {
+      "seq": 6920908,
+      "id": "@earnest/eslint-config",
+      "changes": [
+        {
+          "rev": "180-b5250dd803102cf7dbac8da9c1a403fd"
+        }
+      ]
+    },
+    {
+      "seq": 6920909,
+      "id": "@earnest/eslint-config-es7",
+      "changes": [
+        {
+          "rev": "181-da26885e0baacaea95814857f459572d"
+        }
+      ]
+    },
+    {
+      "seq": 6920910,
+      "id": "fuse-design",
+      "changes": [
+        {
+          "rev": "10-e2b78592872f680c05e55eb5b81a0cab"
+        }
+      ]
+    }
+  ],
+  "last_seq": 6920912
+}
