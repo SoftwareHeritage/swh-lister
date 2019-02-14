@@ -1,3 +1,13 @@
+swh-lister (0.0.20-1~swh1) unstable-swh; urgency=medium
+
+  * New upstream release 0.0.20     - (tagged by Antoine R. Dumont
+    (@ardumont) <antoine.romain.dumont@gmail.com> on 2019-02-14 10:50:06
+    +0100)
+  * Upstream changes:     - v0.0.20     - d/*: debian packaging files
+    migrated to separated branches     - lister.cli: Fix spelling typo
+
+ -- Software Heritage autobuilder (on jenkins-debian1) <jenkins@jenkins-debian1.internal.softwareheritage.org>  Thu, 14 Feb 2019 09:59:29 +0000
+
 swh-lister (0.0.19-1~swh1) unstable-swh; urgency=medium
 
   * New upstream release 0.0.19     - (tagged by David Douard
