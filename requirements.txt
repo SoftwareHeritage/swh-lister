@@ -4,3 +4,4 @@ python_debian
 requests
 setuptools
 xmltodict
+iso8601

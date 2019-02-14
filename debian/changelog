@@ -1,8 +1,20 @@
-swh-lister (0.0.18-1~swh1~bpo9+1) stretch-swh; urgency=medium
+swh-lister (0.0.20-1~swh1) unstable-swh; urgency=medium
 
-  * Rebuild for stretch-backports.
+  * New upstream release 0.0.20     - (tagged by Antoine R. Dumont
+    (@ardumont) <antoine.romain.dumont@gmail.com> on 2019-02-14 10:50:06
+    +0100)
+  * Upstream changes:     - v0.0.20     - d/*: debian packaging files
+    migrated to separated branches     - lister.cli: Fix spelling typo
 
- -- Antoine R. Dumont (@ardumont) <antoine.romain.dumont@gmail.com>  Mon, 08 Oct 2018 15:54:11 +0200
+ -- Software Heritage autobuilder (on jenkins-debian1) <jenkins@jenkins-debian1.internal.softwareheritage.org>  Thu, 14 Feb 2019 09:59:29 +0000
+
+swh-lister (0.0.19-1~swh1) unstable-swh; urgency=medium
+
+  * New upstream release 0.0.19     - (tagged by David Douard
+    <david.douard@sdfa3.org> on 2019-02-07 17:36:33 +0100)
+  * Upstream changes:     - v0.0.19
+
+ -- Software Heritage autobuilder (on jenkins-debian1) <jenkins@jenkins-debian1.internal.softwareheritage.org>  Thu, 07 Feb 2019 16:42:39 +0000
 
 swh-lister (0.0.18-1~swh1) unstable-swh; urgency=medium
 

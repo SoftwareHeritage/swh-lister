@@ -1,0 +1,4 @@
+
+        [console_scripts]
+        swh-lister=swh.lister.cli:cli
+    

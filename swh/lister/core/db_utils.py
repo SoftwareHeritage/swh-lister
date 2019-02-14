@@ -11,7 +11,7 @@ def session_scope(mk_session):
     try:
         yield session
         session.commit()
-    except:
+    except:  # noqa
         session.rollback()
         raise
     finally:
