@@ -115,7 +115,7 @@ def cli(db_url, listers, drop_tables):
                 insert_minimum_data(_lister)
             except Exception:
                 logger.warning(
-                    'Failed to insert minumum data in %s', lister)
+                    'Failed to insert minimum data in %s', lister)
 
 
 if __name__ == '__main__':
