@@ -32,4 +32,4 @@ Depends: python3-swh.scheduler (>= 0.0.31~),
          ${python3:Depends}
 Breaks: python3-swh.lister.github
 Replaces: python3-swh.lister.github
-Description: Software Heritage lister
+Description: Software Heritage Listers (bitbucket, git(lab|hub), pypi, etc...)
