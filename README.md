@@ -127,8 +127,7 @@ Note: This expects storage (5002) and scheduler (5008) services to run locally
 
     $ createdb lister-debian
     $ python3 -m swh.lister.cli --db-url postgres:///lister-debian debian 
-        
-
+ 
     Note: This bootstraps a minimum data set needed for the debian
     lister to run (for development)
 
