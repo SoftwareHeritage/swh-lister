@@ -89,7 +89,7 @@ Note: This expects storage (5002) and scheduler (5008) services to run locally
 4. Bootstrap the db instance schema
 
     $ createdb lister-gitlab
-    $ python3 -m swh.lister.cli --db-url postgres:///lister-gitlab gitlab 
+    $ python3 -m swh.lister.cli --db-url postgres:///lister-gitlab gitlab
 
 ### Configuration file sample
 
@@ -126,7 +126,7 @@ Note: This expects storage (5002) and scheduler (5008) services to run locally
 4. Bootstrap the db instance schema
 
     $ createdb lister-debian
-    $ python3 -m swh.lister.cli --db-url postgres:///lister-debian debian 
+    $ python3 -m swh.lister.cli --db-url postgres:///lister-debian debian
  
     Note: This bootstraps a minimum data set needed for the debian
     lister to run (for development)
@@ -166,7 +166,7 @@ Note: This expects storage (5002) and scheduler (5008) services to run locally
 4. Bootstrap the db instance schema
 
     $ createdb lister-pypi
-    $ python3 -m swh.lister.cli --db-url postgres:///lister-pypi pypi 
+    $ python3 -m swh.lister.cli --db-url postgres:///lister-pypi pypi
 
     Note: This bootstraps a minimum data set needed for the pypi
     lister to run (for development)
