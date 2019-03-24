@@ -71,7 +71,7 @@ Note: This expects storage (5002) and scheduler (5008) services to run locally
     $ python3
     >>> import logging
     >>> logging.basicConfig(level=logging.DEBUG)
-    >>> from swh.lister.github.tasks import RangeGitHubLister; RangeGitHubLister().run(364, 365)
+    >>> from swh.lister.github.tasks import range_github_lister; range_github_lister(364, 365)
     INFO:root:listing repos starting at 364
     DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): api.github.com
     DEBUG:urllib3.connectionpool:https://api.github.com:443 "GET /repositories?since=364 HTTP/1.1" 200 None
@@ -108,11 +108,11 @@ Note: This expects storage (5002) and scheduler (5008) services to run locally
     Python 3.6.6 (default, Jun 27 2018, 14:44:17)
     [GCC 8.1.0] on linux
     Type "help", "copyright", "credits" or "license" for more information.
-    >>> from swh.lister.gitlab.tasks import RangeGitLabLister; RangeGitLabLister().run_task(1, 2,
+    >>> from swh.lister.gitlab.tasks import range_gitlab_lister; range_gitlab_lister(1, 2,
       {'instance': 'debian', 'api_baseurl': 'https://salsa.debian.org/api/v4', 'sort': 'asc', 'per_page': 20})
-    >>> from swh.lister.gitlab.tasks import FullGitLabRelister; FullGitLabRelister().run_task(
+    >>> from swh.lister.gitlab.tasks import full_gitlab_relister; full_gitlab_relister(
       {'instance':'0xacab', 'api_baseurl':'https://0xacab.org/api/v4', 'sort': 'asc', 'per_page': 20})
-    >>> from swh.lister.gitlab.tasks import IncrementalGitLabLister; IncrementalGitLabLister().run_task(
+    >>> from swh.lister.gitlab.tasks import incremental_gitlab_lister; incremental_gitlab_lister(
       {'instance': 'freedesktop.org', 'api_baseurl': 'https://gitlab.freedesktop.org/api/v4',
        'sort': 'asc', 'per_page': 20})
 
@@ -148,7 +148,7 @@ Note: This expects storage (5002) and scheduler (5008) services to run locally
   Python 3.6.6 (default, Jun 27 2018, 14:44:17)
   [GCC 8.1.0] on linux
   Type "help", "copyright", "credits" or "license" for more information.
-  >>> import logging; logging.basicConfig(level=logging.DEBUG); from swh.lister.debian.tasks import DebianListerTask; DebianListerTask().run_task('Debian')
+  >>> import logging; logging.basicConfig(level=logging.DEBUG); from swh.lister.debian.tasks import debian_lister; debian_lister('Debian')
   DEBUG:root:Creating snapshot for distribution Distribution(Debian (deb) on http://deb.debian.org/debian/) on date 2018-07-27 09:22:50.461165+00:00
   DEBUG:root:Processing area Area(stretch/main of Debian)
   DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): deb.debian.org
@@ -188,5 +188,5 @@ Note: This expects storage (5002) and scheduler (5008) services to run locally
   Python 3.6.6 (default, Jun 27 2018, 14:44:17)
   [GCC 8.1.0] on linux
   Type "help", "copyright", "credits" or "license" for more information.
-  >>> from swh.lister.pypi.tasks import PyPIListerTask; PyPIListerTask().run_task()
+  >>> from swh.lister.pypi.tasks import pypi_lister; pypi_lister()
   >>>
