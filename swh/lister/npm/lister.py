@@ -117,7 +117,7 @@ class NpmIncrementalLister(NpmListerBase):
 
     @property
     def CONFIG_BASE_FILENAME(self):  # noqa: N802
-        return 'lister-npm-incremental'
+        return 'lister_npm_incremental'
 
     def get_next_target_from_response(self, response):
         """(Override) Get next npm package name to continue the listing
