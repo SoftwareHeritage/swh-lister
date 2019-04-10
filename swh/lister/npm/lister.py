@@ -54,7 +54,7 @@ class NpmListerBase(SWHIndexingHttpLister):
         needed for the ingestion task creation.
 
         """
-        task_type = 'origin-update-%s' % origin_type
+        task_type = 'load-%s' % origin_type
         task_policy = self.config['loading_task_policy']
         package_name = kwargs.get('name')
         package_metadata_url = kwargs.get('html_url')
