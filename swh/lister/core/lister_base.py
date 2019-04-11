@@ -234,7 +234,7 @@ class SWHListerBase(abc.ABC, config.SWHConfig):
 
     @property
     def CONFIG_BASE_FILENAME(self):  # noqa: N802
-        return 'lister-%s' % self.LISTER_NAME
+        return 'lister_%s' % self.LISTER_NAME
 
     @property
     def ADDITIONAL_CONFIG(self):  # noqa: N802
