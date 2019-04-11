@@ -33,12 +33,12 @@ def cli(db_url, listers, drop_tables):
         }
     }
 
-    insert_minimum_data = None
     if 'all' in listers:
         listers = SUPPORTED_LISTERS
 
     for lister in listers:
         logger.info('Initializing lister %s', lister)
+        insert_minimum_data = None
         if lister == 'github':
             from .github.models import IndexingModelBase as ModelBase
             from .github.lister import GitHubLister
