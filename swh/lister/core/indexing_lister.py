@@ -6,6 +6,7 @@ import abc
 import logging
 from itertools import count
 
+import dateutil
 from sqlalchemy import func
 
 from .lister_transports import SWHListerHttpTransport
@@ -103,23 +104,52 @@ class SWHIndexingLister(SWHListerBase):
                 declare approximately equal-sized ranges of existing
                 repos
         """
+
         n = max(self.db_num_entries(), 10)
-
-        partitions = []
         partition_size = min(partition_size, n)
-        prev_index = None
-        for i in range(0, n-1, partition_size):
-            # indexable column from the ith row
-            index = self.db_session.query(self.MODEL.indexable) \
-                      .order_by(self.MODEL.indexable).offset(i).first()
-            if index:
-                index = index[0]
-            if index is not None and prev_index is not None:
-                partitions.append((prev_index, index))
-            prev_index = index
+        n_partitions = n // partition_size
 
-        partitions.append((prev_index, self.db_last_index()))
-        return partitions
+        min_index = self.db_first_index()
+        max_index = self.db_last_index()
+
+        if not min_index or not max_index:
+            raise ValueError("Can't partition an empty range")
+
+        if isinstance(min_index, str):
+            def format_bound(bound):
+                return bound.isoformat()
+            min_index = dateutil.parser.parse(min_index)
+            max_index = dateutil.parser.parse(max_index)
+        else:
+            def format_bound(bound):
+                return bound
+
+        partition_width = (max_index - min_index) / n_partitions
+
+        partitions = [
+            [
+                format_bound(min_index + i * partition_width),
+                format_bound(min_index + (i+1) * partition_width),
+            ] for i in range(n_partitions)
+        ]
+
+        # Remove bounds for lowest and highest partition
+        partitions[0][0] = None
+        partitions[-1][1] = None
+
+        return [tuple(partition) for partition in partitions]
+
+    def db_first_index(self):
+        """Look in the db for the smallest indexable value
+
+        Returns:
+            the smallest indexable value of all repos in the db
+        """
+        t = self.db_session.query(func.min(self.MODEL.indexable)).first()
+        if t:
+            return t[0]
+        else:
+            return None
 
     def db_last_index(self):
         """Look in the db for the largest indexable value
