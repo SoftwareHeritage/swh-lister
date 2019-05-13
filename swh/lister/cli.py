@@ -26,7 +26,6 @@ def cli(db_url, listers, drop_tables):
 
     """
     override_conf = {
-        'lister_db_url': db_url,
         'lister': {
             'cls': 'local',
             'args': {'db': db_url}
