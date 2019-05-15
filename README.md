@@ -15,6 +15,7 @@ following Python modules:
 - `swh.lister.gitlab`
 - `swh.lister.pypi`
 - `swh.lister.npm`
+- `swh.lister.phabricator`
 
 Dependencies
 ------------
@@ -162,6 +163,18 @@ from swh.lister.npm.tasks import npm_lister
 
 logging.basicConfig(level=logging.DEBUG)
 npm_lister()
+```
+
+## lister-phabricator
+
+Once configured, you can execute a Phabricator lister using the following instructions in a `python3` script:
+
+```lang=python
+import logging
+from swh.lister.phabricator.tasks import incremental_phabricator_lister
+
+logging.basicConfig(level=logging.DEBUG)
+incremental_phabricator_lister(forge_url='https://forge.softwareheritage.org', api_token='XXXX')
 ```
 
 Licensing

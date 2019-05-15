@@ -9,7 +9,8 @@ import click
 
 logger = logging.getLogger(__name__)
 
-SUPPORTED_LISTERS = ['github', 'gitlab', 'bitbucket', 'debian', 'pypi', 'npm']
+SUPPORTED_LISTERS = ['github', 'gitlab', 'bitbucket', 'debian', 'pypi',
+                     'npm', 'phabricator']
 
 
 @click.command()
@@ -95,6 +96,14 @@ def cli(db_url, listers, drop_tables):
             if drop_tables:
                 NpmVisitModel.metadata.drop_all(_lister.db_engine)
             NpmVisitModel.metadata.create_all(_lister.db_engine)
+
+        elif lister == 'phabricator':
+            from .phabricator.models import IndexingModelBase as ModelBase
+            from .phabricator.lister import PhabricatorLister
+            _lister = PhabricatorLister(
+                forge_url='https://forge.softwareheritage.org',
+                api_token='',
+                override_config=override_conf)
 
         else:
             raise ValueError(
