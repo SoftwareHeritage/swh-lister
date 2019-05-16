@@ -414,7 +414,7 @@ class SWHListerBase(abc.ABC, config.SWHConfig):
         Returns:
             the same information in a different form
         """
-        _type = 'origin-update-%s' % origin_type
+        _type = 'load-%s' % origin_type
         _policy = 'recurring'
         return utils.create_task_dict(_type, _policy, origin_url)
 
