@@ -177,6 +177,18 @@ logging.basicConfig(level=logging.DEBUG)
 incremental_phabricator_lister(forge_url='https://forge.softwareheritage.org', api_token='XXXX')
 ```
 
+## lister-gnu
+
+Once configured, you can execute a PyPI lister using the following instructions in a `python3` script:
+
+```lang=python
+import logging
+from swh.lister.gnu.tasks import gnu_lister
+
+logging.basicConfig(level=logging.DEBUG)
+gnu_lister()
+```
+
 Licensing
 ---------
 

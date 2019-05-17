@@ -12,4 +12,5 @@ def celery_includes():
         'swh.lister.npm.tasks',
         'swh.lister.pypi.tasks',
         'swh.lister.phabricator.tasks',
+        'swh.lister.gnu.tasks'
     ]
