@@ -1,30 +1,195 @@
 Metadata-Version: 2.1
 Name: swh.lister
-Version: 0.0.21
+Version: 0.0.22
 Summary: Software Heritage lister
 Home-page: https://forge.softwareheritage.org/diffusion/DLSGH/
 Author: Software Heritage developers
 Author-email: swh-devel@inria.fr
 License: UNKNOWN
 Project-URL: Source, https://forge.softwareheritage.org/source/swh-lister
-Project-URL: Funding, https://www.softwareheritage.org/donate
 Project-URL: Bug Reports, https://forge.softwareheritage.org/maniphest
-Description: SWH-lister
-        ============
+Project-URL: Funding, https://www.softwareheritage.org/donate
+Description: swh-lister
+        ==========
         
-        The Software Heritage Lister is both a library module to permit to
-        centralize lister behaviors, and to provide lister implementations.
+        This component from the Software Heritage stack aims to produce listings
+        of software origins and their urls hosted on various public developer platforms
+        or package managers. As these operations are quite similar, it provides a set of
+        Python modules abstracting common software origins listing behaviors.
         
-        Actual lister implementations are:
+        It also provides several lister implementations, contained in the
+        following Python modules:
         
-        - swh-lister-bitbucket
-        - swh-lister-debian
-        - swh-lister-github
-        - swh-lister-gitlab
-        - swh-lister-pypi
+        - `swh.lister.bitbucket`
+        - `swh.lister.debian`
+        - `swh.lister.github`
+        - `swh.lister.gitlab`
+        - `swh.lister.pypi`
+        - `swh.lister.npm`
+        - `swh.lister.phabricator`
+        
+        Dependencies
+        ------------
+        
+        All required dependencies can be found in the `requirements*.txt` files located
+        at the root of the repository.
+        
+        Local deployment
+        ----------------
+        
+        ## lister configuration
+        
+        Each lister implemented so far by Software Heritage (`github`, `gitlab`, `debian`, `pypi`, `npm`)
+        must be configured by following the instructions below (please note that you have to replace
+        `<lister_name>` by one of the lister name introduced above).
+        
+        ### Preparation steps
+        
+        1. `mkdir ~/.config/swh/ ~/.cache/swh/lister/<lister_name>/`
+        2. create configuration file `~/.config/swh/lister_<lister_name>.yml`
+        3. Bootstrap the db instance schema
+        
+        ```lang=bash
+        $ createdb lister-<lister_name>
+        $ python3 -m swh.lister.cli --db-url postgres:///lister-<lister_name> <lister_name>
+        ```
+        
+        Note: This bootstraps a minimum data set needed for the lister to run.
+        
+        ### Configuration file sample
+        
+        Minimalistic configuration shared by all listers to add in file `~/.config/swh/lister_<lister_name>.yml`:
+        
+        ```lang=yml
+        storage:
+          cls: 'remote'
+          args:
+            url: 'http://localhost:5002/'
+        
+        scheduler:
+          cls: 'remote'
+          args:
+            url: 'http://localhost:5008/'
+        
+        lister:
+          cls: 'local'
+          args:
+            # see http://docs.sqlalchemy.org/en/latest/core/engines.html#database-urls
+            db: 'postgresql:///lister-<lister_name>'
+        
+        credentials: []
+        cache_responses: True
+        cache_dir: /home/user/.cache/swh/lister/<lister_name>/
+        ```
+        
+        Note: This expects storage (5002) and scheduler (5008) services to run locally
+        
+        ## lister-github
+        
+        Once configured, you can execute a GitHub lister using the following instructions in a `python3` script:
+        
+        ```lang=python
+        import logging
+        from swh.lister.github.tasks import range_github_lister
+        
+        logging.basicConfig(level=logging.DEBUG)
+        range_github_lister(364, 365)
+        ...
+        ```
+        
+        ## lister-gitlab
+        
+        Once configured, you can execute a GitLab lister using the instructions detailed in the `python3` scripts below:
+        
+        ```lang=python
+        import logging
+        from swh.lister.gitlab.tasks import range_gitlab_lister
+        
+        logging.basicConfig(level=logging.DEBUG)
+        range_gitlab_lister(1, 2, {
+            'instance': 'debian',
+            'api_baseurl': 'https://salsa.debian.org/api/v4',
+            'sort': 'asc',
+            'per_page': 20
+        })
+        ```
+        
+        ```lang=python
+        import logging
+        from swh.lister.gitlab.tasks import full_gitlab_relister
+        
+        logging.basicConfig(level=logging.DEBUG)
+        full_gitlab_relister({
+            'instance': '0xacab',
+            'api_baseurl': 'https://0xacab.org/api/v4',
+            'sort': 'asc',
+            'per_page': 20
+        })
+        ```
+        
+        ```lang=python
+        import logging
+        from swh.lister.gitlab.tasks import incremental_gitlab_lister
+        
+        logging.basicConfig(level=logging.DEBUG)
+        incremental_gitlab_lister({
+            'instance': 'freedesktop.org',
+            'api_baseurl': 'https://gitlab.freedesktop.org/api/v4',
+            'sort': 'asc',
+            'per_page': 20
+        })
+        ```
+        
+        ## lister-debian
+        
+        Once configured, you can execute a Debian lister using the following instructions in a `python3` script:
+        
+        ```lang=python
+        import logging
+        from swh.lister.debian.tasks import debian_lister
+        
+        logging.basicConfig(level=logging.DEBUG)
+        debian_lister('Debian')
+        ```
+        
+        ## lister-pypi
+        
+        Once configured, you can execute a PyPI lister using the following instructions in a `python3` script:
+        
+        ```lang=python
+        import logging
+        from swh.lister.pypi.tasks import pypi_lister
+        
+        logging.basicConfig(level=logging.DEBUG)
+        pypi_lister()
+        ```
+        
+        ## lister-npm
+        
+        Once configured, you can execute a npm lister using the following instructions in a `python3` REPL:
+        
+        ```lang=python
+        import logging
+        from swh.lister.npm.tasks import npm_lister
+        
+        logging.basicConfig(level=logging.DEBUG)
+        npm_lister()
+        ```
+        
+        ## lister-phabricator
+        
+        Once configured, you can execute a Phabricator lister using the following instructions in a `python3` script:
+        
+        ```lang=python
+        import logging
+        from swh.lister.phabricator.tasks import incremental_phabricator_lister
+        
+        logging.basicConfig(level=logging.DEBUG)
+        incremental_phabricator_lister(forge_url='https://forge.softwareheritage.org', api_token='XXXX')
+        ```
         
         Licensing
-        ----------
+        ---------
         
         This program is free software: you can redistribute it and/or modify it under
         the terms of the GNU General Public License as published by the Free Software
@@ -37,171 +202,6 @@ Description: SWH-lister
         
         See top-level LICENSE file for the full text of the GNU General Public License
         along with this program.
-        
-        
-        Dependencies
-        ------------
-        
-        - python3
-        - python3-requests
-        - python3-sqlalchemy
-        
-        More details in requirements*.txt
-        
-        
-        Local deployment
-        -----------
-        
-        ## lister-github
-        
-        ### Preparation steps
-        
-        1. git clone under $SWH_ENVIRONMENT_HOME/swh-lister (of your choosing)
-        2. mkdir ~/.config/swh/ ~/.cache/swh/lister/github.com/
-        3. create configuration file ~/.config/swh/lister-github.com.yml
-        4. Bootstrap the db instance schema
-        
-            $ createdb lister-github
-            $ python3 -m swh.lister.cli --db-url postgres:///lister-github github
-        
-        ### Configuration file sample
-        
-        Minimalistic configuration:
-        
-            $ cat ~/.config/swh/lister-github.com.yml
-            # see http://docs.sqlalchemy.org/en/latest/core/engines.html#database-urls
-            lister_db_url: postgres:///lister-github
-            credentials: []
-            cache_responses: True
-            cache_dir: /home/user/.cache/swh/lister/github.com
-        
-        Note: This expects storage (5002) and scheduler (5008) services to run locally
-        
-        ### Run
-        
-            $ python3
-            >>> import logging
-            >>> logging.basicConfig(level=logging.DEBUG)
-            >>> from swh.lister.github.tasks import range_github_lister; range_github_lister(364, 365)
-            INFO:root:listing repos starting at 364
-            DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): api.github.com
-            DEBUG:urllib3.connectionpool:https://api.github.com:443 "GET /repositories?since=364 HTTP/1.1" 200 None
-            DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost
-            DEBUG:urllib3.connectionpool:http://localhost:5002 "POST /origin/add HTTP/1.1" 200 1
-        
-        
-        ## lister-gitlab
-        
-        ### preparation steps
-        
-        1. git clone under $SWH_ENVIRONMENT_HOME/swh-lister (of your choosing)
-        2. mkdir ~/.config/swh/ ~/.cache/swh/lister/gitlab/
-        3. create configuration file ~/.config/swh/lister-gitlab.yml
-        4. Bootstrap the db instance schema
-        
-            $ createdb lister-gitlab
-            $ python3 -m swh.lister.cli --db-url postgres:///lister-gitlab gitlab
-        
-        ### Configuration file sample
-        
-            $ cat ~/.config/swh/lister-gitlab.yml
-            # see http://docs.sqlalchemy.org/en/latest/core/engines.html#database-urls
-            lister_db_url: postgres:///lister-gitlab
-            credentials: []
-            cache_responses: True
-            cache_dir: /home/user/.cache/swh/lister/gitlab
-        
-        Note: This expects storage (5002) and scheduler (5008) services to run locally
-        
-        ### Run
-        
-            $ python3
-            Python 3.6.6 (default, Jun 27 2018, 14:44:17)
-            [GCC 8.1.0] on linux
-            Type "help", "copyright", "credits" or "license" for more information.
-            >>> from swh.lister.gitlab.tasks import range_gitlab_lister; range_gitlab_lister(1, 2,
-              {'instance': 'debian', 'api_baseurl': 'https://salsa.debian.org/api/v4', 'sort': 'asc', 'per_page': 20})
-            >>> from swh.lister.gitlab.tasks import full_gitlab_relister; full_gitlab_relister(
-              {'instance':'0xacab', 'api_baseurl':'https://0xacab.org/api/v4', 'sort': 'asc', 'per_page': 20})
-            >>> from swh.lister.gitlab.tasks import incremental_gitlab_lister; incremental_gitlab_lister(
-              {'instance': 'freedesktop.org', 'api_baseurl': 'https://gitlab.freedesktop.org/api/v4',
-               'sort': 'asc', 'per_page': 20})
-        
-        ## lister-debian
-        
-        ### preparation steps
-        
-        1. git clone under $SWH_ENVIRONMENT_HOME/swh-lister (of your choosing)
-        2. mkdir ~/.config/swh/ ~/.cache/swh/lister/debian/
-        3. create configuration file ~/.config/swh/lister-debian.yml
-        4. Bootstrap the db instance schema
-        
-            $ createdb lister-debian
-            $ python3 -m swh.lister.cli --db-url postgres:///lister-debian debian
-         
-            Note: This bootstraps a minimum data set needed for the debian
-            lister to run (for development)
-        
-        ### Configuration file sample
-        
-            $ cat ~/.config/swh/lister-debian.yml
-            # see http://docs.sqlalchemy.org/en/latest/core/engines.html#database-urls
-            lister_db_url: postgres:///lister-debian
-            credentials: []
-            cache_responses: True
-            cache_dir: /home/user/.cache/swh/lister/debian
-        
-        Note: This expects storage (5002) and scheduler (5008) services to run locally
-        
-        ### Run
-        
-          $ python3
-          Python 3.6.6 (default, Jun 27 2018, 14:44:17)
-          [GCC 8.1.0] on linux
-          Type "help", "copyright", "credits" or "license" for more information.
-          >>> import logging; logging.basicConfig(level=logging.DEBUG); from swh.lister.debian.tasks import debian_lister; debian_lister('Debian')
-          DEBUG:root:Creating snapshot for distribution Distribution(Debian (deb) on http://deb.debian.org/debian/) on date 2018-07-27 09:22:50.461165+00:00
-          DEBUG:root:Processing area Area(stretch/main of Debian)
-          DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): deb.debian.org
-          DEBUG:urllib3.connectionpool:http://deb.debian.org:80 "GET /debian//dists/stretch/main/source/Sources.xz HTTP/1.1" 302 325
-          ...
-        
-        
-        ## lister-pypi
-        
-        ### preparation steps
-        
-        1. git clone under $SWH_ENVIRONMENT_HOME/swh-lister (of your choosing)
-        2. mkdir ~/.config/swh/ ~/.cache/swh/lister/pypi/
-        3. create configuration file ~/.config/swh/lister-pypi.yml
-        4. Bootstrap the db instance schema
-        
-            $ createdb lister-pypi
-            $ python3 -m swh.lister.cli --db-url postgres:///lister-pypi pypi
-        
-            Note: This bootstraps a minimum data set needed for the pypi
-            lister to run (for development)
-        
-        ### Configuration file sample
-        
-            $ cat ~/.config/swh/lister-pypi.yml
-            # see http://docs.sqlalchemy.org/en/latest/core/engines.html#database-urls
-            lister_db_url: postgres:///lister-pypi
-            credentials: []
-            cache_responses: True
-            cache_dir: /home/user/.cache/swh/lister/pypi
-        
-        Note: This expects storage (5002) and scheduler (5008) services to run locally
-        
-        ### Run
-        
-          $ python3
-          Python 3.6.6 (default, Jun 27 2018, 14:44:17)
-          [GCC 8.1.0] on linux
-          Type "help", "copyright", "credits" or "license" for more information.
-          >>> from swh.lister.pypi.tasks import pypi_lister; pypi_lister()
-          >>>
-        
 Platform: UNKNOWN
 Classifier: Programming Language :: Python :: 3
 Classifier: Intended Audience :: Developers

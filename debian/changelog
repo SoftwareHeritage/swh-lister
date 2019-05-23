@@ -1,8 +1,10 @@
-swh-lister (0.0.21-1~swh1~bpo9+1) stretch-swh; urgency=medium
+swh-lister (0.0.22-1~swh1) unstable-swh; urgency=medium
 
-  * Rebuild for stretch-swh
+  * New upstream release 0.0.22     - (tagged by Antoine Lambert
+    <antoine.lambert@inria.fr> on 2019-05-23 10:59:39 +0200)
+  * Upstream changes:     - version 0.0.22
 
- -- Software Heritage autobuilder (on jenkins-debian1) <jenkins@jenkins-debian1.internal.softwareheritage.org>  Thu, 11 Apr 2019 09:07:34 +0000
+ -- Software Heritage autobuilder (on jenkins-debian1) <jenkins@jenkins-debian1.internal.softwareheritage.org>  Thu, 23 May 2019 09:05:34 +0000
 
 swh-lister (0.0.21-1~swh1) unstable-swh; urgency=medium
 

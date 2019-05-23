@@ -6,13 +6,23 @@
 import logging
 import click
 
+from swh.core.cli import CONTEXT_SETTINGS
+
 
 logger = logging.getLogger(__name__)
 
-SUPPORTED_LISTERS = ['github', 'gitlab', 'bitbucket', 'debian', 'pypi', 'npm']
+SUPPORTED_LISTERS = ['github', 'gitlab', 'bitbucket', 'debian', 'pypi',
+                     'npm', 'phabricator']
 
 
-@click.command()
+@click.group(name='lister', context_settings=CONTEXT_SETTINGS)
+@click.pass_context
+def lister(ctx):
+    '''Software Heritage Lister tools.'''
+    pass
+
+
+@lister.command(name='db-init', context_settings=CONTEXT_SETTINGS)
 @click.option(
     '--db-url', '-d', default='postgres:///lister-gitlab.com',
     help='SQLAlchemy DB URL; see '
@@ -21,12 +31,12 @@ SUPPORTED_LISTERS = ['github', 'gitlab', 'bitbucket', 'debian', 'pypi', 'npm']
                 type=click.Choice(SUPPORTED_LISTERS + ['all']))
 @click.option('--drop-tables', '-D', is_flag=True, default=False,
               help='Drop tables before creating the database schema')
-def cli(db_url, listers, drop_tables):
-    """Initialize db model according to lister.
+@click.pass_context
+def cli(ctx, db_url, listers, drop_tables):
+    """Initialize the database model for given listers.
 
     """
     override_conf = {
-        'lister_db_url': db_url,
         'lister': {
             'cls': 'local',
             'args': {'db': db_url}
@@ -96,6 +106,14 @@ def cli(db_url, listers, drop_tables):
             if drop_tables:
                 NpmVisitModel.metadata.drop_all(_lister.db_engine)
             NpmVisitModel.metadata.create_all(_lister.db_engine)
+
+        elif lister == 'phabricator':
+            from .phabricator.models import IndexingModelBase as ModelBase
+            from .phabricator.lister import PhabricatorLister
+            _lister = PhabricatorLister(
+                forge_url='https://forge.softwareheritage.org',
+                api_token='',
+                override_config=override_conf)
 
         else:
             raise ValueError(
