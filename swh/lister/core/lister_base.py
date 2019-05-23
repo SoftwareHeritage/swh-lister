@@ -414,7 +414,7 @@ class SWHListerBase(abc.ABC, config.SWHConfig):
         Returns:
             the same information in a different form
         """
-        _type = 'origin-update-%s' % origin_type
+        _type = 'load-%s' % origin_type
         _policy = 'recurring'
         return utils.create_task_dict(_type, _policy, origin_url)
 
@@ -480,7 +480,8 @@ class SWHListerBase(abc.ABC, config.SWHConfig):
             return '%s-%s' % (_type, _url)
 
         def _task_key(m):
-            return '%s-%s' % (m['type'], json.dumps(m['arguments']))
+            return '%s-%s' % (m['type'],
+                              json.dumps(m['arguments'], sort_keys=True))
 
         for m in models_list:
             ir = injected_repos[m['uid']]

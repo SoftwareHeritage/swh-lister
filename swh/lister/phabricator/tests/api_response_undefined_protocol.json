@@ -1,0 +1,60 @@
+{
+  "id": 8,
+  "type": "REPO",
+  "phid": "PHID-REPO-ge2icigfu5ijk2whqfbl",
+  "fields": {
+    "name": "Blender Libraries",
+    "vcs": "svn",
+    "callsign": "BL",
+    "shortName": null,
+    "status": "active",
+    "isImporting": false,
+    "almanacServicePHID": null,
+    "spacePHID": null,
+    "dateCreated": 1385564674,
+    "dateModified": 1468574079,
+    "policy": {
+      "view": "public",
+      "edit": "admin",
+      "diffusion.push": "PHID-PROJ-hclk7tvd6pmpjmqastjl"
+    }
+  },
+  "attachments": {
+    "uris": {
+      "uris": [
+        {
+          "id": "70",
+          "type": "RURI",
+          "phid": "PHID-RURI-h7zdbkud6why4xrb2s2e",
+          "fields": {
+            "repositoryPHID": "PHID-REPO-ge2icigfu5ijk2whqfbl",
+            "uri": {
+              "raw": "https://svn.blender.org/svnroot/bf-blender/",
+              "display": "https://svn.blender.org/svnroot/bf-blender/",
+              "effective": "https://svn.blender.org/svnroot/bf-blender/",
+              "normalized": "svn.blender.org/svnroot/bf-blender"
+            },
+            "io": {
+              "raw": "observe",
+              "default": "none",
+              "effective": "observe"
+            },
+            "display": {
+              "raw": "always",
+              "default": "never",
+              "effective": "always"
+            },
+            "credentialPHID": null,
+            "disabled": false,
+            "builtin": {
+              "protocol": null,
+              "identifier": null
+            },
+            "dateCreated": "1467894515",
+            "dateModified": "1468574079"
+          }
+        }
+      ]
+    }
+  }
+}

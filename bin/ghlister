@@ -77,8 +77,6 @@ if __name__ == '__main__':
     args = parse_args()
 
     override_conf = {}
-    if args.db_url:
-        override_conf['lister_db_url'] = args.db_url
 
     lister = GitHubLister(lister_name='github.com',
                           api_baseurl='https://api.github.com',

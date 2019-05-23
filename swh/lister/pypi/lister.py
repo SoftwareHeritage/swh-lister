@@ -28,7 +28,7 @@ class PyPILister(ListerOnePageApiTransport, SimpleLister):
         needed for the ingestion task creation.
 
         """
-        _type = 'origin-update-%s' % origin_type
+        _type = 'load-%s' % origin_type
         _policy = 'recurring'
         project_name = kwargs.get('name')
         project_metadata_url = kwargs.get('html_url')
