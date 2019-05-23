@@ -54,6 +54,8 @@ setup(
     entry_points='''
         [console_scripts]
         swh-lister=swh.lister.cli:cli
+        [swh.cli.subcommands]
+        lister=swh.lister.cli:lister
     ''',
     classifiers=[
         "Programming Language :: Python :: 3",
