@@ -239,12 +239,9 @@ class SWHListerBase(abc.ABC, config.SWHConfig):
     @property
     def ADDITIONAL_CONFIG(self):  # noqa: N802
         return {
-            'credentials':
-                ('list[dict]', []),
-            'cache_responses':
-                ('bool', False),
-            'cache_dir':
-                ('str', '~/.cache/swh/lister/%s' % self.LISTER_NAME),
+            'credentials': ('dict', {}),
+            'cache_responses': ('bool', False),
+            'cache_dir': ('str', '~/.cache/swh/lister/%s' % self.LISTER_NAME),
         }
 
     INITIAL_BACKOFF = 10
