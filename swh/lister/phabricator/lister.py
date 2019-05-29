@@ -2,6 +2,7 @@
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
 
+import urllib.parse
 
 from swh.lister.core.indexing_lister import SWHIndexingHttpLister
 from swh.lister.phabricator.models import PhabricatorModel
@@ -14,13 +15,17 @@ class PhabricatorLister(SWHIndexingHttpLister):
     MODEL = PhabricatorModel
     LISTER_NAME = 'phabricator'
 
-    def __init__(self, forge_url, api_token, override_config=None):
+    def __init__(self, forge_url, api_token, instance=None,
+                 override_config=None):
         if forge_url.endswith("/"):
             forge_url = forge_url[:-1]
         self.forge_url = forge_url
         api_endpoint = ('api/diffusion.repository.'
                         'search?api.token=%s') % api_token
         api_baseurl = '%s/%s' % (forge_url, api_endpoint)
+        if not instance:
+            instance = urllib.parse.urlparse(forge_url).hostname
+        self.instance = instance
         super().__init__(api_baseurl=api_baseurl,
                          override_config=override_config)
 

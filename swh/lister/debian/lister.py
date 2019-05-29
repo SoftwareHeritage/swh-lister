@@ -32,6 +32,7 @@ class DebianLister(SWHListerHttpTransport, SWHListerBase):
     MODEL = Package
     PATH_TEMPLATE = None
     LISTER_NAME = 'debian'
+    instance = 'debian'
 
     def __init__(self, override_config=None):
         SWHListerHttpTransport.__init__(self, api_baseurl="bogus")
