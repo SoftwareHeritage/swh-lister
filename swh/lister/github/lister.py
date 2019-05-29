@@ -1,4 +1,4 @@
-# Copyright (C) 2017-2018 the Software Heritage developers
+# Copyright (C) 2017-2019 the Software Heritage developers
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
 
@@ -14,6 +14,7 @@ class GitHubLister(SWHIndexingHttpLister):
     MODEL = GitHubModel
     API_URL_INDEX_RE = re.compile(r'^.*/repositories\?since=(\d+)')
     LISTER_NAME = 'github'
+    instance = 'github'  # There is only 1 instance of such lister
 
     def get_model_from_repo(self, repo):
         return {

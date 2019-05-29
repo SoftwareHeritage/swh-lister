@@ -24,9 +24,11 @@ class PhabricatorListerTester(HttpListerTester, unittest.TestCase):
 
     def get_fl(self, override_config=None):
         """(Override) Retrieve an instance of fake lister (fl).
+
         """
         if override_config or self.fl is None:
-            self.fl = self.Lister(forge_url='https://fakeurl', api_token='a-1',
+            self.fl = self.Lister(forge_url='https://fakeurl', instance='fake',
+                                  api_token='a-1',
                                   override_config=override_config)
             self.fl.INITIAL_BACKOFF = 1
 

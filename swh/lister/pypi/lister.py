@@ -1,4 +1,4 @@
-# Copyright (C) 2018 the Software Heritage developers
+# Copyright (C) 2018-2019 the Software Heritage developers
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
 
@@ -16,6 +16,7 @@ class PyPILister(ListerOnePageApiTransport, SimpleLister):
     MODEL = PyPIModel
     LISTER_NAME = 'pypi'
     PAGE = 'https://pypi.org/simple/'
+    instance = 'pypi'  # As of today only the main pypi.org is used
 
     def __init__(self, override_config=None):
         ListerOnePageApiTransport .__init__(self)
