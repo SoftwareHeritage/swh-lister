@@ -1,4 +1,4 @@
-# Copyright (C) 2018 the Software Heritage developers
+# Copyright (C) 2018-2019 the Software Heritage developers
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
 
@@ -27,19 +27,6 @@ class GitLabLister(PageByPageHttpLister):
         if per_page != 20:
             self.PATH_TEMPLATE = '%s&per_page=%s' % (
                 self.PATH_TEMPLATE, per_page)
-
-    @property
-    def ADDITIONAL_CONFIG(self):
-        """Override additional config as the 'credentials' structure change
-           between the ancestor classes and this class.
-
-           cf. request_params method below
-
-        """
-        default_config = super().ADDITIONAL_CONFIG
-        # 'credentials' is a dict of (instance, {username, password}) dict
-        default_config['credentials'] = ('dict', {})
-        return default_config
 
     def request_params(self, identifier):
         """Get the full parameters passed to requests given the

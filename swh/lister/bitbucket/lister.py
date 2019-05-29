@@ -1,4 +1,4 @@
-# Copyright (C) 2017-2018 the Software Heritage developers
+# Copyright (C) 2017-2019 the Software Heritage developers
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
 
@@ -17,6 +17,7 @@ class BitBucketLister(SWHIndexingHttpLister):
     PATH_TEMPLATE = '/repositories?after=%s'
     MODEL = BitBucketModel
     LISTER_NAME = 'bitbucket'
+    instance = 'bitbucket'
 
     def get_model_from_repo(self, repo):
         return {

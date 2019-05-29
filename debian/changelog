@@ -1,8 +1,12 @@
-swh-lister (0.0.22-1~swh1~bpo9+1) stretch-swh; urgency=medium
+swh-lister (0.0.23-1~swh1) unstable-swh; urgency=medium
 
-  * Rebuild for stretch-swh
+  * New upstream release 0.0.23     - (tagged by Antoine R. Dumont
+    (@ardumont) <antoine.romain.dumont@gmail.com> on 2019-05-29 14:04:22
+    +0200)
+  * Upstream changes:     - v0.0.23     - lister: Unify credentials
+    structure between listers
 
- -- Software Heritage autobuilder (on jenkins-debian1) <jenkins@jenkins-debian1.internal.softwareheritage.org>  Thu, 23 May 2019 09:07:56 +0000
+ -- Software Heritage autobuilder (on jenkins-debian1) <jenkins@jenkins-debian1.internal.softwareheritage.org>  Wed, 29 May 2019 12:10:51 +0000
 
 swh-lister (0.0.22-1~swh1) unstable-swh; urgency=medium
 

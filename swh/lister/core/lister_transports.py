@@ -62,13 +62,40 @@ class SWHListerHttpTransport(abc.ABC):
         """Get the full parameters passed to requests given the
         transport_request identifier.
 
+        This uses credentials if any are provided. The 'credentials'
+        configuration is expected to be a dict of multiple levels. The first
+        level is the lister's name, the second is the lister's instance name.
+
+        For example:
+
+        credentials:
+          github:  # github lister
+            github:  # has only one instance (so far)
+            - username: some
+              password: somekey
+            - username: one
+              password: onekey
+            - ...
+          gitlab:  # gitlab lister
+            riseup:  # has many instances
+            - username: someone
+              password: ...
+            - ...
+            gitlab:
+            - username: someone
+              password: ...
+            - ...
+
+
         MAY BE OVERRIDDEN if something more complex than the request headers
         is needed.
 
         """
         params = {}
         params['headers'] = self.request_headers() or {}
-        creds = self.config['credentials']
+        all_creds = self.config['credentials']
+        lister_creds = all_creds.get(self.LISTER_NAME, {})
+        creds = lister_creds.get(self.instance, {})
         auth = random.choice(creds) if creds else None
         if auth:
             params['auth'] = (auth['username'], auth['password'])
