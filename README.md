@@ -16,6 +16,7 @@ following Python modules:
 - `swh.lister.pypi`
 - `swh.lister.npm`
 - `swh.lister.phabricator`
+- `swh.lister.gnu`
 
 Dependencies
 ------------

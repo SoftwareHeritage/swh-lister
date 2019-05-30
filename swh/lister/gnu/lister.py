@@ -17,78 +17,104 @@ class GNULister(SimpleLister):
     MODEL = GNUModel
     LISTER_NAME = 'gnu'
     TREE_URL = 'https://ftp.gnu.org/tree.json.gz'
-
-    def __init__(self, override_config=None):
-        SimpleLister.__init__(self, override_config=override_config)
+    BASE_URL = 'https://ftp.gnu.org'
+    instance = 'gnu'
 
     def task_dict(self, origin_type, origin_url, **kwargs):
-        """(Override)
+        """
         Return task format dict
 
         This is overridden from the lister_base as more information is
         needed for the ingestion task creation.
         """
-        _type = 'load-%s' % origin_type
-        _policy = 'recurring'
-        project_name = kwargs.get('name')
-        project_metadata_url = kwargs.get('html_url')
         return utils.create_task_dict(
-            _type, _policy, project_name, origin_url,
-            project_metadata_url=project_metadata_url)
+            'load-%s' % origin_type, 'recurring', kwargs.get('name'),
+            origin_url, list_of_tarballs=kwargs.get('list_of_tarballs'))
 
     def get_file(self):
         '''
-            Downloads and unzip tree.json.gz file and returns its content
-            in JSON format
+        Downloads and unzip tree.json.gz file and returns its content
+        in JSON format
 
-            Returns
-            File content in JSON format
+        Returns
+        File content in JSON format
         '''
-        response = requests.get('https://ftp.gnu.org/tree.json.gz',
+        response = requests.get(self.TREE_URL,
                                 allow_redirects=True)
         uncompressed_content = gzip.decompress(response.content)
         return json.loads(uncompressed_content.decode('utf-8'))
 
     def safely_issue_request(self, identifier):
-        '''(Override)Make network request with to download the file which
-            has file structure of the GNU website.
-
-            Args:
-                identifier: resource identifier
-            Returns:
-                server response
         '''
-        response = self.get_file()
-        return response
+        Make network request with to download the file which
+        has file structure of the GNU website.
+
+        Args:
+            identifier: resource identifier
+        Returns:
+            server response
+        '''
+        return self.get_file()
 
     def list_packages(self, response):
-        """(Override) List the actual gnu origins with their names and
-            time last updated from the response.
         """
-        response = clean_up_response(response)
+        List the actual gnu origins with their names and
+        time last updated from the response.
+
+        Args:
+            response : File structure of the website
+            in JSON format
+
+        Returns:
+            a list of all the packages with their names, url of their root
+            directory and the tarballs present for the particular package.
+            [
+                {'name': '3dldf', 'url': 'https://ftp.gnu.org/gnu/3dldf/',
+                 'list_of_tarballs':
+                    [
+                        {'archive':
+                            'https://ftp.gnu.org/gnu/3dldf/3DLDF-1.1.3.tar.gz',
+                        'date': '1071002600'},
+                        {'archive':
+                            'https://ftp.gnu.org/gnu/3dldf/3DLDF-1.1.4.tar.gz',
+                        'date': '1071078759'}}
+                    ]
+                },
+                {'name': '8sync', 'url': 'https://ftp.gnu.org/gnu/8sync/',
+                'list_of_tarballs':
+                    [
+                        {'archive':
+                            'https://ftp.gnu.org/gnu/8sync/8sync-0.1.0.tar.gz',
+                        'date': '1461357336'},
+                        {'archive':
+                            'https://ftp.gnu.org/gnu/8sync/8sync-0.2.0.tar.gz',
+                        'date': '1480991830'}
+                    ]
+            ]
+        """
+        response = filter_directories(response)
         packages = []
         for directory in response:
             content = directory['contents']
             for repo in content:
                 if repo['type'] == 'directory':
-                    repo_details = {
-                        'name': repo['name'],
-                        'url': self._get_project_url(directory['name'],
-                                                     repo['name']),
-                        'time_modified': repo['time']
-                    }
-                    packages.append(repo_details)
+                    package_url = '%s/%s/%s/' % (self.BASE_URL,
+                                                 directory['name'],
+                                                 repo['name'])
+                    list_of_tarballs = find_tarballs(
+                                      repo['contents'], package_url)
+                    if list_of_tarballs != []:
+                        repo_details = {
+                            'name': repo['name'],
+                            'url': package_url,
+                            'list_of_tarballs ': list_of_tarballs
+                        }
+                        packages.append(repo_details)
         random.shuffle(packages)
         return packages
 
-    def _get_project_url(self, dir_name, package_name):
-        """Returns project_url
-
-        """
-        return 'https://ftp.gnu.org/%s/%s/' % (dir_name, package_name)
-
     def get_model_from_repo(self, repo):
-        """(Override) Transform from repository representation to model
+        """Transform from repository representation to model
 
         """
         return {
@@ -103,7 +129,7 @@ class GNULister(SimpleLister):
         }
 
     def transport_response_simplified(self, response):
-        """(Override) Transform response to list for model manipulation
+        """Transform response to list for model manipulation
 
         """
         return [self.get_model_from_repo(repo) for repo in response]
@@ -118,10 +144,59 @@ class GNULister(SimpleLister):
         pass
 
 
-def clean_up_response(response):
+def find_tarballs(package_file_structure, url):
+    '''
+    Recursively lists all the tarball present in the folder and
+    subfolders for a particular package url.
+
+    Args
+        package_file_structure : File structure of the package root directory
+        url : URL of the corresponding package
+
+    Returns
+        List of all the tarball urls and the last their time of update
+        example-
+        For a package called 3dldf
+
+        [
+            {'archive': 'https://ftp.gnu.org/gnu/3dldf/3DLDF-1.1.3.tar.gz',
+                                                        'date': '1071002600'}
+            {'archive': 'https://ftp.gnu.org/gnu/3dldf/3DLDF-1.1.4.tar.gz',
+                                                        'date': '1071078759'}
+            {'archive': 'https://ftp.gnu.org/gnu/3dldf/3DLDF-1.1.5.1.tar.gz',
+                                                        'date': '1074278633'}
+            ...
+        ]
+    '''
+    list_of_tarballs = []
+    for single_file in package_file_structure:
+        file_type = single_file['type']
+        file_name = single_file['name']
+        if file_type == 'file':
+            if(file_name[-6:-3] == "tar" or
+               file_name[-3:] == "zip"):
+                list_of_tarballs .append({
+                    "archive": url + file_name,
+                    "date": single_file['time']
+                })
+        # It will recursively check for tarballs in all sub-folders
+        elif file_type == 'directory':
+            list_of_tarballs_in_dir = find_tarballs(
+                                      single_file['contents'],
+                                      url + file_name + '/')
+            list_of_tarballs .extend(list_of_tarballs_in_dir)
+
+    return list_of_tarballs
+
+
+def filter_directories(response):
+    '''
+    Removes unnecessary directories from JSON response and
+    keep only gnu/ and old-gnu/
+    '''
     final_response = []
-    file_system = response[0]['content']
+    file_system = response[0]['contents']
     for directory in file_system:
-        if directory['name'] in ('gnu', 'mirrors', 'old-gnu'):
+        if directory['name'] in ('gnu', 'old-gnu'):
             final_response.append(directory)
     return final_response
