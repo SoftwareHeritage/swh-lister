@@ -6,6 +6,8 @@ import random
 import gzip
 import json
 import requests
+from pathlib import Path
+from collections import defaultdict
 
 from .models import GNUModel
 
@@ -19,6 +21,8 @@ class GNULister(SimpleLister):
     TREE_URL = 'https://ftp.gnu.org/tree.json.gz'
     BASE_URL = 'https://ftp.gnu.org'
     instance = 'gnu'
+    tarballs = defaultdict(dict)  # Dict of key with project name value the
+    # associated is list of tarballs of package to ingest from the gnu mirror
 
     def task_dict(self, origin_type, origin_url, **kwargs):
         """
@@ -29,15 +33,15 @@ class GNULister(SimpleLister):
         """
         return utils.create_task_dict(
             'load-%s' % origin_type, 'recurring', kwargs.get('name'),
-            origin_url, list_of_tarballs=kwargs.get('list_of_tarballs'))
+            origin_url, tarballs=self.tarballs[kwargs.get('name')])
 
     def get_file(self):
         '''
-        Downloads and unzip tree.json.gz file and returns its content
+        Download and unzip tree.json.gz file and returns its content
         in JSON format
 
         Returns
-        File content in JSON format
+        File content in dictionary format
         '''
         response = requests.get(self.TREE_URL,
                                 allow_redirects=True)
@@ -46,31 +50,31 @@ class GNULister(SimpleLister):
 
     def safely_issue_request(self, identifier):
         '''
-        Make network request with to download the file which
+        Make network request to download the file which
         has file structure of the GNU website.
 
         Args:
             identifier: resource identifier
         Returns:
-            server response
+            Server response
         '''
         return self.get_file()
 
     def list_packages(self, response):
         """
-        List the actual gnu origins with their names and
-        time last updated from the response.
+        List the actual gnu origins with their names,url and the list
+        of all the tarball for a package from the response.
 
         Args:
             response : File structure of the website
-            in JSON format
+            in dictionary format
 
         Returns:
-            a list of all the packages with their names, url of their root
+            A list of all the packages with their names, url of their root
             directory and the tarballs present for the particular package.
             [
                 {'name': '3dldf', 'url': 'https://ftp.gnu.org/gnu/3dldf/',
-                 'list_of_tarballs':
+                 'tarballs':
                     [
                         {'archive':
                             'https://ftp.gnu.org/gnu/3dldf/3DLDF-1.1.3.tar.gz',
@@ -81,7 +85,7 @@ class GNULister(SimpleLister):
                     ]
                 },
                 {'name': '8sync', 'url': 'https://ftp.gnu.org/gnu/8sync/',
-                'list_of_tarballs':
+                'tarballs':
                     [
                         {'archive':
                             'https://ftp.gnu.org/gnu/8sync/8sync-0.1.0.tar.gz',
@@ -101,14 +105,15 @@ class GNULister(SimpleLister):
                     package_url = '%s/%s/%s/' % (self.BASE_URL,
                                                  directory['name'],
                                                  repo['name'])
-                    list_of_tarballs = find_tarballs(
+                    package_tarballs = find_tarballs(
                                       repo['contents'], package_url)
-                    if list_of_tarballs != []:
+                    if package_tarballs != []:
                         repo_details = {
                             'name': repo['name'],
                             'url': package_url,
-                            'list_of_tarballs ': list_of_tarballs
+                            'time_modified': repo['time'],
                         }
+                        self.tarballs[repo['name']] = package_tarballs
                         packages.append(repo_details)
         random.shuffle(packages)
         return packages
@@ -123,7 +128,7 @@ class GNULister(SimpleLister):
             'full_name': repo['name'],
             'html_url': repo['url'],
             'origin_url': repo['url'],
-            'time_last_upated': repo['time_modified'],
+            'time_last_updated': repo['time_modified'],
             'origin_type': 'gnu',
             'description': None,
         }
@@ -133,15 +138,6 @@ class GNULister(SimpleLister):
 
         """
         return [self.get_model_from_repo(repo) for repo in response]
-
-    def transport_request(self):
-        pass
-
-    def transport_response_to_string(self):
-        pass
-
-    def transport_quota_check(self):
-        pass
 
 
 def find_tarballs(package_file_structure, url):
@@ -168,31 +164,29 @@ def find_tarballs(package_file_structure, url):
             ...
         ]
     '''
-    list_of_tarballs = []
+    tarballs = []
     for single_file in package_file_structure:
         file_type = single_file['type']
         file_name = single_file['name']
         if file_type == 'file':
-            if(file_name[-6:-3] == "tar" or
-               file_name[-3:] == "zip"):
-                list_of_tarballs .append({
+            if file_extension_check(file_name):
+                tarballs .append({
                     "archive": url + file_name,
                     "date": single_file['time']
                 })
         # It will recursively check for tarballs in all sub-folders
         elif file_type == 'directory':
-            list_of_tarballs_in_dir = find_tarballs(
+            tarballs_in_dir = find_tarballs(
                                       single_file['contents'],
                                       url + file_name + '/')
-            list_of_tarballs .extend(list_of_tarballs_in_dir)
+            tarballs.extend(tarballs_in_dir)
 
-    return list_of_tarballs
+    return tarballs
 
 
 def filter_directories(response):
     '''
-    Removes unnecessary directories from JSON response and
-    keep only gnu/ and old-gnu/
+    Keep only gnu and old-gnu folders from JSON
     '''
     final_response = []
     file_system = response[0]['contents']
@@ -200,3 +194,30 @@ def filter_directories(response):
         if directory['name'] in ('gnu', 'old-gnu'):
             final_response.append(directory)
     return final_response
+
+
+def file_extension_check(file_name):
+    '''
+    Check for the extension of the file, if the file is of zip format of
+    .tar.x format, where x could be anything, then returns true.
+
+    Args:
+        file_name : name of the file for which the extensions is needs to
+                    be checked.
+
+    Returns:
+        True or False
+
+    example
+        file_extension_check('abc.zip')  will return True
+        file_extension_check('abc.tar.gz')  will return True
+        file_extension_check('abc.tar.gz.sig')  will return False
+
+    '''
+    file_suffixes = Path(file_name).suffixes
+    if len(file_suffixes) == 1 and file_suffixes[-1] == '.zip':
+        return True
+    elif len(file_suffixes) > 1:
+        if file_suffixes[-1] == '.zip' or file_suffixes[-2] == '.tar':
+            return True
+    return False

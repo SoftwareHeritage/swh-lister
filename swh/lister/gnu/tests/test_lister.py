@@ -5,6 +5,7 @@
 import json
 
 from swh.lister.gnu.lister import find_tarballs, filter_directories
+from swh.lister.gnu.lister import file_extension_check
 
 
 def test_filter_directories():
@@ -29,5 +30,11 @@ def test_find_tarballs():
     list_of_all_tarballs.extend(
         find_tarballs(file_structure[1]['contents'],
                       "https://ftp.gnu.org/old-gnu/xboard/"))
-
     assert list_of_all_tarballs == expected_list_of_all_tarballs
+
+
+def test_file_extension_check():
+    assert file_extension_check('abc.xy.zip')
+    assert file_extension_check('cvb.zip')
+    assert file_extension_check('abc.tar.bz2')
+    assert file_extension_check('abc') is False

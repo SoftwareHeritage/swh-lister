@@ -14,4 +14,4 @@ class GNUModel(ModelBase):
     __tablename__ = 'gnu_repo'
 
     uid = Column(String, primary_key=True)
-    time_last_upated = Column(Integer)
+    time_last_updated = Column(Integer)

@@ -13,10 +13,10 @@ following Python modules:
 - `swh.lister.debian`
 - `swh.lister.github`
 - `swh.lister.gitlab`
+- `swh.lister.gnu`
 - `swh.lister.pypi`
 - `swh.lister.npm`
 - `swh.lister.phabricator`
-- `swh.lister.gnu`
 
 Dependencies
 ------------

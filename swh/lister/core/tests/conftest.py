@@ -9,8 +9,8 @@ def celery_includes():
         'swh.lister.debian.tasks',
         'swh.lister.github.tasks',
         'swh.lister.gitlab.tasks',
+        'swh.lister.gnu.tasks',
         'swh.lister.npm.tasks',
         'swh.lister.pypi.tasks',
         'swh.lister.phabricator.tasks',
-        'swh.lister.gnu.tasks'
     ]
