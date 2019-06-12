@@ -1,0 +1,37 @@
+[{"type":"directory","name": ".","contents":[
+  {"type":"file","name":".footer.shtml","size":444,"time":"1359994299"},
+  {"type":"file","name":"find.txt.gz","size":261428,"time":"1557684608"},
+  {"type":"directory","name":"gnu","size":12288,"time":"1556742017","contents":[]},
+  {"type":"directory","name":"gnu+linux-distros","size":4096,"time":"1299783002","contents":[
+    {"type":"directory","name":"ututo-e","size":4096,"time":"1487780066","contents":[
+      {"type":"file","name":"README","size":48,"time":"1487780066"},
+      {"type":"file","name":"index.html","size":158,"time":"1487780054"}
+    ]}
+  ]},
+  {"type":"file","name":"ls-lrRt.txt.gz","size":480054,"time":"1557684607"},
+  {"type":"directory","name":"mirrors","size":4096,"time":"1114010630","contents":[
+    {"type":"directory","name":"dynebolic","size":4096,"time":"1317827602","contents":[
+      {"type":"file","name":"MOVED_TO_mirror.fsf.org_dynebolic","size":0,"time":"1317826935"},
+      {"type":"file","name":"index.html","size":107,"time":"1317827601"}
+    ]}
+  ]},
+  {"type":"link","name":"non-gnu","target":"gnu/non-gnu","size":11,"time":"1082055542","contents":[]},
+  {"type":"directory","name":"old-gnu","size":4096,"time":"1548360019","contents":[]},
+  {"type":"link","name":"pub","target":".","size":1,"time":"1060090003","contents":[]},
+  {"type":"directory","name":"savannah","size":4096,"time":"1194544006","contents":[
+    {"type":"file","name":"README","size":473,"time":"1143758028"}
+  ]},
+  {"type":"directory","name":"third-party","size":4096,"time":"1059825710","contents":[
+    {"type":"file","name":"README","size":374,"time":"983824071"}
+  ]},
+  {"type":"directory","name":"tmp","size":4096,"time":"1239072509","contents":[
+  ]},
+  {"type":"file","name":"tree.json.gz","size":0,"time":"1557684608"},
+  {"type":"directory","name":"video","size":4096,"time":"1367963189","contents":[
+    {"type":"file","name":".bash_history","size":27,"time":"1307027604"},
+    {"type":"file","name":"stallmanupv.ogg.sig","size":536,"time":"1299776853"}
+  ]},
+  {"type":"file","name":"welcome.msg","size":2830,"time":"1545163301"}
+]},
+{"type":"report","directories":2743,"files":63983}
+]

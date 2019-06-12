@@ -2,7 +2,6 @@
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
 
-import abc
 import logging
 
 from swh.core import utils
@@ -20,7 +19,6 @@ class SimpleLister(SWHListerBase):
       information and stores those in db
 
     """
-    @abc.abstractmethod
     def list_packages(self, *args):
         """Listing packages method.
 
