@@ -13,6 +13,7 @@ following Python modules:
 - `swh.lister.debian`
 - `swh.lister.github`
 - `swh.lister.gitlab`
+- `swh.lister.gnu`
 - `swh.lister.pypi`
 - `swh.lister.npm`
 - `swh.lister.phabricator`
@@ -175,6 +176,18 @@ from swh.lister.phabricator.tasks import incremental_phabricator_lister
 
 logging.basicConfig(level=logging.DEBUG)
 incremental_phabricator_lister(forge_url='https://forge.softwareheritage.org', api_token='XXXX')
+```
+
+## lister-gnu
+
+Once configured, you can execute a PyPI lister using the following instructions in a `python3` script:
+
+```lang=python
+import logging
+from swh.lister.gnu.tasks import gnu_lister
+
+logging.basicConfig(level=logging.DEBUG)
+gnu_lister()
 ```
 
 Licensing

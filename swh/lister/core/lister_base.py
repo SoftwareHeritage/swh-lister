@@ -70,7 +70,6 @@ class SWHListerBase(abc.ABC, config.SWHConfig):
                               ' customized for a specific service.')
     LISTER_NAME = AbstractAttribute("Lister's name")
 
-    @abc.abstractmethod
     def transport_request(self, identifier):
         """Given a target endpoint identifier to query, try once to request it.
 
@@ -91,7 +90,6 @@ class SWHListerBase(abc.ABC, config.SWHConfig):
         """
         pass
 
-    @abc.abstractmethod
     def transport_response_to_string(self, response):
         """Convert the server response into a formatted string for logging.
 
@@ -105,7 +103,6 @@ class SWHListerBase(abc.ABC, config.SWHConfig):
         """
         pass
 
-    @abc.abstractmethod
     def transport_response_simplified(self, response):
         """Convert the server response into list of a dict for each repo in the
             response, mapping columns in the lister's MODEL class to repo data.
@@ -122,7 +119,6 @@ class SWHListerBase(abc.ABC, config.SWHConfig):
         """
         pass
 
-    @abc.abstractmethod
     def transport_quota_check(self, response):
         """Check server response to see if we're hitting request rate limits.
 
