@@ -69,6 +69,17 @@ swh/lister/gitlab/tests/api_response.json
 swh/lister/gitlab/tests/conftest.py
 swh/lister/gitlab/tests/test_gitlab_lister.py
 swh/lister/gitlab/tests/test_tasks.py
+swh/lister/gnu/__init__.py
+swh/lister/gnu/lister.py
+swh/lister/gnu/models.py
+swh/lister/gnu/tasks.py
+swh/lister/gnu/tests/__init__.py
+swh/lister/gnu/tests/api_response.json
+swh/lister/gnu/tests/conftest.py
+swh/lister/gnu/tests/file_structure.json
+swh/lister/gnu/tests/find_tarballs_output.json
+swh/lister/gnu/tests/test_lister.py
+swh/lister/gnu/tests/test_tasks.py
 swh/lister/npm/__init__.py
 swh/lister/npm/lister.py
 swh/lister/npm/models.py

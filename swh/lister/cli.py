@@ -12,7 +12,7 @@ from swh.core.cli import CONTEXT_SETTINGS
 logger = logging.getLogger(__name__)
 
 SUPPORTED_LISTERS = ['github', 'gitlab', 'bitbucket', 'debian', 'pypi',
-                     'npm', 'phabricator']
+                     'npm', 'phabricator', 'gnu']
 
 
 @click.group(name='lister', context_settings=CONTEXT_SETTINGS)
@@ -114,6 +114,11 @@ def cli(ctx, db_url, listers, drop_tables):
                 forge_url='https://forge.softwareheritage.org',
                 api_token='',
                 override_config=override_conf)
+
+        elif lister == 'gnu':
+            from .gnu.models import ModelBase
+            from .gnu.lister import GNULister
+            _lister = GNULister(override_config=override_conf)
 
         else:
             raise ValueError(

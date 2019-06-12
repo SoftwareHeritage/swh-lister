@@ -1,14 +1,14 @@
 Metadata-Version: 2.1
 Name: swh.lister
-Version: 0.0.23
+Version: 0.0.24
 Summary: Software Heritage lister
 Home-page: https://forge.softwareheritage.org/diffusion/DLSGH/
 Author: Software Heritage developers
 Author-email: swh-devel@inria.fr
 License: UNKNOWN
-Project-URL: Source, https://forge.softwareheritage.org/source/swh-lister
-Project-URL: Bug Reports, https://forge.softwareheritage.org/maniphest
 Project-URL: Funding, https://www.softwareheritage.org/donate
+Project-URL: Bug Reports, https://forge.softwareheritage.org/maniphest
+Project-URL: Source, https://forge.softwareheritage.org/source/swh-lister
 Description: swh-lister
         ==========
         
@@ -24,6 +24,7 @@ Description: swh-lister
         - `swh.lister.debian`
         - `swh.lister.github`
         - `swh.lister.gitlab`
+        - `swh.lister.gnu`
         - `swh.lister.pypi`
         - `swh.lister.npm`
         - `swh.lister.phabricator`
@@ -186,6 +187,18 @@ Description: swh-lister
         
         logging.basicConfig(level=logging.DEBUG)
         incremental_phabricator_lister(forge_url='https://forge.softwareheritage.org', api_token='XXXX')
+        ```
+        
+        ## lister-gnu
+        
+        Once configured, you can execute a PyPI lister using the following instructions in a `python3` script:
+        
+        ```lang=python
+        import logging
+        from swh.lister.gnu.tasks import gnu_lister
+        
+        logging.basicConfig(level=logging.DEBUG)
+        gnu_lister()
         ```
         
         Licensing
