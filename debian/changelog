@@ -1,3 +1,13 @@
+swh-lister (0.0.24-1~swh1) unstable-swh; urgency=medium
+
+  * New upstream release 0.0.24     - (tagged by Antoine R. Dumont
+    (@ardumont) <antoine.romain.dumont@gmail.com> on 2019-06-12 12:02:54
+    +0200)
+  * Upstream changes:     - v0.0.24     - swh.lister.gnu: Add new gnu
+    lister
+
+ -- Software Heritage autobuilder (on jenkins-debian1) <jenkins@jenkins-debian1.internal.softwareheritage.org>  Wed, 12 Jun 2019 10:10:56 +0000
+
 swh-lister (0.0.23-1~swh1) unstable-swh; urgency=medium
 
   * New upstream release 0.0.23     - (tagged by Antoine R. Dumont
