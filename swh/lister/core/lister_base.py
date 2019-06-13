@@ -135,29 +135,26 @@ class SWHListerBase(abc.ABC, config.SWHConfig):
         pass
 
     def filter_before_inject(self, models_list):
-        """Function run after transport_response_simplified but before
-           injection into the local db and creation of workers. Can be
-           used to eliminate some of the results if necessary.
+        """Filter models_list entries prior to injection in the db.
+        This is ran directly after `transport_response_simplified`.
 
-        MAY BE OVERRIDDEN if an intermediate Lister class needs to filter
-        results before injection without requiring every child class to do so.
+        Default implementation is to have no filtering.
 
         Args:
             models_list: list of dicts returned by
                          transport_response_simplified.
         Returns:
             models_list with entries changed according to custom logic.
+
         """
         return models_list
 
     def do_additional_checks(self, models_list):
-        """Execute some additional checks on the model list. For example, to
-           check for existing repositories in the db.
+        """Execute some additional checks on the model list (after the
+        filtering).
 
-        MAY BE OVERRIDDEN if an intermediate Lister class needs to
-        check some more the results before injection.
-
-        Checks are fine by default, returns the models_list as is by default.
+        Default implementation is to run no check at all and to return
+        the input as is.
 
         Args:
             models_list: list of dicts returned by
