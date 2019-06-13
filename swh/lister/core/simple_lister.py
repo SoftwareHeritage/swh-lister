@@ -51,7 +51,7 @@ class SimpleLister(SWHListerBase):
             # inject into local db
             injected = self.inject_repo_data_into_db(models)
             # queue workers
-            self.create_missing_origins_and_tasks(models, injected)
+            self.schedule_missing_tasks(models, injected)
             all_injected.append(injected)
             # flush
             self.db_session.commit()
