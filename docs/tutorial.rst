@@ -56,18 +56,18 @@ Fundamentally, a basic lister must follow these steps:
 3. Populate a work queue for fetching and ingesting source repositories.
 
 Steps 1 and 3 are generic problems, so they can get generic solutions hidden
-away in base code, most of which never needs to change. That leaves us to
-implement step 2, which can be trivially done now for services with clean web
+away in the base code, most of which never needs to change. That leaves us to
+implement step 2, which can be trivially done now for services with a clean web
 APIs.
 
-In the new code we've tried to hide away as much generic functionality as
+In the new code, we've tried to hide away as much generic functionality as
 possible, turning it into set-and-forget plumbing between a few simple
 customized elements. Different hosting services might use different network
 protocols, rate-limit messages, or pagination schemes, but, as long as there is
 some way to get a list of the hosted repositories, we think that the new base
 code will make getting those repositories much easier.
 
-First let me give you the 30,000 foot view…
+First, let me give you the 30,000 foot view…
 
 The old GitHub-specific lister code looked like this (265 lines of Python):
 
@@ -163,6 +163,71 @@ implement, but remember that most of the implementation requirements mentioned
 above are already provided for 99% of services by the HTTP mix-in module. It
 looks much simpler when we look at the actual implementations of the two
 new-style indexing listers we currently have…
+
+An important aspect for making a new lister is its testing. To register the 
+celery tasks of your new lister, you need to add your lister in the main
+conftest.py (swh/lister/core/tests/conftest.py)
+
+After testing, it is suggested to run your new lister in docker as it provides
+good, almost-production like test. Here are the steps you need to follow to run
+a new lister in docker.
+
+1. You must write a docker-compose override file (`docker-compose.override.yml`).
+   An example is given in the `docker-compose.override.yml.example` file ::
+
+        version: '2'
+
+        services:
+        swh-lister:
+            volumes:
+            - "$SWH_ENVIRONMENT_HOME/swh-lister:/src/swh-lister"
+
+   The file named `docker-compose.override.yml` will automatically be loaded by
+   `docker-compose`. For more details, you may refer to README.md present in
+   swh-docker-dev.
+2. Follow the instruction mentioned under heading Preparation steps and 
+   Configuration file sample in README.md of swh-lister.  
+3. Make sure to run storage (5002) and scheduler (5008) services locally.
+   You can run them by the following command::
+
+    ~/swh-environment/swh-docker-dev$ docker-compose up -d swh-scheduler-api \
+      swh-storage
+4. Add the lister task-type in the scheduler.  For example, if you want to
+   add pypi lister task-type ::
+
+    ~/swh-environment$swh-scheduler task-type add list-pypi recurring \
+     "Full pypi lister"
+
+  You can check all the task-type by::
+
+    ~/swh-environment$swh scheduler task-type list
+    Known task types:
+    list-bitbucket-incremental:
+      Incrementally list BitBucket
+    list-cran:
+      Full CRAN Lister
+    list-debian-distribution:
+      List a Debian distribution
+    list-github-full:
+      Full update of GitHub repos list
+    list-github-incremental:
+    ...
+
+  If your lister is creating new loading task not yet registered, you need
+  to register that task type as well. Like for GNU lister::
+
+     ~/swh-environment$swh scheduler task-type add load-gnu-full recurring \
+      "GNU Loader"
+
+5. Run your lister with the help of scheduler cli.You need to add the task in 
+   the schedular using its cli. For example you need to execute this command
+   to run gnu lister ::
+ 
+     ~/swh-environment$swh scheduler --url http://localhost:5008/ task add \
+      list-gnu-full --policy oneshot  
+
+After the execution of lister is complete you can see the loading task created.
+    ~/swh-environment/swh-lister$swh scheduler task list
 
 This is the entire source code for the BitBucket repository lister::
 
