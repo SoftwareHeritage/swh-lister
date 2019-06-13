@@ -135,29 +135,26 @@ class SWHListerBase(abc.ABC, config.SWHConfig):
         pass
 
     def filter_before_inject(self, models_list):
-        """Function run after transport_response_simplified but before
-           injection into the local db and creation of workers. Can be
-           used to eliminate some of the results if necessary.
+        """Filter models_list entries prior to injection in the db.
+        This is ran directly after `transport_response_simplified`.
 
-        MAY BE OVERRIDDEN if an intermediate Lister class needs to filter
-        results before injection without requiring every child class to do so.
+        Default implementation is to have no filtering.
 
         Args:
             models_list: list of dicts returned by
                          transport_response_simplified.
         Returns:
             models_list with entries changed according to custom logic.
+
         """
         return models_list
 
     def do_additional_checks(self, models_list):
-        """Execute some additional checks on the model list. For example, to
-           check for existing repositories in the db.
+        """Execute some additional checks on the model list (after the
+        filtering).
 
-        MAY BE OVERRIDDEN if an intermediate Lister class needs to
-        check some more the results before injection.
-
-        Checks are fine by default, returns the models_list as is by default.
+        Default implementation is to run no check at all and to return
+        the input as is.
 
         Args:
             models_list: list of dicts returned by
@@ -384,20 +381,6 @@ class SWHListerBase(abc.ABC, config.SWHConfig):
 
         return sql_repo
 
-    def origin_dict(self, origin_type, origin_url, **kwargs):
-        """Return special dict format for the origins list
-
-        Args:
-            origin_type (string)
-            origin_url (string)
-        Returns:
-            the same information in a different form
-        """
-        return {
-            'type': origin_type,
-            'url': origin_url,
-        }
-
     def task_dict(self, origin_type, origin_url, **kwargs):
         """Return special dict format for the tasks list
 
@@ -452,44 +435,33 @@ class SWHListerBase(abc.ABC, config.SWHConfig):
             injected_repos[m['uid']] = self.db_inject_repo(m)
         return injected_repos
 
-    def create_missing_origins_and_tasks(self, models_list, injected_repos):
-        """Find any newly created db entries that don't yet have tasks or
-            origin objects assigned.
+    def schedule_missing_tasks(self, models_list, injected_repos):
+        """Find any newly created db entries that do not have been scheduled
+           yet.
 
         Args:
-            models_list: a list of dicts mapping keys in the db model for
-                each repo
-            injected_repos: dict of uid:sql_repo pairs that have just
-                been created
+            models_list ([Model]): List of dicts mapping keys in the db model
+                                   for each repo
+            injected_repos ([dict]): Dict of uid:sql_repo pairs that have just
+                            been created
+
         Returns:
             Nothing. Modifies injected_repos.
+
         """
-        origins = {}
         tasks = {}
 
-        def _origin_key(m):
-            _type = m.get('origin_type', m.get('type'))
-            _url = m.get('origin_url', m.get('url'))
-            return '%s-%s' % (_type, _url)
-
         def _task_key(m):
-            return '%s-%s' % (m['type'],
-                              json.dumps(m['arguments'], sort_keys=True))
+            return '%s-%s' % (
+                m['type'],
+                json.dumps(m['arguments'], sort_keys=True)
+            )
 
         for m in models_list:
             ir = injected_repos[m['uid']]
-            if not ir.origin_id:
-                origin_dict = self.origin_dict(**m)
-                origins[_origin_key(m)] = (ir, m, origin_dict)
             if not ir.task_id:
                 task_dict = self.task_dict(**m)
                 tasks[_task_key(task_dict)] = (ir, m, task_dict)
-
-        new_origins = self.storage.origin_add(
-            (origin_dicts for (_, _, origin_dicts) in origins.values()))
-        for origin in new_origins:
-            ir, m, _ = origins[_origin_key(origin)]
-            ir.origin_id = origin['id']
 
         new_tasks = self.scheduler.create_tasks(
             (task_dicts for (_, _, task_dicts) in tasks.values()))
@@ -519,7 +491,7 @@ class SWHListerBase(abc.ABC, config.SWHConfig):
         # inject into local db
         injected = self.inject_repo_data_into_db(models_list)
         # queue workers
-        self.create_missing_origins_and_tasks(models_list, injected)
+        self.schedule_missing_tasks(models_list, injected)
         return response, injected
 
     def save_response(self, response):

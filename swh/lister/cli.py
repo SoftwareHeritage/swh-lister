@@ -12,7 +12,7 @@ from swh.core.cli import CONTEXT_SETTINGS
 logger = logging.getLogger(__name__)
 
 SUPPORTED_LISTERS = ['github', 'gitlab', 'bitbucket', 'debian', 'pypi',
-                     'npm', 'phabricator', 'gnu']
+                     'npm', 'phabricator', 'gnu', 'cran']
 
 
 @click.group(name='lister', context_settings=CONTEXT_SETTINGS)
@@ -119,6 +119,11 @@ def cli(ctx, db_url, listers, drop_tables):
             from .gnu.models import ModelBase
             from .gnu.lister import GNULister
             _lister = GNULister(override_config=override_conf)
+
+        elif lister == 'cran':
+            from .cran.models import ModelBase
+            from .cran.lister import CRANLister
+            _lister = CRANLister(override_config=override_conf)
 
         else:
             raise ValueError(
