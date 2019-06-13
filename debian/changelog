@@ -1,3 +1,13 @@
+swh-lister (0.0.25-1~swh1) unstable-swh; urgency=medium
+
+  * New upstream release 0.0.25     - (tagged by Antoine R. Dumont
+    (@ardumont) <antoine.romain.dumont@gmail.com> on 2019-06-13 15:54:42
+    +0200)
+  * Upstream changes:     - v0.0.25     - Add new cran lister     -
+    listers: Stop creating origins when scheduling new tasks
+
+ -- Software Heritage autobuilder (on jenkins-debian1) <jenkins@jenkins-debian1.internal.softwareheritage.org>  Thu, 13 Jun 2019 13:59:30 +0000
+
 swh-lister (0.0.24-1~swh1) unstable-swh; urgency=medium
 
   * New upstream release 0.0.24     - (tagged by Antoine R. Dumont
