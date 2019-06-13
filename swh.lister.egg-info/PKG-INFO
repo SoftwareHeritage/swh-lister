@@ -1,14 +1,14 @@
 Metadata-Version: 2.1
 Name: swh.lister
-Version: 0.0.24
+Version: 0.0.25
 Summary: Software Heritage lister
 Home-page: https://forge.softwareheritage.org/diffusion/DLSGH/
 Author: Software Heritage developers
 Author-email: swh-devel@inria.fr
 License: UNKNOWN
 Project-URL: Funding, https://www.softwareheritage.org/donate
-Project-URL: Bug Reports, https://forge.softwareheritage.org/maniphest
 Project-URL: Source, https://forge.softwareheritage.org/source/swh-lister
+Project-URL: Bug Reports, https://forge.softwareheritage.org/maniphest
 Description: swh-lister
         ==========
         
@@ -28,6 +28,7 @@ Description: swh-lister
         - `swh.lister.pypi`
         - `swh.lister.npm`
         - `swh.lister.phabricator`
+        - `swh.lister.cran`
         
         Dependencies
         ------------
@@ -199,6 +200,17 @@ Description: swh-lister
         
         logging.basicConfig(level=logging.DEBUG)
         gnu_lister()
+        
+        ## lister-cran
+        
+        Once configured, you can execute a RCRAN lister using the following instructions in a `python3` script:
+        
+        ```lang=python
+        import logging
+        from swh.lister.cran.tasks import cran_lister
+        
+        logging.basicConfig(level=logging.DEBUG)
+        cran_lister()
         ```
         
         Licensing
