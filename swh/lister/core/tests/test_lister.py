@@ -164,8 +164,8 @@ class HttpListerTesterBase(abc.ABC):
             if k not in ['last_seen', 'task_id', 'origin_id', 'id']:
                 self.assertIn(k, di)
 
-    def disable_storage_and_scheduler(self, fl):
-        fl.create_missing_origins_and_tasks = Mock(return_value=None)
+    def disable_scheduler(self, fl):
+        fl.schedule_missing_tasks = Mock(return_value=None)
 
     def disable_db(self, fl):
         fl.winnow_models = Mock(return_value=[])
@@ -176,7 +176,7 @@ class HttpListerTesterBase(abc.ABC):
         http_mocker.get(self.test_re, text=self.mock_response)
         fl = self.get_fl()
 
-        self.disable_storage_and_scheduler(fl)
+        self.disable_scheduler(fl)
         self.disable_db(fl)
 
         fl.run(min_bound=1, max_bound=1)  # stores no results
@@ -185,7 +185,7 @@ class HttpListerTesterBase(abc.ABC):
         http_mocker.get(self.test_re, text=self.mock_response)
         fl = self.get_fl()
 
-        self.disable_storage_and_scheduler(fl)
+        self.disable_scheduler(fl)
         self.disable_db(fl)
 
         fl.run(min_bound=self.first_index, max_bound=self.first_index)
@@ -194,7 +194,7 @@ class HttpListerTesterBase(abc.ABC):
         http_mocker.get(self.test_re, text=self.mock_response)
         fl = self.get_fl()
 
-        self.disable_storage_and_scheduler(fl)
+        self.disable_scheduler(fl)
         self.disable_db(fl)
 
         fl.run(min_bound=self.first_index)
@@ -222,7 +222,7 @@ class HttpListerTester(HttpListerTesterBase, abc.ABC):
             })
         self.init_db(db, fl.MODEL)
 
-        self.disable_storage_and_scheduler(fl)
+        self.disable_scheduler(fl)
 
         fl.run(min_bound=self.first_index)
 

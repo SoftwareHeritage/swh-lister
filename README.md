@@ -17,6 +17,7 @@ following Python modules:
 - `swh.lister.pypi`
 - `swh.lister.npm`
 - `swh.lister.phabricator`
+- `swh.lister.cran`
 
 Dependencies
 ------------
@@ -188,6 +189,17 @@ from swh.lister.gnu.tasks import gnu_lister
 
 logging.basicConfig(level=logging.DEBUG)
 gnu_lister()
+
+## lister-cran
+
+Once configured, you can execute a RCRAN lister using the following instructions in a `python3` script:
+
+```lang=python
+import logging
+from swh.lister.cran.tasks import cran_lister
+
+logging.basicConfig(level=logging.DEBUG)
+cran_lister()
 ```
 
 Licensing

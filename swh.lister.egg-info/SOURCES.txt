@@ -42,6 +42,14 @@ swh/lister/core/tests/conftest.py
 swh/lister/core/tests/test_abstractattribute.py
 swh/lister/core/tests/test_lister.py
 swh/lister/core/tests/test_model.py
+swh/lister/cran/__init__.py
+swh/lister/cran/list_all_packages.R
+swh/lister/cran/lister.py
+swh/lister/cran/models.py
+swh/lister/cran/tasks.py
+swh/lister/cran/tests/__init__.py
+swh/lister/cran/tests/conftest.py
+swh/lister/cran/tests/test_tasks.py
 swh/lister/debian/__init__.py
 swh/lister/debian/lister.py
 swh/lister/debian/tasks.py

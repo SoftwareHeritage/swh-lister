@@ -97,7 +97,7 @@ class PhabricatorLister(SWHIndexingHttpLister):
         self.max_index = models_list[0]['indexable']
         models_list = self.filter_before_inject(models_list)
         injected = self.inject_repo_data_into_db(models_list)
-        self.create_missing_origins_and_tasks(models_list, injected)
+        self.schedule_missing_tasks(models_list, injected)
         return self.max_index
 
     def run(self, min_bound=None, max_bound=None):

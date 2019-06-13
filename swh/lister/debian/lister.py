@@ -119,7 +119,7 @@ class DebianLister(SWHListerHttpTransport, SWHListerBase):
         """Generate the Package entries that didn't previously exist.
 
         Contrary to SWHListerBase, we don't actually insert the data in
-        database. `create_missing_origins_and_tasks` does it once we have the
+        database. `schedule_missing_tasks` does it once we have the
         origin and task identifiers.
         """
         by_name_version = {}
@@ -173,7 +173,7 @@ class DebianLister(SWHListerHttpTransport, SWHListerBase):
         self.db_session.add_all(added_packages)
         return added_packages
 
-    def create_missing_origins_and_tasks(self, models_list, added_packages):
+    def schedule_missing_tasks(self, models_list, added_packages):
         """We create tasks at the end of the full snapshot processing"""
         return
 
