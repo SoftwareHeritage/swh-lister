@@ -24,7 +24,7 @@ def test_incremental(lister, swh_app, celery_session_worker):
     assert res.successful()
 
     lister.assert_called_once_with(
-        api_token='', forge_url='https://forge.softwareheritage.org',
+        api_token=None, forge_url='https://forge.softwareheritage.org',
         instance='swh')
     lister.db_last_index.assert_called_once_with()
     lister.run.assert_called_once_with(min_bound=42)

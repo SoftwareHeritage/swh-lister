@@ -2,32 +2,67 @@
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
 
+import logging
+
 import urllib.parse
 
 from swh.lister.core.indexing_lister import SWHIndexingHttpLister
 from swh.lister.phabricator.models import PhabricatorModel
 from collections import defaultdict
 
+logger = logging.getLogger(__name__)
+
 
 class PhabricatorLister(SWHIndexingHttpLister):
-
-    PATH_TEMPLATE = '&order=oldest&attachments[uris]=1&after=%s'
+    PATH_TEMPLATE = '?order=oldest&attachments[uris]=1&after=%s'
     MODEL = PhabricatorModel
     LISTER_NAME = 'phabricator'
 
-    def __init__(self, forge_url, api_token, instance=None,
+    def __init__(self, forge_url, instance=None, api_token=None,
                  override_config=None):
         if forge_url.endswith("/"):
             forge_url = forge_url[:-1]
         self.forge_url = forge_url
-        api_endpoint = ('api/diffusion.repository.'
-                        'search?api.token=%s') % api_token
-        api_baseurl = '%s/%s' % (forge_url, api_endpoint)
+        api_baseurl = '%s/api/diffusion.repository.search' % forge_url
+        self.api_token = api_token
         if not instance:
             instance = urllib.parse.urlparse(forge_url).hostname
         self.instance = instance
         super().__init__(api_baseurl=api_baseurl,
                          override_config=override_config)
+
+    def _build_query_params(self, params, api_token):
+        """Build query params to include the forge's api token
+
+        Returns:
+            updated params dict with 'params' entry.
+
+        """
+        params.update({'params': {'api.token': api_token}})
+        return params
+
+    def request_params(self, identifier):
+        """Override the default params behavior to retrieve the api token
+
+        Credentials are stored as:
+
+        credentials:
+          phabricator:
+            <instance>:
+              - username: <account>
+                password: <api-token>
+
+        """
+        params = {}
+        params['headers'] = self.request_headers() or {}
+        if self.api_token:
+            return self._build_query_params(params, self.api_token)
+        instance_creds = self.request_instance_credentials()
+        if not instance_creds:
+            raise ValueError(
+                'Phabricator forge needs authentication credential to list.')
+        api_token = instance_creds[0]['password']
+        return self._build_query_params(params, api_token)
 
     def request_headers(self):
         """
