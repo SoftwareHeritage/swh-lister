@@ -2,7 +2,6 @@
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
 
-import random
 import time
 from urllib3.util import parse_url
 
@@ -27,34 +26,6 @@ class GitLabLister(PageByPageHttpLister):
         if per_page != 20:
             self.PATH_TEMPLATE = '%s&per_page=%s' % (
                 self.PATH_TEMPLATE, per_page)
-
-    def request_params(self, identifier):
-        """Get the full parameters passed to requests given the
-        transport_request identifier.
-
-        For the gitlab lister, the 'credentials' entries is configured
-        per instance. For example::
-
-          - credentials:
-            - gitlab.com:
-              - username: user0
-                password: <pass>
-              - username: user1
-                password: <pass>
-              - ...
-            - other-gitlab-instance:
-              ...
-
-        """
-        params = {
-            'headers': self.request_headers() or {}
-        }
-        creds_lister = self.config['credentials'].get(self.instance)
-        if creds_lister:
-            auth = random.choice(creds_lister)
-            if auth:
-                params['auth'] = (auth['username'], auth['password'])
-        return params
 
     def uid(self, repo):
         return '%s/%s' % (self.instance, repo['path_with_namespace'])
