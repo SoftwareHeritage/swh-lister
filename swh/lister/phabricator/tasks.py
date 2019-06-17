@@ -6,10 +6,10 @@ from swh.scheduler.celery_backend.config import app
 from swh.lister.phabricator.lister import PhabricatorLister
 
 
-def new_lister(forge_url='https://forge.softwareheritage.org', api_token='',
-               instance='swh', **kw):
-    return PhabricatorLister(forge_url=forge_url, api_token=api_token,
-                             instance=instance, **kw)
+def new_lister(forge_url='https://forge.softwareheritage.org', instance='swh',
+               api_token=None, **kw):
+    return PhabricatorLister(
+        forge_url=forge_url, instance=instance, api_token=api_token, **kw)
 
 
 @app.task(name=__name__ + '.IncrementalPhabricatorLister')
