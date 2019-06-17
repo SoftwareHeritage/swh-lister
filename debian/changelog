@@ -1,8 +1,13 @@
-swh-lister (0.0.25-1~swh1~bpo9+1) stretch-swh; urgency=medium
+swh-lister (0.0.26-1~swh1) unstable-swh; urgency=medium
 
-  * Rebuild for stretch-swh
+  * New upstream release 0.0.26     - (tagged by Antoine R. Dumont
+    (@ardumont) <antoine.romain.dumont@gmail.com> on 2019-06-17 17:53:33
+    +0200)
+  * Upstream changes:     - v0.0.26     - phabricator.lister: Use
+    credentials setup from configuration file     - gitlab.lister:
+    Remove request_params method override
 
- -- Software Heritage autobuilder (on jenkins-debian1) <jenkins@jenkins-debian1.internal.softwareheritage.org>  Thu, 13 Jun 2019 14:01:37 +0000
+ -- Software Heritage autobuilder (on jenkins-debian1) <jenkins@jenkins-debian1.internal.softwareheritage.org>  Mon, 17 Jun 2019 16:05:05 +0000
 
 swh-lister (0.0.25-1~swh1) unstable-swh; urgency=medium
 

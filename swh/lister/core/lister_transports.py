@@ -49,6 +49,21 @@ class SWHListerHttpTransport(abc.ABC):
             'User-Agent': 'Software Heritage lister (%s)' % self.lister_version
         }
 
+    def request_instance_credentials(self):
+        """Returns dictionary of any credentials configuration needed by the
+        forge instance to list.
+
+        Returns:
+            dict of credentials per instance lister or {} if none.
+
+        """
+        all_creds = self.config.get('credentials')
+        if not all_creds:
+            return {}
+        lister_creds = all_creds.get(self.LISTER_NAME, {})
+        creds = lister_creds.get(self.instance, {})
+        return creds
+
     def request_uri(self, identifier):
         """Get the full request URI given the transport_request identifier.
 
@@ -93,9 +108,9 @@ class SWHListerHttpTransport(abc.ABC):
         """
         params = {}
         params['headers'] = self.request_headers() or {}
-        all_creds = self.config['credentials']
-        lister_creds = all_creds.get(self.LISTER_NAME, {})
-        creds = lister_creds.get(self.instance, {})
+        creds = self.request_instance_credentials()
+        if not creds:
+            return params
         auth = random.choice(creds) if creds else None
         if auth:
             params['auth'] = (auth['username'], auth['password'])
