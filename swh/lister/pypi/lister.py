@@ -67,7 +67,6 @@ class PyPILister(ListerOnePageApiTransport, SimpleLister):
             'html_url': project_url_meta,
             'origin_url': project_url,
             'origin_type': 'pypi',
-            'description': None,
         }
 
     def transport_response_simplified(self, response):

@@ -25,7 +25,6 @@ class GitHubLister(SWHIndexingHttpLister):
             'html_url': repo['html_url'],
             'origin_url': repo['html_url'],
             'origin_type': 'git',
-            'description': repo['description'],
             'fork': repo['fork'],
         }
 
