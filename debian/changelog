@@ -1,8 +1,13 @@
-swh-lister (0.0.26-1~swh1~bpo9+1) stretch-swh; urgency=medium
+swh-lister (0.0.27-1~swh1) unstable-swh; urgency=medium
 
-  * Rebuild for stretch-swh
+  * New upstream release 0.0.27     - (tagged by Antoine R. Dumont
+    (@ardumont) <antoine.romain.dumont@gmail.com> on 2019-06-18 10:27:09
+    +0200)
+  * Upstream changes:     - v0.0.27     - Unify lister tablenames to use
+    consistently singular     - Add missing instance field to
+    phabricator repository model
 
- -- Software Heritage autobuilder (on jenkins-debian1) <jenkins@jenkins-debian1.internal.softwareheritage.org>  Mon, 17 Jun 2019 16:07:28 +0000
+ -- Software Heritage autobuilder (on jenkins-debian1) <jenkins@jenkins-debian1.internal.softwareheritage.org>  Tue, 18 Jun 2019 08:44:38 +0000
 
 swh-lister (0.0.26-1~swh1) unstable-swh; urgency=medium
 

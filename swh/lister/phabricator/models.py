@@ -9,7 +9,8 @@ from swh.lister.core.models import IndexingModelBase
 
 class PhabricatorModel(IndexingModelBase):
     """a Phabricator repository"""
-    __tablename__ = 'phabricator_repos'
+    __tablename__ = 'phabricator_repo'
 
     uid = Column(String, primary_key=True)
     indexable = Column(Integer, index=True)
+    instance = Column(String, index=True)
