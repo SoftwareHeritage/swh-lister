@@ -84,7 +84,8 @@ class PhabricatorLister(SWHIndexingHttpLister):
             'html_url': url,
             'origin_url': url,
             'description': None,
-            'origin_type': repo['fields']['vcs']
+            'origin_type': repo['fields']['vcs'],
+            'instance': self.instance,
         }
 
     def get_next_target_from_response(self, response):
