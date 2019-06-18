@@ -13,3 +13,4 @@ class PhabricatorModel(IndexingModelBase):
 
     uid = Column(String, primary_key=True)
     indexable = Column(Integer, index=True)
+    instance = Column(String, index=True)
