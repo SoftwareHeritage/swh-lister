@@ -129,7 +129,7 @@ class GNULister(SimpleLister):
             'html_url': repo['url'],
             'origin_url': repo['url'],
             'time_last_updated': repo['time_modified'],
-            'origin_type': 'gnu',
+            'origin_type': 'tar',
         }
 
     def transport_response_simplified(self, response):
