@@ -12,7 +12,7 @@ from swh.core.cli import CONTEXT_SETTINGS
 logger = logging.getLogger(__name__)
 
 SUPPORTED_LISTERS = ['github', 'gitlab', 'bitbucket', 'debian', 'pypi',
-                     'npm', 'phabricator', 'gnu', 'cran']
+                     'npm', 'phabricator', 'gnu', 'cran', 'cgit']
 
 
 @click.group(name='lister', context_settings=CONTEXT_SETTINGS)
@@ -124,6 +124,13 @@ def cli(ctx, db_url, listers, drop_tables):
             from .cran.models import ModelBase
             from .cran.lister import CRANLister
             _lister = CRANLister(override_config=override_conf)
+
+        elif lister == 'cgit':
+            from .cgit.models import ModelBase
+            from .cgit.lister import CGitLister
+            _lister = CGitLister(
+                      base_url='http://git.savannah.gnu.org/cgit/',
+                      override_config=override_conf)
 
         else:
             raise ValueError(

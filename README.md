@@ -203,6 +203,19 @@ logging.basicConfig(level=logging.DEBUG)
 cran_lister()
 ```
 
+## lister-cgit
+
+Once configured, you can execute a cgit lister using the following instructions
+in a `python3` script:
+
+```lang=python
+import logging
+from swh.lister.cgit.tasks import cgit_lister
+
+logging.basicConfig(level=logging.DEBUG)
+cgit_lister(base_url='http://git.savannah.gnu.org/cgit/')
+```
+
 Licensing
 ---------
 

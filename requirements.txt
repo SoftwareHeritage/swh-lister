@@ -5,3 +5,4 @@ requests
 setuptools
 xmltodict
 iso8601
+beautifulsoup4
