@@ -1,3 +1,14 @@
+swh-lister (0.0.28-1~swh1) unstable-swh; urgency=medium
+
+  * New upstream release 0.0.28     - (tagged by Antoine R. Dumont
+    (@ardumont) <antoine.romain.dumont@gmail.com> on 2019-06-20 12:00:09
+    +0200)
+  * Upstream changes:     - v0.0.28     - listers: Remove unused columns
+    `origin_id` / `description`     - gnu-lister: Use origin-type as
+    'tar' (and not 'gnu')     - phabricator: Remove unused code
+
+ -- Software Heritage autobuilder (on jenkins-debian1) <jenkins@jenkins-debian1.internal.softwareheritage.org>  Thu, 20 Jun 2019 10:07:48 +0000
+
 swh-lister (0.0.27-1~swh1) unstable-swh; urgency=medium
 
   * New upstream release 0.0.27     - (tagged by Antoine R. Dumont
