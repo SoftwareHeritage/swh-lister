@@ -145,10 +145,10 @@ repository creation time, but a service can really use anything as long as the
 values monotonically increase with new repositories. A good indexing service
 also includes the URL of the next page with a later 'foo' in its responses. For
 these indexing services we provide another intermediate lister called the
-indexing lister. Instead of inheriting from :class:`SWHListerBase
-<swh.lister.core.lister_base.SWHListerBase>`, the lister class would inherit
-from :class:`SWHIndexingLister
-<swh.lister.core.indexing_lister.SWHIndexingLister>`. Along with the
+indexing lister. Instead of inheriting from :class:`ListerBase
+<swh.lister.core.lister_base.ListerBase>`, the lister class would inherit
+from :class:`IndexingLister
+<swh.lister.core.indexing_lister.IndexingLister>`. Along with the
 requirements of the lister base, the indexing lister base adds one extra
 requirement:
 
@@ -179,9 +179,9 @@ This is the entire source code for the BitBucket repository lister::
 
     from urllib import parse
     from swh.lister.bitbucket.models import BitBucketModel
-    from swh.lister.core.indexing_lister import SWHIndexingHttpLister
+    from swh.lister.core.indexing_lister import IndexingHttpLister
 
-    class BitBucketLister(SWHIndexingHttpLister):
+    class BitBucketLister(IndexingHttpLister):
         PATH_TEMPLATE = '/repositories?after=%s'
         MODEL = BitBucketModel
 
@@ -213,10 +213,10 @@ And this is the entire source code for the GitHub repository lister::
     # See top-level LICENSE file for more information
 
     import time
-    from swh.lister.core.indexing_lister import SWHIndexingHttpLister
+    from swh.lister.core.indexing_lister import IndexingHttpLister
     from swh.lister.github.models import GitHubModel
 
-    class GitHubLister(SWHIndexingHttpLister):
+    class GitHubLister(IndexingHttpLister):
 	PATH_TEMPLATE = '/repositories?since=%d'
 	MODEL = GitHubModel
 
@@ -255,12 +255,12 @@ And this is the entire source code for the GitHub repository lister::
 
 We can see that there are some common elements:
 
-* Both use the HTTP transport mixin (:class:`SWHIndexingHttpLister
-  <swh.lister.core.indexing_lister.SWHIndexingHttpLister>`) just combines
-  :class:`SWHListerHttpTransport
-  <swh.lister.core.lister_transports.SWHListerHttpTransport>` and
-  :class:`SWHIndexingLister
-  <swh.lister.core.indexing_lister.SWHIndexingLister>`) to get most of the
+* Both use the HTTP transport mixin (:class:`IndexingHttpLister
+  <swh.lister.core.indexing_lister.IndexingHttpLister>`) just combines
+  :class:`ListerHttpTransport
+  <swh.lister.core.lister_transports.ListerHttpTransport>` and
+  :class:`IndexingLister
+  <swh.lister.core.indexing_lister.IndexingLister>`) to get most of the
   network request functionality for free.
 
 * Both also define ``MODEL`` and ``PATH_TEMPLATE`` variables. It should be
@@ -305,59 +305,59 @@ quasi-linear way…::
 		       api_baseurl='https://github.com')
     ghl.run()
 
-⇓ (SWHIndexingLister.run)::
+⇓ (IndexingLister.run)::
 
-    # SWHIndexingLister.run
+    # IndexingLister.run
 
     identifier = None
     do
-	response, repos = SWHListerBase.ingest_data(identifier)
+	response, repos = ListerBase.ingest_data(identifier)
 	identifier = GitHubLister.get_next_target_from_response(response)
     while(identifier)
 
-⇓ (SWHListerBase.ingest_data)::
+⇓ (ListerBase.ingest_data)::
 
-    # SWHListerBase.ingest_data
+    # ListerBase.ingest_data
 
-    response = SWHListerBase.safely_issue_request(identifier)
+    response = ListerBase.safely_issue_request(identifier)
     repos = GitHubLister.transport_response_simplified(response)
-    injected = SWHListerBase.inject_repo_data_into_db(repos)
+    injected = ListerBase.inject_repo_data_into_db(repos)
     return response, injected
 
-⇓ (SWHListerBase.safely_issue_request)::
+⇓ (ListerBase.safely_issue_request)::
 
-    # SWHListerBase.safely_issue_request
+    # ListerBase.safely_issue_request
 
     repeat:
-	resp = SWHListerHttpTransport.transport_request(identifier)
-	retry, delay = SWHListerHttpTransport.transport_quota_check(resp)
+	resp = ListerHttpTransport.transport_request(identifier)
+	retry, delay = ListerHttpTransport.transport_quota_check(resp)
 	if retry:
 	    sleep(delay)
     until((not retry) or too_many_retries)
     return resp
 
-⇓ (SWHListerHttpTransport.transport_request)::
+⇓ (ListerHttpTransport.transport_request)::
 
-    # SWHListerHttpTransport.transport_request
+    # ListerHttpTransport.transport_request
 
-    path = SWHListerBase.api_baseurl
-	 + SWHListerHttpTransport.PATH_TEMPLATE % identifier
-    headers = SWHListerHttpTransport.request_headers()
+    path = ListerBase.api_baseurl
+	 + ListerHttpTransport.PATH_TEMPLATE % identifier
+    headers = ListerHttpTransport.request_headers()
     return http.get(path, headers)
 
 (Oh look, there's our ``PATH_TEMPLATE``)
 
-⇓ (SWHListerHttpTransport.request_headers)::
+⇓ (ListerHttpTransport.request_headers)::
 
-    # SWHListerHttpTransport.request_headers
+    # ListerHttpTransport.request_headers
 
     override → GitHubLister.request_headers
 
-↑↑ (SWHListerBase.safely_issue_request)
+↑↑ (ListerBase.safely_issue_request)
 
-⇓ (SWHListerHttpTransport.transport_quota_check)::
+⇓ (ListerHttpTransport.transport_quota_check)::
 
-    # SWHListerHttpTransport.transport_quota_check
+    # ListerHttpTransport.transport_quota_check
 
     override → GitHubLister.transport_quota_check
 

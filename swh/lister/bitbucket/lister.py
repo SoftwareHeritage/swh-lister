@@ -7,13 +7,13 @@ import logging
 import iso8601
 
 from swh.lister.bitbucket.models import BitBucketModel
-from swh.lister.core.indexing_lister import SWHIndexingHttpLister
+from swh.lister.core.indexing_lister import IndexingHttpLister
 
 
 logger = logging.getLogger(__name__)
 
 
-class BitBucketLister(SWHIndexingHttpLister):
+class BitBucketLister(IndexingHttpLister):
     PATH_TEMPLATE = '/repositories?after=%s'
     MODEL = BitBucketModel
     LISTER_NAME = 'bitbucket'
@@ -34,8 +34,6 @@ class BitBucketLister(SWHIndexingHttpLister):
         body = response.json()
         if 'next' in body:
             return parse.unquote(body['next'].split('after=')[1])
-        else:
-            return None
 
     def transport_response_simplified(self, response):
         repos = response.json()['values']

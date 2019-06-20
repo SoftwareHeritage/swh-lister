@@ -9,13 +9,13 @@ from itertools import count
 import dateutil
 from sqlalchemy import func
 
-from .lister_transports import SWHListerHttpTransport
-from .lister_base import SWHListerBase
+from .lister_transports import ListerHttpTransport
+from .lister_base import ListerBase
 
 logger = logging.getLogger(__name__)
 
 
-class SWHIndexingLister(SWHListerBase):
+class IndexingLister(ListerBase):
     """Lister* intermediate class for any service that follows the pattern:
 
     - The service must report at least one stable unique identifier, known
@@ -32,7 +32,7 @@ class SWHIndexingLister(SWHListerBase):
       necessary/available, some indication of the URL or index for fetching the
       next series of repository data.
 
-    See :class:`swh.lister.core.lister_base.SWHListerBase` for more details.
+    See :class:`swh.lister.core.lister_base.ListerBase` for more details.
 
     This class cannot be instantiated. To create a new Lister for a source
     code listing service that follows the model described above, you must
@@ -64,7 +64,7 @@ class SWHIndexingLister(SWHListerBase):
     # You probably don't need to override anything below this line.
 
     def filter_before_inject(self, models_list):
-        """Overrides SWHListerBase.filter_before_inject
+        """Overrides ListerBase.filter_before_inject
 
         Bounds query results by this Lister's set max_index.
         """
@@ -234,9 +234,9 @@ class SWHIndexingLister(SWHListerBase):
         self.db_session = self.mk_session()
 
 
-class SWHIndexingHttpLister(SWHListerHttpTransport, SWHIndexingLister):
+class IndexingHttpLister(ListerHttpTransport, IndexingLister):
     """Convenience class for ensuring right lookup and init order
-        when combining SWHIndexingLister and SWHListerHttpTransport."""
+        when combining IndexingLister and ListerHttpTransport."""
     def __init__(self, api_baseurl=None, override_config=None):
-        SWHListerHttpTransport.__init__(self, api_baseurl=api_baseurl)
-        SWHIndexingLister.__init__(self, override_config=override_config)
+        ListerHttpTransport.__init__(self, api_baseurl=api_baseurl)
+        IndexingLister.__init__(self, override_config=override_config)

@@ -5,11 +5,11 @@
 import re
 import time
 
-from swh.lister.core.indexing_lister import SWHIndexingHttpLister
+from swh.lister.core.indexing_lister import IndexingHttpLister
 from swh.lister.github.models import GitHubModel
 
 
-class GitHubLister(SWHIndexingHttpLister):
+class GitHubLister(IndexingHttpLister):
     PATH_TEMPLATE = '/repositories?since=%d'
     MODEL = GitHubModel
     API_URL_INDEX_RE = re.compile(r'^.*/repositories\?since=(\d+)')

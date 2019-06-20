@@ -6,14 +6,14 @@ import logging
 
 import urllib.parse
 
-from swh.lister.core.indexing_lister import SWHIndexingHttpLister
+from swh.lister.core.indexing_lister import IndexingHttpLister
 from swh.lister.phabricator.models import PhabricatorModel
 from collections import defaultdict
 
 logger = logging.getLogger(__name__)
 
 
-class PhabricatorLister(SWHIndexingHttpLister):
+class PhabricatorLister(IndexingHttpLister):
     PATH_TEMPLATE = '?order=oldest&attachments[uris]=1&after=%s'
     MODEL = PhabricatorModel
     LISTER_NAME = 'phabricator'
@@ -104,7 +104,7 @@ class PhabricatorLister(SWHIndexingHttpLister):
 
     def filter_before_inject(self, models_list):
         """
-        (Overrides) SWHIndexingLister.filter_before_inject
+        (Overrides) IndexingLister.filter_before_inject
         Bounds query results by this Lister's set max_index.
         """
         models_list = [m for m in models_list if m is not None]

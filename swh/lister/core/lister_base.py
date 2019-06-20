@@ -36,7 +36,7 @@ class FetchError(RuntimeError):
         return repr(self.response)
 
 
-class SWHListerBase(abc.ABC, config.SWHConfig):
+class ListerBase(abc.ABC, config.SWHConfig):
     """Lister core base class.
         Generally a source code hosting service provides an API endpoint
         for listing the set of stored repositories. A Lister is the discovery
@@ -46,11 +46,11 @@ class SWHListerBase(abc.ABC, config.SWHConfig):
 
         The core method in this class is ingest_data. Any subclasses should be
         calling this method one or more times to fetch and ingest data from API
-        endpoints. See swh.lister.core.lister_base.SWHIndexingLister for
+        endpoints. See swh.lister.core.lister_base.IndexingLister for
         example usage.
 
         This class cannot be instantiated. Any instantiable Lister descending
-        from SWHListerBase must provide at least the required overrides.
+        from ListerBase must provide at least the required overrides.
         (see member docstrings for details):
 
         Required Overrides:
@@ -172,7 +172,7 @@ class SWHListerBase(abc.ABC, config.SWHConfig):
         MAY BE OVERRIDDEN, for example if the server indexable* key is
         technically sortable but not automatically so.
 
-        * - ( see: swh.lister.core.indexing_lister.SWHIndexingLister )
+        * - ( see: swh.lister.core.indexing_lister.IndexingLister )
 
         Args:
             inner (sortable type): the value being checked

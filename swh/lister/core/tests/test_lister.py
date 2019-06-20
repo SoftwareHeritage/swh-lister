@@ -22,7 +22,7 @@ def noop(*args, **kwargs):
 class HttpListerTesterBase(abc.ABC):
     """Base testing class for subclasses of
 
-           swh.lister.core.indexing_lister.SWHIndexingHttpLister.
+           swh.lister.core.indexing_lister.IndexingHttpLister.
            swh.lister.core.page_by_page_lister.PageByPageHttpLister
 
     See swh.lister.github.tests.test_gh_lister for an example of how
