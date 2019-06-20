@@ -83,7 +83,6 @@ class PhabricatorLister(SWHIndexingHttpLister):
             'full_name': repo['fields']['name'],
             'html_url': url,
             'origin_url': url,
-            'description': None,
             'origin_type': repo['fields']['vcs'],
             'instance': self.instance,
         }

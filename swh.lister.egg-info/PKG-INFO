@@ -1,14 +1,14 @@
 Metadata-Version: 2.1
 Name: swh.lister
-Version: 0.0.27
+Version: 0.0.28
 Summary: Software Heritage lister
 Home-page: https://forge.softwareheritage.org/diffusion/DLSGH/
 Author: Software Heritage developers
 Author-email: swh-devel@inria.fr
 License: UNKNOWN
-Project-URL: Source, https://forge.softwareheritage.org/source/swh-lister
 Project-URL: Funding, https://www.softwareheritage.org/donate
 Project-URL: Bug Reports, https://forge.softwareheritage.org/maniphest
+Project-URL: Source, https://forge.softwareheritage.org/source/swh-lister
 Description: swh-lister
         ==========
         
@@ -200,10 +200,11 @@ Description: swh-lister
         
         logging.basicConfig(level=logging.DEBUG)
         gnu_lister()
+        ```
         
         ## lister-cran
         
-        Once configured, you can execute a RCRAN lister using the following instructions in a `python3` script:
+        Once configured, you can execute a CRAN lister using the following instructions in a `python3` script:
         
         ```lang=python
         import logging
@@ -227,6 +228,7 @@ Description: swh-lister
         
         See top-level LICENSE file for the full text of the GNU General Public License
         along with this program.
+        
 Platform: UNKNOWN
 Classifier: Programming Language :: Python :: 3
 Classifier: Intended Audience :: Developers
