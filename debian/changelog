@@ -1,3 +1,9 @@
+swh-lister (0.0.28-1~swh1~bpo9+1) stretch-swh; urgency=medium
+
+  * Rebuild for stretch-swh
+
+ -- Software Heritage autobuilder (on jenkins-debian1) <jenkins@jenkins-debian1.internal.softwareheritage.org>  Thu, 20 Jun 2019 10:10:23 +0000
+
 swh-lister (0.0.28-1~swh1) unstable-swh; urgency=medium
 
   * New upstream release 0.0.28     - (tagged by Antoine R. Dumont
