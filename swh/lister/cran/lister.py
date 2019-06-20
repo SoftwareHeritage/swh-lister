@@ -76,7 +76,6 @@ class CRANLister(SimpleLister):
             'html_url': project_url,
             'origin_url': project_url,
             'origin_type': 'cran',
-            'description': repo["Description"]
         }
 
     def transport_response_simplified(self, response):

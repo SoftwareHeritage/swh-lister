@@ -12,12 +12,6 @@ def new_lister(forge_url='https://forge.softwareheritage.org', instance='swh',
         forge_url=forge_url, instance=instance, api_token=api_token, **kw)
 
 
-@app.task(name=__name__ + '.IncrementalPhabricatorLister')
-def incremental_phabricator_lister(**lister_args):
-    lister = new_lister(**lister_args)
-    lister.run(min_bound=lister.db_last_index())
-
-
 @app.task(name=__name__ + '.FullPhabricatorLister')
 def full_phabricator_lister(**lister_args):
     lister = new_lister(**lister_args)
