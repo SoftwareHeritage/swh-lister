@@ -28,7 +28,6 @@ class BitBucketLister(SWHIndexingHttpLister):
             'html_url': repo['links']['html']['href'],
             'origin_url': repo['links']['clone'][0]['href'],
             'origin_type': repo['scm'],
-            'description': repo['description']
         }
 
     def get_next_target_from_response(self, response):

@@ -1,4 +1,6 @@
-from unittest.mock import patch
+# Copyright (C) 2019 the Software Heritage developers
+# License: GNU General Public License version 3, or any later version
+# See top-level LICENSE file for more information
 
 
 def test_ping(swh_app, celery_session_worker):
@@ -8,23 +10,3 @@ def test_ping(swh_app, celery_session_worker):
     res.wait()
     assert res.successful()
     assert res.result == 'OK'
-
-
-@patch('swh.lister.phabricator.tasks.PhabricatorLister')
-def test_incremental(lister, swh_app, celery_session_worker):
-    # setup the mocked PhabricatorLister
-    lister.return_value = lister
-    lister.db_last_index.return_value = 42
-    lister.run.return_value = None
-
-    res = swh_app.send_task(
-        'swh.lister.phabricator.tasks.IncrementalPhabricatorLister')
-    assert res
-    res.wait()
-    assert res.successful()
-
-    lister.assert_called_once_with(
-        api_token=None, forge_url='https://forge.softwareheritage.org',
-        instance='swh')
-    lister.db_last_index.assert_called_once_with()
-    lister.run.assert_called_once_with(min_bound=42)

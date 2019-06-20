@@ -45,7 +45,6 @@ class NpmListerBase(SWHIndexingHttpLister):
             'html_url': package_metadata_url,
             'origin_url': package_url,
             'origin_type': 'npm',
-            'description': None
         }
 
     def task_dict(self, origin_type, origin_url, **kwargs):

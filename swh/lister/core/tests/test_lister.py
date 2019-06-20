@@ -161,7 +161,7 @@ class HttpListerTesterBase(abc.ABC):
         self.assertIsInstance(di, dict)
         pubs = [k for k in vars(fl.MODEL).keys() if not k.startswith('_')]
         for k in pubs:
-            if k not in ['last_seen', 'task_id', 'origin_id', 'id']:
+            if k not in ['last_seen', 'task_id', 'id']:
                 self.assertIn(k, di)
 
     def disable_scheduler(self, fl):

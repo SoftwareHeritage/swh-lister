@@ -29,12 +29,10 @@ class ModelBase(SQLBase, metaclass=ABCSQLMeta):
     html_url = Column(String)
     origin_url = Column(String)
     origin_type = Column(String)
-    description = Column(String)
 
     last_seen = Column(DateTime, nullable=False)
 
     task_id = Column(Integer)
-    origin_id = Column(Integer)
 
     def __init__(self, **kw):
         kw['last_seen'] = datetime.now()
