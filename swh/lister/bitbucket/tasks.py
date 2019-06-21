@@ -35,7 +35,7 @@ def full_bitbucket_relister(self, split=None, **lister_args):
     random.shuffle(ranges)
     promise = group(range_bitbucket_lister.s(minv, maxv, **lister_args)
                     for minv, maxv in ranges)()
-    self.log.debug('%s OK (spawned %s subtasks)' % (self.name, len(ranges)))
+    self.log.debug('%s OK (spawned %s subtasks)', (self.name, len(ranges)))
     try:
         promise.save()  # so that we can restore the GroupResult in tests
     except (NotImplementedError, AttributeError):

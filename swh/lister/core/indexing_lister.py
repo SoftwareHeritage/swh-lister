@@ -218,15 +218,16 @@ class IndexingLister(ListerBase):
 
                 # termination condition
                 if next_index is None or next_index == index:
-                    logger.info('stopping after index %s, no next link found' %
+                    logger.info('stopping after index %s, no next link found',
                                 index)
                     return
                 index = next_index
+                logger.debug('Index: %s', index)
                 yield i
 
         for i in ingest_indexes():
             if (i % 20) == 0:
-                logger.info('flushing updates')
+                logger.debug('Flushing updates at index %s', i)
                 self.db_session.commit()
                 self.db_session = self.mk_session()
 
