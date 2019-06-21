@@ -2,9 +2,10 @@
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
 
-import datetime
 import logging
 import iso8601
+
+from datetime import datetime
 
 from urllib import parse
 
@@ -23,6 +24,7 @@ class BitBucketLister(IndexingHttpLister):
     MODEL = BitBucketModel
     LISTER_NAME = 'bitbucket'
     instance = 'bitbucket'
+    default_min_bound = datetime.utcfromtimestamp(0).isoformat()
 
     def __init__(self, api_baseurl, override_config=None, per_page=100):
         super().__init__(
@@ -53,21 +55,6 @@ class BitBucketLister(IndexingHttpLister):
     def transport_response_simplified(self, response):
         repos = response.json()['values']
         return [self.get_model_from_repo(repo) for repo in repos]
-
-    def db_first_index(self):
-        """For the first time listing, there is no data in db, so fallback to the
-        bitbucket starting year.
-
-        """
-        return super().db_first_index() or '2008-01-01T00:00:00Z'
-
-    def db_last_index(self):
-        """For the first time listing, there is no data in db, so fallback to the time
-           of the first run as max date.
-
-        """
-        return super().db_last_index() or datetime.datetime.now(
-            tz=datetime.timezone.utc).isoformat()
 
     def request_uri(self, identifier):
         return super().request_uri(identifier or '1970-01-01')

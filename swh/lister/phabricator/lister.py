@@ -31,6 +31,14 @@ class PhabricatorLister(IndexingHttpLister):
         super().__init__(api_baseurl=api_baseurl,
                          override_config=override_config)
 
+    @property
+    def default_min_bound(self):
+        """Starting boundary when `min_bound` is not defined (db empty). This
+           is used within the fn:`run` call.
+
+        """
+        return self._bootstrap_repositories_listing()
+
     def _build_query_params(self, params, api_token):
         """Build query params to include the forge's api token
 
@@ -133,21 +141,6 @@ class PhabricatorLister(IndexingHttpLister):
         injected = self.inject_repo_data_into_db(models_list)
         self.schedule_missing_tasks(models_list, injected)
         return self.max_index
-
-    def run(self, min_bound=None, max_bound=None):
-        """
-        (Override) Run the lister on the specified Phabricator instance
-
-        Args:
-            min_bound (int): Optional repository index to start the listing
-                after it
-            max_bound (int): Optional repository index to stop the listing
-                after it
-        """
-        # initial call to the lister, we need to bootstrap it in that case
-        if min_bound is None:
-            min_bound = self._bootstrap_repositories_listing()
-        super().run(min_bound, max_bound)
 
 
 def get_repo_url(attachments):

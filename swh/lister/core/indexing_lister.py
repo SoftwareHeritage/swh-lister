@@ -17,6 +17,7 @@ logger = logging.getLogger(__name__)
 
 class IndexingLister(ListerBase):
     flush_packet_db = 20
+    default_min_bound = ''
     """Lister* intermediate class for any service that follows the pattern:
 
     - The service must report at least one stable unique identifier, known
@@ -95,17 +96,18 @@ class IndexingLister(ListerBase):
 
     def db_partition_indices(self, partition_size):
         """Describe an index-space compartmentalization of the db table
-            in equal sized chunks. This is used to describe min&max bounds for
-            parallelizing fetch tasks.
+           in equal sized chunks. This is used to describe min&max bounds for
+           parallelizing fetch tasks.
 
         Args:
             partition_size (int): desired size to make each partition
+
         Returns:
             a list of tuples (begin, end) of indexable value that
-                declare approximately equal-sized ranges of existing
-                repos
-        """
+            declare approximately equal-sized ranges of existing
+            repos
 
+        """
         n = max(self.db_num_entries(), 10)
         partition_size = min(partition_size, n)
         n_partitions = n // partition_size
@@ -114,7 +116,8 @@ class IndexingLister(ListerBase):
         max_index = self.db_last_index()
 
         if not min_index or not max_index:
-            raise ValueError("Can't partition an empty range")
+            # Nothing to list
+            return []
 
         if isinstance(min_index, str):
             def format_bound(bound):
@@ -201,7 +204,7 @@ class IndexingLister(ListerBase):
         self.max_index = max_bound
 
         def ingest_indexes():
-            index = min_bound or ''
+            index = min_bound or self.default_min_bound
             for i in count(1):
                 response, injected_repos = self.ingest_data(index)
                 if not response and not injected_repos:

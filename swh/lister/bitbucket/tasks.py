@@ -30,8 +30,17 @@ def range_bitbucket_lister(start, end, **lister_args):
 
 @app.task(name=__name__ + '.FullBitBucketRelister', bind=True)
 def full_bitbucket_relister(self, split=None, **lister_args):
+    """Relist from the beginning of what's already been listed.
+
+    It's not to be called for an initial listing.
+
+    """
     lister = new_lister(**lister_args)
     ranges = lister.db_partition_indices(split or GROUP_SPLIT)
+    if not ranges:
+        self.log.info('Nothing to list')
+        return
+
     random.shuffle(ranges)
     promise = group(range_bitbucket_lister.s(minv, maxv, **lister_args)
                     for minv, maxv in ranges)()
