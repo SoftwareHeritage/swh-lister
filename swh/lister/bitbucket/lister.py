@@ -30,6 +30,9 @@ class BitBucketLister(IndexingHttpLister):
         if per_page != DEFAULT_BITBUCKET_PAGE:
             self.PATH_TEMPLATE = '%s&pagelen=%s' % (
                 self.PATH_TEMPLATE, per_page)
+        # to stay consistent with prior behavior (20 * 10 repositories then)
+        self.flush_packet_db = int(
+            (self.flush_packet_db * DEFAULT_BITBUCKET_PAGE) / per_page)
 
     def get_model_from_repo(self, repo):
         return {

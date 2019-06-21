@@ -1,4 +1,4 @@
-# Copyright (C) 2015-2017 the Software Heritage developers
+# Copyright (C) 2015-2019 the Software Heritage developers
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
 
@@ -16,6 +16,7 @@ logger = logging.getLogger(__name__)
 
 
 class IndexingLister(ListerBase):
+    flush_packet_db = 20
     """Lister* intermediate class for any service that follows the pattern:
 
     - The service must report at least one stable unique identifier, known
@@ -222,7 +223,7 @@ class IndexingLister(ListerBase):
                 yield i
 
         for i in ingest_indexes():
-            if (i % 20) == 0:
+            if (i % self.flush_packet_db) == 0:
                 logger.debug('Flushing updates at index %s', i)
                 self.db_session.commit()
                 self.db_session = self.mk_session()
