@@ -1,4 +1,4 @@
-# Copyright (C) 2017-2018 the Software Heritage developers
+# Copyright (C) 2017-2019 the Software Heritage developers
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
 
@@ -12,8 +12,8 @@ from .lister import BitBucketLister
 GROUP_SPLIT = 10000
 
 
-def new_lister(api_baseurl='https://api.bitbucket.org/2.0'):
-    return BitBucketLister(api_baseurl=api_baseurl)
+def new_lister(api_baseurl='https://api.bitbucket.org/2.0', per_page=100):
+    return BitBucketLister(api_baseurl=api_baseurl, per_page=per_page)
 
 
 @app.task(name=__name__ + '.IncrementalBitBucketLister')

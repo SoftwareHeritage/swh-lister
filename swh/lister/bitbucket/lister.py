@@ -15,11 +15,21 @@ from swh.lister.core.indexing_lister import IndexingHttpLister
 logger = logging.getLogger(__name__)
 
 
+DEFAULT_BITBUCKET_PAGE = 10
+
+
 class BitBucketLister(IndexingHttpLister):
     PATH_TEMPLATE = '/repositories?after=%s'
     MODEL = BitBucketModel
     LISTER_NAME = 'bitbucket'
     instance = 'bitbucket'
+
+    def __init__(self, api_baseurl, override_config=None, per_page=100):
+        super().__init__(
+            api_baseurl=api_baseurl, override_config=override_config)
+        if per_page != DEFAULT_BITBUCKET_PAGE:
+            self.PATH_TEMPLATE = '%s&pagelen=%s' % (
+                self.PATH_TEMPLATE, per_page)
 
     def get_model_from_repo(self, repo):
         return {
@@ -76,11 +86,10 @@ class BitBucketLister(IndexingHttpLister):
             else:
                 ret = lower <= inner <= upper
         except Exception as e:
-            logger.error(str(e) + ': %s, %s, %s' %
-                         (('inner=%s%s' % (type(inner), inner)),
-                          ('lower=%s%s' % (type(lower), lower)),
-                          ('upper=%s%s' % (type(upper), upper)))
-                         )
+            logger.error(str(e) + ': %s, %s, %s',
+                         ('inner=%s%s' % (type(inner), inner)),
+                         ('lower=%s%s' % (type(lower), lower)),
+                         ('upper=%s%s' % (type(upper), upper)))
             raise
 
         return ret
