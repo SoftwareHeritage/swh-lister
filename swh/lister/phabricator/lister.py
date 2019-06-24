@@ -91,8 +91,7 @@ class PhabricatorLister(IndexingHttpLister):
         body = response.json()['result']['cursor']
         if body['after'] != 'null':
             return body['after']
-        else:
-            return None
+        return None
 
     def transport_response_simplified(self, response):
         repos = response.json()

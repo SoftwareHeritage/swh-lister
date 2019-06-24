@@ -34,15 +34,12 @@ class GitHubLister(IndexingHttpLister):
             reset_at = int(response.headers['X-RateLimit-Reset'])
             delay = min(reset_at - time.time(), 3600)
             return True, delay
-        else:
-            return False, 0
+        return False, 0
 
     def get_next_target_from_response(self, response):
         if 'next' in response.links:
             next_url = response.links['next']['url']
             return int(self.API_URL_INDEX_RE.match(next_url).group(1))
-        else:
-            return None
 
     def transport_response_simplified(self, response):
         repos = response.json()

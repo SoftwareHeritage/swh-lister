@@ -67,8 +67,6 @@ class HttpListerTesterBase(abc.ABC):
         m = self.test_re.search(request.path_url)
         if m and (len(m.groups()) > 0):
             return m.group(1)
-        else:
-            return None
 
     def mock_response(self, request, context):
         self.fl.reset_backoff()
@@ -76,16 +74,17 @@ class HttpListerTesterBase(abc.ABC):
         context.status_code = 200
         custom_headers = self.response_headers(request)
         context.headers.update(custom_headers)
-        if self.request_index(request) == str(self.first_index):
-            with open('swh/lister/%s/tests/%s' % (self.lister_subdir,
-                                                  self.good_api_response_file),
-                      'r', encoding='utf-8') as r:
-                return r.read()
+        req_index = self.request_index(request)
+
+        if req_index == str(self.first_index):
+            response_file = self.good_api_response_file
         else:
-            with open('swh/lister/%s/tests/%s' % (self.lister_subdir,
-                                                  self.bad_api_response_file),
-                      'r', encoding='utf-8') as r:
-                return r.read()
+            response_file = self.bad_api_response_file
+
+        with open('swh/lister/%s/tests/%s' % (self.lister_subdir,
+                                              response_file),
+                  'r', encoding='utf-8') as r:
+            return r.read()
 
     def mock_limit_n_response(self, n, request, context):
         self.fl.reset_backoff()

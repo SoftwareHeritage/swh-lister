@@ -148,8 +148,6 @@ class IndexingLister(ListerBase):
         t = self.db_session.query(func.min(self.MODEL.indexable)).first()
         if t:
             return t[0]
-        else:
-            return None
 
     def db_last_index(self):
         """Look in the db for the largest indexable value
@@ -160,8 +158,6 @@ class IndexingLister(ListerBase):
         t = self.db_session.query(func.max(self.MODEL.indexable)).first()
         if t:
             return t[0]
-        else:
-            return None
 
     def disable_deleted_repo_tasks(self, start, end, keep_these):
         """Disable tasks for repos that no longer exist between start and end.
