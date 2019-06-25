@@ -38,6 +38,12 @@ class HttpListerTesterBase(abc.ABC):
     first_index = AbstractAttribute('First index in good_api_response')
     entries_per_page = AbstractAttribute('Number of results in good response')
     LISTER_NAME = 'fake-lister'
+    convert_type = str
+    """static method used to convert the "request_index" to its right type (for
+       indexing listers for example, this is in accordance with the model's
+       "indexable" column).
+
+    """
 
     # May need to override this if the headers are used for something
     def response_headers(self, request):
@@ -66,7 +72,7 @@ class HttpListerTesterBase(abc.ABC):
     def request_index(self, request):
         m = self.test_re.search(request.path_url)
         if m and (len(m.groups()) > 0):
-            return m.group(1)
+            return self.convert_type(m.group(1))
 
     def mock_response(self, request, context):
         self.fl.reset_backoff()
@@ -76,7 +82,7 @@ class HttpListerTesterBase(abc.ABC):
         context.headers.update(custom_headers)
         req_index = self.request_index(request)
 
-        if req_index == str(self.first_index):
+        if req_index == self.first_index:
             response_file = self.good_api_response_file
         else:
             response_file = self.bad_api_response_file

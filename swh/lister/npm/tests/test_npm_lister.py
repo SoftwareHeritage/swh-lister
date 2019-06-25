@@ -1,4 +1,4 @@
-# Copyright (C) 2018 the Software Heritage developers
+# Copyright (C) 2018-2019 the Software Heritage developers
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
 
@@ -33,7 +33,7 @@ class NpmIncrementalListerTester(HttpListerTesterBase, unittest.TestCase):
     lister_subdir = 'npm'
     good_api_response_file = 'api_inc_response.json'
     bad_api_response_file = 'api_inc_empty_response.json'
-    first_index = 6920642
+    first_index = '6920642'
     entries_per_page = 100
 
     @requests_mock.Mocker()

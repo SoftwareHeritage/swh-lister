@@ -2,7 +2,7 @@
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
 
-from sqlalchemy import Column, String
+from sqlalchemy import Column, String, DateTime
 
 from swh.lister.core.models import IndexingModelBase
 
@@ -12,4 +12,4 @@ class BitBucketModel(IndexingModelBase):
     __tablename__ = 'bitbucket_repo'
 
     uid = Column(String, primary_key=True)
-    indexable = Column(String, index=True)
+    indexable = Column(DateTime(timezone=True), index=True)
