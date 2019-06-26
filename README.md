@@ -18,6 +18,7 @@ following Python modules:
 - `swh.lister.npm`
 - `swh.lister.phabricator`
 - `swh.lister.cran`
+- `swh.lister.cgit`
 
 Dependencies
 ------------

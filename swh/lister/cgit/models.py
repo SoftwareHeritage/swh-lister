@@ -15,3 +15,4 @@ class CGitModel(ModelBase):
 
     uid = Column(String, primary_key=True)
     time_updated = Column(String)
+    instance = Column(String, index=True)

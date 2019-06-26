@@ -6,7 +6,7 @@ import random
 from bs4 import BeautifulSoup
 from collections import defaultdict
 import requests
-import urllib.parse
+from urllib.parse import urlparse
 
 from .models import CGitModel
 
@@ -17,22 +17,16 @@ from swh.lister.core.lister_transports import ListerOnePageApiTransport
 class CGitLister(ListerOnePageApiTransport, SimpleLister):
     MODEL = CGitModel
     LISTER_NAME = 'cgit'
-    PAGE = ''
+    PAGE = None
 
     def __init__(self, base_url, instance=None, override_config=None):
-        if not base_url.endswith('/'):
-            base_url = base_url+'/'
-        self.PAGE = base_url
 
-        # This part removes any suffix from the base url and stores it in
-        # next_url. For example for base_url = https://git.kernel.org/pub/scm/
-        # it will convert it into https://git.kernel.org and then attach
-        # the suffix
-        (part1, part2, next_url) = self.PAGE.split('/', 2)
-        self.next_url = part1 + '//' + next_url
+        self.PAGE = base_url
+        url = urlparse(self.PAGE)
+        self.url_netloc = find_netloc(url)
 
         if not instance:
-            instance = urllib.parse.urlparse(base_url).hostname
+            instance = url.hostname
         self.instance = instance
         ListerOnePageApiTransport .__init__(self)
         SimpleLister.__init__(self, override_config=override_config)
@@ -40,11 +34,18 @@ class CGitLister(ListerOnePageApiTransport, SimpleLister):
     def list_packages(self, response):
         """List the actual cgit instance origins from the response.
 
+        Find the repos in all the pages by parsing over the HTML of
+        the `base_url`. Find the details for all the repos and return
+        them in the format of list of dictionaries.
+
         """
         repos_details = []
-        soup = BeautifulSoup(response.text, features="html.parser") \
-            .find('div', {"class": "content"})
-        repos = soup.find_all("tr", {"class": ""})
+        repos = get_repo_list(response)
+        soup = make_repo_soup(response)
+        pages = self.get_page(soup)
+        if len(pages) > 1:
+            repos.extend(self.get_all_pages(pages))
+
         for repo in repos:
             repo_name = repo.a.text
             repo_url = self.get_url(repo)
@@ -60,10 +61,54 @@ class CGitLister(ListerOnePageApiTransport, SimpleLister):
                                         'name': repo_name,
                                         'time': time,
                                         'origin_url': origin_url,
-                                    })
+                                     })
 
         random.shuffle(repos_details)
         return repos_details
+
+    def get_page(self, soup):
+        """Find URL of all pages
+
+        Finds URL of all the pages that are present by parsing over the HTML of
+        pagination present at the end of the page.
+
+        Args:
+            soup (Beautifulsoup): a beautifulsoup object of base URL
+
+        Returns:
+            list: URL of all the pages present for a cgit instance
+
+        """
+        pages = soup.find('div', {"class": "content"}).find_all('li')
+
+        if not pages:
+            return [self.PAGE]
+
+        return [self.get_url(page) for page in pages]
+
+    def get_all_pages(self, pages):
+        """Find repos from all the pages
+
+        Make the request for all the pages (except the first) present for a
+        particular cgit instance and finds the repos that are available
+        for each and every page.
+
+        Args:
+            pages ([str]): list of urls of all the pages present for a
+                           particular cgit instance
+
+        Returns:
+            List of beautifulsoup object of all the repositories (url) row
+            present in all the pages(except first).
+
+        """
+        all_repos = []
+        for page in pages[1:]:
+            response = requests.get(page)
+            repos = get_repo_list(response)
+            all_repos.extend(repos)
+
+        return all_repos
 
     def get_url(self, repo):
         """Finds url of a repo page.
@@ -72,14 +117,15 @@ class CGitLister(ListerOnePageApiTransport, SimpleLister):
         that repo present in the base url.
 
         Args:
-            repo: a beautifulsoup object of the html code of the repo row
-                   present in base url.
+            repo (Beautifulsoup): a beautifulsoup object of the repository
+                                  row present in base url.
 
         Returns:
             string: The url of a repo.
+
         """
         suffix = repo.a['href']
-        return self.next_url + suffix
+        return self.url_netloc + suffix
 
     def get_model_from_repo(self, repo):
         """Transform from repository representation to model.
@@ -93,13 +139,60 @@ class CGitLister(ListerOnePageApiTransport, SimpleLister):
             'origin_url': repo['origin_url'],
             'origin_type': 'git',
             'time_updated': repo['time'],
+            'instance': self.instance,
         }
 
-    def transport_response_simplified(self, response):
+    def transport_response_simplified(self, repos_details):
         """Transform response to list for model manipulation.
 
         """
-        return [self.get_model_from_repo(repo) for repo in response]
+        return [self.get_model_from_repo(repo) for repo in repos_details]
+
+
+def find_netloc(url):
+    """Finds the network location from then base_url
+
+    All the url in the repo are relative to the network location part of base
+    url, so we need to compute it to reconstruct all the urls.
+
+    Args:
+        url (urllib): urllib object of base_url
+
+    Returns:
+        string: Scheme and Network location part in the base URL.
+
+    Example:
+    For base_url = https://git.kernel.org/pub/scm/
+        >>> find_netloc(url)
+        'https://git.kernel.org'
+
+    """
+    return '%s://%s' % (url.scheme, url.netloc)
+
+
+def get_repo_list(response):
+    """Find all the rows with repo for a particualar page on the base url
+
+    Finds all the repos on page and retuens a list of all the repos. Each
+    element of the list is a beautifulsoup object representing a repo.
+
+    Args:
+        response (Response): server response
+
+    Returns:
+        List of all the repos on a page.
+
+    """
+    repo_soup = make_repo_soup(response)
+    return repo_soup \
+        .find('div', {"class": "content"}).find_all("tr", {"class": ""})
+
+
+def make_repo_soup(response):
+    """Makes BeautifulSoup object of the response
+
+    """
+    return BeautifulSoup(response.text, features="html.parser")
 
 
 def find_origin_url(repo_url):
@@ -123,22 +216,24 @@ def find_origin_url(repo_url):
     """
 
     response = requests.get(repo_url)
-    soup = BeautifulSoup(response.text, features="html.parser")
+    repo_soup = make_repo_soup(response)
 
-    origin_urls = find_all_origin_url(soup)
+    origin_urls = find_all_origin_url(repo_soup)
     return priority_origin_url(origin_urls)
 
 
 def find_all_origin_url(soup):
-    """
+    """Finds all possible origin url for a repo.
+
     Finds all the origin url for a particular repo by parsing over the html of
     repo page.
 
     Args:
-        soup: a beautifulsoup object of the html code of the repo.
+        soup: a beautifulsoup object repo representation.
 
     Returns:
-        dictionary: All possible origin urls with their protocol as key.
+        dictionary: All possible origin urls for a repository (dict with
+                    key 'protocol', value the associated url).
 
     Examples:
         If soup is beautifulsoup object of the html code at
@@ -169,10 +264,11 @@ def priority_origin_url(origin_url):
     Priority order is https>http>git>ssh.
 
     Args:
-        origin_urls: A dictionary of origin links with their protocol as key.
+        origin_urls (Dict): All possible origin urls for a repository
+                            (key 'protocol', value the associated url)
 
     Returns:
-        string: URL with the highest priority.
+        Url (str) with the highest priority.
 
     """
     for protocol in ['https', 'http', 'git', 'ssh']:

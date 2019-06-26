@@ -4,8 +4,10 @@
 
 
 from bs4 import BeautifulSoup
+from urllib.parse import urlparse
 
 from swh.lister.cgit.lister import priority_origin_url, find_all_origin_url
+from swh.lister.cgit.lister import find_netloc
 
 
 def test_find_all_origin_url():
@@ -38,3 +40,11 @@ def test_priority_origin_url():
     assert (priority_origin_url(second_input) ==
             'git://git.savannah.gnu.org/perl-pesel.git')
     assert priority_origin_url(third_input) is None
+
+
+def test_find_netloc():
+    first_url = urlparse('http://git.savannah.gnu.org/cgit/')
+    second_url = urlparse('https://cgit.kde.org/')
+
+    assert find_netloc(first_url) == 'http://git.savannah.gnu.org'
+    assert find_netloc(second_url) == 'https://cgit.kde.org'
