@@ -1,4 +1,4 @@
-# Copyright (C) 2017-2018 the Software Heritage developers
+# Copyright (C) 2017-2019 the Software Heritage developers
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
 
@@ -19,10 +19,11 @@ class GitHubListerTester(HttpListerTester, unittest.TestCase):
     first_index = 26
     last_index = 368
     entries_per_page = 100
+    convert_type = int
 
     def response_headers(self, request):
         headers = {'X-RateLimit-Remaining': '1'}
-        if self.request_index(request) == str(self.first_index):
+        if self.request_index(request) == self.first_index:
             headers.update({
                 'Link': '<https://api.github.com/repositories?since=367>;'
                         ' rel="next",'

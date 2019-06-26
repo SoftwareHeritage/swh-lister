@@ -21,6 +21,7 @@ class PhabricatorListerTester(HttpListerTester, unittest.TestCase):
     first_index = 1
     last_index = 12
     entries_per_page = 10
+    convert_type = int
 
     def get_fl(self, override_config=None):
         """(Override) Retrieve an instance of fake lister (fl).

@@ -4,12 +4,12 @@
 
 from urllib.parse import quote
 
-from swh.lister.core.indexing_lister import SWHIndexingHttpLister
+from swh.lister.core.indexing_lister import IndexingHttpLister
 from swh.lister.npm.models import NpmModel
 from swh.scheduler.utils import create_task_dict
 
 
-class NpmListerBase(SWHIndexingHttpLister):
+class NpmListerBase(IndexingHttpLister):
     """List packages available in the npm registry in a paginated way
     """
     MODEL = NpmModel

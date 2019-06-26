@@ -1,4 +1,4 @@
-# Copyright (C) 2015-2017 the Software Heritage developers
+# Copyright (C) 2015-2019 the Software Heritage developers
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
 
@@ -9,13 +9,13 @@ from itertools import count
 import dateutil
 from sqlalchemy import func
 
-from .lister_transports import SWHListerHttpTransport
-from .lister_base import SWHListerBase
+from .lister_transports import ListerHttpTransport
+from .lister_base import ListerBase
 
 logger = logging.getLogger(__name__)
 
 
-class SWHIndexingLister(SWHListerBase):
+class IndexingLister(ListerBase):
     """Lister* intermediate class for any service that follows the pattern:
 
     - The service must report at least one stable unique identifier, known
@@ -32,7 +32,7 @@ class SWHIndexingLister(SWHListerBase):
       necessary/available, some indication of the URL or index for fetching the
       next series of repository data.
 
-    See :class:`swh.lister.core.lister_base.SWHListerBase` for more details.
+    See :class:`swh.lister.core.lister_base.ListerBase` for more details.
 
     This class cannot be instantiated. To create a new Lister for a source
     code listing service that follows the model described above, you must
@@ -44,6 +44,14 @@ class SWHIndexingLister(SWHListerBase):
 
         def get_next_target_from_response
 
+    """
+    flush_packet_db = 20
+    """Number of iterations in-between write flushes of lister repositories to
+       db (see fn:`run`).
+    """
+    default_min_bound = ''
+    """Default initialization value for the minimum boundary index to use when
+       undefined (see fn:`run`).
     """
 
     @abc.abstractmethod
@@ -64,7 +72,7 @@ class SWHIndexingLister(SWHListerBase):
     # You probably don't need to override anything below this line.
 
     def filter_before_inject(self, models_list):
-        """Overrides SWHListerBase.filter_before_inject
+        """Overrides ListerBase.filter_before_inject
 
         Bounds query results by this Lister's set max_index.
         """
@@ -94,17 +102,18 @@ class SWHIndexingLister(SWHListerBase):
 
     def db_partition_indices(self, partition_size):
         """Describe an index-space compartmentalization of the db table
-            in equal sized chunks. This is used to describe min&max bounds for
-            parallelizing fetch tasks.
+           in equal sized chunks. This is used to describe min&max bounds for
+           parallelizing fetch tasks.
 
         Args:
             partition_size (int): desired size to make each partition
+
         Returns:
             a list of tuples (begin, end) of indexable value that
-                declare approximately equal-sized ranges of existing
-                repos
-        """
+            declare approximately equal-sized ranges of existing
+            repos
 
+        """
         n = max(self.db_num_entries(), 10)
         partition_size = min(partition_size, n)
         n_partitions = n // partition_size
@@ -113,7 +122,8 @@ class SWHIndexingLister(SWHListerBase):
         max_index = self.db_last_index()
 
         if not min_index or not max_index:
-            raise ValueError("Can't partition an empty range")
+            # Nothing to list
+            return []
 
         if isinstance(min_index, str):
             def format_bound(bound):
@@ -148,8 +158,6 @@ class SWHIndexingLister(SWHListerBase):
         t = self.db_session.query(func.min(self.MODEL.indexable)).first()
         if t:
             return t[0]
-        else:
-            return None
 
     def db_last_index(self):
         """Look in the db for the largest indexable value
@@ -160,8 +168,6 @@ class SWHIndexingLister(SWHListerBase):
         t = self.db_session.query(func.max(self.MODEL.indexable)).first()
         if t:
             return t[0]
-        else:
-            return None
 
     def disable_deleted_repo_tasks(self, start, end, keep_these):
         """Disable tasks for repos that no longer exist between start and end.
@@ -204,7 +210,7 @@ class SWHIndexingLister(SWHListerBase):
         self.max_index = max_bound
 
         def ingest_indexes():
-            index = min_bound or ''
+            index = min_bound or self.default_min_bound
             for i in count(1):
                 response, injected_repos = self.ingest_data(index)
                 if not response and not injected_repos:
@@ -218,15 +224,16 @@ class SWHIndexingLister(SWHListerBase):
 
                 # termination condition
                 if next_index is None or next_index == index:
-                    logger.info('stopping after index %s, no next link found' %
+                    logger.info('stopping after index %s, no next link found',
                                 index)
                     return
                 index = next_index
+                logger.debug('Index: %s', index)
                 yield i
 
         for i in ingest_indexes():
-            if (i % 20) == 0:
-                logger.info('flushing updates')
+            if (i % self.flush_packet_db) == 0:
+                logger.debug('Flushing updates at index %s', i)
                 self.db_session.commit()
                 self.db_session = self.mk_session()
 
@@ -234,9 +241,9 @@ class SWHIndexingLister(SWHListerBase):
         self.db_session = self.mk_session()
 
 
-class SWHIndexingHttpLister(SWHListerHttpTransport, SWHIndexingLister):
+class IndexingHttpLister(ListerHttpTransport, IndexingLister):
     """Convenience class for ensuring right lookup and init order
-        when combining SWHIndexingLister and SWHListerHttpTransport."""
+        when combining IndexingLister and ListerHttpTransport."""
     def __init__(self, api_baseurl=None, override_config=None):
-        SWHListerHttpTransport.__init__(self, api_baseurl=api_baseurl)
-        SWHIndexingLister.__init__(self, override_config=override_config)
+        ListerHttpTransport.__init__(self, api_baseurl=api_baseurl)
+        IndexingLister.__init__(self, override_config=override_config)

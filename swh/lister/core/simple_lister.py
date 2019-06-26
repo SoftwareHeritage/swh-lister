@@ -6,10 +6,10 @@ import logging
 
 from swh.core import utils
 
-from .lister_base import SWHListerBase
+from .lister_base import ListerBase
 
 
-class SimpleLister(SWHListerBase):
+class SimpleLister(ListerBase):
     """Lister* intermediate class for any service that follows the simple,
        'list in oneshot information' pattern.
 
