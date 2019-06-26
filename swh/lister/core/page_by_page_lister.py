@@ -5,11 +5,11 @@
 import abc
 import logging
 
-from .lister_transports import SWHListerHttpTransport
-from .lister_base import SWHListerBase
+from .lister_transports import ListerHttpTransport
+from .lister_base import ListerBase
 
 
-class PageByPageLister(SWHListerBase):
+class PageByPageLister(ListerBase):
     """Lister* intermediate class for any service that follows the simple
        pagination page pattern.
 
@@ -22,7 +22,7 @@ class PageByPageLister(SWHListerBase):
       of the next page index for fetching the remaining repository
       data.
 
-    See :class:`swh.lister.core.lister_base.SWHListerBase` for more
+    See :class:`swh.lister.core.lister_base.ListerBase` for more
     details.
 
     This class cannot be instantiated. To create a new Lister for a
@@ -150,11 +150,11 @@ class PageByPageLister(SWHListerBase):
         self.db_session = self.mk_session()
 
 
-class PageByPageHttpLister(SWHListerHttpTransport, PageByPageLister):
+class PageByPageHttpLister(ListerHttpTransport, PageByPageLister):
     """Convenience class for ensuring right lookup and init order when
-       combining PageByPageLister and SWHListerHttpTransport.
+       combining PageByPageLister and ListerHttpTransport.
 
     """
     def __init__(self, api_baseurl=None, override_config=None):
-        SWHListerHttpTransport.__init__(self, api_baseurl=api_baseurl)
+        ListerHttpTransport.__init__(self, api_baseurl=api_baseurl)
         PageByPageLister.__init__(self, override_config=override_config)

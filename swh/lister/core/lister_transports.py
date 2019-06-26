@@ -24,10 +24,10 @@ from .lister_base import FetchError
 logger = logging.getLogger(__name__)
 
 
-class SWHListerHttpTransport(abc.ABC):
+class ListerHttpTransport(abc.ABC):
     """Use the Requests library for making Lister endpoint requests.
 
-    To be used in conjunction with SWHListerBase or a subclass of it.
+    To be used in conjunction with ListerBase or a subclass of it.
     """
 
     PATH_TEMPLATE = AbstractAttribute('string containing a python string'
@@ -117,7 +117,7 @@ class SWHListerHttpTransport(abc.ABC):
         return params
 
     def transport_quota_check(self, response):
-        """Implements SWHListerBase.transport_quota_check with standard 429
+        """Implements ListerBase.transport_quota_check with standard 429
             code check for HTTP with Requests library.
 
         MAY BE OVERRIDDEN if the server notifies about rate limits in a
@@ -174,7 +174,7 @@ class SWHListerHttpTransport(abc.ABC):
         return self._transport_action(identifier, method='head')
 
     def transport_request(self, identifier):
-        """Implements SWHListerBase.transport_request for HTTP using Requests.
+        """Implements ListerBase.transport_request for HTTP using Requests.
 
         Retrieve get information on api.
 
@@ -182,7 +182,7 @@ class SWHListerHttpTransport(abc.ABC):
         return self._transport_action(identifier)
 
     def transport_response_to_string(self, response):
-        """Implements SWHListerBase.transport_response_to_string for HTTP given
+        """Implements ListerBase.transport_response_to_string for HTTP given
             Requests responses.
         """
         s = pformat(response.request.path_url)
@@ -200,11 +200,11 @@ class SWHListerHttpTransport(abc.ABC):
         return s
 
 
-class ListerOnePageApiTransport(SWHListerHttpTransport):
+class ListerOnePageApiTransport(ListerHttpTransport):
     """Leverage requests library to retrieve basic html page and parse
        result.
 
-       To be used in conjunction with SWHListerBase or a subclass of it.
+       To be used in conjunction with ListerBase or a subclass of it.
 
     """
     PAGE = AbstractAttribute("The server api's unique page to retrieve and "

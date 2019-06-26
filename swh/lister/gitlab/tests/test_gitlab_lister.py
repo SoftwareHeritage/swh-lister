@@ -1,4 +1,4 @@
-# Copyright (C) 2017-2018 the Software Heritage developers
+# Copyright (C) 2017-2019 the Software Heritage developers
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
 
@@ -18,10 +18,11 @@ class GitLabListerTester(HttpListerTesterBase, unittest.TestCase):
     bad_api_response_file = 'api_empty_response.json'
     first_index = 1
     entries_per_page = 10
+    convert_type = int
 
     def response_headers(self, request):
         headers = {'RateLimit-Remaining': '1'}
-        if self.request_index(request) == str(self.first_index):
+        if self.request_index(request) == self.first_index:
             headers.update({
                 'x-next-page': '3',
             })

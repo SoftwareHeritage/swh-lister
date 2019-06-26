@@ -1,4 +1,4 @@
-# Copyright (C) 2017-2018 the Software Heritage developers
+# Copyright (C) 2017-2019 the Software Heritage developers
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
 
@@ -30,8 +30,16 @@ def range_github_lister(start, end, **lister_args):
 
 @app.task(name=__name__ + '.FullGitHubRelister', bind=True)
 def full_github_relister(self, split=None, **lister_args):
+    """Relist from the beginning of what's already been listed.
+
+    It's not to be called for an initial listing.
+
+    """
     lister = new_lister(**lister_args)
     ranges = lister.db_partition_indices(split or GROUP_SPLIT)
+    if not ranges:
+        self.log.info('Nothing to list')
+        return
     random.shuffle(ranges)
     promise = group(range_github_lister.s(minv, maxv, **lister_args)
                     for minv, maxv in ranges)()
