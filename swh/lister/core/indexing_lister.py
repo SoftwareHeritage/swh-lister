@@ -16,8 +16,6 @@ logger = logging.getLogger(__name__)
 
 
 class IndexingLister(ListerBase):
-    flush_packet_db = 20
-    default_min_bound = ''
     """Lister* intermediate class for any service that follows the pattern:
 
     - The service must report at least one stable unique identifier, known
@@ -46,6 +44,14 @@ class IndexingLister(ListerBase):
 
         def get_next_target_from_response
 
+    """
+    flush_packet_db = 20
+    """Number of iterations in-between write flushes of lister repositories to
+       db (see fn:`run`).
+    """
+    default_min_bound = ''
+    """Default initialization value for the minimum boundary index to use when
+       undefined (see fn:`run`).
     """
 
     @abc.abstractmethod
