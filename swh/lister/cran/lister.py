@@ -26,8 +26,7 @@ class CRANLister(SimpleLister):
         """
         return create_task_dict(
             'load-%s' % origin_type, 'recurring',
-            kwargs.get('name'), origin_url, kwargs.get('version'),
-            project_metadata=kwargs.get('description'))
+            kwargs.get('name'), origin_url, kwargs.get('version'))
 
     def r_script_request(self):
         """Runs R script which uses inbuilt API to return a json
