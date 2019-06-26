@@ -38,6 +38,11 @@ def range_gitlab_lister(start, end, **lister_args):
 
 @app.task(name=__name__ + '.FullGitLabRelister', bind=True)
 def full_gitlab_relister(self, **lister_args):
+    """Full lister
+
+    This should be renamed as such.
+
+    """
     lister = new_lister(**lister_args)
     _, total_pages, _ = lister.get_pages_information()
     ranges = list(utils.split_range(total_pages, NBPAGES))

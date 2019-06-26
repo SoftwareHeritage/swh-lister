@@ -6,14 +6,14 @@ import logging
 
 import urllib.parse
 
-from swh.lister.core.indexing_lister import SWHIndexingHttpLister
+from swh.lister.core.indexing_lister import IndexingHttpLister
 from swh.lister.phabricator.models import PhabricatorModel
 from collections import defaultdict
 
 logger = logging.getLogger(__name__)
 
 
-class PhabricatorLister(SWHIndexingHttpLister):
+class PhabricatorLister(IndexingHttpLister):
     PATH_TEMPLATE = '?order=oldest&attachments[uris]=1&after=%s'
     MODEL = PhabricatorModel
     LISTER_NAME = 'phabricator'
@@ -30,6 +30,14 @@ class PhabricatorLister(SWHIndexingHttpLister):
         self.instance = instance
         super().__init__(api_baseurl=api_baseurl,
                          override_config=override_config)
+
+    @property
+    def default_min_bound(self):
+        """Starting boundary when `min_bound` is not defined (db empty). This
+           is used within the fn:`run` call.
+
+        """
+        return self._bootstrap_repositories_listing()
 
     def _build_query_params(self, params, api_token):
         """Build query params to include the forge's api token
@@ -91,8 +99,7 @@ class PhabricatorLister(SWHIndexingHttpLister):
         body = response.json()['result']['cursor']
         if body['after'] != 'null':
             return body['after']
-        else:
-            return None
+        return None
 
     def transport_response_simplified(self, response):
         repos = response.json()
@@ -104,7 +111,7 @@ class PhabricatorLister(SWHIndexingHttpLister):
 
     def filter_before_inject(self, models_list):
         """
-        (Overrides) SWHIndexingLister.filter_before_inject
+        (Overrides) IndexingLister.filter_before_inject
         Bounds query results by this Lister's set max_index.
         """
         models_list = [m for m in models_list if m is not None]
@@ -134,21 +141,6 @@ class PhabricatorLister(SWHIndexingHttpLister):
         injected = self.inject_repo_data_into_db(models_list)
         self.schedule_missing_tasks(models_list, injected)
         return self.max_index
-
-    def run(self, min_bound=None, max_bound=None):
-        """
-        (Override) Run the lister on the specified Phabricator instance
-
-        Args:
-            min_bound (int): Optional repository index to start the listing
-                after it
-            max_bound (int): Optional repository index to stop the listing
-                after it
-        """
-        # initial call to the lister, we need to bootstrap it in that case
-        if min_bound is None:
-            min_bound = self._bootstrap_repositories_listing()
-        super().run(min_bound, max_bound)
 
 
 def get_repo_url(attachments):

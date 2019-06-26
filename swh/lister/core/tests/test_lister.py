@@ -22,7 +22,7 @@ def noop(*args, **kwargs):
 class HttpListerTesterBase(abc.ABC):
     """Base testing class for subclasses of
 
-           swh.lister.core.indexing_lister.SWHIndexingHttpLister.
+           swh.lister.core.indexing_lister.IndexingHttpLister.
            swh.lister.core.page_by_page_lister.PageByPageHttpLister
 
     See swh.lister.github.tests.test_gh_lister for an example of how
@@ -38,6 +38,12 @@ class HttpListerTesterBase(abc.ABC):
     first_index = AbstractAttribute('First index in good_api_response')
     entries_per_page = AbstractAttribute('Number of results in good response')
     LISTER_NAME = 'fake-lister'
+    convert_type = str
+    """static method used to convert the "request_index" to its right type (for
+       indexing listers for example, this is in accordance with the model's
+       "indexable" column).
+
+    """
 
     # May need to override this if the headers are used for something
     def response_headers(self, request):
@@ -66,9 +72,7 @@ class HttpListerTesterBase(abc.ABC):
     def request_index(self, request):
         m = self.test_re.search(request.path_url)
         if m and (len(m.groups()) > 0):
-            return m.group(1)
-        else:
-            return None
+            return self.convert_type(m.group(1))
 
     def mock_response(self, request, context):
         self.fl.reset_backoff()
@@ -76,16 +80,17 @@ class HttpListerTesterBase(abc.ABC):
         context.status_code = 200
         custom_headers = self.response_headers(request)
         context.headers.update(custom_headers)
-        if self.request_index(request) == str(self.first_index):
-            with open('swh/lister/%s/tests/%s' % (self.lister_subdir,
-                                                  self.good_api_response_file),
-                      'r', encoding='utf-8') as r:
-                return r.read()
+        req_index = self.request_index(request)
+
+        if req_index == self.first_index:
+            response_file = self.good_api_response_file
         else:
-            with open('swh/lister/%s/tests/%s' % (self.lister_subdir,
-                                                  self.bad_api_response_file),
-                      'r', encoding='utf-8') as r:
-                return r.read()
+            response_file = self.bad_api_response_file
+
+        with open('swh/lister/%s/tests/%s' % (self.lister_subdir,
+                                              response_file),
+                  'r', encoding='utf-8') as r:
+            return r.read()
 
     def mock_limit_n_response(self, n, request, context):
         self.fl.reset_backoff()

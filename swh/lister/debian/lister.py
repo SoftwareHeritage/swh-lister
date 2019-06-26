@@ -18,8 +18,8 @@ from swh.storage.schemata.distribution import (
     TempPackage,
 )
 
-from swh.lister.core.lister_base import SWHListerBase, FetchError
-from swh.lister.core.lister_transports import SWHListerHttpTransport
+from swh.lister.core.lister_base import ListerBase, FetchError
+from swh.lister.core.lister_transports import ListerHttpTransport
 
 decompressors = {
     'gz': lambda f: gzip.GzipFile(fileobj=f),
@@ -28,18 +28,18 @@ decompressors = {
 }
 
 
-class DebianLister(SWHListerHttpTransport, SWHListerBase):
+class DebianLister(ListerHttpTransport, ListerBase):
     MODEL = Package
     PATH_TEMPLATE = None
     LISTER_NAME = 'debian'
     instance = 'debian'
 
     def __init__(self, override_config=None):
-        SWHListerHttpTransport.__init__(self, api_baseurl="bogus")
-        SWHListerBase.__init__(self, override_config=override_config)
+        ListerHttpTransport.__init__(self, api_baseurl="bogus")
+        ListerBase.__init__(self, override_config=override_config)
 
     def transport_request(self, identifier):
-        """Subvert SWHListerHttpTransport.transport_request, to try several
+        """Subvert ListerHttpTransport.transport_request, to try several
         index URIs in turn.
 
         The Debian repository format supports several compression algorithms
@@ -70,7 +70,7 @@ class DebianLister(SWHListerHttpTransport, SWHListerBase):
 
     def request_uri(self, identifier):
         # In the overridden transport_request, we pass
-        # SWHListerBase.transport_request() the full URI as identifier, so we
+        # ListerBase.transport_request() the full URI as identifier, so we
         # need to return it here.
         return identifier
 
@@ -118,7 +118,7 @@ class DebianLister(SWHListerHttpTransport, SWHListerBase):
     def inject_repo_data_into_db(self, models_list):
         """Generate the Package entries that didn't previously exist.
 
-        Contrary to SWHListerBase, we don't actually insert the data in
+        Contrary to ListerBase, we don't actually insert the data in
         database. `schedule_missing_tasks` does it once we have the
         origin and task identifiers.
         """
