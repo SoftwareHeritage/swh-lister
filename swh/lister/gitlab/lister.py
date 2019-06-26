@@ -39,7 +39,6 @@ class GitLabLister(PageByPageHttpLister):
             'html_url': repo['web_url'],
             'origin_url': repo['http_url_to_repo'],
             'origin_type': 'git',
-            'description': repo['description'],
         }
 
     def transport_quota_check(self, response):
