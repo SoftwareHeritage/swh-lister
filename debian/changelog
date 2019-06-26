@@ -1,8 +1,12 @@
-swh-lister (0.0.29-1~swh1~bpo9+1) stretch-swh; urgency=medium
+swh-lister (0.0.30-1~swh1) unstable-swh; urgency=medium
 
-  * Rebuild for stretch-swh
+  * New upstream release 0.0.30     - (tagged by Antoine R. Dumont
+    (@ardumont) <antoine.romain.dumont@gmail.com> on 2019-06-26 14:52:13
+    +0200)
+  * Upstream changes:     - v0.0.30     - Drop last description mentions
+    for gitlab and cran listers.
 
- -- Software Heritage autobuilder (on jenkins-debian1) <jenkins@jenkins-debian1.internal.softwareheritage.org>  Wed, 26 Jun 2019 10:49:43 +0000
+ -- Software Heritage autobuilder (on jenkins-debian1) <jenkins@jenkins-debian1.internal.softwareheritage.org>  Wed, 26 Jun 2019 13:02:11 +0000
 
 swh-lister (0.0.29-1~swh1) unstable-swh; urgency=medium
 
