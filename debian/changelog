@@ -1,3 +1,12 @@
+swh-lister (0.0.29-1~swh1) unstable-swh; urgency=medium
+
+  * New upstream release 0.0.29     - (tagged by Antoine R. Dumont
+    (@ardumont) <antoine.romain.dumont@gmail.com> on 2019-06-26 12:37:14
+    +0200)
+  * Upstream changes:     - v0.0.29     - lister: Fix bitbucket lister
+
+ -- Software Heritage autobuilder (on jenkins-debian1) <jenkins@jenkins-debian1.internal.softwareheritage.org>  Wed, 26 Jun 2019 10:47:20 +0000
+
 swh-lister (0.0.28-1~swh1) unstable-swh; urgency=medium
 
   * New upstream release 0.0.28     - (tagged by Antoine R. Dumont
