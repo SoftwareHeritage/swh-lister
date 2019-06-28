@@ -18,6 +18,7 @@ following Python modules:
 - `swh.lister.npm`
 - `swh.lister.phabricator`
 - `swh.lister.cran`
+- `swh.lister.cgit`
 
 Dependencies
 ------------
@@ -201,6 +202,23 @@ from swh.lister.cran.tasks import cran_lister
 
 logging.basicConfig(level=logging.DEBUG)
 cran_lister()
+```
+
+## lister-cgit
+
+Once configured, you can execute a cgit lister using the following instructions
+in a `python3` script:
+
+```lang=python
+import logging
+from swh.lister.cgit.tasks import cgit_lister
+
+logging.basicConfig(level=logging.DEBUG)
+# simple cgit instance
+cgit_lister(url='https://git.kernel.org/')
+# cgit instance whose listed repositories differ from the base url
+cgit_lister(url='https://cgit.kde.org/',
+            url_prefix='https://anongit.kde.org/')
 ```
 
 Licensing
