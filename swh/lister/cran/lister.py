@@ -5,6 +5,7 @@ import subprocess
 import json
 import logging
 import pkg_resources
+from collections import defaultdict
 
 from swh.lister.cran.models import CRANModel
 
@@ -17,6 +18,7 @@ class CRANLister(SimpleLister):
     MODEL = CRANModel
     LISTER_NAME = 'cran'
     instance = 'cran'
+    descriptions = defaultdict(dict)
 
     def task_dict(self, origin_type, origin_url, **kwargs):
         """Return task format dict
@@ -26,7 +28,8 @@ class CRANLister(SimpleLister):
         """
         return create_task_dict(
             'load-%s' % origin_type, 'recurring',
-            kwargs.get('name'), origin_url, kwargs.get('version'))
+            kwargs.get('name'), origin_url, kwargs.get('version'),
+            project_metadata=self.descriptions[kwargs.get('name')])
 
     def r_script_request(self):
         """Runs R script which uses inbuilt API to return a json
@@ -65,6 +68,7 @@ class CRANLister(SimpleLister):
         """Transform from repository representation to model
 
         """
+        self.descriptions[repo["Package"]] = repo['Description']
         project_url = 'https://cran.r-project.org/src/contrib' \
                       '/%(Package)s_%(Version)s.tar.gz' % repo
         return {

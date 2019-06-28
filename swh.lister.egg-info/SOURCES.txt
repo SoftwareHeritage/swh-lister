@@ -6,7 +6,6 @@ requirements-test.txt
 requirements.txt
 setup.py
 version.txt
-bin/ghlister
 swh/__init__.py
 swh.lister.egg-info/PKG-INFO
 swh.lister.egg-info/SOURCES.txt
@@ -28,6 +27,16 @@ swh/lister/bitbucket/tests/api_response.json
 swh/lister/bitbucket/tests/conftest.py
 swh/lister/bitbucket/tests/test_bb_lister.py
 swh/lister/bitbucket/tests/test_tasks.py
+swh/lister/cgit/__init__.py
+swh/lister/cgit/lister.py
+swh/lister/cgit/models.py
+swh/lister/cgit/tasks.py
+swh/lister/cgit/tests/__init__.py
+swh/lister/cgit/tests/conftest.py
+swh/lister/cgit/tests/repo_list.txt
+swh/lister/cgit/tests/response.html
+swh/lister/cgit/tests/test_lister.py
+swh/lister/cgit/tests/test_tasks.py
 swh/lister/core/__init__.py
 swh/lister/core/abstractattribute.py
 swh/lister/core/db_utils.py
@@ -49,6 +58,7 @@ swh/lister/cran/models.py
 swh/lister/cran/tasks.py
 swh/lister/cran/tests/__init__.py
 swh/lister/cran/tests/conftest.py
+swh/lister/cran/tests/test_lister.py
 swh/lister/cran/tests/test_tasks.py
 swh/lister/debian/__init__.py
 swh/lister/debian/lister.py

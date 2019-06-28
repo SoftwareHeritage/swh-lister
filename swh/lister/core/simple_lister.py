@@ -45,7 +45,7 @@ class SimpleLister(ListerBase):
         models_list = self.transport_response_simplified(response)
         models_list = self.filter_before_inject(models_list)
         all_injected = []
-        for models in utils.grouper(models_list, n=10000):
+        for models in utils.grouper(models_list, n=1000):
             models = list(models)
             logging.debug('models: %s' % len(models))
             # inject into local db
