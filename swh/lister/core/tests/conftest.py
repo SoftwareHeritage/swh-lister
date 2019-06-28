@@ -6,6 +6,7 @@ from swh.scheduler.tests.conftest import *  # noqa
 def celery_includes():
     return [
         'swh.lister.bitbucket.tasks',
+        'swh.lister.cgit.tasks',
         'swh.lister.cran.tasks',
         'swh.lister.debian.tasks',
         'swh.lister.github.tasks',
