@@ -1,3 +1,13 @@
+swh-lister (0.0.32-1~swh1) unstable-swh; urgency=medium
+
+  * New upstream release 0.0.32     - (tagged by Antoine R. Dumont
+    (@ardumont) <antoine.romain.dumont@gmail.com> on 2019-06-28 18:21:50
+    +0200)
+  * Upstream changes:     - v0.0.32     - Clean up dead code     - Add
+    missing *.html sample for tests to run in packaging
+
+ -- Software Heritage autobuilder (on jenkins-debian1) <jenkins@jenkins-debian1.internal.softwareheritage.org>  Fri, 28 Jun 2019 16:42:05 +0000
+
 swh-lister (0.0.31-1~swh1) unstable-swh; urgency=medium
 
   * New upstream release 0.0.31     - (tagged by Antoine R. Dumont
