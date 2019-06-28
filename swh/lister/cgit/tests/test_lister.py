@@ -3,43 +3,20 @@
 # See top-level LICENSE file for more information
 
 
-from bs4 import BeautifulSoup
 from urllib.parse import urlparse
 
-from swh.lister.cgit.lister import priority_origin_url, find_all_origin_url
-from swh.lister.cgit.lister import find_netloc
+from swh.lister.cgit.lister import find_netloc, get_repo_list
 
 
-def test_find_all_origin_url():
-    f = open('swh/lister/cgit/tests/api_response.html')
-    soup = BeautifulSoup(f.read(), features="html.parser")
-    expected_output = {'https': 'https://git.savannah.gnu.org/git/'
-                                'fbvbconv-py.git',
-                       'ssh': 'ssh://git.savannah.gnu.org/srv/git/'
-                              'fbvbconv-py.git',
-                       'git': 'git://git.savannah.gnu.org/fbvbconv-py.git'}
-
-    output = find_all_origin_url(soup)
-
-    for protocol, url in expected_output.items():
-        assert url == output[protocol]
-
-
-def test_priority_origin_url():
-    first_input = {'https': 'https://kernel.googlesource.com/pub/scm/docs/'
-                            'man-pages/man-pages.git',
-                   'git': 'git://git.kernel.org/pub/scm/docs/man-pages/'
-                          'man-pages.git'}
-    second_input = {'git': 'git://git.savannah.gnu.org/perl-pesel.git',
-                    'ssh': 'ssh://git.savannah.gnu.org/srv/git/perl-pesel.git'}
-    third_input = {}
-
-    assert (priority_origin_url(first_input) ==
-            'https://kernel.googlesource.com/pub/scm/docs/man-pages/'
-            'man-pages.git')
-    assert (priority_origin_url(second_input) ==
-            'git://git.savannah.gnu.org/perl-pesel.git')
-    assert priority_origin_url(third_input) is None
+def test_get_repo_list():
+    f = open('swh/lister/cgit/tests/response.html')
+    repos = get_repo_list(f.read())
+    f = open('swh/lister/cgit/tests/repo_list.txt')
+    expected_repos = f.readlines()
+    expected_repos = list(map((lambda repo: repo[:-1]), expected_repos))
+    assert len(repos) == len(expected_repos)
+    for i in range(len(repos)):
+        assert str(repos[i]) == expected_repos[i]
 
 
 def test_find_netloc():

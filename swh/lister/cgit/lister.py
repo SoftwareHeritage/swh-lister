@@ -3,8 +3,8 @@
 # See top-level LICENSE file for more information
 
 import random
+import logging
 from bs4 import BeautifulSoup
-from collections import defaultdict
 import requests
 from urllib.parse import urlparse
 
@@ -18,38 +18,60 @@ class CGitLister(ListerOnePageApiTransport, SimpleLister):
     MODEL = CGitModel
     LISTER_NAME = 'cgit'
     PAGE = None
+    url_prefix_present = True
 
-    def __init__(self, base_url, instance=None, override_config=None):
+    def __init__(self, url, instance=None, url_prefix=None,
+                 override_config=None):
+        """Inits Class with PAGE url and origin url prefix.
 
-        self.PAGE = base_url
+        Args:
+            url (str): URL of the CGit instance.
+            instance (str): Name of cgit instance.
+            url_prefix (str): Prefix of the origin_url. Origin link of the
+                              repos of some special instances do not match
+                              the url of the repository page, they have origin
+                              url in the format <url_prefix>/<repo_name>.
+
+        """
+        self.PAGE = url
+        if url_prefix is None:
+            self.url_prefix = url
+            self.url_prefix_present = False
+        else:
+            self.url_prefix = url_prefix
+
+        if not self.url_prefix.endswith('/'):
+            self.url_prefix += '/'
         url = urlparse(self.PAGE)
         self.url_netloc = find_netloc(url)
 
         if not instance:
             instance = url.hostname
         self.instance = instance
+
         ListerOnePageApiTransport .__init__(self)
         SimpleLister.__init__(self, override_config=override_config)
 
     def list_packages(self, response):
         """List the actual cgit instance origins from the response.
 
-        Find the repos in all the pages by parsing over the HTML of
-        the `base_url`. Find the details for all the repos and return
-        them in the format of list of dictionaries.
+        Find repositories metadata by parsing the html page (response's raw
+        content). If there are links in the html page, retrieve those
+        repositories metadata from those pages as well. Return the
+        repositories as list of dictionaries.
+
+        Args:
+            response (Response): http api request response.
+
+        Returns:
+            List of repository origin urls (as dict) included in the response.
 
         """
         repos_details = []
-        repos = get_repo_list(response)
-        soup = make_repo_soup(response)
-        pages = self.get_page(soup)
-        if len(pages) > 1:
-            repos.extend(self.get_all_pages(pages))
 
-        for repo in repos:
+        for repo in self.yield_repo_from_responses(response):
             repo_name = repo.a.text
-            repo_url = self.get_url(repo)
-            origin_url = find_origin_url(repo_url)
+            origin_url = self.find_origin_url(repo, repo_name)
 
             try:
                 time = repo.span['title']
@@ -58,57 +80,93 @@ class CGitLister(ListerOnePageApiTransport, SimpleLister):
 
             if origin_url is not None:
                 repos_details.append({
-                                        'name': repo_name,
-                                        'time': time,
-                                        'origin_url': origin_url,
-                                     })
+                    'name': repo_name,
+                    'time': time,
+                    'origin_url': origin_url,
+                })
 
         random.shuffle(repos_details)
         return repos_details
 
-    def get_page(self, soup):
-        """Find URL of all pages
+    def yield_repo_from_responses(self, response):
+        """Yield repositories from all pages of the cgit instance.
 
-        Finds URL of all the pages that are present by parsing over the HTML of
+        Finds the number of pages present and yields the list of
+        repositories present.
+
+        Args:
+            response (Response): server response.
+
+        Yields:
+            List of beautifulsoup object of repository rows.
+
+        """
+        html = response.text
+        yield from get_repo_list(html)
+        pages = self.get_pages(make_soup(html))
+        if len(pages) > 1:
+            yield from self.get_repos_from_pages(pages[1:])
+
+    def find_origin_url(self, repo, repo_name):
+        """Finds the origin url for a repository
+
+        Args:
+            repo (Beautifulsoup): Beautifulsoup object of the repository
+                                  row present in base url.
+            repo_name (str): Repository name.
+
+        Returns:
+            string: origin url.
+
+        """
+        if self.url_prefix_present:
+            return self.url_prefix + repo_name
+
+        return self.get_url(repo)
+
+    def get_pages(self, url_soup):
+        """Find URL of all pages.
+
+        Finds URL of pages that are present by parsing over the HTML of
         pagination present at the end of the page.
 
         Args:
-            soup (Beautifulsoup): a beautifulsoup object of base URL
+            url_soup (Beautifulsoup): a beautifulsoup object of base URL
 
         Returns:
-            list: URL of all the pages present for a cgit instance
+            list: URL of pages present for a cgit instance
 
         """
-        pages = soup.find('div', {"class": "content"}).find_all('li')
+        pages = url_soup.find('div', {"class": "content"}).find_all('li')
 
         if not pages:
             return [self.PAGE]
 
         return [self.get_url(page) for page in pages]
 
-    def get_all_pages(self, pages):
-        """Find repos from all the pages
+    def get_repos_from_pages(self, pages):
+        """Find repos from all pages.
 
-        Make the request for all the pages (except the first) present for a
-        particular cgit instance and finds the repos that are available
-        for each and every page.
+        Request the available repos from the pages. This yields
+        the available repositories found as beautiful object representation.
 
         Args:
-            pages ([str]): list of urls of all the pages present for a
-                           particular cgit instance
+            pages ([str]): list of urls of all pages present for a
+                           particular cgit instance.
 
-        Returns:
-            List of beautifulsoup object of all the repositories (url) row
-            present in all the pages(except first).
+        Yields:
+            List of beautifulsoup object of repository (url) rows
+            present in pages(except first).
 
         """
-        all_repos = []
-        for page in pages[1:]:
+        for page in pages:
             response = requests.get(page)
-            repos = get_repo_list(response)
-            all_repos.extend(repos)
+            if not response.ok:
+                logging.warning('Failed to retrieve repositories from page %s',
+                                page)
+                continue
 
-        return all_repos
+            yield from get_repo_list(response.text)
 
     def get_url(self, repo):
         """Finds url of a repo page.
@@ -150,19 +208,19 @@ class CGitLister(ListerOnePageApiTransport, SimpleLister):
 
 
 def find_netloc(url):
-    """Finds the network location from then base_url
+    """Finds the network location from then url.
 
-    All the url in the repo are relative to the network location part of base
-    url, so we need to compute it to reconstruct all the urls.
+    URL in the repo are relative to the network location part of base
+    URL, so we need to compute it to reconstruct URLs.
 
     Args:
-        url (urllib): urllib object of base_url
+        url (urllib): urllib object of url.
 
     Returns:
         string: Scheme and Network location part in the base URL.
 
     Example:
-    For base_url = https://git.kernel.org/pub/scm/
+    For url = https://git.kernel.org/pub/scm/
         >>> find_netloc(url)
         'https://git.kernel.org'
 
@@ -171,106 +229,23 @@ def find_netloc(url):
 
 
 def get_repo_list(response):
-    """Find all the rows with repo for a particualar page on the base url
-
-    Finds all the repos on page and retuens a list of all the repos. Each
-    element of the list is a beautifulsoup object representing a repo.
+    """Find repositories (as beautifulsoup object) available within the server
+       response.
 
     Args:
         response (Response): server response
 
     Returns:
-        List of all the repos on a page.
+        List all repositories as beautifulsoup object within the response.
 
     """
-    repo_soup = make_repo_soup(response)
+    repo_soup = make_soup(response)
     return repo_soup \
         .find('div', {"class": "content"}).find_all("tr", {"class": ""})
 
 
-def make_repo_soup(response):
-    """Makes BeautifulSoup object of the response
+def make_soup(response):
+    """Instantiates a beautiful soup object from the response object.
 
     """
-    return BeautifulSoup(response.text, features="html.parser")
-
-
-def find_origin_url(repo_url):
-    """Finds origin url for a repo.
-
-    Finds the origin url for a particular repo by parsing over the page of
-    that repo.
-
-    Args:
-        repo_url: URL of the repo.
-
-    Returns:
-        string: Origin url for the repo.
-
-    Examples:
-
-        >>> find_origin_url(
-            'http://git.savannah.gnu.org/cgit/fbvbconv-py.git/')
-        'https://git.savannah.gnu.org/git/fbvbconv-py.git'
-
-    """
-
-    response = requests.get(repo_url)
-    repo_soup = make_repo_soup(response)
-
-    origin_urls = find_all_origin_url(repo_soup)
-    return priority_origin_url(origin_urls)
-
-
-def find_all_origin_url(soup):
-    """Finds all possible origin url for a repo.
-
-    Finds all the origin url for a particular repo by parsing over the html of
-    repo page.
-
-    Args:
-        soup: a beautifulsoup object repo representation.
-
-    Returns:
-        dictionary: All possible origin urls for a repository (dict with
-                    key 'protocol', value the associated url).
-
-    Examples:
-        If soup is beautifulsoup object of the html code at
-        http://git.savannah.gnu.org/cgit/fbvbconv-py.git/
-
-        >>> print(find_all_origin_url(soup))
-        { 'https': 'https://git.savannah.gnu.org/git/fbvbconv-py.git',
-          'ssh': 'ssh://git.savannah.gnu.org/srv/git/fbvbconv-py.git',
-          'git': 'git://git.savannah.gnu.org/fbvbconv-py.git'}
-    """
-    origin_urls = defaultdict(dict)
-    found_clone_word = False
-
-    for i in soup.find_all('tr'):
-        if found_clone_word:
-            link = i.text
-            protocol = link[:link.find(':')]
-            origin_urls[protocol] = link
-        if i.text == 'Clone':
-            found_clone_word = True
-
-    return origin_urls
-
-
-def priority_origin_url(origin_url):
-    """Finds the highest priority link for a particular repo.
-
-    Priority order is https>http>git>ssh.
-
-    Args:
-        origin_urls (Dict): All possible origin urls for a repository
-                            (key 'protocol', value the associated url)
-
-    Returns:
-        Url (str) with the highest priority.
-
-    """
-    for protocol in ['https', 'http', 'git', 'ssh']:
-        if protocol in origin_url:
-            return origin_url[protocol]
+    return BeautifulSoup(response, features="html.parser")

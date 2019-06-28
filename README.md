@@ -214,7 +214,11 @@ import logging
 from swh.lister.cgit.tasks import cgit_lister
 
 logging.basicConfig(level=logging.DEBUG)
-cgit_lister(base_url='http://git.savannah.gnu.org/cgit/')
+# simple cgit instance
+cgit_lister(url='https://git.kernel.org/')
+# cgit instance whose listed repositories differ from the base url
+cgit_lister(url='https://cgit.kde.org/',
+            url_prefix='https://anongit.kde.org/')
 ```
 
 Licensing

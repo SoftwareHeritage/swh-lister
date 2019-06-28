@@ -129,7 +129,8 @@ def cli(ctx, db_url, listers, drop_tables):
             from .cgit.models import ModelBase
             from .cgit.lister import CGitLister
             _lister = CGitLister(
-                      base_url='http://git.savannah.gnu.org/cgit/',
+                      url='http://git.savannah.gnu.org/cgit/',
+                      url_prefix='http://git.savannah.gnu.org/git/',
                       override_config=override_conf)
 
         else:

@@ -7,9 +7,11 @@ from swh.scheduler.celery_backend.config import app
 from .lister import CGitLister
 
 
-def new_lister(base_url='https://git.savannah.gnu.org/cgit/',
-               instance='savannah-gnu', **kw):
-    return CGitLister(base_url=base_url, instance=instance, **kw)
+def new_lister(url='https://git.kernel.org/',
+               url_prefix=None,
+               instance='kernal', **kw):
+    return CGitLister(url=url, instance=instance, url_prefix=url_prefix,
+                      **kw)
 
 
 @app.task(name=__name__ + '.CGitListerTask')
