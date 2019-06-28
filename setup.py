@@ -44,7 +44,6 @@ setup(
     author_email='swh-devel@inria.fr',
     url='https://forge.softwareheritage.org/diffusion/DLSGH/',
     packages=find_packages(),
-    scripts=['bin/ghlister'],
     install_requires=parse_requirements() + parse_requirements('swh'),
     tests_require=parse_requirements('test'),
     setup_requires=['vcversioner'],
