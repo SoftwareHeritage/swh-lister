@@ -13,6 +13,7 @@ def celery_includes():
         'swh.lister.gitlab.tasks',
         'swh.lister.gnu.tasks',
         'swh.lister.npm.tasks',
-        'swh.lister.pypi.tasks',
+        'swh.lister.packagist.tasks',
         'swh.lister.phabricator.tasks',
+        'swh.lister.pypi.tasks',
     ]

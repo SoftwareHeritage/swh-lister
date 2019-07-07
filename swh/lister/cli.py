@@ -12,7 +12,7 @@ from swh.core.cli import CONTEXT_SETTINGS
 logger = logging.getLogger(__name__)
 
 SUPPORTED_LISTERS = ['github', 'gitlab', 'bitbucket', 'debian', 'pypi',
-                     'npm', 'phabricator', 'gnu', 'cran', 'cgit']
+                     'npm', 'phabricator', 'gnu', 'cran', 'cgit', 'packagist']
 
 
 @click.group(name='lister', context_settings=CONTEXT_SETTINGS)
@@ -132,6 +132,11 @@ def cli(ctx, db_url, listers, drop_tables):
                       url='http://git.savannah.gnu.org/cgit/',
                       url_prefix='http://git.savannah.gnu.org/git/',
                       override_config=override_conf)
+
+        elif lister == 'packagist':
+            from .packagist.models import ModelBase
+            from .packagist.lister import PackagistLister
+            _lister = PackagistLister(override_config=override_conf)
 
         else:
             raise ValueError(
