@@ -1,3 +1,9 @@
+swh-lister (0.0.32-1~swh1~bpo10+1) buster-swh; urgency=medium
+
+  * Rebuild for buster-swh
+
+ -- Nicolas Dandrimont <olasd@debian.org>  Thu, 11 Jul 2019 14:18:48 +0200
+
 swh-lister (0.0.32-1~swh1) unstable-swh; urgency=medium
 
   * New upstream release 0.0.32     - (tagged by Antoine R. Dumont
