@@ -51,7 +51,8 @@ class PackagistLister(ListerOnePageApiTransport, SimpleLister):
         needed for the ingestion task creation.
 
         """
-        return utils.create_task_dict('load-%s' % origin_type, 'recurring',
+        return utils.create_task_dict('load-%s' % origin_type,
+                                      kwargs.get('policy', 'recurring'),
                                       kwargs.get('name'), origin_url)
 
     def list_packages(self, response):
