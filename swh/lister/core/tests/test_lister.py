@@ -9,9 +9,9 @@ from unittest.mock import Mock, patch
 
 import requests_mock
 from sqlalchemy import create_engine
-from testing.postgresql import Postgresql
 
 from swh.lister.core.abstractattribute import AbstractAttribute
+from swh.lister.tests.test_utils import init_db
 
 
 def noop(*args, **kwargs):
@@ -166,9 +166,7 @@ class HttpListerTester(HttpListerTesterBase, abc.ABC):
     @requests_mock.Mocker()
     def test_fetch_multiple_pages_yesdb(self, http_mocker):
         http_mocker.get(self.test_re, text=self.mock_response)
-        initdb_args = Postgresql.DEFAULT_SETTINGS['initdb_args']
-        initdb_args = ' '.join([initdb_args, '-E UTF-8'])
-        db = Postgresql(initdb_args=initdb_args)
+        db = init_db()
 
         fl = self.get_fl(override_config={
             'lister': {
