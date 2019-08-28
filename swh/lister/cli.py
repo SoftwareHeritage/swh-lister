@@ -26,7 +26,7 @@ DEFAULT_BASEURLS = {
 }
 
 
-def new_lister(lister_name, db_url, drop_tables=False, **conf):
+def get_lister(lister_name, db_url, drop_tables=False, **conf):
     """Instantiate a lister given its name.
 
     Args:
@@ -189,7 +189,7 @@ def cli(ctx, db_url, listers, drop_tables):
     for lister_name in listers:
         logger.info('Initializing lister %s', lister_name)
         lister, drop_schema_fn, init_schema_fn, insert_minimum_data_fn = \
-            new_lister(lister_name, db_url, drop_tables=drop_tables)
+            get_lister(lister_name, db_url, drop_tables=drop_tables)
 
         if drop_schema_fn:
             drop_schema_fn(lister_name, lister)
@@ -229,7 +229,7 @@ def run(ctx, db_url, lister, priority, options):
         **kwargs,
     }
 
-    lister, _, _, _ = new_lister(lister, db_url, **override_config)
+    lister, _, _, _ = get_lister(lister, db_url, **override_config)
     lister.run()
 
 
