@@ -30,7 +30,7 @@ class PyPILister(ListerOnePageApiTransport, SimpleLister):
 
         """
         _type = 'load-%s' % origin_type
-        _policy = 'recurring'
+        _policy = kwargs.get('policy', 'recurring')
         project_name = kwargs.get('name')
         project_metadata_url = kwargs.get('html_url')
         return utils.create_task_dict(

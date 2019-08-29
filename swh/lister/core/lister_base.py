@@ -391,8 +391,10 @@ class ListerBase(abc.ABC, config.SWHConfig):
             the same information in a different form
         """
         _type = 'load-%s' % origin_type
-        _policy = 'recurring'
-        return utils.create_task_dict(_type, _policy, origin_url)
+        _policy = kwargs.get('policy', 'recurring')
+        priority = kwargs.get('priority')
+        kw = {'priority': priority} if priority else {}
+        return utils.create_task_dict(_type, _policy, origin_url, **kw)
 
     def string_pattern_check(self, a, b, c=None):
         """When comparing indexable types in is_within_bounds, complex strings
@@ -460,6 +462,12 @@ class ListerBase(abc.ABC, config.SWHConfig):
         for m in models_list:
             ir = injected_repos[m['uid']]
             if not ir.task_id:
+                # Patching the model instance to add the policy/priority task
+                # scheduling
+                if 'policy' in self.config:
+                    m['policy'] = self.config['policy']
+                if 'priority' in self.config:
+                    m['priority'] = self.config['priority']
                 task_dict = self.task_dict(**m)
                 tasks[_task_key(task_dict)] = (ir, m, task_dict)
 

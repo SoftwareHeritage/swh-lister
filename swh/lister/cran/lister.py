@@ -27,7 +27,8 @@ class CRANLister(SimpleLister):
         needed for the ingestion task creation.
         """
         return create_task_dict(
-            'load-%s' % origin_type, 'recurring',
+            'load-%s' % origin_type,
+            kwargs.get('policy', 'recurring'),
             kwargs.get('name'), origin_url, kwargs.get('version'),
             project_metadata=self.descriptions[kwargs.get('name')])
 
