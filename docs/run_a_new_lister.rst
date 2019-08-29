@@ -24,13 +24,13 @@ Here are the steps you need to follow to run a lister within your local environm
 
    The file named `docker-compose.override.yml` will automatically be loaded by
    ``docker-compose``.Having an override makes it possible to run a docker container
-   with some swh packages installed from sources instead of using the latest 
-   published packages from pypi. For more details, you may refer to README.md 
+   with some swh packages installed from sources instead of using the latest
+   published packages from pypi. For more details, you may refer to README.md
    present in ``swh-docker-dev``.
-2. Follow the instruction mentioned under heading **Preparation steps** and 
+2. Follow the instruction mentioned under heading **Preparation steps** and
    **Configuration file sample** in README.md of swh-lister.
 3. Add in the lister configuration the new ``task_modules`` and ``task_queues``
-   entry for the your new lister. You need to amend the conf/lister.yml file to 
+   entry for the your new lister. You need to amend the conf/lister.yml file to
    add the entries. Here is an example for GNU lister::
 
     celery:
@@ -45,7 +45,7 @@ Here are the steps you need to follow to run a lister within your local environm
 4. Make sure to run ``storage (5002)`` and ``scheduler (5008)`` services locally.
    You may use the following command to run docker::
 
-    ~/swh-environment/swh-docker-dev$ docker-compose up -d 
+    ~/swh-environment/swh-docker-dev$ docker-compose up -d
 
 5. Add the lister task-type in the scheduler.  For example, if you want to
    add pypi lister task-type ::
@@ -72,18 +72,18 @@ Here are the steps you need to follow to run a lister within your local environm
   If your lister is creating new loading task not yet registered, you need
   to register that task type as well.
 
-6. Run your lister with the help of scheduler cli. You need to add the task in 
+6. Run your lister with the help of scheduler cli. You need to add the task in
    the scheduler using its cli. For example, you need to execute this command
    to run gnu lister ::
- 
+
      ~/swh-environment$ swh scheduler --url http://localhost:5008/ task add \
-      list-gnu-full --policy oneshot  
+      list-gnu-full --policy oneshot
 
 After the execution of lister is complete, you can see the loading task created::
-    
+
     ~/swh-environment/swh-lister$ swh scheduler task list
 
-You can also check the repositories listed by the lister from the database in 
+You can also check the repositories listed by the lister from the database in
 which the lister output is stored. To connect to the database::
 
     ~/swh-environment/swh-docker-dev$ docker-compose exec swh-lister bash -c \
