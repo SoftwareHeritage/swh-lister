@@ -50,7 +50,7 @@ class BitBucketLister(IndexingHttpLister):
            and return it as a datetime.
 
         Args:
-            reponse (Response): requests' response from api call
+            response (Response): requests' response from api call
 
         Returns:
             next date as a datetime

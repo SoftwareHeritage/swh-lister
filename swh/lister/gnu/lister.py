@@ -32,7 +32,8 @@ class GNULister(SimpleLister):
         needed for the ingestion task creation.
         """
         return utils.create_task_dict(
-            'load-%s' % origin_type, 'recurring', kwargs.get('name'),
+            'load-%s' % origin_type, kwargs.get('policy', 'recurring'),
+            kwargs.get('name'),
             origin_url, tarballs=self.tarballs[kwargs.get('name')])
 
     def get_file(self):

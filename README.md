@@ -19,6 +19,7 @@ following Python modules:
 - `swh.lister.phabricator`
 - `swh.lister.cran`
 - `swh.lister.cgit`
+- `swh.lister.packagist`
 
 Dependencies
 ------------
@@ -219,6 +220,19 @@ cgit_lister(url='https://git.kernel.org/')
 # cgit instance whose listed repositories differ from the base url
 cgit_lister(url='https://cgit.kde.org/',
             url_prefix='https://anongit.kde.org/')
+```
+
+## lister-packagist
+
+Once configured, you can execute a Packagist lister using the following instructions
+in a `python3` script:
+
+```lang=python
+import logging
+from swh.lister.packagist.tasks import packagist_lister
+
+logging.basicConfig(level=logging.DEBUG)
+packagist_lister()
 ```
 
 Licensing
