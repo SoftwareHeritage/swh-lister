@@ -1,8 +1,15 @@
-swh-lister (0.0.32-1~swh1~bpo10+1) buster-swh; urgency=medium
+swh-lister (0.0.33-1~swh1) unstable-swh; urgency=medium
 
-  * Rebuild for buster-swh
+  * New upstream release 0.0.33     - (tagged by Antoine R. Dumont
+    (@ardumont) <antoine.romain.dumont@gmail.com> on 2019-08-29 10:23:20
+    +0200)
+  * Upstream changes:     - v0.0.33     - lister.cli: Allow to list
+    forges with policy and priority     - listers: Add New packagist
+    lister     - listers: Allow to override policy and priority for
+    scheduled tasks     - tests: Add tests to cli, pypi and improve
+    lister core's     - docs: Add code of conduct document
 
- -- Nicolas Dandrimont <olasd@debian.org>  Thu, 11 Jul 2019 14:18:48 +0200
+ -- Software Heritage autobuilder (on jenkins-debian1) <jenkins@jenkins-debian1.internal.softwareheritage.org>  Thu, 29 Aug 2019 08:28:23 +0000
 
 swh-lister (0.0.32-1~swh1) unstable-swh; urgency=medium
 
