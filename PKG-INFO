@@ -1,14 +1,14 @@
 Metadata-Version: 2.1
 Name: swh.lister
-Version: 0.0.32
+Version: 0.0.33
 Summary: Software Heritage lister
 Home-page: https://forge.softwareheritage.org/diffusion/DLSGH/
 Author: Software Heritage developers
 Author-email: swh-devel@inria.fr
 License: UNKNOWN
 Project-URL: Funding, https://www.softwareheritage.org/donate
-Project-URL: Source, https://forge.softwareheritage.org/source/swh-lister
 Project-URL: Bug Reports, https://forge.softwareheritage.org/maniphest
+Project-URL: Source, https://forge.softwareheritage.org/source/swh-lister
 Description: swh-lister
         ==========
         
@@ -30,6 +30,7 @@ Description: swh-lister
         - `swh.lister.phabricator`
         - `swh.lister.cran`
         - `swh.lister.cgit`
+        - `swh.lister.packagist`
         
         Dependencies
         ------------
@@ -230,6 +231,19 @@ Description: swh-lister
         # cgit instance whose listed repositories differ from the base url
         cgit_lister(url='https://cgit.kde.org/',
                     url_prefix='https://anongit.kde.org/')
+        ```
+        
+        ## lister-packagist
+        
+        Once configured, you can execute a Packagist lister using the following instructions
+        in a `python3` script:
+        
+        ```lang=python
+        import logging
+        from swh.lister.packagist.tasks import packagist_lister
+        
+        logging.basicConfig(level=logging.DEBUG)
+        packagist_lister()
         ```
         
         Licensing
