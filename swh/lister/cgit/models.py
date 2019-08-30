@@ -14,5 +14,4 @@ class CGitModel(ModelBase):
     __tablename__ = 'cgit_repo'
 
     uid = Column(String, primary_key=True)
-    time_updated = Column(String)
     instance = Column(String, index=True)

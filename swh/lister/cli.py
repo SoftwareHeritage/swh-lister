@@ -19,10 +19,6 @@ SUPPORTED_LISTERS = ['github', 'gitlab', 'bitbucket', 'debian', 'pypi',
 DEFAULT_BASEURLS = {
     'gitlab': 'https://gitlab.com/api/v4/',
     'phabricator': 'https://forge.softwareheritage.org',
-    'cgit': (
-        'http://git.savannah.gnu.org/cgit/',
-        'http://git.savannah.gnu.org/git/'
-    ),
 }
 
 
@@ -132,13 +128,8 @@ def get_lister(lister_name, db_url, drop_tables=False, **conf):
     elif lister_name == 'cgit':
         from .cgit.models import ModelBase
         from .cgit.lister import CGitLister
-        if isinstance(api_baseurl, str):
-            _lister = CGitLister(url=api_baseurl,
-                                 override_config=override_conf)
-        else:  # tuple
-            _lister = CGitLister(url=api_baseurl[0],
-                                 url_prefix=api_baseurl[1],
-                                 override_config=override_conf)
+        _lister = CGitLister(url=api_baseurl,
+                             override_config=override_conf)
 
     elif lister_name == 'packagist':
         from .packagist.models import ModelBase  # noqa

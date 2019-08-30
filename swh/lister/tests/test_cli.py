@@ -61,7 +61,6 @@ def test_get_lister_override():
     listers = {
         'gitlab': ('api_baseurl', 'https://gitlab.uni/api/v4/'),
         'phabricator': ('forge_url', 'https://somewhere.org'),
-        'cgit': ('url_prefix', 'https://some-cgit.eu/'),
     }
 
     # check the override ends up defined in the lister
@@ -87,8 +86,6 @@ def test_get_lister_override():
 
         # then the default base url is used
         default_url = DEFAULT_BASEURLS[lister_name]
-        if isinstance(default_url, tuple):  # cgit implementation detail...
-            default_url = default_url[1]
 
         assert getattr(lst, url_key) == default_url
         assert 'priority' not in lst.config

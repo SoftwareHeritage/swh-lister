@@ -1,0 +1,57 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns='http://www.w3.org/1999/xhtml' xml:lang='en' lang='en'>
+<head>
+<title>adaptation/ap_samsung/audio-hal-e4x12 - Domain: Multimedia / Audio FW;</title>
+<meta name='generator' content='cgit v0.11.2'/>
+<meta name='robots' content='index, nofollow'/>
+<link rel='stylesheet' type='text/css' href='/cgit-css/cgit.css'/>
+<link rel='shortcut icon' href='/favicon.ico'/>
+<link rel='alternate' title='Atom feed' href='http://git.prod.infra.tizen.org:8000/cgit/adaptation/ap_samsung/audio-hal-e4x12/atom/?h=master' type='application/atom+xml'/>
+<link rel='vcs-git' href='https://git.tizen.org/cgit/adaptation/ap_samsung/audio-hal-e4x12' title='adaptation/ap_samsung/audio-hal-e4x12 Git repository'/>
+<link rel='vcs-git' href='git://git.tizen.org/adaptation/ap_samsung/audio-hal-e4x12' title='adaptation/ap_samsung/audio-hal-e4x12 Git repository'/>
+</head>
+<body>
+<div id='cgit'><table id='header'>
+<tr>
+<td class='logo' rowspan='2'><a href='/cgit/'><img src='/cgit-css/tizen-pinwheel.png' alt='cgit logo'/></a></td>
+<td class='main'><a href='/cgit/'>index</a> : <a title='adaptation/ap_samsung/audio-hal-e4x12' href='/cgit/adaptation/ap_samsung/audio-hal-e4x12/'>adaptation/ap_samsung/audio-hal-e4x12</a></td><td class='form'><form method='get' action=''>
+<select name='h' onchange='this.form.submit();'>
+<option value='master' selected='selected'>master</option>
+<option value='tizen_2.3'>tizen_2.3</option>
+<option value='tizen_2.3.1'>tizen_2.3.1</option>
+</select> <input type='submit' name='' value='switch'/></form></td></tr>
+<tr><td class='sub'>Domain: Multimedia / Audio FW;</td><td class='sub right'></td></tr></table>
+<table class='tabs'><tr><td>
+<a class='active' href='/cgit/adaptation/ap_samsung/audio-hal-e4x12/'>summary</a><a href='/cgit/adaptation/ap_samsung/audio-hal-e4x12/refs/'>refs</a><a href='/cgit/adaptation/ap_samsung/audio-hal-e4x12/log/'>log</a><a href='/cgit/adaptation/ap_samsung/audio-hal-e4x12/tree/'>tree</a><a href='/cgit/adaptation/ap_samsung/audio-hal-e4x12/commit/'>commit</a><a href='/cgit/adaptation/ap_samsung/audio-hal-e4x12/diff/'>diff</a></td><td class='form'><form class='right' method='get' action='/cgit/adaptation/ap_samsung/audio-hal-e4x12/log/'>
+<select name='qt'>
+<option value='grep'>log msg</option>
+<option value='author'>author</option>
+<option value='committer'>committer</option>
+<option value='range'>range</option>
+</select>
+<input class='txt' type='text' size='10' name='q' value=''/>
+<input type='submit' value='search'/>
+</form>
+</td></tr></table>
+<div class='content'><table summary='repository info' class='list nowrap'><tr class='nohover'><th class='left'>Branch</th><th class='left'>Commit message</th><th class='left'>Author</th><th class='left' colspan='2'>Age</th></tr>
+<tr><td><a href='/cgit/adaptation/ap_samsung/audio-hal-e4x12/log/'>master</a></td><td><a href='/cgit/adaptation/ap_samsung/audio-hal-e4x12/commit/'>Initial empty repository</a></td><td>Sehong Na</td><td colspan='2'><span class='age-years' title='2014-05-31 02:24:02 (GMT)'>5 years</span></td></tr>
+<tr><td><a href='/cgit/adaptation/ap_samsung/audio-hal-e4x12/log/?h=tizen_2.3'>tizen_2.3</a></td><td><a href='/cgit/adaptation/ap_samsung/audio-hal-e4x12/commit/?h=tizen_2.3'>tizen 2.3 release</a></td><td>jk7744.park</td><td colspan='2'><span class='age-years' title='2015-01-31 05:49:15 (GMT)'>5 years</span></td></tr>
+<tr><td><a href='/cgit/adaptation/ap_samsung/audio-hal-e4x12/log/?h=tizen_2.3.1'>tizen_2.3.1</a></td><td><a href='/cgit/adaptation/ap_samsung/audio-hal-e4x12/commit/?h=tizen_2.3.1'>tizen 2.3.1 release</a></td><td>jk7744.park</td><td colspan='2'><span class='age-years' title='2015-09-08 12:29:27 (GMT)'>4 years</span></td></tr>
+<tr class='nohover'><td colspan='5'>&nbsp;</td></tr><tr class='nohover'><th class='left'>Tag</th><th class='left'>Download</th><th class='left'>Author</th><th class='left' colspan='2'>Age</th></tr>
+<tr><td><a href='/cgit/adaptation/ap_samsung/audio-hal-e4x12/tag/?h=submit/tizen_2.3.1/20150915.072158'>submit/tizen_2.3.1/20150915.072158</a></td><td><a href='/cgit/adaptation/ap_samsung/audio-hal-e4x12/snapshot/submit/tizen_2.3.1/20150915.072158.zip'>submit/tizen_2.3.1/20150915.072158.zip</a>&nbsp;&nbsp;<a href='/cgit/adaptation/ap_samsung/audio-hal-e4x12/snapshot/submit/tizen_2.3.1/20150915.072158.tar.gz'>submit/tizen_2.3.1/20150915.072158.tar.gz</a>&nbsp;&nbsp;<a href='/cgit/adaptation/ap_samsung/audio-hal-e4x12/snapshot/submit/tizen_2.3.1/20150915.072158.tar.bz2'>submit/tizen_2.3.1/20150915.072158.tar.bz2</a>&nbsp;&nbsp;</td><td>Deokyang Jin</td><td colspan='2'><span class='age-years' title='2015-09-15 07:21:58 (GMT)'>4 years</span></td></tr>
+<tr><td><a href='/cgit/adaptation/ap_samsung/audio-hal-e4x12/tag/?h=tizen_2.3.1_release'>tizen_2.3.1_release</a></td><td><a href='/cgit/adaptation/ap_samsung/audio-hal-e4x12/snapshot/tizen_2.3.1_release.zip'>tizen_2.3.1_release.zip</a>&nbsp;&nbsp;<a href='/cgit/adaptation/ap_samsung/audio-hal-e4x12/snapshot/tizen_2.3.1_release.tar.gz'>tizen_2.3.1_release.tar.gz</a>&nbsp;&nbsp;<a href='/cgit/adaptation/ap_samsung/audio-hal-e4x12/snapshot/tizen_2.3.1_release.tar.bz2'>tizen_2.3.1_release.tar.bz2</a>&nbsp;&nbsp;</td><td>jk7744.park</td><td colspan='2'><span class='age-years' title='2015-09-08 12:29:27 (GMT)'>4 years</span></td></tr>
+<tr><td><a href='/cgit/adaptation/ap_samsung/audio-hal-e4x12/tag/?h=submit/tizen_2.3/20150202.052539'>submit/tizen_2.3/20150202.052539</a></td><td><a href='/cgit/adaptation/ap_samsung/audio-hal-e4x12/snapshot/submit/tizen_2.3/20150202.052539.zip'>submit/tizen_2.3/20150202.052539.zip</a>&nbsp;&nbsp;<a href='/cgit/adaptation/ap_samsung/audio-hal-e4x12/snapshot/submit/tizen_2.3/20150202.052539.tar.gz'>submit/tizen_2.3/20150202.052539.tar.gz</a>&nbsp;&nbsp;<a href='/cgit/adaptation/ap_samsung/audio-hal-e4x12/snapshot/submit/tizen_2.3/20150202.052539.tar.bz2'>submit/tizen_2.3/20150202.052539.tar.bz2</a>&nbsp;&nbsp;</td><td>br21.kang</td><td colspan='2'><span class='age-years' title='2015-02-02 05:25:39 (GMT)'>5 years</span></td></tr>
+<tr><td><a href='/cgit/adaptation/ap_samsung/audio-hal-e4x12/tag/?h=tizen_2.3_release'>tizen_2.3_release</a></td><td><a href='/cgit/adaptation/ap_samsung/audio-hal-e4x12/snapshot/tizen_2.3_release.zip'>tizen_2.3_release.zip</a>&nbsp;&nbsp;<a href='/cgit/adaptation/ap_samsung/audio-hal-e4x12/snapshot/tizen_2.3_release.tar.gz'>tizen_2.3_release.tar.gz</a>&nbsp;&nbsp;<a href='/cgit/adaptation/ap_samsung/audio-hal-e4x12/snapshot/tizen_2.3_release.tar.bz2'>tizen_2.3_release.tar.bz2</a>&nbsp;&nbsp;</td><td>jk7744.park</td><td colspan='2'><span class='age-years' title='2015-01-31 05:49:15 (GMT)'>5 years</span></td></tr>
+<tr><td><a href='/cgit/adaptation/ap_samsung/audio-hal-e4x12/tag/?h=submit/tizen_2.3/20140531.054605'>submit/tizen_2.3/20140531.054605</a></td><td><a href='/cgit/adaptation/ap_samsung/audio-hal-e4x12/snapshot/submit/tizen_2.3/20140531.054605.zip'>submit/tizen_2.3/20140531.054605.zip</a>&nbsp;&nbsp;<a href='/cgit/adaptation/ap_samsung/audio-hal-e4x12/snapshot/submit/tizen_2.3/20140531.054605.tar.gz'>submit/tizen_2.3/20140531.054605.tar.gz</a>&nbsp;&nbsp;<a href='/cgit/adaptation/ap_samsung/audio-hal-e4x12/snapshot/submit/tizen_2.3/20140531.054605.tar.bz2'>submit/tizen_2.3/20140531.054605.tar.bz2</a>&nbsp;&nbsp;</td><td>Sehong Na</td><td colspan='2'><span class='age-years' title='2014-05-31 05:46:05 (GMT)'>5 years</span></td></tr>
+<tr><td><a href='/cgit/adaptation/ap_samsung/audio-hal-e4x12/tag/?h=2.3a_release'>2.3a_release</a></td><td><a href='/cgit/adaptation/ap_samsung/audio-hal-e4x12/snapshot/audio-hal-e4x12-2.3a_release.zip'>audio-hal-e4x12-2.3a_release.zip</a>&nbsp;&nbsp;<a href='/cgit/adaptation/ap_samsung/audio-hal-e4x12/snapshot/audio-hal-e4x12-2.3a_release.tar.gz'>audio-hal-e4x12-2.3a_release.tar.gz</a>&nbsp;&nbsp;<a href='/cgit/adaptation/ap_samsung/audio-hal-e4x12/snapshot/audio-hal-e4x12-2.3a_release.tar.bz2'>audio-hal-e4x12-2.3a_release.tar.bz2</a>&nbsp;&nbsp;</td><td>Sehong Na</td><td colspan='2'><span class='age-years' title='2014-05-31 03:29:38 (GMT)'>5 years</span></td></tr>
+<tr class='nohover'><td colspan='5'>&nbsp;</td></tr><tr class='nohover'><th class='left'>Age</th><th class='left'>Commit message</th><th class='left'>Author</th><th class='left'>Files</th><th class='left'>Lines</th></tr>
+<tr><td>2014-05-31</td><td><a href='/cgit/adaptation/ap_samsung/audio-hal-e4x12/commit/?id=9a63d55fc1c5b5120878b7696807750eb8e5d570'>Initial empty repository</a><span class='decoration'><a class='deco' href='/cgit/adaptation/ap_samsung/audio-hal-e4x12/commit/?id=9a63d55fc1c5b5120878b7696807750eb8e5d570'>HEAD</a><a class='branch-deco' href='/cgit/adaptation/ap_samsung/audio-hal-e4x12/log/'>master</a></span></td><td>Sehong Na</td><td>0</td><td>-0/+0</td></tr>
+<tr class='nohover'><td colspan='5'>&nbsp;</td></tr><tr class='nohover'><th class='left' colspan='5'>Clone</th></tr>
+<tr><td colspan='5'><a rel='vcs-git' href='https://git.tizen.org/cgit/adaptation/ap_samsung/audio-hal-e4x12' title='adaptation/ap_samsung/audio-hal-e4x12 Git repository'>https://git.tizen.org/cgit/adaptation/ap_samsung/audio-hal-e4x12</a></td></tr>
+<tr><td colspan='5'><a rel='vcs-git' href='git://git.tizen.org/adaptation/ap_samsung/audio-hal-e4x12' title='adaptation/ap_samsung/audio-hal-e4x12 Git repository'>git://git.tizen.org/adaptation/ap_samsung/audio-hal-e4x12</a></td></tr>
+</table></div> <!-- class=content -->
+<div class='footer'>generated by <a href='http://git.zx2c4.com/cgit/about/'>cgit v0.11.2</a> at 2019-08-30 14:32:50 (GMT)</div>
+</div> <!-- id=cgit -->
+</body>
+</html>

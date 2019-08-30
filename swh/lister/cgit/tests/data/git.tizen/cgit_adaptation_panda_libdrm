@@ -1,0 +1,56 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns='http://www.w3.org/1999/xhtml' xml:lang='en' lang='en'>
+<head>
+<title>adaptation/panda/libdrm - Domain: Graphics System / Uncategorized;</title>
+<meta name='generator' content='cgit v0.11.2'/>
+<meta name='robots' content='index, nofollow'/>
+<link rel='stylesheet' type='text/css' href='/cgit-css/cgit.css'/>
+<link rel='shortcut icon' href='/favicon.ico'/>
+<link rel='alternate' title='Atom feed' href='http://git.prod.infra.tizen.org:8000/cgit/adaptation/panda/libdrm/atom/?h=2.0alpha' type='application/atom+xml'/>
+<link rel='vcs-git' href='https://git.tizen.org/cgit/adaptation/panda/libdrm' title='adaptation/panda/libdrm Git repository'/>
+<link rel='vcs-git' href='git://git.tizen.org/adaptation/panda/libdrm' title='adaptation/panda/libdrm Git repository'/>
+</head>
+<body>
+<div id='cgit'><table id='header'>
+<tr>
+<td class='logo' rowspan='2'><a href='/cgit/'><img src='/cgit-css/tizen-pinwheel.png' alt='cgit logo'/></a></td>
+<td class='main'><a href='/cgit/'>index</a> : <a title='adaptation/panda/libdrm' href='/cgit/adaptation/panda/libdrm/'>adaptation/panda/libdrm</a></td><td class='form'><form method='get' action=''>
+<select name='h' onchange='this.form.submit();'>
+<option value='2.0'>2.0</option>
+<option value='2.0alpha' selected='selected'>2.0alpha</option>
+</select> <input type='submit' name='' value='switch'/></form></td></tr>
+<tr><td class='sub'>Domain: Graphics System / Uncategorized;</td><td class='sub right'></td></tr></table>
+<table class='tabs'><tr><td>
+<a class='active' href='/cgit/adaptation/panda/libdrm/'>summary</a><a href='/cgit/adaptation/panda/libdrm/refs/'>refs</a><a href='/cgit/adaptation/panda/libdrm/log/'>log</a><a href='/cgit/adaptation/panda/libdrm/tree/'>tree</a><a href='/cgit/adaptation/panda/libdrm/commit/'>commit</a><a href='/cgit/adaptation/panda/libdrm/diff/'>diff</a></td><td class='form'><form class='right' method='get' action='/cgit/adaptation/panda/libdrm/log/'>
+<select name='qt'>
+<option value='grep'>log msg</option>
+<option value='author'>author</option>
+<option value='committer'>committer</option>
+<option value='range'>range</option>
+</select>
+<input class='txt' type='text' size='10' name='q' value=''/>
+<input type='submit' value='search'/>
+</form>
+</td></tr></table>
+<div class='content'><table summary='repository info' class='list nowrap'><tr class='nohover'><th class='left'>Branch</th><th class='left'>Commit message</th><th class='left'>Author</th><th class='left' colspan='2'>Age</th></tr>
+<tr><td><a href='/cgit/adaptation/panda/libdrm/log/?h=2.0'>2.0</a></td><td><a href='/cgit/adaptation/panda/libdrm/commit/?h=2.0'>HS-IVI2.0 release - Spec file changed for 2.0</a></td><td>subham.sen</td><td colspan='2'><span class='age-years' title='2013-08-02 07:14:02 (GMT)'>6 years</span></td></tr>
+<tr><td><a href='/cgit/adaptation/panda/libdrm/log/'>2.0alpha</a></td><td><a href='/cgit/adaptation/panda/libdrm/commit/'>Comment out missing file in files section</a></td><td>Graydon, Tracy</td><td colspan='2'><span class='age-years' title='2013-04-12 07:29:45 (GMT)'>6 years</span></td></tr>
+<tr class='nohover'><td colspan='5'>&nbsp;</td></tr><tr class='nohover'><th class='left'>Tag</th><th class='left'>Download</th><th class='left'>Author</th><th class='left' colspan='2'>Age</th></tr>
+<tr><td><a href='/cgit/adaptation/panda/libdrm/tag/?h=submit/2.0/20130803.003029'>submit/2.0/20130803.003029</a></td><td><a href='/cgit/adaptation/panda/libdrm/snapshot/submit/2.0/20130803.003029.zip'>submit/2.0/20130803.003029.zip</a>&nbsp;&nbsp;<a href='/cgit/adaptation/panda/libdrm/snapshot/submit/2.0/20130803.003029.tar.gz'>submit/2.0/20130803.003029.tar.gz</a>&nbsp;&nbsp;<a href='/cgit/adaptation/panda/libdrm/snapshot/submit/2.0/20130803.003029.tar.bz2'>submit/2.0/20130803.003029.tar.bz2</a>&nbsp;&nbsp;</td><td>Graydon, Tracy</td><td colspan='2'><span class='age-years' title='2013-08-03 00:30:29 (GMT)'>6 years</span></td></tr>
+<tr><td><a href='/cgit/adaptation/panda/libdrm/tag/?h=submit/2.0/20130803.002848'>submit/2.0/20130803.002848</a></td><td><a href='/cgit/adaptation/panda/libdrm/snapshot/submit/2.0/20130803.002848.zip'>submit/2.0/20130803.002848.zip</a>&nbsp;&nbsp;<a href='/cgit/adaptation/panda/libdrm/snapshot/submit/2.0/20130803.002848.tar.gz'>submit/2.0/20130803.002848.tar.gz</a>&nbsp;&nbsp;<a href='/cgit/adaptation/panda/libdrm/snapshot/submit/2.0/20130803.002848.tar.bz2'>submit/2.0/20130803.002848.tar.bz2</a>&nbsp;&nbsp;</td><td>Graydon, Tracy</td><td colspan='2'><span class='age-years' title='2013-08-03 00:28:48 (GMT)'>6 years</span></td></tr>
+<tr><td><a href='/cgit/adaptation/panda/libdrm/tag/?h=accepted/2.0/20130802.235500'>accepted/2.0/20130802.235500</a></td><td><a href='/cgit/adaptation/panda/libdrm/snapshot/accepted/2.0/20130802.235500.zip'>accepted/2.0/20130802.235500.zip</a>&nbsp;&nbsp;<a href='/cgit/adaptation/panda/libdrm/snapshot/accepted/2.0/20130802.235500.tar.gz'>accepted/2.0/20130802.235500.tar.gz</a>&nbsp;&nbsp;<a href='/cgit/adaptation/panda/libdrm/snapshot/accepted/2.0/20130802.235500.tar.bz2'>accepted/2.0/20130802.235500.tar.bz2</a>&nbsp;&nbsp;</td><td>Jenkins Continuous Build server</td><td colspan='2'><span class='age-years' title='2013-08-02 23:55:00 (GMT)'>6 years</span></td></tr>
+<tr><td><a href='/cgit/adaptation/panda/libdrm/tag/?h=submit/2.0alpha/20130412.072951'>submit/2.0alpha/20130412.072951</a></td><td><a href='/cgit/adaptation/panda/libdrm/snapshot/submit/2.0alpha/20130412.072951.zip'>submit/2.0alpha/20130412.072951.zip</a>&nbsp;&nbsp;<a href='/cgit/adaptation/panda/libdrm/snapshot/submit/2.0alpha/20130412.072951.tar.gz'>submit/2.0alpha/20130412.072951.tar.gz</a>&nbsp;&nbsp;<a href='/cgit/adaptation/panda/libdrm/snapshot/submit/2.0alpha/20130412.072951.tar.bz2'>submit/2.0alpha/20130412.072951.tar.bz2</a>&nbsp;&nbsp;</td><td>Graydon, Tracy</td><td colspan='2'><span class='age-years' title='2013-04-12 07:29:51 (GMT)'>6 years</span></td></tr>
+<tr><td><a href='/cgit/adaptation/panda/libdrm/tag/?h=accepted/2.0alpha/20130412.071806'>accepted/2.0alpha/20130412.071806</a></td><td><a href='/cgit/adaptation/panda/libdrm/snapshot/accepted/2.0alpha/20130412.071806.zip'>accepted/2.0alpha/20130412.071806.zip</a>&nbsp;&nbsp;<a href='/cgit/adaptation/panda/libdrm/snapshot/accepted/2.0alpha/20130412.071806.tar.gz'>accepted/2.0alpha/20130412.071806.tar.gz</a>&nbsp;&nbsp;<a href='/cgit/adaptation/panda/libdrm/snapshot/accepted/2.0alpha/20130412.071806.tar.bz2'>accepted/2.0alpha/20130412.071806.tar.bz2</a>&nbsp;&nbsp;</td><td>Jenkins Continuous Build server</td><td colspan='2'><span class='age-years' title='2013-04-12 07:18:06 (GMT)'>6 years</span></td></tr>
+<tr class='nohover'><td colspan='5'>&nbsp;</td></tr><tr class='nohover'><th class='left'>Age</th><th class='left'>Commit message</th><th class='left'>Author</th><th class='left'>Files</th><th class='left'>Lines</th></tr>
+<tr><td>2013-04-12</td><td><a href='/cgit/adaptation/panda/libdrm/commit/?id=d93f5f5978f8a8b5b714f863620f3250f74baddc'>Comment out missing file in files section</a><span class='decoration'><a class='deco' href='/cgit/adaptation/panda/libdrm/commit/?id=d93f5f5978f8a8b5b714f863620f3250f74baddc'>HEAD</a><a class='tag-deco' href='/cgit/adaptation/panda/libdrm/tag/?h=submit/2.0alpha/20130412.072951'>submit/2.0alpha/20130412.072951</a><a class='tag-deco' href='/cgit/adaptation/panda/libdrm/tag/?h=accepted/2.0alpha/20130412.071806'>accepted/2.0alpha/20130412.071806</a><a class='branch-deco' href='/cgit/adaptation/panda/libdrm/log/'>2.0alpha</a></span></td><td>Graydon, Tracy</td><td>1</td><td>-6/+4</td></tr>
+<tr><td>2013-04-12</td><td><a href='/cgit/adaptation/panda/libdrm/commit/?id=9950547bb9b5c1e53d531b507526b53503eb0e34'>Rearranging to get into the format needed to build</a><span class='decoration'></span></td><td>Graydon, Tracy</td><td>179</td><td>-1729/+0</td></tr>
+<tr><td>2013-03-12</td><td><a href='/cgit/adaptation/panda/libdrm/commit/?id=7ce508d857c6346664ea4100f9a8dbf7a6c361f9'>HS Files added for IVI ARM release</a><span class='decoration'><a class='deco' href='/cgit/adaptation/panda/libdrm/commit/?id=7ce508d857c6346664ea4100f9a8dbf7a6c361f9'>refs/changes/70/3170/1</a></span></td><td>livingston</td><td>179</td><td>-0/+94746</td></tr>
+<tr class='nohover'><td colspan='5'>&nbsp;</td></tr><tr class='nohover'><th class='left' colspan='5'>Clone</th></tr>
+<tr><td colspan='5'><a rel='vcs-git' href='https://git.tizen.org/cgit/adaptation/panda/libdrm' title='adaptation/panda/libdrm Git repository'>https://git.tizen.org/cgit/adaptation/panda/libdrm</a></td></tr>
+<tr><td colspan='5'><a rel='vcs-git' href='git://git.tizen.org/adaptation/panda/libdrm' title='adaptation/panda/libdrm Git repository'>git://git.tizen.org/adaptation/panda/libdrm</a></td></tr>
+</table></div> <!-- class=content -->
+<div class='footer'>generated by <a href='http://git.zx2c4.com/cgit/about/'>cgit v0.11.2</a> at 2019-08-30 14:34:17 (GMT)</div>
+</div> <!-- id=cgit -->
+</body>
+</html>
