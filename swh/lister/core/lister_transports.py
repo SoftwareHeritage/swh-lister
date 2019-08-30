@@ -53,33 +53,10 @@ class ListerHttpTransport(abc.ABC):
         """Returns dictionary of any credentials configuration needed by the
         forge instance to list.
 
-        Returns:
-            dict of credentials per instance lister or {} if none.
-
-        """
-        all_creds = self.config.get('credentials')
-        if not all_creds:
-            return {}
-        lister_creds = all_creds.get(self.LISTER_NAME, {})
-        creds = lister_creds.get(self.instance, {})
-        return creds
-
-    def request_uri(self, identifier):
-        """Get the full request URI given the transport_request identifier.
-
-        MAY BE OVERRIDDEN if something more complex than the PATH_TEMPLATE is
-        required.
-        """
-        path = self.PATH_TEMPLATE % identifier
-        return self.api_baseurl + path
-
-    def request_params(self, identifier):
-        """Get the full parameters passed to requests given the
-        transport_request identifier.
-
-        This uses credentials if any are provided. The 'credentials'
-        configuration is expected to be a dict of multiple levels. The first
-        level is the lister's name, the second is the lister's instance name.
+        The 'credentials' configuration is expected to be a dict of multiple
+        levels. The first level is the lister's name, the second is the
+        lister's instance name, which value is expected to be a list of
+        credential structures (typically a couple username/password).
 
         For example:
 
@@ -101,6 +78,32 @@ class ListerHttpTransport(abc.ABC):
               password: ...
             - ...
 
+        Returns:
+            list of credential dicts for the current lister.
+
+        """
+        all_creds = self.config.get('credentials')
+        if not all_creds:
+            return []
+        lister_creds = all_creds.get(self.LISTER_NAME, {})
+        creds = lister_creds.get(self.instance, [])
+        return creds
+
+    def request_uri(self, identifier):
+        """Get the full request URI given the transport_request identifier.
+
+        MAY BE OVERRIDDEN if something more complex than the PATH_TEMPLATE is
+        required.
+        """
+        path = self.PATH_TEMPLATE % identifier
+        return self.api_baseurl + path
+
+    def request_params(self, identifier):
+        """Get the full parameters passed to requests given the
+        transport_request identifier.
+
+        This uses credentials if any are provided (see
+        request_instance_credentials).
 
         MAY BE OVERRIDDEN if something more complex than the request headers
         is needed.
