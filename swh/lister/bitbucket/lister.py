@@ -19,10 +19,11 @@ class BitBucketLister(IndexingHttpLister):
     PATH_TEMPLATE = '/repositories?after=%s'
     MODEL = BitBucketModel
     LISTER_NAME = 'bitbucket'
+    DEFAULT_URL = 'https://api.bitbucket.org/2.0'
     instance = 'bitbucket'
     default_min_bound = datetime.utcfromtimestamp(0)
 
-    def __init__(self, api_baseurl, override_config=None, per_page=100):
+    def __init__(self, api_baseurl=None, override_config=None, per_page=100):
         super().__init__(
             api_baseurl=api_baseurl, override_config=override_config)
         per_page = self.config.get('per_page', per_page)
