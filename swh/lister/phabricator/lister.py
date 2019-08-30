@@ -37,16 +37,6 @@ class PhabricatorLister(IndexingHttpLister):
         """
         return self._bootstrap_repositories_listing()
 
-    def _build_query_params(self, params, api_token):
-        """Build query params to include the forge's api token
-
-        Returns:
-            updated params dict with 'params' entry.
-
-        """
-        params.update({'params': {'api.token': api_token}})
-        return params
-
     def request_params(self, identifier):
         """Override the default params behavior to retrieve the api token
 
@@ -59,14 +49,14 @@ class PhabricatorLister(IndexingHttpLister):
                 password: <api-token>
 
         """
-        params = {}
-        params['headers'] = self.request_headers() or {}
         instance_creds = self.request_instance_credentials()
         if not instance_creds:
             raise ValueError(
                 'Phabricator forge needs authentication credential to list.')
         api_token = instance_creds[0]['password']
-        return self._build_query_params(params, api_token)
+
+        return {'headers': self.request_headers() or {},
+                'params': {'api.token': api_token}}
 
     def request_headers(self):
         """
