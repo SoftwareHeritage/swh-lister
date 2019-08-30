@@ -3,6 +3,7 @@
 # See top-level LICENSE file for more information
 
 import logging
+import random
 
 import urllib.parse
 
@@ -49,11 +50,11 @@ class PhabricatorLister(IndexingHttpLister):
                 password: <api-token>
 
         """
-        instance_creds = self.request_instance_credentials()
-        if not instance_creds:
+        creds = self.request_instance_credentials()
+        if not creds:
             raise ValueError(
                 'Phabricator forge needs authentication credential to list.')
-        api_token = instance_creds[0]['password']
+        api_token = random.choice(creds)['password']
 
         return {'headers': self.request_headers() or {},
                 'params': {'api.token': api_token}}
