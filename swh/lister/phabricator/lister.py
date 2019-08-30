@@ -18,13 +18,11 @@ class PhabricatorLister(IndexingHttpLister):
     MODEL = PhabricatorModel
     LISTER_NAME = 'phabricator'
 
-    def __init__(self, forge_url, instance=None, api_token=None,
-                 override_config=None):
+    def __init__(self, forge_url, instance=None, override_config=None):
         if forge_url.endswith("/"):
             forge_url = forge_url[:-1]
         self.forge_url = forge_url
         api_baseurl = '%s/api/diffusion.repository.search' % forge_url
-        self.api_token = api_token
         if not instance:
             instance = urllib.parse.urlparse(forge_url).hostname
         self.instance = instance
@@ -63,8 +61,6 @@ class PhabricatorLister(IndexingHttpLister):
         """
         params = {}
         params['headers'] = self.request_headers() or {}
-        if self.api_token:
-            return self._build_query_params(params, self.api_token)
         instance_creds = self.request_instance_credentials()
         if not instance_creds:
             raise ValueError(
