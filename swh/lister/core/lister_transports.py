@@ -29,7 +29,7 @@ class ListerHttpTransport(abc.ABC):
 
     To be used in conjunction with ListerBase or a subclass of it.
     """
-
+    DEFAULT_URL = None
     PATH_TEMPLATE = AbstractAttribute('string containing a python string'
                                       ' format pattern that produces the API'
                                       ' endpoint path for listing stored'
@@ -143,6 +143,10 @@ class ListerHttpTransport(abc.ABC):
             return False, 0
 
     def __init__(self, api_baseurl=None):
+        if not api_baseurl:
+            api_baseurl = self.config.get('api_baseurl')
+        if not api_baseurl:
+            api_baseurl = self.DEFAULT_URL
         if not api_baseurl:
             raise NameError('HTTP Lister Transport requires api_baseurl.')
         self.api_baseurl = api_baseurl  # eg. 'https://api.github.com'

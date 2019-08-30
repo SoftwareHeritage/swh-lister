@@ -245,5 +245,5 @@ class IndexingHttpLister(ListerHttpTransport, IndexingLister):
     """Convenience class for ensuring right lookup and init order
         when combining IndexingLister and ListerHttpTransport."""
     def __init__(self, api_baseurl=None, override_config=None):
-        ListerHttpTransport.__init__(self, api_baseurl=api_baseurl)
         IndexingLister.__init__(self, override_config=override_config)
+        ListerHttpTransport.__init__(self, api_baseurl=api_baseurl)
