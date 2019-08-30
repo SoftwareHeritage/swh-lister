@@ -16,19 +16,16 @@ logger = logging.getLogger(__name__)
 
 class PhabricatorLister(IndexingHttpLister):
     PATH_TEMPLATE = '?order=oldest&attachments[uris]=1&after=%s'
+    DEFAULT_URL = 'https://forge.softwareheritage.org/api/diffusion.repository.search'  # noqa
     MODEL = PhabricatorModel
     LISTER_NAME = 'phabricator'
 
-    def __init__(self, forge_url, instance=None, override_config=None):
-        if forge_url.endswith("/"):
-            forge_url = forge_url[:-1]
-        self.forge_url = forge_url
-        api_baseurl = '%s/api/diffusion.repository.search' % forge_url
-        if not instance:
-            instance = urllib.parse.urlparse(forge_url).hostname
-        self.instance = instance
+    def __init__(self, api_baseurl=None, instance=None, override_config=None):
         super().__init__(api_baseurl=api_baseurl,
                          override_config=override_config)
+        if not instance:
+            instance = urllib.parse.urlparse(self.api_baseurl).hostname
+        self.instance = instance
 
     @property
     def default_min_bound(self):
@@ -72,7 +69,7 @@ class PhabricatorLister(IndexingHttpLister):
         if url is None:
             return None
         return {
-            'uid': self.forge_url + str(repo['id']),
+            'uid': url,
             'indexable': repo['id'],
             'name': repo['fields']['shortName'],
             'full_name': repo['fields']['name'],

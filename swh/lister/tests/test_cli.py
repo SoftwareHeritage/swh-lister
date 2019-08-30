@@ -60,7 +60,9 @@ def test_get_lister_override():
 
     listers = {
         'gitlab': ('api_baseurl', 'https://gitlab.uni/api/v4/'),
-        'phabricator': ('forge_url', 'https://somewhere.org'),
+        'phabricator': (
+            'api_baseurl',
+            'https://somewhere.org/api/diffusion.repository.search'),
     }
 
     # check the override ends up defined in the lister
