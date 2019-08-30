@@ -12,20 +12,19 @@ from .models import GitLabModel
 class GitLabLister(PageByPageHttpLister):
     # Template path expecting an integer that represents the page id
     PATH_TEMPLATE = '/projects?page=%d&order_by=id'
+    DEFAULT_URL = 'https://gitlab.com/api/v4/'
     MODEL = GitLabModel
     LISTER_NAME = 'gitlab'
 
-    def __init__(self, api_baseurl, instance=None,
+    def __init__(self, api_baseurl=None, instance=None,
                  override_config=None, sort='asc', per_page=20):
         super().__init__(api_baseurl=api_baseurl,
                          override_config=override_config)
         if instance is None:
-            instance = parse_url(api_baseurl).host
+            instance = parse_url(self.api_baseurl).host
         self.instance = instance
-        self.PATH_TEMPLATE = '%s&sort=%s' % (self.PATH_TEMPLATE, sort)
-        if per_page != 20:
-            self.PATH_TEMPLATE = '%s&per_page=%s' % (
-                self.PATH_TEMPLATE, per_page)
+        self.PATH_TEMPLATE = '%s&sort=%s&per_page=%s' % (
+            self.PATH_TEMPLATE, sort, per_page)
 
     def uid(self, repo):
         return '%s/%s' % (self.instance, repo['path_with_namespace'])
