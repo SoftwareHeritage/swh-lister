@@ -6,7 +6,7 @@
 import pytest
 
 from swh.lister.core.lister_base import ListerBase
-from swh.lister.cli import get_lister, SUPPORTED_LISTERS, DEFAULT_BASEURLS
+from swh.lister.cli import get_lister, SUPPORTED_LISTERS
 
 from .test_utils import init_db
 
@@ -24,32 +24,9 @@ def test_get_lister():
 
     """
     db_url = init_db().url()
-    supported_listers_with_init = {'npm', 'debian'}
-    supported_listers = set(SUPPORTED_LISTERS) - supported_listers_with_init
-    for lister_name in supported_listers:
-        lst, drop_fn, init_fn, insert_data_fn = get_lister(lister_name, db_url)
-
+    for lister_name in SUPPORTED_LISTERS:
+        lst = get_lister(lister_name, db_url)
         assert isinstance(lst, ListerBase)
-        assert drop_fn is None
-        assert init_fn is not None
-        assert insert_data_fn is None
-
-    for lister_name in supported_listers_with_init:
-        lst, drop_fn, init_fn, insert_data_fn = get_lister(lister_name, db_url)
-
-        assert isinstance(lst, ListerBase)
-        assert drop_fn is None
-        assert init_fn is not None
-        assert insert_data_fn is not None
-
-    for lister_name in supported_listers_with_init:
-        lst, drop_fn, init_fn, insert_data_fn = get_lister(lister_name, db_url,
-                                                           drop_tables=True)
-
-        assert isinstance(lst, ListerBase)
-        assert drop_fn is not None
-        assert init_fn is not None
-        assert insert_data_fn is not None
 
 
 def test_get_lister_override():
@@ -67,9 +44,9 @@ def test_get_lister_override():
 
     # check the override ends up defined in the lister
     for lister_name, (url_key, url_value) in listers.items():
-        lst, drop_fn, init_fn, insert_data_fn = get_lister(
+        lst = get_lister(
             lister_name, db_url, **{
-                'api_baseurl': url_value,
+                url_key: url_value,
                 'priority': 'high',
                 'policy': 'oneshot',
             })
@@ -81,14 +58,9 @@ def test_get_lister_override():
     # check the default urls are used and not the override (since it's not
     # passed)
     for lister_name, (url_key, url_value) in listers.items():
-        lst, drop_fn, init_fn, insert_data_fn = get_lister(lister_name, db_url)
+        lst = get_lister(lister_name, db_url)
 
         # no override so this does not end up in lister's configuration
         assert url_key not in lst.config
-
-        # then the default base url is used
-        default_url = DEFAULT_BASEURLS[lister_name]
-
-        assert getattr(lst, url_key) == default_url
         assert 'priority' not in lst.config
         assert 'oneshot' not in lst.config
