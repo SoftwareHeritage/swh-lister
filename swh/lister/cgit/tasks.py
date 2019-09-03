@@ -7,17 +7,9 @@ from swh.scheduler.celery_backend.config import app
 from .lister import CGitLister
 
 
-def new_lister(url='https://git.kernel.org/',
-               url_prefix=None,
-               instance='kernal', **kw):
-    return CGitLister(url=url, instance=instance, url_prefix=url_prefix,
-                      **kw)
-
-
 @app.task(name=__name__ + '.CGitListerTask')
 def cgit_lister(**lister_args):
-    lister = new_lister(**lister_args)
-    lister.run()
+    CGitLister(**lister_args).run()
 
 
 @app.task(name=__name__ + '.ping')
