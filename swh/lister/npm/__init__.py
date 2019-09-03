@@ -10,4 +10,11 @@ def register():
     return {'models': [NpmVisitModel, NpmModel],
             'lister': NpmLister,
             'task_modules': ['%s.tasks' % __name__],
+            'task_types': {
+                'list-npm-full': {
+                    'default_interval': '7 days',
+                    'min_interval': '7 days',
+                    'max_interval': '7 days',
+                    },
+                },
             }

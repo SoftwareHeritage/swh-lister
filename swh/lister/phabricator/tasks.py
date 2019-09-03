@@ -7,10 +7,11 @@ from swh.lister.phabricator.lister import PhabricatorLister
 
 
 @app.task(name=__name__ + '.FullPhabricatorLister')
-def full_phabricator_lister(**lister_args):
+def list_phabricator_full(**lister_args):
+    'Full update of a Phabricator instance'
     PhabricatorLister(**lister_args).run()
 
 
 @app.task(name=__name__ + '.ping')
-def ping():
+def _ping():
     return 'OK'

@@ -8,10 +8,11 @@ from .lister import GNULister
 
 
 @app.task(name=__name__ + '.GNUListerTask')
-def gnu_lister(**lister_args):
+def list_gnu_full(**lister_args):
+    'List lister for the GNU source code archive'
     GNULister(**lister_args).run()
 
 
 @app.task(name=__name__ + '.ping')
-def ping():
+def _ping():
     return 'OK'

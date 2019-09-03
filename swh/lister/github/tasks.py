@@ -17,20 +17,21 @@ def new_lister(api_baseurl='https://api.github.com', **kw):
 
 
 @app.task(name=__name__ + '.IncrementalGitHubLister')
-def incremental_github_lister(**lister_args):
+def list_github_incremental(**lister_args):
+    'Incremental update of GitHub'
     lister = new_lister(**lister_args)
     lister.run(min_bound=lister.db_last_index(), max_bound=None)
 
 
 @app.task(name=__name__ + '.RangeGitHubLister')
-def range_github_lister(start, end, **lister_args):
+def _range_github_lister(start, end, **lister_args):
     lister = new_lister(**lister_args)
     lister.run(min_bound=start, max_bound=end)
 
 
 @app.task(name=__name__ + '.FullGitHubRelister', bind=True)
-def full_github_relister(self, split=None, **lister_args):
-    """Relist from the beginning of what's already been listed.
+def list_github_full(self, split=None, **lister_args):
+    """Full update of GitHub
 
     It's not to be called for an initial listing.
 
@@ -41,7 +42,7 @@ def full_github_relister(self, split=None, **lister_args):
         self.log.info('Nothing to list')
         return
     random.shuffle(ranges)
-    promise = group(range_github_lister.s(minv, maxv, **lister_args)
+    promise = group(_range_github_lister.s(minv, maxv, **lister_args)
                     for minv, maxv in ranges)()
     self.log.debug('%s OK (spawned %s subtasks)' % (self.name, len(ranges)))
     try:
@@ -52,5 +53,5 @@ def full_github_relister(self, split=None, **lister_args):
 
 
 @app.task(name=__name__ + '.ping')
-def ping():
+def _ping():
     return 'OK'

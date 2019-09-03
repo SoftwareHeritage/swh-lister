@@ -17,20 +17,21 @@ def new_lister(api_baseurl='https://api.bitbucket.org/2.0', per_page=100):
 
 
 @app.task(name=__name__ + '.IncrementalBitBucketLister')
-def incremental_bitbucket_lister(**lister_args):
+def list_bitbucket_incremental(**lister_args):
+    '''Incremental update of the BitBucket forge'''
     lister = new_lister(**lister_args)
     lister.run(min_bound=lister.db_last_index(), max_bound=None)
 
 
 @app.task(name=__name__ + '.RangeBitBucketLister')
-def range_bitbucket_lister(start, end, **lister_args):
+def _range_bitbucket_lister(start, end, **lister_args):
     lister = new_lister(**lister_args)
     lister.run(min_bound=start, max_bound=end)
 
 
 @app.task(name=__name__ + '.FullBitBucketRelister', bind=True)
-def full_bitbucket_relister(self, split=None, **lister_args):
-    """Relist from the beginning of what's already been listed.
+def list_bitbucket_full(self, split=None, **lister_args):
+    """Full update of the BitBucket forge
 
     It's not to be called for an initial listing.
 
@@ -42,7 +43,7 @@ def full_bitbucket_relister(self, split=None, **lister_args):
         return
 
     random.shuffle(ranges)
-    promise = group(range_bitbucket_lister.s(minv, maxv, **lister_args)
+    promise = group(_range_bitbucket_lister.s(minv, maxv, **lister_args)
                     for minv, maxv in ranges)()
     self.log.debug('%s OK (spawned %s subtasks)', (self.name, len(ranges)))
     try:
@@ -53,5 +54,5 @@ def full_bitbucket_relister(self, split=None, **lister_args):
 
 
 @app.task(name=__name__ + '.ping')
-def ping():
+def _ping():
     return 'OK'

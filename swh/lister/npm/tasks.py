@@ -41,14 +41,16 @@ def get_last_update_seq(lister):
 
 
 @app.task(name=__name__ + '.NpmListerTask')
-def npm_lister(**lister_args):
+def list_npm_full(**lister_args):
+    'Full lister for the npm (javascript) registry'
     lister = NpmLister(**lister_args)
     with save_registry_state(lister):
         lister.run()
 
 
 @app.task(name=__name__ + '.NpmIncrementalListerTask')
-def npm_incremental_lister(**lister_args):
+def list_npm_incremental(**lister_args):
+    'Incremental lister for the npm (javascript) registry'
     lister = NpmIncrementalLister(**lister_args)
     update_seq_start = get_last_update_seq(lister)
     with save_registry_state(lister):
@@ -56,5 +58,5 @@ def npm_incremental_lister(**lister_args):
 
 
 @app.task(name=__name__ + '.ping')
-def ping():
+def _ping():
     return 'OK'

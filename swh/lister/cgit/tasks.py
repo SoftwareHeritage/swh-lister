@@ -8,10 +8,11 @@ from .lister import CGitLister
 
 
 @app.task(name=__name__ + '.CGitListerTask')
-def cgit_lister(**lister_args):
+def list_cgit(**lister_args):
+    '''Lister task for CGit instances'''
     CGitLister(**lister_args).run()
 
 
 @app.task(name=__name__ + '.ping')
-def ping():
+def _ping():
     return 'OK'
