@@ -112,7 +112,7 @@ def get_lister(lister_name, db_url, drop_tables=False, **conf):
     elif lister_name == 'phabricator':
         from .phabricator.models import IndexingModelBase as ModelBase
         from .phabricator.lister import PhabricatorLister
-        _lister = PhabricatorLister(forge_url=api_baseurl,
+        _lister = PhabricatorLister(api_baseurl=api_baseurl,
                                     override_config=override_conf)
 
     elif lister_name == 'gnu':
