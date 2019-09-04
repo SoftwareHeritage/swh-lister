@@ -3,6 +3,7 @@
 # See top-level LICENSE file for more information
 
 import re
+import logging
 from urllib.parse import urlparse, urljoin
 
 from bs4 import BeautifulSoup
@@ -13,6 +14,9 @@ from .models import CGitModel
 
 from swh.core.utils import grouper
 from swh.lister.core.lister_base import ListerBase
+
+
+logger = logging.getLogger(__name__)
 
 
 class CGitLister(ListerBase):
@@ -70,12 +74,15 @@ class CGitLister(ListerBase):
         self.session.mount(self.url, HTTPAdapter(max_retries=3))
 
     def run(self):
-        for repos in grouper(self.get_repos(), 100):
+        total = 0
+        for repos in grouper(self.get_repos(), 10):
             models = list(filter(None, (self.build_model(repo)
                                         for repo in repos)))
             injected_repos = self.inject_repo_data_into_db(models)
             self.schedule_missing_tasks(models, injected_repos)
             self.db_session.commit()
+            total += len(injected_repos)
+            logger.debug('Scheduled %s tasks for %s', total, self.url)
 
     def get_repos(self):
         """Generate git 'project' URLs found on the current CGit server
