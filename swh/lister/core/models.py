@@ -7,13 +7,14 @@ from datetime import datetime
 import logging
 
 from sqlalchemy import Column, DateTime, Integer, String
-from sqlalchemy.ext.declarative import declarative_base, DeclarativeMeta
+from sqlalchemy.ext.declarative import DeclarativeMeta
 
 from .abstractattribute import AbstractAttribute
 
-logger = logging.getLogger(__name__)
+from swh.storage.schemata.distribution import SQLBase
 
-SQLBase = declarative_base()
+
+logger = logging.getLogger(__name__)
 
 
 class ABCSQLMeta(abc.ABCMeta, DeclarativeMeta):
