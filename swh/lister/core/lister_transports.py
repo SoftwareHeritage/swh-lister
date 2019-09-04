@@ -96,7 +96,7 @@ class ListerHttpTransport(abc.ABC):
         required.
         """
         path = self.PATH_TEMPLATE % identifier
-        return self.api_baseurl + path
+        return self.url + path
 
     def request_params(self, identifier):
         """Get the full parameters passed to requests given the
@@ -142,14 +142,14 @@ class ListerHttpTransport(abc.ABC):
             self.reset_backoff()
             return False, 0
 
-    def __init__(self, api_baseurl=None):
-        if not api_baseurl:
-            api_baseurl = self.config.get('api_baseurl')
-        if not api_baseurl:
-            api_baseurl = self.DEFAULT_URL
-        if not api_baseurl:
-            raise NameError('HTTP Lister Transport requires api_baseurl.')
-        self.api_baseurl = api_baseurl  # eg. 'https://api.github.com'
+    def __init__(self, url=None):
+        if not url:
+            url = self.config.get('url')
+        if not url:
+            url = self.DEFAULT_URL
+        if not url:
+            raise NameError('HTTP Lister Transport requires an url.')
+        self.url = url  # eg. 'https://api.github.com'
         self.session = requests.Session()
         self.lister_version = __version__
 
@@ -218,7 +218,7 @@ class ListerOnePageApiTransport(ListerHttpTransport):
                              "parse for information")
     PATH_TEMPLATE = None  # we do not use it
 
-    def __init__(self, api_baseurl=None):
+    def __init__(self, url=None):
         self.session = requests.Session()
         self.lister_version = __version__
 

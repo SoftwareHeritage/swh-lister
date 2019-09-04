@@ -12,20 +12,16 @@ from .lister import BitBucketLister
 GROUP_SPLIT = 10000
 
 
-def new_lister(api_baseurl='https://api.bitbucket.org/2.0', per_page=100):
-    return BitBucketLister(api_baseurl=api_baseurl, per_page=per_page)
-
-
 @app.task(name=__name__ + '.IncrementalBitBucketLister')
 def list_bitbucket_incremental(**lister_args):
     '''Incremental update of the BitBucket forge'''
-    lister = new_lister(**lister_args)
+    lister = BitBucketLister(**lister_args)
     lister.run(min_bound=lister.db_last_index(), max_bound=None)
 
 
 @app.task(name=__name__ + '.RangeBitBucketLister')
 def _range_bitbucket_lister(start, end, **lister_args):
-    lister = new_lister(**lister_args)
+    lister = BitBucketLister(**lister_args)
     lister.run(min_bound=start, max_bound=end)
 
 
@@ -36,7 +32,7 @@ def list_bitbucket_full(self, split=None, **lister_args):
     It's not to be called for an initial listing.
 
     """
-    lister = new_lister(**lister_args)
+    lister = BitBucketLister(**lister_args)
     ranges = lister.db_partition_indices(split or GROUP_SPLIT)
     if not ranges:
         self.log.info('Nothing to list')

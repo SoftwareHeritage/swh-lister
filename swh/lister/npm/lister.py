@@ -16,10 +16,9 @@ class NpmListerBase(IndexingHttpLister):
     LISTER_NAME = 'npm'
     instance = 'npm'
 
-    def __init__(self, api_baseurl='https://replicate.npmjs.com',
+    def __init__(self, url='https://replicate.npmjs.com',
                  per_page=1000, override_config=None):
-        super().__init__(api_baseurl=api_baseurl,
-                         override_config=override_config)
+        super().__init__(url=url, override_config=override_config)
         self.per_page = per_page + 1
         self.PATH_TEMPLATE += '&limit=%s' % self.per_page
 
@@ -76,7 +75,7 @@ class NpmListerBase(IndexingHttpLister):
             'https://www.npmjs.com/package/%s' % repo_name,
             # package metadata url needs to be escaped otherwise some requests
             # may fail (for instance when a package name contains '/')
-            '%s/%s' % (self.api_baseurl, quote(repo_name, safe=''))
+            '%s/%s' % (self.url, quote(repo_name, safe=''))
         )
 
     def string_pattern_check(self, inner, lower, upper=None):

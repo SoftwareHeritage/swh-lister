@@ -14,18 +14,11 @@ from .lister import GitLabLister
 NBPAGES = 10
 
 
-def new_lister(api_baseurl='https://gitlab.com/api/v4',
-               instance=None, sort='asc', per_page=20):
-    return GitLabLister(
-        api_baseurl=api_baseurl, instance=instance, sort=sort,
-        per_page=per_page)
-
-
 @app.task(name=__name__ + '.IncrementalGitLabLister')
 def list_gitlab_incremental(**lister_args):
     """Incremental update of a GitLab instance"""
     lister_args['sort'] = 'desc'
-    lister = new_lister(**lister_args)
+    lister = GitLabLister(**lister_args)
     total_pages = lister.get_pages_information()[1]
     # stopping as soon as existing origins for that instance are detected
     lister.run(min_bound=1, max_bound=total_pages, check_existence=True)
@@ -33,14 +26,14 @@ def list_gitlab_incremental(**lister_args):
 
 @app.task(name=__name__ + '.RangeGitLabLister')
 def _range_gitlab_lister(start, end, **lister_args):
-    lister = new_lister(**lister_args)
+    lister = GitLabLister(**lister_args)
     lister.run(min_bound=start, max_bound=end)
 
 
 @app.task(name=__name__ + '.FullGitLabRelister', bind=True)
 def list_gitlab_full(self, **lister_args):
     """Full update of a GitLab instance"""
-    lister = new_lister(**lister_args)
+    lister = GitLabLister(**lister_args)
     _, total_pages, _ = lister.get_pages_information()
     ranges = list(utils.split_range(total_pages, NBPAGES))
     random.shuffle(ranges)

@@ -16,12 +16,11 @@ class GitLabLister(PageByPageHttpLister):
     MODEL = GitLabModel
     LISTER_NAME = 'gitlab'
 
-    def __init__(self, api_baseurl=None, instance=None,
+    def __init__(self, url=None, instance=None,
                  override_config=None, sort='asc', per_page=20):
-        super().__init__(api_baseurl=api_baseurl,
-                         override_config=override_config)
+        super().__init__(url=url, override_config=override_config)
         if instance is None:
-            instance = parse_url(self.api_baseurl).host
+            instance = parse_url(self.url).host
         self.instance = instance
         self.PATH_TEMPLATE = '%s&sort=%s&per_page=%s' % (
             self.PATH_TEMPLATE, sort, per_page)

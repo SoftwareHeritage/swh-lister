@@ -12,20 +12,16 @@ from swh.lister.github.lister import GitHubLister
 GROUP_SPLIT = 10000
 
 
-def new_lister(api_baseurl='https://api.github.com', **kw):
-    return GitHubLister(api_baseurl=api_baseurl, **kw)
-
-
 @app.task(name=__name__ + '.IncrementalGitHubLister')
 def list_github_incremental(**lister_args):
     'Incremental update of GitHub'
-    lister = new_lister(**lister_args)
+    lister = GitHubLister(**lister_args)
     lister.run(min_bound=lister.db_last_index(), max_bound=None)
 
 
 @app.task(name=__name__ + '.RangeGitHubLister')
 def _range_github_lister(start, end, **lister_args):
-    lister = new_lister(**lister_args)
+    lister = GitHubLister(**lister_args)
     lister.run(min_bound=start, max_bound=end)
 
 
@@ -36,7 +32,7 @@ def list_github_full(self, split=None, **lister_args):
     It's not to be called for an initial listing.
 
     """
-    lister = new_lister(**lister_args)
+    lister = GitHubLister(**lister_args)
     ranges = lister.db_partition_indices(split or GROUP_SPLIT)
     if not ranges:
         self.log.info('Nothing to list')

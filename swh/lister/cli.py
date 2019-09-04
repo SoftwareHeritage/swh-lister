@@ -63,7 +63,7 @@ def get_lister(lister_name, db_url=None, **conf):
             (lister_name, SUPPORTED_LISTERS))
     if db_url:
         conf['lister'] = {'cls': 'local', 'args': {'db': db_url}}
-    # To allow api_baseurl override per lister
+
     registry_entry = LISTERS[lister_name].load()()
     lister_cls = registry_entry['lister']
     lister = lister_cls(override_config=conf)

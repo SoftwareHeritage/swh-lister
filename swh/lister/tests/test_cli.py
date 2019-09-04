@@ -67,34 +67,34 @@ def test_get_lister_override():
     db_url = init_db().url()
 
     listers = {
-        'gitlab': ('api_baseurl', 'https://gitlab.uni/api/v4/'),
-        'phabricator': (
-            'api_baseurl',
-            'https://somewhere.org/api/diffusion.repository.search'),
+        'gitlab': 'https://other.gitlab.uni/api/v4/',
+        'phabricator': 'https://somewhere.org/api/diffusion.repository.search',
+        'cgit': 'https://some.where/cgit',
     }
 
     # check the override ends up defined in the lister
-    for lister_name, (url_key, url_value) in listers.items():
+    for lister_name, url in listers.items():
         lst = get_lister(
             lister_name, db_url, **{
-                url_key: url_value,
+                'url': url,
                 'priority': 'high',
                 'policy': 'oneshot',
             })
 
-        assert getattr(lst, url_key) == url_value
+        assert lst.url == url
         assert lst.config['priority'] == 'high'
         assert lst.config['policy'] == 'oneshot'
 
     # check the default urls are used and not the override (since it's not
     # passed)
-    for lister_name, (url_key, url_value) in listers.items():
+    for lister_name, url in listers.items():
         lst = get_lister(lister_name, db_url)
 
         # no override so this does not end up in lister's configuration
-        assert url_key not in lst.config
+        assert 'url' not in lst.config
         assert 'priority' not in lst.config
         assert 'oneshot' not in lst.config
+        assert lst.url == lst.DEFAULT_URL
 
 
 def test_task_types(swh_scheduler_config, tmp_path):

@@ -20,11 +20,10 @@ class PhabricatorLister(IndexingHttpLister):
     MODEL = PhabricatorModel
     LISTER_NAME = 'phabricator'
 
-    def __init__(self, api_baseurl=None, instance=None, override_config=None):
-        super().__init__(api_baseurl=api_baseurl,
-                         override_config=override_config)
+    def __init__(self, url=None, instance=None, override_config=None):
+        super().__init__(url=url, override_config=override_config)
         if not instance:
-            instance = urllib.parse.urlparse(self.api_baseurl).hostname
+            instance = urllib.parse.urlparse(self.url).hostname
         self.instance = instance
 
     @property

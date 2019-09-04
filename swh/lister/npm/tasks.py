@@ -14,7 +14,7 @@ from swh.lister.npm.models import NpmVisitModel
 @contextmanager
 def save_registry_state(lister):
     params = {'headers': lister.request_headers()}
-    registry_state = lister.session.get(lister.api_baseurl, **params)
+    registry_state = lister.session.get(lister.url, **params)
     registry_state = registry_state.json()
     keys = ('doc_count', 'doc_del_count', 'update_seq', 'purge_seq',
             'disk_size', 'data_size', 'committed_update_seq',

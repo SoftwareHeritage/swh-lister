@@ -23,9 +23,8 @@ class BitBucketLister(IndexingHttpLister):
     instance = 'bitbucket'
     default_min_bound = datetime.utcfromtimestamp(0)
 
-    def __init__(self, api_baseurl=None, override_config=None, per_page=100):
-        super().__init__(
-            api_baseurl=api_baseurl, override_config=override_config)
+    def __init__(self, url=None, override_config=None, per_page=100):
+        super().__init__(url=url, override_config=override_config)
         per_page = self.config.get('per_page', per_page)
 
         self.PATH_TEMPLATE = '%s&pagelen=%s' % (
