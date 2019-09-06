@@ -1,5 +1,3 @@
-:orphan:
-
 .. _lister-tutorial:
 
 Tutorial: list the content of your favorite forge in just a few steps

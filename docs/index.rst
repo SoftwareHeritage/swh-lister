@@ -12,7 +12,14 @@ source code distribution place.
 Overview
 --------
 
-* :ref:`lister-tutorial`
+.. toctree::
+   :maxdepth: 2
+   :caption: Overview:
+   :titlesonly:
+
+
+   lister-tutorial
+   run-lister-tutorial
 
 
 Reference Documentation

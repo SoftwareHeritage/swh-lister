@@ -1,6 +1,3 @@
-
-:orphan:
-
 .. _run-lister-tutorial:
 
 Tutorial: run a lister within docker-dev in just a few steps
