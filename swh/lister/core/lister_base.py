@@ -16,7 +16,6 @@ from sqlalchemy.orm import sessionmaker
 
 from swh.core import config
 from swh.scheduler import get_scheduler, utils
-from swh.storage import get_storage
 
 from .abstractattribute import AbstractAttribute
 
@@ -205,12 +204,6 @@ class ListerBase(abc.ABC, config.SWHConfig):
     # You probably don't need to override anything below this line.
 
     DEFAULT_CONFIG = {
-        'storage': ('dict', {
-            'cls': 'remote',
-            'args': {
-                'url': 'http://localhost:5002/'
-            },
-        }),
         'scheduler': ('dict', {
             'cls': 'remote',
             'args': {
@@ -256,7 +249,6 @@ class ListerBase(abc.ABC, config.SWHConfig):
             self.config.update(override_config)
 
         logger.debug('%s CONFIG=%s' % (self, self.config))
-        self.storage = get_storage(**self.config['storage'])
         self.scheduler = get_scheduler(**self.config['scheduler'])
         self.db_engine = create_engine(self.config['lister']['args']['db'])
         self.mk_session = sessionmaker(bind=self.db_engine)

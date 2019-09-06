@@ -8,10 +8,11 @@ from .lister import PyPILister
 
 
 @app.task(name=__name__ + '.PyPIListerTask')
-def pypi_lister(**lister_args):
+def list_pypi(**lister_args):
+    'Full update of the PyPI (python) registry'
     PyPILister(**lister_args).run()
 
 
 @app.task(name=__name__ + '.ping')
-def ping():
+def _ping():
     return 'OK'

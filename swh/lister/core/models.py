@@ -4,13 +4,17 @@
 
 import abc
 from datetime import datetime
+import logging
 
 from sqlalchemy import Column, DateTime, Integer, String
-from sqlalchemy.ext.declarative import declarative_base, DeclarativeMeta
+from sqlalchemy.ext.declarative import DeclarativeMeta
 
 from .abstractattribute import AbstractAttribute
 
-SQLBase = declarative_base()
+from swh.storage.schemata.distribution import SQLBase
+
+
+logger = logging.getLogger(__name__)
 
 
 class ABCSQLMeta(abc.ABCMeta, DeclarativeMeta):
@@ -46,3 +50,23 @@ class IndexingModelBase(ModelBase, metaclass=ABCSQLMeta):
     # The value used for sorting, segmenting, or api query paging,
     # because uids aren't always sequential.
     indexable = AbstractAttribute('Column(<indexable_type>, index=True)')
+
+
+def initialize(db_engine, drop_tables=False, **kwargs):
+    """Default database initialization function for a lister.
+
+    Typically called from the lister's initialization hook.
+
+    Args:
+        models (list): list of SQLAlchemy tables/models to drop/create.
+        db_enfine (): the SQLAlchemy DB engine.
+        drop_tables (bool): if True, tables will be dropped before
+            (re)creating them.
+    """
+
+    if drop_tables:
+        logger.info('Dropping tables')
+        SQLBase.metadata.drop_all(db_engine, checkfirst=True)
+
+    logger.info('Creating tables')
+    SQLBase.metadata.create_all(db_engine, checkfirst=True)

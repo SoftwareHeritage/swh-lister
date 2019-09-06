@@ -29,7 +29,7 @@ class ListerHttpTransport(abc.ABC):
 
     To be used in conjunction with ListerBase or a subclass of it.
     """
-
+    DEFAULT_URL = None
     PATH_TEMPLATE = AbstractAttribute('string containing a python string'
                                       ' format pattern that produces the API'
                                       ' endpoint path for listing stored'
@@ -53,33 +53,10 @@ class ListerHttpTransport(abc.ABC):
         """Returns dictionary of any credentials configuration needed by the
         forge instance to list.
 
-        Returns:
-            dict of credentials per instance lister or {} if none.
-
-        """
-        all_creds = self.config.get('credentials')
-        if not all_creds:
-            return {}
-        lister_creds = all_creds.get(self.LISTER_NAME, {})
-        creds = lister_creds.get(self.instance, {})
-        return creds
-
-    def request_uri(self, identifier):
-        """Get the full request URI given the transport_request identifier.
-
-        MAY BE OVERRIDDEN if something more complex than the PATH_TEMPLATE is
-        required.
-        """
-        path = self.PATH_TEMPLATE % identifier
-        return self.api_baseurl + path
-
-    def request_params(self, identifier):
-        """Get the full parameters passed to requests given the
-        transport_request identifier.
-
-        This uses credentials if any are provided. The 'credentials'
-        configuration is expected to be a dict of multiple levels. The first
-        level is the lister's name, the second is the lister's instance name.
+        The 'credentials' configuration is expected to be a dict of multiple
+        levels. The first level is the lister's name, the second is the
+        lister's instance name, which value is expected to be a list of
+        credential structures (typically a couple username/password).
 
         For example:
 
@@ -101,6 +78,32 @@ class ListerHttpTransport(abc.ABC):
               password: ...
             - ...
 
+        Returns:
+            list of credential dicts for the current lister.
+
+        """
+        all_creds = self.config.get('credentials')
+        if not all_creds:
+            return []
+        lister_creds = all_creds.get(self.LISTER_NAME, {})
+        creds = lister_creds.get(self.instance, [])
+        return creds
+
+    def request_uri(self, identifier):
+        """Get the full request URI given the transport_request identifier.
+
+        MAY BE OVERRIDDEN if something more complex than the PATH_TEMPLATE is
+        required.
+        """
+        path = self.PATH_TEMPLATE % identifier
+        return self.url + path
+
+    def request_params(self, identifier):
+        """Get the full parameters passed to requests given the
+        transport_request identifier.
+
+        This uses credentials if any are provided (see
+        request_instance_credentials).
 
         MAY BE OVERRIDDEN if something more complex than the request headers
         is needed.
@@ -139,10 +142,14 @@ class ListerHttpTransport(abc.ABC):
             self.reset_backoff()
             return False, 0
 
-    def __init__(self, api_baseurl=None):
-        if not api_baseurl:
-            raise NameError('HTTP Lister Transport requires api_baseurl.')
-        self.api_baseurl = api_baseurl  # eg. 'https://api.github.com'
+    def __init__(self, url=None):
+        if not url:
+            url = self.config.get('url')
+        if not url:
+            url = self.DEFAULT_URL
+        if not url:
+            raise NameError('HTTP Lister Transport requires an url.')
+        self.url = url  # eg. 'https://api.github.com'
         self.session = requests.Session()
         self.lister_version = __version__
 
@@ -211,7 +218,7 @@ class ListerOnePageApiTransport(ListerHttpTransport):
                              "parse for information")
     PATH_TEMPLATE = None  # we do not use it
 
-    def __init__(self, api_baseurl=None):
+    def __init__(self, url=None):
         self.session = requests.Session()
         self.lister_version = __version__
 

@@ -3,11 +3,8 @@
 # See top-level LICENSE file for more information
 
 from sqlalchemy import Column, String, DateTime, Integer, BigInteger, Sequence
-from sqlalchemy.ext.declarative import declarative_base
 
-from swh.lister.core.models import IndexingModelBase, ABCSQLMeta
-
-SQLBase = declarative_base()
+from swh.lister.core.models import IndexingModelBase, SQLBase, ABCSQLMeta
 
 
 class NpmVisitModel(SQLBase, metaclass=ABCSQLMeta):
