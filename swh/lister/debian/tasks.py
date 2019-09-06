@@ -8,10 +8,11 @@ from .lister import DebianLister
 
 
 @app.task(name=__name__ + '.DebianListerTask')
-def debian_lister(distribution, **lister_args):
+def list_debian_distribution(distribution, **lister_args):
+    '''List a Debian distribution'''
     DebianLister(**lister_args).run(distribution)
 
 
 @app.task(name=__name__ + '.ping')
-def ping():
+def _ping():
     return 'OK'

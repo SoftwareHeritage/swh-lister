@@ -26,8 +26,7 @@ def test_incremental(lister, swh_app, celery_session_worker):
     res.wait()
     assert res.successful()
 
-    lister.assert_called_once_with(
-        api_baseurl='https://api.bitbucket.org/2.0', per_page=100)
+    lister.assert_called_once_with()
     lister.db_last_index.assert_called_once_with()
     lister.run.assert_called_once_with(min_bound=42, max_bound=None)
 
@@ -45,8 +44,7 @@ def test_range(lister, swh_app, celery_session_worker):
     res.wait()
     assert res.successful()
 
-    lister.assert_called_once_with(
-        api_baseurl='https://api.bitbucket.org/2.0', per_page=100)
+    lister.assert_called_once_with()
     lister.db_last_index.assert_not_called()
     lister.run.assert_called_once_with(min_bound=12, max_bound=42)
 
@@ -76,8 +74,7 @@ def test_relister(lister, swh_app, celery_session_worker):
             break
         sleep(1)
 
-    lister.assert_called_with(
-        api_baseurl='https://api.bitbucket.org/2.0', per_page=100)
+    lister.assert_called_with()
 
     # one by the FullBitbucketRelister task
     # + 5 for the RangeBitbucketLister subtasks

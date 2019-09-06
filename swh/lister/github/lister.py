@@ -12,6 +12,7 @@ from swh.lister.github.models import GitHubModel
 class GitHubLister(IndexingHttpLister):
     PATH_TEMPLATE = '/repositories?since=%d'
     MODEL = GitHubModel
+    DEFAULT_URL = 'https://api.github.com'
     API_URL_INDEX_RE = re.compile(r'^.*/repositories\?since=(\d+)')
     LISTER_NAME = 'github'
     instance = 'github'  # There is only 1 instance of such lister

@@ -3,6 +3,7 @@
 # See top-level LICENSE file for more information
 
 import logging
+import random
 
 import urllib.parse
 
@@ -15,21 +16,15 @@ logger = logging.getLogger(__name__)
 
 class PhabricatorLister(IndexingHttpLister):
     PATH_TEMPLATE = '?order=oldest&attachments[uris]=1&after=%s'
+    DEFAULT_URL = 'https://forge.softwareheritage.org/api/diffusion.repository.search'  # noqa
     MODEL = PhabricatorModel
     LISTER_NAME = 'phabricator'
 
-    def __init__(self, forge_url, instance=None, api_token=None,
-                 override_config=None):
-        if forge_url.endswith("/"):
-            forge_url = forge_url[:-1]
-        self.forge_url = forge_url
-        api_baseurl = '%s/api/diffusion.repository.search' % forge_url
-        self.api_token = api_token
+    def __init__(self, url=None, instance=None, override_config=None):
+        super().__init__(url=url, override_config=override_config)
         if not instance:
-            instance = urllib.parse.urlparse(forge_url).hostname
+            instance = urllib.parse.urlparse(self.url).hostname
         self.instance = instance
-        super().__init__(api_baseurl=api_baseurl,
-                         override_config=override_config)
 
     @property
     def default_min_bound(self):
@@ -38,16 +33,6 @@ class PhabricatorLister(IndexingHttpLister):
 
         """
         return self._bootstrap_repositories_listing()
-
-    def _build_query_params(self, params, api_token):
-        """Build query params to include the forge's api token
-
-        Returns:
-            updated params dict with 'params' entry.
-
-        """
-        params.update({'params': {'api.token': api_token}})
-        return params
 
     def request_params(self, identifier):
         """Override the default params behavior to retrieve the api token
@@ -61,16 +46,14 @@ class PhabricatorLister(IndexingHttpLister):
                 password: <api-token>
 
         """
-        params = {}
-        params['headers'] = self.request_headers() or {}
-        if self.api_token:
-            return self._build_query_params(params, self.api_token)
-        instance_creds = self.request_instance_credentials()
-        if not instance_creds:
+        creds = self.request_instance_credentials()
+        if not creds:
             raise ValueError(
                 'Phabricator forge needs authentication credential to list.')
-        api_token = instance_creds[0]['password']
-        return self._build_query_params(params, api_token)
+        api_token = random.choice(creds)['password']
+
+        return {'headers': self.request_headers() or {},
+                'params': {'api.token': api_token}}
 
     def request_headers(self):
         """
@@ -85,7 +68,7 @@ class PhabricatorLister(IndexingHttpLister):
         if url is None:
             return None
         return {
-            'uid': self.forge_url + str(repo['id']),
+            'uid': url,
             'indexable': repo['id'],
             'name': repo['fields']['shortName'],
             'full_name': repo['fields']['name'],

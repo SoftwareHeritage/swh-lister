@@ -14,25 +14,21 @@ from swh.lister.core.indexing_lister import IndexingHttpLister
 
 logger = logging.getLogger(__name__)
 
-DEFAULT_BITBUCKET_PAGE = 10
-
 
 class BitBucketLister(IndexingHttpLister):
     PATH_TEMPLATE = '/repositories?after=%s'
     MODEL = BitBucketModel
     LISTER_NAME = 'bitbucket'
+    DEFAULT_URL = 'https://api.bitbucket.org/2.0'
     instance = 'bitbucket'
     default_min_bound = datetime.utcfromtimestamp(0)
 
-    def __init__(self, api_baseurl, override_config=None, per_page=100):
-        super().__init__(
-            api_baseurl=api_baseurl, override_config=override_config)
-        if per_page != DEFAULT_BITBUCKET_PAGE:
-            self.PATH_TEMPLATE = '%s&pagelen=%s' % (
-                self.PATH_TEMPLATE, per_page)
-        # to stay consistent with prior behavior (20 * 10 repositories then)
-        self.flush_packet_db = int(
-            (self.flush_packet_db * DEFAULT_BITBUCKET_PAGE) / per_page)
+    def __init__(self, url=None, override_config=None, per_page=100):
+        super().__init__(url=url, override_config=override_config)
+        per_page = self.config.get('per_page', per_page)
+
+        self.PATH_TEMPLATE = '%s&pagelen=%s' % (
+            self.PATH_TEMPLATE, per_page)
 
     def get_model_from_repo(self, repo):
         return {

@@ -34,7 +34,6 @@ swh/lister/cgit/tasks.py
 swh/lister/cgit/tests/__init__.py
 swh/lister/cgit/tests/conftest.py
 swh/lister/cgit/tests/repo_list.txt
-swh/lister/cgit/tests/response.html
 swh/lister/cgit/tests/test_lister.py
 swh/lister/cgit/tests/test_tasks.py
 swh/lister/core/__init__.py
