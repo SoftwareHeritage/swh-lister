@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+<title>elisp-es.git - Unnamed repository; edit this file 'description' to name the repository.</title>
+<meta name='generator' content='cgit v1.0-41-gc330'/>
+<meta name='robots' content='index, nofollow'/>
+<link rel='stylesheet' type='text/css' href='/cgit/cgit.css'/>
+<link rel='shortcut icon' href='/gitweb/git-favicon.png'/>
+<link rel='alternate' title='Atom feed' href='http://git.savannah.gnu.org/cgit/elisp-es.git/atom/?h=master' type='application/atom+xml'/>
+<link rel='vcs-git' href='git://git.savannah.gnu.org/elisp-es.git' title='elisp-es.git Git repository'/>
+<link rel='vcs-git' href='https://git.savannah.gnu.org/git/elisp-es.git' title='elisp-es.git Git repository'/>
+<link rel='vcs-git' href='ssh://git.savannah.gnu.org/srv/git/elisp-es.git' title='elisp-es.git Git repository'/>
+</head>
+<body>
+<div id='cgit'><table id='header'>
+<tr>
+<td class='logo' rowspan='2'><a href='/cgit/'><img src='/cgit/cgit.png' alt='cgit logo'/></a></td>
+<td class='main'><a href='/cgit/'>index</a> : <a title='elisp-es.git' href='/cgit/elisp-es.git/'>elisp-es.git</a></td><td class='form'><form method='get'>
+<select name='h' onchange='this.form.submit();'>
+<option value='master' selected='selected'>master</option>
+</select> <input type='submit' value='switch'/></form></td></tr>
+<tr><td class='sub'>Unnamed repository; edit this file 'description' to name the repository.</td><td class='sub right'></td></tr></table>
+<table class='tabs'><tr><td>
+<a class='active' href='/cgit/elisp-es.git/'>summary</a><a href='/cgit/elisp-es.git/refs/'>refs</a><a href='/cgit/elisp-es.git/log/'>log</a><a href='/cgit/elisp-es.git/tree/'>tree</a><a href='/cgit/elisp-es.git/commit/'>commit</a><a href='/cgit/elisp-es.git/diff/'>diff</a></td><td class='form'><form class='right' method='get' action='/cgit/elisp-es.git/log/'>
+<select name='qt'>
+<option value='grep'>log msg</option>
+<option value='author'>author</option>
+<option value='committer'>committer</option>
+<option value='range'>range</option>
+</select>
+<input class='txt' type='text' size='10' name='q' value=''/>
+<input type='submit' value='search'/>
+</form>
+</td></tr></table>
+<div class='content'><table summary='repository info' class='list nowrap'><tr class='nohover'><th class='left'>Branch</th><th class='left'>Commit message</th><th class='left'>Author</th><th class='left' colspan='2'>Age</th></tr>
+<tr><td><a href='/cgit/elisp-es.git/log/'>master</a></td><td><a href='/cgit/elisp-es.git/commit/'>emacs-lisp-intro-es.po: add sources and isbn</a></td><td>David Arroyo Menéndez</td><td colspan='2'><span class='age-months' title='2018-05-22 17:57:52 +0200'>15 months</span></td></tr>
+<tr class='nohover'><td colspan='5'>&nbsp;</td></tr><tr class='nohover'><td colspan='5'>&nbsp;</td></tr><tr class='nohover'><th class='left'>Age</th><th class='left'>Commit message</th><th class='left'>Author</th><th class='left'>Files</th><th class='left'>Lines</th></tr>
+<tr><td><span title='2018-05-22 17:57:52 +0200'>2018-05-22</span></td><td><a href='/cgit/elisp-es.git/commit/?id=098f5751cd840b545caa7c3bbd270d6c4687dd76'>emacs-lisp-intro-es.po: add sources and isbn</a><span class='decoration'><a class='deco' href='/cgit/elisp-es.git/commit/?id=098f5751cd840b545caa7c3bbd270d6c4687dd76'>HEAD</a><a class='branch-deco' href='/cgit/elisp-es.git/log/'>master</a></span></td><td>David Arroyo Menéndez</td><td>1</td><td><span class='deletions'>-4</span>/<span class='insertions'>+8</span></td></tr>
+<tr><td><span title='2016-08-19 22:17:08 -0500'>2016-08-19</span></td><td><a href='/cgit/elisp-es.git/commit/?id=fe6ec23e460864822a134656c9b3fac914b4bec7'>pre-revision en emacs-lisp-intro-es.po lineas 9638-10430</a></td><td>nasciiboy</td><td>1</td><td><span class='deletions'>-169</span>/<span class='insertions'>+165</span></td></tr>
+<tr><td><span title='2016-08-12 22:05:45 -0500'>2016-08-12</span></td><td><a href='/cgit/elisp-es.git/commit/?id=2b8ea921aa4f47e6a15ce6e367637e9308f8bbf7'>pre-revision en emacs-lisp-intro-es.po lineas 9174-9637</a></td><td>nasciiboy</td><td>1</td><td><span class='deletions'>-100</span>/<span class='insertions'>+99</span></td></tr>
+<tr><td><span title='2016-08-05 22:21:22 -0500'>2016-08-05</span></td><td><a href='/cgit/elisp-es.git/commit/?id=1b9ffff6e2324f6db9451ba723cc78c1b5ca3fc2'>pre-revision en emacs-lisp-intro-es.po lineas 8488-9173</a></td><td>nasciiboy</td><td>1</td><td><span class='deletions'>-164</span>/<span class='insertions'>+163</span></td></tr>
+<tr><td><span title='2016-07-30 22:17:59 -0500'>2016-07-30</span></td><td><a href='/cgit/elisp-es.git/commit/?id=2cd51b7a45ee1123c7ee55448ffb98fe8d7d99fd'>pre-revision en emacs-lisp-intro-es.po lineas 7887-8487</a></td><td>nasciiboy</td><td>1</td><td><span class='deletions'>-124</span>/<span class='insertions'>+124</span></td></tr>
+<tr><td><span title='2016-07-15 21:32:44 -0500'>2016-07-15</span></td><td><a href='/cgit/elisp-es.git/commit/?id=1fe081344475af3e95f14e18fd0d66c4be2d0ba8'>pre-revision en emacs-lisp-intro-es.po lineas 7137-7886</a></td><td>nasciiboy</td><td>1</td><td><span class='deletions'>-166</span>/<span class='insertions'>+166</span></td></tr>
+<tr><td><span title='2016-07-08 22:28:27 -0500'>2016-07-08</span></td><td><a href='/cgit/elisp-es.git/commit/?id=0fcaf050f9024b01d9a2b02d31fc61b0f1ef9697'>pre-revision en emacs-lisp-intro-es.po lineas 6390-7136</a></td><td>nasciiboy</td><td>1</td><td><span class='deletions'>-149</span>/<span class='insertions'>+148</span></td></tr>
+<tr><td><span title='2016-07-01 22:47:14 -0500'>2016-07-01</span></td><td><a href='/cgit/elisp-es.git/commit/?id=d234b0e44b76a4dfcabbcefdda5577e4c58e1d7f'>pre-revision en emacs-lisp-intro-es.po lineas 5577-6389</a></td><td>nasciiboy</td><td>1</td><td><span class='deletions'>-117</span>/<span class='insertions'>+116</span></td></tr>
+<tr><td><span title='2016-06-25 10:26:56 -0500'>2016-06-25</span></td><td><a href='/cgit/elisp-es.git/commit/?id=b60f208dfa49d05f603aad81a16e23f74169c482'>ajuste a la pre-revision en emacs-lisp-intro-es.po lineas 5000-5576</a></td><td>nasciiboy</td><td>1</td><td><span class='deletions'>-7</span>/<span class='insertions'>+7</span></td></tr>
+<tr><td><span title='2016-06-24 21:54:38 -0500'>2016-06-24</span></td><td><a href='/cgit/elisp-es.git/commit/?id=fc99ac66bcb0eaa2431250b44ab51e0fec234f72'>pre-revision en emacs-lisp-intro-es.po lineas 5000-5576</a></td><td>nasciiboy</td><td>1</td><td><span class='deletions'>-122</span>/<span class='insertions'>+122</span></td></tr>
+<tr class='nohover'><td colspan='5'><a href='/cgit/elisp-es.git/log/'>[...]</a></td></tr>
+<tr class='nohover'><td colspan='5'>&nbsp;</td></tr><tr class='nohover'><th class='left' colspan='5'>Clone</th></tr>
+<tr><td colspan='5'><a rel='vcs-git' href='git://git.savannah.gnu.org/elisp-es.git' title='elisp-es.git Git repository'>git://git.savannah.gnu.org/elisp-es.git</a></td></tr>
+<tr><td colspan='5'><a rel='vcs-git' href='https://git.savannah.gnu.org/git/elisp-es.git' title='elisp-es.git Git repository'>https://git.savannah.gnu.org/git/elisp-es.git</a></td></tr>
+<tr><td colspan='5'><a rel='vcs-git' href='ssh://git.savannah.gnu.org/srv/git/elisp-es.git' title='elisp-es.git Git repository'>ssh://git.savannah.gnu.org/srv/git/elisp-es.git</a></td></tr>
+</table></div> <!-- class=content -->
+<div class='footer'>generated by <a href='https://git.zx2c4.com/cgit/about/'>cgit v1.0-41-gc330</a> at 2019-08-30 13:36:08 +0000</div>
+</div> <!-- id=cgit -->
+</body>
+</html>
