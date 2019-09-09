@@ -1,0 +1,71 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns='http://www.w3.org/1999/xhtml' xml:lang='en' lang='en'>
+<head>
+<title>adaptation/mtdev - Domain: System / Uncategorized;</title>
+<meta name='generator' content='cgit v0.11.2'/>
+<meta name='robots' content='index, nofollow'/>
+<link rel='stylesheet' type='text/css' href='/cgit-css/cgit.css'/>
+<link rel='shortcut icon' href='/favicon.ico'/>
+<link rel='alternate' title='Atom feed' href='http://git.prod.infra.tizen.org:8000/cgit/adaptation/mtdev/atom/?h=master' type='application/atom+xml'/>
+<link rel='vcs-git' href='https://git.tizen.org/cgit/adaptation/mtdev' title='adaptation/mtdev Git repository'/>
+<link rel='vcs-git' href='git://git.tizen.org/adaptation/mtdev' title='adaptation/mtdev Git repository'/>
+</head>
+<body>
+<div id='cgit'><table id='header'>
+<tr>
+<td class='logo' rowspan='2'><a href='/cgit/'><img src='/cgit-css/tizen-pinwheel.png' alt='cgit logo'/></a></td>
+<td class='main'><a href='/cgit/'>index</a> : <a title='adaptation/mtdev' href='/cgit/adaptation/mtdev/'>adaptation/mtdev</a></td><td class='form'><form method='get' action=''>
+<select name='h' onchange='this.form.submit();'>
+<option value='accepted/tizen_2.4_mobile'>accepted/tizen_2.4_mobile</option>
+<option value='master' selected='selected'>master</option>
+<option value='tizen_2.0'>tizen_2.0</option>
+<option value='tizen_2.1'>tizen_2.1</option>
+<option value='tizen_2.2'>tizen_2.2</option>
+<option value='tizen_2.3'>tizen_2.3</option>
+<option value='tizen_2.3.1'>tizen_2.3.1</option>
+<option value='tizen_2.4'>tizen_2.4</option>
+</select> <input type='submit' name='' value='switch'/></form></td></tr>
+<tr><td class='sub'>Domain: System / Uncategorized;</td><td class='sub right'></td></tr></table>
+<table class='tabs'><tr><td>
+<a class='active' href='/cgit/adaptation/mtdev/'>summary</a><a href='/cgit/adaptation/mtdev/refs/'>refs</a><a href='/cgit/adaptation/mtdev/log/'>log</a><a href='/cgit/adaptation/mtdev/tree/'>tree</a><a href='/cgit/adaptation/mtdev/commit/'>commit</a><a href='/cgit/adaptation/mtdev/diff/'>diff</a></td><td class='form'><form class='right' method='get' action='/cgit/adaptation/mtdev/log/'>
+<select name='qt'>
+<option value='grep'>log msg</option>
+<option value='author'>author</option>
+<option value='committer'>committer</option>
+<option value='range'>range</option>
+</select>
+<input class='txt' type='text' size='10' name='q' value=''/>
+<input type='submit' value='search'/>
+</form>
+</td></tr></table>
+<div class='content'><table summary='repository info' class='list nowrap'><tr class='nohover'><th class='left'>Branch</th><th class='left'>Commit message</th><th class='left'>Author</th><th class='left' colspan='2'>Age</th></tr>
+<tr><td><a href='/cgit/adaptation/mtdev/log/?h=accepted/tizen_2.4_mobile'>accepted/tizen_2.4_mobile</a></td><td><a href='/cgit/adaptation/mtdev/commit/?h=accepted/tizen_2.4_mobile'>tizen 2.3.1 release</a></td><td>jk7744.park</td><td colspan='2'><span class='age-years' title='2015-09-08 12:32:24 (GMT)'>4 years</span></td></tr>
+<tr><td><a href='/cgit/adaptation/mtdev/log/'>master</a></td><td><a href='/cgit/adaptation/mtdev/commit/'>Initial empty repository</a></td><td>HyungKyu Song</td><td colspan='2'><span class='age-years' title='2013-02-15 05:22:24 (GMT)'>7 years</span></td></tr>
+<tr><td><a href='/cgit/adaptation/mtdev/log/?h=tizen_2.0'>tizen_2.0</a></td><td><a href='/cgit/adaptation/mtdev/commit/?h=tizen_2.0'>Tizen 2.0 Release</a></td><td>HyungKyu Song</td><td colspan='2'><span class='age-years' title='2013-02-15 16:00:51 (GMT)'>7 years</span></td></tr>
+<tr><td><a href='/cgit/adaptation/mtdev/log/?h=tizen_2.1'>tizen_2.1</a></td><td><a href='/cgit/adaptation/mtdev/commit/?h=tizen_2.1'>Tizen 2.1 base</a></td><td>Jinkun Jang</td><td colspan='2'><span class='age-years' title='2013-03-12 16:36:55 (GMT)'>6 years</span></td></tr>
+<tr><td><a href='/cgit/adaptation/mtdev/log/?h=tizen_2.2'>tizen_2.2</a></td><td><a href='/cgit/adaptation/mtdev/commit/?h=tizen_2.2'>Modify a spec file to install license file under /usr/share/license directory</a></td><td>Sung-Jin Park</td><td colspan='2'><span class='age-years' title='2013-09-30 05:36:03 (GMT)'>6 years</span></td></tr>
+<tr><td><a href='/cgit/adaptation/mtdev/log/?h=tizen_2.3'>tizen_2.3</a></td><td><a href='/cgit/adaptation/mtdev/commit/?h=tizen_2.3'>Initialize Tizen 2.3</a></td><td>Sehong Na</td><td colspan='2'><span class='age-years' title='2014-05-31 03:54:00 (GMT)'>5 years</span></td></tr>
+<tr><td><a href='/cgit/adaptation/mtdev/log/?h=tizen_2.3.1'>tizen_2.3.1</a></td><td><a href='/cgit/adaptation/mtdev/commit/?h=tizen_2.3.1'>tizen 2.3.1 release</a></td><td>jk7744.park</td><td colspan='2'><span class='age-years' title='2015-09-08 12:32:24 (GMT)'>4 years</span></td></tr>
+<tr><td><a href='/cgit/adaptation/mtdev/log/?h=tizen_2.4'>tizen_2.4</a></td><td><a href='/cgit/adaptation/mtdev/commit/?h=tizen_2.4'>tizen 2.3.1 release</a></td><td>jk7744.park</td><td colspan='2'><span class='age-years' title='2015-09-08 12:32:24 (GMT)'>4 years</span></td></tr>
+<tr class='nohover'><td colspan='5'>&nbsp;</td></tr><tr class='nohover'><th class='left'>Tag</th><th class='left'>Download</th><th class='left'>Author</th><th class='left' colspan='2'>Age</th></tr>
+<tr><td><a href='/cgit/adaptation/mtdev/tag/?h=accepted/tizen/2.4/mobile/20151029.042043'>accepted/tizen/2.4/mobile/20151029.042043</a></td><td><a href='/cgit/adaptation/mtdev/snapshot/accepted/tizen/2.4/mobile/20151029.042043.zip'>accepted/tizen/2.4/mobile/20151029.042043.zip</a>&nbsp;&nbsp;<a href='/cgit/adaptation/mtdev/snapshot/accepted/tizen/2.4/mobile/20151029.042043.tar.gz'>accepted/tizen/2.4/mobile/20151029.042043.tar.gz</a>&nbsp;&nbsp;<a href='/cgit/adaptation/mtdev/snapshot/accepted/tizen/2.4/mobile/20151029.042043.tar.bz2'>accepted/tizen/2.4/mobile/20151029.042043.tar.bz2</a>&nbsp;&nbsp;</td><td>Jenkins Continuous Build server</td><td colspan='2'><span class='age-years' title='2015-10-29 04:20:43 (GMT)'>4 years</span></td></tr>
+<tr><td><a href='/cgit/adaptation/mtdev/tag/?h=submit/tizen_2.4/20151028.062424'>submit/tizen_2.4/20151028.062424</a></td><td><a href='/cgit/adaptation/mtdev/snapshot/submit/tizen_2.4/20151028.062424.zip'>submit/tizen_2.4/20151028.062424.zip</a>&nbsp;&nbsp;<a href='/cgit/adaptation/mtdev/snapshot/submit/tizen_2.4/20151028.062424.tar.gz'>submit/tizen_2.4/20151028.062424.tar.gz</a>&nbsp;&nbsp;<a href='/cgit/adaptation/mtdev/snapshot/submit/tizen_2.4/20151028.062424.tar.bz2'>submit/tizen_2.4/20151028.062424.tar.bz2</a>&nbsp;&nbsp;</td><td>Joonsub Lee</td><td colspan='2'><span class='age-years' title='2015-10-28 06:24:24 (GMT)'>4 years</span></td></tr>
+<tr><td><a href='/cgit/adaptation/mtdev/tag/?h=submit/tizen_2.3.1/20150915.072428'>submit/tizen_2.3.1/20150915.072428</a></td><td><a href='/cgit/adaptation/mtdev/snapshot/submit/tizen_2.3.1/20150915.072428.zip'>submit/tizen_2.3.1/20150915.072428.zip</a>&nbsp;&nbsp;<a href='/cgit/adaptation/mtdev/snapshot/submit/tizen_2.3.1/20150915.072428.tar.gz'>submit/tizen_2.3.1/20150915.072428.tar.gz</a>&nbsp;&nbsp;<a href='/cgit/adaptation/mtdev/snapshot/submit/tizen_2.3.1/20150915.072428.tar.bz2'>submit/tizen_2.3.1/20150915.072428.tar.bz2</a>&nbsp;&nbsp;</td><td>Deokyang Jin</td><td colspan='2'><span class='age-years' title='2015-09-15 07:24:28 (GMT)'>4 years</span></td></tr>
+<tr><td><a href='/cgit/adaptation/mtdev/tag/?h=tizen_2.3.1_release'>tizen_2.3.1_release</a></td><td><a href='/cgit/adaptation/mtdev/snapshot/tizen_2.3.1_release.zip'>tizen_2.3.1_release.zip</a>&nbsp;&nbsp;<a href='/cgit/adaptation/mtdev/snapshot/tizen_2.3.1_release.tar.gz'>tizen_2.3.1_release.tar.gz</a>&nbsp;&nbsp;<a href='/cgit/adaptation/mtdev/snapshot/tizen_2.3.1_release.tar.bz2'>tizen_2.3.1_release.tar.bz2</a>&nbsp;&nbsp;</td><td>jk7744.park</td><td colspan='2'><span class='age-years' title='2015-09-08 12:32:24 (GMT)'>4 years</span></td></tr>
+<tr><td><a href='/cgit/adaptation/mtdev/tag/?h=tizen_2.4_mobile_release'>tizen_2.4_mobile_release</a></td><td><a href='/cgit/adaptation/mtdev/snapshot/tizen_2.4_mobile_release.zip'>tizen_2.4_mobile_release.zip</a>&nbsp;&nbsp;<a href='/cgit/adaptation/mtdev/snapshot/tizen_2.4_mobile_release.tar.gz'>tizen_2.4_mobile_release.tar.gz</a>&nbsp;&nbsp;<a href='/cgit/adaptation/mtdev/snapshot/tizen_2.4_mobile_release.tar.bz2'>tizen_2.4_mobile_release.tar.bz2</a>&nbsp;&nbsp;</td><td>jk7744.park</td><td colspan='2'><span class='age-years' title='2015-09-08 12:32:24 (GMT)'>4 years</span></td></tr>
+<tr><td><a href='/cgit/adaptation/mtdev/tag/?h=submit/tizen_2.3/20150202.052923'>submit/tizen_2.3/20150202.052923</a></td><td><a href='/cgit/adaptation/mtdev/snapshot/submit/tizen_2.3/20150202.052923.zip'>submit/tizen_2.3/20150202.052923.zip</a>&nbsp;&nbsp;<a href='/cgit/adaptation/mtdev/snapshot/submit/tizen_2.3/20150202.052923.tar.gz'>submit/tizen_2.3/20150202.052923.tar.gz</a>&nbsp;&nbsp;<a href='/cgit/adaptation/mtdev/snapshot/submit/tizen_2.3/20150202.052923.tar.bz2'>submit/tizen_2.3/20150202.052923.tar.bz2</a>&nbsp;&nbsp;</td><td>br21.kang</td><td colspan='2'><span class='age-years' title='2015-02-02 05:29:23 (GMT)'>5 years</span></td></tr>
+<tr><td><a href='/cgit/adaptation/mtdev/tag/?h=submit/tizen_2.3/20140531.101352'>submit/tizen_2.3/20140531.101352</a></td><td><a href='/cgit/adaptation/mtdev/snapshot/submit/tizen_2.3/20140531.101352.zip'>submit/tizen_2.3/20140531.101352.zip</a>&nbsp;&nbsp;<a href='/cgit/adaptation/mtdev/snapshot/submit/tizen_2.3/20140531.101352.tar.gz'>submit/tizen_2.3/20140531.101352.tar.gz</a>&nbsp;&nbsp;<a href='/cgit/adaptation/mtdev/snapshot/submit/tizen_2.3/20140531.101352.tar.bz2'>submit/tizen_2.3/20140531.101352.tar.bz2</a>&nbsp;&nbsp;</td><td>Sehong Na</td><td colspan='2'><span class='age-years' title='2014-05-31 10:13:52 (GMT)'>5 years</span></td></tr>
+<tr><td><a href='/cgit/adaptation/mtdev/tag/?h=2.3a_release'>2.3a_release</a></td><td><a href='/cgit/adaptation/mtdev/snapshot/mtdev-2.3a_release.zip'>mtdev-2.3a_release.zip</a>&nbsp;&nbsp;<a href='/cgit/adaptation/mtdev/snapshot/mtdev-2.3a_release.tar.gz'>mtdev-2.3a_release.tar.gz</a>&nbsp;&nbsp;<a href='/cgit/adaptation/mtdev/snapshot/mtdev-2.3a_release.tar.bz2'>mtdev-2.3a_release.tar.bz2</a>&nbsp;&nbsp;</td><td>Sehong Na</td><td colspan='2'><span class='age-years' title='2014-05-31 03:54:00 (GMT)'>5 years</span></td></tr>
+<tr><td><a href='/cgit/adaptation/mtdev/tag/?h=tizen_2.3_release'>tizen_2.3_release</a></td><td><a href='/cgit/adaptation/mtdev/snapshot/tizen_2.3_release.zip'>tizen_2.3_release.zip</a>&nbsp;&nbsp;<a href='/cgit/adaptation/mtdev/snapshot/tizen_2.3_release.tar.gz'>tizen_2.3_release.tar.gz</a>&nbsp;&nbsp;<a href='/cgit/adaptation/mtdev/snapshot/tizen_2.3_release.tar.bz2'>tizen_2.3_release.tar.bz2</a>&nbsp;&nbsp;</td><td>Sehong Na</td><td colspan='2'><span class='age-years' title='2014-05-31 03:54:00 (GMT)'>5 years</span></td></tr>
+<tr><td><a href='/cgit/adaptation/mtdev/tag/?h=submit/tizen_2.2/20131107.061414'>submit/tizen_2.2/20131107.061414</a></td><td><a href='/cgit/adaptation/mtdev/snapshot/submit/tizen_2.2/20131107.061414.zip'>submit/tizen_2.2/20131107.061414.zip</a>&nbsp;&nbsp;<a href='/cgit/adaptation/mtdev/snapshot/submit/tizen_2.2/20131107.061414.tar.gz'>submit/tizen_2.2/20131107.061414.tar.gz</a>&nbsp;&nbsp;<a href='/cgit/adaptation/mtdev/snapshot/submit/tizen_2.2/20131107.061414.tar.bz2'>submit/tizen_2.2/20131107.061414.tar.bz2</a>&nbsp;&nbsp;</td><td>Sehong Na</td><td colspan='2'><span class='age-years' title='2013-11-07 06:14:14 (GMT)'>6 years</span></td></tr>
+<tr class='nohover'><td colspan='5'><a href='/cgit/adaptation/mtdev/refs/tags'>[...]</a></td></tr><tr class='nohover'><td colspan='5'>&nbsp;</td></tr><tr class='nohover'><th class='left'>Age</th><th class='left'>Commit message</th><th class='left'>Author</th><th class='left'>Files</th><th class='left'>Lines</th></tr>
+<tr><td>2013-02-15</td><td><a href='/cgit/adaptation/mtdev/commit/?id=30cb2b118904bb4ed18468c4785cf81a39499ab8'>Initial empty repository</a><span class='decoration'><a class='deco' href='/cgit/adaptation/mtdev/commit/?id=30cb2b118904bb4ed18468c4785cf81a39499ab8'>HEAD</a><a class='branch-deco' href='/cgit/adaptation/mtdev/log/'>master</a></span></td><td>HyungKyu Song</td><td>0</td><td>-0/+0</td></tr>
+<tr class='nohover'><td colspan='5'>&nbsp;</td></tr><tr class='nohover'><th class='left' colspan='5'>Clone</th></tr>
+<tr><td colspan='5'><a rel='vcs-git' href='https://git.tizen.org/cgit/adaptation/mtdev' title='adaptation/mtdev Git repository'>https://git.tizen.org/cgit/adaptation/mtdev</a></td></tr>
+<tr><td colspan='5'><a rel='vcs-git' href='git://git.tizen.org/adaptation/mtdev' title='adaptation/mtdev Git repository'>git://git.tizen.org/adaptation/mtdev</a></td></tr>
+</table></div> <!-- class=content -->
+<div class='footer'>generated by <a href='http://git.zx2c4.com/cgit/about/'>cgit v0.11.2</a> at 2019-08-30 14:34:15 (GMT)</div>
+</div> <!-- id=cgit -->
+</body>
+</html>
