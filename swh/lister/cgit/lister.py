@@ -2,250 +2,137 @@
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
 
-import random
+import re
 import logging
+from urllib.parse import urlparse, urljoin
+
 from bs4 import BeautifulSoup
-import requests
-from urllib.parse import urlparse
+from requests import Session
+from requests.adapters import HTTPAdapter
 
 from .models import CGitModel
 
-from swh.lister.core.simple_lister import SimpleLister
-from swh.lister.core.lister_transports import ListerOnePageApiTransport
+from swh.core.utils import grouper
+from swh.lister.core.lister_base import ListerBase
 
 
-class CGitLister(ListerOnePageApiTransport, SimpleLister):
-    MODEL = CGitModel
-    LISTER_NAME = 'cgit'
-    PAGE = None
-    url_prefix_present = True
+logger = logging.getLogger(__name__)
 
-    def __init__(self, url, instance=None, url_prefix=None,
-                 override_config=None):
-        """Inits Class with PAGE url and origin url prefix.
 
+class CGitLister(ListerBase):
+    """Lister class for CGit repositories.
+
+    This lister will retrieve the list of published git repositories by
+    parsing the HTML page(s) of the index retrieved at `url`.
+
+    For each found git repository, a query is made at the given url found
+    in this index to gather published "Clone" URLs to be used as origin
+    URL for that git repo.
+
+    If several "Clone" urls are provided, prefer the http/https one, if
+    any, otherwise fall bak to the first one.
+
+    A loader task is created for each git repository:
+
+    Task:
+        Type: load-git
+        Policy: recurring
         Args:
-            url (str): URL of the CGit instance.
-            instance (str): Name of cgit instance.
-            url_prefix (str): Prefix of the origin_url. Origin link of the
-                              repos of some special instances do not match
-                              the url of the repository page, they have origin
-                              url in the format <url_prefix>/<repo_name>.
-
-        """
-        self.PAGE = url
-        if url_prefix is None:
-            self.url_prefix = url
-            self.url_prefix_present = False
-        else:
-            self.url_prefix = url_prefix
-
-        if not self.url_prefix.endswith('/'):
-            self.url_prefix += '/'
-        url = urlparse(self.PAGE)
-        self.url_netloc = find_netloc(url)
-
-        if not instance:
-            instance = url.hostname
-        self.instance = instance
-
-        ListerOnePageApiTransport .__init__(self)
-        SimpleLister.__init__(self, override_config=override_config)
-
-    def list_packages(self, response):
-        """List the actual cgit instance origins from the response.
-
-        Find repositories metadata by parsing the html page (response's raw
-        content). If there are links in the html page, retrieve those
-        repositories metadata from those pages as well. Return the
-        repositories as list of dictionaries.
-
-        Args:
-            response (Response): http api request response.
-
-        Returns:
-            List of repository origin urls (as dict) included in the response.
-
-        """
-        repos_details = []
-
-        for repo in self.yield_repo_from_responses(response):
-            repo_name = repo.a.text
-            origin_url = self.find_origin_url(repo, repo_name)
-
-            try:
-                time = repo.span['title']
-            except Exception:
-                time = None
-
-            if origin_url is not None:
-                repos_details.append({
-                    'name': repo_name,
-                    'time': time,
-                    'origin_url': origin_url,
-                })
-
-        random.shuffle(repos_details)
-        return repos_details
-
-    def yield_repo_from_responses(self, response):
-        """Yield repositories from all pages of the cgit instance.
-
-        Finds the number of pages present and yields the list of
-        repositories present.
-
-        Args:
-            response (Response): server response.
-
-        Yields:
-            List of beautifulsoup object of repository rows.
-
-        """
-        html = response.text
-        yield from get_repo_list(html)
-        pages = self.get_pages(make_soup(html))
-        if len(pages) > 1:
-            yield from self.get_repos_from_pages(pages[1:])
-
-    def find_origin_url(self, repo, repo_name):
-        """Finds the origin url for a repository
-
-        Args:
-            repo (Beautifulsoup): Beautifulsoup object of the repository
-                                  row present in base url.
-            repo_name (str): Repository name.
-
-        Returns:
-            string: origin url.
-
-        """
-        if self.url_prefix_present:
-            return self.url_prefix + repo_name
-
-        return self.get_url(repo)
-
-    def get_pages(self, url_soup):
-        """Find URL of all pages.
-
-        Finds URL of pages that are present by parsing over the HTML of
-        pagination present at the end of the page.
-
-        Args:
-            url_soup (Beautifulsoup): a beautifulsoup object of base URL
-
-        Returns:
-            list: URL of pages present for a cgit instance
-
-        """
-        pages = url_soup.find('div', {"class": "content"}).find_all('li')
-
-        if not pages:
-            return [self.PAGE]
-
-        return [self.get_url(page) for page in pages]
-
-    def get_repos_from_pages(self, pages):
-        """Find repos from all pages.
-
-        Request the available repos from the pages. This yields
-        the available repositories found as beautiful object representation.
-
-        Args:
-            pages ([str]): list of urls of all pages present for a
-                           particular cgit instance.
-
-        Yields:
-            List of beautifulsoup object of repository (url) rows
-            present in pages(except first).
-
-        """
-        for page in pages:
-            response = requests.get(page)
-            if not response.ok:
-                logging.warning('Failed to retrieve repositories from page %s',
-                                page)
-                continue
-
-            yield from get_repo_list(response.text)
-
-    def get_url(self, repo):
-        """Finds url of a repo page.
-
-        Finds the url of a repo page by parsing over the html of the row of
-        that repo present in the base url.
-
-        Args:
-            repo (Beautifulsoup): a beautifulsoup object of the repository
-                                  row present in base url.
-
-        Returns:
-            string: The url of a repo.
-
-        """
-        suffix = repo.a['href']
-        return self.url_netloc + suffix
-
-    def get_model_from_repo(self, repo):
-        """Transform from repository representation to model.
-
-        """
-        return {
-            'uid': self.PAGE + repo['name'],
-            'name': repo['name'],
-            'full_name': repo['name'],
-            'html_url': repo['origin_url'],
-            'origin_url': repo['origin_url'],
-            'origin_type': 'git',
-            'time_updated': repo['time'],
-            'instance': self.instance,
-        }
-
-    def transport_response_simplified(self, repos_details):
-        """Transform response to list for model manipulation.
-
-        """
-        return [self.get_model_from_repo(repo) for repo in repos_details]
-
-
-def find_netloc(url):
-    """Finds the network location from then url.
-
-    URL in the repo are relative to the network location part of base
-    URL, so we need to compute it to reconstruct URLs.
-
-    Args:
-        url (urllib): urllib object of url.
-
-    Returns:
-        string: Scheme and Network location part in the base URL.
+            <git_clonable_url>
 
     Example:
-    For url = https://git.kernel.org/pub/scm/
-        >>> find_netloc(url)
-        'https://git.kernel.org'
-
+        Type: load-git
+        Policy: recurring
+        Args:
+            'https://git.savannah.gnu.org/git/elisp-es.git'
     """
-    return '%s://%s' % (url.scheme, url.netloc)
+    MODEL = CGitModel
+    DEFAULT_URL = 'http://git.savannah.gnu.org/cgit/'
+    LISTER_NAME = 'cgit'
+    url_prefix_present = True
 
+    def __init__(self, url=None, instance=None, override_config=None):
+        """Lister class for CGit repositories.
 
-def get_repo_list(response):
-    """Find repositories (as beautifulsoup object) available within the server
-       response.
+        Args:
+            url (str): main URL of the CGit instance, i.e. url of the index
+                of published git repositories on this instance.
+            instance (str): Name of cgit instance. Defaults to url's hostname
+                if unset.
 
-    Args:
-        response (Response): server response
+        """
+        super().__init__(override_config=override_config)
 
-    Returns:
-        List all repositories as beautifulsoup object within the response.
+        if url is None:
+            url = self.config.get('url', self.DEFAULT_URL)
+        self.url = url
 
-    """
-    repo_soup = make_soup(response)
-    return repo_soup \
-        .find('div', {"class": "content"}).find_all("tr", {"class": ""})
+        if not instance:
+            instance = urlparse(url).hostname
+        self.instance = instance
+        self.session = Session()
+        self.session.mount(self.url, HTTPAdapter(max_retries=3))
 
+    def run(self):
+        total = 0
+        for repos in grouper(self.get_repos(), 10):
+            models = list(filter(None, (self.build_model(repo)
+                                        for repo in repos)))
+            injected_repos = self.inject_repo_data_into_db(models)
+            self.schedule_missing_tasks(models, injected_repos)
+            self.db_session.commit()
+            total += len(injected_repos)
+            logger.debug('Scheduled %s tasks for %s', total, self.url)
 
-def make_soup(response):
-    """Instantiates a beautiful soup object from the response object.
+    def get_repos(self):
+        """Generate git 'project' URLs found on the current CGit server
 
-    """
-    return BeautifulSoup(response, features="html.parser")
+        """
+        next_page = self.url
+        while next_page:
+            bs_idx = self.get_and_parse(next_page)
+            for tr in bs_idx.find(
+                    'div', {"class": "content"}).find_all(
+                        "tr", {"class": ""}):
+                yield urljoin(self.url, tr.find('a')['href'])
+
+            try:
+                pager = bs_idx.find('ul', {'class': 'pager'})
+                current_page = pager.find('a', {'class': 'current'})
+                if current_page:
+                    next_page = current_page.parent.next_sibling.a['href']
+                    next_page = urljoin(self.url, next_page)
+            except (AttributeError, KeyError):
+                # no pager, or no next page
+                next_page = None
+
+    def build_model(self, repo_url):
+        """Given the URL of a git repo project page on a CGit server,
+        return the repo description (dict) suitable for insertion in the db.
+        """
+        bs = self.get_and_parse(repo_url)
+        urls = [x['href'] for x in bs.find_all('a', {'rel': 'vcs-git'})]
+
+        if not urls:
+            return
+
+        # look for the http/https url, if any, and use it as origin_url
+        for url in urls:
+            if urlparse(url).scheme in ('http', 'https'):
+                origin_url = url
+                break
+        else:
+            # otherwise, choose the first one
+            origin_url = urls[0]
+
+        return {'uid': repo_url,
+                'name': bs.find('a', title=re.compile('.+'))['title'],
+                'origin_type': 'git',
+                'instance': self.instance,
+                'origin_url': origin_url,
+                }
+
+    def get_and_parse(self, url):
+        "Get the given url and parse the retrieved HTML using BeautifulSoup"
+        return BeautifulSoup(self.session.get(url).text,
+                             features='html.parser')

@@ -55,6 +55,18 @@ setup(
         swh-lister=swh.lister.cli:cli
         [swh.cli.subcommands]
         lister=swh.lister.cli:lister
+        [swh.workers]
+        lister.bitbucket=swh.lister.bitbucket:register
+        lister.cgit=swh.lister.cgit:register
+        lister.cran=swh.lister.cran:register
+        lister.debian=swh.lister.debian:register
+        lister.github=swh.lister.github:register
+        lister.gitlab=swh.lister.gitlab:register
+        lister.gnu=swh.lister.gnu:register
+        lister.npm=swh.lister.npm:register
+        lister.packagist=swh.lister.packagist:register
+        lister.phabricator=swh.lister.phabricator:register
+        lister.pypi=swh.lister.pypi:register
     ''',
     classifiers=[
         "Programming Language :: Python :: 3",

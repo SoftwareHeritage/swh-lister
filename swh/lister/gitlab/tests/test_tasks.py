@@ -26,9 +26,7 @@ def test_incremental(lister, swh_app, celery_session_worker):
     res.wait()
     assert res.successful()
 
-    lister.assert_called_once_with(
-        api_baseurl='https://gitlab.com/api/v4',
-        instance=None, sort='desc', per_page=20)
+    lister.assert_called_once_with(sort='desc')
     lister.db_last_index.assert_not_called()
     lister.get_pages_information.assert_called_once_with()
     lister.run.assert_called_once_with(
@@ -48,9 +46,7 @@ def test_range(lister, swh_app, celery_session_worker):
     res.wait()
     assert res.successful()
 
-    lister.assert_called_once_with(
-        api_baseurl='https://gitlab.com/api/v4',
-        instance=None, sort='asc', per_page=20)
+    lister.assert_called_once_with()
     lister.db_last_index.assert_not_called()
     lister.run.assert_called_once_with(min_bound=12, max_bound=42)
 
@@ -81,9 +77,7 @@ def test_relister(lister, swh_app, celery_session_worker):
             break
         sleep(1)
 
-    lister.assert_called_with(
-        api_baseurl='https://gitlab.com/api/v4',
-        instance=None, sort='asc', per_page=20)
+    lister.assert_called_with()
 
     # one by the FullGitlabRelister task
     # + 9 for the RangeGitlabLister subtasks
@@ -113,7 +107,7 @@ def test_relister_instance(lister, swh_app, celery_session_worker):
 
     res = swh_app.send_task(
         'swh.lister.gitlab.tasks.FullGitLabRelister',
-        kwargs=dict(api_baseurl='https://0xacab.org/api/v4'))
+        kwargs=dict(url='https://0xacab.org/api/v4'))
     assert res
 
     res.wait()
@@ -129,9 +123,7 @@ def test_relister_instance(lister, swh_app, celery_session_worker):
             break
         sleep(1)
 
-    lister.assert_called_with(
-        api_baseurl='https://0xacab.org/api/v4',
-        instance=None, sort='asc', per_page=20)
+    lister.assert_called_with(url='https://0xacab.org/api/v4')
 
     # one by the FullGitlabRelister task
     # + 9 for the RangeGitlabLister subtasks

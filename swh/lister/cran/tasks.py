@@ -8,10 +8,11 @@ from swh.lister.cran.lister import CRANLister
 
 
 @app.task(name=__name__ + '.CRANListerTask')
-def cran_lister(**lister_args):
+def list_cran(**lister_args):
+    '''Lister task for the CRAN registry'''
     CRANLister(**lister_args).run()
 
 
 @app.task(name=__name__ + '.ping')
-def ping():
+def _ping():
     return 'OK'
