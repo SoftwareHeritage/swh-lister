@@ -77,7 +77,7 @@ class HttpListerTesterBase(abc.ABC):
 
         """
         if override_config or self.fl is None:
-            self.fl = self.Lister(api_baseurl='https://fakeurl',
+            self.fl = self.Lister(url='https://fakeurl',
                                   override_config=override_config)
             self.fl.INITIAL_BACKOFF = 1
 

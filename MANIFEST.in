@@ -5,4 +5,5 @@ include requirements-swh.txt
 include requirements-test.txt
 include version.txt
 include swh/lister/cran/list_all_packages.R
-recursive-include swh/lister/*/tests/ *.json *.html *.txt
+recursive-include swh/lister/*/tests/ *.json *.html *.txt *.* *
+recursive-include swh/lister/cgit/tests/data/ *.* *

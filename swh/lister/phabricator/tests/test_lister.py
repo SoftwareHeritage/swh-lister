@@ -28,8 +28,12 @@ class PhabricatorListerTester(HttpListerTester, unittest.TestCase):
 
         """
         if override_config or self.fl is None:
-            self.fl = self.Lister(forge_url='https://fakeurl', instance='fake',
-                                  api_token='a-1',
+            credentials = {'phabricator': {'fake': [
+                {'password': 'toto'}
+            ]}}
+            override_config = dict(credentials=credentials,
+                                   **(override_config or {}))
+            self.fl = self.Lister(url='https://fakeurl', instance='fake',
                                   override_config=override_config)
             self.fl.INITIAL_BACKOFF = 1
 

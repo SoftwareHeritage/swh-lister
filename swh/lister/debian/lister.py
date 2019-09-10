@@ -35,7 +35,7 @@ class DebianLister(ListerHttpTransport, ListerBase):
     instance = 'debian'
 
     def __init__(self, override_config=None):
-        ListerHttpTransport.__init__(self, api_baseurl="bogus")
+        ListerHttpTransport.__init__(self, url="notused")
         ListerBase.__init__(self, override_config=override_config)
 
     def transport_request(self, identifier):

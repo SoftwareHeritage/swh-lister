@@ -8,10 +8,11 @@ from .lister import PackagistLister
 
 
 @app.task(name=__name__ + '.PackagistListerTask')
-def packagist_lister(**lister_args):
+def list_packagist(**lister_args):
+    'List the packagist (php) registry'
     PackagistLister(**lister_args).run()
 
 
 @app.task(name=__name__ + '.ping')
-def ping():
+def _ping():
     return 'OK'
