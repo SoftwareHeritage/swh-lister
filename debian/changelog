@@ -1,8 +1,8 @@
-swh-lister (0.0.35-1~swh2~bpo9+1) stretch-swh; urgency=medium
+swh-lister (0.0.35-1~swh3) unstable-swh; urgency=medium
 
-  * Rebuild for stretch-swh
+  * Bump dh-python to >= 3 for pybuild.testfiles.
 
- -- Software Heritage autobuilder (on jenkins-debian1) <jenkins@jenkins-debian1.internal.softwareheritage.org>  Tue, 10 Sep 2019 12:54:12 +0000
+ -- Nicolas Dandrimont <olasd@debian.org>  Tue, 10 Sep 2019 14:58:11 +0200
 
 swh-lister (0.0.35-1~swh2) unstable-swh; urgency=medium
 
