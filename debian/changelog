@@ -1,3 +1,9 @@
+swh-lister (0.0.35-1~swh2) unstable-swh; urgency=medium
+
+  * Add egg-info to pybuild.testfiles. Close T1995.
+
+ -- Nicolas Dandrimont <olasd@debian.org>  Tue, 10 Sep 2019 14:36:22 +0200
+
 swh-lister (0.0.35-1~swh1) unstable-swh; urgency=medium
 
   * New upstream release 0.0.35     - (tagged by Antoine R. Dumont
