@@ -1,3 +1,9 @@
+swh-lister (0.0.35-1~swh3) unstable-swh; urgency=medium
+
+  * Bump dh-python to >= 3 for pybuild.testfiles.
+
+ -- Nicolas Dandrimont <olasd@debian.org>  Tue, 10 Sep 2019 14:58:11 +0200
+
 swh-lister (0.0.35-1~swh2) unstable-swh; urgency=medium
 
   * Add egg-info to pybuild.testfiles. Close T1995.
