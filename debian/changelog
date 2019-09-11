@@ -1,3 +1,9 @@
+swh-lister (0.0.35-1~swh4~bpo9+1) stretch-swh; urgency=medium
+
+  * Rebuild for stretch-swh
+
+ -- Software Heritage autobuilder (on jenkins-debian1) <jenkins@jenkins-debian1.internal.softwareheritage.org>  Wed, 11 Sep 2019 09:12:15 +0000
+
 swh-lister (0.0.35-1~swh4) unstable-swh; urgency=medium
 
   * Fix runtime dependencies
