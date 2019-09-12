@@ -163,8 +163,7 @@ class HttpListerTester(HttpListerTesterBase, abc.ABC):
         if m and (len(m.groups()) > 0):
             return self.convert_type(m.group(1))
 
-    @requests_mock.Mocker()
-    def test_fetch_multiple_pages_yesdb(self, http_mocker):
+    def create_fl_with_db(self, http_mocker):
         http_mocker.get(self.test_re, text=self.mock_response)
         db = init_db()
 
@@ -174,10 +173,16 @@ class HttpListerTester(HttpListerTesterBase, abc.ABC):
                 'args': {'db': db.url()}
                 }
             })
+        fl.db = db
         self.init_db(db, fl.MODEL)
 
         self.disable_scheduler(fl)
+        return fl
 
+    @requests_mock.Mocker()
+    def test_fetch_multiple_pages_yesdb(self, http_mocker):
+
+        fl = self.create_fl_with_db(http_mocker)
         fl.run(min_bound=self.first_index)
 
         self.assertEqual(fl.db_last_index(), self.last_index)

@@ -119,11 +119,10 @@ class PhabricatorLister(IndexingHttpLister):
         params = '&order=oldest&limit=1'
         response = self.safely_issue_request(params)
         models_list = self.transport_response_simplified(response)
-        self.max_index = models_list[0]['indexable']
         models_list = self.filter_before_inject(models_list)
         injected = self.inject_repo_data_into_db(models_list)
         self.schedule_missing_tasks(models_list, injected)
-        return self.max_index
+        return models_list[0]['indexable']
 
 
 def get_repo_url(attachments):

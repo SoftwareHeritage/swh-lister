@@ -5,6 +5,9 @@
 import re
 import json
 import unittest
+
+import requests_mock
+
 from swh.lister.core.tests.test_lister import HttpListerTester
 from swh.lister.phabricator.lister import PhabricatorLister
 from swh.lister.phabricator.lister import get_repo_url
@@ -12,16 +15,28 @@ from swh.lister.phabricator.lister import get_repo_url
 
 class PhabricatorListerTester(HttpListerTester, unittest.TestCase):
     Lister = PhabricatorLister
-    test_re = re.compile(r'\&after=([^?&]+)')
+    # first request will have the after parameter empty
+    test_re = re.compile(r'\&after=([^?&]*)')
     lister_subdir = 'phabricator'
     good_api_response_file = 'api_response.json'
     good_api_response_undefined_protocol = 'api_response_undefined_'\
                                            'protocol.json'
     bad_api_response_file = 'api_empty_response.json'
-    first_index = 1
+    # first_index must be retrieved through a bootstrap process for Phabricator
+    first_index = None
     last_index = 12
     entries_per_page = 10
+
     convert_type = int
+
+    def request_index(self, request):
+        """(Override) This is needed to emulate the listing bootstrap
+        when no min_bound is provided to run
+        """
+        m = self.test_re.search(request.path_url)
+        idx = m.group(1)
+        if idx == str(self.last_index):
+            return int(idx)
 
     def get_fl(self, override_config=None):
         """(Override) Retrieve an instance of fake lister (fl).
@@ -58,3 +73,14 @@ class PhabricatorListerTester(HttpListerTester, unittest.TestCase):
         self.assertEqual(
                 'https://svn.blender.org/svnroot/bf-blender/',
                 get_repo_url(repo['attachments']['uris']['uris']))
+
+    @requests_mock.Mocker()
+    def test_full_listing(self, http_mocker):
+        fl = self.create_fl_with_db(http_mocker)
+
+        fl.run()
+
+        self.assertEqual(fl.db_last_index(), self.last_index)
+        ingested_repos = list(fl.db_query_range(self.first_index,
+                                                self.last_index))
+        self.assertEqual(len(ingested_repos), self.entries_per_page)
