@@ -80,9 +80,8 @@ class PhabricatorLister(IndexingHttpLister):
 
     def get_next_target_from_response(self, response):
         body = response.json()['result']['cursor']
-        if body['after'] != 'null':
-            return body['after']
-        return None
+        if body['after'] and body['after'] != 'null':
+            return int(body['after'])
 
     def transport_response_simplified(self, response):
         repos = response.json()
