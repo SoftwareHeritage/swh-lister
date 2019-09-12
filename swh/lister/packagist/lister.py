@@ -12,11 +12,11 @@ from swh.lister.core.lister_transports import ListerOnePageApiTransport
 
 
 class PackagistLister(ListerOnePageApiTransport, SimpleLister):
-    """List packages available in the Packagist package manger.
+    """List packages available in the Packagist package manager.
 
         The lister sends the request to the url present in the class
         variable `PAGE`, to receive a list of all the package names
-        present in the Packagist package manger. Iterates over all the
+        present in the Packagist package manager. Iterates over all the
         packages and constructs the metadata url of the package from
         the name of the package and creates a loading task.
 
