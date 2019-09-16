@@ -3,6 +3,7 @@
 # See top-level LICENSE file for more information
 
 import abc
+import datetime
 import time
 from unittest import TestCase
 from unittest.mock import Mock, patch
@@ -51,6 +52,7 @@ class HttpListerTesterBase(abc.ABC):
         self.response = None
         self.fl = None
         self.helper = None
+        self.scheduler_tasks = []
         if self.__class__ != HttpListerTesterBase:
             self.run = TestCase.run.__get__(self, self.__class__)
         else:
@@ -82,10 +84,37 @@ class HttpListerTesterBase(abc.ABC):
             self.fl.INITIAL_BACKOFF = 1
 
         self.fl.reset_backoff()
+        self.scheduler_tasks = []
         return self.fl
 
     def disable_scheduler(self, fl):
         fl.schedule_missing_tasks = Mock(return_value=None)
+
+    def mock_scheduler(self, fl):
+        def _create_tasks(tasks):
+            task_id = 0
+            current_nb_tasks = len(self.scheduler_tasks)
+            if current_nb_tasks > 0:
+                task_id = self.scheduler_tasks[-1]['id'] + 1
+            for task in tasks:
+                scheduler_task = dict(task)
+                scheduler_task.update({
+                    'status': 'next_run_not_scheduled',
+                    'retries_left': 0,
+                    'priority': None,
+                    'id': task_id,
+                    'current_interval': datetime.timedelta(days=64)
+                })
+                self.scheduler_tasks.append(scheduler_task)
+                task_id = task_id + 1
+            return self.scheduler_tasks[current_nb_tasks:]
+
+        def _disable_tasks(task_ids):
+            for task_id in task_ids:
+                self.scheduler_tasks[task_id]['status'] = 'disabled'
+
+        fl.scheduler.create_tasks = Mock(wraps=_create_tasks)
+        fl.scheduler.disable_tasks = Mock(wraps=_disable_tasks)
 
     def disable_db(self, fl):
         fl.winnow_models = Mock(return_value=[])
@@ -176,7 +205,7 @@ class HttpListerTester(HttpListerTesterBase, abc.ABC):
         fl.db = db
         self.init_db(db, fl.MODEL)
 
-        self.disable_scheduler(fl)
+        self.mock_scheduler(fl)
         return fl
 
     @requests_mock.Mocker()
@@ -186,6 +215,7 @@ class HttpListerTester(HttpListerTesterBase, abc.ABC):
         fl.run(min_bound=self.first_index)
 
         self.assertEqual(fl.db_last_index(), self.last_index)
+
         partitions = fl.db_partition_indices(5)
         self.assertGreater(len(partitions), 0)
         for k in partitions:

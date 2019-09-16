@@ -18,7 +18,7 @@ class PhabricatorListerTester(HttpListerTester, unittest.TestCase):
     # first request will have the after parameter empty
     test_re = re.compile(r'\&after=([^?&]*)')
     lister_subdir = 'phabricator'
-    good_api_response_file = 'api_response.json'
+    good_api_response_file = 'api_first_response.json'
     good_api_response_undefined_protocol = 'api_response_undefined_'\
                                            'protocol.json'
     bad_api_response_file = 'api_empty_response.json'
@@ -35,7 +35,7 @@ class PhabricatorListerTester(HttpListerTester, unittest.TestCase):
         """
         m = self.test_re.search(request.path_url)
         idx = m.group(1)
-        if idx == str(self.last_index):
+        if idx not in ('', 'None'):
             return int(idx)
 
     def get_fl(self, override_config=None):
@@ -86,12 +86,54 @@ class PhabricatorListerTester(HttpListerTester, unittest.TestCase):
         self.assertEqual(len(ingested_repos), self.entries_per_page)
 
     @requests_mock.Mocker()
-    def test_range_listing(self, http_mocker):
+    def test_scheduled_tasks(self, http_mocker):
         fl = self.create_fl_with_db(http_mocker)
 
-        fl.run(max_bound=self.last_index - 1)
+        # process first page of repositories listing
+        fl.run()
 
-        self.assertEqual(fl.db_last_index(), self.last_index - 1)
-        ingested_repos = list(fl.db_query_range(self.first_index,
-                                                self.last_index))
-        self.assertEqual(len(ingested_repos), self.entries_per_page - 1)
+        # process second page of repositories listing
+        prev_last_index = self.last_index
+        self.first_index = self.last_index
+        self.last_index = 23
+        self.good_api_response_file = 'api_next_response.json'
+        fl.run(min_bound=prev_last_index)
+
+        # check expected number of ingested repos and loading tasks
+        ingested_repos = list(fl.db_query_range(0, self.last_index))
+        self.assertEqual(len(ingested_repos), len(self.scheduler_tasks))
+        self.assertEqual(len(ingested_repos), 2 * self.entries_per_page)
+
+        # check tasks are not disabled
+        for task in self.scheduler_tasks:
+            self.assertTrue(task['status'] != 'disabled')
+
+    @requests_mock.Mocker()
+    def test_scheduled_tasks_multiple_instances(self, http_mocker):
+
+        fl = self.create_fl_with_db(http_mocker)
+
+        # list first Phabricator instance
+        fl.run()
+
+        fl.instance = 'other_fake'
+        fl.config['credentials'] = {
+            'phabricator': {
+                'other_fake': [{
+                    'password': 'foo'
+                }]
+            }
+        }
+
+        # list second Phabricator instance hosting repositories having
+        # same ids as those listed from the first instance
+        self.good_api_response_file = 'api_first_response_other_instance.json'
+        self.last_index = 13
+        fl.run()
+
+        # check expected number of loading tasks
+        self.assertEqual(len(self.scheduler_tasks), 2 * self.entries_per_page)
+
+        # check tasks are not disabled
+        for task in self.scheduler_tasks:
+            self.assertTrue(task['status'] != 'disabled')
