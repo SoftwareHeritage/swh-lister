@@ -35,6 +35,16 @@ class BitBucketListerTester(HttpListerTester, unittest.TestCase):
     entries_per_page = 10
     convert_type = staticmethod(convert_type)
 
+    def request_index(self, request):
+        """(Override) This is needed to emulate the listing bootstrap
+        when no min_bound is provided to run
+        """
+        m = self.test_re.search(request.path_url)
+        idx = convert_type(m.group(1))
+        if idx == self.Lister.default_min_bound:
+            idx = self.first_index
+        return idx
+
     @requests_mock.Mocker()
     def test_fetch_none_nodb(self, http_mocker):
         """Overridden because index is not an integer nor a string

@@ -16,7 +16,7 @@ class GitHubListerTester(HttpListerTester, unittest.TestCase):
     lister_subdir = 'github'
     good_api_response_file = 'api_response.json'
     bad_api_response_file = 'api_empty_response.json'
-    first_index = 26
+    first_index = 0
     last_index = 368
     entries_per_page = 100
     convert_type = int

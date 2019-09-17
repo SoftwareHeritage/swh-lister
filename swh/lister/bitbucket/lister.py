@@ -5,7 +5,7 @@
 import logging
 import iso8601
 
-from datetime import datetime
+from datetime import datetime, timezone
 from urllib import parse
 
 from swh.lister.bitbucket.models import BitBucketModel
@@ -21,7 +21,7 @@ class BitBucketLister(IndexingHttpLister):
     LISTER_NAME = 'bitbucket'
     DEFAULT_URL = 'https://api.bitbucket.org/2.0'
     instance = 'bitbucket'
-    default_min_bound = datetime.utcfromtimestamp(0)
+    default_min_bound = datetime.fromtimestamp(0, timezone.utc)
 
     def __init__(self, url=None, override_config=None, per_page=100):
         super().__init__(url=url, override_config=override_config)

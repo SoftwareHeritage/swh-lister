@@ -209,6 +209,17 @@ class HttpListerTester(HttpListerTesterBase, abc.ABC):
         return fl
 
     @requests_mock.Mocker()
+    def test_fetch_no_bounds_yesdb(self, http_mocker):
+        fl = self.create_fl_with_db(http_mocker)
+
+        fl.run()
+
+        self.assertEqual(fl.db_last_index(), self.last_index)
+        ingested_repos = list(fl.db_query_range(self.first_index,
+                                                self.last_index))
+        self.assertEqual(len(ingested_repos), self.entries_per_page)
+
+    @requests_mock.Mocker()
     def test_fetch_multiple_pages_yesdb(self, http_mocker):
 
         fl = self.create_fl_with_db(http_mocker)

@@ -75,17 +75,6 @@ class PhabricatorListerTester(HttpListerTester, unittest.TestCase):
                 get_repo_url(repo['attachments']['uris']['uris']))
 
     @requests_mock.Mocker()
-    def test_full_listing(self, http_mocker):
-        fl = self.create_fl_with_db(http_mocker)
-
-        fl.run()
-
-        self.assertEqual(fl.db_last_index(), self.last_index)
-        ingested_repos = list(fl.db_query_range(self.first_index,
-                                                self.last_index))
-        self.assertEqual(len(ingested_repos), self.entries_per_page)
-
-    @requests_mock.Mocker()
     def test_scheduled_tasks(self, http_mocker):
         fl = self.create_fl_with_db(http_mocker)
 

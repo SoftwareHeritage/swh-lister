@@ -16,6 +16,7 @@ class GitHubLister(IndexingHttpLister):
     API_URL_INDEX_RE = re.compile(r'^.*/repositories\?since=(\d+)')
     LISTER_NAME = 'github'
     instance = 'github'  # There is only 1 instance of such lister
+    default_min_bound = 0
 
     def get_model_from_repo(self, repo):
         return {
