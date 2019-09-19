@@ -76,26 +76,7 @@ class PhabricatorListerTester(HttpListerTester, unittest.TestCase):
 
     @requests_mock.Mocker()
     def test_scheduled_tasks(self, http_mocker):
-        fl = self.create_fl_with_db(http_mocker)
-
-        # process first page of repositories listing
-        fl.run()
-
-        # process second page of repositories listing
-        prev_last_index = self.last_index
-        self.first_index = self.last_index
-        self.last_index = 23
-        self.good_api_response_file = 'api_next_response.json'
-        fl.run(min_bound=prev_last_index)
-
-        # check expected number of ingested repos and loading tasks
-        ingested_repos = list(fl.db_query_range(0, self.last_index))
-        self.assertEqual(len(ingested_repos), len(self.scheduler_tasks))
-        self.assertEqual(len(ingested_repos), 2 * self.entries_per_page)
-
-        # check tasks are not disabled
-        for task in self.scheduler_tasks:
-            self.assertTrue(task['status'] != 'disabled')
+        self.scheduled_tasks_test('api_next_response.json', 23, http_mocker)
 
     @requests_mock.Mocker()
     def test_scheduled_tasks_multiple_instances(self, http_mocker):

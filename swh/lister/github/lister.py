@@ -49,3 +49,14 @@ class GitHubLister(IndexingHttpLister):
 
     def request_headers(self):
         return {'Accept': 'application/vnd.github.v3+json'}
+
+    def disable_deleted_repo_tasks(self, index, next_index, keep_these):
+        """ (Overrides) Fix provided index value to avoid erroneously disabling
+        some scheduler tasks
+        """
+        # Next listed repository ids are strictly greater than the 'since'
+        # parameter, so increment the index to avoid disabling the latest
+        # created task when processing a new repositories page returned by
+        # the Github API
+        return super().disable_deleted_repo_tasks(index + 1, next_index,
+                                                  keep_these)

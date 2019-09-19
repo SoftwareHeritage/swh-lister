@@ -308,6 +308,32 @@ class HttpListerTester(HttpListerTesterBase, abc.ABC):
             self.get_api_response(self.first_index)
             self.assertEqual(sleepmock.call_count, 2)
 
+    def scheduled_tasks_test(self, next_api_response_file, next_last_index,
+                             http_mocker):
+        """Check that no loading tasks get disabled when processing a new
+        page of repositories returned by a forge API
+        """
+        fl = self.create_fl_with_db(http_mocker)
+
+        # process first page of repositories listing
+        fl.run()
+
+        # process second page of repositories listing
+        prev_last_index = self.last_index
+        self.first_index = self.last_index
+        self.last_index = next_last_index
+        self.good_api_response_file = next_api_response_file
+        fl.run(min_bound=prev_last_index)
+
+        # check expected number of ingested repos and loading tasks
+        ingested_repos = list(fl.db_query_range(0, self.last_index))
+        self.assertEqual(len(ingested_repos), len(self.scheduler_tasks))
+        self.assertEqual(len(ingested_repos), 2 * self.entries_per_page)
+
+        # check tasks are not disabled
+        for task in self.scheduler_tasks:
+            self.assertTrue(task['status'] != 'disabled')
+
 
 class HttpSimpleListerTester(HttpListerTesterBase, abc.ABC):
     """Base testing class for subclass of
