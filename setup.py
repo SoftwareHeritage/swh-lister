@@ -51,8 +51,6 @@ setup(
     vcversioner={'version_module_paths': ['swh/lister/_version.py']},
     include_package_data=True,
     entry_points='''
-        [console_scripts]
-        swh-lister=swh.lister.cli:cli
         [swh.cli.subcommands]
         lister=swh.lister.cli:lister
         [swh.workers]
