@@ -103,7 +103,7 @@ class GNULister(SimpleLister):
                                                  directory['name'],
                                                  repo['name'])
                     package_tarballs = find_tarballs(
-                                      repo['contents'], package_url)
+                        repo['contents'], package_url)
                     if package_tarballs != []:
                         repo_details = {
                             'name': repo['name'],
@@ -125,7 +125,7 @@ class GNULister(SimpleLister):
             'full_name': repo['name'],
             'html_url': repo['url'],
             'origin_url': repo['url'],
-            'time_last_updated': repo['time_modified'],
+            'time_last_updated': int(repo['time_modified']),
             'origin_type': 'tar',
         }
 
@@ -137,44 +137,47 @@ class GNULister(SimpleLister):
 
 
 def find_tarballs(package_file_structure, url):
-    '''
-    Recursively lists all the tarball present in the folder and
-    subfolders for a particular package url.
+    '''Recursively lists tarballs present in the folder and subfolders for a
+    particular package url.
 
     Args
-        package_file_structure : File structure of the package root directory
-        url : URL of the corresponding package
+        package_file_structure: File structure of the package root directory
+        url: URL of the corresponding package
 
     Returns
-        List of all the tarball urls and the last their time of update
-        example-
-        For a package called 3dldf
+        List of tarball urls and their associated metadata (time, length).
+        For example:
 
         [
             {'archive': 'https://ftp.gnu.org/gnu/3dldf/3DLDF-1.1.3.tar.gz',
-                                                        'date': '1071002600'}
+             'time': 1071002600,
+            'length': 543},
             {'archive': 'https://ftp.gnu.org/gnu/3dldf/3DLDF-1.1.4.tar.gz',
-                                                        'date': '1071078759'}
+             'time': 1071078759,
+             'length': 456},
             {'archive': 'https://ftp.gnu.org/gnu/3dldf/3DLDF-1.1.5.1.tar.gz',
-                                                        'date': '1074278633'}
+             'time': 1074278633,
+             'length': 251},
             ...
         ]
+
     '''
     tarballs = []
     for single_file in package_file_structure:
-        file_type = single_file['type']
-        file_name = single_file['name']
-        if file_type == 'file':
-            if file_extension_check(file_name):
-                tarballs .append({
-                    "archive": url + file_name,
-                    "date": single_file['time']
+        filetype = single_file['type']
+        filename = single_file['name']
+        if filetype == 'file':
+            if file_extension_check(filename):
+                tarballs.append({
+                    'archive': url + filename,
+                    'time': int(single_file['time']),
+                    'length': int(single_file['size']),
                 })
         # It will recursively check for tarballs in all sub-folders
-        elif file_type == 'directory':
+        elif filetype == 'directory':
             tarballs_in_dir = find_tarballs(
-                                      single_file['contents'],
-                                      url + file_name + '/')
+                single_file['contents'],
+                url + filename + '/')
             tarballs.extend(tarballs_in_dir)
 
     return tarballs

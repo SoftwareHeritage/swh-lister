@@ -17,20 +17,39 @@ def test_filter_directories():
             assert False
 
 
-def test_find_tarballs():
-    f = open('swh/lister/gnu/tests/find_tarballs_output.json')
-    expected_list_of_all_tarballs = json.load(f)
+def test_find_tarballs_small_sample():
+    expected_tarballs = [
+        {
+            'archive': '/root/artanis/artanis-0.2.1.tar.bz2',
+            'time': 1495205979,
+            'length': 424081,
+        },
+        {
+            'archive': '/root/xboard/winboard/winboard-4_0_0-src.zip',  # noqa
+            'time': 898422900,
+            'length': 1514448
+        },
+        {
+            'archive': '/root/xboard/xboard-3.6.2.tar.gz',  # noqa
+            'time': 869814000,
+            'length': 450164,
+        },
+        {
+            'archive': '/root/xboard/xboard-4.0.0.tar.gz',  # noqa
+            'time': 898422900,
+            'length': 514951,
+        },
+    ]
 
-    f = open('swh/lister/gnu/tests/file_structure.json')
-    file_structure = json.load(f)
-    list_of_all_tarballs = []
-    list_of_all_tarballs.extend(
-        find_tarballs(file_structure[0]['contents'],
-                      "https://ftp.gnu.org/gnu/artanis/"))
-    list_of_all_tarballs.extend(
-        find_tarballs(file_structure[1]['contents'],
-                      "https://ftp.gnu.org/old-gnu/xboard/"))
-    assert list_of_all_tarballs == expected_list_of_all_tarballs
+    file_structure = json.load(open('swh/lister/gnu/tests/tree.min.json'))
+    actual_tarballs = find_tarballs(file_structure, '/root/')
+    assert actual_tarballs == expected_tarballs
+
+
+def test_find_tarballs():
+    file_structure = json.load(open('swh/lister/gnu/tests/tree.json'))
+    actual_tarballs = find_tarballs(file_structure, '/root/')
+    assert len(actual_tarballs) == 42 + 3  # tar + zip
 
 
 def test_file_extension_check():
