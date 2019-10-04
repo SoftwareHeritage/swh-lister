@@ -38,30 +38,24 @@ class GNULister(SimpleLister):
             origin_url,
             tarballs=self.tarballs[kwargs.get('name')])
 
-    def get_file(self):
+    def safely_issue_request(self, identifier):
         '''
         Download and unzip tree.json.gz file and returns its content
         in JSON format
 
-        Returns
         File content in dictionary format
+
+        Args:
+            identifier: resource identifier (unused)
+
+        Returns:
+            Server response
+
         '''
         response = requests.get(self.TREE_URL,
                                 allow_redirects=True)
         uncompressed_content = gzip.decompress(response.content)
         return json.loads(uncompressed_content.decode('utf-8'))
-
-    def safely_issue_request(self, identifier):
-        '''
-        Make network request to download the file which
-        has file structure of the GNU website.
-
-        Args:
-            identifier: resource identifier
-        Returns:
-            Server response
-        '''
-        return self.get_file()
 
     def list_packages(self, response):
         """
