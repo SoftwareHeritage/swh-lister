@@ -59,6 +59,12 @@ class SimpleLister(ListerBase):
 
         return response, all_injected
 
+    def transport_response_simplified(self, response):
+        """Transform response to list for model manipulation
+
+        """
+        return [self.get_model_from_repo(repo_name) for repo_name in response]
+
     def run(self):
         """Query the server which answers in one query.  Stores the
            information, dropping actual redundant information we

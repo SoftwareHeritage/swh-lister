@@ -68,9 +68,3 @@ class PyPILister(ListerOnePageApiTransport, SimpleLister):
             'origin_url': project_url,
             'origin_type': 'pypi',
         }
-
-    def transport_response_simplified(self, response):
-        """(Override) Transform response to list for model manipulation
-
-        """
-        return [self.get_model_from_repo(repo_name) for repo_name in response]

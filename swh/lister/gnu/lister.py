@@ -129,12 +129,6 @@ class GNULister(SimpleLister):
             'origin_type': 'tar',
         }
 
-    def transport_response_simplified(self, response):
-        """Transform response to list for model manipulation
-
-        """
-        return [self.get_model_from_repo(repo) for repo in response]
-
 
 def find_tarballs(package_file_structure, url):
     '''Recursively lists tarballs present in the folder and subfolders for a

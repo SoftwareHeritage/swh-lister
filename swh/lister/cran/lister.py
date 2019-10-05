@@ -93,9 +93,3 @@ class CRANLister(SimpleLister):
             'origin_url': project_url,
             'origin_type': 'cran',
         }
-
-    def transport_response_simplified(self, response):
-        """Transform response to list for model manipulation
-
-        """
-        return [self.get_model_from_repo(repo) for repo in response]

@@ -77,9 +77,3 @@ class PackagistLister(ListerOnePageApiTransport, SimpleLister):
             'origin_url': url,
             'origin_type': 'packagist',
         }
-
-    def transport_response_simplified(self, response):
-        """Transform response to list for model manipulation
-
-        """
-        return [self.get_model_from_repo(repo_name) for repo_name in response]
