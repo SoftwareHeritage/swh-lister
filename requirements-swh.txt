@@ -1,3 +1,3 @@
-swh.core
+swh.core >= 0.0.73
 swh.storage[schemata] >= 0.0.122
 swh.scheduler >= 0.0.58
