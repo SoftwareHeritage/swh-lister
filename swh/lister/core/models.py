@@ -59,7 +59,7 @@ def initialize(db_engine, drop_tables=False, **kwargs):
 
     Args:
         models (list): list of SQLAlchemy tables/models to drop/create.
-        db_enfine (): the SQLAlchemy DB engine.
+        db_engine (): the SQLAlchemy DB engine.
         drop_tables (bool): if True, tables will be dropped before
             (re)creating them.
     """
