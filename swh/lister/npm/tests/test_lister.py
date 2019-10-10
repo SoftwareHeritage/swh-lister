@@ -1,6 +1,9 @@
-# Copyright (C) 2018-2019 the Software Heritage developers
+# Copyright (C) 2018-2019 The Software Heritage developers
+# See the AUTHORS file at the top-level directory of this distribution
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
+
+import logging
 
 import re
 import requests_mock
@@ -10,12 +13,15 @@ from swh.lister.core.tests.test_lister import HttpListerTesterBase
 from swh.lister.npm.lister import NpmLister, NpmIncrementalLister
 
 
+logger = logging.getLogger(__name__)
+
+
 class NpmListerTester(HttpListerTesterBase, unittest.TestCase):
     Lister = NpmLister
     test_re = re.compile(r'^.*/_all_docs\?startkey=%22(.+)%22.*')
     lister_subdir = 'npm'
-    good_api_response_file = 'api_response.json'
-    bad_api_response_file = 'api_empty_response.json'
+    good_api_response_file = 'data/replicate.npmjs.com/api_response.json'
+    bad_api_response_file = 'data/api_empty_response.json'
     first_index = 'jquery'
     entries_per_page = 100
 
@@ -31,8 +37,8 @@ class NpmIncrementalListerTester(HttpListerTesterBase, unittest.TestCase):
     Lister = NpmIncrementalLister
     test_re = re.compile(r'^.*/_changes\?since=([0-9]+).*')
     lister_subdir = 'npm'
-    good_api_response_file = 'api_inc_response.json'
-    bad_api_response_file = 'api_inc_empty_response.json'
+    good_api_response_file = 'data/api_inc_response.json'
+    bad_api_response_file = 'data/api_inc_empty_response.json'
     first_index = '6920642'
     entries_per_page = 100
 
@@ -42,3 +48,31 @@ class NpmIncrementalListerTester(HttpListerTesterBase, unittest.TestCase):
         # it can not succeed for the npm lister due to the
         # overriding of the string_pattern_check method
         pass
+
+
+def test_lister_npm_basic_listing(swh_listers, requests_mock_datadir):
+    lister = swh_listers['npm']
+
+    lister.run()
+
+    r = lister.scheduler.search_tasks(task_type='load-npm')
+    assert len(r) == 100
+
+    for row in r:
+        logger.debug('row: %s', row)
+        assert row['type'] == 'load-npm'
+        # arguments check
+        args = row['arguments']['args']
+        assert len(args) == 2
+
+        package = args[0]
+        url = args[1]
+        assert url == 'https://www.npmjs.com/package/%s' % package
+
+        # kwargs
+        kwargs = row['arguments']['kwargs']
+        meta_url = kwargs['package_metadata_url']
+        assert meta_url == 'https://replicate.npmjs.com/%s' % package
+
+        assert row['policy'] == 'recurring'
+        assert row['priority'] is None
