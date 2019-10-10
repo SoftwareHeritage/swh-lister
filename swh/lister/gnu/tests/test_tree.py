@@ -92,7 +92,7 @@ def test_tree_json_failures(requests_mock_datadir):
         tree_json.projects['https://ftp.gnu.org/old-gnu/xshogi/']
 
 
-def test_find_artifacts_small_sample():
+def test_find_artifacts_small_sample(datadir):
     expected_tarballs = [
         {
             'archive': '/root/artanis/artanis-0.2.1.tar.bz2',
@@ -116,13 +116,13 @@ def test_find_artifacts_small_sample():
         },
     ]
 
-    file_structure = json.load(open('swh/lister/gnu/tests/tree.min.json'))
+    file_structure = json.load(open(path.join(datadir, 'tree.min.json')))
     actual_tarballs = find_artifacts(file_structure, '/root/')
     assert actual_tarballs == expected_tarballs
 
 
-def test_find_artifacts():
-    file_structure = json.load(open('swh/lister/gnu/tests/tree.json'))
+def test_find_artifacts(datadir):
+    file_structure = json.load(open(path.join(datadir, 'tree.json')))
     actual_tarballs = find_artifacts(file_structure, '/root/')
     assert len(actual_tarballs) == 42 + 3  # tar + zip
 
