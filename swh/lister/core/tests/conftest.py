@@ -1,11 +1,20 @@
+# Copyright (C) 2019  The Software Heritage developers
+# See the AUTHORS file at the top-level directory of this distribution
+# License: GNU General Public License version 3, or any later version
+# See top-level LICENSE file for more information
+
 from swh.scheduler.tests.conftest import *  # noqa
 
+import logging
 import pytest
 
 from sqlalchemy import create_engine
 
 from swh.lister import get_lister, SUPPORTED_LISTERS
 from swh.lister.core.models import initialize
+
+
+logger = logging.getLogger(__name__)
 
 
 @pytest.fixture
