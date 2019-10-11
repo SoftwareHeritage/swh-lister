@@ -1,14 +1,29 @@
-# Copyright (C) 2019 the Software Heritage developers
+# Copyright (C) 2019  The Software Heritage developers
+# See the AUTHORS file at the top-level directory of this distribution
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
 
-import random
 import json
-from .models import PackagistModel
+import logging
+import random
+
+from typing import Any, List, Mapping
 
 from swh.scheduler import utils
 from swh.lister.core.simple_lister import SimpleLister
 from swh.lister.core.lister_transports import ListerOnePageApiTransport
+
+from .models import PackagistModel
+
+
+logger = logging.getLogger(__name__)
+
+
+def compute_package_url(repo_name: str) -> str:
+    """Compute packgist package url from repo name.
+
+    """
+    return 'https://repo.packagist.org/p/%s.json' % repo_name
 
 
 class PackagistLister(ListerOnePageApiTransport, SimpleLister):
@@ -44,31 +59,35 @@ class PackagistLister(ListerOnePageApiTransport, SimpleLister):
         ListerOnePageApiTransport .__init__(self)
         SimpleLister.__init__(self, override_config=override_config)
 
-    def task_dict(self, origin_type, origin_url, **kwargs):
+    def task_dict(self, origin_type: str, origin_url: str,
+                  **kwargs: Mapping[str, str]) -> Mapping[str, str]:
         """Return task format dict
 
         This is overridden from the lister_base as more information is
         needed for the ingestion task creation.
 
         """
-        return utils.create_task_dict('load-%s' % origin_type,
-                                      kwargs.get('policy', 'recurring'),
-                                      kwargs.get('name'), origin_url)
+        return utils.create_task_dict(
+            'load-%s' % origin_type,
+            kwargs.get('policy', 'recurring'),
+            kwargs.get('name'), origin_url,
+            retries_left=3)
 
-    def list_packages(self, response):
+    def list_packages(self, response: Any) -> List[str]:
         """List the actual packagist origins from the response.
 
         """
         response = json.loads(response.text)
         packages = [name for name in response['packageNames']]
+        logger.debug('Number of packages: %s', len(packages))
         random.shuffle(packages)
         return packages
 
-    def get_model_from_repo(self, repo_name):
+    def get_model_from_repo(self, repo_name: str) -> Mapping[str, str]:
         """Transform from repository representation to model
 
         """
-        url = 'https://repo.packagist.org/p/%s.json' % repo_name
+        url = compute_package_url(repo_name)
         return {
             'uid': repo_name,
             'name': repo_name,

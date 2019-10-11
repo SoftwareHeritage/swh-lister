@@ -1,11 +1,14 @@
-# Copyright (C) 2019 the Software Heritage developers
+# Copyright (C) 2019  The Software Heritage developers
+# See the AUTHORS file at the top-level directory of this distribution
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
 
 import unittest
 import requests_mock
+
 from unittest.mock import patch
-from swh.lister.packagist.lister import PackagistLister
+
+from swh.lister.packagist.lister import PackagistLister, compute_package_url
 from swh.lister.core.tests.test_lister import HttpSimpleListerTester
 
 
@@ -29,7 +32,7 @@ class PackagistListerTester(HttpSimpleListerTester, unittest.TestCase):
     Lister = PackagistLister
     PAGE = 'https://packagist.org/packages/list.json'
     lister_subdir = 'packagist'
-    good_api_response_file = 'api_response.json'
+    good_api_response_file = 'data/packagist.org/packages_list.json'
     entries = 5
 
     @requests_mock.Mocker()
@@ -54,13 +57,46 @@ class PackagistListerTester(HttpSimpleListerTester, unittest.TestCase):
         for key, values in model[0].items():
             assert values == expected_model[key]
 
-    def test_task_dict(self):
+    @patch('swh.lister.packagist.lister.utils.create_task_dict')
+    def test_task_dict(self, mock_create_tasks):
         """Test the task creation of lister
 
         """
         fl = self.get_fl()
-        with patch('swh.lister.packagist.lister.utils.create_task_dict') as mock_create_tasks:  # noqa
-            fl.task_dict(origin_type='packagist', origin_url='https://abc',
-                         name='test_pack')
+        fl.task_dict(origin_type='packagist', origin_url='https://abc',
+                     name='test_pack')
         mock_create_tasks.assert_called_once_with(
-            'load-packagist', 'recurring', 'test_pack', 'https://abc')
+            'load-packagist', 'recurring', 'test_pack', 'https://abc',
+            retries_left=3)
+
+
+def test_compute_package_url():
+    expected_url = 'https://repo.packagist.org/p/hello.json'
+    actual_url = compute_package_url('hello')
+    assert actual_url == expected_url
+
+
+def test_packagist_lister(lister_packagist, requests_mock_datadir):
+    lister_packagist.run()
+
+    r = lister_packagist.scheduler.search_tasks(task_type='load-packagist')
+    assert len(r) == 5
+
+    for row in r:
+        assert row['type'] == 'load-packagist'
+        # arguments check
+        args = row['arguments']['args']
+        assert len(args) == 2
+
+        package = args[0]
+        url = args[1]
+
+        expected_url = compute_package_url(package)
+        assert url == expected_url
+
+        # kwargs
+        kwargs = row['arguments']['kwargs']
+        assert kwargs == {}
+
+        assert row['policy'] == 'recurring'
+        assert row['priority'] is None
