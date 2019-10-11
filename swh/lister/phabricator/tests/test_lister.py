@@ -1,9 +1,11 @@
-# Copyright (C) 2019 the Software Heritage developers
+# Copyright (C) 2019  The Software Heritage developers
+# See the AUTHORS file at the top-level directory of this distribution
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
 
 import re
 import json
+import logging
 import unittest
 
 import requests_mock
@@ -13,15 +15,18 @@ from swh.lister.phabricator.lister import PhabricatorLister
 from swh.lister.phabricator.lister import get_repo_url
 
 
+logger = logging.getLogger(__name__)
+
+
 class PhabricatorListerTester(HttpListerTester, unittest.TestCase):
     Lister = PhabricatorLister
     # first request will have the after parameter empty
     test_re = re.compile(r'\&after=([^?&]*)')
     lister_subdir = 'phabricator'
-    good_api_response_file = 'api_first_response.json'
-    good_api_response_undefined_protocol = 'api_response_undefined_'\
-                                           'protocol.json'
-    bad_api_response_file = 'api_empty_response.json'
+    good_api_response_file = 'data/api_first_response.json'
+    good_api_response_undefined_protocol = \
+        'data/api_response_undefined_protocol.json'
+    bad_api_response_file = 'data/api_empty_response.json'
     # first_index must be retrieved through a bootstrap process for Phabricator
     first_index = None
     last_index = 12
@@ -76,7 +81,8 @@ class PhabricatorListerTester(HttpListerTester, unittest.TestCase):
 
     @requests_mock.Mocker()
     def test_scheduled_tasks(self, http_mocker):
-        self.scheduled_tasks_test('api_next_response.json', 23, http_mocker)
+        self.scheduled_tasks_test('data/api_next_response.json', 23,
+                                  http_mocker)
 
     @requests_mock.Mocker()
     def test_scheduled_tasks_multiple_instances(self, http_mocker):
@@ -97,7 +103,8 @@ class PhabricatorListerTester(HttpListerTester, unittest.TestCase):
 
         # list second Phabricator instance hosting repositories having
         # same ids as those listed from the first instance
-        self.good_api_response_file = 'api_first_response_other_instance.json'
+        self.good_api_response_file = \
+            'data/api_first_response_other_instance.json'
         self.last_index = 13
         fl.run()
 
@@ -107,3 +114,29 @@ class PhabricatorListerTester(HttpListerTester, unittest.TestCase):
         # check tasks are not disabled
         for task in self.scheduler_tasks:
             self.assertTrue(task['status'] != 'disabled')
+
+
+def test_phabricator_lister(lister_phabricator, requests_mock_datadir):
+    lister = lister_phabricator
+    assert lister.url == lister.DEFAULT_URL
+    assert lister.instance == 'forge.softwareheritage.org'
+    lister.run()
+
+    r = lister.scheduler.search_tasks(task_type='load-git')
+    assert len(r) == 10
+
+    for row in r:
+        assert row['type'] == 'load-git'
+        # arguments check
+        args = row['arguments']['args']
+        assert len(args) == 1
+
+        url = args[0]
+        assert lister.instance in url
+
+        # kwargs
+        kwargs = row['arguments']['kwargs']
+        assert kwargs == {}
+
+        assert row['policy'] == 'recurring'
+        assert row['priority'] is None

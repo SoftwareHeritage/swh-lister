@@ -161,6 +161,9 @@ class ListerHttpTransport(abc.ABC):
         path = self.request_uri(identifier)
         params = self.request_params(identifier)
 
+        logger.debug('path: %s', path)
+        logger.debug('params: %s', params)
+        logger.debug('method: %s', method)
         try:
             if method == 'head':
                 response = self.session.head(path, **params)
