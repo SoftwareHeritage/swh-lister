@@ -26,9 +26,8 @@ def read_cran_data() -> List[Mapping[str, str]]:
     filepath = pkg_resources.resource_filename('swh.lister.cran',
                                                'list_all_packages.R')
     logger.debug('script list-all-packages.R path: %s', filepath)
-    response = subprocess.run(
-        filepath, stdout=subprocess.PIPE, shell=False, encoding='utf-8')
-    return json.loads(response.stdout)
+    response = subprocess.run(filepath, stdout=subprocess.PIPE, shell=False)
+    return json.loads(response.stdout.decode('utf-8'))
 
 
 def compute_package_url(repo: Mapping[str, str]) -> str:
