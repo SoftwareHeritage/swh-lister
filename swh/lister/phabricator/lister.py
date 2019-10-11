@@ -20,7 +20,8 @@ logger = logging.getLogger(__name__)
 
 class PhabricatorLister(IndexingHttpLister):
     PATH_TEMPLATE = '?order=oldest&attachments[uris]=1&after=%s'
-    DEFAULT_URL = 'https://forge.softwareheritage.org/api/diffusion.repository.search'  # noqa
+    DEFAULT_URL = \
+        'https://forge.softwareheritage.org/api/diffusion.repository.search'
     MODEL = PhabricatorModel
     LISTER_NAME = 'phabricator'
 

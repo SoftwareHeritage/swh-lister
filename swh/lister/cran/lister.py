@@ -42,7 +42,7 @@ def compute_package_url(repo: Mapping[str, str]) -> str:
 
     """
     return 'https://cran.r-project.org/src/contrib' \
-        '/%(Package)s_%(Version)s.tar.gz' % repo
+        '/%(Package)s_%(Version)s.tar.gz'.format(repo)
 
 
 class CRANLister(SimpleLister):

@@ -7,7 +7,6 @@ import re
 import unittest
 
 from datetime import timedelta
-
 from urllib.parse import unquote
 
 import iso8601
@@ -17,7 +16,7 @@ from swh.lister.bitbucket.lister import BitBucketLister
 from swh.lister.core.tests.test_lister import HttpListerTester
 
 
-def convert_type(req_index):
+def _convert_type(req_index):
     """Convert the req_index to its right type according to the model's
        "indexable" column.
 
@@ -31,17 +30,17 @@ class BitBucketListerTester(HttpListerTester, unittest.TestCase):
     lister_subdir = 'bitbucket'
     good_api_response_file = 'data/https_api.bitbucket.org/response.json'
     bad_api_response_file = 'data/https_api.bitbucket.org/empty_response.json'
-    first_index = convert_type('2008-07-12T07:44:01.476818+00:00')
-    last_index = convert_type('2008-07-19T06:16:43.044743+00:00')
+    first_index = _convert_type('2008-07-12T07:44:01.476818+00:00')
+    last_index = _convert_type('2008-07-19T06:16:43.044743+00:00')
     entries_per_page = 10
-    convert_type = staticmethod(convert_type)
+    convert_type = _convert_type
 
     def request_index(self, request):
         """(Override) This is needed to emulate the listing bootstrap
         when no min_bound is provided to run
         """
         m = self.test_re.search(request.path_url)
-        idx = convert_type(m.group(1))
+        idx = _convert_type(m.group(1))
         if idx == self.Lister.default_min_bound:
             idx = self.first_index
         return idx

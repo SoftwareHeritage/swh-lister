@@ -10,6 +10,7 @@ from unittest.mock import Mock, patch
 
 import requests_mock
 from sqlalchemy import create_engine
+from typing import Any, Callable, Optional, Pattern, Type, Union
 
 from swh.lister.core.abstractattribute import AbstractAttribute
 from swh.lister.tests.test_utils import init_db
@@ -28,9 +29,12 @@ class HttpListerTesterBase(abc.ABC):
     to customize for a specific listing service.
 
     """
-    Lister = AbstractAttribute('The lister class to test')
-    lister_subdir = AbstractAttribute('bitbucket, github, etc.')
-    good_api_response_file = AbstractAttribute('Example good response body')
+    Lister = AbstractAttribute(
+        'Lister class to test')  # type: Union[AbstractAttribute, Type[Any]]
+    lister_subdir = AbstractAttribute(
+        'bitbucket, github, etc.')  # type: Union[AbstractAttribute, str]
+    good_api_response_file = AbstractAttribute(
+        'Example good response body')  # type: Union[AbstractAttribute, str]
     LISTER_NAME = 'fake-lister'
 
     # May need to override this if the headers are used for something
@@ -157,13 +161,21 @@ class HttpListerTester(HttpListerTesterBase, abc.ABC):
     to customize for a specific listing service.
 
     """
-    last_index = AbstractAttribute('Last index in good_api_response')
-    first_index = AbstractAttribute('First index in good_api_response')
-    bad_api_response_file = AbstractAttribute('Example bad response body')
-    entries_per_page = AbstractAttribute('Number of results in good response')
-    test_re = AbstractAttribute('Compiled regex matching the server url. Must'
-                                ' capture the index value.')
-    convert_type = str
+    last_index = AbstractAttribute(
+        'Last index '
+        'in good_api_response')  # type: Union[AbstractAttribute, int]
+    first_index = AbstractAttribute(
+        'First index in '
+        ' good_api_response')  # type: Union[AbstractAttribute, Optional[int]]
+    bad_api_response_file = AbstractAttribute(
+        'Example bad response body')  # type: Union[AbstractAttribute, str]
+    entries_per_page = AbstractAttribute(
+        'Number of results in '
+        'good response')  # type: Union[AbstractAttribute, int]
+    test_re = AbstractAttribute(
+        'Compiled regex matching the server url. Must capture the '
+        'index value.')  # type: Union[AbstractAttribute, Pattern]
+    convert_type = str  # type: Callable[..., Any]
     """static method used to convert the "request_index" to its right type (for
        indexing listers for example, this is in accordance with the model's
        "indexable" column).
@@ -343,9 +355,12 @@ class HttpSimpleListerTester(HttpListerTesterBase, abc.ABC):
     to customize for a specific listing service.
 
     """
-    entries = AbstractAttribute('Number of results in good response')
-    PAGE = AbstractAttribute("The server api's unique page to retrieve and "
-                             "parse for information")
+    entries = AbstractAttribute(
+        'Number of results '
+        'in good response')  # type: Union[AbstractAttribute, int]
+    PAGE = AbstractAttribute(
+        "URL of the server api's unique page to retrieve and "
+        "parse for information")  # type: Union[AbstractAttribute, str]
 
     def get_fl(self, override_config=None):
         """Retrieve an instance of fake lister (fl).

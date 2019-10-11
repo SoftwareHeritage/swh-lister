@@ -5,13 +5,15 @@
 import abc
 import unittest
 
+from typing import Any
+
 from swh.lister.core.abstractattribute import AbstractAttribute
 
 
 class BaseClass(abc.ABC):
-    v1 = AbstractAttribute
-    v2 = AbstractAttribute()
-    v3 = AbstractAttribute('changed docstring')
+    v1 = AbstractAttribute  # type: Any
+    v2 = AbstractAttribute()  # type: Any
+    v3 = AbstractAttribute('changed docstring')  # type: Any
     v4 = 'qux'
 
 

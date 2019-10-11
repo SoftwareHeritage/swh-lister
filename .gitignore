@@ -11,3 +11,4 @@ dist/
 version.txt
 swh/lister/_version.py
 .tox/
+.mypy_cache/
