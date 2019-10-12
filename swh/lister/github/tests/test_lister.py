@@ -1,4 +1,5 @@
-# Copyright (C) 2017-2019 the Software Heritage developers
+# Copyright (C) 2017-2019 The Software Heritage developers
+# See the AUTHORS file at the top-level directory of this distribution
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
 
@@ -17,8 +18,8 @@ class GitHubListerTester(HttpListerTester, unittest.TestCase):
     Lister = GitHubLister
     test_re = re.compile(r'/repositories\?since=([^?&]+)')
     lister_subdir = 'github'
-    good_api_response_file = 'api_first_response.json'
-    bad_api_response_file = 'api_empty_response.json'
+    good_api_response_file = 'data/api.github.com/first_response.json'
+    bad_api_response_file = 'data/api.github.com/empty_response.json'
     first_index = 0
     last_index = 369
     entries_per_page = 100
@@ -50,4 +51,33 @@ class GitHubListerTester(HttpListerTester, unittest.TestCase):
 
     @requests_mock.Mocker()
     def test_scheduled_tasks(self, http_mocker):
-        self.scheduled_tasks_test('api_next_response.json', 876, http_mocker)
+        self.scheduled_tasks_test(
+            'data/api.github.com/next_response.json', 876, http_mocker)
+
+
+def test_lister_github(swh_listers, requests_mock_datadir):
+    """Simple github listing should create scheduled tasks
+
+    """
+    lister = swh_listers['github']
+
+    lister.run()
+
+    r = lister.scheduler.search_tasks(task_type='load-git')
+    assert len(r) == 100
+
+    for row in r:
+        assert row['type'] == 'load-git'
+        # arguments check
+        args = row['arguments']['args']
+        assert len(args) == 1
+
+        url = args[0]
+        assert url.startswith('https://github.com')
+
+        # kwargs
+        kwargs = row['arguments']['kwargs']
+        assert kwargs == {}
+
+        assert row['policy'] == 'recurring'
+        assert row['priority'] is None

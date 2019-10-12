@@ -1,4 +1,5 @@
-# Copyright (C) 2017-2019 the Software Heritage developers
+# Copyright (C) 2017-2019 The Software Heritage developers
+# See the AUTHORS file at the top-level directory of this distribution
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
 
@@ -31,7 +32,10 @@ class GitHubLister(IndexingHttpLister):
         }
 
     def transport_quota_check(self, response):
-        reqs_remaining = int(response.headers['X-RateLimit-Remaining'])
+        x_rate_limit_remaining = response.headers.get('X-RateLimit-Remaining')
+        if not x_rate_limit_remaining:
+            return False, 0
+        reqs_remaining = int(x_rate_limit_remaining)
         if response.status_code == 403 and reqs_remaining == 0:
             reset_at = int(response.headers['X-RateLimit-Reset'])
             delay = min(reset_at - time.time(), 3600)
