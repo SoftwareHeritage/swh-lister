@@ -1,4 +1,5 @@
-# Copyright (C) 2017 the Software Heritage developers
+# Copyright (C) 2017-2019 The Software Heritage developers
+# See the AUTHORS file at the top-level directory of this distribution
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
 
@@ -26,6 +27,9 @@ decompressors = {
     'bz2': bz2.BZ2File,
     'xz': lzma.LZMAFile,
 }
+
+
+logger = logging.getLogger(__name__)
 
 
 class DebianLister(ListerHttpTransport, ListerBase):
@@ -209,8 +213,8 @@ class DebianLister(ListerHttpTransport, ListerBase):
 
         date = date or datetime.datetime.now(tz=datetime.timezone.utc)
 
-        logging.debug('Creating snapshot for distribution %s on date %s' %
-                      (distribution, date))
+        logger.debug('Creating snapshot for distribution %s on date %s' %
+                     (distribution, date))
 
         snapshot = DistributionSnapshot(date=date, distribution=distribution)
 
@@ -222,7 +226,7 @@ class DebianLister(ListerHttpTransport, ListerBase):
 
             self.area = area
 
-            logging.debug('Processing area %s' % area)
+            logger.debug('Processing area %s' % area)
 
             _, new_area_packages = self.ingest_data(None)
             area_snapshot = AreaSnapshot(snapshot=snapshot, area=area)
