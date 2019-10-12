@@ -382,6 +382,7 @@ class ListerBase(abc.ABC, config.SWHConfig):
         Returns:
             the same information in a different form
         """
+        logger.debug('origin-url: %s, type: %s', origin_url, origin_type)
         _type = 'load-%s' % origin_type
         _policy = kwargs.get('policy', 'recurring')
         priority = kwargs.get('priority')
