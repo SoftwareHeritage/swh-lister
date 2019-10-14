@@ -25,6 +25,8 @@ def swh_listers(request, postgresql_proc, postgresql, swh_scheduler):
             user='postgres',
             dbname='tests')
 
+    logger.debug('lister db_url: %s', db_url)
+
     listers = {}
 
     # Prepare schema for all listers
