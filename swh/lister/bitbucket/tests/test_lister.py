@@ -29,8 +29,8 @@ class BitBucketListerTester(HttpListerTester, unittest.TestCase):
     Lister = BitBucketLister
     test_re = re.compile(r'/repositories\?after=([^?&]+)')
     lister_subdir = 'bitbucket'
-    good_api_response_file = 'data/api.bitbucket.org/response.json'
-    bad_api_response_file = 'data/api.bitbucket.org/empty_response.json'
+    good_api_response_file = 'data/https_api.bitbucket.org/response.json'
+    bad_api_response_file = 'data/https_api.bitbucket.org/empty_response.json'
     first_index = convert_type('2008-07-12T07:44:01.476818+00:00')
     last_index = convert_type('2008-07-19T06:16:43.044743+00:00')
     entries_per_page = 10

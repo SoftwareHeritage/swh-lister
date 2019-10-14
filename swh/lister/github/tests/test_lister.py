@@ -18,8 +18,8 @@ class GitHubListerTester(HttpListerTester, unittest.TestCase):
     Lister = GitHubLister
     test_re = re.compile(r'/repositories\?since=([^?&]+)')
     lister_subdir = 'github'
-    good_api_response_file = 'data/api.github.com/first_response.json'
-    bad_api_response_file = 'data/api.github.com/empty_response.json'
+    good_api_response_file = 'data/https_api.github.com/first_response.json'
+    bad_api_response_file = 'data/https_api.github.com/empty_response.json'
     first_index = 0
     last_index = 369
     entries_per_page = 100
@@ -52,7 +52,7 @@ class GitHubListerTester(HttpListerTester, unittest.TestCase):
     @requests_mock.Mocker()
     def test_scheduled_tasks(self, http_mocker):
         self.scheduled_tasks_test(
-            'data/api.github.com/next_response.json', 876, http_mocker)
+            'data/https_api.github.com/next_response.json', 876, http_mocker)
 
 
 def test_lister_github(swh_listers, requests_mock_datadir):

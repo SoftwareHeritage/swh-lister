@@ -27,7 +27,7 @@ def test_load_raw_data_from_query_failure(requests_mock_datadir):
 
 
 def test_load_raw_data_from_file(datadir):
-    filepath = path.join(datadir, 'ftp.gnu.org', 'tree.json.gz')
+    filepath = path.join(datadir, 'https_ftp.gnu.org', 'tree.json.gz')
     actual_json = load_raw_data(filepath)
     assert actual_json is not None
     assert isinstance(actual_json, list)

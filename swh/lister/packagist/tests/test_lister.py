@@ -32,7 +32,7 @@ class PackagistListerTester(HttpSimpleListerTester, unittest.TestCase):
     Lister = PackagistLister
     PAGE = 'https://packagist.org/packages/list.json'
     lister_subdir = 'packagist'
-    good_api_response_file = 'data/packagist.org/packages_list.json'
+    good_api_response_file = 'data/https_packagist.org/packages_list.json'
     entries = 5
 
     @requests_mock.Mocker()
