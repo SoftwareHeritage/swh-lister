@@ -12,6 +12,8 @@ import unittest
 from swh.lister.core.tests.test_lister import HttpListerTesterBase
 from swh.lister.npm.lister import NpmLister, NpmIncrementalLister
 
+from typing import Any, List
+
 
 logger = logging.getLogger(__name__)
 
@@ -50,8 +52,9 @@ class NpmIncrementalListerTester(HttpListerTesterBase, unittest.TestCase):
         pass
 
 
-def check_tasks(tasks):
-    """Ensure tasks as of expected formats
+def check_tasks(tasks: List[Any]):
+    """Ensure scheduled tasks are in the expected format.
+
 
     """
     for row in tasks:
