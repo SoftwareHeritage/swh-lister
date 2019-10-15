@@ -50,15 +50,11 @@ class NpmIncrementalListerTester(HttpListerTesterBase, unittest.TestCase):
         pass
 
 
-def test_lister_npm_basic_listing(swh_listers, requests_mock_datadir):
-    lister = swh_listers['npm']
+def check_tasks(tasks):
+    """Ensure tasks as of expected formats
 
-    lister.run()
-
-    r = lister.scheduler.search_tasks(task_type='load-npm')
-    assert len(r) == 100
-
-    for row in r:
+    """
+    for row in tasks:
         logger.debug('row: %s', row)
         assert row['type'] == 'load-npm'
         # arguments check
@@ -76,3 +72,28 @@ def test_lister_npm_basic_listing(swh_listers, requests_mock_datadir):
 
         assert row['policy'] == 'recurring'
         assert row['priority'] is None
+
+
+def test_lister_npm_basic_listing(swh_listers, requests_mock_datadir):
+    lister = swh_listers['npm']
+
+    lister.run()
+
+    tasks = lister.scheduler.search_tasks(task_type='load-npm')
+    assert len(tasks) == 100
+
+    check_tasks(tasks)
+
+
+def test_lister_npm_listing_pagination(swh_listers, requests_mock_datadir):
+    lister = swh_listers['npm']
+    # Patch per page pagination
+    lister.per_page = 10 + 1
+    lister.PATH_TEMPLATE = lister.PATH_TEMPLATE.replace(
+        '&limit=1001', '&limit=%s' % lister.per_page)
+    lister.run()
+
+    tasks = lister.scheduler.search_tasks(task_type='load-npm')
+    assert len(tasks) == 2 * 10  # only 2 files with 10 results each
+
+    check_tasks(tasks)
