@@ -4,7 +4,7 @@
 # See top-level LICENSE file for more information
 
 
-def test_pypi_lister_(swh_listers, requests_mock_datadir):
+def test_pypi_lister(swh_listers, requests_mock_datadir):
     lister = swh_listers['pypi']
 
     lister.run()
