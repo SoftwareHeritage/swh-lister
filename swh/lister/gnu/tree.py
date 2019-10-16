@@ -18,123 +18,6 @@ from urllib.parse import urlparse
 logger = logging.getLogger(__name__)
 
 
-# to recognize existing naming pattern
-extensions = [
-    'zip',
-    'tar',
-    'gz', 'tgz',
-    'bz2', 'bzip2',
-    'lzma', 'lz',
-    'xz',
-    'Z',
-]
-
-version_keywords = [
-    'cygwin_me',
-    'w32', 'win32', 'nt', 'cygwin', 'mingw',
-    'latest', 'alpha', 'beta',
-    'release', 'stable',
-    'hppa',
-    'solaris', 'sunos', 'sun4u', 'sparc', 'sun',
-    'aix', 'ibm', 'rs6000',
-    'i386', 'i686',
-    'linux', 'redhat', 'linuxlibc',
-    'mips',
-    'powerpc', 'macos', 'apple', 'darwin', 'macosx', 'powermacintosh',
-    'unknown',
-    'netbsd', 'freebsd',
-    'sgi', 'irix',
-]
-
-# Match a filename into components.
-#
-# We use Debian's release number heuristic: A release number starts
-# with a digit, and is followed by alphanumeric characters or any of
-# ., +, :, ~ and -
-#
-# We hardcode a list of possible extensions, as this release number
-# scheme would match them too... We match on any combination of those.
-#
-# Greedy matching is done right to left (we only match the extension
-# greedily with +, software_name and release_number are matched lazily
-# with +? and *?).
-
-pattern = r'''
-^
-(?:
-    # We have a software name and a release number, separated with a
-    # -, _ or dot.
-    (?P<software_name1>.+?[-_.])
-    (?P<release_number>(%(vkeywords)s|[0-9][0-9a-zA-Z_.+:~-]*?)+)
-|
-    # We couldn't match a release number, put everything in the
-    # software name.
-    (?P<software_name2>.+?)
-)
-(?P<extension>(?:\.(?:%(extensions)s))+)
-$
-''' % {
-    'extensions': '|'.join(extensions),
-    'vkeywords': '|'.join('%s[-]?' % k for k in version_keywords),
-}
-
-
-def get_version(uri: str) -> str:
-    """Extract branch name from tarball uri
-
-    Args:
-        uri (str): Tarball URI
-
-    Returns:
-        Version detected
-
-    Example:
-        For uri = https://ftp.gnu.org/gnu/8sync/8sync-0.2.0.tar.gz
-
-        >>> get_version(uri)
-        '0.2.0'
-
-        For uri = 8sync-0.3.0.tar.gz
-
-        >>> get_version(uri)
-        '0.3.0'
-
-    """
-    filename = path.split(uri)[-1]
-    m = re.match(pattern, filename,
-                 flags=re.VERBOSE | re.IGNORECASE)
-    if m:
-        d = m.groupdict()
-        if d['software_name1'] and d['release_number']:
-            return d['release_number']
-        if d['software_name2']:
-            return d['software_name2']
-
-    return ''
-
-
-def load_raw_data(url: str) -> List[Dict]:
-    """Load the raw json from the tree.json.gz
-
-    Args:
-        url: Tree.json.gz url or path
-
-    Returns:
-        The raw json list
-
-    """
-    if url.startswith('http://') or url.startswith('https://'):
-        response = requests.get(url, allow_redirects=True)
-        if not response.ok:
-            raise ValueError('Error during query to %s' % url)
-        raw = gzip.decompress(response.content)
-    else:
-        with gzip.open(url, 'r') as f:
-            raw = f.read()
-    raw_data = json.loads(raw.decode('utf-8'))
-    return raw_data
-
-
 class GNUTree:
     """Gnu Tree's representation
 
@@ -298,3 +181,120 @@ def check_filename_is_archive(filename: str) -> bool:
         if file_suffixes[-1] == '.zip' or file_suffixes[-2] == '.tar':
             return True
     return False
+
+
+# to recognize existing naming pattern
+extensions = [
+    'zip',
+    'tar',
+    'gz', 'tgz',
+    'bz2', 'bzip2',
+    'lzma', 'lz',
+    'xz',
+    'Z',
+]
+
+version_keywords = [
+    'cygwin_me',
+    'w32', 'win32', 'nt', 'cygwin', 'mingw',
+    'latest', 'alpha', 'beta',
+    'release', 'stable',
+    'hppa',
+    'solaris', 'sunos', 'sun4u', 'sparc', 'sun',
+    'aix', 'ibm', 'rs6000',
+    'i386', 'i686',
+    'linux', 'redhat', 'linuxlibc',
+    'mips',
+    'powerpc', 'macos', 'apple', 'darwin', 'macosx', 'powermacintosh',
+    'unknown',
+    'netbsd', 'freebsd',
+    'sgi', 'irix',
+]
+
+# Match a filename into components.
+#
+# We use Debian's release number heuristic: A release number starts
+# with a digit, and is followed by alphanumeric characters or any of
+# ., +, :, ~ and -
+#
+# We hardcode a list of possible extensions, as this release number
+# scheme would match them too... We match on any combination of those.
+#
+# Greedy matching is done right to left (we only match the extension
+# greedily with +, software_name and release_number are matched lazily
+# with +? and *?).
+
+pattern = r'''
+^
+(?:
+    # We have a software name and a release number, separated with a
+    # -, _ or dot.
+    (?P<software_name1>.+?[-_.])
+    (?P<release_number>(%(vkeywords)s|[0-9][0-9a-zA-Z_.+:~-]*?)+)
+|
+    # We couldn't match a release number, put everything in the
+    # software name.
+    (?P<software_name2>.+?)
+)
+(?P<extension>(?:\.(?:%(extensions)s))+)
+$
+''' % {
+    'extensions': '|'.join(extensions),
+    'vkeywords': '|'.join('%s[-]?' % k for k in version_keywords),
+}
+
+
+def get_version(uri: str) -> str:
+    """Extract branch name from tarball uri
+
+    Args:
+        uri (str): Tarball URI
+
+    Returns:
+        Version detected
+
+    Example:
+        For uri = https://ftp.gnu.org/gnu/8sync/8sync-0.2.0.tar.gz
+
+        >>> get_version(uri)
+        '0.2.0'
+
+        For uri = 8sync-0.3.0.tar.gz
+
+        >>> get_version(uri)
+        '0.3.0'
+
+    """
+    filename = path.split(uri)[-1]
+    m = re.match(pattern, filename,
+                 flags=re.VERBOSE | re.IGNORECASE)
+    if m:
+        d = m.groupdict()
+        if d['software_name1'] and d['release_number']:
+            return d['release_number']
+        if d['software_name2']:
+            return d['software_name2']
+
+    return ''
+
+
+def load_raw_data(url: str) -> List[Dict]:
+    """Load the raw json from the tree.json.gz
+
+    Args:
+        url: Tree.json.gz url or path
+
+    Returns:
+        The raw json list
+
+    """
+    if url.startswith('http://') or url.startswith('https://'):
+        response = requests.get(url, allow_redirects=True)
+        if not response.ok:
+            raise ValueError('Error during query to %s' % url)
+        raw = gzip.decompress(response.content)
+    else:
+        with gzip.open(url, 'r') as f:
+            raw = f.read()
+    raw_data = json.loads(raw.decode('utf-8'))
+    return raw_data
