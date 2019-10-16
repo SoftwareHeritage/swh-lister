@@ -9,7 +9,7 @@ import logging
 logger = logging.getLogger(__name__)
 
 
-def test_lister_no_page_check_results(swh_listers, requests_mock_datadir):
+def test_gnu_lister(swh_listers, requests_mock_datadir):
     lister = swh_listers['gnu']
 
     lister.run()
@@ -21,21 +21,23 @@ def test_lister_no_page_check_results(swh_listers, requests_mock_datadir):
         assert row['type'] == 'load-tar'
         # arguments check
         args = row['arguments']['args']
-        assert len(args) == 1
+        assert len(args) == 0
 
-        url = args[0]
+        # kwargs
+        kwargs = row['arguments']['kwargs']
+        assert set(kwargs.keys()) == {'url', 'artifacts'}
+
+        url = kwargs['url']
         assert url.startswith('https://ftp.gnu.org')
 
         url_suffix = url.split('https://ftp.gnu.org')[1]
         assert 'gnu' in url_suffix or 'old-gnu' in url_suffix
 
-        # kwargs
-        kwargs = row['arguments']['kwargs']
-        assert list(kwargs.keys()) == ['tarballs']
-
-        tarballs = kwargs['tarballs']
-        # check the tarball's structure
-        tarball = tarballs[0]
-        assert set(tarball.keys()) == set(['archive', 'length', 'time'])
+        artifacts = kwargs['artifacts']
+        # check the artifact's structure
+        artifact = artifacts[0]
+        assert set(artifact.keys()) == {
+            'url', 'length', 'time', 'filename', 'version'
+        }
 
         assert row['policy'] == 'oneshot'

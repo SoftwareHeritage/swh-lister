@@ -33,22 +33,23 @@ class GNULister(SimpleLister):
 
         .. code-block:: python
 
-            args: ['https://ftp.gnu.org/gnu/3dldf/']
+            args:
             kwargs: {
-                'tarballs': [{
-                    'archive': 'https://...',
+                'url': 'https://ftp.gnu.org/gnu/3dldf/',
+                'artifacts': [{
+                    'url': 'https://...',
                     'time': 1071002600,
                     'length': 128},
                 ...
             ]}
 
         """
-        tarballs = self.gnu_tree.artifacts[origin_url]
+        artifacts = self.gnu_tree.artifacts[origin_url]
         return utils.create_task_dict(
             'load-%s' % origin_type,
             kwargs.get('policy', 'oneshot'),
-            origin_url,
-            tarballs=tarballs)
+            url=origin_url,
+            artifacts=artifacts)
 
     def safely_issue_request(self, identifier):
         """Bypass the implementation. It's now the GNUTree which deals with

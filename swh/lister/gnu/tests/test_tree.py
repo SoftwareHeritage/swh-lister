@@ -9,7 +9,8 @@ import pytest
 
 from os import path
 from swh.lister.gnu.tree import (
-    GNUTree, find_artifacts, check_filename_is_archive, load_raw_data
+    GNUTree, find_artifacts, check_filename_is_archive, load_raw_data,
+    get_version
 )
 
 
@@ -69,14 +70,18 @@ def test_tree_json(requests_mock_datadir):
 
     assert tree_json.artifacts['https://ftp.gnu.org/old-gnu/zlibc/'] == [
         {
-            'archive': 'https://ftp.gnu.org/old-gnu/zlibc/zlibc-0.9b.tar.gz',  # noqa
+            'url': 'https://ftp.gnu.org/old-gnu/zlibc/zlibc-0.9b.tar.gz',  # noqa
             'length': 90106,
-            'time': 857980800
+            'time': 857980800,
+            'filename': 'zlibc-0.9b.tar.gz',
+            'version': '0.9b',
         },
         {
-            'archive': 'https://ftp.gnu.org/old-gnu/zlibc/zlibc-0.9e.tar.gz',  # noqa
+            'url': 'https://ftp.gnu.org/old-gnu/zlibc/zlibc-0.9e.tar.gz',  # noqa
             'length': 89625,
-            'time': 860396400
+            'time': 860396400,
+            'filename': 'zlibc-0.9e.tar.gz',
+            'version': '0.9e',
         }
     ]
 
@@ -93,38 +98,46 @@ def test_tree_json_failures(requests_mock_datadir):
 
 
 def test_find_artifacts_small_sample(datadir):
-    expected_tarballs = [
+    expected_artifacts = [
         {
-            'archive': '/root/artanis/artanis-0.2.1.tar.bz2',
+            'url': '/root/artanis/artanis-0.2.1.tar.bz2',
             'time': 1495205979,
             'length': 424081,
+            'version': '0.2.1',
+            'filename': 'artanis-0.2.1.tar.bz2',
         },
         {
-            'archive': '/root/xboard/winboard/winboard-4_0_0-src.zip',  # noqa
+            'url': '/root/xboard/winboard/winboard-4_0_0-src.zip',  # noqa
             'time': 898422900,
-            'length': 1514448
+            'length': 1514448,
+            'version': '4_0_0-src',
+            'filename': 'winboard-4_0_0-src.zip',
         },
         {
-            'archive': '/root/xboard/xboard-3.6.2.tar.gz',  # noqa
+            'url': '/root/xboard/xboard-3.6.2.tar.gz',  # noqa
             'time': 869814000,
             'length': 450164,
+            'version': '3.6.2',
+            'filename': 'xboard-3.6.2.tar.gz',
         },
         {
-            'archive': '/root/xboard/xboard-4.0.0.tar.gz',  # noqa
+            'url': '/root/xboard/xboard-4.0.0.tar.gz',  # noqa
             'time': 898422900,
             'length': 514951,
+            'version': '4.0.0',
+            'filename': 'xboard-4.0.0.tar.gz',
         },
     ]
 
     file_structure = json.load(open(path.join(datadir, 'tree.min.json')))
-    actual_tarballs = find_artifacts(file_structure, '/root/')
-    assert actual_tarballs == expected_tarballs
+    actual_artifacts = find_artifacts(file_structure, '/root/')
+    assert actual_artifacts == expected_artifacts
 
 
 def test_find_artifacts(datadir):
     file_structure = json.load(open(path.join(datadir, 'tree.json')))
-    actual_tarballs = find_artifacts(file_structure, '/root/')
-    assert len(actual_tarballs) == 42 + 3  # tar + zip
+    actual_artifacts = find_artifacts(file_structure, '/root/')
+    assert len(actual_artifacts) == 42 + 3  # tar + zip
 
 
 def test_check_filename_is_archive():
@@ -133,3 +146,61 @@ def test_check_filename_is_archive():
 
     for ext in ['abc.tar.gz.sig', 'abc', 'something.zip2', 'foo.tar.']:
         assert check_filename_is_archive(ext) is False
+
+
+def test_get_version():
+    """From url to branch name should yield something relevant
+
+    """
+    for url, expected_branchname in [
+            ('https://gnu.org/sthg/info-2.1.0.tar.gz', '2.1.0'),
+            ('https://gnu.org/sthg/info-2.1.2.zip', '2.1.2'),
+            ('https://sthg.org/gnu/sthg.tar.gz', 'sthg'),
+            ('https://sthg.org/gnu/DLDF-1.1.4.tar.gz', '1.1.4'),
+            ('https://sthg.org/gnu/anubis-latest.tar.bz2', 'latest'),
+            ('https://ftp.org/gnu/aris-w32.zip', 'w32'),
+            ('https://ftp.org/gnu/aris-w32-2.2.zip', 'w32-2.2'),
+            ('https://ftp.org/gnu/autogen.info.tar.gz', 'autogen.info'),
+            ('https://ftp.org/gnu/crypto-build-demo.tar.gz',
+             'crypto-build-demo'),
+            ('https://ftp.org/gnu/clue+clio+xit.clisp.tar.gz',
+             'clue+clio+xit.clisp'),
+            ('https://ftp.org/gnu/clue+clio.for-pcl.tar.gz',
+             'clue+clio.for-pcl'),
+            ('https://ftp.org/gnu/clisp-hppa2.0-hp-hpux10.20.tar.gz',
+             'hppa2.0-hp-hpux10.20'),
+            ('clisp-i386-solaris2.6.tar.gz', 'i386-solaris2.6'),
+            ('clisp-mips-sgi-irix6.5.tar.gz', 'mips-sgi-irix6.5'),
+            ('clisp-powerpc-apple-macos.tar.gz', 'powerpc-apple-macos'),
+            ('clisp-powerpc-unknown-linuxlibc6.tar.gz',
+             'powerpc-unknown-linuxlibc6'),
+
+            ('clisp-rs6000-ibm-aix3.2.5.tar.gz', 'rs6000-ibm-aix3.2.5'),
+            ('clisp-sparc-redhat51-linux.tar.gz', 'sparc-redhat51-linux'),
+            ('clisp-sparc-sun-solaris2.4.tar.gz', 'sparc-sun-solaris2.4'),
+            ('clisp-sparc-sun-sunos4.1.3_U1.tar.gz',
+             'sparc-sun-sunos4.1.3_U1'),
+            ('clisp-2.25.1-powerpc-apple-MacOSX.tar.gz',
+             '2.25.1-powerpc-apple-MacOSX'),
+            ('clisp-2.27-PowerMacintosh-powerpc-Darwin-1.3.7.tar.gz',
+             '2.27-PowerMacintosh-powerpc-Darwin-1.3.7'),
+            ('clisp-2.27-i686-unknown-Linux-2.2.19.tar.gz',
+             '2.27-i686-unknown-Linux-2.2.19'),
+            ('clisp-2.28-i386-i386-freebsd-4.3-RELEASE.tar.gz',
+             '2.28-i386-i386-freebsd-4.3-RELEASE'),
+            ('clisp-2.28-i686-unknown-cygwin_me-4.90-1.3.10.tar.gz',
+             '2.28-i686-unknown-cygwin_me-4.90-1.3.10'),
+            ('clisp-2.29-i386-i386-freebsd-4.6-STABLE.tar.gz',
+             '2.29-i386-i386-freebsd-4.6-STABLE'),
+            ('clisp-2.29-i686-unknown-cygwin_nt-5.0-1.3.12.tar.gz',
+             '2.29-i686-unknown-cygwin_nt-5.0-1.3.12'),
+            ('gcl-2.5.3-ansi-japi-xdr.20030701_mingw32.zip',
+             '2.5.3-ansi-japi-xdr.20030701_mingw32'),
+            ('gettext-runtime-0.13.1.bin.woe32.zip', '0.13.1.bin.woe32'),
+            ('sather-logo_images.tar.gz', 'sather-logo_images'),
+            ('sather-specification-000328.html.tar.gz', '000328.html')
+
+    ]:
+        actual_branchname = get_version(url)
+
+        assert actual_branchname == expected_branchname

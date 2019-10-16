@@ -7,13 +7,110 @@ import gzip
 import json
 import logging
 import requests
+import re
 
+from os import path
 from pathlib import Path
-from typing import Dict, Tuple, List
+from typing import Any, Dict, List, Mapping, Tuple
 from urllib.parse import urlparse
 
 
 logger = logging.getLogger(__name__)
+
+
+# to recognize existing naming pattern
+extensions = [
+    'zip',
+    'tar',
+    'gz', 'tgz',
+    'bz2', 'bzip2',
+    'lzma', 'lz',
+    'xz',
+    'Z',
+]
+
+version_keywords = [
+    'cygwin_me',
+    'w32', 'win32', 'nt', 'cygwin', 'mingw',
+    'latest', 'alpha', 'beta',
+    'release', 'stable',
+    'hppa',
+    'solaris', 'sunos', 'sun4u', 'sparc', 'sun',
+    'aix', 'ibm', 'rs6000',
+    'i386', 'i686',
+    'linux', 'redhat', 'linuxlibc',
+    'mips',
+    'powerpc', 'macos', 'apple', 'darwin', 'macosx', 'powermacintosh',
+    'unknown',
+    'netbsd', 'freebsd',
+    'sgi', 'irix',
+]
+
+# Match a filename into components.
+#
+# We use Debian's release number heuristic: A release number starts
+# with a digit, and is followed by alphanumeric characters or any of
+# ., +, :, ~ and -
+#
+# We hardcode a list of possible extensions, as this release number
+# scheme would match them too... We match on any combination of those.
+#
+# Greedy matching is done right to left (we only match the extension
+# greedily with +, software_name and release_number are matched lazily
+# with +? and *?).
+
+pattern = r'''
+^
+(?:
+    # We have a software name and a release number, separated with a
+    # -, _ or dot.
+    (?P<software_name1>.+?[-_.])
+    (?P<release_number>(%(vkeywords)s|[0-9][0-9a-zA-Z_.+:~-]*?)+)
+|
+    # We couldn't match a release number, put everything in the
+    # software name.
+    (?P<software_name2>.+?)
+)
+(?P<extension>(?:\.(?:%(extensions)s))+)
+$
+''' % {
+    'extensions': '|'.join(extensions),
+    'vkeywords': '|'.join('%s[-]?' % k for k in version_keywords),
+}
+
+
+def get_version(uri: str) -> str:
+    """Extract branch name from tarball uri
+
+    Args:
+        uri (str): Tarball URI
+
+    Returns:
+        Version detected
+
+    Example:
+        For uri = https://ftp.gnu.org/gnu/8sync/8sync-0.2.0.tar.gz
+
+        >>> get_version(uri)
+        '0.2.0'
+
+        For uri = 8sync-0.3.0.tar.gz
+
+        >>> get_version(uri)
+        '0.3.0'
+
+    """
+    filename = path.split(uri)[-1]
+    m = re.match(pattern, filename,
+                 flags=re.VERBOSE | re.IGNORECASE)
+    if m:
+        d = m.groupdict()
+        if d['software_name1'] and d['release_number']:
+            return d['release_number']
+        if d['software_name2']:
+            return d['software_name2']
+
+    return ''
 
 
 def load_raw_data(url: str) -> List[Dict]:
@@ -99,7 +196,8 @@ class GNUTree:
         return projects, artifacts
 
 
-def find_artifacts(filesystem: List[Dict], url: str) -> List[Dict]:
+def find_artifacts(
+        filesystem: List[Dict], url: str) -> List[Mapping[str, Any]]:
     """Recursively list artifacts present in the folder and subfolders for a
     particular package url.
 
@@ -111,21 +209,33 @@ def find_artifacts(filesystem: List[Dict], url: str) -> List[Dict]:
         url: URL of the corresponding package
 
     Returns
-        List of tarball urls and their associated metadata (time, length).
-        For example:
+        List of tarball urls and their associated metadata (time, length,
+        etc...). For example:
 
         .. code-block:: python
 
             [
-                {'archive': 'https://ftp.gnu.org/gnu/3dldf/3DLDF-1.1.3.tar.gz',
-                 'time': 1071002600,
-                 'length': 543},
-                {'archive': 'https://ftp.gnu.org/gnu/3dldf/3DLDF-1.1.4.tar.gz',
-                 'time': 1071078759,
-                 'length': 456},
-                {'archive': 'https://ftp.gnu.org/gnu/3dldf/3DLDF-1.1.5.tar.gz',
-                 'time': 1074278633,
-                 'length': 251},
+                {
+                    'url': 'https://ftp.gnu.org/gnu/3dldf/3DLDF-1.1.3.tar.gz',
+                    'time': 1071002600,
+                    'filename': '3DLDF-1.1.3.tar.gz',
+                    'version': '1.1.3',
+                    'length': 543
+                },
+                {
+                    'url': 'https://ftp.gnu.org/gnu/3dldf/3DLDF-1.1.4.tar.gz',
+                    'time': 1071078759,
+                    'filename: '3DLDF-1.1.4.tar.gz',
+                    'version': '1.1.4',
+                    'length': 456
+                },
+                {
+                    'url': 'https://ftp.gnu.org/gnu/3dldf/3DLDF-1.1.5.tar.gz',
+                    'time': 1074278633,
+                    'filename': '3DLDF-1.1.5.tar.gz',
+                    'version': '1.1.5'
+                    'length': 251
+                },
                 ...
             ]
 
@@ -136,10 +246,13 @@ def find_artifacts(filesystem: List[Dict], url: str) -> List[Dict]:
         filename = info_file['name']
         if filetype == 'file':
             if check_filename_is_archive(filename):
+                uri = url + filename
                 artifacts.append({
-                    'archive': url + filename,
+                    'url': uri,
+                    'filename': filename,
                     'time': int(info_file['time']),
                     'length': int(info_file['size']),
+                    'version': get_version(filename),
                 })
         # It will recursively check for artifacts in all sub-folders
         elif filetype == 'directory':
