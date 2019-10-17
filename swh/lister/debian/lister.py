@@ -14,7 +14,7 @@ from debian.deb822 import Sources
 from sqlalchemy.orm import joinedload, load_only
 from sqlalchemy.schema import CreateTable, DropTable
 
-from swh.storage.schemata.distribution import (
+from swh.lister.debian.models import (
     AreaSnapshot, Distribution, DistributionSnapshot, Package,
     TempPackage,
 )
