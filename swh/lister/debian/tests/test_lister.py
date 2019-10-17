@@ -27,7 +27,7 @@ def test_lister_debian(lister_debian, datadir, requests_mock_datadir):
 
         # kwargs
         kwargs = row['arguments']['kwargs']
-        assert set(kwargs.keys()) == {'origin', 'date', 'packages'}
+        assert set(kwargs.keys()) == {'url', 'date', 'packages'}
 
         logger.debug('kwargs: %s', kwargs)
 
