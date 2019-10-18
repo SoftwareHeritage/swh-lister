@@ -97,6 +97,6 @@ class GNULister(SimpleLister):
             'full_name': repo['name'],
             'html_url': repo['url'],
             'origin_url': repo['url'],
-            'time_last_updated': int(repo['time_modified']),
+            'time_last_updated': repo['time_modified'],
             'origin_type': 'tar',
         }

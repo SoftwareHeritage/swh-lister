@@ -3,15 +3,16 @@
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
 
-import datetime
 import gzip
 import json
 import logging
 import requests
 import re
 
+from datetime import datetime
 from os import path
 from pathlib import Path
+from pytz import utc
 from typing import Any, Dict, List, Mapping, Tuple
 from urllib.parse import urlparse
 
@@ -72,7 +73,7 @@ class GNUTree:
                         repo_details = {
                             'name': info['name'],
                             'url': package_url,
-                            'time_modified': info['time'],
+                            'time_modified': format_date(info['time'])
                         }
                         artifacts[package_url] = package_artifacts
                         projects[package_url] = repo_details
@@ -305,4 +306,4 @@ def format_date(timestamp: str) -> str:
     """Format a string timestamp to an isoformat string
 
     """
-    return datetime.datetime.fromtimestamp(int(timestamp)).isoformat()
+    return datetime.fromtimestamp(int(timestamp), tz=utc).isoformat()

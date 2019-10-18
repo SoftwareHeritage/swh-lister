@@ -46,25 +46,25 @@ def test_tree_json(requests_mock_datadir):
 
     assert tree_json.projects['https://ftp.gnu.org/gnu/8sync/'] == {
         'name': '8sync',
-        'time_modified': '1489817408',
+        'time_modified': '2017-03-18T06:10:08+00:00',
         'url': 'https://ftp.gnu.org/gnu/8sync/'
     }
 
     assert tree_json.projects['https://ftp.gnu.org/gnu/3dldf/'] == {
         'name': '3dldf',
-        'time_modified': '1386961236',
+        'time_modified': '2013-12-13T19:00:36+00:00',
         'url': 'https://ftp.gnu.org/gnu/3dldf/'
     }
 
     assert tree_json.projects['https://ftp.gnu.org/gnu/a2ps/'] == {
         'name': 'a2ps',
-        'time_modified': '1198900505',
+        'time_modified': '2007-12-29T03:55:05+00:00',
         'url': 'https://ftp.gnu.org/gnu/a2ps/'
     }
 
     assert tree_json.projects['https://ftp.gnu.org/old-gnu/xshogi/'] == {
         'name': 'xshogi',
-        'time_modified': '1059822922',
+        'time_modified': '2003-08-02T11:15:22+00:00',
         'url': 'https://ftp.gnu.org/old-gnu/xshogi/'
     }
 
@@ -72,14 +72,14 @@ def test_tree_json(requests_mock_datadir):
         {
             'url': 'https://ftp.gnu.org/old-gnu/zlibc/zlibc-0.9b.tar.gz',  # noqa
             'length': 90106,
-            'time': '1997-03-10T09:00:00',
+            'time': '1997-03-10T08:00:00+00:00',
             'filename': 'zlibc-0.9b.tar.gz',
             'version': '0.9b',
         },
         {
             'url': 'https://ftp.gnu.org/old-gnu/zlibc/zlibc-0.9e.tar.gz',  # noqa
             'length': 89625,
-            'time': '1997-04-07T09:00:00',
+            'time': '1997-04-07T07:00:00+00:00',
             'filename': 'zlibc-0.9e.tar.gz',
             'version': '0.9e',
         }
@@ -101,28 +101,28 @@ def test_find_artifacts_small_sample(datadir):
     expected_artifacts = [
         {
             'url': '/root/artanis/artanis-0.2.1.tar.bz2',
-            'time': '2017-05-19T16:59:39',
+            'time': '2017-05-19T14:59:39+00:00',
             'length': 424081,
             'version': '0.2.1',
             'filename': 'artanis-0.2.1.tar.bz2',
         },
         {
             'url': '/root/xboard/winboard/winboard-4_0_0-src.zip',  # noqa
-            'time': '1998-06-21T11:55:00',
+            'time': '1998-06-21T09:55:00+00:00',
             'length': 1514448,
             'version': '4_0_0-src',
             'filename': 'winboard-4_0_0-src.zip',
         },
         {
             'url': '/root/xboard/xboard-3.6.2.tar.gz',  # noqa
-            'time': '1997-07-25T09:00:00',
+            'time': '1997-07-25T07:00:00+00:00',
             'length': 450164,
             'version': '3.6.2',
             'filename': 'xboard-3.6.2.tar.gz',
         },
         {
             'url': '/root/xboard/xboard-4.0.0.tar.gz',  # noqa
-            'time': '1998-06-21T11:55:00',
+            'time': '1998-06-21T09:55:00+00:00',
             'length': 514951,
             'version': '4.0.0',
             'filename': 'xboard-4.0.0.tar.gz',
@@ -207,14 +207,14 @@ def test_get_version():
 
 
 def test_format_date():
-    for t_str, expected_isoformat_date in [
-            (1489817408, '2017-03-18T07:10:08'),
-            (1386961236, '2013-12-13T20:00:36'),
-            ('1198900505', '2007-12-29T04:55:05'),
-            (1059822922, '2003-08-02T13:15:22'),
-            ('1489817408', '2017-03-18T07:10:08'),
+    for timestamp, expected_isoformat_date in [
+            (1489817408, '2017-03-18T06:10:08+00:00'),
+            (1386961236, '2013-12-13T19:00:36+00:00'),
+            ('1198900505', '2007-12-29T03:55:05+00:00'),
+            (1059822922, '2003-08-02T11:15:22+00:00'),
+            ('1489817408', '2017-03-18T06:10:08+00:00'),
     ]:
-        actual_date = format_date(t_str)
+        actual_date = format_date(timestamp)
         assert actual_date == expected_isoformat_date
 
     with pytest.raises(ValueError):
