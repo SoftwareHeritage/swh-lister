@@ -13,7 +13,7 @@ from datetime import datetime
 from os import path
 from pathlib import Path
 from pytz import utc
-from typing import Any, Dict, List, Mapping, Tuple
+from typing import Any, List, Mapping, Sequence, Tuple
 from urllib.parse import urlparse
 
 
@@ -31,22 +31,22 @@ class GNUTree:
         # Interesting top level directories
         self.top_level_directories = ['gnu', 'old-gnu']
         # internal state
-        self._artifacts = {}  # type: Dict
-        self._projects = {}  # type: Dict
+        self._artifacts = {}  # type: Mapping[str, Any]
+        self._projects = {}  # type: Mapping[str, Any]
 
     @property
-    def projects(self) -> Dict:
+    def projects(self) -> Mapping[str, Any]:
         if not self._projects:
             self._projects, self._artifacts = self._load()
         return self._projects
 
     @property
-    def artifacts(self) -> Dict:
+    def artifacts(self) -> Mapping[str, Any]:
         if not self._artifacts:
             self._projects, self._artifacts = self._load()
         return self._artifacts
 
-    def _load(self) -> Tuple[Dict, Dict]:
+    def _load(self) -> Tuple[Mapping[str, Any], Mapping[str, Any]]:
         """Compute projects and artifacts per project
 
         Returns:
@@ -81,8 +81,8 @@ class GNUTree:
         return projects, artifacts
 
 
-def find_artifacts(
-        filesystem: List[Dict], url: str) -> List[Mapping[str, Any]]:
+def find_artifacts(filesystem: List[Mapping[str, Any]],
+                   url: str) -> List[Mapping[str, Any]]:
     """Recursively list artifacts present in the folder and subfolders for a
     particular package url.
 
@@ -125,7 +125,7 @@ def find_artifacts(
             ]
 
     """
-    artifacts = []
+    artifacts = []  # type: List[Mapping[str, Any]]
     for info_file in filesystem:
         filetype = info_file['type']
         filename = info_file['name']
@@ -176,7 +176,6 @@ def check_filename_is_archive(filename: str) -> bool:
 
     """
     file_suffixes = Path(filename).suffixes
-    logger.debug('Path(%s).suffixed: %s' % (filename, file_suffixes))
     if len(file_suffixes) == 1 and file_suffixes[-1] in ('.zip', '.tar'):
         return True
     elif len(file_suffixes) > 1:
@@ -186,17 +185,17 @@ def check_filename_is_archive(filename: str) -> bool:
 
 
 # to recognize existing naming pattern
-extensions = [
+EXTENSIONS = [
     'zip',
     'tar',
     'gz', 'tgz',
     'bz2', 'bzip2',
     'lzma', 'lz',
     'xz',
-    'Z',
+    'Z', '7z',
 ]
 
-version_keywords = [
+VERSION_KEYWORDS = [
     'cygwin_me',
     'w32', 'win32', 'nt', 'cygwin', 'mingw',
     'latest', 'alpha', 'beta',
@@ -226,24 +225,24 @@ version_keywords = [
 # greedily with +, software_name and release_number are matched lazily
 # with +? and *?).
 
-pattern = r'''
+PATTERN = r'''
 ^
 (?:
     # We have a software name and a release number, separated with a
     # -, _ or dot.
     (?P<software_name1>.+?[-_.])
-    (?P<release_number>(%(vkeywords)s|[0-9][0-9a-zA-Z_.+:~-]*?)+)
+    (?P<release_number>({vkeywords}|[0-9][0-9a-zA-Z_.+:~-]*?)+)
 |
     # We couldn't match a release number, put everything in the
     # software name.
     (?P<software_name2>.+?)
 )
-(?P<extension>(?:\.(?:%(extensions)s))+)
+(?P<extension>(?:\.(?:{extensions}))+)
 $
-''' % {
-    'extensions': '|'.join(extensions),
-    'vkeywords': '|'.join('%s[-]?' % k for k in version_keywords),
-}
+'''.format(
+    extensions='|'.join(EXTENSIONS),
+    vkeywords='|'.join('%s[-]?' % k for k in VERSION_KEYWORDS),
+)
 
 
 def get_version(uri: str) -> str:
@@ -268,7 +267,7 @@ def get_version(uri: str) -> str:
 
     """
     filename = path.split(uri)[-1]
-    m = re.match(pattern, filename,
+    m = re.match(PATTERN, filename,
                  flags=re.VERBOSE | re.IGNORECASE)
     if m:
         d = m.groupdict()
@@ -280,7 +279,7 @@ def get_version(uri: str) -> str:
     return ''
 
 
-def load_raw_data(url: str) -> List[Dict]:
+def load_raw_data(url: str) -> Sequence[Mapping]:
     """Load the raw json from the tree.json.gz
 
     Args:

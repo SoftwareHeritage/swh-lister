@@ -149,7 +149,9 @@ def test_check_filename_is_archive():
 
 
 def test_get_version():
-    """From url to branch name should yield something relevant
+    """Parsing version from url should yield some form of "sensible" version
+
+    Given the dataset, it's not a simple task to extract correctly the version.
 
     """
     for url, expected_branchname in [
@@ -198,7 +200,8 @@ def test_get_version():
              '2.5.3-ansi-japi-xdr.20030701_mingw32'),
             ('gettext-runtime-0.13.1.bin.woe32.zip', '0.13.1.bin.woe32'),
             ('sather-logo_images.tar.gz', 'sather-logo_images'),
-            ('sather-specification-000328.html.tar.gz', '000328.html')
+            ('sather-specification-000328.html.tar.gz', '000328.html'),
+            ('something-10.1.0.7z', '10.1.0'),
 
     ]:
         actual_branchname = get_version(url)

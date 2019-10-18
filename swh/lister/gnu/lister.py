@@ -38,10 +38,14 @@ class GNULister(SimpleLister):
                 'url': 'https://ftp.gnu.org/gnu/3dldf/',
                 'artifacts': [{
                     'url': 'https://...',
-                    'time': 1071002600,
-                    'length': 128},
+                    'time': '2003-12-09T21:43:20+00:00',
+                    'length': 128,
+                    'version': '1.0.1',
+                    'filename': 'something-1.0.1.tar.gz',
+                },
                 ...
-            ]}
+                ]
+            }
 
         """
         artifacts = self.gnu_tree.artifacts[origin_url]
@@ -73,14 +77,13 @@ class GNULister(SimpleLister):
             List of packages name, url, last modification time
 
             .. code-block:: python
-
                 [
                     {'name': '3dldf',
                      'url': 'https://ftp.gnu.org/gnu/3dldf/',
-                     'time_modified': 1071002600},
+                     'time_modified': '2003-12-09T20:43:20+00:00'},
                     {'name': '8sync',
                      'url': 'https://ftp.gnu.org/gnu/8sync/',
-                     'time_modified': 1480991830},
+                     'time_modified': '2016-12-06T02:37:10+00:00'},
                     ...
                 ]
 
