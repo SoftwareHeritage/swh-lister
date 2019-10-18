@@ -40,4 +40,12 @@ def test_gnu_lister(swh_listers, requests_mock_datadir):
             'url', 'length', 'time', 'filename', 'version'
         }
 
+        for artifact in artifacts:
+            logger.debug(artifact)
+            # 'time' is an isoformat string now
+            for key in ['url', 'time', 'filename', 'version']:
+                assert isinstance(artifact[key], str)
+            assert isinstance(artifact['length'], int)
+
         assert row['policy'] == 'oneshot'
+        assert row['priority'] is None

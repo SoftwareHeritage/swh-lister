@@ -3,6 +3,7 @@
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
 
+import datetime
 import gzip
 import json
 import logging
@@ -133,7 +134,7 @@ def find_artifacts(
                 artifacts.append({
                     'url': uri,
                     'filename': filename,
-                    'time': int(info_file['time']),
+                    'time': format_date(info_file['time']),
                     'length': int(info_file['size']),
                     'version': get_version(filename),
                 })
@@ -298,3 +299,10 @@ def load_raw_data(url: str) -> List[Dict]:
             raw = f.read()
     raw_data = json.loads(raw.decode('utf-8'))
     return raw_data
+
+
+def format_date(timestamp: str) -> str:
+    """Format a string timestamp to an isoformat string
+
+    """
+    return datetime.datetime.fromtimestamp(int(timestamp)).isoformat()

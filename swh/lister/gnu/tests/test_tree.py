@@ -10,7 +10,7 @@ import pytest
 from os import path
 from swh.lister.gnu.tree import (
     GNUTree, find_artifacts, check_filename_is_archive, load_raw_data,
-    get_version
+    get_version, format_date
 )
 
 
@@ -72,14 +72,14 @@ def test_tree_json(requests_mock_datadir):
         {
             'url': 'https://ftp.gnu.org/old-gnu/zlibc/zlibc-0.9b.tar.gz',  # noqa
             'length': 90106,
-            'time': 857980800,
+            'time': '1997-03-10T09:00:00',
             'filename': 'zlibc-0.9b.tar.gz',
             'version': '0.9b',
         },
         {
             'url': 'https://ftp.gnu.org/old-gnu/zlibc/zlibc-0.9e.tar.gz',  # noqa
             'length': 89625,
-            'time': 860396400,
+            'time': '1997-04-07T09:00:00',
             'filename': 'zlibc-0.9e.tar.gz',
             'version': '0.9e',
         }
@@ -101,28 +101,28 @@ def test_find_artifacts_small_sample(datadir):
     expected_artifacts = [
         {
             'url': '/root/artanis/artanis-0.2.1.tar.bz2',
-            'time': 1495205979,
+            'time': '2017-05-19T16:59:39',
             'length': 424081,
             'version': '0.2.1',
             'filename': 'artanis-0.2.1.tar.bz2',
         },
         {
             'url': '/root/xboard/winboard/winboard-4_0_0-src.zip',  # noqa
-            'time': 898422900,
+            'time': '1998-06-21T11:55:00',
             'length': 1514448,
             'version': '4_0_0-src',
             'filename': 'winboard-4_0_0-src.zip',
         },
         {
             'url': '/root/xboard/xboard-3.6.2.tar.gz',  # noqa
-            'time': 869814000,
+            'time': '1997-07-25T09:00:00',
             'length': 450164,
             'version': '3.6.2',
             'filename': 'xboard-3.6.2.tar.gz',
         },
         {
             'url': '/root/xboard/xboard-4.0.0.tar.gz',  # noqa
-            'time': 898422900,
+            'time': '1998-06-21T11:55:00',
             'length': 514951,
             'version': '4.0.0',
             'filename': 'xboard-4.0.0.tar.gz',
@@ -204,3 +204,20 @@ def test_get_version():
         actual_branchname = get_version(url)
 
         assert actual_branchname == expected_branchname
+
+
+def test_format_date():
+    for t_str, expected_isoformat_date in [
+            (1489817408, '2017-03-18T07:10:08'),
+            (1386961236, '2013-12-13T20:00:36'),
+            ('1198900505', '2007-12-29T04:55:05'),
+            (1059822922, '2003-08-02T13:15:22'),
+            ('1489817408', '2017-03-18T07:10:08'),
+    ]:
+        actual_date = format_date(t_str)
+        assert actual_date == expected_isoformat_date
+
+    with pytest.raises(ValueError):
+        format_date('')
+    with pytest.raises(TypeError):
+        format_date(None)
