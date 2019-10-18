@@ -77,7 +77,7 @@ class CRANLister(SimpleLister):
         """
         return None
 
-    def list_packages(self, *args) -> List[Mapping[str, str]]:
+    def list_packages(self, response) -> List[Mapping[str, str]]:
         """Runs R script which uses inbuilt API to return a json response
            containing data about the R packages.
 

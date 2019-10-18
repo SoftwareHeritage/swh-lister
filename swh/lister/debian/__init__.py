@@ -3,13 +3,13 @@
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
 
-from typing import Any, Mapping, Optional
+from typing import Any, List, Mapping, Optional
 
 
 def debian_init(db_engine, lister=None,
                 override_conf: Optional[Mapping[str, Any]] = None,
-                distributions: Optional[str] = ['stretch', 'buster'],
-                area_names: Optional[str] = ['main', 'contrib', 'non-free']):
+                distributions: List[str] = ['stretch', 'buster'],
+                area_names: List[str] = ['main', 'contrib', 'non-free']):
     """Initialize the debian data model.
 
     Args:

@@ -5,8 +5,9 @@
 
 import logging
 
-from swh.core import utils
+from typing import Any, List
 
+from swh.core import utils
 from .lister_base import ListerBase
 
 
@@ -20,7 +21,7 @@ class SimpleLister(ListerBase):
       information and stores those in db
 
     """
-    def list_packages(self, *args):
+    def list_packages(self, response: Any) -> List[Any]:
         """Listing packages method.
 
         """
