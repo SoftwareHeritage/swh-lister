@@ -30,6 +30,7 @@ def test_lister_debian(lister_debian, datadir, requests_mock_datadir):
         assert set(kwargs.keys()) == {'url', 'date', 'packages'}
 
         logger.debug('kwargs: %s', kwargs)
+        assert isinstance(kwargs['url'], str)
 
         assert row['policy'] == 'oneshot'
         assert row['priority'] is None

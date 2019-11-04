@@ -19,6 +19,7 @@ from sqlalchemy import (
     Table,
     UniqueConstraint,
 )
+from typing import Any, Mapping
 
 try:
     from sqlalchemy import JSON
@@ -44,14 +45,11 @@ class Distribution(SQLBase):
 
     areas = relationship('Area', back_populates='distribution')
 
-    def origin_for_package(self, package_name, package_versions):
-        """Return the origin dictionary for the given package"""
-        return {
-            'type': self.type,
-            'url': '%s://%s/packages/%s' % (
-                self.type, self.name, package_name
-            ),
-        }
+    def origin_for_package(self, package_name: str) -> str:
+        """Return the origin url for the given package
+
+        """
+        return '%s://%s/packages/%s' % (self.type, self.name, package_name)
 
     def __repr__(self):
         return 'Distribution(%s (%s) on %s)' % (
@@ -183,11 +181,12 @@ class DistributionSnapshot(SQLBase):
     distribution = relationship('Distribution')
     areas = relationship('AreaSnapshot', back_populates='snapshot')
 
-    def task_for_package(self, package_name, package_versions):
-        """Return the task dictionary for the given list of package versions"""
-        origin = self.distribution.origin_for_package(
-            package_name, package_versions,
-        )
+    def task_for_package(self, package_name: str,
+                         package_versions: Mapping) -> Mapping[str, Any]:
+        """Return the task dictionary for the given list of package versions
+
+        """
+        origin_url = self.distribution.origin_for_package(package_name)
 
         return {
             'policy': 'oneshot',
@@ -196,7 +195,7 @@ class DistributionSnapshot(SQLBase):
             'arguments': {
                 'args': [],
                 'kwargs': {
-                    'url': origin,
+                    'url': origin_url,
                     'date': self.date.isoformat(),
                     'packages': package_versions,
                 },
