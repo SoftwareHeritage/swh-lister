@@ -189,7 +189,7 @@ class DebianLister(ListerHttpTransport, ListerBase):
 
         return self.scheduler.create_tasks(tasks)
 
-    def run(self, distribution, date=None):
+    def run(self, distribution='Debian', date=None):
         """Run the lister for a given (distribution, area) tuple.
 
         Args:
