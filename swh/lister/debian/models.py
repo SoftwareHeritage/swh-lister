@@ -199,7 +199,8 @@ class DistributionSnapshot(SQLBase):
                     'date': self.date.isoformat(),
                     'packages': package_versions,
                 },
-            }
+            },
+            'retries_left': 3,
         }
 
     def get_packages(self):
