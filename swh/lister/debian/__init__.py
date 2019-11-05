@@ -3,11 +3,11 @@
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
 
-from typing import Any, List, Mapping, Optional
+from typing import Any, List, Mapping
 
 
 def debian_init(db_engine, lister=None,
-                override_conf: Optional[Mapping[str, Any]] = None,
+                override_conf: Mapping[str, Any] = {},
                 distributions: List[str] = ['stretch', 'buster'],
                 area_names: List[str] = ['main', 'contrib', 'non-free']):
     """Initialize the debian data model.
@@ -15,26 +15,27 @@ def debian_init(db_engine, lister=None,
     Args:
         db_engine: SQLAlchemy manipulation database object
         lister: Debian lister instance. None by default.
-        override_conf: Override conf to pass to instantiate a lister.
-            None by default
+        override_conf: Override conf to pass to instantiate a lister
         distributions: Default distribution to build
 
 
     """
+    distribution_name = 'Debian'
     from swh.storage.schemata.distribution import (
         Distribution, Area)
 
     if lister is None:
         from .lister import DebianLister
-        lister = DebianLister(override_config=override_conf)
+        lister = DebianLister(distribution=distribution_name,
+                              override_config=override_conf)
 
     if not lister.db_session\
                  .query(Distribution)\
-                 .filter(Distribution.name == 'Debian')\
+                 .filter(Distribution.name == distribution_name)\
                  .one_or_none():
 
         d = Distribution(
-            name='Debian',
+            name=distribution_name,
             type='deb',
             mirror_uri='http://deb.debian.org/debian/')
         lister.db_session.add(d)

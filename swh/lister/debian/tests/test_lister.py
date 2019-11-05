@@ -14,7 +14,7 @@ def test_lister_debian(lister_debian, datadir, requests_mock_datadir):
 
     """
     # Run the lister
-    lister_debian.run(distribution="Debian")
+    lister_debian.run()
 
     r = lister_debian.scheduler.search_tasks(task_type='load-deb-package')
     assert len(r) == 151

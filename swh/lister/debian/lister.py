@@ -13,6 +13,7 @@ import logging
 from debian.deb822 import Sources
 from sqlalchemy.orm import joinedload, load_only
 from sqlalchemy.schema import CreateTable, DropTable
+from typing import Mapping, Optional
 
 from swh.lister.debian.models import (
     AreaSnapshot, Distribution, DistributionSnapshot, Package,
@@ -38,9 +39,24 @@ class DebianLister(ListerHttpTransport, ListerBase):
     LISTER_NAME = 'debian'
     instance = 'debian'
 
-    def __init__(self, override_config=None):
+    def __init__(self, distribution: str = 'Debian',
+                 date: Optional[datetime.datetime] = None,
+                 override_config: Mapping = {}):
+        """Initialize the debian lister for a given distribution at a given
+        date.
+
+        Args:
+            distribution: name of the distribution (e.g. "Debian")
+            date: date the snapshot is taken (defaults to now if empty)
+            override_config: Override configuration (which takes precedence
+               over the parameters if provided)
+
+        """
         ListerHttpTransport.__init__(self, url="notused")
         ListerBase.__init__(self, override_config=override_config)
+        self.distribution = override_config.get('distribution', distribution)
+        self.date = override_config.get('date', date) or datetime.datetime.now(
+            tz=datetime.timezone.utc)
 
     def transport_request(self, identifier):
         """Subvert ListerHttpTransport.transport_request, to try several
@@ -189,29 +205,25 @@ class DebianLister(ListerHttpTransport, ListerBase):
 
         return self.scheduler.create_tasks(tasks)
 
-    def run(self, distribution='Debian', date=None):
+    def run(self):
         """Run the lister for a given (distribution, area) tuple.
 
-        Args:
-            distribution (str): name of the distribution (e.g. "Debian")
-            date (datetime.datetime): date the snapshot is taken (defaults to
-                                      now)
         """
         distribution = self.db_session\
                            .query(Distribution)\
                            .options(joinedload(Distribution.areas))\
-                           .filter(Distribution.name == distribution)\
+                           .filter(Distribution.name == self.distribution)\
                            .one_or_none()
 
         if not distribution:
             raise ValueError("Distribution %s is not registered" %
-                             distribution)
+                             self.distribution)
 
         if not distribution.type == 'deb':
             raise ValueError("Distribution %s is not a Debian derivative" %
                              distribution)
 
-        date = date or datetime.datetime.now(tz=datetime.timezone.utc)
+        date = self.date
 
         logger.debug('Creating snapshot for distribution %s on date %s' %
                      (distribution, date))
