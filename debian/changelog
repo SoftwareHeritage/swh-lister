@@ -1,8 +1,29 @@
-swh-lister (0.0.35-1~swh4~bpo10+1) buster-swh; urgency=medium
+swh-lister (0.0.37-1~swh1) unstable-swh; urgency=medium
 
-  * Rebuild for buster-swh
+  * New upstream release 0.0.37     - (tagged by Antoine R. Dumont
+    (@ardumont) <antoine.romain.dumont@gmail.com> on 2019-11-06 15:06:51
+    +0100)
+  * Upstream changes:     - v0.0.37     - Update swh-core dependency
 
- -- Software Heritage autobuilder (on jenkins-debian1) <jenkins@jenkins-debian1.internal.softwareheritage.org>  Wed, 11 Sep 2019 09:12:22 +0000
+ -- Software Heritage autobuilder (on jenkins-debian1) <jenkins@jenkins-debian1.internal.softwareheritage.org>  Wed, 06 Nov 2019 14:18:31 +0000
+
+swh-lister (0.0.36-1~swh1) unstable-swh; urgency=medium
+
+  * New upstream release 0.0.36     - (tagged by Antoine R. Dumont
+    (@ardumont) <antoine.romain.dumont@gmail.com> on 2019-11-06 11:33:33
+    +0100)
+  * Upstream changes:     - v0.0.36     - lister.*.tests: Add at least
+    one integration test     - gnu.lister: Move gnu listers specifity
+    within the lister's scope     - debian/lister: Use url parameter
+    name instead of origin     - debian/model: Install lister model
+    within the lister repository     - lister.*.tasks: Stop binding
+    tasks to a specific instance of the     - celery app     -
+    cran.lister: Refactor and fix cran lister     - github/lister:
+    Prevent erroneous scheduler tasks disabling     -
+    phabricator/lister: Fix lister     - setup.py: Kill deprecated swh-
+    lister command     - Bootstrap typing annotations
+
+ -- Software Heritage autobuilder (on jenkins-debian1) <jenkins@jenkins-debian1.internal.softwareheritage.org>  Wed, 06 Nov 2019 10:55:41 +0000
 
 swh-lister (0.0.35-1~swh4) unstable-swh; urgency=medium
 

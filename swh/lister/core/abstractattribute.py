@@ -16,7 +16,8 @@ class AbstractAttribute:
 
         import abc
         class ClassContainingAnAbstractAttribute(abc.ABC):
-            foo = AbstractAttribute('descriptive docstring for foo')
+            foo: Union[AbstractAttribute, Any] = \
+                AbstractAttribute('docstring for foo')
 
     """
     __isabstractmethod__ = True

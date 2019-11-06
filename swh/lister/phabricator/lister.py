@@ -7,16 +7,21 @@ import random
 
 import urllib.parse
 
+from collections import defaultdict
+
+from sqlalchemy import func
+
 from swh.lister.core.indexing_lister import IndexingHttpLister
 from swh.lister.phabricator.models import PhabricatorModel
-from collections import defaultdict
+
 
 logger = logging.getLogger(__name__)
 
 
 class PhabricatorLister(IndexingHttpLister):
     PATH_TEMPLATE = '?order=oldest&attachments[uris]=1&after=%s'
-    DEFAULT_URL = 'https://forge.softwareheritage.org/api/diffusion.repository.search'  # noqa
+    DEFAULT_URL = \
+        'https://forge.softwareheritage.org/api/diffusion.repository.search'
     MODEL = PhabricatorModel
     LISTER_NAME = 'phabricator'
 
@@ -25,14 +30,6 @@ class PhabricatorLister(IndexingHttpLister):
         if not instance:
             instance = urllib.parse.urlparse(self.url).hostname
         self.instance = instance
-
-    @property
-    def default_min_bound(self):
-        """Starting boundary when `min_bound` is not defined (db empty). This
-           is used within the fn:`run` call.
-
-        """
-        return self._bootstrap_repositories_listing()
 
     def request_params(self, identifier):
         """Override the default params behavior to retrieve the api token
@@ -80,9 +77,8 @@ class PhabricatorLister(IndexingHttpLister):
 
     def get_next_target_from_response(self, response):
         body = response.json()['result']['cursor']
-        if body['after'] != 'null':
-            return body['after']
-        return None
+        if body['after'] and body['after'] != 'null':
+            return int(body['after'])
 
     def transport_response_simplified(self, response):
         repos = response.json()
@@ -100,30 +96,62 @@ class PhabricatorLister(IndexingHttpLister):
         models_list = [m for m in models_list if m is not None]
         return super().filter_before_inject(models_list)
 
-    def _bootstrap_repositories_listing(self):
+    def disable_deleted_repo_tasks(self, index, next_index, keep_these):
         """
-        Method called when no min_bound value has been provided
-        to the lister. Its purpose is to:
+        (Overrides) Fix provided index value to avoid:
 
-            1. get the first repository data hosted on the Phabricator
-               instance
+            - database query error
+            - erroneously disabling some scheduler tasks
+        """
+        # First call to the Phabricator API uses an empty 'after' parameter,
+        # so set the index to 0 to avoid database query error
+        if index == '':
+            index = 0
+        # Next listed repository ids are strictly greater than the 'after'
+        # parameter, so increment the index to avoid disabling the latest
+        # created task when processing a new repositories page returned by
+        # the Phabricator API
+        else:
+            index = index + 1
+        return super().disable_deleted_repo_tasks(index, next_index,
+                                                  keep_these)
 
-            2. inject them into the lister database
-
-            3. return the first repository index to start the listing
-               after that value
+    def db_first_index(self):
+        """
+        (Overrides) Filter results by Phabricator instance
 
         Returns:
-             int: The first repository index
+            the smallest indexable value of all repos in the db
         """
-        params = '&order=oldest&limit=1'
-        response = self.safely_issue_request(params)
-        models_list = self.transport_response_simplified(response)
-        self.max_index = models_list[0]['indexable']
-        models_list = self.filter_before_inject(models_list)
-        injected = self.inject_repo_data_into_db(models_list)
-        self.schedule_missing_tasks(models_list, injected)
-        return self.max_index
+        t = self.db_session.query(func.min(self.MODEL.indexable))
+        t = t.filter(self.MODEL.instance == self.instance).first()
+        if t:
+            return t[0]
+
+    def db_last_index(self):
+        """
+        (Overrides) Filter results by Phabricator instance
+
+        Returns:
+            the largest indexable value of all instance repos in the db
+        """
+        t = self.db_session.query(func.max(self.MODEL.indexable))
+        t = t.filter(self.MODEL.instance == self.instance).first()
+        if t:
+            return t[0]
+
+    def db_query_range(self, start, end):
+        """
+        (Overrides) Filter the results by the Phabricator instance to
+        avoid disabling loading tasks for repositories hosted on a
+        different instance.
+
+        Returns:
+            a list of sqlalchemy.ext.declarative.declarative_base objects
+                with indexable values within the given range for the instance
+        """
+        retlist = super().db_query_range(start, end)
+        return retlist.filter(self.MODEL.instance == self.instance)
 
 
 def get_repo_url(attachments):

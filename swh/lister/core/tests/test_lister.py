@@ -3,12 +3,14 @@
 # See top-level LICENSE file for more information
 
 import abc
+import datetime
 import time
 from unittest import TestCase
 from unittest.mock import Mock, patch
 
 import requests_mock
 from sqlalchemy import create_engine
+from typing import Any, Callable, Optional, Pattern, Type, Union
 
 from swh.lister.core.abstractattribute import AbstractAttribute
 from swh.lister.tests.test_utils import init_db
@@ -27,9 +29,12 @@ class HttpListerTesterBase(abc.ABC):
     to customize for a specific listing service.
 
     """
-    Lister = AbstractAttribute('The lister class to test')
-    lister_subdir = AbstractAttribute('bitbucket, github, etc.')
-    good_api_response_file = AbstractAttribute('Example good response body')
+    Lister = AbstractAttribute(
+        'Lister class to test')  # type: Union[AbstractAttribute, Type[Any]]
+    lister_subdir = AbstractAttribute(
+        'bitbucket, github, etc.')  # type: Union[AbstractAttribute, str]
+    good_api_response_file = AbstractAttribute(
+        'Example good response body')  # type: Union[AbstractAttribute, str]
     LISTER_NAME = 'fake-lister'
 
     # May need to override this if the headers are used for something
@@ -51,6 +56,7 @@ class HttpListerTesterBase(abc.ABC):
         self.response = None
         self.fl = None
         self.helper = None
+        self.scheduler_tasks = []
         if self.__class__ != HttpListerTesterBase:
             self.run = TestCase.run.__get__(self, self.__class__)
         else:
@@ -82,10 +88,37 @@ class HttpListerTesterBase(abc.ABC):
             self.fl.INITIAL_BACKOFF = 1
 
         self.fl.reset_backoff()
+        self.scheduler_tasks = []
         return self.fl
 
     def disable_scheduler(self, fl):
         fl.schedule_missing_tasks = Mock(return_value=None)
+
+    def mock_scheduler(self, fl):
+        def _create_tasks(tasks):
+            task_id = 0
+            current_nb_tasks = len(self.scheduler_tasks)
+            if current_nb_tasks > 0:
+                task_id = self.scheduler_tasks[-1]['id'] + 1
+            for task in tasks:
+                scheduler_task = dict(task)
+                scheduler_task.update({
+                    'status': 'next_run_not_scheduled',
+                    'retries_left': 0,
+                    'priority': None,
+                    'id': task_id,
+                    'current_interval': datetime.timedelta(days=64)
+                })
+                self.scheduler_tasks.append(scheduler_task)
+                task_id = task_id + 1
+            return self.scheduler_tasks[current_nb_tasks:]
+
+        def _disable_tasks(task_ids):
+            for task_id in task_ids:
+                self.scheduler_tasks[task_id]['status'] = 'disabled'
+
+        fl.scheduler.create_tasks = Mock(wraps=_create_tasks)
+        fl.scheduler.disable_tasks = Mock(wraps=_disable_tasks)
 
     def disable_db(self, fl):
         fl.winnow_models = Mock(return_value=[])
@@ -128,13 +161,21 @@ class HttpListerTester(HttpListerTesterBase, abc.ABC):
     to customize for a specific listing service.
 
     """
-    last_index = AbstractAttribute('Last index in good_api_response')
-    first_index = AbstractAttribute('First index in good_api_response')
-    bad_api_response_file = AbstractAttribute('Example bad response body')
-    entries_per_page = AbstractAttribute('Number of results in good response')
-    test_re = AbstractAttribute('Compiled regex matching the server url. Must'
-                                ' capture the index value.')
-    convert_type = str
+    last_index = AbstractAttribute(
+        'Last index '
+        'in good_api_response')  # type: Union[AbstractAttribute, int]
+    first_index = AbstractAttribute(
+        'First index in '
+        ' good_api_response')  # type: Union[AbstractAttribute, Optional[int]]
+    bad_api_response_file = AbstractAttribute(
+        'Example bad response body')  # type: Union[AbstractAttribute, str]
+    entries_per_page = AbstractAttribute(
+        'Number of results in '
+        'good response')  # type: Union[AbstractAttribute, int]
+    test_re = AbstractAttribute(
+        'Compiled regex matching the server url. Must capture the '
+        'index value.')  # type: Union[AbstractAttribute, Pattern]
+    convert_type = str  # type: Callable[..., Any]
     """static method used to convert the "request_index" to its right type (for
        indexing listers for example, this is in accordance with the model's
        "indexable" column).
@@ -163,8 +204,7 @@ class HttpListerTester(HttpListerTesterBase, abc.ABC):
         if m and (len(m.groups()) > 0):
             return self.convert_type(m.group(1))
 
-    @requests_mock.Mocker()
-    def test_fetch_multiple_pages_yesdb(self, http_mocker):
+    def create_fl_with_db(self, http_mocker):
         http_mocker.get(self.test_re, text=self.mock_response)
         db = init_db()
 
@@ -174,13 +214,31 @@ class HttpListerTester(HttpListerTesterBase, abc.ABC):
                 'args': {'db': db.url()}
                 }
             })
+        fl.db = db
         self.init_db(db, fl.MODEL)
 
-        self.disable_scheduler(fl)
+        self.mock_scheduler(fl)
+        return fl
 
+    @requests_mock.Mocker()
+    def test_fetch_no_bounds_yesdb(self, http_mocker):
+        fl = self.create_fl_with_db(http_mocker)
+
+        fl.run()
+
+        self.assertEqual(fl.db_last_index(), self.last_index)
+        ingested_repos = list(fl.db_query_range(self.first_index,
+                                                self.last_index))
+        self.assertEqual(len(ingested_repos), self.entries_per_page)
+
+    @requests_mock.Mocker()
+    def test_fetch_multiple_pages_yesdb(self, http_mocker):
+
+        fl = self.create_fl_with_db(http_mocker)
         fl.run(min_bound=self.first_index)
 
         self.assertEqual(fl.db_last_index(), self.last_index)
+
         partitions = fl.db_partition_indices(5)
         self.assertGreater(len(partitions), 0)
         for k in partitions:
@@ -262,6 +320,32 @@ class HttpListerTester(HttpListerTesterBase, abc.ABC):
             self.get_api_response(self.first_index)
             self.assertEqual(sleepmock.call_count, 2)
 
+    def scheduled_tasks_test(self, next_api_response_file, next_last_index,
+                             http_mocker):
+        """Check that no loading tasks get disabled when processing a new
+        page of repositories returned by a forge API
+        """
+        fl = self.create_fl_with_db(http_mocker)
+
+        # process first page of repositories listing
+        fl.run()
+
+        # process second page of repositories listing
+        prev_last_index = self.last_index
+        self.first_index = self.last_index
+        self.last_index = next_last_index
+        self.good_api_response_file = next_api_response_file
+        fl.run(min_bound=prev_last_index)
+
+        # check expected number of ingested repos and loading tasks
+        ingested_repos = list(fl.db_query_range(0, self.last_index))
+        self.assertEqual(len(ingested_repos), len(self.scheduler_tasks))
+        self.assertEqual(len(ingested_repos), 2 * self.entries_per_page)
+
+        # check tasks are not disabled
+        for task in self.scheduler_tasks:
+            self.assertTrue(task['status'] != 'disabled')
+
 
 class HttpSimpleListerTester(HttpListerTesterBase, abc.ABC):
     """Base testing class for subclass of
@@ -271,9 +355,12 @@ class HttpSimpleListerTester(HttpListerTesterBase, abc.ABC):
     to customize for a specific listing service.
 
     """
-    entries = AbstractAttribute('Number of results in good response')
-    PAGE = AbstractAttribute("The server api's unique page to retrieve and "
-                             "parse for information")
+    entries = AbstractAttribute(
+        'Number of results '
+        'in good response')  # type: Union[AbstractAttribute, int]
+    PAGE = AbstractAttribute(
+        "URL of the server api's unique page to retrieve and "
+        "parse for information")  # type: Union[AbstractAttribute, str]
 
     def get_fl(self, override_config=None):
         """Retrieve an instance of fake lister (fl).

@@ -2,7 +2,7 @@
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
 
-from sqlalchemy import Column, String, Integer
+from sqlalchemy import Column, DateTime, String
 
 from ..core.models import ModelBase
 
@@ -14,4 +14,4 @@ class GNUModel(ModelBase):
     __tablename__ = 'gnu_repo'
 
     uid = Column(String, primary_key=True)
-    time_last_updated = Column(Integer)
+    time_last_updated = Column(DateTime)
