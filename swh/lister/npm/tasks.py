@@ -5,7 +5,7 @@
 from datetime import datetime
 from contextlib import contextmanager
 
-from swh.scheduler.celery_backend.config import app
+from celery import shared_task
 
 from swh.lister.npm.lister import NpmLister, NpmIncrementalLister
 from swh.lister.npm.models import NpmVisitModel
@@ -40,7 +40,7 @@ def get_last_update_seq(lister):
     return row[0]
 
 
-@app.task(name=__name__ + '.NpmListerTask')
+@shared_task(name=__name__ + '.NpmListerTask')
 def list_npm_full(**lister_args):
     'Full lister for the npm (javascript) registry'
     lister = NpmLister(**lister_args)
@@ -48,7 +48,7 @@ def list_npm_full(**lister_args):
         lister.run()
 
 
-@app.task(name=__name__ + '.NpmIncrementalListerTask')
+@shared_task(name=__name__ + '.NpmIncrementalListerTask')
 def list_npm_incremental(**lister_args):
     'Incremental lister for the npm (javascript) registry'
     lister = NpmIncrementalLister(**lister_args)
@@ -57,6 +57,6 @@ def list_npm_incremental(**lister_args):
         lister.run(min_bound=update_seq_start)
 
 
-@app.task(name=__name__ + '.ping')
+@shared_task(name=__name__ + '.ping')
 def _ping():
     return 'OK'

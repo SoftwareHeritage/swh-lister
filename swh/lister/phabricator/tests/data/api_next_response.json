@@ -1,0 +1,2354 @@
+{
+  "result": {
+    "data": [{
+      "id": 13,
+      "type": "REPO",
+      "phid": "PHID-REPO-4ugsplr2mfejd74jsbxj",
+      "fields": {
+        "name": "Python module template",
+        "vcs": "git",
+        "callsign": "DTPL",
+        "shortName": "swh-py-template",
+        "status": "active",
+        "isImporting": false,
+        "almanacServicePHID": null,
+        "spacePHID": null,
+        "dateCreated": 1441877842,
+        "dateModified": 1565608900,
+        "policy": {
+          "view": "public",
+          "edit": "PHID-PROJ-zqzomfxtpkd5jgltioiy",
+          "diffusion.push": "users"
+        }
+      },
+      "attachments": {
+        "uris": {
+          "uris": [{
+            "id": "1473",
+            "type": "RURI",
+            "phid": "PHID-RURI-764c7xaxwdgfnb7usaui",
+            "fields": {
+              "repositoryPHID": "PHID-REPO-4ugsplr2mfejd74jsbxj",
+              "uri": {
+                "raw": "git@github.com:SoftwareHeritage\/swh-py-template.git",
+                "display": "git@github.com:SoftwareHeritage\/swh-py-template.git",
+                "effective": "git@github.com:SoftwareHeritage\/swh-py-template.git",
+                "normalized": "github.com\/SoftwareHeritage\/swh-py-template"
+              },
+              "io": {
+                "raw": "mirror",
+                "default": "none",
+                "effective": "mirror"
+              },
+              "display": {
+                "raw": "never",
+                "default": "never",
+                "effective": "never"
+              },
+              "credentialPHID": "PHID-CDTL-hwgnkw6vk2nrh475bvkf",
+              "disabled": false,
+              "builtin": {
+                "protocol": null,
+                "identifier": null
+              },
+              "dateCreated": "1538726742",
+              "dateModified": "1538726742"
+            }
+          }, {
+            "id": "96",
+            "type": "RURI",
+            "phid": "PHID-RURI-ofdvsa4wcsz6myqeu4gy",
+            "fields": {
+              "repositoryPHID": "PHID-REPO-4ugsplr2mfejd74jsbxj",
+              "uri": {
+                "raw": "https:\/\/id",
+                "display": "https:\/\/forge.softwareheritage.org\/diffusion\/13\/swh-py-template.git",
+                "effective": "https:\/\/forge.softwareheritage.org\/diffusion\/13\/swh-py-template.git",
+                "normalized": "forge.softwareheritage.org\/diffusion\/13"
+              },
+              "io": {
+                "raw": "read",
+                "default": "readwrite",
+                "effective": "read"
+              },
+              "display": {
+                "raw": "default",
+                "default": "never",
+                "effective": "never"
+              },
+              "credentialPHID": null,
+              "disabled": false,
+              "builtin": {
+                "protocol": "https",
+                "identifier": "id"
+              },
+              "dateCreated": "1465923366",
+              "dateModified": "1465923366"
+            }
+          }, {
+            "id": "95",
+            "type": "RURI",
+            "phid": "PHID-RURI-ezwncbnreyln5w34cqfh",
+            "fields": {
+              "repositoryPHID": "PHID-REPO-4ugsplr2mfejd74jsbxj",
+              "uri": {
+                "raw": "https:\/\/shortname",
+                "display": "https:\/\/forge.softwareheritage.org\/source\/swh-py-template.git",
+                "effective": "https:\/\/forge.softwareheritage.org\/source\/swh-py-template.git",
+                "normalized": "forge.softwareheritage.org\/source\/swh-py-template"
+              },
+              "io": {
+                "raw": "read",
+                "default": "readwrite",
+                "effective": "read"
+              },
+              "display": {
+                "raw": "default",
+                "default": "always",
+                "effective": "always"
+              },
+              "credentialPHID": null,
+              "disabled": false,
+              "builtin": {
+                "protocol": "https",
+                "identifier": "shortname"
+              },
+              "dateCreated": "1465923366",
+              "dateModified": "1465923366"
+            }
+          }, {
+            "id": "94",
+            "type": "RURI",
+            "phid": "PHID-RURI-jntvroc4qvoy6zx2ntsv",
+            "fields": {
+              "repositoryPHID": "PHID-REPO-4ugsplr2mfejd74jsbxj",
+              "uri": {
+                "raw": "https:\/\/callsign",
+                "display": "https:\/\/forge.softwareheritage.org\/diffusion\/DTPL\/swh-py-template.git",
+                "effective": "https:\/\/forge.softwareheritage.org\/diffusion\/DTPL\/swh-py-template.git",
+                "normalized": "forge.softwareheritage.org\/diffusion\/DTPL"
+              },
+              "io": {
+                "raw": "read",
+                "default": "readwrite",
+                "effective": "read"
+              },
+              "display": {
+                "raw": "default",
+                "default": "never",
+                "effective": "never"
+              },
+              "credentialPHID": null,
+              "disabled": false,
+              "builtin": {
+                "protocol": "https",
+                "identifier": "callsign"
+              },
+              "dateCreated": "1465923366",
+              "dateModified": "1465923366"
+            }
+          }, {
+            "id": "93",
+            "type": "RURI",
+            "phid": "PHID-RURI-2ncgtnqdvtuwlz247lbm",
+            "fields": {
+              "repositoryPHID": "PHID-REPO-4ugsplr2mfejd74jsbxj",
+              "uri": {
+                "raw": "ssh:\/\/id",
+                "display": "ssh:\/\/git@forge.softwareheritage.org\/diffusion\/13\/swh-py-template.git",
+                "effective": "ssh:\/\/git@forge.softwareheritage.org\/diffusion\/13\/swh-py-template.git",
+                "normalized": "forge.softwareheritage.org\/diffusion\/13"
+              },
+              "io": {
+                "raw": "default",
+                "default": "readwrite",
+                "effective": "readwrite"
+              },
+              "display": {
+                "raw": "default",
+                "default": "never",
+                "effective": "never"
+              },
+              "credentialPHID": null,
+              "disabled": false,
+              "builtin": {
+                "protocol": "ssh",
+                "identifier": "id"
+              },
+              "dateCreated": "1465923366",
+              "dateModified": "1465923366"
+            }
+          }, {
+            "id": "92",
+            "type": "RURI",
+            "phid": "PHID-RURI-pechztbc54i5lfjzjzsd",
+            "fields": {
+              "repositoryPHID": "PHID-REPO-4ugsplr2mfejd74jsbxj",
+              "uri": {
+                "raw": "ssh:\/\/shortname",
+                "display": "ssh:\/\/git@forge.softwareheritage.org\/source\/swh-py-template.git",
+                "effective": "ssh:\/\/git@forge.softwareheritage.org\/source\/swh-py-template.git",
+                "normalized": "forge.softwareheritage.org\/source\/swh-py-template"
+              },
+              "io": {
+                "raw": "default",
+                "default": "readwrite",
+                "effective": "readwrite"
+              },
+              "display": {
+                "raw": "default",
+                "default": "always",
+                "effective": "always"
+              },
+              "credentialPHID": null,
+              "disabled": false,
+              "builtin": {
+                "protocol": "ssh",
+                "identifier": "shortname"
+              },
+              "dateCreated": "1465923366",
+              "dateModified": "1465923366"
+            }
+          }, {
+            "id": "91",
+            "type": "RURI",
+            "phid": "PHID-RURI-heg6fces2vgir2uqh3r4",
+            "fields": {
+              "repositoryPHID": "PHID-REPO-4ugsplr2mfejd74jsbxj",
+              "uri": {
+                "raw": "ssh:\/\/callsign",
+                "display": "ssh:\/\/git@forge.softwareheritage.org\/diffusion\/DTPL\/swh-py-template.git",
+                "effective": "ssh:\/\/git@forge.softwareheritage.org\/diffusion\/DTPL\/swh-py-template.git",
+                "normalized": "forge.softwareheritage.org\/diffusion\/DTPL"
+              },
+              "io": {
+                "raw": "default",
+                "default": "readwrite",
+                "effective": "readwrite"
+              },
+              "display": {
+                "raw": "default",
+                "default": "never",
+                "effective": "never"
+              },
+              "credentialPHID": null,
+              "disabled": false,
+              "builtin": {
+                "protocol": "ssh",
+                "identifier": "callsign"
+              },
+              "dateCreated": "1465923366",
+              "dateModified": "1465923366"
+            }
+          }]
+        }
+      }
+    }, {
+      "id": 15,
+      "type": "REPO",
+      "phid": "PHID-REPO-quukav7qzhbwqipl3wdr",
+      "fields": {
+        "name": "Credentials, passwords, keys, etc.",
+        "vcs": "git",
+        "callsign": "PWD",
+        "shortName": "credentials",
+        "status": "active",
+        "isImporting": false,
+        "almanacServicePHID": null,
+        "spacePHID": "PHID-SPCE-nxk3i2n6wix4dgnquliz",
+        "dateCreated": 1441877843,
+        "dateModified": 1538661901,
+        "policy": {
+          "view": "PHID-PLCY-kowkczwerljqda7m75du",
+          "edit": "PHID-PLCY-54hg2ludpa3enu73g67g",
+          "diffusion.push": "PHID-PLCY-ecfahf5wyj5ct4z3wgqv"
+        }
+      },
+      "attachments": {
+        "uris": {
+          "uris": [{
+            "id": "804",
+            "type": "RURI",
+            "phid": "PHID-RURI-hkdlmpjc4l3yojiqfzho",
+            "fields": {
+              "repositoryPHID": "PHID-REPO-quukav7qzhbwqipl3wdr",
+              "uri": {
+                "raw": "git@github.com:SoftwareHeritage\/credentials.git",
+                "display": "git@github.com:SoftwareHeritage\/credentials.git",
+                "effective": "git@github.com:SoftwareHeritage\/credentials.git",
+                "normalized": "github.com\/SoftwareHeritage\/credentials"
+              },
+              "io": {
+                "raw": "mirror",
+                "default": "none",
+                "effective": "mirror"
+              },
+              "display": {
+                "raw": "never",
+                "default": "never",
+                "effective": "never"
+              },
+              "credentialPHID": "PHID-CDTL-hwgnkw6vk2nrh475bvkf",
+              "disabled": true,
+              "builtin": {
+                "protocol": null,
+                "identifier": null
+              },
+              "dateCreated": "1486563623",
+              "dateModified": "1486563808"
+            }
+          }, {
+            "id": "114",
+            "type": "RURI",
+            "phid": "PHID-RURI-tngvxner53gnimw5w63l",
+            "fields": {
+              "repositoryPHID": "PHID-REPO-quukav7qzhbwqipl3wdr",
+              "uri": {
+                "raw": "https:\/\/id",
+                "display": "https:\/\/forge.softwareheritage.org\/diffusion\/15\/credentials.git",
+                "effective": "https:\/\/forge.softwareheritage.org\/diffusion\/15\/credentials.git",
+                "normalized": "forge.softwareheritage.org\/diffusion\/15"
+              },
+              "io": {
+                "raw": "default",
+                "default": "readwrite",
+                "effective": "readwrite"
+              },
+              "display": {
+                "raw": "default",
+                "default": "never",
+                "effective": "never"
+              },
+              "credentialPHID": null,
+              "disabled": false,
+              "builtin": {
+                "protocol": "https",
+                "identifier": "id"
+              },
+              "dateCreated": "1465923366",
+              "dateModified": "1465923366"
+            }
+          }, {
+            "id": "113",
+            "type": "RURI",
+            "phid": "PHID-RURI-fcopd257imhysqhxmrxl",
+            "fields": {
+              "repositoryPHID": "PHID-REPO-quukav7qzhbwqipl3wdr",
+              "uri": {
+                "raw": "https:\/\/shortname",
+                "display": "https:\/\/forge.softwareheritage.org\/source\/credentials.git",
+                "effective": "https:\/\/forge.softwareheritage.org\/source\/credentials.git",
+                "normalized": "forge.softwareheritage.org\/source\/credentials"
+              },
+              "io": {
+                "raw": "default",
+                "default": "readwrite",
+                "effective": "readwrite"
+              },
+              "display": {
+                "raw": "default",
+                "default": "always",
+                "effective": "always"
+              },
+              "credentialPHID": null,
+              "disabled": false,
+              "builtin": {
+                "protocol": "https",
+                "identifier": "shortname"
+              },
+              "dateCreated": "1465923366",
+              "dateModified": "1465923366"
+            }
+          }, {
+            "id": "112",
+            "type": "RURI",
+            "phid": "PHID-RURI-3rk33xsair7yn3hezr25",
+            "fields": {
+              "repositoryPHID": "PHID-REPO-quukav7qzhbwqipl3wdr",
+              "uri": {
+                "raw": "https:\/\/callsign",
+                "display": "https:\/\/forge.softwareheritage.org\/diffusion\/PWD\/credentials.git",
+                "effective": "https:\/\/forge.softwareheritage.org\/diffusion\/PWD\/credentials.git",
+                "normalized": "forge.softwareheritage.org\/diffusion\/PWD"
+              },
+              "io": {
+                "raw": "default",
+                "default": "readwrite",
+                "effective": "readwrite"
+              },
+              "display": {
+                "raw": "default",
+                "default": "never",
+                "effective": "never"
+              },
+              "credentialPHID": null,
+              "disabled": false,
+              "builtin": {
+                "protocol": "https",
+                "identifier": "callsign"
+              },
+              "dateCreated": "1465923366",
+              "dateModified": "1465923366"
+            }
+          }, {
+            "id": "111",
+            "type": "RURI",
+            "phid": "PHID-RURI-x4casoguf7ase6wgtgrn",
+            "fields": {
+              "repositoryPHID": "PHID-REPO-quukav7qzhbwqipl3wdr",
+              "uri": {
+                "raw": "ssh:\/\/id",
+                "display": "ssh:\/\/git@forge.softwareheritage.org\/diffusion\/15\/credentials.git",
+                "effective": "ssh:\/\/git@forge.softwareheritage.org\/diffusion\/15\/credentials.git",
+                "normalized": "forge.softwareheritage.org\/diffusion\/15"
+              },
+              "io": {
+                "raw": "default",
+                "default": "readwrite",
+                "effective": "readwrite"
+              },
+              "display": {
+                "raw": "default",
+                "default": "never",
+                "effective": "never"
+              },
+              "credentialPHID": null,
+              "disabled": false,
+              "builtin": {
+                "protocol": "ssh",
+                "identifier": "id"
+              },
+              "dateCreated": "1465923366",
+              "dateModified": "1465923366"
+            }
+          }, {
+            "id": "110",
+            "type": "RURI",
+            "phid": "PHID-RURI-drqylfsiu3juttazwoxa",
+            "fields": {
+              "repositoryPHID": "PHID-REPO-quukav7qzhbwqipl3wdr",
+              "uri": {
+                "raw": "ssh:\/\/shortname",
+                "display": "ssh:\/\/git@forge.softwareheritage.org\/source\/credentials.git",
+                "effective": "ssh:\/\/git@forge.softwareheritage.org\/source\/credentials.git",
+                "normalized": "forge.softwareheritage.org\/source\/credentials"
+              },
+              "io": {
+                "raw": "default",
+                "default": "readwrite",
+                "effective": "readwrite"
+              },
+              "display": {
+                "raw": "default",
+                "default": "always",
+                "effective": "always"
+              },
+              "credentialPHID": null,
+              "disabled": false,
+              "builtin": {
+                "protocol": "ssh",
+                "identifier": "shortname"
+              },
+              "dateCreated": "1465923366",
+              "dateModified": "1465923366"
+            }
+          }, {
+            "id": "109",
+            "type": "RURI",
+            "phid": "PHID-RURI-4pjbri5izostye67tswq",
+            "fields": {
+              "repositoryPHID": "PHID-REPO-quukav7qzhbwqipl3wdr",
+              "uri": {
+                "raw": "ssh:\/\/callsign",
+                "display": "ssh:\/\/git@forge.softwareheritage.org\/diffusion\/PWD\/credentials.git",
+                "effective": "ssh:\/\/git@forge.softwareheritage.org\/diffusion\/PWD\/credentials.git",
+                "normalized": "forge.softwareheritage.org\/diffusion\/PWD"
+              },
+              "io": {
+                "raw": "default",
+                "default": "readwrite",
+                "effective": "readwrite"
+              },
+              "display": {
+                "raw": "default",
+                "default": "never",
+                "effective": "never"
+              },
+              "credentialPHID": null,
+              "disabled": false,
+              "builtin": {
+                "protocol": "ssh",
+                "identifier": "callsign"
+              },
+              "dateCreated": "1465923366",
+              "dateModified": "1465923366"
+            }
+          }]
+        }
+      }
+    }, {
+      "id": 16,
+      "type": "REPO",
+      "phid": "PHID-REPO-2bnhoxwdcdfwf2o5jahe",
+      "fields": {
+        "name": "deploy-cloner-git",
+        "vcs": "git",
+        "callsign": "SDCLG",
+        "shortName": null,
+        "status": "active",
+        "isImporting": false,
+        "almanacServicePHID": null,
+        "spacePHID": null,
+        "dateCreated": 1441877843,
+        "dateModified": 1463233788,
+        "policy": {
+          "view": "public",
+          "edit": "PHID-PROJ-zqzomfxtpkd5jgltioiy",
+          "diffusion.push": "PHID-PROJ-zqzomfxtpkd5jgltioiy"
+        }
+      },
+      "attachments": {
+        "uris": {
+          "uris": [{
+            "id": "123",
+            "type": "RURI",
+            "phid": "PHID-RURI-3cjran3qzci5ambthenu",
+            "fields": {
+              "repositoryPHID": "PHID-REPO-2bnhoxwdcdfwf2o5jahe",
+              "uri": {
+                "raw": "https:\/\/id",
+                "display": "https:\/\/forge.softwareheritage.org\/diffusion\/16\/deploy-cloner-git.git",
+                "effective": "https:\/\/forge.softwareheritage.org\/diffusion\/16\/deploy-cloner-git.git",
+                "normalized": "forge.softwareheritage.org\/diffusion\/16"
+              },
+              "io": {
+                "raw": "read",
+                "default": "readwrite",
+                "effective": "read"
+              },
+              "display": {
+                "raw": "default",
+                "default": "never",
+                "effective": "never"
+              },
+              "credentialPHID": null,
+              "disabled": false,
+              "builtin": {
+                "protocol": "https",
+                "identifier": "id"
+              },
+              "dateCreated": "1465923366",
+              "dateModified": "1465923366"
+            }
+          }, {
+            "id": "121",
+            "type": "RURI",
+            "phid": "PHID-RURI-uhmyyxh5tiqaddfrjp6r",
+            "fields": {
+              "repositoryPHID": "PHID-REPO-2bnhoxwdcdfwf2o5jahe",
+              "uri": {
+                "raw": "https:\/\/callsign",
+                "display": "https:\/\/forge.softwareheritage.org\/diffusion\/SDCLG\/deploy-cloner-git.git",
+                "effective": "https:\/\/forge.softwareheritage.org\/diffusion\/SDCLG\/deploy-cloner-git.git",
+                "normalized": "forge.softwareheritage.org\/diffusion\/SDCLG"
+              },
+              "io": {
+                "raw": "read",
+                "default": "readwrite",
+                "effective": "read"
+              },
+              "display": {
+                "raw": "default",
+                "default": "always",
+                "effective": "always"
+              },
+              "credentialPHID": null,
+              "disabled": false,
+              "builtin": {
+                "protocol": "https",
+                "identifier": "callsign"
+              },
+              "dateCreated": "1465923366",
+              "dateModified": "1465923366"
+            }
+          }, {
+            "id": "120",
+            "type": "RURI",
+            "phid": "PHID-RURI-eyi5iy6n5ypvafisuczo",
+            "fields": {
+              "repositoryPHID": "PHID-REPO-2bnhoxwdcdfwf2o5jahe",
+              "uri": {
+                "raw": "ssh:\/\/id",
+                "display": "ssh:\/\/git@forge.softwareheritage.org\/diffusion\/16\/deploy-cloner-git.git",
+                "effective": "ssh:\/\/git@forge.softwareheritage.org\/diffusion\/16\/deploy-cloner-git.git",
+                "normalized": "forge.softwareheritage.org\/diffusion\/16"
+              },
+              "io": {
+                "raw": "default",
+                "default": "readwrite",
+                "effective": "readwrite"
+              },
+              "display": {
+                "raw": "default",
+                "default": "never",
+                "effective": "never"
+              },
+              "credentialPHID": null,
+              "disabled": false,
+              "builtin": {
+                "protocol": "ssh",
+                "identifier": "id"
+              },
+              "dateCreated": "1465923366",
+              "dateModified": "1465923366"
+            }
+          }, {
+            "id": "118",
+            "type": "RURI",
+            "phid": "PHID-RURI-67vdvodqa4a5wa6ugtev",
+            "fields": {
+              "repositoryPHID": "PHID-REPO-2bnhoxwdcdfwf2o5jahe",
+              "uri": {
+                "raw": "ssh:\/\/callsign",
+                "display": "ssh:\/\/git@forge.softwareheritage.org\/diffusion\/SDCLG\/deploy-cloner-git.git",
+                "effective": "ssh:\/\/git@forge.softwareheritage.org\/diffusion\/SDCLG\/deploy-cloner-git.git",
+                "normalized": "forge.softwareheritage.org\/diffusion\/SDCLG"
+              },
+              "io": {
+                "raw": "default",
+                "default": "readwrite",
+                "effective": "readwrite"
+              },
+              "display": {
+                "raw": "default",
+                "default": "always",
+                "effective": "always"
+              },
+              "credentialPHID": null,
+              "disabled": false,
+              "builtin": {
+                "protocol": "ssh",
+                "identifier": "callsign"
+              },
+              "dateCreated": "1465923366",
+              "dateModified": "1465923366"
+            }
+          }]
+        }
+      }
+    }, {
+      "id": 17,
+      "type": "REPO",
+      "phid": "PHID-REPO-xoxcxgcr2y4iixjeajny",
+      "fields": {
+        "name": "puppet-puppetlabs-apache",
+        "vcs": "git",
+        "callsign": "SPAPA",
+        "shortName": "puppet-puppetlabs-apache",
+        "status": "active",
+        "isImporting": false,
+        "almanacServicePHID": null,
+        "spacePHID": null,
+        "dateCreated": 1441877843,
+        "dateModified": 1519669547,
+        "policy": {
+          "view": "public",
+          "edit": "PHID-PROJ-w6dmg2vssgiimpjpduga",
+          "diffusion.push": "PHID-PROJ-w6dmg2vssgiimpjpduga"
+        }
+      },
+      "attachments": {
+        "uris": {
+          "uris": [{
+            "id": "820",
+            "type": "RURI",
+            "phid": "PHID-RURI-xindxlk65edf65cjmo72",
+            "fields": {
+              "repositoryPHID": "PHID-REPO-xoxcxgcr2y4iixjeajny",
+              "uri": {
+                "raw": "git@github.com:SoftwareHeritage\/puppet-puppetlabs-apache.git",
+                "display": "git@github.com:SoftwareHeritage\/puppet-puppetlabs-apache.git",
+                "effective": "git@github.com:SoftwareHeritage\/puppet-puppetlabs-apache.git",
+                "normalized": "github.com\/SoftwareHeritage\/puppet-puppetlabs-apache"
+              },
+              "io": {
+                "raw": "mirror",
+                "default": "none",
+                "effective": "mirror"
+              },
+              "display": {
+                "raw": "never",
+                "default": "never",
+                "effective": "never"
+              },
+              "credentialPHID": "PHID-CDTL-hwgnkw6vk2nrh475bvkf",
+              "disabled": false,
+              "builtin": {
+                "protocol": null,
+                "identifier": null
+              },
+              "dateCreated": "1486571138",
+              "dateModified": "1486571138"
+            }
+          }, {
+            "id": "132",
+            "type": "RURI",
+            "phid": "PHID-RURI-a2id7eambpoyq7uyqo66",
+            "fields": {
+              "repositoryPHID": "PHID-REPO-xoxcxgcr2y4iixjeajny",
+              "uri": {
+                "raw": "https:\/\/id",
+                "display": "https:\/\/forge.softwareheritage.org\/diffusion\/17\/puppet-puppetlabs-apache.git",
+                "effective": "https:\/\/forge.softwareheritage.org\/diffusion\/17\/puppet-puppetlabs-apache.git",
+                "normalized": "forge.softwareheritage.org\/diffusion\/17"
+              },
+              "io": {
+                "raw": "read",
+                "default": "readwrite",
+                "effective": "read"
+              },
+              "display": {
+                "raw": "default",
+                "default": "never",
+                "effective": "never"
+              },
+              "credentialPHID": null,
+              "disabled": false,
+              "builtin": {
+                "protocol": "https",
+                "identifier": "id"
+              },
+              "dateCreated": "1465923366",
+              "dateModified": "1465923366"
+            }
+          }, {
+            "id": "131",
+            "type": "RURI",
+            "phid": "PHID-RURI-lw27ew7aidoghcybfefe",
+            "fields": {
+              "repositoryPHID": "PHID-REPO-xoxcxgcr2y4iixjeajny",
+              "uri": {
+                "raw": "https:\/\/shortname",
+                "display": "https:\/\/forge.softwareheritage.org\/source\/puppet-puppetlabs-apache.git",
+                "effective": "https:\/\/forge.softwareheritage.org\/source\/puppet-puppetlabs-apache.git",
+                "normalized": "forge.softwareheritage.org\/source\/puppet-puppetlabs-apache"
+              },
+              "io": {
+                "raw": "read",
+                "default": "readwrite",
+                "effective": "read"
+              },
+              "display": {
+                "raw": "default",
+                "default": "always",
+                "effective": "always"
+              },
+              "credentialPHID": null,
+              "disabled": false,
+              "builtin": {
+                "protocol": "https",
+                "identifier": "shortname"
+              },
+              "dateCreated": "1465923366",
+              "dateModified": "1465923366"
+            }
+          }, {
+            "id": "130",
+            "type": "RURI",
+            "phid": "PHID-RURI-3fd2u6dgsxgmoikqhm74",
+            "fields": {
+              "repositoryPHID": "PHID-REPO-xoxcxgcr2y4iixjeajny",
+              "uri": {
+                "raw": "https:\/\/callsign",
+                "display": "https:\/\/forge.softwareheritage.org\/diffusion\/SPAPA\/puppet-puppetlabs-apache.git",
+                "effective": "https:\/\/forge.softwareheritage.org\/diffusion\/SPAPA\/puppet-puppetlabs-apache.git",
+                "normalized": "forge.softwareheritage.org\/diffusion\/SPAPA"
+              },
+              "io": {
+                "raw": "read",
+                "default": "readwrite",
+                "effective": "read"
+              },
+              "display": {
+                "raw": "default",
+                "default": "never",
+                "effective": "never"
+              },
+              "credentialPHID": null,
+              "disabled": false,
+              "builtin": {
+                "protocol": "https",
+                "identifier": "callsign"
+              },
+              "dateCreated": "1465923366",
+              "dateModified": "1465923366"
+            }
+          }, {
+            "id": "129",
+            "type": "RURI",
+            "phid": "PHID-RURI-lru6lxzbxn3gtbv26kij",
+            "fields": {
+              "repositoryPHID": "PHID-REPO-xoxcxgcr2y4iixjeajny",
+              "uri": {
+                "raw": "ssh:\/\/id",
+                "display": "ssh:\/\/git@forge.softwareheritage.org\/diffusion\/17\/puppet-puppetlabs-apache.git",
+                "effective": "ssh:\/\/git@forge.softwareheritage.org\/diffusion\/17\/puppet-puppetlabs-apache.git",
+                "normalized": "forge.softwareheritage.org\/diffusion\/17"
+              },
+              "io": {
+                "raw": "default",
+                "default": "readwrite",
+                "effective": "readwrite"
+              },
+              "display": {
+                "raw": "default",
+                "default": "never",
+                "effective": "never"
+              },
+              "credentialPHID": null,
+              "disabled": false,
+              "builtin": {
+                "protocol": "ssh",
+                "identifier": "id"
+              },
+              "dateCreated": "1465923366",
+              "dateModified": "1465923366"
+            }
+          }, {
+            "id": "128",
+            "type": "RURI",
+            "phid": "PHID-RURI-dtqqqjsggp4nzeimc2gy",
+            "fields": {
+              "repositoryPHID": "PHID-REPO-xoxcxgcr2y4iixjeajny",
+              "uri": {
+                "raw": "ssh:\/\/shortname",
+                "display": "ssh:\/\/git@forge.softwareheritage.org\/source\/puppet-puppetlabs-apache.git",
+                "effective": "ssh:\/\/git@forge.softwareheritage.org\/source\/puppet-puppetlabs-apache.git",
+                "normalized": "forge.softwareheritage.org\/source\/puppet-puppetlabs-apache"
+              },
+              "io": {
+                "raw": "default",
+                "default": "readwrite",
+                "effective": "readwrite"
+              },
+              "display": {
+                "raw": "default",
+                "default": "always",
+                "effective": "always"
+              },
+              "credentialPHID": null,
+              "disabled": false,
+              "builtin": {
+                "protocol": "ssh",
+                "identifier": "shortname"
+              },
+              "dateCreated": "1465923366",
+              "dateModified": "1465923366"
+            }
+          }, {
+            "id": "127",
+            "type": "RURI",
+            "phid": "PHID-RURI-7gomv4dt4l37c2zecbq4",
+            "fields": {
+              "repositoryPHID": "PHID-REPO-xoxcxgcr2y4iixjeajny",
+              "uri": {
+                "raw": "ssh:\/\/callsign",
+                "display": "ssh:\/\/git@forge.softwareheritage.org\/diffusion\/SPAPA\/puppet-puppetlabs-apache.git",
+                "effective": "ssh:\/\/git@forge.softwareheritage.org\/diffusion\/SPAPA\/puppet-puppetlabs-apache.git",
+                "normalized": "forge.softwareheritage.org\/diffusion\/SPAPA"
+              },
+              "io": {
+                "raw": "default",
+                "default": "readwrite",
+                "effective": "readwrite"
+              },
+              "display": {
+                "raw": "default",
+                "default": "never",
+                "effective": "never"
+              },
+              "credentialPHID": null,
+              "disabled": false,
+              "builtin": {
+                "protocol": "ssh",
+                "identifier": "callsign"
+              },
+              "dateCreated": "1465923366",
+              "dateModified": "1465923366"
+            }
+          }]
+        }
+      }
+    }, {
+      "id": 18,
+      "type": "REPO",
+      "phid": "PHID-REPO-uwnol3ltlsam75ddfvf6",
+      "fields": {
+        "name": "puppet-inkblot-bind",
+        "vcs": "git",
+        "callsign": "SPBIND",
+        "shortName": "puppet-inkblot-bind",
+        "status": "active",
+        "isImporting": false,
+        "almanacServicePHID": null,
+        "spacePHID": null,
+        "dateCreated": 1441877844,
+        "dateModified": 1519669626,
+        "policy": {
+          "view": "public",
+          "edit": "PHID-PROJ-w6dmg2vssgiimpjpduga",
+          "diffusion.push": "PHID-PROJ-w6dmg2vssgiimpjpduga"
+        }
+      },
+      "attachments": {
+        "uris": {
+          "uris": [{
+            "id": "822",
+            "type": "RURI",
+            "phid": "PHID-RURI-zfj7vbx5b62ku6zizaci",
+            "fields": {
+              "repositoryPHID": "PHID-REPO-uwnol3ltlsam75ddfvf6",
+              "uri": {
+                "raw": "git@github.com:SoftwareHeritage\/puppet-inkblot-bind.git",
+                "display": "git@github.com:SoftwareHeritage\/puppet-inkblot-bind.git",
+                "effective": "git@github.com:SoftwareHeritage\/puppet-inkblot-bind.git",
+                "normalized": "github.com\/SoftwareHeritage\/puppet-inkblot-bind"
+              },
+              "io": {
+                "raw": "mirror",
+                "default": "none",
+                "effective": "mirror"
+              },
+              "display": {
+                "raw": "never",
+                "default": "never",
+                "effective": "never"
+              },
+              "credentialPHID": "PHID-CDTL-hwgnkw6vk2nrh475bvkf",
+              "disabled": false,
+              "builtin": {
+                "protocol": null,
+                "identifier": null
+              },
+              "dateCreated": "1486571143",
+              "dateModified": "1486571143"
+            }
+          }, {
+            "id": "141",
+            "type": "RURI",
+            "phid": "PHID-RURI-ejgi3sf54c4qhp3kmn2p",
+            "fields": {
+              "repositoryPHID": "PHID-REPO-uwnol3ltlsam75ddfvf6",
+              "uri": {
+                "raw": "https:\/\/id",
+                "display": "https:\/\/forge.softwareheritage.org\/diffusion\/18\/puppet-inkblot-bind.git",
+                "effective": "https:\/\/forge.softwareheritage.org\/diffusion\/18\/puppet-inkblot-bind.git",
+                "normalized": "forge.softwareheritage.org\/diffusion\/18"
+              },
+              "io": {
+                "raw": "read",
+                "default": "readwrite",
+                "effective": "read"
+              },
+              "display": {
+                "raw": "default",
+                "default": "never",
+                "effective": "never"
+              },
+              "credentialPHID": null,
+              "disabled": false,
+              "builtin": {
+                "protocol": "https",
+                "identifier": "id"
+              },
+              "dateCreated": "1465923366",
+              "dateModified": "1465923366"
+            }
+          }, {
+            "id": "140",
+            "type": "RURI",
+            "phid": "PHID-RURI-ayzdqdakh6kkbvvcp3gr",
+            "fields": {
+              "repositoryPHID": "PHID-REPO-uwnol3ltlsam75ddfvf6",
+              "uri": {
+                "raw": "https:\/\/shortname",
+                "display": "https:\/\/forge.softwareheritage.org\/source\/puppet-inkblot-bind.git",
+                "effective": "https:\/\/forge.softwareheritage.org\/source\/puppet-inkblot-bind.git",
+                "normalized": "forge.softwareheritage.org\/source\/puppet-inkblot-bind"
+              },
+              "io": {
+                "raw": "read",
+                "default": "readwrite",
+                "effective": "read"
+              },
+              "display": {
+                "raw": "default",
+                "default": "always",
+                "effective": "always"
+              },
+              "credentialPHID": null,
+              "disabled": false,
+              "builtin": {
+                "protocol": "https",
+                "identifier": "shortname"
+              },
+              "dateCreated": "1465923366",
+              "dateModified": "1465923366"
+            }
+          }, {
+            "id": "139",
+            "type": "RURI",
+            "phid": "PHID-RURI-7dxu6hs3puihvvrtt7oa",
+            "fields": {
+              "repositoryPHID": "PHID-REPO-uwnol3ltlsam75ddfvf6",
+              "uri": {
+                "raw": "https:\/\/callsign",
+                "display": "https:\/\/forge.softwareheritage.org\/diffusion\/SPBIND\/puppet-inkblot-bind.git",
+                "effective": "https:\/\/forge.softwareheritage.org\/diffusion\/SPBIND\/puppet-inkblot-bind.git",
+                "normalized": "forge.softwareheritage.org\/diffusion\/SPBIND"
+              },
+              "io": {
+                "raw": "read",
+                "default": "readwrite",
+                "effective": "read"
+              },
+              "display": {
+                "raw": "default",
+                "default": "never",
+                "effective": "never"
+              },
+              "credentialPHID": null,
+              "disabled": false,
+              "builtin": {
+                "protocol": "https",
+                "identifier": "callsign"
+              },
+              "dateCreated": "1465923366",
+              "dateModified": "1465923366"
+            }
+          }, {
+            "id": "138",
+            "type": "RURI",
+            "phid": "PHID-RURI-gibi25r3o5cy4oen325v",
+            "fields": {
+              "repositoryPHID": "PHID-REPO-uwnol3ltlsam75ddfvf6",
+              "uri": {
+                "raw": "ssh:\/\/id",
+                "display": "ssh:\/\/git@forge.softwareheritage.org\/diffusion\/18\/puppet-inkblot-bind.git",
+                "effective": "ssh:\/\/git@forge.softwareheritage.org\/diffusion\/18\/puppet-inkblot-bind.git",
+                "normalized": "forge.softwareheritage.org\/diffusion\/18"
+              },
+              "io": {
+                "raw": "default",
+                "default": "readwrite",
+                "effective": "readwrite"
+              },
+              "display": {
+                "raw": "default",
+                "default": "never",
+                "effective": "never"
+              },
+              "credentialPHID": null,
+              "disabled": false,
+              "builtin": {
+                "protocol": "ssh",
+                "identifier": "id"
+              },
+              "dateCreated": "1465923366",
+              "dateModified": "1465923366"
+            }
+          }, {
+            "id": "137",
+            "type": "RURI",
+            "phid": "PHID-RURI-nvmyq5qjynxhmcbiraga",
+            "fields": {
+              "repositoryPHID": "PHID-REPO-uwnol3ltlsam75ddfvf6",
+              "uri": {
+                "raw": "ssh:\/\/shortname",
+                "display": "ssh:\/\/git@forge.softwareheritage.org\/source\/puppet-inkblot-bind.git",
+                "effective": "ssh:\/\/git@forge.softwareheritage.org\/source\/puppet-inkblot-bind.git",
+                "normalized": "forge.softwareheritage.org\/source\/puppet-inkblot-bind"
+              },
+              "io": {
+                "raw": "default",
+                "default": "readwrite",
+                "effective": "readwrite"
+              },
+              "display": {
+                "raw": "default",
+                "default": "always",
+                "effective": "always"
+              },
+              "credentialPHID": null,
+              "disabled": false,
+              "builtin": {
+                "protocol": "ssh",
+                "identifier": "shortname"
+              },
+              "dateCreated": "1465923366",
+              "dateModified": "1465923366"
+            }
+          }, {
+            "id": "136",
+            "type": "RURI",
+            "phid": "PHID-RURI-chkbn73lbbmkq2nyfb4v",
+            "fields": {
+              "repositoryPHID": "PHID-REPO-uwnol3ltlsam75ddfvf6",
+              "uri": {
+                "raw": "ssh:\/\/callsign",
+                "display": "ssh:\/\/git@forge.softwareheritage.org\/diffusion\/SPBIND\/puppet-inkblot-bind.git",
+                "effective": "ssh:\/\/git@forge.softwareheritage.org\/diffusion\/SPBIND\/puppet-inkblot-bind.git",
+                "normalized": "forge.softwareheritage.org\/diffusion\/SPBIND"
+              },
+              "io": {
+                "raw": "default",
+                "default": "readwrite",
+                "effective": "readwrite"
+              },
+              "display": {
+                "raw": "default",
+                "default": "never",
+                "effective": "never"
+              },
+              "credentialPHID": null,
+              "disabled": false,
+              "builtin": {
+                "protocol": "ssh",
+                "identifier": "callsign"
+              },
+              "dateCreated": "1465923366",
+              "dateModified": "1465923366"
+            }
+          }]
+        }
+      }
+    }, {
+      "id": 19,
+      "type": "REPO",
+      "phid": "PHID-REPO-jya26bh3bbxkn2wjtctr",
+      "fields": {
+        "name": "puppet-puppetlabs-concat",
+        "vcs": "git",
+        "callsign": "SPCAT",
+        "shortName": "puppet-puppetlabs-concat",
+        "status": "active",
+        "isImporting": false,
+        "almanacServicePHID": null,
+        "spacePHID": null,
+        "dateCreated": 1441877844,
+        "dateModified": 1519668150,
+        "policy": {
+          "view": "public",
+          "edit": "PHID-PROJ-w6dmg2vssgiimpjpduga",
+          "diffusion.push": "PHID-PROJ-w6dmg2vssgiimpjpduga"
+        }
+      },
+      "attachments": {
+        "uris": {
+          "uris": [{
+            "id": "823",
+            "type": "RURI",
+            "phid": "PHID-RURI-wxzoxyplwhivmjhyjhc3",
+            "fields": {
+              "repositoryPHID": "PHID-REPO-jya26bh3bbxkn2wjtctr",
+              "uri": {
+                "raw": "git@github.com:SoftwareHeritage\/puppet-puppetlabs-concat.git",
+                "display": "git@github.com:SoftwareHeritage\/puppet-puppetlabs-concat.git",
+                "effective": "git@github.com:SoftwareHeritage\/puppet-puppetlabs-concat.git",
+                "normalized": "github.com\/SoftwareHeritage\/puppet-puppetlabs-concat"
+              },
+              "io": {
+                "raw": "mirror",
+                "default": "none",
+                "effective": "mirror"
+              },
+              "display": {
+                "raw": "never",
+                "default": "never",
+                "effective": "never"
+              },
+              "credentialPHID": "PHID-CDTL-hwgnkw6vk2nrh475bvkf",
+              "disabled": false,
+              "builtin": {
+                "protocol": null,
+                "identifier": null
+              },
+              "dateCreated": "1486571145",
+              "dateModified": "1486571145"
+            }
+          }, {
+            "id": "150",
+            "type": "RURI",
+            "phid": "PHID-RURI-hwi2f4jugi6q2nkows72",
+            "fields": {
+              "repositoryPHID": "PHID-REPO-jya26bh3bbxkn2wjtctr",
+              "uri": {
+                "raw": "https:\/\/id",
+                "display": "https:\/\/forge.softwareheritage.org\/diffusion\/19\/puppet-puppetlabs-concat.git",
+                "effective": "https:\/\/forge.softwareheritage.org\/diffusion\/19\/puppet-puppetlabs-concat.git",
+                "normalized": "forge.softwareheritage.org\/diffusion\/19"
+              },
+              "io": {
+                "raw": "read",
+                "default": "readwrite",
+                "effective": "read"
+              },
+              "display": {
+                "raw": "default",
+                "default": "never",
+                "effective": "never"
+              },
+              "credentialPHID": null,
+              "disabled": false,
+              "builtin": {
+                "protocol": "https",
+                "identifier": "id"
+              },
+              "dateCreated": "1465923366",
+              "dateModified": "1465923366"
+            }
+          }, {
+            "id": "149",
+            "type": "RURI",
+            "phid": "PHID-RURI-zemlx65r2ap4o5gdn6ec",
+            "fields": {
+              "repositoryPHID": "PHID-REPO-jya26bh3bbxkn2wjtctr",
+              "uri": {
+                "raw": "https:\/\/shortname",
+                "display": "https:\/\/forge.softwareheritage.org\/source\/puppet-puppetlabs-concat.git",
+                "effective": "https:\/\/forge.softwareheritage.org\/source\/puppet-puppetlabs-concat.git",
+                "normalized": "forge.softwareheritage.org\/source\/puppet-puppetlabs-concat"
+              },
+              "io": {
+                "raw": "read",
+                "default": "readwrite",
+                "effective": "read"
+              },
+              "display": {
+                "raw": "default",
+                "default": "always",
+                "effective": "always"
+              },
+              "credentialPHID": null,
+              "disabled": false,
+              "builtin": {
+                "protocol": "https",
+                "identifier": "shortname"
+              },
+              "dateCreated": "1465923366",
+              "dateModified": "1465923366"
+            }
+          }, {
+            "id": "148",
+            "type": "RURI",
+            "phid": "PHID-RURI-c7crv6ddlkjwhhz7rst2",
+            "fields": {
+              "repositoryPHID": "PHID-REPO-jya26bh3bbxkn2wjtctr",
+              "uri": {
+                "raw": "https:\/\/callsign",
+                "display": "https:\/\/forge.softwareheritage.org\/diffusion\/SPCAT\/puppet-puppetlabs-concat.git",
+                "effective": "https:\/\/forge.softwareheritage.org\/diffusion\/SPCAT\/puppet-puppetlabs-concat.git",
+                "normalized": "forge.softwareheritage.org\/diffusion\/SPCAT"
+              },
+              "io": {
+                "raw": "read",
+                "default": "readwrite",
+                "effective": "read"
+              },
+              "display": {
+                "raw": "default",
+                "default": "never",
+                "effective": "never"
+              },
+              "credentialPHID": null,
+              "disabled": false,
+              "builtin": {
+                "protocol": "https",
+                "identifier": "callsign"
+              },
+              "dateCreated": "1465923366",
+              "dateModified": "1465923366"
+            }
+          }, {
+            "id": "147",
+            "type": "RURI",
+            "phid": "PHID-RURI-juqkfx3qiqcyjwcne67l",
+            "fields": {
+              "repositoryPHID": "PHID-REPO-jya26bh3bbxkn2wjtctr",
+              "uri": {
+                "raw": "ssh:\/\/id",
+                "display": "ssh:\/\/git@forge.softwareheritage.org\/diffusion\/19\/puppet-puppetlabs-concat.git",
+                "effective": "ssh:\/\/git@forge.softwareheritage.org\/diffusion\/19\/puppet-puppetlabs-concat.git",
+                "normalized": "forge.softwareheritage.org\/diffusion\/19"
+              },
+              "io": {
+                "raw": "default",
+                "default": "readwrite",
+                "effective": "readwrite"
+              },
+              "display": {
+                "raw": "default",
+                "default": "never",
+                "effective": "never"
+              },
+              "credentialPHID": null,
+              "disabled": false,
+              "builtin": {
+                "protocol": "ssh",
+                "identifier": "id"
+              },
+              "dateCreated": "1465923366",
+              "dateModified": "1465923366"
+            }
+          }, {
+            "id": "146",
+            "type": "RURI",
+            "phid": "PHID-RURI-proyswlqcj6227mwuqdy",
+            "fields": {
+              "repositoryPHID": "PHID-REPO-jya26bh3bbxkn2wjtctr",
+              "uri": {
+                "raw": "ssh:\/\/shortname",
+                "display": "ssh:\/\/git@forge.softwareheritage.org\/source\/puppet-puppetlabs-concat.git",
+                "effective": "ssh:\/\/git@forge.softwareheritage.org\/source\/puppet-puppetlabs-concat.git",
+                "normalized": "forge.softwareheritage.org\/source\/puppet-puppetlabs-concat"
+              },
+              "io": {
+                "raw": "default",
+                "default": "readwrite",
+                "effective": "readwrite"
+              },
+              "display": {
+                "raw": "default",
+                "default": "always",
+                "effective": "always"
+              },
+              "credentialPHID": null,
+              "disabled": false,
+              "builtin": {
+                "protocol": "ssh",
+                "identifier": "shortname"
+              },
+              "dateCreated": "1465923366",
+              "dateModified": "1465923366"
+            }
+          }, {
+            "id": "145",
+            "type": "RURI",
+            "phid": "PHID-RURI-23anwwjc6dolewkvr3iw",
+            "fields": {
+              "repositoryPHID": "PHID-REPO-jya26bh3bbxkn2wjtctr",
+              "uri": {
+                "raw": "ssh:\/\/callsign",
+                "display": "ssh:\/\/git@forge.softwareheritage.org\/diffusion\/SPCAT\/puppet-puppetlabs-concat.git",
+                "effective": "ssh:\/\/git@forge.softwareheritage.org\/diffusion\/SPCAT\/puppet-puppetlabs-concat.git",
+                "normalized": "forge.softwareheritage.org\/diffusion\/SPCAT"
+              },
+              "io": {
+                "raw": "default",
+                "default": "readwrite",
+                "effective": "readwrite"
+              },
+              "display": {
+                "raw": "default",
+                "default": "never",
+                "effective": "never"
+              },
+              "credentialPHID": null,
+              "disabled": false,
+              "builtin": {
+                "protocol": "ssh",
+                "identifier": "callsign"
+              },
+              "dateCreated": "1465923366",
+              "dateModified": "1465923366"
+            }
+          }]
+        }
+      }
+    }, {
+      "id": 20,
+      "type": "REPO",
+      "phid": "PHID-REPO-3xtwfrzpgrksmaeq3pbu",
+      "fields": {
+        "name": "puppet-swh-dar",
+        "vcs": "git",
+        "callsign": "SPDAR",
+        "shortName": "puppet-swh-dar",
+        "status": "active",
+        "isImporting": false,
+        "almanacServicePHID": null,
+        "spacePHID": null,
+        "dateCreated": 1441877844,
+        "dateModified": 1519668304,
+        "policy": {
+          "view": "public",
+          "edit": "PHID-PROJ-w6dmg2vssgiimpjpduga",
+          "diffusion.push": "PHID-PROJ-w6dmg2vssgiimpjpduga"
+        }
+      },
+      "attachments": {
+        "uris": {
+          "uris": [{
+            "id": "825",
+            "type": "RURI",
+            "phid": "PHID-RURI-5brm3qxzvd7rlb5fcfhy",
+            "fields": {
+              "repositoryPHID": "PHID-REPO-3xtwfrzpgrksmaeq3pbu",
+              "uri": {
+                "raw": "git@github.com:SoftwareHeritage\/puppet-swh-dar.git",
+                "display": "git@github.com:SoftwareHeritage\/puppet-swh-dar.git",
+                "effective": "git@github.com:SoftwareHeritage\/puppet-swh-dar.git",
+                "normalized": "github.com\/SoftwareHeritage\/puppet-swh-dar"
+              },
+              "io": {
+                "raw": "mirror",
+                "default": "none",
+                "effective": "mirror"
+              },
+              "display": {
+                "raw": "never",
+                "default": "never",
+                "effective": "never"
+              },
+              "credentialPHID": "PHID-CDTL-hwgnkw6vk2nrh475bvkf",
+              "disabled": false,
+              "builtin": {
+                "protocol": null,
+                "identifier": null
+              },
+              "dateCreated": "1486571149",
+              "dateModified": "1486571149"
+            }
+          }, {
+            "id": "159",
+            "type": "RURI",
+            "phid": "PHID-RURI-5cmipcfr6lhsycjfxpov",
+            "fields": {
+              "repositoryPHID": "PHID-REPO-3xtwfrzpgrksmaeq3pbu",
+              "uri": {
+                "raw": "https:\/\/id",
+                "display": "https:\/\/forge.softwareheritage.org\/diffusion\/20\/puppet-swh-dar.git",
+                "effective": "https:\/\/forge.softwareheritage.org\/diffusion\/20\/puppet-swh-dar.git",
+                "normalized": "forge.softwareheritage.org\/diffusion\/20"
+              },
+              "io": {
+                "raw": "read",
+                "default": "readwrite",
+                "effective": "read"
+              },
+              "display": {
+                "raw": "default",
+                "default": "never",
+                "effective": "never"
+              },
+              "credentialPHID": null,
+              "disabled": false,
+              "builtin": {
+                "protocol": "https",
+                "identifier": "id"
+              },
+              "dateCreated": "1465923366",
+              "dateModified": "1465923366"
+            }
+          }, {
+            "id": "158",
+            "type": "RURI",
+            "phid": "PHID-RURI-mdyxaybpf5hpq2a7s72x",
+            "fields": {
+              "repositoryPHID": "PHID-REPO-3xtwfrzpgrksmaeq3pbu",
+              "uri": {
+                "raw": "https:\/\/shortname",
+                "display": "https:\/\/forge.softwareheritage.org\/source\/puppet-swh-dar.git",
+                "effective": "https:\/\/forge.softwareheritage.org\/source\/puppet-swh-dar.git",
+                "normalized": "forge.softwareheritage.org\/source\/puppet-swh-dar"
+              },
+              "io": {
+                "raw": "read",
+                "default": "readwrite",
+                "effective": "read"
+              },
+              "display": {
+                "raw": "default",
+                "default": "always",
+                "effective": "always"
+              },
+              "credentialPHID": null,
+              "disabled": false,
+              "builtin": {
+                "protocol": "https",
+                "identifier": "shortname"
+              },
+              "dateCreated": "1465923366",
+              "dateModified": "1465923366"
+            }
+          }, {
+            "id": "157",
+            "type": "RURI",
+            "phid": "PHID-RURI-tx4kcorm6m6dsnxo57z7",
+            "fields": {
+              "repositoryPHID": "PHID-REPO-3xtwfrzpgrksmaeq3pbu",
+              "uri": {
+                "raw": "https:\/\/callsign",
+                "display": "https:\/\/forge.softwareheritage.org\/diffusion\/SPDAR\/puppet-swh-dar.git",
+                "effective": "https:\/\/forge.softwareheritage.org\/diffusion\/SPDAR\/puppet-swh-dar.git",
+                "normalized": "forge.softwareheritage.org\/diffusion\/SPDAR"
+              },
+              "io": {
+                "raw": "read",
+                "default": "readwrite",
+                "effective": "read"
+              },
+              "display": {
+                "raw": "default",
+                "default": "never",
+                "effective": "never"
+              },
+              "credentialPHID": null,
+              "disabled": false,
+              "builtin": {
+                "protocol": "https",
+                "identifier": "callsign"
+              },
+              "dateCreated": "1465923366",
+              "dateModified": "1465923366"
+            }
+          }, {
+            "id": "156",
+            "type": "RURI",
+            "phid": "PHID-RURI-h54jxpxmp6nqqcjqbhrl",
+            "fields": {
+              "repositoryPHID": "PHID-REPO-3xtwfrzpgrksmaeq3pbu",
+              "uri": {
+                "raw": "ssh:\/\/id",
+                "display": "ssh:\/\/git@forge.softwareheritage.org\/diffusion\/20\/puppet-swh-dar.git",
+                "effective": "ssh:\/\/git@forge.softwareheritage.org\/diffusion\/20\/puppet-swh-dar.git",
+                "normalized": "forge.softwareheritage.org\/diffusion\/20"
+              },
+              "io": {
+                "raw": "default",
+                "default": "readwrite",
+                "effective": "readwrite"
+              },
+              "display": {
+                "raw": "default",
+                "default": "never",
+                "effective": "never"
+              },
+              "credentialPHID": null,
+              "disabled": false,
+              "builtin": {
+                "protocol": "ssh",
+                "identifier": "id"
+              },
+              "dateCreated": "1465923366",
+              "dateModified": "1465923366"
+            }
+          }, {
+            "id": "155",
+            "type": "RURI",
+            "phid": "PHID-RURI-vomrxosskwxp2htvtpjf",
+            "fields": {
+              "repositoryPHID": "PHID-REPO-3xtwfrzpgrksmaeq3pbu",
+              "uri": {
+                "raw": "ssh:\/\/shortname",
+                "display": "ssh:\/\/git@forge.softwareheritage.org\/source\/puppet-swh-dar.git",
+                "effective": "ssh:\/\/git@forge.softwareheritage.org\/source\/puppet-swh-dar.git",
+                "normalized": "forge.softwareheritage.org\/source\/puppet-swh-dar"
+              },
+              "io": {
+                "raw": "default",
+                "default": "readwrite",
+                "effective": "readwrite"
+              },
+              "display": {
+                "raw": "default",
+                "default": "always",
+                "effective": "always"
+              },
+              "credentialPHID": null,
+              "disabled": false,
+              "builtin": {
+                "protocol": "ssh",
+                "identifier": "shortname"
+              },
+              "dateCreated": "1465923366",
+              "dateModified": "1465923366"
+            }
+          }, {
+            "id": "154",
+            "type": "RURI",
+            "phid": "PHID-RURI-yyvre6j7agh7km355shz",
+            "fields": {
+              "repositoryPHID": "PHID-REPO-3xtwfrzpgrksmaeq3pbu",
+              "uri": {
+                "raw": "ssh:\/\/callsign",
+                "display": "ssh:\/\/git@forge.softwareheritage.org\/diffusion\/SPDAR\/puppet-swh-dar.git",
+                "effective": "ssh:\/\/git@forge.softwareheritage.org\/diffusion\/SPDAR\/puppet-swh-dar.git",
+                "normalized": "forge.softwareheritage.org\/diffusion\/SPDAR"
+              },
+              "io": {
+                "raw": "default",
+                "default": "readwrite",
+                "effective": "readwrite"
+              },
+              "display": {
+                "raw": "default",
+                "default": "never",
+                "effective": "never"
+              },
+              "credentialPHID": null,
+              "disabled": false,
+              "builtin": {
+                "protocol": "ssh",
+                "identifier": "callsign"
+              },
+              "dateCreated": "1465923366",
+              "dateModified": "1465923366"
+            }
+          }]
+        }
+      }
+    }, {
+      "id": 21,
+      "type": "REPO",
+      "phid": "PHID-REPO-pytzhoaebyxq7ufa37ko",
+      "fields": {
+        "name": "puppet-trepasi-debnet",
+        "vcs": "git",
+        "callsign": "SPDEBN",
+        "shortName": "puppet-trepasi-debnet",
+        "status": "active",
+        "isImporting": false,
+        "almanacServicePHID": null,
+        "spacePHID": null,
+        "dateCreated": 1441877845,
+        "dateModified": 1519669642,
+        "policy": {
+          "view": "public",
+          "edit": "PHID-PROJ-w6dmg2vssgiimpjpduga",
+          "diffusion.push": "PHID-PROJ-w6dmg2vssgiimpjpduga"
+        }
+      },
+      "attachments": {
+        "uris": {
+          "uris": [{
+            "id": "826",
+            "type": "RURI",
+            "phid": "PHID-RURI-svpdjt42vbnbjw5w65on",
+            "fields": {
+              "repositoryPHID": "PHID-REPO-pytzhoaebyxq7ufa37ko",
+              "uri": {
+                "raw": "git@github.com:SoftwareHeritage\/puppet-trepasi-debnet.git",
+                "display": "git@github.com:SoftwareHeritage\/puppet-trepasi-debnet.git",
+                "effective": "git@github.com:SoftwareHeritage\/puppet-trepasi-debnet.git",
+                "normalized": "github.com\/SoftwareHeritage\/puppet-trepasi-debnet"
+              },
+              "io": {
+                "raw": "mirror",
+                "default": "none",
+                "effective": "mirror"
+              },
+              "display": {
+                "raw": "never",
+                "default": "never",
+                "effective": "never"
+              },
+              "credentialPHID": "PHID-CDTL-hwgnkw6vk2nrh475bvkf",
+              "disabled": false,
+              "builtin": {
+                "protocol": null,
+                "identifier": null
+              },
+              "dateCreated": "1486571152",
+              "dateModified": "1486571152"
+            }
+          }, {
+            "id": "168",
+            "type": "RURI",
+            "phid": "PHID-RURI-rhgzs5b2wmcv4jlkv3ma",
+            "fields": {
+              "repositoryPHID": "PHID-REPO-pytzhoaebyxq7ufa37ko",
+              "uri": {
+                "raw": "https:\/\/id",
+                "display": "https:\/\/forge.softwareheritage.org\/diffusion\/21\/puppet-trepasi-debnet.git",
+                "effective": "https:\/\/forge.softwareheritage.org\/diffusion\/21\/puppet-trepasi-debnet.git",
+                "normalized": "forge.softwareheritage.org\/diffusion\/21"
+              },
+              "io": {
+                "raw": "read",
+                "default": "readwrite",
+                "effective": "read"
+              },
+              "display": {
+                "raw": "default",
+                "default": "never",
+                "effective": "never"
+              },
+              "credentialPHID": null,
+              "disabled": false,
+              "builtin": {
+                "protocol": "https",
+                "identifier": "id"
+              },
+              "dateCreated": "1465923366",
+              "dateModified": "1465923366"
+            }
+          }, {
+            "id": "167",
+            "type": "RURI",
+            "phid": "PHID-RURI-ajns4iobpeqfgtmjhree",
+            "fields": {
+              "repositoryPHID": "PHID-REPO-pytzhoaebyxq7ufa37ko",
+              "uri": {
+                "raw": "https:\/\/shortname",
+                "display": "https:\/\/forge.softwareheritage.org\/source\/puppet-trepasi-debnet.git",
+                "effective": "https:\/\/forge.softwareheritage.org\/source\/puppet-trepasi-debnet.git",
+                "normalized": "forge.softwareheritage.org\/source\/puppet-trepasi-debnet"
+              },
+              "io": {
+                "raw": "read",
+                "default": "readwrite",
+                "effective": "read"
+              },
+              "display": {
+                "raw": "default",
+                "default": "always",
+                "effective": "always"
+              },
+              "credentialPHID": null,
+              "disabled": false,
+              "builtin": {
+                "protocol": "https",
+                "identifier": "shortname"
+              },
+              "dateCreated": "1465923366",
+              "dateModified": "1465923366"
+            }
+          }, {
+            "id": "166",
+            "type": "RURI",
+            "phid": "PHID-RURI-2sokpzri5xx3zixja6fv",
+            "fields": {
+              "repositoryPHID": "PHID-REPO-pytzhoaebyxq7ufa37ko",
+              "uri": {
+                "raw": "https:\/\/callsign",
+                "display": "https:\/\/forge.softwareheritage.org\/diffusion\/SPDEBN\/puppet-trepasi-debnet.git",
+                "effective": "https:\/\/forge.softwareheritage.org\/diffusion\/SPDEBN\/puppet-trepasi-debnet.git",
+                "normalized": "forge.softwareheritage.org\/diffusion\/SPDEBN"
+              },
+              "io": {
+                "raw": "read",
+                "default": "readwrite",
+                "effective": "read"
+              },
+              "display": {
+                "raw": "default",
+                "default": "never",
+                "effective": "never"
+              },
+              "credentialPHID": null,
+              "disabled": false,
+              "builtin": {
+                "protocol": "https",
+                "identifier": "callsign"
+              },
+              "dateCreated": "1465923366",
+              "dateModified": "1465923366"
+            }
+          }, {
+            "id": "165",
+            "type": "RURI",
+            "phid": "PHID-RURI-liiq5unqz3j5u6yazafe",
+            "fields": {
+              "repositoryPHID": "PHID-REPO-pytzhoaebyxq7ufa37ko",
+              "uri": {
+                "raw": "ssh:\/\/id",
+                "display": "ssh:\/\/git@forge.softwareheritage.org\/diffusion\/21\/puppet-trepasi-debnet.git",
+                "effective": "ssh:\/\/git@forge.softwareheritage.org\/diffusion\/21\/puppet-trepasi-debnet.git",
+                "normalized": "forge.softwareheritage.org\/diffusion\/21"
+              },
+              "io": {
+                "raw": "default",
+                "default": "readwrite",
+                "effective": "readwrite"
+              },
+              "display": {
+                "raw": "default",
+                "default": "never",
+                "effective": "never"
+              },
+              "credentialPHID": null,
+              "disabled": false,
+              "builtin": {
+                "protocol": "ssh",
+                "identifier": "id"
+              },
+              "dateCreated": "1465923366",
+              "dateModified": "1465923366"
+            }
+          }, {
+            "id": "164",
+            "type": "RURI",
+            "phid": "PHID-RURI-6zt6eb57y2aeq4g63x5d",
+            "fields": {
+              "repositoryPHID": "PHID-REPO-pytzhoaebyxq7ufa37ko",
+              "uri": {
+                "raw": "ssh:\/\/shortname",
+                "display": "ssh:\/\/git@forge.softwareheritage.org\/source\/puppet-trepasi-debnet.git",
+                "effective": "ssh:\/\/git@forge.softwareheritage.org\/source\/puppet-trepasi-debnet.git",
+                "normalized": "forge.softwareheritage.org\/source\/puppet-trepasi-debnet"
+              },
+              "io": {
+                "raw": "default",
+                "default": "readwrite",
+                "effective": "readwrite"
+              },
+              "display": {
+                "raw": "default",
+                "default": "always",
+                "effective": "always"
+              },
+              "credentialPHID": null,
+              "disabled": false,
+              "builtin": {
+                "protocol": "ssh",
+                "identifier": "shortname"
+              },
+              "dateCreated": "1465923366",
+              "dateModified": "1465923366"
+            }
+          }, {
+            "id": "163",
+            "type": "RURI",
+            "phid": "PHID-RURI-c23pvohtnjsuu7vlqzp2",
+            "fields": {
+              "repositoryPHID": "PHID-REPO-pytzhoaebyxq7ufa37ko",
+              "uri": {
+                "raw": "ssh:\/\/callsign",
+                "display": "ssh:\/\/git@forge.softwareheritage.org\/diffusion\/SPDEBN\/puppet-trepasi-debnet.git",
+                "effective": "ssh:\/\/git@forge.softwareheritage.org\/diffusion\/SPDEBN\/puppet-trepasi-debnet.git",
+                "normalized": "forge.softwareheritage.org\/diffusion\/SPDEBN"
+              },
+              "io": {
+                "raw": "default",
+                "default": "readwrite",
+                "effective": "readwrite"
+              },
+              "display": {
+                "raw": "default",
+                "default": "never",
+                "effective": "never"
+              },
+              "credentialPHID": null,
+              "disabled": false,
+              "builtin": {
+                "protocol": "ssh",
+                "identifier": "callsign"
+              },
+              "dateCreated": "1465923366",
+              "dateModified": "1465923366"
+            }
+          }]
+        }
+      }
+    }, {
+      "id": 22,
+      "type": "REPO",
+      "phid": "PHID-REPO-n642dkbntfq67th5bzsd",
+      "fields": {
+        "name": "puppet-rlenglet-debconf_package",
+        "vcs": "git",
+        "callsign": "SPDEBP",
+        "shortName": "puppet-rlenglet-debconf_package",
+        "status": "active",
+        "isImporting": false,
+        "almanacServicePHID": null,
+        "spacePHID": null,
+        "dateCreated": 1441877845,
+        "dateModified": 1519669708,
+        "policy": {
+          "view": "public",
+          "edit": "PHID-PROJ-w6dmg2vssgiimpjpduga",
+          "diffusion.push": "PHID-PROJ-w6dmg2vssgiimpjpduga"
+        }
+      },
+      "attachments": {
+        "uris": {
+          "uris": [{
+            "id": "827",
+            "type": "RURI",
+            "phid": "PHID-RURI-3t47sufj2ukzmsvm6mm2",
+            "fields": {
+              "repositoryPHID": "PHID-REPO-n642dkbntfq67th5bzsd",
+              "uri": {
+                "raw": "git@github.com:SoftwareHeritage\/puppet-rlenglet-debconf_package.git",
+                "display": "git@github.com:SoftwareHeritage\/puppet-rlenglet-debconf_package.git",
+                "effective": "git@github.com:SoftwareHeritage\/puppet-rlenglet-debconf_package.git",
+                "normalized": "github.com\/SoftwareHeritage\/puppet-rlenglet-debconf_package"
+              },
+              "io": {
+                "raw": "mirror",
+                "default": "none",
+                "effective": "mirror"
+              },
+              "display": {
+                "raw": "never",
+                "default": "never",
+                "effective": "never"
+              },
+              "credentialPHID": "PHID-CDTL-hwgnkw6vk2nrh475bvkf",
+              "disabled": false,
+              "builtin": {
+                "protocol": null,
+                "identifier": null
+              },
+              "dateCreated": "1486571154",
+              "dateModified": "1486571154"
+            }
+          }, {
+            "id": "177",
+            "type": "RURI",
+            "phid": "PHID-RURI-qv6zztdt5yynvxatz4gf",
+            "fields": {
+              "repositoryPHID": "PHID-REPO-n642dkbntfq67th5bzsd",
+              "uri": {
+                "raw": "https:\/\/id",
+                "display": "https:\/\/forge.softwareheritage.org\/diffusion\/22\/puppet-rlenglet-debconf_package.git",
+                "effective": "https:\/\/forge.softwareheritage.org\/diffusion\/22\/puppet-rlenglet-debconf_package.git",
+                "normalized": "forge.softwareheritage.org\/diffusion\/22"
+              },
+              "io": {
+                "raw": "read",
+                "default": "readwrite",
+                "effective": "read"
+              },
+              "display": {
+                "raw": "default",
+                "default": "never",
+                "effective": "never"
+              },
+              "credentialPHID": null,
+              "disabled": false,
+              "builtin": {
+                "protocol": "https",
+                "identifier": "id"
+              },
+              "dateCreated": "1465923366",
+              "dateModified": "1465923366"
+            }
+          }, {
+            "id": "176",
+            "type": "RURI",
+            "phid": "PHID-RURI-bjeybzpxfdumvxpw72i4",
+            "fields": {
+              "repositoryPHID": "PHID-REPO-n642dkbntfq67th5bzsd",
+              "uri": {
+                "raw": "https:\/\/shortname",
+                "display": "https:\/\/forge.softwareheritage.org\/source\/puppet-rlenglet-debconf_package.git",
+                "effective": "https:\/\/forge.softwareheritage.org\/source\/puppet-rlenglet-debconf_package.git",
+                "normalized": "forge.softwareheritage.org\/source\/puppet-rlenglet-debconf_package"
+              },
+              "io": {
+                "raw": "read",
+                "default": "readwrite",
+                "effective": "read"
+              },
+              "display": {
+                "raw": "default",
+                "default": "always",
+                "effective": "always"
+              },
+              "credentialPHID": null,
+              "disabled": false,
+              "builtin": {
+                "protocol": "https",
+                "identifier": "shortname"
+              },
+              "dateCreated": "1465923366",
+              "dateModified": "1465923366"
+            }
+          }, {
+            "id": "175",
+            "type": "RURI",
+            "phid": "PHID-RURI-gw2ogimld5rfh2gujhuv",
+            "fields": {
+              "repositoryPHID": "PHID-REPO-n642dkbntfq67th5bzsd",
+              "uri": {
+                "raw": "https:\/\/callsign",
+                "display": "https:\/\/forge.softwareheritage.org\/diffusion\/SPDEBP\/puppet-rlenglet-debconf_package.git",
+                "effective": "https:\/\/forge.softwareheritage.org\/diffusion\/SPDEBP\/puppet-rlenglet-debconf_package.git",
+                "normalized": "forge.softwareheritage.org\/diffusion\/SPDEBP"
+              },
+              "io": {
+                "raw": "read",
+                "default": "readwrite",
+                "effective": "read"
+              },
+              "display": {
+                "raw": "default",
+                "default": "never",
+                "effective": "never"
+              },
+              "credentialPHID": null,
+              "disabled": false,
+              "builtin": {
+                "protocol": "https",
+                "identifier": "callsign"
+              },
+              "dateCreated": "1465923366",
+              "dateModified": "1465923366"
+            }
+          }, {
+            "id": "174",
+            "type": "RURI",
+            "phid": "PHID-RURI-oxrznqmpmflhc7ixrsxy",
+            "fields": {
+              "repositoryPHID": "PHID-REPO-n642dkbntfq67th5bzsd",
+              "uri": {
+                "raw": "ssh:\/\/id",
+                "display": "ssh:\/\/git@forge.softwareheritage.org\/diffusion\/22\/puppet-rlenglet-debconf_package.git",
+                "effective": "ssh:\/\/git@forge.softwareheritage.org\/diffusion\/22\/puppet-rlenglet-debconf_package.git",
+                "normalized": "forge.softwareheritage.org\/diffusion\/22"
+              },
+              "io": {
+                "raw": "default",
+                "default": "readwrite",
+                "effective": "readwrite"
+              },
+              "display": {
+                "raw": "default",
+                "default": "never",
+                "effective": "never"
+              },
+              "credentialPHID": null,
+              "disabled": false,
+              "builtin": {
+                "protocol": "ssh",
+                "identifier": "id"
+              },
+              "dateCreated": "1465923366",
+              "dateModified": "1465923366"
+            }
+          }, {
+            "id": "173",
+            "type": "RURI",
+            "phid": "PHID-RURI-3bo6vt3t3ibrn5hyegxj",
+            "fields": {
+              "repositoryPHID": "PHID-REPO-n642dkbntfq67th5bzsd",
+              "uri": {
+                "raw": "ssh:\/\/shortname",
+                "display": "ssh:\/\/git@forge.softwareheritage.org\/source\/puppet-rlenglet-debconf_package.git",
+                "effective": "ssh:\/\/git@forge.softwareheritage.org\/source\/puppet-rlenglet-debconf_package.git",
+                "normalized": "forge.softwareheritage.org\/source\/puppet-rlenglet-debconf_package"
+              },
+              "io": {
+                "raw": "default",
+                "default": "readwrite",
+                "effective": "readwrite"
+              },
+              "display": {
+                "raw": "default",
+                "default": "always",
+                "effective": "always"
+              },
+              "credentialPHID": null,
+              "disabled": false,
+              "builtin": {
+                "protocol": "ssh",
+                "identifier": "shortname"
+              },
+              "dateCreated": "1465923366",
+              "dateModified": "1465923366"
+            }
+          }, {
+            "id": "172",
+            "type": "RURI",
+            "phid": "PHID-RURI-kurtmma6pjh6ym6fxpx6",
+            "fields": {
+              "repositoryPHID": "PHID-REPO-n642dkbntfq67th5bzsd",
+              "uri": {
+                "raw": "ssh:\/\/callsign",
+                "display": "ssh:\/\/git@forge.softwareheritage.org\/diffusion\/SPDEBP\/puppet-rlenglet-debconf_package.git",
+                "effective": "ssh:\/\/git@forge.softwareheritage.org\/diffusion\/SPDEBP\/puppet-rlenglet-debconf_package.git",
+                "normalized": "forge.softwareheritage.org\/diffusion\/SPDEBP"
+              },
+              "io": {
+                "raw": "default",
+                "default": "readwrite",
+                "effective": "readwrite"
+              },
+              "display": {
+                "raw": "default",
+                "default": "never",
+                "effective": "never"
+              },
+              "credentialPHID": null,
+              "disabled": false,
+              "builtin": {
+                "protocol": "ssh",
+                "identifier": "callsign"
+              },
+              "dateCreated": "1465923366",
+              "dateModified": "1465923366"
+            }
+          }]
+        }
+      }
+    }, {
+      "id": 23,
+      "type": "REPO",
+      "phid": "PHID-REPO-gon7c2ra3wn7uzmggbbt",
+      "fields": {
+        "name": "puppet-saz-locales",
+        "vcs": "git",
+        "callsign": "SPLOC",
+        "shortName": "puppet-saz-locales",
+        "status": "active",
+        "isImporting": false,
+        "almanacServicePHID": null,
+        "spacePHID": null,
+        "dateCreated": 1441877845,
+        "dateModified": 1519669614,
+        "policy": {
+          "view": "public",
+          "edit": "PHID-PROJ-w6dmg2vssgiimpjpduga",
+          "diffusion.push": "PHID-PROJ-w6dmg2vssgiimpjpduga"
+        }
+      },
+      "attachments": {
+        "uris": {
+          "uris": [{
+            "id": "829",
+            "type": "RURI",
+            "phid": "PHID-RURI-3q6qexi66tkqbmnijwgk",
+            "fields": {
+              "repositoryPHID": "PHID-REPO-gon7c2ra3wn7uzmggbbt",
+              "uri": {
+                "raw": "git@github.com:SoftwareHeritage\/puppet-saz-locales.git",
+                "display": "git@github.com:SoftwareHeritage\/puppet-saz-locales.git",
+                "effective": "git@github.com:SoftwareHeritage\/puppet-saz-locales.git",
+                "normalized": "github.com\/SoftwareHeritage\/puppet-saz-locales"
+              },
+              "io": {
+                "raw": "mirror",
+                "default": "none",
+                "effective": "mirror"
+              },
+              "display": {
+                "raw": "never",
+                "default": "never",
+                "effective": "never"
+              },
+              "credentialPHID": "PHID-CDTL-hwgnkw6vk2nrh475bvkf",
+              "disabled": false,
+              "builtin": {
+                "protocol": null,
+                "identifier": null
+              },
+              "dateCreated": "1486571160",
+              "dateModified": "1486571160"
+            }
+          }, {
+            "id": "186",
+            "type": "RURI",
+            "phid": "PHID-RURI-ynpxyptpf3icmkdt7zld",
+            "fields": {
+              "repositoryPHID": "PHID-REPO-gon7c2ra3wn7uzmggbbt",
+              "uri": {
+                "raw": "https:\/\/id",
+                "display": "https:\/\/forge.softwareheritage.org\/diffusion\/23\/puppet-saz-locales.git",
+                "effective": "https:\/\/forge.softwareheritage.org\/diffusion\/23\/puppet-saz-locales.git",
+                "normalized": "forge.softwareheritage.org\/diffusion\/23"
+              },
+              "io": {
+                "raw": "read",
+                "default": "readwrite",
+                "effective": "read"
+              },
+              "display": {
+                "raw": "default",
+                "default": "never",
+                "effective": "never"
+              },
+              "credentialPHID": null,
+              "disabled": false,
+              "builtin": {
+                "protocol": "https",
+                "identifier": "id"
+              },
+              "dateCreated": "1465923366",
+              "dateModified": "1465923366"
+            }
+          }, {
+            "id": "185",
+            "type": "RURI",
+            "phid": "PHID-RURI-qa4e363htffrxikj6afz",
+            "fields": {
+              "repositoryPHID": "PHID-REPO-gon7c2ra3wn7uzmggbbt",
+              "uri": {
+                "raw": "https:\/\/shortname",
+                "display": "https:\/\/forge.softwareheritage.org\/source\/puppet-saz-locales.git",
+                "effective": "https:\/\/forge.softwareheritage.org\/source\/puppet-saz-locales.git",
+                "normalized": "forge.softwareheritage.org\/source\/puppet-saz-locales"
+              },
+              "io": {
+                "raw": "read",
+                "default": "readwrite",
+                "effective": "read"
+              },
+              "display": {
+                "raw": "default",
+                "default": "always",
+                "effective": "always"
+              },
+              "credentialPHID": null,
+              "disabled": false,
+              "builtin": {
+                "protocol": "https",
+                "identifier": "shortname"
+              },
+              "dateCreated": "1465923366",
+              "dateModified": "1465923366"
+            }
+          }, {
+            "id": "184",
+            "type": "RURI",
+            "phid": "PHID-RURI-b2uvtewuozsg377ifz5b",
+            "fields": {
+              "repositoryPHID": "PHID-REPO-gon7c2ra3wn7uzmggbbt",
+              "uri": {
+                "raw": "https:\/\/callsign",
+                "display": "https:\/\/forge.softwareheritage.org\/diffusion\/SPLOC\/puppet-saz-locales.git",
+                "effective": "https:\/\/forge.softwareheritage.org\/diffusion\/SPLOC\/puppet-saz-locales.git",
+                "normalized": "forge.softwareheritage.org\/diffusion\/SPLOC"
+              },
+              "io": {
+                "raw": "read",
+                "default": "readwrite",
+                "effective": "read"
+              },
+              "display": {
+                "raw": "default",
+                "default": "never",
+                "effective": "never"
+              },
+              "credentialPHID": null,
+              "disabled": false,
+              "builtin": {
+                "protocol": "https",
+                "identifier": "callsign"
+              },
+              "dateCreated": "1465923366",
+              "dateModified": "1465923366"
+            }
+          }, {
+            "id": "183",
+            "type": "RURI",
+            "phid": "PHID-RURI-sxezk7ro7xydzvscwq2x",
+            "fields": {
+              "repositoryPHID": "PHID-REPO-gon7c2ra3wn7uzmggbbt",
+              "uri": {
+                "raw": "ssh:\/\/id",
+                "display": "ssh:\/\/git@forge.softwareheritage.org\/diffusion\/23\/puppet-saz-locales.git",
+                "effective": "ssh:\/\/git@forge.softwareheritage.org\/diffusion\/23\/puppet-saz-locales.git",
+                "normalized": "forge.softwareheritage.org\/diffusion\/23"
+              },
+              "io": {
+                "raw": "default",
+                "default": "readwrite",
+                "effective": "readwrite"
+              },
+              "display": {
+                "raw": "default",
+                "default": "never",
+                "effective": "never"
+              },
+              "credentialPHID": null,
+              "disabled": false,
+              "builtin": {
+                "protocol": "ssh",
+                "identifier": "id"
+              },
+              "dateCreated": "1465923366",
+              "dateModified": "1465923366"
+            }
+          }, {
+            "id": "182",
+            "type": "RURI",
+            "phid": "PHID-RURI-htakhjtuv6gpbnpulrk2",
+            "fields": {
+              "repositoryPHID": "PHID-REPO-gon7c2ra3wn7uzmggbbt",
+              "uri": {
+                "raw": "ssh:\/\/shortname",
+                "display": "ssh:\/\/git@forge.softwareheritage.org\/source\/puppet-saz-locales.git",
+                "effective": "ssh:\/\/git@forge.softwareheritage.org\/source\/puppet-saz-locales.git",
+                "normalized": "forge.softwareheritage.org\/source\/puppet-saz-locales"
+              },
+              "io": {
+                "raw": "default",
+                "default": "readwrite",
+                "effective": "readwrite"
+              },
+              "display": {
+                "raw": "default",
+                "default": "always",
+                "effective": "always"
+              },
+              "credentialPHID": null,
+              "disabled": false,
+              "builtin": {
+                "protocol": "ssh",
+                "identifier": "shortname"
+              },
+              "dateCreated": "1465923366",
+              "dateModified": "1465923366"
+            }
+          }, {
+            "id": "181",
+            "type": "RURI",
+            "phid": "PHID-RURI-h44ktd7hg43xr2o6v4zh",
+            "fields": {
+              "repositoryPHID": "PHID-REPO-gon7c2ra3wn7uzmggbbt",
+              "uri": {
+                "raw": "ssh:\/\/callsign",
+                "display": "ssh:\/\/git@forge.softwareheritage.org\/diffusion\/SPLOC\/puppet-saz-locales.git",
+                "effective": "ssh:\/\/git@forge.softwareheritage.org\/diffusion\/SPLOC\/puppet-saz-locales.git",
+                "normalized": "forge.softwareheritage.org\/diffusion\/SPLOC"
+              },
+              "io": {
+                "raw": "default",
+                "default": "readwrite",
+                "effective": "readwrite"
+              },
+              "display": {
+                "raw": "default",
+                "default": "never",
+                "effective": "never"
+              },
+              "credentialPHID": null,
+              "disabled": false,
+              "builtin": {
+                "protocol": "ssh",
+                "identifier": "callsign"
+              },
+              "dateCreated": "1465923366",
+              "dateModified": "1465923366"
+            }
+          }]
+        }
+      }
+    }],
+    "maps": {},
+    "query": {
+      "queryKey": null
+    },
+    "cursor": {
+      "limit": 10,
+      "after": "23",
+      "before": "13",
+      "order": "oldest"
+    }
+  },
+  "error_code": null,
+  "error_info": null
+}

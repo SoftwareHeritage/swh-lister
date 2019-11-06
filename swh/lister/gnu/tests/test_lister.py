@@ -1,40 +1,51 @@
-# Copyright (C) 2019 the Software Heritage developers
+# Copyright (C) 2019 The Software Heritage developers
+# See the AUTHORS file at the top-level directory of this distribution
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
 
-import json
-
-from swh.lister.gnu.lister import find_tarballs, filter_directories
-from swh.lister.gnu.lister import file_extension_check
+import logging
 
 
-def test_filter_directories():
-    f = open('swh/lister/gnu/tests/api_response.json')
-    api_response = json.load(f)
-    cleared_api_response = filter_directories(api_response)
-    for directory in cleared_api_response:
-        if directory['name'] not in ('gnu', 'old-gnu'):
-            assert False
+logger = logging.getLogger(__name__)
 
 
-def test_find_tarballs():
-    f = open('swh/lister/gnu/tests/find_tarballs_output.json')
-    expected_list_of_all_tarballs = json.load(f)
+def test_gnu_lister(swh_listers, requests_mock_datadir):
+    lister = swh_listers['gnu']
 
-    f = open('swh/lister/gnu/tests/file_structure.json')
-    file_structure = json.load(f)
-    list_of_all_tarballs = []
-    list_of_all_tarballs.extend(
-        find_tarballs(file_structure[0]['contents'],
-                      "https://ftp.gnu.org/gnu/artanis/"))
-    list_of_all_tarballs.extend(
-        find_tarballs(file_structure[1]['contents'],
-                      "https://ftp.gnu.org/old-gnu/xboard/"))
-    assert list_of_all_tarballs == expected_list_of_all_tarballs
+    lister.run()
 
+    r = lister.scheduler.search_tasks(task_type='load-tar')
+    assert len(r) == 383
 
-def test_file_extension_check():
-    assert file_extension_check('abc.xy.zip')
-    assert file_extension_check('cvb.zip')
-    assert file_extension_check('abc.tar.bz2')
-    assert file_extension_check('abc') is False
+    for row in r:
+        assert row['type'] == 'load-tar'
+        # arguments check
+        args = row['arguments']['args']
+        assert len(args) == 0
+
+        # kwargs
+        kwargs = row['arguments']['kwargs']
+        assert set(kwargs.keys()) == {'url', 'artifacts'}
+
+        url = kwargs['url']
+        assert url.startswith('https://ftp.gnu.org')
+
+        url_suffix = url.split('https://ftp.gnu.org')[1]
+        assert 'gnu' in url_suffix or 'old-gnu' in url_suffix
+
+        artifacts = kwargs['artifacts']
+        # check the artifact's structure
+        artifact = artifacts[0]
+        assert set(artifact.keys()) == {
+            'url', 'length', 'time', 'filename', 'version'
+        }
+
+        for artifact in artifacts:
+            logger.debug(artifact)
+            # 'time' is an isoformat string now
+            for key in ['url', 'time', 'filename', 'version']:
+                assert isinstance(artifact[key], str)
+            assert isinstance(artifact['length'], int)
+
+        assert row['policy'] == 'oneshot'
+        assert row['priority'] is None

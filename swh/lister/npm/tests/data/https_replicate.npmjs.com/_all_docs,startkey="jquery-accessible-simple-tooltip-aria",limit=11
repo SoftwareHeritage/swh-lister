@@ -1,0 +1,83 @@
+{
+  "total_rows": 839080,
+  "offset": 422482,
+  "rows": [
+    {
+      "id": "jquery-accessible-simple-tooltip-aria",
+      "key": "jquery-accessible-simple-tooltip-aria",
+      "value": {
+        "rev": "6-ea71aa37760790dc603b56117f054e1b"
+      }
+    },
+    {
+      "id": "jquery-accessible-subnav-dropdown",
+      "key": "jquery-accessible-subnav-dropdown",
+      "value": {
+        "rev": "2-496f017a9ac243655225e43b5697b09b"
+      }
+    },
+    {
+      "id": "jquery-accessible-tabpanel-aria",
+      "key": "jquery-accessible-tabpanel-aria",
+      "value": {
+        "rev": "11-659971471e6ac0fbb3b2f78ad208722a"
+      }
+    },
+    {
+      "id": "jquery-accessible-tabs-umd",
+      "key": "jquery-accessible-tabs-umd",
+      "value": {
+        "rev": "1-f92015de5bb36e411d8c0940cca2883f"
+      }
+    },
+    {
+      "id": "jquery-active-descendant",
+      "key": "jquery-active-descendant",
+      "value": {
+        "rev": "8-79aed7a6cbca4e1f3c3ac0570d0290de"
+      }
+    },
+    {
+      "id": "jquery-ada-validation",
+      "key": "jquery-ada-validation",
+      "value": {
+        "rev": "1-9aab9629027c29fbece90485dd9d3112"
+      }
+    },
+    {
+      "id": "jquery-adaptText",
+      "key": "jquery-adaptText",
+      "value": {
+        "rev": "3-2e15fc801ea8235b9180a3defc782ed0"
+      }
+    },
+    {
+      "id": "jquery-adapttr",
+      "key": "jquery-adapttr",
+      "value": {
+        "rev": "6-74585f2d4be60b3f493585a6d28b90bc"
+      }
+    },
+    {
+      "id": "jquery-add-prefixed-class",
+      "key": "jquery-add-prefixed-class",
+      "value": {
+        "rev": "1-9e43aee9758504b3f5271e9804a95f20"
+      }
+    },
+    {
+      "id": "jquery-address",
+      "key": "jquery-address",
+      "value": {
+        "rev": "1-64173ede32157b26f4de910ad0f49590"
+      }
+    },
+    {
+      "id": "jquery-address-suggestion",
+      "key": "jquery-address-suggestion",
+      "value": {
+        "rev": "6-18d9df51d472c365bcd84a61c9105774"
+      }
+    }
+  ]
+}

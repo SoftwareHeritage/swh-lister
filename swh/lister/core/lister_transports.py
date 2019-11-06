@@ -12,6 +12,8 @@ import logging
 import requests
 import xmltodict
 
+from typing import Optional, Union
+
 try:
     from swh.lister._version import __version__
 except ImportError:
@@ -29,14 +31,14 @@ class ListerHttpTransport(abc.ABC):
 
     To be used in conjunction with ListerBase or a subclass of it.
     """
-    DEFAULT_URL = None
-    PATH_TEMPLATE = AbstractAttribute('string containing a python string'
-                                      ' format pattern that produces the API'
-                                      ' endpoint path for listing stored'
-                                      ' repositories when given an index.'
-                                      ' eg. "/repositories?after=%s".'
-                                      'To be implemented in the API-specific'
-                                      ' class inheriting this.')
+    DEFAULT_URL = None  # type: Optional[str]
+    PATH_TEMPLATE = \
+        AbstractAttribute(
+            'string containing a python string format pattern that produces'
+            ' the API endpoint path for listing stored repositories when given'
+            ' an index, e.g., "/repositories?after=%s". To be implemented in'
+            ' the API-specific class inheriting this.'
+        )  # type: Union[AbstractAttribute, Optional[str]]
 
     EXPECTED_STATUS_CODES = (200, 429, 403, 404)
 
@@ -161,6 +163,9 @@ class ListerHttpTransport(abc.ABC):
         path = self.request_uri(identifier)
         params = self.request_params(identifier)
 
+        logger.debug('path: %s', path)
+        logger.debug('params: %s', params)
+        logger.debug('method: %s', method)
         try:
             if method == 'head':
                 response = self.session.head(path, **params)
@@ -214,8 +219,9 @@ class ListerOnePageApiTransport(ListerHttpTransport):
        To be used in conjunction with ListerBase or a subclass of it.
 
     """
-    PAGE = AbstractAttribute("The server api's unique page to retrieve and "
-                             "parse for information")
+    PAGE = AbstractAttribute(
+        "URL of the API's unique page to retrieve and parse "
+        "for information")  # type: Union[AbstractAttribute, str]
     PATH_TEMPLATE = None  # we do not use it
 
     def __init__(self, url=None):
