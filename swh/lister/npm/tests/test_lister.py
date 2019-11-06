@@ -20,7 +20,7 @@ logger = logging.getLogger(__name__)
 
 class NpmListerTester(HttpListerTesterBase, unittest.TestCase):
     Lister = NpmLister
-    test_re = re.compile(r'^.*/_all_docs\?startkey=%22(.+)%22.*')
+    test_re = re.compile(r'^.*/_all_docs\?startkey="(.+)".*')
     lister_subdir = 'npm'
     good_api_response_file = 'data/replicate.npmjs.com/api_response.json'
     bad_api_response_file = 'data/api_empty_response.json'
