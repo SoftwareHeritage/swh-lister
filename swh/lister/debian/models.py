@@ -27,10 +27,9 @@ except ImportError:
     # SQLAlchemy < 1.1
     from sqlalchemy.dialects.postgresql import JSONB as JSON
 
-from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship
 
-SQLBase = declarative_base()
+from swh.lister.core.models import SQLBase
 
 
 class Distribution(SQLBase):
