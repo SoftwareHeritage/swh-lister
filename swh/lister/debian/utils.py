@@ -1,4 +1,4 @@
-# Copyright (C) 2017 the Software Heritage developers
+# Copyright (C) 2017-2019 the Software Heritage developers
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
 
@@ -6,7 +6,7 @@ import logging
 
 import click
 
-from swh.storage.schemata.distribution import Distribution, Area, SQLBase
+from swh.lister.debian.models import Distribution, Area, SQLBase
 from swh.lister.debian.lister import DebianLister
 
 
