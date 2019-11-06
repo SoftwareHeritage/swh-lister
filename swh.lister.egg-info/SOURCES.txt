@@ -26,7 +26,7 @@ swh/lister/bitbucket/tests/__init__.py
 swh/lister/bitbucket/tests/conftest.py
 swh/lister/bitbucket/tests/test_lister.py
 swh/lister/bitbucket/tests/test_tasks.py
-swh/lister/bitbucket/tests/data/https_api.bitbucket.org/2.0_repositories,after=1970-01-01T00%3A00%3A00%2B00%3A00,pagelen=100
+swh/lister/bitbucket/tests/data/https_api.bitbucket.org/2.0_repositories,after=1970-01-01T00:00:00+00:00,pagelen=100
 swh/lister/bitbucket/tests/data/https_api.bitbucket.org/empty_response.json
 swh/lister/bitbucket/tests/data/https_api.bitbucket.org/response.json
 swh/lister/cgit/__init__.py
@@ -143,9 +143,9 @@ swh/lister/npm/tests/test_tasks.py
 swh/lister/npm/tests/data/api_empty_response.json
 swh/lister/npm/tests/data/api_inc_empty_response.json
 swh/lister/npm/tests/data/api_inc_response.json
-swh/lister/npm/tests/data/https_replicate.npmjs.com/_all_docs,startkey=%22%22,limit=1001
-swh/lister/npm/tests/data/https_replicate.npmjs.com/_all_docs,startkey=%22%22,limit=11
-swh/lister/npm/tests/data/https_replicate.npmjs.com/_all_docs,startkey=%22jquery-accessible-simple-tooltip-aria%22,limit=11
+swh/lister/npm/tests/data/https_replicate.npmjs.com/_all_docs,startkey="",limit=1001
+swh/lister/npm/tests/data/https_replicate.npmjs.com/_all_docs,startkey="",limit=11
+swh/lister/npm/tests/data/https_replicate.npmjs.com/_all_docs,startkey="jquery-accessible-simple-tooltip-aria",limit=11
 swh/lister/npm/tests/data/https_replicate.npmjs.com/api_response.json
 swh/lister/packagist/__init__.py
 swh/lister/packagist/lister.py
@@ -169,7 +169,7 @@ swh/lister/phabricator/tests/data/api_first_response.json
 swh/lister/phabricator/tests/data/api_first_response_other_instance.json
 swh/lister/phabricator/tests/data/api_next_response.json
 swh/lister/phabricator/tests/data/api_response_undefined_protocol.json
-swh/lister/phabricator/tests/data/https_forge.softwareheritage.org/api_diffusion.repository.search,order=oldest,attachments%5Buris%5D=1,after=,api.token=foo
+swh/lister/phabricator/tests/data/https_forge.softwareheritage.org/api_diffusion.repository.search,order=oldest,attachments[uris]=1,after=,api.token=foo
 swh/lister/pypi/__init__.py
 swh/lister/pypi/lister.py
 swh/lister/pypi/models.py
