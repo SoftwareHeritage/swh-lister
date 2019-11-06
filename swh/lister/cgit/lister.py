@@ -47,7 +47,7 @@ class CGitLister(ListerBase):
             'https://git.savannah.gnu.org/git/elisp-es.git'
     """
     MODEL = CGitModel
-    DEFAULT_URL = 'http://git.savannah.gnu.org/cgit/'
+    DEFAULT_URL = 'https://git.savannah.gnu.org/cgit/'
     LISTER_NAME = 'cgit'
     url_prefix_present = True
 

@@ -1,9 +1,12 @@
-# Copyright (C) 2017-2019 the Software Heritage developers
+# Copyright (C) 2017-2019 The Software Heritage developers
+# See the AUTHORS file at the top-level directory of this distribution
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
 
 import re
 import time
+
+from typing import Any
 
 from swh.lister.core.indexing_lister import IndexingHttpLister
 from swh.lister.github.models import GitHubModel
@@ -16,6 +19,7 @@ class GitHubLister(IndexingHttpLister):
     API_URL_INDEX_RE = re.compile(r'^.*/repositories\?since=(\d+)')
     LISTER_NAME = 'github'
     instance = 'github'  # There is only 1 instance of such lister
+    default_min_bound = 0  # type: Any
 
     def get_model_from_repo(self, repo):
         return {
@@ -30,7 +34,10 @@ class GitHubLister(IndexingHttpLister):
         }
 
     def transport_quota_check(self, response):
-        reqs_remaining = int(response.headers['X-RateLimit-Remaining'])
+        x_rate_limit_remaining = response.headers.get('X-RateLimit-Remaining')
+        if not x_rate_limit_remaining:
+            return False, 0
+        reqs_remaining = int(x_rate_limit_remaining)
         if response.status_code == 403 and reqs_remaining == 0:
             reset_at = int(response.headers['X-RateLimit-Reset'])
             delay = min(reset_at - time.time(), 3600)
@@ -48,3 +55,14 @@ class GitHubLister(IndexingHttpLister):
 
     def request_headers(self):
         return {'Accept': 'application/vnd.github.v3+json'}
+
+    def disable_deleted_repo_tasks(self, index, next_index, keep_these):
+        """ (Overrides) Fix provided index value to avoid erroneously disabling
+        some scheduler tasks
+        """
+        # Next listed repository ids are strictly greater than the 'since'
+        # parameter, so increment the index to avoid disabling the latest
+        # created task when processing a new repositories page returned by
+        # the Github API
+        return super().disable_deleted_repo_tasks(index + 1, next_index,
+                                                  keep_these)

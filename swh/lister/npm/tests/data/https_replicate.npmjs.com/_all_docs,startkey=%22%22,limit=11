@@ -1,0 +1,83 @@
+{
+  "total_rows": 839080,
+  "offset": 422482,
+  "rows": [
+    {
+      "id": "jquery",
+      "key": "jquery",
+      "value": {
+        "rev": "212-2eac7c93af4c8bccdf7317739f0319b6"
+      }
+    },
+    {
+      "id": "jquery-1.8",
+      "key": "jquery-1.8",
+      "value": {
+        "rev": "1-711ded49a7453adce85ce7a51c2157de"
+      }
+    },
+    {
+      "id": "jquery-1x",
+      "key": "jquery-1x",
+      "value": {
+        "rev": "1-c53fa04d9c8fb231336704508732c287"
+      }
+    },
+    {
+      "id": "jquery-2-typescript-async-await-adapter",
+      "key": "jquery-2-typescript-async-await-adapter",
+      "value": {
+        "rev": "8-5cfb484e9afaa6e326a97240fccd8f93"
+      }
+    },
+    {
+      "id": "jquery-accessible-accordion-aria",
+      "key": "jquery-accessible-accordion-aria",
+      "value": {
+        "rev": "15-9fc0df7cb2f1cd1001e2da302443b56e"
+      }
+    },
+    {
+      "id": "jquery-accessible-autocomplete-list-aria",
+      "key": "jquery-accessible-autocomplete-list-aria",
+      "value": {
+        "rev": "8-961b382442c1a5bafe58f0e05424701d"
+      }
+    },
+    {
+      "id": "jquery-accessible-carrousel-aria",
+      "key": "jquery-accessible-carrousel-aria",
+      "value": {
+        "rev": "9-f33f59d7f601bafe023bd711b551282b"
+      }
+    },
+    {
+      "id": "jquery-accessible-dialog-tooltip-aria",
+      "key": "jquery-accessible-dialog-tooltip-aria",
+      "value": {
+        "rev": "12-0a7b5ba6f7717c2c6603cabdb29de9ba"
+      }
+    },
+    {
+      "id": "jquery-accessible-hide-show-aria",
+      "key": "jquery-accessible-hide-show-aria",
+      "value": {
+        "rev": "10-5a03c47a8995b08246e4bc103782dafa"
+      }
+    },
+    {
+      "id": "jquery-accessible-modal-window-aria",
+      "key": "jquery-accessible-modal-window-aria",
+      "value": {
+        "rev": "18-50266e260f6b807019cfcfcd3a3685ab"
+      }
+    },
+    {
+      "id": "jquery-accessible-simple-tooltip-aria",
+      "key": "jquery-accessible-simple-tooltip-aria",
+      "value": {
+        "rev": "6-ea71aa37760790dc603b56117f054e1b"
+      }
+    }
+  ]
+}
