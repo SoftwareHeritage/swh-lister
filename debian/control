@@ -19,7 +19,6 @@ Build-Depends: debhelper (>= 9),
                python3-swh.core,
                python3-swh.scheduler (>= 0.0.31~),
                python3-swh.storage (>= 0.0.103~),
-               python3-swh.storage.schemata,
                python3-testing.postgresql,
                python3-vcversioner,
                python3-xmltodict
@@ -31,7 +30,6 @@ Architecture: all
 Depends: python3-swh.core,
          python3-swh.scheduler (>= 0.0.31~),
          python3-swh.storage (>= 0.0.103~),
-         python3-swh.storage.schemata,
          ${misc:Depends},
          ${python3:Depends}
 Breaks: python3-swh.lister.github
