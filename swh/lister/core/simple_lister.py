@@ -1,11 +1,13 @@
-# Copyright (C) 2018 the Software Heritage developers
+# Copyright (C) 2018-2019 The Software Heritage developers
+# See the AUTHORS file at the top-level directory of this distribution
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
 
 import logging
 
-from swh.core import utils
+from typing import Any, List
 
+from swh.core import utils
 from .lister_base import ListerBase
 
 
@@ -19,7 +21,7 @@ class SimpleLister(ListerBase):
       information and stores those in db
 
     """
-    def list_packages(self, *args):
+    def list_packages(self, response: Any) -> List[Any]:
         """Listing packages method.
 
         """
@@ -58,6 +60,12 @@ class SimpleLister(ListerBase):
             self.db_session = self.mk_session()
 
         return response, all_injected
+
+    def transport_response_simplified(self, response):
+        """Transform response to list for model manipulation
+
+        """
+        return [self.get_model_from_repo(repo_name) for repo_name in response]
 
     def run(self):
         """Query the server which answers in one query.  Stores the

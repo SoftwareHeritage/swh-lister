@@ -13,6 +13,7 @@ import time
 
 from sqlalchemy import create_engine, func
 from sqlalchemy.orm import sessionmaker
+from typing import Any, Type, Union
 
 from swh.core import config
 from swh.scheduler import get_scheduler, utils
@@ -64,10 +65,12 @@ class ListerBase(abc.ABC, config.SWHConfig):
             def is_within_bounds
     """
 
-    MODEL = AbstractAttribute('Subclass type (not instance)'
-                              ' of swh.lister.core.models.ModelBase'
-                              ' customized for a specific service.')
-    LISTER_NAME = AbstractAttribute("Lister's name")
+    MODEL = AbstractAttribute(
+        'Subclass type (not instance) of swh.lister.core.models.ModelBase '
+        'customized for a specific service.'
+    )  # type: Union[AbstractAttribute, Type[Any]]
+    LISTER_NAME = AbstractAttribute(
+        "Lister's name")  # type: Union[AbstractAttribute, str]
 
     def transport_request(self, identifier):
         """Given a target endpoint identifier to query, try once to request it.
@@ -382,6 +385,7 @@ class ListerBase(abc.ABC, config.SWHConfig):
         Returns:
             the same information in a different form
         """
+        logger.debug('origin-url: %s, type: %s', origin_url, origin_type)
         _type = 'load-%s' % origin_type
         _policy = kwargs.get('policy', 'recurring')
         priority = kwargs.get('priority')

@@ -1,0 +1,39 @@
+[
+    {
+        "Package": "SeleMix",
+        "Version": "1.0.1",
+        "Title": "Selective Editing via Mixture Models",
+        "Description": "Detection of outliers and influential errors using a latent variable model. "
+    },
+    {
+        "Package": "plink",
+        "Version": "1.5-1",
+        "Title": "IRT Separate Calibration Linking Methods",
+        "Description": "Item response theory based methods are used to compute\n        linking constants and conduct chain linking of unidimensional\n        or multidimensional tests for multiple groups under a common\n        item design.  The unidimensional methods include the Mean/Mean,\n        Mean/Sigma, Haebara, and Stocking-Lord methods for dichotomous\n        (1PL, 2PL and 3PL) and/or polytomous (graded response, partial\n        credit/generalized partial credit, nominal, and multiple-choice\n        model) items.  The multidimensional methods include the least\n        squares method and extensions of the Haebara and Stocking-Lord\n        method using single or multiple dilation parameters for\n        multidimensional extensions of all the unidimensional\n        dichotomous and polytomous item response models.  The package\n        also includes functions for importing item and/or ability\n        parameters from common IRT software, conducting IRT true score\n        and observed score equating, and plotting item response\n        curves/surfaces, vector plots, information plots, and comparison \n        plots for examining parameter drift."
+    },
+    {
+        "Package": "justifier",
+        "Version": "0.1.0",
+        "Title": "Human and Machine-Readable Justifications and Justified\nDecisions Based on 'YAML'",
+        "Description": "Leverages the 'yum' package to\n             implement a 'YAML' ('YAML Ain't Markup Language', a human\n             friendly standard for data serialization; see <https:yaml.org>)\n             standard for documenting justifications, such as for decisions\n             taken during the planning, execution and analysis of a study\n             or during the development of a behavior change intervention\n             as illustrated by Marques & Peters (2019)\n             <doi:10.17605/osf.io/ndxha>. These justifications are both\n             human- and machine-readable, facilitating efficient extraction\n             and organisation."
+    },
+    {
+        "Package": "Records",
+        "Version": "1.0",
+        "Title": "Record Values and Record Times",
+        "Description": "Functions for generating k-record values and k-record\n        times"
+    },
+    {
+        "Package": "scRNAtools",
+        "Version": "1.0",
+        "Title": "Single Cell RNA Sequencing Data Analysis Tools",
+        "Description": "We integrated the common analysis methods utilized in single cell RNA sequencing data, which included cluster method, principal components analysis (PCA), the filter of differentially expressed genes, pathway enrichment analysis and correlated analysis methods."
+    },
+
+    {
+        "Package": "Deriv",
+        "Version": "3.9.0",
+        "Title": "Symbolic Differentiation",
+        "Description": "R-based solution for symbolic differentiation. It admits\n    user-defined function as well as function substitution\n    in arguments of functions to be differentiated. Some symbolic\n    simplification is part of the work."
+    }
+]

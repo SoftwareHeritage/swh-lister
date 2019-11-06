@@ -8,6 +8,7 @@ import logging
 
 from sqlalchemy import Column, DateTime, Integer, String
 from sqlalchemy.ext.declarative import DeclarativeMeta
+from typing import Type, Union
 
 from .abstractattribute import AbstractAttribute
 
@@ -24,9 +25,12 @@ class ABCSQLMeta(abc.ABCMeta, DeclarativeMeta):
 class ModelBase(SQLBase, metaclass=ABCSQLMeta):
     """a common repository"""
     __abstract__ = True
-    __tablename__ = AbstractAttribute
+    __tablename__ = \
+        AbstractAttribute  # type: Union[Type[AbstractAttribute], str]
 
-    uid = AbstractAttribute('Column(<uid_type>, primary_key=True)')
+    uid = AbstractAttribute(
+        'Column(<uid_type>, primary_key=True)'
+    )  # type: Union[AbstractAttribute, Column]
 
     name = Column(String, index=True)
     full_name = Column(String, index=True)
@@ -45,11 +49,14 @@ class ModelBase(SQLBase, metaclass=ABCSQLMeta):
 
 class IndexingModelBase(ModelBase, metaclass=ABCSQLMeta):
     __abstract__ = True
-    __tablename__ = AbstractAttribute
+    __tablename__ = \
+        AbstractAttribute  # type: Union[Type[AbstractAttribute], str]
 
     # The value used for sorting, segmenting, or api query paging,
     # because uids aren't always sequential.
-    indexable = AbstractAttribute('Column(<indexable_type>, index=True)')
+    indexable = AbstractAttribute(
+        'Column(<indexable_type>, index=True)'
+    )  # type: Union[AbstractAttribute, Column]
 
 
 def initialize(db_engine, drop_tables=False, **kwargs):
@@ -59,7 +66,7 @@ def initialize(db_engine, drop_tables=False, **kwargs):
 
     Args:
         models (list): list of SQLAlchemy tables/models to drop/create.
-        db_enfine (): the SQLAlchemy DB engine.
+        db_engine (): the SQLAlchemy DB engine.
         drop_tables (bool): if True, tables will be dropped before
             (re)creating them.
     """

@@ -4,28 +4,27 @@
 
 import random
 
-from celery import group
-from swh.scheduler.celery_backend.config import app
+from celery import group, shared_task
 
 from swh.lister.github.lister import GitHubLister
 
 GROUP_SPLIT = 10000
 
 
-@app.task(name=__name__ + '.IncrementalGitHubLister')
+@shared_task(name=__name__ + '.IncrementalGitHubLister')
 def list_github_incremental(**lister_args):
     'Incremental update of GitHub'
     lister = GitHubLister(**lister_args)
     lister.run(min_bound=lister.db_last_index(), max_bound=None)
 
 
-@app.task(name=__name__ + '.RangeGitHubLister')
+@shared_task(name=__name__ + '.RangeGitHubLister')
 def _range_github_lister(start, end, **lister_args):
     lister = GitHubLister(**lister_args)
     lister.run(min_bound=start, max_bound=end)
 
 
-@app.task(name=__name__ + '.FullGitHubRelister', bind=True)
+@shared_task(name=__name__ + '.FullGitHubRelister', bind=True)
 def list_github_full(self, split=None, **lister_args):
     """Full update of GitHub
 
@@ -48,6 +47,6 @@ def list_github_full(self, split=None, **lister_args):
     return promise.id
 
 
-@app.task(name=__name__ + '.ping')
+@shared_task(name=__name__ + '.ping')
 def _ping():
     return 'OK'

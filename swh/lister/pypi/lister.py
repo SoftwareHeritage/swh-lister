@@ -1,4 +1,5 @@
-# Copyright (C) 2018-2019 the Software Heritage developers
+# Copyright (C) 2018-2019 The Software Heritage developers
+# See the AUTHORS file at the top-level directory of this distribution
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
 
@@ -68,9 +69,3 @@ class PyPILister(ListerOnePageApiTransport, SimpleLister):
             'origin_url': project_url,
             'origin_type': 'pypi',
         }
-
-    def transport_response_simplified(self, response):
-        """(Override) Transform response to list for model manipulation
-
-        """
-        return [self.get_model_from_repo(repo_name) for repo_name in response]

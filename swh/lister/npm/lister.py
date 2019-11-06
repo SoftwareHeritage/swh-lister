@@ -11,6 +11,7 @@ from swh.scheduler.utils import create_task_dict
 
 class NpmListerBase(IndexingHttpLister):
     """List packages available in the npm registry in a paginated way
+
     """
     MODEL = NpmModel
     LISTER_NAME = 'npm'
@@ -47,7 +48,8 @@ class NpmListerBase(IndexingHttpLister):
         }
 
     def task_dict(self, origin_type, origin_url, **kwargs):
-        """(Override) Return task dict for loading a npm package into the archive
+        """(Override) Return task dict for loading a npm package into the
+        archive.
 
         This is overridden from the lister_base as more information is
         needed for the ingestion task creation.
@@ -62,7 +64,8 @@ class NpmListerBase(IndexingHttpLister):
                                 package_metadata_url=package_metadata_url)
 
     def request_headers(self):
-        """(Override) Set requests headers to send when querying the npm registry
+        """(Override) Set requests headers to send when querying the npm
+        registry.
 
         """
         return {'User-Agent': 'Software Heritage npm lister',
@@ -82,12 +85,14 @@ class NpmListerBase(IndexingHttpLister):
         """ (Override) Inhibit the effect of that method as packages indices
         correspond to package names and thus do not respect any kind
         of fixed length string pattern
+
         """
         pass
 
 
 class NpmLister(NpmListerBase):
     """List all packages available in the npm registry in a paginated way
+
     """
     PATH_TEMPLATE = '/_all_docs?startkey="%s"'
 
@@ -110,7 +115,8 @@ class NpmLister(NpmListerBase):
 
 class NpmIncrementalLister(NpmListerBase):
     """List packages in the npm registry, updated since a specific
-    update_seq value of the underlying CouchDB database, in a paginated way
+    update_seq value of the underlying CouchDB database, in a paginated way.
+
     """
     PATH_TEMPLATE = '/_changes?since=%s'
 
@@ -119,14 +125,15 @@ class NpmIncrementalLister(NpmListerBase):
         return 'lister_npm_incremental'
 
     def get_next_target_from_response(self, response):
-        """(Override) Get next npm package name to continue the listing
+        """(Override) Get next npm package name to continue the listing.
 
         """
         repos = response.json()['results']
         return repos[-1]['seq'] if len(repos) == self.per_page else None
 
     def transport_response_simplified(self, response):
-        """(Override) Transform npm registry response to list for model manipulation
+        """(Override) Transform npm registry response to list for model
+        manipulation.
 
         """
         repos = response.json()['results']
@@ -136,7 +143,8 @@ class NpmIncrementalLister(NpmListerBase):
 
     def filter_before_inject(self, models_list):
         """(Override) Filter out documents in the CouchDB database
-        not related to a npm package
+        not related to a npm package.
+
         """
         models_filtered = []
         for model in models_list:
@@ -148,9 +156,9 @@ class NpmIncrementalLister(NpmListerBase):
         return models_filtered
 
     def disable_deleted_repo_tasks(self, start, end, keep_these):
-        """(Override) Disable the processing performed by that method
-        as it is not relevant in this incremental lister context
-        and it raises and exception due to a different index type
-        (int instead of str)
+        """(Override) Disable the processing performed by that method as it is
+        not relevant in this incremental lister context. It also raises an
+        exception due to a different index type (int instead of str).
+
         """
         pass

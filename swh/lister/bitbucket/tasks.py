@@ -3,29 +3,27 @@
 # See top-level LICENSE file for more information
 
 import random
-from celery import group
-
-from swh.scheduler.celery_backend.config import app
+from celery import group, shared_task
 
 from .lister import BitBucketLister
 
 GROUP_SPLIT = 10000
 
 
-@app.task(name=__name__ + '.IncrementalBitBucketLister')
+@shared_task(name=__name__ + '.IncrementalBitBucketLister')
 def list_bitbucket_incremental(**lister_args):
     '''Incremental update of the BitBucket forge'''
     lister = BitBucketLister(**lister_args)
     lister.run(min_bound=lister.db_last_index(), max_bound=None)
 
 
-@app.task(name=__name__ + '.RangeBitBucketLister')
+@shared_task(name=__name__ + '.RangeBitBucketLister')
 def _range_bitbucket_lister(start, end, **lister_args):
     lister = BitBucketLister(**lister_args)
     lister.run(min_bound=start, max_bound=end)
 
 
-@app.task(name=__name__ + '.FullBitBucketRelister', bind=True)
+@shared_task(name=__name__ + '.FullBitBucketRelister', bind=True)
 def list_bitbucket_full(self, split=None, **lister_args):
     """Full update of the BitBucket forge
 
@@ -49,6 +47,6 @@ def list_bitbucket_full(self, split=None, **lister_args):
     return promise.id
 
 
-@app.task(name=__name__ + '.ping')
+@shared_task(name=__name__ + '.ping')
 def _ping():
     return 'OK'
