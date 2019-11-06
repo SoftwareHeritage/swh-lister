@@ -1,4 +1,4 @@
-# Copyright (C) 2015-2017 the Software Heritage developers
+# Copyright (C) 2015-2019 the Software Heritage developers
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
 
@@ -7,12 +7,13 @@ from datetime import datetime
 import logging
 
 from sqlalchemy import Column, DateTime, Integer, String
-from sqlalchemy.ext.declarative import DeclarativeMeta
+from sqlalchemy.ext.declarative import DeclarativeMeta, declarative_base
 from typing import Type, Union
 
 from .abstractattribute import AbstractAttribute
 
-from swh.storage.schemata.distribution import SQLBase
+
+SQLBase = declarative_base()
 
 
 logger = logging.getLogger(__name__)

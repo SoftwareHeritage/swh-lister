@@ -21,8 +21,7 @@ def debian_init(db_engine, lister=None,
 
     """
     distribution_name = 'Debian'
-    from swh.storage.schemata.distribution import (
-        Distribution, Area)
+    from swh.lister.debian.models import Distribution, Area
 
     if lister is None:
         from .lister import DebianLister
