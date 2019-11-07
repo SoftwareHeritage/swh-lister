@@ -71,7 +71,6 @@ def initialize(db_engine, drop_tables=False, **kwargs):
         drop_tables (bool): if True, tables will be dropped before
             (re)creating them.
     """
-
     if drop_tables:
         logger.info('Dropping tables')
         SQLBase.metadata.drop_all(db_engine, checkfirst=True)
