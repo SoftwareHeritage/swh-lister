@@ -54,17 +54,15 @@ def lister(ctx, config_file, db_url):
     from swh.core import config
     ctx.ensure_object(dict)
 
-    override_conf = {}
+    if not config_file:
+        config_file = os.environ.get('SWH_CONFIG_FILENAME')
+    conf = config.read(config_file)
     if db_url:
-        override_conf['lister'] = {
+        conf['lister'] = {
             'cls': 'local',
             'args': {'db': db_url}
         }
-    if not config_file:
-        config_file = os.environ.get('SWH_CONFIG_FILENAME')
-    conf = config.read(config_file, override_conf)
     ctx.obj['config'] = conf
-    ctx.obj['override_conf'] = override_conf
 
 
 @lister.command(name='db-init', context_settings=CONTEXT_SETTINGS)
