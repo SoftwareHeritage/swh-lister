@@ -121,7 +121,7 @@ class IndexingLister(ListerBase):
         min_index = self.db_first_index()
         max_index = self.db_last_index()
 
-        if not min_index or not max_index:
+        if min_index is None or max_index is None:
             # Nothing to list
             return []
 

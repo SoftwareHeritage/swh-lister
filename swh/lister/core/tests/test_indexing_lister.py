@@ -47,6 +47,22 @@ def test_db_partition_indices():
     assert partitions[-1] == (9001, None)
 
 
+def test_db_partition_indices_zero_first():
+    m = MockedIndexingListerDbPartitionIndices(
+        num_entries=1000,
+        first_index=0,
+        last_index=10000,
+    )
+    assert m
+
+    partitions = m.db_partition_indices(100)
+
+    # 1000 entries with indices 0 - 10000, partitions of 100 entries
+    assert len(partitions) == 10
+    assert partitions[0] == (None, 1000)
+    assert partitions[-1] == (9000, None)
+
+
 def test_db_partition_indices_date_indices():
     # 24 hour delta
     first = datetime.datetime.fromisoformat('2019-11-01T00:00:00+00:00')
@@ -74,8 +90,8 @@ def test_db_partition_indices_date_indices():
 def test_db_partition_indices_float_index_range():
     m = MockedIndexingListerDbPartitionIndices(
         num_entries=10000,
-        first_index=1.0,
-        last_index=2.0,
+        first_index=0.0,
+        last_index=1.0,
     )
     assert m
 
@@ -83,7 +99,7 @@ def test_db_partition_indices_float_index_range():
 
     assert len(partitions) == 10
 
-    expected_bounds = [1.0 + 0.1 * i for i in range(11)]
+    expected_bounds = [0.1 * i for i in range(11)]
     expected_bounds[0] = expected_bounds[-1] = None
 
     assert partitions == list(zip(expected_bounds[:-1], expected_bounds[1:]))
