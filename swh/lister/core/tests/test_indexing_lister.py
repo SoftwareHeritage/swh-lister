@@ -103,3 +103,20 @@ def test_db_partition_indices_float_index_range():
     expected_bounds[0] = expected_bounds[-1] = None
 
     assert partitions == list(zip(expected_bounds[:-1], expected_bounds[1:]))
+
+
+def test_db_partition_indices_uneven_int_index_range():
+    m = MockedIndexingListerDbPartitionIndices(
+        num_entries=5641,
+        first_index=0,
+        last_index=10000,
+    )
+    assert m
+
+    partitions = m.db_partition_indices(500)
+
+    assert len(partitions) == 5641 // 500
+
+    for i, (start, end) in enumerate(partitions):
+        assert isinstance(start, int) or (i == 0 and start is None)
+        assert isinstance(end, int) or (i == 10 and end is None)

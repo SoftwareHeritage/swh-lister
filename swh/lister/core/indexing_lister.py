@@ -130,6 +130,9 @@ class IndexingLister(ListerBase):
                 return bound.isoformat()
             min_index = dateutil.parser.parse(min_index)
             max_index = dateutil.parser.parse(max_index)
+        elif isinstance(max_index - min_index, int):
+            def format_bound(bound):
+                return int(bound)
         else:
             def format_bound(bound):
                 return bound
