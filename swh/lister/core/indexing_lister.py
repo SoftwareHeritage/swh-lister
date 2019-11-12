@@ -139,18 +139,22 @@ class IndexingLister(ListerBase):
 
         partition_width = (max_index - min_index) / n_partitions
 
-        partitions = [
-            [
-                format_bound(min_index + i * partition_width),
-                format_bound(min_index + (i+1) * partition_width),
-            ] for i in range(n_partitions)
+        # Generate n_partitions + 1 bounds for n_partitions partitons
+        bounds = [
+            format_bound(min_index + i * partition_width)
+            for i in range(n_partitions + 1)
         ]
 
-        # Remove bounds for lowest and highest partition
-        partitions[0][0] = None
-        partitions[-1][1] = None
+        # Trim duplicate bounds
+        bounds.append(None)
+        bounds = [cur
+                  for cur, next in zip(bounds[:-1], bounds[1:])
+                  if cur != next]
 
-        return [tuple(partition) for partition in partitions]
+        # Remove bounds for lowest and highest partition
+        bounds[0] = bounds[-1] = None
+
+        return list(zip(bounds[:-1], bounds[1:]))
 
     def db_first_index(self):
         """Look in the db for the smallest indexable value

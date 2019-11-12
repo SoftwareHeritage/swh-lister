@@ -63,6 +63,19 @@ def test_db_partition_indices_zero_first():
     assert partitions[-1] == (9000, None)
 
 
+def test_db_partition_indices_small_index_range():
+    m = MockedIndexingListerDbPartitionIndices(
+        num_entries=5000,
+        first_index=0,
+        last_index=5,
+    )
+    assert m
+
+    partitions = m.db_partition_indices(100)
+
+    assert partitions == [(None, 1), (1, 2), (2, 3), (3, 4), (4, None)]
+
+
 def test_db_partition_indices_date_indices():
     # 24 hour delta
     first = datetime.datetime.fromisoformat('2019-11-01T00:00:00+00:00')
