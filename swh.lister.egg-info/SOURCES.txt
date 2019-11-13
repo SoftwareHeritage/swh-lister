@@ -72,6 +72,7 @@ swh/lister/core/simple_lister.py
 swh/lister/core/tests/__init__.py
 swh/lister/core/tests/conftest.py
 swh/lister/core/tests/test_abstractattribute.py
+swh/lister/core/tests/test_indexing_lister.py
 swh/lister/core/tests/test_lister.py
 swh/lister/core/tests/test_model.py
 swh/lister/cran/__init__.py

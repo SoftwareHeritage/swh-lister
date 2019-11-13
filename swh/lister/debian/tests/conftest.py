@@ -15,7 +15,7 @@ def lister_debian(swh_listers):
     lister = swh_listers['debian']
 
     # Initialize the debian data model
-    debian_init(lister.db_engine, lister=lister,
+    debian_init(lister.db_engine,
                 distributions=['stretch'],
                 area_names=['main', 'contrib'])
 
