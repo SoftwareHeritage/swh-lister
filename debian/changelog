@@ -1,8 +1,11 @@
-swh-lister (0.0.39-1~swh1~bpo10+1) buster-swh; urgency=medium
+swh-lister (0.0.40-1~swh1) unstable-swh; urgency=medium
 
-  * Rebuild for buster-swh
+  * New upstream release 0.0.40     - (tagged by Nicolas Dandrimont
+    <nicolas@dandrimont.eu> on 2019-11-13 13:54:38 +0100)
+  * Upstream changes:     - Release swh.lister 0.0.40     - Fix bogus
+    NotImplementedError on Area.index_uris
 
- -- Software Heritage autobuilder (on jenkins-debian1) <jenkins@jenkins-debian1.internal.softwareheritage.org>  Wed, 13 Nov 2019 12:34:57 +0000
+ -- Software Heritage autobuilder (on jenkins-debian1) <jenkins@jenkins-debian1.internal.softwareheritage.org>  Wed, 13 Nov 2019 13:02:08 +0000
 
 swh-lister (0.0.39-1~swh1) unstable-swh; urgency=medium
 
