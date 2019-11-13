@@ -1,8 +1,12 @@
-swh-lister (0.0.38-1~swh1~bpo10+1) buster-swh; urgency=medium
+swh-lister (0.0.39-1~swh1) unstable-swh; urgency=medium
 
-  * Rebuild for buster-swh
+  * New upstream release 0.0.39     - (tagged by Nicolas Dandrimont
+    <nicolas@dandrimont.eu> on 2019-11-13 13:23:31 +0100)
+  * Upstream changes:     - Release swh.lister 0.0.39     - Properly
+    register all tasks     - Fix up db_partition_indices to avoid
+    expensive scans
 
- -- Software Heritage autobuilder (on jenkins-debian1) <jenkins@jenkins-debian1.internal.softwareheritage.org>  Wed, 06 Nov 2019 15:02:46 +0000
+ -- Software Heritage autobuilder (on jenkins-debian1) <jenkins@jenkins-debian1.internal.softwareheritage.org>  Wed, 13 Nov 2019 12:28:33 +0000
 
 swh-lister (0.0.38-1~swh1) unstable-swh; urgency=medium
 

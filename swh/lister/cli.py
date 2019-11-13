@@ -8,12 +8,12 @@ import logging
 from copy import deepcopy
 from importlib import import_module
 
+import celery.app.task
 import click
 from sqlalchemy import create_engine
 
 from swh.core.cli import CONTEXT_SETTINGS
 from swh.scheduler import get_scheduler
-from swh.scheduler.task import SWHTask
 from swh.lister import get_lister, SUPPORTED_LISTERS, LISTERS
 from swh.lister.core.models import initialize
 
@@ -54,17 +54,15 @@ def lister(ctx, config_file, db_url):
     from swh.core import config
     ctx.ensure_object(dict)
 
-    override_conf = {}
+    if not config_file:
+        config_file = os.environ.get('SWH_CONFIG_FILENAME')
+    conf = config.read(config_file)
     if db_url:
-        override_conf['lister'] = {
+        conf['lister'] = {
             'cls': 'local',
             'args': {'db': db_url}
         }
-    if not config_file:
-        config_file = os.environ.get('SWH_CONFIG_FILENAME')
-    conf = config.read(config_file, override_conf)
     ctx.obj['config'] = conf
-    ctx.obj['override_conf'] = override_conf
 
 
 @lister.command(name='db-init', context_settings=CONTEXT_SETTINGS)
@@ -126,7 +124,7 @@ def register_task_types(ctx, listers):
             mod = import_module(task_module)
             for task_name in (x for x in dir(mod) if not x.startswith('_')):
                 taskobj = getattr(mod, task_name)
-                if isinstance(taskobj, SWHTask):
+                if isinstance(taskobj, celery.app.task.Task):
                     task_type = task_name.replace('_', '-')
                     task_cfg = registry_entry.get('task_types', {}).get(
                         task_type, {})
