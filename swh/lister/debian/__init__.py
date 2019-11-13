@@ -6,7 +6,7 @@
 from typing import Any, List, Mapping
 
 
-def debian_init(db_engine, lister=None,
+def debian_init(db_engine,
                 override_conf: Mapping[str, Any] = {},
                 distributions: List[str] = ['stretch', 'buster'],
                 area_names: List[str] = ['main', 'contrib', 'non-free']):
@@ -14,7 +14,6 @@ def debian_init(db_engine, lister=None,
 
     Args:
         db_engine: SQLAlchemy manipulation database object
-        lister: Debian lister instance. None by default.
         override_conf: Override conf to pass to instantiate a lister
         distributions: Default distribution to build
 
@@ -22,32 +21,29 @@ def debian_init(db_engine, lister=None,
     """
     distribution_name = 'Debian'
     from swh.lister.debian.models import Distribution, Area
+    from sqlalchemy.orm import sessionmaker
+    db_session = sessionmaker(bind=db_engine)()
 
-    if lister is None:
-        from .lister import DebianLister
-        lister = DebianLister(distribution=distribution_name,
-                              override_config=override_conf)
+    existing_distrib = db_session \
+        .query(Distribution) \
+        .filter(Distribution.name == distribution_name) \
+        .one_or_none()
+    if not existing_distrib:
+        distrib = Distribution(name=distribution_name,
+                               type='deb',
+                               mirror_uri='http://deb.debian.org/debian/')
+        db_session.add(distrib)
 
-    if not lister.db_session\
-                 .query(Distribution)\
-                 .filter(Distribution.name == distribution_name)\
-                 .one_or_none():
-
-        d = Distribution(
-            name=distribution_name,
-            type='deb',
-            mirror_uri='http://deb.debian.org/debian/')
-        lister.db_session.add(d)
-
-        areas = []
         for distribution_name in distributions:
             for area_name in area_names:
-                areas.append(Area(
+                area = Area(
                     name='%s/%s' % (distribution_name, area_name),
-                    distribution=d,
-                ))
-        lister.db_session.add_all(areas)
-        lister.db_session.commit()
+                    distribution=distrib,
+                )
+                db_session.add(area)
+
+        db_session.commit()
+    db_session.close()
 
 
 def register() -> Mapping[str, Any]:

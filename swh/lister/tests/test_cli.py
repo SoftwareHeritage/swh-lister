@@ -98,21 +98,22 @@ def test_get_lister_override():
 
 
 def test_task_types(swh_scheduler_config, tmp_path):
-    db_url = init_db().url()
-
     configfile = tmp_path / 'config.yml'
-    configfile.write_text(yaml.dump({'scheduler': {
-        'cls': 'local',
-        'args': swh_scheduler_config}}))
+    config = {
+        'scheduler': {
+            'cls': 'local',
+            'args': swh_scheduler_config
+        }
+    }
+    configfile.write_text(yaml.dump(config))
     runner = CliRunner()
     result = runner.invoke(cli, [
-        '--db-url', db_url,
         '--config-file', configfile.as_posix(),
         'register-task-types'])
 
     assert result.exit_code == 0, traceback.print_exception(*result.exc_info)
 
-    scheduler = get_scheduler(cls='local', args=swh_scheduler_config)
+    scheduler = get_scheduler(**config['scheduler'])
     all_tasks = [
         'list-bitbucket-full', 'list-bitbucket-incremental',
         'list-cran',
@@ -125,7 +126,7 @@ def test_task_types(swh_scheduler_config, tmp_path):
         'list-phabricator-full',
         'list-packagist',
         'list-pypi',
-        ]
+    ]
     for task in all_tasks:
         task_type_desc = scheduler.get_task_type(task)
         assert task_type_desc
