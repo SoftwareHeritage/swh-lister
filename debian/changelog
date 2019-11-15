@@ -1,3 +1,16 @@
+swh-lister (0.0.41-1~swh1) unstable-swh; urgency=medium
+
+  * New upstream release 0.0.41     - (tagged by Antoine R. Dumont
+    (@ardumont) <antoine.romain.dumont@gmail.com> on 2019-11-15 12:02:13
+    +0100)
+  * Upstream changes:     - v0.0.41     - simple_lister: Flush to db
+    more frequently     - gnu.lister: Use url as primary key     -
+    gnu.lister.tests: Add missing assertion     - gnu.lister: Add
+    missing retries_left parameter     - debian.models: Migrate tests
+    from storage to debian lister model
+
+ -- Software Heritage autobuilder (on jenkins-debian1) <jenkins@jenkins-debian1.internal.softwareheritage.org>  Fri, 15 Nov 2019 11:06:35 +0000
+
 swh-lister (0.0.40-1~swh1) unstable-swh; urgency=medium
 
   * New upstream release 0.0.40     - (tagged by Nicolas Dandrimont
