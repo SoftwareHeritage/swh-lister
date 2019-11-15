@@ -49,3 +49,4 @@ def test_gnu_lister(swh_listers, requests_mock_datadir):
 
         assert row['policy'] == 'oneshot'
         assert row['priority'] is None
+        assert row['retries_left'] == 3
