@@ -93,6 +93,7 @@ swh/lister/debian/utils.py
 swh/lister/debian/tests/__init__.py
 swh/lister/debian/tests/conftest.py
 swh/lister/debian/tests/test_lister.py
+swh/lister/debian/tests/test_models.py
 swh/lister/debian/tests/test_tasks.py
 swh/lister/debian/tests/data/http_deb.debian.org/debian__dists_stretch_contrib_source_Sources.xz
 swh/lister/debian/tests/data/http_deb.debian.org/debian__dists_stretch_main_source_Sources.xz

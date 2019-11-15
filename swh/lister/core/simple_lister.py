@@ -11,6 +11,9 @@ from swh.core import utils
 from .lister_base import ListerBase
 
 
+logger = logging.getLogger(__name__)
+
+
 class SimpleLister(ListerBase):
     """Lister* intermediate class for any service that follows the simple,
        'list in oneshot information' pattern.
@@ -21,6 +24,11 @@ class SimpleLister(ListerBase):
       information and stores those in db
 
     """
+    flush_packet_db = 2
+    """Number of iterations in-between write flushes of lister repositories to
+       db (see fn:`ingest_data`).
+    """
+
     def list_packages(self, response: Any) -> List[Any]:
         """Listing packages method.
 
@@ -47,7 +55,7 @@ class SimpleLister(ListerBase):
         models_list = self.transport_response_simplified(response)
         models_list = self.filter_before_inject(models_list)
         all_injected = []
-        for models in utils.grouper(models_list, n=1000):
+        for i, models in enumerate(utils.grouper(models_list, n=100), start=1):
             models = list(models)
             logging.debug('models: %s' % len(models))
             # inject into local db
@@ -55,9 +63,10 @@ class SimpleLister(ListerBase):
             # queue workers
             self.schedule_missing_tasks(models, injected)
             all_injected.append(injected)
-            # flush
-            self.db_session.commit()
-            self.db_session = self.mk_session()
+            if (i % self.flush_packet_db) == 0:
+                logger.debug('Flushing updates at index %s', i)
+                self.db_session.commit()
+                self.db_session = self.mk_session()
 
         return response, all_injected
 
