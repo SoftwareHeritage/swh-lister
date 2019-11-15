@@ -97,7 +97,7 @@ class GNULister(SimpleLister):
 
         """
         return {
-            'uid': repo['name'],
+            'uid': repo['url'],
             'name': repo['name'],
             'full_name': repo['name'],
             'html_url': repo['url'],
