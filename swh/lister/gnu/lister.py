@@ -53,7 +53,9 @@ class GNULister(SimpleLister):
             'load-%s' % origin_type,
             kwargs.get('policy', 'oneshot'),
             url=origin_url,
-            artifacts=artifacts)
+            artifacts=artifacts,
+            retries_left=3,
+        )
 
     def safely_issue_request(self, identifier):
         """Bypass the implementation. It's now the GNUTree which deals with
@@ -95,7 +97,7 @@ class GNULister(SimpleLister):
 
         """
         return {
-            'uid': repo['name'],
+            'uid': repo['url'],
             'name': repo['name'],
             'full_name': repo['name'],
             'html_url': repo['url'],
