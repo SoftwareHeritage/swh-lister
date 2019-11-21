@@ -14,16 +14,14 @@ def test_pypi_lister(lister_pypi, requests_mock_datadir):
         assert row['type'] == 'load-pypi'
         # arguments check
         args = row['arguments']['args']
-        assert len(args) == 2
-
-        project = args[0]
-        url = args[1]
-        assert url == 'https://pypi.org/project/%s/' % project
+        assert len(args) == 0
 
         # kwargs
         kwargs = row['arguments']['kwargs']
-        meta_url = kwargs['project_metadata_url']
-        assert meta_url == 'https://pypi.org/pypi/%s/json' % project
+        assert len(kwargs) == 1
+
+        origin_url = kwargs['url']
+        assert 'https://pypi.org/project' in origin_url
 
         assert row['policy'] == 'recurring'
         assert row['priority'] is None

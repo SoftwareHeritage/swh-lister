@@ -36,4 +36,12 @@ def swh_listers(request, postgresql_proc, postgresql, swh_scheduler):
         listers[lister_name] = lister
     initialize(create_engine(db_url), drop_tables=True)
 
+    # Add the load-archive-files expected by some listers (gnu, cran, ...)
+    swh_scheduler.create_task_type({
+        'type': 'load-archive-files',
+        'description': 'Load archive files.',
+        'backend_name': 'swh.loader.package.tasks.LoadArchive',
+        'default_interval': '1 day',
+    })
+
     return listers

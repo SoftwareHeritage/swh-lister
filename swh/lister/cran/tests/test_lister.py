@@ -28,16 +28,18 @@ def test_cran_compute_package_url_failure():
 
 
 @patch('swh.lister.cran.lister.read_cran_data')
-def test_cran_lister_cran(mock_cran, datadir, lister_cran):
+def test_cran_lister_cran(mock_cran, datadir, swh_listers):
+    lister = swh_listers['cran']
+
     with open(path.join(datadir, 'list-r-packages.json')) as f:
         data = json.loads(f.read())
 
     mock_cran.return_value = data
     assert len(data) == 6
 
-    lister_cran.run()
+    lister.run()
 
-    r = lister_cran.scheduler.search_tasks(task_type='load-archive-files')
+    r = lister.scheduler.search_tasks(task_type='load-archive-files')
     assert len(r) == 6
 
     for row in r:
