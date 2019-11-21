@@ -49,8 +49,9 @@ class GNULister(SimpleLister):
 
         """
         artifacts = self.gnu_tree.artifacts[origin_url]
+        assert origin_type == 'tar'
         return utils.create_task_dict(
-            'load-%s' % origin_type,
+            'load-archive-files',
             kwargs.get('policy', 'oneshot'),
             url=origin_url,
             artifacts=artifacts,
