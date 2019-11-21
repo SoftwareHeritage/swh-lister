@@ -60,6 +60,7 @@ class CRANLister(SimpleLister):
         policy = kwargs.get('policy', 'oneshot')
         package = kwargs.get('name')
         version = kwargs.get('version')
+        assert origin_type == 'tar'
         return create_task_dict(
             'load-%s' % origin_type,
             policy, package, origin_url, version,
