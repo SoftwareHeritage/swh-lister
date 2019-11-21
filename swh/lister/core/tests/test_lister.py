@@ -12,12 +12,18 @@ import requests_mock
 from sqlalchemy import create_engine
 from typing import Any, Callable, Optional, Pattern, Type, Union
 
+import swh.lister
 from swh.lister.core.abstractattribute import AbstractAttribute
 from swh.lister.tests.test_utils import init_db
 
 
 def noop(*args, **kwargs):
     pass
+
+
+def test_version_generation():
+    assert swh.lister.__version__ != 'devel', \
+        "Make sure swh.lister is installed (e.g. pip install -e .)"
 
 
 class HttpListerTesterBase(abc.ABC):

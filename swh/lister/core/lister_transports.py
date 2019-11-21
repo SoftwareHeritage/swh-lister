@@ -14,10 +14,7 @@ import xmltodict
 
 from typing import Optional, Union
 
-try:
-    from swh.lister._version import __version__
-except ImportError:
-    __version__ = 'devel'
+from swh.lister import __version__
 
 from .abstractattribute import AbstractAttribute
 from .lister_base import FetchError

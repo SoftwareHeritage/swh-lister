@@ -9,6 +9,5 @@ build/
 dist/
 *.egg-info
 version.txt
-swh/lister/_version.py
 .tox/
 .mypy_cache/
