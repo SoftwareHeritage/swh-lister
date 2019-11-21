@@ -37,11 +37,11 @@ def test_cran_lister_cran(mock_cran, datadir, lister_cran):
 
     lister_cran.run()
 
-    r = lister_cran.scheduler.search_tasks(task_type='load-tar')
+    r = lister_cran.scheduler.search_tasks(task_type='load-archive-files')
     assert len(r) == 6
 
     for row in r:
-        assert row['type'] == 'load-tar'
+        assert row['type'] == 'load-archive-files'
         # arguments check
         args = row['arguments']['args']
         assert len(args) == 3
