@@ -62,16 +62,16 @@ def check_tasks(tasks: List[Any]):
         assert row['type'] == 'load-npm'
         # arguments check
         args = row['arguments']['args']
-        assert len(args) == 2
-
-        package = args[0]
-        url = args[1]
-        assert url == 'https://www.npmjs.com/package/%s' % package
+        assert len(args) == 0
 
         # kwargs
         kwargs = row['arguments']['kwargs']
+        assert len(kwargs) == 3
+        package_name = kwargs['package_name']
+        package_url = kwargs['package_url']
+        assert package_url == 'https://www.npmjs.com/package/%s' % package_name
         meta_url = kwargs['package_metadata_url']
-        assert meta_url == 'https://replicate.npmjs.com/%s' % package
+        assert meta_url == 'https://replicate.npmjs.com/%s' % package_name
 
         assert row['policy'] == 'recurring'
         assert row['priority'] is None
