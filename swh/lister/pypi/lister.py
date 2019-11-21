@@ -32,11 +32,8 @@ class PyPILister(ListerOnePageApiTransport, SimpleLister):
         """
         _type = 'load-%s' % origin_type
         _policy = kwargs.get('policy', 'recurring')
-        project_name = kwargs.get('name')
-        project_metadata_url = kwargs.get('html_url')
         return utils.create_task_dict(
-            _type, _policy, project_name, origin_url,
-            project_metadata_url=project_metadata_url)
+            _type, _policy, url=origin_url)
 
     def list_packages(self, response):
         """(Override) List the actual pypi origins from the response.
@@ -47,25 +44,22 @@ class PyPILister(ListerOnePageApiTransport, SimpleLister):
         random.shuffle(_packages)
         return _packages
 
-    def _compute_urls(self, repo_name):
-        """Returns a tuple (project_url, project_metadata_url)
+    def origin_url(self, repo_name: str) -> str:
+        """Returns origin_url
 
         """
-        return (
-            'https://pypi.org/project/%s/' % repo_name,
-            'https://pypi.org/pypi/%s/json' % repo_name
-        )
+        return 'https://pypi.org/project/%s/' % repo_name
 
     def get_model_from_repo(self, repo_name):
         """(Override) Transform from repository representation to model
 
         """
-        project_url, project_url_meta = self._compute_urls(repo_name)
+        origin_url = self.origin_url(repo_name)
         return {
-            'uid': repo_name,
+            'uid': origin_url,
             'name': repo_name,
             'full_name': repo_name,
-            'html_url': project_url_meta,
-            'origin_url': project_url,
+            'html_url': origin_url,
+            'origin_url': origin_url,
             'origin_type': 'pypi',
         }
