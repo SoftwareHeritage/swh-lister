@@ -4,12 +4,10 @@
 # See top-level LICENSE file for more information
 
 
-def test_pypi_lister(swh_listers, requests_mock_datadir):
-    lister = swh_listers['pypi']
+def test_pypi_lister(lister_pypi, requests_mock_datadir):
+    lister_pypi.run()
 
-    lister.run()
-
-    r = lister.scheduler.search_tasks(task_type='load-pypi')
+    r = lister_pypi.scheduler.search_tasks(task_type='load-pypi')
     assert len(r) == 4
 
     for row in r:

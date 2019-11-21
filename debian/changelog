@@ -1,8 +1,16 @@
-swh-lister (0.0.41-1~swh1~bpo10+1) buster-swh; urgency=medium
+swh-lister (0.0.42-1~swh1) unstable-swh; urgency=medium
 
-  * Rebuild for buster-swh
+  * New upstream release 0.0.42     - (tagged by Antoine R. Dumont
+    (@ardumont) <antoine.romain.dumont@gmail.com> on 2019-11-21 13:52:16
+    +0100)
+  * Upstream changes:     - v0.0.42     - cran/gnu: Rename task_type to
+    load-archive-files     - lister.tests: Add missing task_type for
+    package listers     - Migrate tox.ini to extras = xxx instead of
+    deps = .[testing]     - Merge tox environments     - Include all
+    requirements in MANIFEST.in     - lister.cli: Remove task type
+    register cli
 
- -- Software Heritage autobuilder (on jenkins-debian1) <jenkins@jenkins-debian1.internal.softwareheritage.org>  Tue, 19 Nov 2019 12:36:39 +0000
+ -- Software Heritage autobuilder (on jenkins-debian1) <jenkins@jenkins-debian1.internal.softwareheritage.org>  Thu, 21 Nov 2019 13:00:29 +0000
 
 swh-lister (0.0.41-1~swh1) unstable-swh; urgency=medium
 
