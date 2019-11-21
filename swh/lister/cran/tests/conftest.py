@@ -15,7 +15,7 @@ def lister_cran(swh_listers):
     # Add the load-deb-package in the scheduler backend
     lister.scheduler.create_task_type({
         'type': 'load-archive-files',
-        'description': 'Load archive files',
+        'description': 'Load archive files.',
         'backend_name': 'swh.loader.package.tasks.LoadArchive',
         'default_interval': '1 day',
     })

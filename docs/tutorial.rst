@@ -162,12 +162,12 @@ above are already provided for 99% of services by the HTTP mix-in module. It
 looks much simpler when we look at the actual implementations of the two
 new-style indexing listers we currently have…
 
-When developing a new lister, it's important to test. For this, add the tests 
-(check `swh/lister/*/tests/`) and register the celery tasks in the main 
+When developing a new lister, it's important to test. For this, add the tests
+(check `swh/lister/*/tests/`) and register the celery tasks in the main
 conftest.py (`swh/lister/core/tests/conftest.py`).
 
-Another important step is to actually run it within the 
-docker-dev (:ref:`run-lister-tutorial`). 
+Another important step is to actually run it within the
+docker-dev (:ref:`run-lister-tutorial`).
 
 This is the entire source code for the BitBucket repository lister::
 
