@@ -60,7 +60,8 @@ class NpmListerBase(IndexingHttpLister):
         package_name = kwargs.get('name')
         package_metadata_url = kwargs.get('html_url')
         return create_task_dict(task_type, task_policy,
-                                package_name, origin_url,
+                                package_name=package_name,
+                                package_url=origin_url,
                                 package_metadata_url=package_metadata_url)
 
     def request_headers(self):

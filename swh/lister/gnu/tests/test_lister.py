@@ -9,10 +9,12 @@ import logging
 logger = logging.getLogger(__name__)
 
 
-def test_gnu_lister(lister_gnu, requests_mock_datadir):
-    lister_gnu.run()
+def test_gnu_lister(swh_listers, requests_mock_datadir):
+    lister = swh_listers['gnu']
 
-    r = lister_gnu.scheduler.search_tasks(task_type='load-archive-files')
+    lister.run()
+
+    r = lister.scheduler.search_tasks(task_type='load-archive-files')
     assert len(r) == 383
 
     for row in r:
