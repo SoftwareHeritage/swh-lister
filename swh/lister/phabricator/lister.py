@@ -57,8 +57,9 @@ class PhabricatorLister(IndexingHttpLister):
         (Override) Set requests headers to send when querying the
         Phabricator API
         """
-        return {'User-Agent': 'Software Heritage phabricator lister',
-                'Accept': 'application/json'}
+        headers = super().request_headers()
+        headers['Accept'] = 'application/json'
+        return headers
 
     def get_model_from_repo(self, repo):
         url = get_repo_url(repo['attachments']['uris']['uris'])

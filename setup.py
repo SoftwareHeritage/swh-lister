@@ -48,7 +48,7 @@ setup(
     tests_require=parse_requirements('test'),
     setup_requires=['vcversioner'],
     extras_require={'testing': parse_requirements('test')},
-    vcversioner={'version_module_paths': ['swh/lister/_version.py']},
+    vcversioner={},
     include_package_data=True,
     entry_points='''
         [swh.cli.subcommands]

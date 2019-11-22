@@ -12,12 +12,18 @@ import requests_mock
 from sqlalchemy import create_engine
 from typing import Any, Callable, Optional, Pattern, Type, Union
 
+import swh.lister
 from swh.lister.core.abstractattribute import AbstractAttribute
 from swh.lister.tests.test_utils import init_db
 
 
 def noop(*args, **kwargs):
     pass
+
+
+def test_version_generation():
+    assert swh.lister.__version__ != 'devel', \
+        "Make sure swh.lister is installed (e.g. pip install -e .)"
 
 
 class HttpListerTesterBase(abc.ABC):
@@ -319,6 +325,17 @@ class HttpListerTester(HttpListerTesterBase, abc.ABC):
         with patch.object(time, 'sleep', wraps=time.sleep) as sleepmock:
             self.get_api_response(self.first_index)
             self.assertEqual(sleepmock.call_count, 2)
+
+    @requests_mock.Mocker()
+    def test_request_headers(self, http_mocker):
+        fl = self.create_fl_with_db(http_mocker)
+        fl.run()
+        self.assertNotEqual(len(http_mocker.request_history), 0)
+        for request in http_mocker.request_history:
+            assert 'User-Agent' in request.headers
+            user_agent = request.headers['User-Agent']
+            assert 'Software Heritage Lister' in user_agent
+            assert swh.lister.__version__ in user_agent
 
     def scheduled_tasks_test(self, next_api_response_file, next_last_index,
                              http_mocker):
