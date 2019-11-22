@@ -69,8 +69,9 @@ class NpmListerBase(IndexingHttpLister):
         registry.
 
         """
-        return {'User-Agent': 'Software Heritage npm lister',
-                'Accept': 'application/json'}
+        headers = super().request_headers()
+        headers['Accept'] = 'application/json'
+        return headers
 
     def _compute_urls(self, repo_name):
         """Return a tuple (package_url, package_metadata_url)

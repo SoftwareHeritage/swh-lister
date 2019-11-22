@@ -54,7 +54,12 @@ class GitHubLister(IndexingHttpLister):
         return [self.get_model_from_repo(repo) for repo in repos]
 
     def request_headers(self):
-        return {'Accept': 'application/vnd.github.v3+json'}
+        """(Override) Set requests headers to send when querying the GitHub API
+
+        """
+        headers = super().request_headers()
+        headers['Accept'] = 'application/vnd.github.v3+json'
+        return headers
 
     def disable_deleted_repo_tasks(self, index, next_index, keep_these):
         """ (Overrides) Fix provided index value to avoid erroneously disabling

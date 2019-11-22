@@ -40,7 +40,6 @@ def test_incremental(lister, seq, save, swh_app, celery_session_worker):
     # setup the mocked NpmLister
     lister.return_value = lister
     lister.run.return_value = None
-    lister.request_headers.return_value = []
     seq.return_value = 42
     save.side_effect = mock_save
 
