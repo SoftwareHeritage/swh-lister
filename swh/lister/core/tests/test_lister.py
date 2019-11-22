@@ -326,6 +326,17 @@ class HttpListerTester(HttpListerTesterBase, abc.ABC):
             self.get_api_response(self.first_index)
             self.assertEqual(sleepmock.call_count, 2)
 
+    @requests_mock.Mocker()
+    def test_request_headers(self, http_mocker):
+        fl = self.create_fl_with_db(http_mocker)
+        fl.run()
+        self.assertNotEqual(len(http_mocker.request_history), 0)
+        for request in http_mocker.request_history:
+            assert 'User-Agent' in request.headers
+            user_agent = request.headers['User-Agent']
+            assert 'Software Heritage Lister' in user_agent
+            assert swh.lister.__version__ in user_agent
+
     def scheduled_tasks_test(self, next_api_response_file, next_last_index,
                              http_mocker):
         """Check that no loading tasks get disabled when processing a new

@@ -14,7 +14,7 @@ import xmltodict
 
 from typing import Optional, Union
 
-from swh.lister import __version__
+from swh.lister import USER_AGENT_TEMPLATE, __version__
 
 from .abstractattribute import AbstractAttribute
 from .lister_base import FetchError
@@ -45,7 +45,7 @@ class ListerHttpTransport(abc.ABC):
         MAY BE OVERRIDDEN if request headers are needed.
         """
         return {
-            'User-Agent': 'Software Heritage lister (%s)' % self.lister_version
+            'User-Agent': USER_AGENT_TEMPLATE % self.lister_version
         }
 
     def request_instance_credentials(self):
