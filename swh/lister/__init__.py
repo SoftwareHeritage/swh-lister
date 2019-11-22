@@ -10,6 +10,15 @@ import pkg_resources
 logger = logging.getLogger(__name__)
 
 
+try:
+    __version__ = pkg_resources.get_distribution('swh.lister').version
+except pkg_resources.DistributionNotFound:
+    __version__ = 'devel'
+
+USER_AGENT_TEMPLATE = 'Software Heritage Lister (%s)'
+USER_AGENT = USER_AGENT_TEMPLATE % __version__
+
+
 LISTERS = {entry_point.name.split('.', 1)[1]: entry_point
            for entry_point in pkg_resources.iter_entry_points('swh.workers')
            if entry_point.name.split('.', 1)[0] == 'lister'}

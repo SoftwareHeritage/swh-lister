@@ -14,7 +14,6 @@ swh.lister.egg-info/entry_points.txt
 swh.lister.egg-info/requires.txt
 swh.lister.egg-info/top_level.txt
 swh/lister/__init__.py
-swh/lister/_version.py
 swh/lister/cli.py
 swh/lister/py.typed
 swh/lister/utils.py

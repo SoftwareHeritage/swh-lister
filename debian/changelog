@@ -1,8 +1,11 @@
-swh-lister (0.0.43-1~swh1~bpo10+1) buster-swh; urgency=medium
+swh-lister (0.0.44-1~swh1) unstable-swh; urgency=medium
 
-  * Rebuild for buster-swh
+  * New upstream release 0.0.44     - (tagged by Nicolas Dandrimont
+    <nicolas@dandrimont.eu> on 2019-11-22 16:15:54 +0100)
+  * Upstream changes:     - Release swh.lister v0.0.44     - Define
+    proper User Agents everywhere
 
- -- Software Heritage autobuilder (on jenkins-debian1) <jenkins@jenkins-debian1.internal.softwareheritage.org>  Thu, 21 Nov 2019 18:00:29 +0000
+ -- Software Heritage autobuilder (on jenkins-debian1) <jenkins@jenkins-debian1.internal.softwareheritage.org>  Fri, 22 Nov 2019 15:31:33 +0000
 
 swh-lister (0.0.43-1~swh1) unstable-swh; urgency=medium
 

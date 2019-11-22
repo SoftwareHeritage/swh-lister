@@ -13,6 +13,7 @@ from requests.adapters import HTTPAdapter
 from .models import CGitModel
 
 from swh.core.utils import grouper
+from swh.lister import USER_AGENT
 from swh.lister.core.lister_base import ListerBase
 
 
@@ -72,6 +73,9 @@ class CGitLister(ListerBase):
         self.instance = instance
         self.session = Session()
         self.session.mount(self.url, HTTPAdapter(max_retries=3))
+        self.session.headers = {
+            'User-Agent': USER_AGENT,
+        }
 
     def run(self):
         total = 0

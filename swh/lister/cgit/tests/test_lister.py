@@ -3,6 +3,9 @@
 # See top-level LICENSE file for more information
 
 
+from swh.lister import __version__
+
+
 def test_lister_no_page(requests_mock_datadir, swh_listers):
     lister = swh_listers['cgit']
 
@@ -64,3 +67,16 @@ def test_lister_run(requests_mock_datadir, swh_listers):
         assert kwargs == {}
         assert row['policy'] == 'recurring'
         assert row['priority'] is None
+
+
+def test_lister_requests(requests_mock_datadir, swh_listers):
+    lister = swh_listers['cgit']
+    lister.url = 'https://git.tizen/cgit/'
+    lister.run()
+
+    assert len(requests_mock_datadir.request_history) != 0
+    for request in requests_mock_datadir.request_history:
+        assert 'User-Agent' in request.headers
+        user_agent = request.headers['User-Agent']
+        assert 'Software Heritage Lister' in user_agent
+        assert __version__ in user_agent
