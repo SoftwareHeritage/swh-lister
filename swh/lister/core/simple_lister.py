@@ -89,3 +89,8 @@ class SimpleLister(ListerBase):
         response, injected_repos = self.ingest_data(dump_not_used_identifier)
         if not response and not injected_repos:
             logging.info('No response from api server, stopping')
+            status = 'uneventful'
+        else:
+            status = 'eventful'
+
+        return {'status': status}

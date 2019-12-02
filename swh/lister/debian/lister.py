@@ -216,12 +216,14 @@ class DebianLister(ListerHttpTransport, ListerBase):
                            .one_or_none()
 
         if not distribution:
-            raise ValueError("Distribution %s is not registered" %
-                             self.distribution)
+            logger.error("Distribution %s is not registered" %
+                         self.distribution)
+            return {'status': 'failed'}
 
         if not distribution.type == 'deb':
-            raise ValueError("Distribution %s is not a Debian derivative" %
-                             distribution)
+            logger.error("Distribution %s is not a Debian derivative" %
+                         distribution)
+            return {'status': 'failed'}
 
         date = self.date
 
@@ -250,4 +252,4 @@ class DebianLister(ListerHttpTransport, ListerBase):
 
         self.db_session.commit()
 
-        return True
+        return {'status': 'eventful'}
