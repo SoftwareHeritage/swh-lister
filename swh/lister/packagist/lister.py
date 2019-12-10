@@ -7,7 +7,7 @@ import json
 import logging
 import random
 
-from typing import Any, List, Mapping
+from typing import Any, Dict, List, Mapping
 
 from swh.scheduler import utils
 from swh.lister.core.simple_lister import SimpleLister
@@ -60,7 +60,7 @@ class PackagistLister(ListerOnePageApiTransport, SimpleLister):
         SimpleLister.__init__(self, override_config=override_config)
 
     def task_dict(self, origin_type: str, origin_url: str,
-                  **kwargs: Mapping[str, str]) -> Mapping[str, str]:
+                  **kwargs: Mapping[str, str]) -> Dict[str, Any]:
         """Return task format dict
 
         This is overridden from the lister_base as more information is

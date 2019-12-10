@@ -10,7 +10,7 @@ from .lister import CGitLister
 @shared_task(name=__name__ + '.CGitListerTask')
 def list_cgit(**lister_args):
     '''Lister task for CGit instances'''
-    CGitLister(**lister_args).run()
+    return CGitLister(**lister_args).run()
 
 
 @shared_task(name=__name__ + '.ping')

@@ -82,7 +82,7 @@
             "description": "Basic files and directory structure for a C++ project. Intended as a starting point for a new project. Includes a basic cross platform core library."
         },
         {
-            "scm": "hg",
+            "scm": "git",
             "website": "",
             "has_wiki": true,
             "name": "mercurialeclipse",

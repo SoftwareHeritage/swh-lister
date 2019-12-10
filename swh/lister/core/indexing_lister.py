@@ -213,6 +213,7 @@ class IndexingLister(ListerBase):
         Returns:
             nothing
         """
+        status = 'uneventful'
         self.min_index = min_bound
         self.max_index = max_bound
 
@@ -243,9 +244,11 @@ class IndexingLister(ListerBase):
                 logger.debug('Flushing updates at index %s', i)
                 self.db_session.commit()
                 self.db_session = self.mk_session()
+                status = 'eventful'
 
         self.db_session.commit()
         self.db_session = self.mk_session()
+        return {'status': status}
 
 
 class IndexingHttpLister(ListerHttpTransport, IndexingLister):
