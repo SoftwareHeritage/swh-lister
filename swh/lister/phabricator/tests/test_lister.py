@@ -129,14 +129,12 @@ def test_phabricator_lister(lister_phabricator, requests_mock_datadir):
         assert row['type'] == 'load-git'
         # arguments check
         args = row['arguments']['args']
-        assert len(args) == 1
-
-        url = args[0]
-        assert lister.instance in url
+        assert len(args) == 0
 
         # kwargs
         kwargs = row['arguments']['kwargs']
-        assert kwargs == {}
+        url = kwargs['url']
+        assert lister.instance in url
 
         assert row['policy'] == 'recurring'
         assert row['priority'] is None

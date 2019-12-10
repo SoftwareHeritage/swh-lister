@@ -10,6 +10,7 @@ from datetime import datetime, timezone
 from typing import Any
 from urllib import parse
 
+
 from swh.lister.bitbucket.models import BitBucketModel
 from swh.lister.core.indexing_lister import IndexingHttpLister
 

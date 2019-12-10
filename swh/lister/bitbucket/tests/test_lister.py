@@ -74,7 +74,7 @@ class BitBucketListerTester(HttpListerTester, unittest.TestCase):
 
 
 def test_lister_bitbucket(swh_listers, requests_mock_datadir):
-    """Simple bitbucket listing should create scheduled tasks
+    """Simple bitbucket listing should create scheduled tasks (git, hg)
 
     """
     lister = swh_listers['bitbucket']
@@ -82,20 +82,32 @@ def test_lister_bitbucket(swh_listers, requests_mock_datadir):
     lister.run()
 
     r = lister.scheduler.search_tasks(task_type='load-hg')
-    assert len(r) == 10
+    assert len(r) == 9
 
     for row in r:
-        assert row['type'] == 'load-hg'
-        # arguments check
         args = row['arguments']['args']
-        assert len(args) == 1
+        kwargs = row['arguments']['kwargs']
 
-        url = args[0]
+        assert len(args) == 0
+        assert len(kwargs) == 1
+        url = kwargs['url']
+
         assert url.startswith('https://bitbucket.org')
 
-        # kwargs
+        assert row['policy'] == 'recurring'
+        assert row['priority'] is None
+
+    r = lister.scheduler.search_tasks(task_type='load-git')
+    assert len(r) == 1
+
+    for row in r:
+        args = row['arguments']['args']
         kwargs = row['arguments']['kwargs']
-        assert kwargs == {}
+        assert len(args) == 0
+        assert len(kwargs) == 1
+        url = kwargs['url']
+
+        assert url.startswith('https://bitbucket.org')
 
         assert row['policy'] == 'recurring'
         assert row['priority'] is None

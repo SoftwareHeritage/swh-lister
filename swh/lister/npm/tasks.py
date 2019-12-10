@@ -45,7 +45,7 @@ def list_npm_full(**lister_args):
     'Full lister for the npm (javascript) registry'
     lister = NpmLister(**lister_args)
     with save_registry_state(lister):
-        lister.run()
+        return lister.run()
 
 
 @shared_task(name=__name__ + '.NpmIncrementalListerTask')
@@ -54,7 +54,7 @@ def list_npm_incremental(**lister_args):
     lister = NpmIncrementalLister(**lister_args)
     update_seq_start = get_last_update_seq(lister)
     with save_registry_state(lister):
-        lister.run(min_bound=update_seq_start)
+        return lister.run(min_bound=update_seq_start)
 
 
 @shared_task(name=__name__ + '.ping')

@@ -110,6 +110,7 @@ class PageByPageLister(ListerBase):
             nothing
 
         """
+        status = 'uneventful'
         page = min_bound or 0
         loop_count = 0
 
@@ -127,6 +128,7 @@ class PageByPageLister(ListerBase):
             elif not injected_repos:
                 logging.info('Repositories already seen, stopping')
                 break
+            status = 'eventful'
 
             next_page = self.get_next_target_from_response(response)
 
@@ -148,6 +150,8 @@ class PageByPageLister(ListerBase):
 
         self.db_session.commit()
         self.db_session = self.mk_session()
+
+        return {'status': status}
 
 
 class PageByPageHttpLister(ListerHttpTransport, PageByPageLister):

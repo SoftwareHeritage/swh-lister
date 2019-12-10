@@ -55,14 +55,12 @@ def test_lister_gitlab(swh_listers, requests_mock_datadir):
         assert row['type'] == 'load-git'
         # arguments check
         args = row['arguments']['args']
-        assert len(args) == 1
-
-        url = args[0]
-        assert url.startswith('https://gitlab.com')
+        assert len(args) == 0
 
         # kwargs
         kwargs = row['arguments']['kwargs']
-        assert kwargs == {}
+        url = kwargs['url']
+        assert url.startswith('https://gitlab.com')
 
         assert row['policy'] == 'recurring'
         assert row['priority'] is None

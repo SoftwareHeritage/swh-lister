@@ -10,7 +10,7 @@ from swh.lister.cran.lister import CRANLister
 @shared_task(name=__name__ + '.CRANListerTask')
 def list_cran(**lister_args):
     '''Lister task for the CRAN registry'''
-    CRANLister(**lister_args).run()
+    return CRANLister(**lister_args).run()
 
 
 @shared_task(name=__name__ + '.ping')

@@ -9,8 +9,8 @@ from swh.lister.phabricator.lister import PhabricatorLister
 
 @shared_task(name=__name__ + '.FullPhabricatorLister')
 def list_phabricator_full(**lister_args):
-    'Full update of a Phabricator instance'
-    PhabricatorLister(**lister_args).run()
+    """Full update of a Phabricator instance"""
+    return PhabricatorLister(**lister_args).run()
 
 
 @shared_task(name=__name__ + '.ping')
