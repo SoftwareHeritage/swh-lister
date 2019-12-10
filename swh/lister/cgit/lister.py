@@ -78,6 +78,7 @@ class CGitLister(ListerBase):
         }
 
     def run(self):
+        status = 'uneventful'
         total = 0
         for repos in grouper(self.get_repos(), 10):
             models = list(filter(None, (self.build_model(repo)
@@ -87,6 +88,9 @@ class CGitLister(ListerBase):
             self.db_session.commit()
             total += len(injected_repos)
             logger.debug('Scheduled %s tasks for %s', total, self.url)
+            status = 'eventful'
+
+        return {'status': status}
 
     def get_repos(self):
         """Generate git 'project' URLs found on the current CGit server

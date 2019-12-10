@@ -1,8 +1,14 @@
-swh-lister (0.0.44-1~swh1~bpo10+1) buster-swh; urgency=medium
+swh-lister (0.0.45-1~swh1) unstable-swh; urgency=medium
 
-  * Rebuild for buster-swh
+  * New upstream release 0.0.45     - (tagged by Antoine R. Dumont
+    (@ardumont) <antoine.romain.dumont@gmail.com> on 2019-12-10 11:27:17
+    +0100)
+  * Upstream changes:     - v0.0.45     - core: Align listers' task
+    output (hg/git tasks) with expected format     - npm: Align lister's
+    loader output tasks with expected format     - lister/tasks:
+    Standardize return statements
 
- -- Software Heritage autobuilder (on jenkins-debian1) <jenkins@jenkins-debian1.internal.softwareheritage.org>  Fri, 22 Nov 2019 15:35:34 +0000
+ -- Software Heritage autobuilder (on jenkins-debian1) <jenkins@jenkins-debian1.internal.softwareheritage.org>  Tue, 10 Dec 2019 10:32:45 +0000
 
 swh-lister (0.0.44-1~swh1) unstable-swh; urgency=medium
 

@@ -20,13 +20,13 @@ def list_gitlab_incremental(**lister_args):
     lister = GitLabLister(**lister_args)
     total_pages = lister.get_pages_information()[1]
     # stopping as soon as existing origins for that instance are detected
-    lister.run(min_bound=1, max_bound=total_pages, check_existence=True)
+    return lister.run(min_bound=1, max_bound=total_pages, check_existence=True)
 
 
 @shared_task(name=__name__ + '.RangeGitLabLister')
 def _range_gitlab_lister(start, end, **lister_args):
     lister = GitLabLister(**lister_args)
-    lister.run(min_bound=start, max_bound=end)
+    return lister.run(min_bound=start, max_bound=end)
 
 
 @shared_task(name=__name__ + '.FullGitLabRelister', bind=True)
@@ -43,6 +43,7 @@ def list_gitlab_full(self, **lister_args):
         promise.save()
     except (NotImplementedError, AttributeError):
         self.log.info('Unable to call save_group with current result backend.')
+    # FIXME: what to do in terms of return here?
     return promise.id
 
 

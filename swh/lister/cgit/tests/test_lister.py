@@ -57,14 +57,14 @@ def test_lister_run(requests_mock_datadir, swh_listers):
         assert row['type'] == 'load-git'
         # arguments check
         args = row['arguments']['args']
-        assert len(args) == 1
-
-        url = args[0]
-        assert url.startswith('https://git.tizen')
+        assert len(args) == 0
 
         # kwargs
         kwargs = row['arguments']['kwargs']
-        assert kwargs == {}
+        assert len(kwargs) == 1
+        url = kwargs['url']
+        assert url.startswith('https://git.tizen')
+
         assert row['policy'] == 'recurring'
         assert row['priority'] is None
 

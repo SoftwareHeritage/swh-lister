@@ -2,8 +2,6 @@
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
 
-from urllib.parse import quote
-
 from swh.lister.core.indexing_lister import IndexingHttpLister
 from swh.lister.npm.models import NpmModel
 from swh.scheduler.utils import create_task_dict
@@ -36,13 +34,13 @@ class NpmListerBase(IndexingHttpLister):
         """(Override) Transform from npm package name to model
 
         """
-        package_url, package_metadata_url = self._compute_urls(repo_name)
+        package_url = 'https://www.npmjs.com/package/%s' % repo_name
         return {
             'uid': repo_name,
             'indexable': repo_name,
             'name': repo_name,
             'full_name': repo_name,
-            'html_url': package_metadata_url,
+            'html_url': package_url,
             'origin_url': package_url,
             'origin_type': 'npm',
         }
@@ -57,12 +55,8 @@ class NpmListerBase(IndexingHttpLister):
         """
         task_type = 'load-%s' % origin_type
         task_policy = self.config['loading_task_policy']
-        package_name = kwargs.get('name')
-        package_metadata_url = kwargs.get('html_url')
         return create_task_dict(task_type, task_policy,
-                                package_name=package_name,
-                                package_url=origin_url,
-                                package_metadata_url=package_metadata_url)
+                                url=origin_url)
 
     def request_headers(self):
         """(Override) Set requests headers to send when querying the npm
@@ -72,16 +66,6 @@ class NpmListerBase(IndexingHttpLister):
         headers = super().request_headers()
         headers['Accept'] = 'application/json'
         return headers
-
-    def _compute_urls(self, repo_name):
-        """Return a tuple (package_url, package_metadata_url)
-        """
-        return (
-            'https://www.npmjs.com/package/%s' % repo_name,
-            # package metadata url needs to be escaped otherwise some requests
-            # may fail (for instance when a package name contains '/')
-            '%s/%s' % (self.url, quote(repo_name, safe=''))
-        )
 
     def string_pattern_check(self, inner, lower, upper=None):
         """ (Override) Inhibit the effect of that method as packages indices

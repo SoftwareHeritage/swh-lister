@@ -66,12 +66,10 @@ def check_tasks(tasks: List[Any]):
 
         # kwargs
         kwargs = row['arguments']['kwargs']
-        assert len(kwargs) == 3
-        package_name = kwargs['package_name']
-        package_url = kwargs['package_url']
-        assert package_url == 'https://www.npmjs.com/package/%s' % package_name
-        meta_url = kwargs['package_metadata_url']
-        assert meta_url == 'https://replicate.npmjs.com/%s' % package_name
+        assert len(kwargs) == 1
+        package_url = kwargs['url']
+        package_name = package_url.split('/')[-1]
+        assert package_url == f'https://www.npmjs.com/package/{package_name}'
 
         assert row['policy'] == 'recurring'
         assert row['priority'] is None

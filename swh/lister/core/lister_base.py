@@ -1,4 +1,4 @@
-# Copyright (C) 2015-2018 the Software Heritage developers
+# Copyright (C) 2015-2019 the Software Heritage developers
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
 
@@ -13,7 +13,7 @@ import time
 
 from sqlalchemy import create_engine, func
 from sqlalchemy.orm import sessionmaker
-from typing import Any, Type, Union
+from typing import Any, Dict, Type, Union
 
 from swh.core import config
 from swh.scheduler import get_scheduler, utils
@@ -376,7 +376,8 @@ class ListerBase(abc.ABC, config.SWHConfig):
 
         return sql_repo
 
-    def task_dict(self, origin_type, origin_url, **kwargs):
+    def task_dict(self, origin_type: str,
+                  origin_url: str, **kwargs) -> Dict[str, Any]:
         """Return special dict format for the tasks list
 
         Args:
@@ -390,7 +391,7 @@ class ListerBase(abc.ABC, config.SWHConfig):
         _policy = kwargs.get('policy', 'recurring')
         priority = kwargs.get('priority')
         kw = {'priority': priority} if priority else {}
-        return utils.create_task_dict(_type, _policy, origin_url, **kw)
+        return utils.create_task_dict(_type, _policy, url=origin_url, **kw)
 
     def string_pattern_check(self, a, b, c=None):
         """When comparing indexable types in is_within_bounds, complex strings
