@@ -91,6 +91,7 @@ swh/lister/debian/tasks.py
 swh/lister/debian/utils.py
 swh/lister/debian/tests/__init__.py
 swh/lister/debian/tests/conftest.py
+swh/lister/debian/tests/test_init.py
 swh/lister/debian/tests/test_lister.py
 swh/lister/debian/tests/test_models.py
 swh/lister/debian/tests/test_tasks.py
