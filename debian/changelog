@@ -1,3 +1,14 @@
+swh-lister (0.0.46-1~swh1) unstable-swh; urgency=medium
+
+  * New upstream release 0.0.46     - (tagged by Antoine R. Dumont
+    (@ardumont) <antoine.romain.dumont@gmail.com> on 2019-12-19 14:09:45
+    +0100)
+  * Upstream changes:     - v0.0.46     - lister.debian: Make debian
+    init step idempotent and up-to-date     - lister_base: Split into
+    chunks the tasks prior to creation
+
+ -- Software Heritage autobuilder (on jenkins-debian1) <jenkins@jenkins-debian1.internal.softwareheritage.org>  Thu, 19 Dec 2019 13:16:45 +0000
+
 swh-lister (0.0.45-1~swh1) unstable-swh; urgency=medium
 
   * New upstream release 0.0.45     - (tagged by Antoine R. Dumont
