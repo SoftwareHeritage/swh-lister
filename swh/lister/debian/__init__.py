@@ -3,46 +3,62 @@
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
 
+import logging
+
 from typing import Any, List, Mapping
+
+
+logger = logging.getLogger(__name__)
 
 
 def debian_init(db_engine,
                 override_conf: Mapping[str, Any] = {},
-                distributions: List[str] = ['stretch', 'buster'],
-                area_names: List[str] = ['main', 'contrib', 'non-free']):
+                distribution_name: str = 'Debian',
+                suites: List[str] = ['stretch', 'buster', 'bullseye'],
+                components: List[str] = ['main', 'contrib', 'non-free']):
     """Initialize the debian data model.
 
     Args:
         db_engine: SQLAlchemy manipulation database object
         override_conf: Override conf to pass to instantiate a lister
-        distributions: Default distribution to build
-
+        distribution_name: Distribution to initialize
+        suites: Default suites to register with the lister
+        components: Default components to register per suite
 
     """
-    distribution_name = 'Debian'
     from swh.lister.debian.models import Distribution, Area
     from sqlalchemy.orm import sessionmaker
     db_session = sessionmaker(bind=db_engine)()
-
-    existing_distrib = db_session \
-        .query(Distribution) \
+    distrib = db_session.query(Distribution) \
         .filter(Distribution.name == distribution_name) \
         .one_or_none()
-    if not existing_distrib:
-        distrib = Distribution(name=distribution_name,
-                               type='deb',
-                               mirror_uri='http://deb.debian.org/debian/')
+
+    if distrib is None:
+        distrib = Distribution(
+            name=distribution_name, type='deb',
+            mirror_uri='http://deb.debian.org/debian/'
+        )
         db_session.add(distrib)
 
-        for distribution_name in distributions:
-            for area_name in area_names:
-                area = Area(
-                    name='%s/%s' % (distribution_name, area_name),
-                    distribution=distrib,
-                )
-                db_session.add(area)
+    # Check the existing
+    existing_area = db_session.query(Area) \
+        .filter(Area.distribution == distrib) \
+        .all()
+    existing_area = set([a.name for a in existing_area])
 
-        db_session.commit()
+    logger.debug('Area already known: %s', ', '.join(existing_area))
+
+    # Create only the new ones
+    for suite in suites:
+        for component in components:
+            area_name = f'{suite}/{component}'
+            if area_name in existing_area:
+                logger.debug("Area '%s' already set, skipping", area_name)
+                continue
+            area = Area(name=area_name, distribution=distrib)
+            db_session.add(area)
+
+    db_session.commit()
     db_session.close()
 
 
