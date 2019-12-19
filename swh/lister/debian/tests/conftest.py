@@ -19,9 +19,9 @@ def lister_debian(swh_listers):
     lister = swh_listers['debian']
 
     # Initialize the debian data model
-    debian_init(lister.db_engine,
-                distributions=['stretch'],
-                area_names=['main', 'contrib'])
+    debian_init(
+        lister.db_engine, suites=['stretch'], components=['main', 'contrib']
+    )
 
     # Add the load-deb-package in the scheduler backend
     lister.scheduler.create_task_type({
