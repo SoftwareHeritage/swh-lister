@@ -1,3 +1,9 @@
+swh-lister (0.0.47-1~swh1~bpo10+1) buster-swh; urgency=medium
+
+  * Rebuild for buster-swh
+
+ -- Software Heritage autobuilder (on jenkins-debian1) <jenkins@jenkins-debian1.internal.softwareheritage.org>  Thu, 09 Jan 2020 09:38:31 +0000
+
 swh-lister (0.0.47-1~swh1) unstable-swh; urgency=medium
 
   * New upstream release 0.0.47     - (tagged by Antoine R. Dumont
