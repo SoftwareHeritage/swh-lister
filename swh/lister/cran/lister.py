@@ -28,8 +28,11 @@ class CRANLister(SimpleLister):
         """Return task format dict. This creates tasks with args and kwargs
         set, for example::
 
-            args: ['package', 'https://cran.r-project.org/...', 'version']
-            kwargs: {}
+            args: []
+            kwargs: {
+                'url': 'https://cran.r-project.org/...',
+                'version': '0.0.1'
+            }
 
         """
         policy = kwargs.get('policy', 'oneshot')
