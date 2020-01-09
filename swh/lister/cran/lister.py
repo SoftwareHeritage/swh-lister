@@ -33,13 +33,11 @@ class CRANLister(SimpleLister):
 
         """
         policy = kwargs.get('policy', 'oneshot')
-        package = kwargs.get('name')
         version = kwargs.get('version')
         assert origin_type == 'tar'
         return create_task_dict(
-            'load-archive-files',
-            policy, package, origin_url, version,
-            retries_left=3,
+            'load-cran', policy,
+            url=origin_url, version=version, retries_left=3
         )
 
     def safely_issue_request(self, identifier):
