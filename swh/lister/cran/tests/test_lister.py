@@ -1,4 +1,4 @@
-# Copyright (C) 2019 The Software Heritage developers
+# Copyright (C) 2019-2020 The Software Heritage developers
 # See the AUTHORS file at the top-level directory of this distribution
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
@@ -28,8 +28,8 @@ def test_cran_compute_package_url_failure():
 
 
 @patch('swh.lister.cran.lister.read_cran_data')
-def test_cran_lister_cran(mock_cran, datadir, swh_listers):
-    lister = swh_listers['cran']
+def test_cran_lister_cran(mock_cran, datadir, lister_cran):
+    lister = lister_cran
 
     with open(path.join(datadir, 'list-r-packages.json')) as f:
         data = json.loads(f.read())
@@ -39,27 +39,19 @@ def test_cran_lister_cran(mock_cran, datadir, swh_listers):
 
     lister.run()
 
-    r = lister.scheduler.search_tasks(task_type='load-archive-files')
+    r = lister.scheduler.search_tasks(task_type='load-cran')
     assert len(r) == 6
 
     for row in r:
-        assert row['type'] == 'load-archive-files'
+        assert row['type'] == 'load-cran'
         # arguments check
         args = row['arguments']['args']
-        assert len(args) == 3
-        # ['SeleMix',
-        #  'https://cran.r-project.org/src/contrib/SeleMix_1.0.1.tar.gz',
-        #  '1.0.1']
-
-        package = args[0]
-        url = args[1]
-        version = args[2]
-
-        assert url == compute_package_url(
-            {'Package': package, 'Version': version})
+        assert len(args) == 0
 
         # kwargs
         kwargs = row['arguments']['kwargs']
-        assert kwargs == {}
+        assert len(kwargs) == 2
+        assert set(kwargs.keys()) == {'url', 'version'}
 
         assert row['policy'] == 'oneshot'
+        assert row['retries_left'] == 3
