@@ -1,3 +1,13 @@
+swh-lister (0.0.47-1~swh1) unstable-swh; urgency=medium
+
+  * New upstream release 0.0.47     - (tagged by Antoine R. Dumont
+    (@ardumont) <antoine.romain.dumont@gmail.com> on 2020-01-09 10:26:18
+    +0100)
+  * Upstream changes:     - v0.0.47     - cran.lister: Align loading
+    tasks' with loader's expectation
+
+ -- Software Heritage autobuilder (on jenkins-debian1) <jenkins@jenkins-debian1.internal.softwareheritage.org>  Thu, 09 Jan 2020 09:34:26 +0000
+
 swh-lister (0.0.46-1~swh1) unstable-swh; urgency=medium
 
   * New upstream release 0.0.46     - (tagged by Antoine R. Dumont
