@@ -9,22 +9,25 @@ import pytest
 from os import path
 from unittest.mock import patch
 
-from swh.lister.cran.lister import compute_package_url
+from swh.lister.cran.lister import compute_origin_urls, CRAN_MIRROR
 
 
-def test_cran_compute_package_url():
-    url = compute_package_url({'Package': 'something', 'Version': '0.0.1'})
+def test_cran_compute_origin_urls():
+    pack = 'something'
+    vers = '0.0.1'
+    origin_url, artifact_url = compute_origin_urls({
+        'Package': pack,
+        'Version': vers,
+    })
 
-    assert url == 'https://cran.r-project.org/src/contrib/%s_%s.tar.gz' % (
-        'something',
-        '0.0.1',
-    )
+    assert origin_url == f'{CRAN_MIRROR}/package={pack}'
+    assert artifact_url == f'{CRAN_MIRROR}/src/contrib/{pack}_{vers}.tar.gz'
 
 
-def test_cran_compute_package_url_failure():
+def test_cran_compute_origin_urls_failure():
     for incomplete_repo in [{'Version': '0.0.1'}, {'Package': 'package'}, {}]:
         with pytest.raises(KeyError):
-            compute_package_url(incomplete_repo)
+            compute_origin_urls(incomplete_repo)
 
 
 @patch('swh.lister.cran.lister.read_cran_data')
@@ -51,7 +54,12 @@ def test_cran_lister_cran(mock_cran, datadir, lister_cran):
         # kwargs
         kwargs = row['arguments']['kwargs']
         assert len(kwargs) == 2
-        assert set(kwargs.keys()) == {'url', 'version'}
+        assert set(kwargs.keys()) == {'url', 'artifacts'}
+
+        artifacts = kwargs['artifacts']
+        assert len(artifacts) == 1
+
+        assert set(artifacts[0].keys()) == {'url', 'version'}
 
         assert row['policy'] == 'oneshot'
         assert row['retries_left'] == 3
