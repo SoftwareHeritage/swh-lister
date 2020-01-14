@@ -55,3 +55,10 @@ def test_cran_lister_cran(mock_cran, datadir, lister_cran):
 
         assert row['policy'] == 'oneshot'
         assert row['retries_left'] == 3
+
+        origin_url = kwargs['url']
+        record = lister.db_session \
+            .query(lister.MODEL) \
+            .filter(origin_url == origin_url).first()
+        assert record
+        assert record.uid == f'{record.name}-{record.version}'

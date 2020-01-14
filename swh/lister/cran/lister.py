@@ -97,11 +97,12 @@ class CRANLister(SimpleLister):
         logger.debug('repo: %s', repo)
         project_url = compute_package_url(repo)
         package = repo['Package']
+        version = repo['Version']
         return {
-            'uid': package,
+            'uid': f'{package}-{version}',
             'name': package,
             'full_name': repo['Title'],
-            'version': repo['Version'],
+            'version': version,
             'html_url': project_url,
             'origin_url': project_url,
             'origin_type': 'tar',
