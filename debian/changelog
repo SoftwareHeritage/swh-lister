@@ -1,3 +1,15 @@
+swh-lister (0.0.48-1~swh1) unstable-swh; urgency=medium
+
+  * New upstream release 0.0.48     - (tagged by Antoine R. Dumont
+    (@ardumont) <antoine.romain.dumont@gmail.com> on 2020-01-16 13:56:12
+    +0100)
+  * Upstream changes:     - v0.0.48     - cran.lister: Use cran's
+    canonical url for origin url     - cran.lister: Version uid so we
+    can list new package versions     - cran.lister: Adapt docstring
+    sample accordingly
+
+ -- Software Heritage autobuilder (on jenkins-debian1) <jenkins@jenkins-debian1.internal.softwareheritage.org>  Thu, 16 Jan 2020 13:03:54 +0000
+
 swh-lister (0.0.47-1~swh1) unstable-swh; urgency=medium
 
   * New upstream release 0.0.47     - (tagged by Antoine R. Dumont
