@@ -8,7 +8,7 @@ import logging
 import pkg_resources
 import subprocess
 
-from typing import List, Mapping
+from typing import List, Mapping, Tuple
 
 from swh.lister.cran.models import CRANModel
 
@@ -19,25 +19,39 @@ from swh.scheduler.utils import create_task_dict
 logger = logging.getLogger(__name__)
 
 
+CRAN_MIRROR = 'https://cran.r-project.org'
+
+
 class CRANLister(SimpleLister):
     MODEL = CRANModel
     LISTER_NAME = 'cran'
     instance = 'cran'
 
-    def task_dict(self, origin_type, origin_url, **kwargs):
+    def task_dict(self, origin_type, origin_url, version=None, html_url=None,
+                  policy=None, **kwargs):
         """Return task format dict. This creates tasks with args and kwargs
         set, for example::
 
-            args: ['package', 'https://cran.r-project.org/...', 'version']
-            kwargs: {}
+            args: []
+            kwargs: {
+                'url': 'https://cran.r-project.org/Packages/<package>...',
+                'artifacts': [{
+                    'url': 'https://cran.r-project.org/...',
+                    'version': '0.0.1',
+                }]
+            }
 
         """
-        policy = kwargs.get('policy', 'oneshot')
-        version = kwargs.get('version')
+        if not policy:
+            policy = 'oneshot'
+        artifact_url = html_url
         assert origin_type == 'tar'
         return create_task_dict(
             'load-cran', policy,
-            url=origin_url, version=version, retries_left=3
+            url=origin_url, artifacts=[{
+                'url': artifact_url,
+                'version': version
+            }], retries_left=3
         )
 
     def safely_issue_request(self, identifier):
@@ -92,15 +106,16 @@ class CRANLister(SimpleLister):
 
         """
         logger.debug('repo: %s', repo)
-        project_url = compute_package_url(repo)
+        origin_url, artifact_url = compute_origin_urls(repo)
         package = repo['Package']
+        version = repo['Version']
         return {
-            'uid': package,
+            'uid': f'{package}-{version}',
             'name': package,
             'full_name': repo['Title'],
-            'version': repo['Version'],
-            'html_url': project_url,
-            'origin_url': project_url,
+            'version': version,
+            'html_url': artifact_url,
+            'origin_url': origin_url,
             'origin_type': 'tar',
         }
 
@@ -116,15 +131,18 @@ def read_cran_data() -> List[Mapping[str, str]]:
     return json.loads(response.stdout.decode('utf-8'))
 
 
-def compute_package_url(repo: Mapping[str, str]) -> str:
+def compute_origin_urls(repo: Mapping[str, str]) -> Tuple[str, str]:
     """Compute the package url from the repo dict.
 
     Args:
         repo: dict with key 'Package', 'Version'
 
     Returns:
-        the package url
+        the tuple project url, artifact url
 
     """
-    return 'https://cran.r-project.org/src/contrib' \
-        '/{Package}_{Version}.tar.gz'.format(**repo)
+    package = repo['Package']
+    version = repo['Version']
+    origin_url = f'{CRAN_MIRROR}/package={package}'
+    artifact_url = f'{CRAN_MIRROR}/src/contrib/{package}_{version}.tar.gz'
+    return origin_url, artifact_url
