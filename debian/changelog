@@ -1,3 +1,13 @@
+swh-lister (0.0.49-1~swh1) unstable-swh; urgency=medium
+
+  * New upstream release 0.0.49     - (tagged by Antoine R. Dumont
+    (@ardumont) <antoine.romain.dumont@gmail.com> on 2020-01-17 14:20:35
+    +0100)
+  * Upstream changes:     - v0.0.49     - github.lister: Use Retry-After
+    header when rate limit reached
+
+ -- Software Heritage autobuilder (on jenkins-debian1) <jenkins@jenkins-debian1.internal.softwareheritage.org>  Fri, 17 Jan 2020 13:27:56 +0000
+
 swh-lister (0.0.48-1~swh1) unstable-swh; urgency=medium
 
   * New upstream release 0.0.48     - (tagged by Antoine R. Dumont
