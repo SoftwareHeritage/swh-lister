@@ -57,25 +57,25 @@ class ListerHttpTransport(abc.ABC):
         lister's instance name, which value is expected to be a list of
         credential structures (typically a couple username/password).
 
-        For example:
+        For example::
 
-        credentials:
-          github:  # github lister
-            github:  # has only one instance (so far)
-            - username: some
-              password: somekey
-            - username: one
-              password: onekey
-            - ...
-          gitlab:  # gitlab lister
-            riseup:  # has many instances
-            - username: someone
-              password: ...
-            - ...
-            gitlab:
-            - username: someone
-              password: ...
-            - ...
+            credentials:
+              github:  # github lister
+                github:  # has only one instance (so far)
+                  - username: some
+                    password: somekey
+                  - username: one
+                    password: onekey
+                  - ...
+                gitlab:  # gitlab lister
+                  riseup:  # has many instances
+                    - username: someone
+                      password: ...
+                    - ...
+                  gitlab:
+                    - username: someone
+                      password: ...
+                    - ...
 
         Returns:
             list of credential dicts for the current lister.

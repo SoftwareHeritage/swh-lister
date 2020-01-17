@@ -14,12 +14,11 @@ Overview
 
 .. toctree::
    :maxdepth: 2
-   :caption: Overview:
    :titlesonly:
 
 
-   lister-tutorial
-   run-lister-tutorial
+   tutorial
+   run_a_new_lister
 
 
 Reference Documentation
