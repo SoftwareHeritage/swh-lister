@@ -1,10 +1,9 @@
-# Copyright (C) 2017-2019 The Software Heritage developers
+# Copyright (C) 2017-2020 The Software Heritage developers
 # See the AUTHORS file at the top-level directory of this distribution
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
 
 import re
-import time
 
 from typing import Any
 
@@ -39,8 +38,7 @@ class GitHubLister(IndexingHttpLister):
             return False, 0
         reqs_remaining = int(x_rate_limit_remaining)
         if response.status_code == 403 and reqs_remaining == 0:
-            reset_at = int(response.headers['X-RateLimit-Reset'])
-            delay = min(reset_at - time.time(), 3600)
+            delay = int(response.headers['Retry-After'])
             return True, delay
         return False, 0
 

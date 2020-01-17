@@ -1,4 +1,4 @@
-# Copyright (C) 2017-2019 The Software Heritage developers
+# Copyright (C) 2017-2020 The Software Heritage developers
 # See the AUTHORS file at the top-level directory of this distribution
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
@@ -7,8 +7,6 @@ import re
 import unittest
 
 import requests_mock
-
-from datetime import datetime, timedelta
 
 from swh.lister.core.tests.test_lister import HttpListerTester
 from swh.lister.github.lister import GitHubLister
@@ -45,8 +43,7 @@ class GitHubListerTester(HttpListerTester, unittest.TestCase):
         self.rate_limit += 1
         context.status_code = 403
         context.headers['X-RateLimit-Remaining'] = '0'
-        one_second = int((datetime.now() + timedelta(seconds=1.5)).timestamp())
-        context.headers['X-RateLimit-Reset'] = str(one_second)
+        context.headers['Retry-After'] = '1'   # 1 second
         return '{"error":"dummy"}'
 
     @requests_mock.Mocker()
