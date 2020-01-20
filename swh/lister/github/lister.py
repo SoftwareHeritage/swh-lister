@@ -49,7 +49,8 @@ class GitHubLister(IndexingHttpLister):
 
     def transport_response_simplified(self, response):
         repos = response.json()
-        return [self.get_model_from_repo(repo) for repo in repos]
+        return [self.get_model_from_repo(repo)
+                for repo in repos if repo and 'id' in repo]
 
     def request_headers(self):
         """(Override) Set requests headers to send when querying the GitHub API
