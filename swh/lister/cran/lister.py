@@ -70,29 +70,20 @@ class CRANLister(SimpleLister):
            containing data about the R packages.
 
         Returns:
-            List of Dict about r packages. For example:
-
-            .. code-block:: python
+            List of Dict about R packages. For example::
 
                 [
                     {
                         'Package': 'A3',
                         'Version': '1.0.0',
-                        'Title':
-                            'Accurate, Adaptable, and Accessible Error Metrics
-                             for Predictive\nModels',
-                        'Description':
-                            'Supplies tools for tabulating and analyzing the
-                             results of predictive models. The methods employed
-                             are ... '
+                        'Title': 'A3 package',
+                        'Description': ...
                     },
                     {
                         'Package': 'abbyyR',
                         'Version': '0.5.4',
-                        'Title':
-                            'Access to Abbyy OCR (OCR) API',
-                        'Description': 'Get text from images of text using
-                                        Abbyy Cloud Optical Character\n ...'
+                        'Title': 'Access to Abbyy OCR (OCR) API',
+                        'Description': ...'
                     },
                     ...
                 ]

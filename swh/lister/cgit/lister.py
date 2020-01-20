@@ -33,19 +33,21 @@ class CGitLister(ListerBase):
     If several "Clone" urls are provided, prefer the http/https one, if
     any, otherwise fall bak to the first one.
 
-    A loader task is created for each git repository:
+    A loader task is created for each git repository::
 
-    Task:
-        Type: load-git
-        Policy: recurring
-        Args:
-            <git_clonable_url>
+        Task:
+            Type: load-git
+            Policy: recurring
+            Args:
+                <git_clonable_url>
 
-    Example:
-        Type: load-git
-        Policy: recurring
-        Args:
-            'https://git.savannah.gnu.org/git/elisp-es.git'
+    Example::
+
+        Task:
+            Type: load-git
+            Policy: recurring
+            Args:
+                'https://git.savannah.gnu.org/git/elisp-es.git'
     """
     MODEL = CGitModel
     DEFAULT_URL = 'https://git.savannah.gnu.org/cgit/'

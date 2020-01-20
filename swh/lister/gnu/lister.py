@@ -77,16 +77,19 @@ class GNULister(SimpleLister):
             response: Unused
 
         Returns:
-            List of packages name, url, last modification time
+            List of packages name, url, last modification time::
 
-            .. code-block:: python
                 [
-                    {'name': '3dldf',
-                     'url': 'https://ftp.gnu.org/gnu/3dldf/',
-                     'time_modified': '2003-12-09T20:43:20+00:00'},
-                    {'name': '8sync',
-                     'url': 'https://ftp.gnu.org/gnu/8sync/',
-                     'time_modified': '2016-12-06T02:37:10+00:00'},
+                    {
+                        'name': '3dldf',
+                        'url': 'https://ftp.gnu.org/gnu/3dldf/',
+                        'time_modified': '2003-12-09T20:43:20+00:00'
+                    },
+                    {
+                        'name': '8sync',
+                        'url': 'https://ftp.gnu.org/gnu/8sync/',
+                        'time_modified': '2016-12-06T02:37:10+00:00'
+                    },
                     ...
                 ]
 

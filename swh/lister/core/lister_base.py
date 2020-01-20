@@ -1,4 +1,4 @@
-# Copyright (C) 2015-2019 the Software Heritage developers
+# Copyright (C) 2015-2020 the Software Heritage developers
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
 
@@ -13,7 +13,7 @@ import time
 
 from sqlalchemy import create_engine, func
 from sqlalchemy.orm import sessionmaker
-from typing import Any, Dict, Type, Union
+from typing import Any, Dict, List, Type, Union
 
 from swh.core import config
 from swh.core.utils import grouper
@@ -361,9 +361,11 @@ class ListerBase(abc.ABC, config.SWHConfig):
 
         Args:
             model_dict: dictionary mapping model keys to values
+
         Returns:
             new or updated sqlalchemy.ext.declarative.declarative_base
-                object associated with the injection
+            object associated with the injection
+
         """
         sql_repo = self.db_query_equal('uid', model_dict['uid'])
 
@@ -421,7 +423,7 @@ class ListerBase(abc.ABC, config.SWHConfig):
                 logger.debug(a_pattern)
                 raise TypeError('incomparable string patterns detected')
 
-    def inject_repo_data_into_db(self, models_list):
+    def inject_repo_data_into_db(self, models_list: List[Dict]) -> Dict:
         """Inject data into the db.
 
         Args:
@@ -429,24 +431,27 @@ class ListerBase(abc.ABC, config.SWHConfig):
                         for each repo to be injected
         Returns:
             dict of uid:sql_repo pairs
+
         """
         injected_repos = {}
         for m in models_list:
             injected_repos[m['uid']] = self.db_inject_repo(m)
         return injected_repos
 
-    def schedule_missing_tasks(self, models_list, injected_repos):
-        """Find any newly created db entries that do not have been scheduled
-           yet.
+    def schedule_missing_tasks(
+            self, models_list: List[Dict], injected_repos: Dict) -> None:
+        """Schedule any newly created db entries that do not have been
+           scheduled yet.
 
         Args:
-            models_list ([Model]): List of dicts mapping keys in the db model
-                                   for each repo
-            injected_repos ([dict]): Dict of uid:sql_repo pairs that have just
+            models_list: List of dicts mapping keys in the db model
+                         for each repo
+            injected_repos: Dict of uid:sql_repo pairs that have just
                             been created
 
         Returns:
-            Nothing. Modifies injected_repos.
+            Nothing. (Note that it Modifies injected_repos to set the new
+            task_id).
 
         """
         tasks = {}
