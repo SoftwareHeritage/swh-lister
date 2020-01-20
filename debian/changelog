@@ -1,3 +1,14 @@
+swh-lister (0.0.50-1~swh1) unstable-swh; urgency=medium
+
+  * New upstream release 0.0.50     - (tagged by Antoine R. Dumont
+    (@ardumont) <antoine.romain.dumont@gmail.com> on 2020-01-20 10:44:57
+    +0100)
+  * Upstream changes:     - v0.0.50     - github.lister: Filter out
+    partial repositories which break listing     - docs: Fix sphinx
+    warnings     - core.lister_base: Improve slightly docs and types
+
+ -- Software Heritage autobuilder (on jenkins-debian1) <jenkins@jenkins-debian1.internal.softwareheritage.org>  Mon, 20 Jan 2020 09:51:23 +0000
+
 swh-lister (0.0.49-1~swh1) unstable-swh; urgency=medium
 
   * New upstream release 0.0.49     - (tagged by Antoine R. Dumont
