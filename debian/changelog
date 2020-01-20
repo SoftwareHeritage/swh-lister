@@ -1,8 +1,13 @@
-swh-lister (0.0.49-1~swh1~bpo10+1) buster-swh; urgency=medium
+swh-lister (0.0.50-1~swh1) unstable-swh; urgency=medium
 
-  * Rebuild for buster-swh
+  * New upstream release 0.0.50     - (tagged by Antoine R. Dumont
+    (@ardumont) <antoine.romain.dumont@gmail.com> on 2020-01-20 10:44:57
+    +0100)
+  * Upstream changes:     - v0.0.50     - github.lister: Filter out
+    partial repositories which break listing     - docs: Fix sphinx
+    warnings     - core.lister_base: Improve slightly docs and types
 
- -- Software Heritage autobuilder (on jenkins-debian1) <jenkins@jenkins-debian1.internal.softwareheritage.org>  Fri, 17 Jan 2020 13:32:00 +0000
+ -- Software Heritage autobuilder (on jenkins-debian1) <jenkins@jenkins-debian1.internal.softwareheritage.org>  Mon, 20 Jan 2020 09:51:23 +0000
 
 swh-lister (0.0.49-1~swh1) unstable-swh; urgency=medium
 

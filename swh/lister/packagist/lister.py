@@ -33,21 +33,23 @@ class PackagistLister(ListerOnePageApiTransport, SimpleLister):
         variable `PAGE`, to receive a list of all the package names
         present in the Packagist package manager. Iterates over all the
         packages and constructs the metadata url of the package from
-        the name of the package and creates a loading task.
+        the name of the package and creates a loading task::
 
-        Task:
-            Type: load-packagist
-            Policy: recurring
-            Args:
-                <package_name>
-                <package_metadata_url>
+            Task:
+                Type: load-packagist
+                Policy: recurring
+                Args:
+                    <package_name>
+                    <package_metadata_url>
 
-        Example:
-            Type: load-packagist
-            Policy: recurring
-            Args:
-                'hypejunction/hypegamemechanics'
-                'https://repo.packagist.org/p/hypejunction/hypegamemechanics.json'
+        Example::
+
+            Task:
+                Type: load-packagist
+                Policy: recurring
+                Args:
+                    'hypejunction/hypegamemechanics'
+                    'https://repo.packagist.org/p/hypejunction/hypegamemechanics.json'
 
     """
     MODEL = PackagistModel
