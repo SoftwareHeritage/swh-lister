@@ -12,6 +12,9 @@ from sqlalchemy import func
 from .lister_transports import ListerHttpTransport
 from .lister_base import ListerBase
 
+from requests import Response
+from typing import Any, Dict, List, Tuple, Optional
+
 logger = logging.getLogger(__name__)
 
 
@@ -55,7 +58,7 @@ class IndexingLister(ListerBase):
     """
 
     @abc.abstractmethod
-    def get_next_target_from_response(self, response):
+    def get_next_target_from_response(self, response: Response):
         """Find the next server endpoint identifier given the entire response.
 
         Implementation of this method depends on the server API spec
@@ -71,7 +74,8 @@ class IndexingLister(ListerBase):
 
     # You probably don't need to override anything below this line.
 
-    def filter_before_inject(self, models_list):
+    def filter_before_inject(
+            self, models_list: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
         """Overrides ListerBase.filter_before_inject
 
         Bounds query results by this Lister's set max_index.
@@ -100,7 +104,9 @@ class IndexingLister(ListerBase):
             retlist = retlist.filter(self.MODEL.indexable <= end)
         return retlist
 
-    def db_partition_indices(self, partition_size):
+    def db_partition_indices(
+            self, partition_size: int
+    ) -> List[Tuple[Optional[int], Optional[int]]]:
         """Describe an index-space compartmentalization of the db table
            in equal sized chunks. This is used to describe min&max bounds for
            parallelizing fetch tasks.
@@ -165,6 +171,7 @@ class IndexingLister(ListerBase):
         t = self.db_session.query(func.min(self.MODEL.indexable)).first()
         if t:
             return t[0]
+        return None
 
     def db_last_index(self):
         """Look in the db for the largest indexable value
@@ -175,8 +182,10 @@ class IndexingLister(ListerBase):
         t = self.db_session.query(func.max(self.MODEL.indexable)).first()
         if t:
             return t[0]
+        return None
 
-    def disable_deleted_repo_tasks(self, start, end, keep_these):
+    def disable_deleted_repo_tasks(
+            self, start, end, keep_these):
         """Disable tasks for repos that no longer exist between start and end.
 
         Args:
@@ -254,6 +263,7 @@ class IndexingLister(ListerBase):
 class IndexingHttpLister(ListerHttpTransport, IndexingLister):
     """Convenience class for ensuring right lookup and init order
         when combining IndexingLister and ListerHttpTransport."""
+
     def __init__(self, url=None, override_config=None):
         IndexingLister.__init__(self, override_config=override_config)
         ListerHttpTransport.__init__(self, url=url)

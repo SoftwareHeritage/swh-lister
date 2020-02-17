@@ -13,7 +13,7 @@ import time
 
 from sqlalchemy import create_engine, func
 from sqlalchemy.orm import sessionmaker
-from typing import Any, Dict, List, Type, Union
+from typing import Any, Dict, List, Type, Union, Optional
 
 from swh.core import config
 from swh.core.utils import grouper
@@ -21,6 +21,7 @@ from swh.scheduler import get_scheduler, utils
 
 from .abstractattribute import AbstractAttribute
 
+from requests import Response
 
 logger = logging.getLogger(__name__)
 
@@ -137,7 +138,8 @@ class ListerBase(abc.ABC, config.SWHConfig):
         """
         pass
 
-    def filter_before_inject(self, models_list):
+    def filter_before_inject(
+            self, models_list: List[Dict]) -> List[Dict]:
         """Filter models_list entries prior to injection in the db.
         This is ran directly after `transport_response_simplified`.
 
@@ -152,7 +154,8 @@ class ListerBase(abc.ABC, config.SWHConfig):
         """
         return models_list
 
-    def do_additional_checks(self, models_list):
+    def do_additional_checks(
+            self, models_list: List[Dict]) -> List[Dict]:
         """Execute some additional checks on the model list (after the
         filtering).
 
@@ -169,7 +172,9 @@ class ListerBase(abc.ABC, config.SWHConfig):
         """
         return models_list
 
-    def is_within_bounds(self, inner, lower=None, upper=None):
+    def is_within_bounds(
+            self, inner: int,
+            lower: Optional[int] = None, upper: Optional[int] = None) -> bool:
         """See if a sortable value is inside the range [lower,upper].
 
         MAY BE OVERRIDDEN, for example if the server indexable* key is
@@ -188,7 +193,7 @@ class ListerBase(abc.ABC, config.SWHConfig):
             if lower is None and upper is None:
                 return True
             elif lower is None:
-                ret = inner <= upper
+                ret = inner <= upper  # type: ignore
             elif upper is None:
                 ret = inner >= lower
             else:
@@ -262,13 +267,13 @@ class ListerBase(abc.ABC, config.SWHConfig):
         """Reset exponential backoff timeout to initial level."""
         self.backoff = self.INITIAL_BACKOFF
 
-    def back_off(self):
+    def back_off(self) -> int:
         """Get next exponential backoff timeout."""
         ret = self.backoff
         self.backoff *= 10
         return ret
 
-    def safely_issue_request(self, identifier):
+    def safely_issue_request(self, identifier: int) -> Optional[Response]:
         """Make network request with retries, rate quotas, and response logs.
 
         Protocol is handled by the implementation of the transport_request
@@ -315,7 +320,7 @@ class ListerBase(abc.ABC, config.SWHConfig):
 
         return r
 
-    def db_query_equal(self, key, value):
+    def db_query_equal(self, key: Any, value: Any):
         """Look in the db for a row with key == value
 
         Args:
@@ -419,7 +424,8 @@ class ListerBase(abc.ABC, config.SWHConfig):
                                '[a-zA-Z0-9]',
                                re.escape(a))
             if (isinstance(b, str) and (re.match(a_pattern, b) is None)
-               or isinstance(c, str) and (re.match(a_pattern, c) is None)):
+                    or isinstance(c, str) and
+                    (re.match(a_pattern, c) is None)):
                 logger.debug(a_pattern)
                 raise TypeError('incomparable string patterns detected')
 
@@ -481,7 +487,7 @@ class ListerBase(abc.ABC, config.SWHConfig):
                 ir, m, _ = tasks[_task_key(task)]
                 ir.task_id = task['id']
 
-    def ingest_data(self, identifier, checks=False):
+    def ingest_data(self, identifier: int, checks: bool = False):
         """The core data fetch sequence. Request server endpoint. Simplify and
             filter response list of repositories. Inject repo information into
             local db. Queue loader tasks for linked repositories.

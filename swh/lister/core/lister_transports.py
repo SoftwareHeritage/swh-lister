@@ -12,7 +12,8 @@ import logging
 import requests
 import xmltodict
 
-from typing import Optional, Union
+from typing import Optional, Union, Dict, Any
+from requests import Response
 
 from swh.lister import USER_AGENT_TEMPLATE, __version__
 
@@ -39,7 +40,7 @@ class ListerHttpTransport(abc.ABC):
 
     EXPECTED_STATUS_CODES = (200, 429, 403, 404)
 
-    def request_headers(self):
+    def request_headers(self) -> Dict[str, Any]:
         """Returns dictionary of any request headers needed by the server.
 
         MAY BE OVERRIDDEN if request headers are needed.
@@ -97,7 +98,7 @@ class ListerHttpTransport(abc.ABC):
         path = self.PATH_TEMPLATE % identifier
         return self.url + path
 
-    def request_params(self, identifier):
+    def request_params(self, identifier: int) -> Dict[str, Any]:
         """Get the full parameters passed to requests given the
         transport_request identifier.
 
@@ -115,7 +116,8 @@ class ListerHttpTransport(abc.ABC):
             return params
         auth = random.choice(creds) if creds else None
         if auth:
-            params['auth'] = (auth['username'], auth['password'])
+            params['auth'] = (auth['username'],  # type: ignore
+                              auth['password'])
         return params
 
     def transport_quota_check(self, response):
@@ -152,7 +154,8 @@ class ListerHttpTransport(abc.ABC):
         self.session = requests.Session()
         self.lister_version = __version__
 
-    def _transport_action(self, identifier, method='get'):
+    def _transport_action(
+            self, identifier: int, method: str = 'get') -> Response:
         """Permit to ask information to the api prior to actually executing
            query.
 
@@ -176,13 +179,13 @@ class ListerHttpTransport(abc.ABC):
                 raise FetchError(response)
             return response
 
-    def transport_head(self, identifier):
+    def transport_head(self, identifier: int) -> Response:
         """Retrieve head information on api.
 
         """
         return self._transport_action(identifier, method='head')
 
-    def transport_request(self, identifier):
+    def transport_request(self, identifier: int) -> Response:
         """Implements ListerBase.transport_request for HTTP using Requests.
 
         Retrieve get information on api.
@@ -190,7 +193,7 @@ class ListerHttpTransport(abc.ABC):
         """
         return self._transport_action(identifier)
 
-    def transport_response_to_string(self, response):
+    def transport_response_to_string(self, response: Response) -> str:
         """Implements ListerBase.transport_response_to_string for HTTP given
             Requests responses.
         """

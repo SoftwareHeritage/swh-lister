@@ -10,6 +10,8 @@ from swh.lister.core.simple_lister import SimpleLister
 from swh.lister.gnu.models import GNUModel
 from swh.lister.gnu.tree import GNUTree
 
+from typing import Any, Dict, List
+from requests import Response
 
 logger = logging.getLogger(__name__)
 
@@ -58,7 +60,7 @@ class GNULister(SimpleLister):
             retries_left=3,
         )
 
-    def safely_issue_request(self, identifier):
+    def safely_issue_request(self, identifier: int) -> None:
         """Bypass the implementation. It's now the GNUTree which deals with
         querying the gnu mirror.
 
@@ -69,7 +71,7 @@ class GNULister(SimpleLister):
         """
         return None
 
-    def list_packages(self, response):
+    def list_packages(self, response: Response) -> List[Dict[str, Any]]:
         """List the actual gnu origins (package name) with their name, url and
            associated tarballs.
 
@@ -96,7 +98,7 @@ class GNULister(SimpleLister):
         """
         return list(self.gnu_tree.projects.values())
 
-    def get_model_from_repo(self, repo):
+    def get_model_from_repo(self, repo: Dict[str, Any]) -> Dict[str, Any]:
         """Transform from repository representation to model
 
         """

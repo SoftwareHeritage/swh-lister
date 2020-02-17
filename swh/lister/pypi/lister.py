@@ -12,6 +12,9 @@ from swh.scheduler import utils
 from swh.lister.core.simple_lister import SimpleLister
 from swh.lister.core.lister_transports import ListerOnePageApiTransport
 
+from typing import Any, Dict
+from requests import Response
+
 
 class PyPILister(ListerOnePageApiTransport, SimpleLister):
     MODEL = PyPIModel
@@ -23,7 +26,7 @@ class PyPILister(ListerOnePageApiTransport, SimpleLister):
         ListerOnePageApiTransport .__init__(self)
         SimpleLister.__init__(self, override_config=override_config)
 
-    def task_dict(self, origin_type, origin_url, **kwargs):
+    def task_dict(self, origin_type: str, origin_url: str, **kwargs):
         """(Override) Return task format dict
 
         This is overridden from the lister_base as more information is
@@ -35,7 +38,7 @@ class PyPILister(ListerOnePageApiTransport, SimpleLister):
         return utils.create_task_dict(
             _type, _policy, url=origin_url)
 
-    def list_packages(self, response):
+    def list_packages(self, response: Response) -> list:
         """(Override) List the actual pypi origins from the response.
 
         """
@@ -50,7 +53,7 @@ class PyPILister(ListerOnePageApiTransport, SimpleLister):
         """
         return 'https://pypi.org/project/%s/' % repo_name
 
-    def get_model_from_repo(self, repo_name):
+    def get_model_from_repo(self, repo_name: str) -> Dict[str, Any]:
         """(Override) Transform from repository representation to model
 
         """

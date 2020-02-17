@@ -13,7 +13,8 @@ import logging
 from debian.deb822 import Sources
 from sqlalchemy.orm import joinedload, load_only
 from sqlalchemy.schema import CreateTable, DropTable
-from typing import Mapping, Optional
+from typing import Mapping, Optional, Dict, Any
+from requests import Response
 
 from swh.lister.debian.models import (
     AreaSnapshot, Distribution, DistributionSnapshot, Package,
@@ -58,7 +59,7 @@ class DebianLister(ListerHttpTransport, ListerBase):
         self.date = override_config.get('date', date) or datetime.datetime.now(
             tz=datetime.timezone.utc)
 
-    def transport_request(self, identifier):
+    def transport_request(self, identifier) -> Response:
         """Subvert ListerHttpTransport.transport_request, to try several
         index URIs in turn.
 
@@ -94,7 +95,7 @@ class DebianLister(ListerHttpTransport, ListerBase):
         # need to return it here.
         return identifier
 
-    def request_params(self, identifier):
+    def request_params(self, identifier) -> Dict[str, Any]:
         # Enable streaming to allow wrapping the response in the decompressor
         # in transport_response_simplified.
         params = super().request_params(identifier)

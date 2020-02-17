@@ -9,6 +9,9 @@ from urllib3.util import parse_url
 from ..core.page_by_page_lister import PageByPageHttpLister
 from .models import GitLabModel
 
+from typing import Any, Dict, List, Tuple, Union, MutableMapping, Optional
+from requests import Response
+
 
 class GitLabLister(PageByPageHttpLister):
     # Template path expecting an integer that represents the page id
@@ -26,10 +29,10 @@ class GitLabLister(PageByPageHttpLister):
         self.PATH_TEMPLATE = '%s&sort=%s&per_page=%s' % (
             self.PATH_TEMPLATE, sort, per_page)
 
-    def uid(self, repo):
+    def uid(self, repo: Dict[str, Any]) -> str:
         return '%s/%s' % (self.instance, repo['path_with_namespace'])
 
-    def get_model_from_repo(self, repo):
+    def get_model_from_repo(self, repo: Dict[str, Any]) -> Dict[str, Any]:
         return {
             'instance': self.instance,
             'uid': self.uid(repo),
@@ -40,7 +43,8 @@ class GitLabLister(PageByPageHttpLister):
             'origin_type': 'git',
         }
 
-    def transport_quota_check(self, response):
+    def transport_quota_check(self, response: Response
+                              ) -> Tuple[bool, Union[int, float]]:
         """Deal with rate limit if any.
 
         """
@@ -53,18 +57,22 @@ class GitLabLister(PageByPageHttpLister):
                 return True, delay
         return False, 0
 
-    def _get_int(self, headers, key):
+    def _get_int(self, headers: MutableMapping[str, Any],
+                 key: str) -> Optional[int]:
         _val = headers.get(key)
         if _val:
             return int(_val)
+        return None
 
-    def get_next_target_from_response(self, response):
+    def get_next_target_from_response(
+            self, response: Response) -> Optional[int]:
         """Determine the next page identifier.
 
         """
         return self._get_int(response.headers, 'x-next-page')
 
-    def get_pages_information(self):
+    def get_pages_information(self) -> Tuple[Optional[int],
+                                             Optional[int], Optional[int]]:
         """Determine pages information.
 
         """
@@ -77,6 +85,7 @@ class GitLabLister(PageByPageHttpLister):
                 self._get_int(h, 'x-total-pages'),
                 self._get_int(h, 'x-per-page'))
 
-    def transport_response_simplified(self, response):
+    def transport_response_simplified(self, response: Response
+                                      ) -> List[Dict[str, Any]]:
         repos = response.json()
         return [self.get_model_from_repo(repo) for repo in repos]

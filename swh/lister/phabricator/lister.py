@@ -14,6 +14,8 @@ from sqlalchemy import func
 from swh.lister.core.indexing_lister import IndexingHttpLister
 from swh.lister.phabricator.models import PhabricatorModel
 
+from typing import Any, Dict, List, Optional
+from requests import Response
 
 logger = logging.getLogger(__name__)
 
@@ -31,7 +33,7 @@ class PhabricatorLister(IndexingHttpLister):
             instance = urllib.parse.urlparse(self.url).hostname
         self.instance = instance
 
-    def request_params(self, identifier):
+    def request_params(self, identifier: int) -> Dict[str, Any]:
         """Override the default params behavior to retrieve the api token
 
         Credentials are stored as:
@@ -61,7 +63,8 @@ class PhabricatorLister(IndexingHttpLister):
         headers['Accept'] = 'application/json'
         return headers
 
-    def get_model_from_repo(self, repo):
+    def get_model_from_repo(
+            self, repo: Dict[str, Any]) -> Optional[Dict[str, Any]]:
         url = get_repo_url(repo['attachments']['uris']['uris'])
         if url is None:
             return None
@@ -76,12 +79,15 @@ class PhabricatorLister(IndexingHttpLister):
             'instance': self.instance,
         }
 
-    def get_next_target_from_response(self, response):
+    def get_next_target_from_response(
+            self, response: Response) -> Optional[int]:
         body = response.json()['result']['cursor']
         if body['after'] and body['after'] != 'null':
             return int(body['after'])
+        return None
 
-    def transport_response_simplified(self, response):
+    def transport_response_simplified(
+            self, response: Response) -> List[Optional[Dict[str, Any]]]:
         repos = response.json()
         if repos['result'] is None:
             raise ValueError(
@@ -97,7 +103,8 @@ class PhabricatorLister(IndexingHttpLister):
         models_list = [m for m in models_list if m is not None]
         return super().filter_before_inject(models_list)
 
-    def disable_deleted_repo_tasks(self, index, next_index, keep_these):
+    def disable_deleted_repo_tasks(
+            self, index: int, next_index: int, keep_these: str):
         """
         (Overrides) Fix provided index value to avoid:
 
@@ -117,7 +124,7 @@ class PhabricatorLister(IndexingHttpLister):
         return super().disable_deleted_repo_tasks(index, next_index,
                                                   keep_these)
 
-    def db_first_index(self):
+    def db_first_index(self) -> Optional[int]:
         """
         (Overrides) Filter results by Phabricator instance
 
@@ -128,6 +135,7 @@ class PhabricatorLister(IndexingHttpLister):
         t = t.filter(self.MODEL.instance == self.instance).first()
         if t:
             return t[0]
+        return None
 
     def db_last_index(self):
         """
@@ -141,7 +149,7 @@ class PhabricatorLister(IndexingHttpLister):
         if t:
             return t[0]
 
-    def db_query_range(self, start, end):
+    def db_query_range(self, start: int, end: int):
         """
         (Overrides) Filter the results by the Phabricator instance to
         avoid disabling loading tasks for repositories hosted on a
@@ -155,14 +163,14 @@ class PhabricatorLister(IndexingHttpLister):
         return retlist.filter(self.MODEL.instance == self.instance)
 
 
-def get_repo_url(attachments):
+def get_repo_url(attachments: List[Dict[str, Any]]) -> Optional[int]:
     """
     Return url for a hosted repository from its uris attachments according
     to the following priority lists:
     * protocol: https > http
     * identifier: shortname > callsign > id
     """
-    processed_urls = defaultdict(dict)
+    processed_urls = defaultdict(dict)  # type: Dict[str, Any]
     for uri in attachments:
         protocol = uri['fields']['builtin']['protocol']
         url = uri['fields']['uri']['effective']

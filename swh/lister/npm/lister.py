@@ -6,6 +6,9 @@ from swh.lister.core.indexing_lister import IndexingHttpLister
 from swh.lister.npm.models import NpmModel
 from swh.scheduler.utils import create_task_dict
 
+from typing import Any, Dict, Optional, List
+from requests import Response
+
 
 class NpmListerBase(IndexingHttpLister):
     """List packages available in the npm registry in a paginated way
@@ -22,7 +25,7 @@ class NpmListerBase(IndexingHttpLister):
         self.PATH_TEMPLATE += '&limit=%s' % self.per_page
 
     @property
-    def ADDITIONAL_CONFIG(self):
+    def ADDITIONAL_CONFIG(self) -> Dict[str, Any]:
         """(Override) Add extra configuration
 
         """
@@ -30,7 +33,7 @@ class NpmListerBase(IndexingHttpLister):
         default_config['loading_task_policy'] = ('str', 'recurring')
         return default_config
 
-    def get_model_from_repo(self, repo_name):
+    def get_model_from_repo(self, repo_name: str) -> Dict[str, str]:
         """(Override) Transform from npm package name to model
 
         """
@@ -45,7 +48,7 @@ class NpmListerBase(IndexingHttpLister):
             'origin_type': 'npm',
         }
 
-    def task_dict(self, origin_type, origin_url, **kwargs):
+    def task_dict(self, origin_type: str, origin_url: str, **kwargs):
         """(Override) Return task dict for loading a npm package into the
         archive.
 
@@ -58,7 +61,7 @@ class NpmListerBase(IndexingHttpLister):
         return create_task_dict(task_type, task_policy,
                                 url=origin_url)
 
-    def request_headers(self):
+    def request_headers(self) -> Dict[str, Any]:
         """(Override) Set requests headers to send when querying the npm
         registry.
 
@@ -67,7 +70,7 @@ class NpmListerBase(IndexingHttpLister):
         headers['Accept'] = 'application/json'
         return headers
 
-    def string_pattern_check(self, inner, lower, upper=None):
+    def string_pattern_check(self, inner: int, lower: int, upper: int = None):
         """ (Override) Inhibit the effect of that method as packages indices
         correspond to package names and thus do not respect any kind
         of fixed length string pattern
@@ -82,14 +85,16 @@ class NpmLister(NpmListerBase):
     """
     PATH_TEMPLATE = '/_all_docs?startkey="%s"'
 
-    def get_next_target_from_response(self, response):
+    def get_next_target_from_response(
+            self, response: Response) -> Optional[str]:
         """(Override) Get next npm package name to continue the listing
 
         """
         repos = response.json()['rows']
         return repos[-1]['id'] if len(repos) == self.per_page else None
 
-    def transport_response_simplified(self, response):
+    def transport_response_simplified(
+            self, response: Response) -> List[Dict[str, str]]:
         """(Override) Transform npm registry response to list for model manipulation
 
         """
@@ -110,14 +115,16 @@ class NpmIncrementalLister(NpmListerBase):
     def CONFIG_BASE_FILENAME(self):  # noqa: N802
         return 'lister_npm_incremental'
 
-    def get_next_target_from_response(self, response):
+    def get_next_target_from_response(
+            self, response: Response) -> Optional[str]:
         """(Override) Get next npm package name to continue the listing.
 
         """
         repos = response.json()['results']
         return repos[-1]['seq'] if len(repos) == self.per_page else None
 
-    def transport_response_simplified(self, response):
+    def transport_response_simplified(
+            self, response: Response) -> List[Dict[str, str]]:
         """(Override) Transform npm registry response to list for model
         manipulation.
 
@@ -127,7 +134,7 @@ class NpmIncrementalLister(NpmListerBase):
             repos = repos[:-1]
         return [self.get_model_from_repo(repo['id']) for repo in repos]
 
-    def filter_before_inject(self, models_list):
+    def filter_before_inject(self, models_list: List[Dict[str, Any]]):
         """(Override) Filter out documents in the CouchDB database
         not related to a npm package.
 

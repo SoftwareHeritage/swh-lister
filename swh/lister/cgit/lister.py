@@ -8,8 +8,9 @@ from urllib.parse import urlparse, urljoin
 
 from bs4 import BeautifulSoup
 from requests import Session
+# from requests.structures import CaseInsensitiveDict
 from requests.adapters import HTTPAdapter
-
+from typing import Any, Dict, Generator, Union
 from .models import CGitModel
 
 from swh.core.utils import grouper
@@ -54,13 +55,14 @@ class CGitLister(ListerBase):
     LISTER_NAME = 'cgit'
     url_prefix_present = True
 
-    def __init__(self, url=None, instance=None, override_config=None):
+    def __init__(self, url=None, instance=None,
+                 override_config=None):
         """Lister class for CGit repositories.
 
         Args:
-            url (str): main URL of the CGit instance, i.e. url of the index
+            url : main URL of the CGit instance, i.e. url of the index
                 of published git repositories on this instance.
-            instance (str): Name of cgit instance. Defaults to url's hostname
+            instance : Name of cgit instance. Defaults to url's hostname
                 if unset.
 
         """
@@ -79,7 +81,7 @@ class CGitLister(ListerBase):
             'User-Agent': USER_AGENT,
         }
 
-    def run(self):
+    def run(self) -> Dict[str, str]:
         status = 'uneventful'
         total = 0
         for repos in grouper(self.get_repos(), 10):
@@ -94,7 +96,7 @@ class CGitLister(ListerBase):
 
         return {'status': status}
 
-    def get_repos(self):
+    def get_repos(self) -> Generator:
         """Generate git 'project' URLs found on the current CGit server
 
         """
@@ -116,7 +118,7 @@ class CGitLister(ListerBase):
                 # no pager, or no next page
                 next_page = None
 
-    def build_model(self, repo_url):
+    def build_model(self, repo_url: str) -> Union[None, Dict[str, Any]]:
         """Given the URL of a git repo project page on a CGit server,
         return the repo description (dict) suitable for insertion in the db.
         """
@@ -124,7 +126,7 @@ class CGitLister(ListerBase):
         urls = [x['href'] for x in bs.find_all('a', {'rel': 'vcs-git'})]
 
         if not urls:
-            return
+            return None
 
         # look for the http/https url, if any, and use it as origin_url
         for url in urls:
@@ -142,7 +144,7 @@ class CGitLister(ListerBase):
                 'origin_url': origin_url,
                 }
 
-    def get_and_parse(self, url):
+    def get_and_parse(self, url: str) -> BeautifulSoup:
         "Get the given url and parse the retrieved HTML using BeautifulSoup"
         return BeautifulSoup(self.session.get(url).text,
                              features='html.parser')
