@@ -76,7 +76,7 @@ class GitLabLister(PageByPageHttpLister):
         """Determine pages information.
 
         """
-        response = self.transport_head(identifier=1)
+        response = self.transport_head(identifier=1)  # type: ignore
         if not response.ok:
             raise ValueError(
                 'Problem during information fetch: %s' % response.status_code)

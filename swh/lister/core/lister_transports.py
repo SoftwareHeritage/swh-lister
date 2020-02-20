@@ -12,7 +12,7 @@ import logging
 import requests
 import xmltodict
 
-from typing import Optional, Union, Dict, Any
+from typing import Optional, Union, Dict, Any, List
 from requests import Response
 
 from swh.lister import USER_AGENT_TEMPLATE, __version__
@@ -49,7 +49,7 @@ class ListerHttpTransport(abc.ABC):
             'User-Agent': USER_AGENT_TEMPLATE % self.lister_version
         }
 
-    def request_instance_credentials(self):
+    def request_instance_credentials(self) -> List[Dict[str, Any]]:
         """Returns dictionary of any credentials configuration needed by the
         forge instance to list.
 
@@ -82,23 +82,23 @@ class ListerHttpTransport(abc.ABC):
             list of credential dicts for the current lister.
 
         """
-        all_creds = self.config.get('credentials')
+        all_creds = self.config.get('credentials')  # type: ignore
         if not all_creds:
             return []
-        lister_creds = all_creds.get(self.LISTER_NAME, {})
-        creds = lister_creds.get(self.instance, [])
+        lister_creds = all_creds.get(self.LISTER_NAME, {})  # type: ignore
+        creds = lister_creds.get(self.instance, [])  # type: ignore
         return creds
 
-    def request_uri(self, identifier):
+    def request_uri(self, identifier: str) -> str:
         """Get the full request URI given the transport_request identifier.
 
         MAY BE OVERRIDDEN if something more complex than the PATH_TEMPLATE is
         required.
         """
-        path = self.PATH_TEMPLATE % identifier
+        path = self.PATH_TEMPLATE % identifier  # type: ignore
         return self.url + path
 
-    def request_params(self, identifier: int) -> Dict[str, Any]:
+    def request_params(self, identifier: str) -> Dict[str, Any]:
         """Get the full parameters passed to requests given the
         transport_request identifier.
 
@@ -155,7 +155,7 @@ class ListerHttpTransport(abc.ABC):
         self.lister_version = __version__
 
     def _transport_action(
-            self, identifier: int, method: str = 'get') -> Response:
+            self, identifier: str, method: str = 'get') -> Response:
         """Permit to ask information to the api prior to actually executing
            query.
 
@@ -179,13 +179,13 @@ class ListerHttpTransport(abc.ABC):
                 raise FetchError(response)
             return response
 
-    def transport_head(self, identifier: int) -> Response:
+    def transport_head(self, identifier: str) -> Response:
         """Retrieve head information on api.
 
         """
         return self._transport_action(identifier, method='head')
 
-    def transport_request(self, identifier: int) -> Response:
+    def transport_request(self, identifier: str) -> Response:
         """Implements ListerBase.transport_request for HTTP using Requests.
 
         Retrieve get information on api.

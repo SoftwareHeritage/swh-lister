@@ -13,7 +13,8 @@ from .lister_transports import ListerHttpTransport
 from .lister_base import ListerBase
 
 from requests import Response
-from typing import Any, Dict, List, Tuple, Optional
+from typing import Any, Dict, List, Tuple, Optional, Union
+from datetime import datetime
 
 logger = logging.getLogger(__name__)
 
@@ -58,7 +59,9 @@ class IndexingLister(ListerBase):
     """
 
     @abc.abstractmethod
-    def get_next_target_from_response(self, response: Response):
+    def get_next_target_from_response(
+            self, response: Response
+    ) -> Union[Optional[datetime], Optional[str], Optional[int]]:
         """Find the next server endpoint identifier given the entire response.
 
         Implementation of this method depends on the server API spec
@@ -184,8 +187,7 @@ class IndexingLister(ListerBase):
             return t[0]
         return None
 
-    def disable_deleted_repo_tasks(
-            self, start, end, keep_these):
+    def disable_deleted_repo_tasks(self, start, end, keep_these):
         """Disable tasks for repos that no longer exist between start and end.
 
         Args:

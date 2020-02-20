@@ -7,7 +7,7 @@ import logging
 import iso8601
 
 from datetime import datetime, timezone
-from typing import Any, Dict, List, Optional, Union
+from typing import Any, Dict, List, Optional
 from urllib import parse
 from requests import Response
 
@@ -46,7 +46,7 @@ class BitBucketLister(IndexingHttpLister):
         }
 
     def get_next_target_from_response(self, response: Response
-                                      ) -> Union[None, datetime]:
+                                      ) -> Optional[datetime]:
         """This will read the 'next' link from the api response if any
            and return it as a datetime.
 
@@ -69,7 +69,7 @@ class BitBucketLister(IndexingHttpLister):
         repos = response.json()['values']
         return [self.get_model_from_repo(repo) for repo in repos]
 
-    def request_uri(self, identifier: datetime) -> str:
+    def request_uri(self, identifier: datetime) -> str:  # type: ignore
         identifier_str = parse.quote(identifier.isoformat())
         return super().request_uri(identifier_str or '1970-01-01')
 

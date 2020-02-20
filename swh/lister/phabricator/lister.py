@@ -33,7 +33,7 @@ class PhabricatorLister(IndexingHttpLister):
             instance = urllib.parse.urlparse(self.url).hostname
         self.instance = instance
 
-    def request_params(self, identifier: int) -> Dict[str, Any]:
+    def request_params(self, identifier: str) -> Dict[str, Any]:
         """Override the default params behavior to retrieve the api token
 
         Credentials are stored as:

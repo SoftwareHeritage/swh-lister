@@ -8,9 +8,9 @@ from urllib.parse import urlparse, urljoin
 
 from bs4 import BeautifulSoup
 from requests import Session
-# from requests.structures import CaseInsensitiveDict
+
 from requests.adapters import HTTPAdapter
-from typing import Any, Dict, Generator, Union
+from typing import Any, Dict, Generator, Optional
 from .models import CGitModel
 
 from swh.core.utils import grouper
@@ -60,9 +60,9 @@ class CGitLister(ListerBase):
         """Lister class for CGit repositories.
 
         Args:
-            url : main URL of the CGit instance, i.e. url of the index
+            url (str): main URL of the CGit instance, i.e. url of the index
                 of published git repositories on this instance.
-            instance : Name of cgit instance. Defaults to url's hostname
+            instance (str): Name of cgit instance. Defaults to url's hostname
                 if unset.
 
         """
@@ -96,7 +96,7 @@ class CGitLister(ListerBase):
 
         return {'status': status}
 
-    def get_repos(self) -> Generator:
+    def get_repos(self) -> Generator[str, None, None]:
         """Generate git 'project' URLs found on the current CGit server
 
         """
@@ -118,7 +118,7 @@ class CGitLister(ListerBase):
                 # no pager, or no next page
                 next_page = None
 
-    def build_model(self, repo_url: str) -> Union[None, Dict[str, Any]]:
+    def build_model(self, repo_url: str) -> Optional[Dict[str, Any]]:
         """Given the URL of a git repo project page on a CGit server,
         return the repo description (dict) suitable for insertion in the db.
         """
