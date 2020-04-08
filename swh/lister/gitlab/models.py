@@ -11,7 +11,8 @@ class GitLabModel(ModelBase):
     """a Gitlab repository from a gitlab instance
 
     """
-    __tablename__ = 'gitlab_repo'
+
+    __tablename__ = "gitlab_repo"
 
     uid = Column(String, primary_key=True)
     instance = Column(String, index=True)

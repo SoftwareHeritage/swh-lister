@@ -9,7 +9,8 @@ from swh.lister.core.models import IndexingModelBase
 
 class GitHubModel(IndexingModelBase):
     """a GitHub repository"""
-    __tablename__ = 'github_repo'
+
+    __tablename__ = "github_repo"
 
     uid = Column(Integer, primary_key=True)
     indexable = Column(Integer, index=True)

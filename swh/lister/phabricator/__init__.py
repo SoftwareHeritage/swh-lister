@@ -7,7 +7,8 @@ def register():
     from .models import PhabricatorModel
     from .lister import PhabricatorLister
 
-    return {'models': [PhabricatorModel],
-            'lister': PhabricatorLister,
-            'task_modules': ['%s.tasks' % __name__],
-            }
+    return {
+        "models": [PhabricatorModel],
+        "lister": PhabricatorLister,
+        "task_modules": ["%s.tasks" % __name__],
+    }

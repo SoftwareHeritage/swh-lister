@@ -15,7 +15,7 @@ from .test_utils import init_db
 def test_get_lister_wrong_input():
     """Unsupported lister should raise"""
     with pytest.raises(ValueError) as e:
-        get_lister('unknown', 'db-url')
+        get_lister("unknown", "db-url")
 
     assert "Invalid lister" in str(e.value)
 
@@ -37,23 +37,22 @@ def test_get_lister_override():
     db_url = init_db().url()
 
     listers = {
-        'gitlab': 'https://other.gitlab.uni/api/v4/',
-        'phabricator': 'https://somewhere.org/api/diffusion.repository.search',
-        'cgit': 'https://some.where/cgit',
+        "gitlab": "https://other.gitlab.uni/api/v4/",
+        "phabricator": "https://somewhere.org/api/diffusion.repository.search",
+        "cgit": "https://some.where/cgit",
     }
 
     # check the override ends up defined in the lister
     for lister_name, url in listers.items():
         lst = get_lister(
-            lister_name, db_url, **{
-                'url': url,
-                'priority': 'high',
-                'policy': 'oneshot',
-            })
+            lister_name,
+            db_url,
+            **{"url": url, "priority": "high", "policy": "oneshot",}
+        )
 
         assert lst.url == url
-        assert lst.config['priority'] == 'high'
-        assert lst.config['policy'] == 'oneshot'
+        assert lst.config["priority"] == "high"
+        assert lst.config["policy"] == "oneshot"
 
     # check the default urls are used and not the override (since it's not
     # passed)
@@ -61,7 +60,7 @@ def test_get_lister_override():
         lst = get_lister(lister_name, db_url)
 
         # no override so this does not end up in lister's configuration
-        assert 'url' not in lst.config
-        assert 'priority' not in lst.config
-        assert 'oneshot' not in lst.config
+        assert "url" not in lst.config
+        assert "priority" not in lst.config
+        assert "oneshot" not in lst.config
         assert lst.url == lst.DEFAULT_URL

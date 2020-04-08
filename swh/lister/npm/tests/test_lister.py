@@ -21,10 +21,10 @@ logger = logging.getLogger(__name__)
 class NpmListerTester(HttpListerTesterBase, unittest.TestCase):
     Lister = NpmLister
     test_re = re.compile(r'^.*/_all_docs\?startkey="(.+)".*')
-    lister_subdir = 'npm'
-    good_api_response_file = 'data/replicate.npmjs.com/api_response.json'
-    bad_api_response_file = 'data/api_empty_response.json'
-    first_index = 'jquery'
+    lister_subdir = "npm"
+    good_api_response_file = "data/replicate.npmjs.com/api_response.json"
+    bad_api_response_file = "data/api_empty_response.json"
+    first_index = "jquery"
     entries_per_page = 100
 
     @requests_mock.Mocker()
@@ -37,11 +37,11 @@ class NpmListerTester(HttpListerTesterBase, unittest.TestCase):
 
 class NpmIncrementalListerTester(HttpListerTesterBase, unittest.TestCase):
     Lister = NpmIncrementalLister
-    test_re = re.compile(r'^.*/_changes\?since=([0-9]+).*')
-    lister_subdir = 'npm'
-    good_api_response_file = 'data/api_inc_response.json'
-    bad_api_response_file = 'data/api_inc_empty_response.json'
-    first_index = '6920642'
+    test_re = re.compile(r"^.*/_changes\?since=([0-9]+).*")
+    lister_subdir = "npm"
+    good_api_response_file = "data/api_inc_response.json"
+    bad_api_response_file = "data/api_inc_empty_response.json"
+    first_index = "6920642"
     entries_per_page = 100
 
     @requests_mock.Mocker()
@@ -58,27 +58,27 @@ def check_tasks(tasks: List[Any]):
 
     """
     for row in tasks:
-        logger.debug('row: %s', row)
-        assert row['type'] == 'load-npm'
+        logger.debug("row: %s", row)
+        assert row["type"] == "load-npm"
         # arguments check
-        args = row['arguments']['args']
+        args = row["arguments"]["args"]
         assert len(args) == 0
 
         # kwargs
-        kwargs = row['arguments']['kwargs']
+        kwargs = row["arguments"]["kwargs"]
         assert len(kwargs) == 1
-        package_url = kwargs['url']
-        package_name = package_url.split('/')[-1]
-        assert package_url == f'https://www.npmjs.com/package/{package_name}'
+        package_url = kwargs["url"]
+        package_name = package_url.split("/")[-1]
+        assert package_url == f"https://www.npmjs.com/package/{package_name}"
 
-        assert row['policy'] == 'recurring'
-        assert row['priority'] is None
+        assert row["policy"] == "recurring"
+        assert row["priority"] is None
 
 
 def test_lister_npm_basic_listing(lister_npm, requests_mock_datadir):
     lister_npm.run()
 
-    tasks = lister_npm.scheduler.search_tasks(task_type='load-npm')
+    tasks = lister_npm.scheduler.search_tasks(task_type="load-npm")
     assert len(tasks) == 100
 
     check_tasks(tasks)
@@ -89,10 +89,11 @@ def test_lister_npm_listing_pagination(lister_npm, requests_mock_datadir):
     # Patch per page pagination
     lister.per_page = 10 + 1
     lister.PATH_TEMPLATE = lister.PATH_TEMPLATE.replace(
-        '&limit=1001', '&limit=%s' % lister.per_page)
+        "&limit=1001", "&limit=%s" % lister.per_page
+    )
     lister.run()
 
-    tasks = lister.scheduler.search_tasks(task_type='load-npm')
+    tasks = lister.scheduler.search_tasks(task_type="load-npm")
     assert len(tasks) == 2 * 10  # only 2 files with 10 results each
 
     check_tasks(tasks)

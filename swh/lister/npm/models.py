@@ -11,9 +11,10 @@ class NpmVisitModel(SQLBase, metaclass=ABCSQLMeta):
     """Table to store the npm registry state at the time of a
     content listing by Software Heritage
     """
-    __tablename__ = 'npm_visit'
 
-    uid = Column(Integer, Sequence('npm_visit_id_seq'), primary_key=True)
+    __tablename__ = "npm_visit"
+
+    uid = Column(Integer, Sequence("npm_visit_id_seq"), primary_key=True)
     visit_date = Column(DateTime, nullable=False)
     doc_count = Column(BigInteger)
     doc_del_count = Column(BigInteger)
@@ -29,7 +30,8 @@ class NpmModel(IndexingModelBase):
     """A npm package representation
 
     """
-    __tablename__ = 'npm_repo'
+
+    __tablename__ = "npm_repo"
 
     uid = Column(String, primary_key=True)
     indexable = Column(String, index=True)

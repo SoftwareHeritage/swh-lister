@@ -29,14 +29,14 @@ class ListerHttpTransport(abc.ABC):
 
     To be used in conjunction with ListerBase or a subclass of it.
     """
+
     DEFAULT_URL = None  # type: Optional[str]
-    PATH_TEMPLATE = \
-        AbstractAttribute(
-            'string containing a python string format pattern that produces'
-            ' the API endpoint path for listing stored repositories when given'
-            ' an index, e.g., "/repositories?after=%s". To be implemented in'
-            ' the API-specific class inheriting this.'
-        )  # type: Union[AbstractAttribute, Optional[str]]
+    PATH_TEMPLATE = AbstractAttribute(
+        "string containing a python string format pattern that produces"
+        " the API endpoint path for listing stored repositories when given"
+        ' an index, e.g., "/repositories?after=%s". To be implemented in'
+        " the API-specific class inheriting this."
+    )  # type: Union[AbstractAttribute, Optional[str]]
 
     EXPECTED_STATUS_CODES = (200, 429, 403, 404)
 
@@ -45,9 +45,7 @@ class ListerHttpTransport(abc.ABC):
 
         MAY BE OVERRIDDEN if request headers are needed.
         """
-        return {
-            'User-Agent': USER_AGENT_TEMPLATE % self.lister_version
-        }
+        return {"User-Agent": USER_AGENT_TEMPLATE % self.lister_version}
 
     def request_instance_credentials(self) -> List[Dict[str, Any]]:
         """Returns dictionary of any credentials configuration needed by the
@@ -82,7 +80,7 @@ class ListerHttpTransport(abc.ABC):
             list of credential dicts for the current lister.
 
         """
-        all_creds = self.config.get('credentials')  # type: ignore
+        all_creds = self.config.get("credentials")  # type: ignore
         if not all_creds:
             return []
         lister_creds = all_creds.get(self.LISTER_NAME, {})  # type: ignore
@@ -110,14 +108,16 @@ class ListerHttpTransport(abc.ABC):
 
         """
         params = {}
-        params['headers'] = self.request_headers() or {}
+        params["headers"] = self.request_headers() or {}
         creds = self.request_instance_credentials()
         if not creds:
             return params
         auth = random.choice(creds) if creds else None
         if auth:
-            params['auth'] = (auth['username'],  # type: ignore
-                              auth['password'])
+            params["auth"] = (
+                auth["username"],  # type: ignore
+                auth["password"],
+            )
         return params
 
     def transport_quota_check(self, response):
@@ -130,7 +130,7 @@ class ListerHttpTransport(abc.ABC):
 
         """
         if response.status_code == 429:  # HTTP too many requests
-            retry_after = response.headers.get('Retry-After', self.back_off())
+            retry_after = response.headers.get("Retry-After", self.back_off())
             try:
                 # might be seconds
                 return True, float(retry_after)
@@ -145,17 +145,16 @@ class ListerHttpTransport(abc.ABC):
 
     def __init__(self, url=None):
         if not url:
-            url = self.config.get('url')
+            url = self.config.get("url")
         if not url:
             url = self.DEFAULT_URL
         if not url:
-            raise NameError('HTTP Lister Transport requires an url.')
+            raise NameError("HTTP Lister Transport requires an url.")
         self.url = url  # eg. 'https://api.github.com'
         self.session = requests.Session()
         self.lister_version = __version__
 
-    def _transport_action(
-            self, identifier: str, method: str = 'get') -> Response:
+    def _transport_action(self, identifier: str, method: str = "get") -> Response:
         """Permit to ask information to the api prior to actually executing
            query.
 
@@ -163,16 +162,16 @@ class ListerHttpTransport(abc.ABC):
         path = self.request_uri(identifier)
         params = self.request_params(identifier)
 
-        logger.debug('path: %s', path)
-        logger.debug('params: %s', params)
-        logger.debug('method: %s', method)
+        logger.debug("path: %s", path)
+        logger.debug("params: %s", params)
+        logger.debug("method: %s", method)
         try:
-            if method == 'head':
+            if method == "head":
                 response = self.session.head(path, **params)
             else:
                 response = self.session.get(path, **params)
         except requests.exceptions.ConnectionError as e:
-            logger.warning('Failed to fetch %s: %s', path, e)
+            logger.warning("Failed to fetch %s: %s", path, e)
             raise FetchError(e)
         else:
             if response.status_code not in self.EXPECTED_STATUS_CODES:
@@ -183,7 +182,7 @@ class ListerHttpTransport(abc.ABC):
         """Retrieve head information on api.
 
         """
-        return self._transport_action(identifier, method='head')
+        return self._transport_action(identifier, method="head")
 
     def transport_request(self, identifier: str) -> Response:
         """Implements ListerBase.transport_request for HTTP using Requests.
@@ -198,10 +197,10 @@ class ListerHttpTransport(abc.ABC):
             Requests responses.
         """
         s = pformat(response.request.path_url)
-        s += '\n#\n' + pformat(response.request.headers)
-        s += '\n#\n' + pformat(response.status_code)
-        s += '\n#\n' + pformat(response.headers)
-        s += '\n#\n'
+        s += "\n#\n" + pformat(response.request.headers)
+        s += "\n#\n" + pformat(response.status_code)
+        s += "\n#\n" + pformat(response.headers)
+        s += "\n#\n"
         try:  # json?
             s += pformat(response.json())
         except Exception:  # not json
@@ -219,9 +218,10 @@ class ListerOnePageApiTransport(ListerHttpTransport):
        To be used in conjunction with ListerBase or a subclass of it.
 
     """
+
     PAGE = AbstractAttribute(
-        "URL of the API's unique page to retrieve and parse "
-        "for information")  # type: Union[AbstractAttribute, str]
+        "URL of the API's unique page to retrieve and parse " "for information"
+    )  # type: Union[AbstractAttribute, str]
     PATH_TEMPLATE = None  # we do not use it
 
     def __init__(self, url=None):

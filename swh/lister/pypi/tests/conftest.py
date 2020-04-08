@@ -10,14 +10,16 @@ from swh.lister.core.tests.conftest import *  # noqa
 
 @pytest.fixture
 def lister_pypi(swh_listers):
-    lister = swh_listers['pypi']
+    lister = swh_listers["pypi"]
 
     # Add the load-deb-package in the scheduler backend
-    lister.scheduler.create_task_type({
-        'type': 'load-pypi',
-        'description': 'Load PyPI package',
-        'backend_name': 'swh.loader.package.tasks.LoadPyPI',
-        'default_interval': '1 day',
-    })
+    lister.scheduler.create_task_type(
+        {
+            "type": "load-pypi",
+            "description": "Load PyPI package",
+            "backend_name": "swh.loader.package.tasks.LoadPyPI",
+            "default_interval": "1 day",
+        }
+    )
 
     return lister

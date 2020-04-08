@@ -7,7 +7,8 @@ def register():
     from .models import GNUModel
     from .lister import GNULister
 
-    return {'models': [GNUModel],
-            'lister': GNULister,
-            'task_modules': ['%s.tasks' % __name__],
-            }
+    return {
+        "models": [GNUModel],
+        "lister": GNULister,
+        "task_modules": ["%s.tasks" % __name__],
+    }

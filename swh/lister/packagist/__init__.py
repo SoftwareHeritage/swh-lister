@@ -7,7 +7,8 @@ def register():
     from .models import PackagistModel
     from .lister import PackagistLister
 
-    return {'models': [PackagistModel],
-            'lister': PackagistLister,
-            'task_modules': ['%s.tasks' % __name__],
-            }
+    return {
+        "models": [PackagistModel],
+        "lister": PackagistLister,
+        "task_modules": ["%s.tasks" % __name__],
+    }

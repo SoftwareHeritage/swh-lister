@@ -21,11 +21,10 @@ logger = logging.getLogger(__name__)
 
 
 class PhabricatorLister(IndexingHttpLister):
-    PATH_TEMPLATE = '?order=oldest&attachments[uris]=1&after=%s'
-    DEFAULT_URL = \
-        'https://forge.softwareheritage.org/api/diffusion.repository.search'
+    PATH_TEMPLATE = "?order=oldest&attachments[uris]=1&after=%s"
+    DEFAULT_URL = "https://forge.softwareheritage.org/api/diffusion.repository.search"
     MODEL = PhabricatorModel
-    LISTER_NAME = 'phabricator'
+    LISTER_NAME = "phabricator"
 
     def __init__(self, url=None, instance=None, override_config=None):
         super().__init__(url=url, override_config=override_config)
@@ -48,11 +47,14 @@ class PhabricatorLister(IndexingHttpLister):
         creds = self.request_instance_credentials()
         if not creds:
             raise ValueError(
-                'Phabricator forge needs authentication credential to list.')
-        api_token = random.choice(creds)['password']
+                "Phabricator forge needs authentication credential to list."
+            )
+        api_token = random.choice(creds)["password"]
 
-        return {'headers': self.request_headers() or {},
-                'params': {'api.token': api_token}}
+        return {
+            "headers": self.request_headers() or {},
+            "params": {"api.token": api_token},
+        }
 
     def request_headers(self):
         """
@@ -60,39 +62,39 @@ class PhabricatorLister(IndexingHttpLister):
         Phabricator API
         """
         headers = super().request_headers()
-        headers['Accept'] = 'application/json'
+        headers["Accept"] = "application/json"
         return headers
 
-    def get_model_from_repo(
-            self, repo: Dict[str, Any]) -> Optional[Dict[str, Any]]:
-        url = get_repo_url(repo['attachments']['uris']['uris'])
+    def get_model_from_repo(self, repo: Dict[str, Any]) -> Optional[Dict[str, Any]]:
+        url = get_repo_url(repo["attachments"]["uris"]["uris"])
         if url is None:
             return None
         return {
-            'uid': url,
-            'indexable': repo['id'],
-            'name': repo['fields']['shortName'],
-            'full_name': repo['fields']['name'],
-            'html_url': url,
-            'origin_url': url,
-            'origin_type': repo['fields']['vcs'],
-            'instance': self.instance,
+            "uid": url,
+            "indexable": repo["id"],
+            "name": repo["fields"]["shortName"],
+            "full_name": repo["fields"]["name"],
+            "html_url": url,
+            "origin_url": url,
+            "origin_type": repo["fields"]["vcs"],
+            "instance": self.instance,
         }
 
-    def get_next_target_from_response(
-            self, response: Response) -> Optional[int]:
-        body = response.json()['result']['cursor']
-        if body['after'] and body['after'] != 'null':
-            return int(body['after'])
+    def get_next_target_from_response(self, response: Response) -> Optional[int]:
+        body = response.json()["result"]["cursor"]
+        if body["after"] and body["after"] != "null":
+            return int(body["after"])
         return None
 
     def transport_response_simplified(
-            self, response: Response) -> List[Optional[Dict[str, Any]]]:
+        self, response: Response
+    ) -> List[Optional[Dict[str, Any]]]:
         repos = response.json()
-        if repos['result'] is None:
+        if repos["result"] is None:
             raise ValueError(
-                'Problem during information fetch: %s' % repos['error_code'])
-        repos = repos['result']['data']
+                "Problem during information fetch: %s" % repos["error_code"]
+            )
+        repos = repos["result"]["data"]
         return [self.get_model_from_repo(repo) for repo in repos]
 
     def filter_before_inject(self, models_list):
@@ -103,8 +105,7 @@ class PhabricatorLister(IndexingHttpLister):
         models_list = [m for m in models_list if m is not None]
         return super().filter_before_inject(models_list)
 
-    def disable_deleted_repo_tasks(
-            self, index: int, next_index: int, keep_these: str):
+    def disable_deleted_repo_tasks(self, index: int, next_index: int, keep_these: str):
         """
         (Overrides) Fix provided index value to avoid:
 
@@ -113,7 +114,7 @@ class PhabricatorLister(IndexingHttpLister):
         """
         # First call to the Phabricator API uses an empty 'after' parameter,
         # so set the index to 0 to avoid database query error
-        if index == '':
+        if index == "":
             index = 0
         # Next listed repository ids are strictly greater than the 'after'
         # parameter, so increment the index to avoid disabling the latest
@@ -121,8 +122,7 @@ class PhabricatorLister(IndexingHttpLister):
         # the Phabricator API
         else:
             index = index + 1
-        return super().disable_deleted_repo_tasks(index, next_index,
-                                                  keep_these)
+        return super().disable_deleted_repo_tasks(index, next_index, keep_these)
 
     def db_first_index(self) -> Optional[int]:
         """
@@ -172,19 +172,18 @@ def get_repo_url(attachments: List[Dict[str, Any]]) -> Optional[int]:
     """
     processed_urls = defaultdict(dict)  # type: Dict[str, Any]
     for uri in attachments:
-        protocol = uri['fields']['builtin']['protocol']
-        url = uri['fields']['uri']['effective']
-        identifier = uri['fields']['builtin']['identifier']
-        if protocol in ('http', 'https'):
+        protocol = uri["fields"]["builtin"]["protocol"]
+        url = uri["fields"]["uri"]["effective"]
+        identifier = uri["fields"]["builtin"]["identifier"]
+        if protocol in ("http", "https"):
             processed_urls[protocol][identifier] = url
         elif protocol is None:
-            for protocol in ('https', 'http'):
+            for protocol in ("https", "http"):
                 if url.startswith(protocol):
-                    processed_urls[protocol]['undefined'] = url
+                    processed_urls[protocol]["undefined"] = url
                 break
-    for protocol in ['https', 'http']:
-        for identifier in ['shortname', 'callsign', 'id', 'undefined']:
-            if (protocol in processed_urls and
-                    identifier in processed_urls[protocol]):
+    for protocol in ["https", "http"]:
+        for identifier in ["shortname", "callsign", "id", "undefined"]:
+            if protocol in processed_urls and identifier in processed_urls[protocol]:
                 return processed_urls[protocol][identifier]
     return None

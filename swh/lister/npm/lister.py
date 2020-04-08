@@ -14,15 +14,17 @@ class NpmListerBase(IndexingHttpLister):
     """List packages available in the npm registry in a paginated way
 
     """
-    MODEL = NpmModel
-    LISTER_NAME = 'npm'
-    instance = 'npm'
 
-    def __init__(self, url='https://replicate.npmjs.com',
-                 per_page=1000, override_config=None):
+    MODEL = NpmModel
+    LISTER_NAME = "npm"
+    instance = "npm"
+
+    def __init__(
+        self, url="https://replicate.npmjs.com", per_page=1000, override_config=None
+    ):
         super().__init__(url=url, override_config=override_config)
         self.per_page = per_page + 1
-        self.PATH_TEMPLATE += '&limit=%s' % self.per_page
+        self.PATH_TEMPLATE += "&limit=%s" % self.per_page
 
     @property
     def ADDITIONAL_CONFIG(self) -> Dict[str, Any]:
@@ -30,22 +32,22 @@ class NpmListerBase(IndexingHttpLister):
 
         """
         default_config = super().ADDITIONAL_CONFIG
-        default_config['loading_task_policy'] = ('str', 'recurring')
+        default_config["loading_task_policy"] = ("str", "recurring")
         return default_config
 
     def get_model_from_repo(self, repo_name: str) -> Dict[str, str]:
         """(Override) Transform from npm package name to model
 
         """
-        package_url = 'https://www.npmjs.com/package/%s' % repo_name
+        package_url = "https://www.npmjs.com/package/%s" % repo_name
         return {
-            'uid': repo_name,
-            'indexable': repo_name,
-            'name': repo_name,
-            'full_name': repo_name,
-            'html_url': package_url,
-            'origin_url': package_url,
-            'origin_type': 'npm',
+            "uid": repo_name,
+            "indexable": repo_name,
+            "name": repo_name,
+            "full_name": repo_name,
+            "html_url": package_url,
+            "origin_url": package_url,
+            "origin_type": "npm",
         }
 
     def task_dict(self, origin_type: str, origin_url: str, **kwargs):
@@ -56,10 +58,9 @@ class NpmListerBase(IndexingHttpLister):
         needed for the ingestion task creation.
 
         """
-        task_type = 'load-%s' % origin_type
-        task_policy = self.config['loading_task_policy']
-        return create_task_dict(task_type, task_policy,
-                                url=origin_url)
+        task_type = "load-%s" % origin_type
+        task_policy = self.config["loading_task_policy"]
+        return create_task_dict(task_type, task_policy, url=origin_url)
 
     def request_headers(self) -> Dict[str, Any]:
         """(Override) Set requests headers to send when querying the npm
@@ -67,7 +68,7 @@ class NpmListerBase(IndexingHttpLister):
 
         """
         headers = super().request_headers()
-        headers['Accept'] = 'application/json'
+        headers["Accept"] = "application/json"
         return headers
 
     def string_pattern_check(self, inner: int, lower: int, upper: int = None):
@@ -83,25 +84,24 @@ class NpmLister(NpmListerBase):
     """List all packages available in the npm registry in a paginated way
 
     """
+
     PATH_TEMPLATE = '/_all_docs?startkey="%s"'
 
-    def get_next_target_from_response(
-            self, response: Response) -> Optional[str]:
+    def get_next_target_from_response(self, response: Response) -> Optional[str]:
         """(Override) Get next npm package name to continue the listing
 
         """
-        repos = response.json()['rows']
-        return repos[-1]['id'] if len(repos) == self.per_page else None
+        repos = response.json()["rows"]
+        return repos[-1]["id"] if len(repos) == self.per_page else None
 
-    def transport_response_simplified(
-            self, response: Response) -> List[Dict[str, str]]:
+    def transport_response_simplified(self, response: Response) -> List[Dict[str, str]]:
         """(Override) Transform npm registry response to list for model manipulation
 
         """
-        repos = response.json()['rows']
+        repos = response.json()["rows"]
         if len(repos) == self.per_page:
             repos = repos[:-1]
-        return [self.get_model_from_repo(repo['id']) for repo in repos]
+        return [self.get_model_from_repo(repo["id"]) for repo in repos]
 
 
 class NpmIncrementalLister(NpmListerBase):
@@ -109,30 +109,29 @@ class NpmIncrementalLister(NpmListerBase):
     update_seq value of the underlying CouchDB database, in a paginated way.
 
     """
-    PATH_TEMPLATE = '/_changes?since=%s'
+
+    PATH_TEMPLATE = "/_changes?since=%s"
 
     @property
     def CONFIG_BASE_FILENAME(self):  # noqa: N802
-        return 'lister_npm_incremental'
+        return "lister_npm_incremental"
 
-    def get_next_target_from_response(
-            self, response: Response) -> Optional[str]:
+    def get_next_target_from_response(self, response: Response) -> Optional[str]:
         """(Override) Get next npm package name to continue the listing.
 
         """
-        repos = response.json()['results']
-        return repos[-1]['seq'] if len(repos) == self.per_page else None
+        repos = response.json()["results"]
+        return repos[-1]["seq"] if len(repos) == self.per_page else None
 
-    def transport_response_simplified(
-            self, response: Response) -> List[Dict[str, str]]:
+    def transport_response_simplified(self, response: Response) -> List[Dict[str, str]]:
         """(Override) Transform npm registry response to list for model
         manipulation.
 
         """
-        repos = response.json()['results']
+        repos = response.json()["results"]
         if len(repos) == self.per_page:
             repos = repos[:-1]
-        return [self.get_model_from_repo(repo['id']) for repo in repos]
+        return [self.get_model_from_repo(repo["id"]) for repo in repos]
 
     def filter_before_inject(self, models_list: List[Dict[str, Any]]):
         """(Override) Filter out documents in the CouchDB database
@@ -141,9 +140,9 @@ class NpmIncrementalLister(NpmListerBase):
         """
         models_filtered = []
         for model in models_list:
-            package_name = model['name']
+            package_name = model["name"]
             # document related to CouchDB internals
-            if package_name.startswith('_design/'):
+            if package_name.startswith("_design/"):
                 continue
             models_filtered.append(model)
         return models_filtered

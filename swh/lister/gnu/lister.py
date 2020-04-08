@@ -18,12 +18,12 @@ logger = logging.getLogger(__name__)
 
 class GNULister(SimpleLister):
     MODEL = GNUModel
-    LISTER_NAME = 'gnu'
-    instance = 'gnu'
+    LISTER_NAME = "gnu"
+    instance = "gnu"
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.gnu_tree = GNUTree('https://ftp.gnu.org/tree.json.gz')
+        self.gnu_tree = GNUTree("https://ftp.gnu.org/tree.json.gz")
 
     def task_dict(self, origin_type, origin_url, **kwargs):
         """Return task format dict
@@ -51,10 +51,10 @@ class GNULister(SimpleLister):
 
         """
         artifacts = self.gnu_tree.artifacts[origin_url]
-        assert origin_type == 'tar'
+        assert origin_type == "tar"
         return utils.create_task_dict(
-            'load-archive-files',
-            kwargs.get('policy', 'oneshot'),
+            "load-archive-files",
+            kwargs.get("policy", "oneshot"),
             url=origin_url,
             artifacts=artifacts,
             retries_left=3,
@@ -103,11 +103,11 @@ class GNULister(SimpleLister):
 
         """
         return {
-            'uid': repo['url'],
-            'name': repo['name'],
-            'full_name': repo['name'],
-            'html_url': repo['url'],
-            'origin_url': repo['url'],
-            'time_last_updated': repo['time_modified'],
-            'origin_type': 'tar',
+            "uid": repo["url"],
+            "name": repo["name"],
+            "full_name": repo["name"],
+            "html_url": repo["url"],
+            "origin_url": repo["url"],
+            "time_last_updated": repo["time_modified"],
+            "origin_type": "tar",
         }

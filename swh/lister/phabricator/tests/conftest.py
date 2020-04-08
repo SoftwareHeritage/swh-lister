@@ -10,17 +10,12 @@ from swh.lister.core.tests.conftest import *  # noqa
 
 @pytest.fixture
 def lister_phabricator(swh_listers):
-    lister = swh_listers['phabricator']
+    lister = swh_listers["phabricator"]
 
     # Amend the credentials
     lister.config = {
-        'cache_responses': False,
-        'credentials': {
-            'phabricator': {
-                lister.instance: [{
-                    'password': 'foo'
-                }]
-            }}
+        "cache_responses": False,
+        "credentials": {"phabricator": {lister.instance: [{"password": "foo"}]}},
     }
 
     return lister

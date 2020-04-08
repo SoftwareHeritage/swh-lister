@@ -19,13 +19,14 @@ logger = logging.getLogger(__name__)
 
 @pytest.fixture
 def swh_listers(request, postgresql_proc, postgresql, swh_scheduler):
-    db_url = 'postgresql://{user}@{host}:{port}/{dbname}'.format(
-            host=postgresql_proc.host,
-            port=postgresql_proc.port,
-            user='postgres',
-            dbname='tests')
+    db_url = "postgresql://{user}@{host}:{port}/{dbname}".format(
+        host=postgresql_proc.host,
+        port=postgresql_proc.port,
+        user="postgres",
+        dbname="tests",
+    )
 
-    logger.debug('lister db_url: %s', db_url)
+    logger.debug("lister db_url: %s", db_url)
 
     listers = {}
 
@@ -37,11 +38,13 @@ def swh_listers(request, postgresql_proc, postgresql, swh_scheduler):
     initialize(create_engine(db_url), drop_tables=True)
 
     # Add the load-archive-files expected by some listers (gnu, cran, ...)
-    swh_scheduler.create_task_type({
-        'type': 'load-archive-files',
-        'description': 'Load archive files.',
-        'backend_name': 'swh.loader.package.tasks.LoadArchive',
-        'default_interval': '1 day',
-    })
+    swh_scheduler.create_task_type(
+        {
+            "type": "load-archive-files",
+            "description": "Load archive files.",
+            "backend_name": "swh.loader.package.tasks.LoadArchive",
+            "default_interval": "1 day",
+        }
+    )
 
     return listers

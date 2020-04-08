@@ -10,13 +10,9 @@ from swh.lister.debian.models import Distribution, Area
 
 def test_area_index_uris_deb(session):
     d = Distribution(
-        name='Debian', type='deb', mirror_uri='http://deb.debian.org/debian'
+        name="Debian", type="deb", mirror_uri="http://deb.debian.org/debian"
     )
-    a = Area(
-        distribution=d,
-        name='unstable/main',
-        active=True,
-    )
+    a = Area(distribution=d, name="unstable/main", active=True,)
     session.add_all([d, a])
     session.commit()
 
@@ -26,14 +22,9 @@ def test_area_index_uris_deb(session):
 
 def test_area_index_uris_rpm(session):
     d = Distribution(
-        name='CentOS', type='rpm',
-        mirror_uri='http://centos.mirrors.proxad.net/'
+        name="CentOS", type="rpm", mirror_uri="http://centos.mirrors.proxad.net/"
     )
-    a = Area(
-        distribution=d,
-        name='8',
-        active=True,
-    )
+    a = Area(distribution=d, name="8", active=True,)
     session.add_all([d, a])
     session.commit()
 

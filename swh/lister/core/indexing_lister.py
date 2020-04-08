@@ -49,18 +49,19 @@ class IndexingLister(ListerBase):
         def get_next_target_from_response
 
     """
+
     flush_packet_db = 20
     """Number of iterations in-between write flushes of lister repositories to
        db (see fn:`run`).
     """
-    default_min_bound = ''
+    default_min_bound = ""
     """Default initialization value for the minimum boundary index to use when
        undefined (see fn:`run`).
     """
 
     @abc.abstractmethod
     def get_next_target_from_response(
-            self, response: Response
+        self, response: Response
     ) -> Union[Optional[datetime], Optional[str], Optional[int]]:
         """Find the next server endpoint identifier given the entire response.
 
@@ -78,14 +79,16 @@ class IndexingLister(ListerBase):
     # You probably don't need to override anything below this line.
 
     def filter_before_inject(
-            self, models_list: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
+        self, models_list: List[Dict[str, Any]]
+    ) -> List[Dict[str, Any]]:
         """Overrides ListerBase.filter_before_inject
 
         Bounds query results by this Lister's set max_index.
         """
         models_list = [
-            m for m in models_list
-            if self.is_within_bounds(m['indexable'], None, self.max_index)
+            m
+            for m in models_list
+            if self.is_within_bounds(m["indexable"], None, self.max_index)
         ]
         return models_list
 
@@ -108,7 +111,7 @@ class IndexingLister(ListerBase):
         return retlist
 
     def db_partition_indices(
-            self, partition_size: int
+        self, partition_size: int
     ) -> List[Tuple[Optional[int], Optional[int]]]:
         """Describe an index-space compartmentalization of the db table
            in equal sized chunks. This is used to describe min&max bounds for
@@ -135,14 +138,19 @@ class IndexingLister(ListerBase):
             return []
 
         if isinstance(min_index, str):
+
             def format_bound(bound):
                 return bound.isoformat()
+
             min_index = dateutil.parser.parse(min_index)
             max_index = dateutil.parser.parse(max_index)
         elif isinstance(max_index - min_index, int):
+
             def format_bound(bound):
                 return int(bound)
+
         else:
+
             def format_bound(bound):
                 return bound
 
@@ -156,9 +164,7 @@ class IndexingLister(ListerBase):
 
         # Trim duplicate bounds
         bounds.append(None)
-        bounds = [cur
-                  for cur, next in zip(bounds[:-1], bounds[1:])
-                  if cur != next]
+        bounds = [cur for cur, next in zip(bounds[:-1], bounds[1:]) if cur != next]
 
         # Remove bounds for lowest and highest partition
         bounds[0] = bounds[-1] = None
@@ -204,8 +210,9 @@ class IndexingLister(ListerBase):
         deleted_repos = self.winnow_models(
             self.db_query_range(start, end), self.MODEL.uid, keep_these
         )
-        tasks_to_disable = [repo.task_id for repo in deleted_repos
-                            if repo.task_id is not None]
+        tasks_to_disable = [
+            repo.task_id for repo in deleted_repos if repo.task_id is not None
+        ]
         if tasks_to_disable:
             self.scheduler.disable_tasks(tasks_to_disable)
         for repo in deleted_repos:
@@ -224,7 +231,7 @@ class IndexingLister(ListerBase):
         Returns:
             nothing
         """
-        status = 'uneventful'
+        status = "uneventful"
         self.min_index = min_bound
         self.max_index = max_bound
 
@@ -233,7 +240,7 @@ class IndexingLister(ListerBase):
             for i in count(1):
                 response, injected_repos = self.ingest_data(index)
                 if not response and not injected_repos:
-                    logger.info('No response from api server, stopping')
+                    logger.info("No response from api server, stopping")
                     return
 
                 next_index = self.get_next_target_from_response(response)
@@ -243,23 +250,22 @@ class IndexingLister(ListerBase):
 
                 # termination condition
                 if next_index is None or next_index == index:
-                    logger.info('stopping after index %s, no next link found',
-                                index)
+                    logger.info("stopping after index %s, no next link found", index)
                     return
                 index = next_index
-                logger.debug('Index: %s', index)
+                logger.debug("Index: %s", index)
                 yield i
 
         for i in ingest_indexes():
             if (i % self.flush_packet_db) == 0:
-                logger.debug('Flushing updates at index %s', i)
+                logger.debug("Flushing updates at index %s", i)
                 self.db_session.commit()
                 self.db_session = self.mk_session()
-                status = 'eventful'
+                status = "eventful"
 
         self.db_session.commit()
         self.db_session = self.mk_session()
-        return {'status': status}
+        return {"status": status}
 
 
 class IndexingHttpLister(ListerHttpTransport, IndexingLister):
