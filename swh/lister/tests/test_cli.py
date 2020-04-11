@@ -47,7 +47,7 @@ def test_get_lister_override():
         lst = get_lister(
             lister_name,
             db_url,
-            **{"url": url, "priority": "high", "policy": "oneshot",}
+            **{"url": url, "priority": "high", "policy": "oneshot",},
         )
 
         assert lst.url == url

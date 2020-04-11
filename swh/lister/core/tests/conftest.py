@@ -13,29 +13,32 @@ from sqlalchemy import create_engine
 from swh.lister import get_lister, SUPPORTED_LISTERS
 from swh.lister.core.models import initialize
 
-
 logger = logging.getLogger(__name__)
 
 
 @pytest.fixture
-def swh_listers(request, postgresql_proc, postgresql, swh_scheduler):
+def lister_db_url(postgresql_proc, postgresql):
     db_url = "postgresql://{user}@{host}:{port}/{dbname}".format(
         host=postgresql_proc.host,
         port=postgresql_proc.port,
         user="postgres",
         dbname="tests",
     )
-
     logger.debug("lister db_url: %s", db_url)
+    return db_url
+
+
+@pytest.fixture
+def swh_listers(request, lister_db_url, swh_scheduler):
 
     listers = {}
 
     # Prepare schema for all listers
     for lister_name in SUPPORTED_LISTERS:
-        lister = get_lister(lister_name, db_url=db_url)
+        lister = get_lister(lister_name, db_url=lister_db_url)
         lister.scheduler = swh_scheduler  # inject scheduler fixture
         listers[lister_name] = lister
-    initialize(create_engine(db_url), drop_tables=True)
+    initialize(create_engine(lister_db_url), drop_tables=True)
 
     # Add the load-archive-files expected by some listers (gnu, cran, ...)
     swh_scheduler.create_task_type(
