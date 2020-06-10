@@ -67,6 +67,7 @@ setup(
         lister.phabricator=swh.lister.phabricator:register
         lister.pypi=swh.lister.pypi:register
         lister.launchpad=swh.lister.launchpad:register
+        lister.gitea=swh.lister.gitea:register
     """,
     classifiers=[
         "Programming Language :: Python :: 3",
