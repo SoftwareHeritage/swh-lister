@@ -1,3 +1,9 @@
+swh-lister (0.0.50-1~swh2) UNRELEASED; urgency=medium
+
+  * Use setuptools-scm instead of vcversioner
+
+ -- Nicolas Dandrimont <olasd@debian.org>  Mon, 06 Jul 2020 14:28:55 +0200
+
 swh-lister (0.0.50-1~swh1) unstable-swh; urgency=medium
 
   * New upstream release 0.0.50     - (tagged by Antoine R. Dumont
