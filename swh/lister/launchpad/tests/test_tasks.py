@@ -1,13 +1,20 @@
+# Copyright (C) 2020  The Software Heritage developers
+# See the AUTHORS file at the top-level directory of this distribution
+# License: GNU General Public License version 3, or any later version
+# See top-level LICENSE file for more information
+
 from unittest.mock import patch
 
 
 @patch("swh.lister.launchpad.tasks.LaunchpadLister")
-def test_new(lister, swh_app, celery_session_worker):
+def test_new(lister, swh_scheduler_celery_app, swh_scheduler_celery_worker):
     # setup the mocked LaunchpadLister
     lister.return_value = lister
     lister.run.return_value = None
 
-    res = swh_app.send_task("swh.lister.launchpad.tasks.NewLaunchpadLister")
+    res = swh_scheduler_celery_app.send_task(
+        "swh.lister.launchpad.tasks.NewLaunchpadLister"
+    )
     assert res
     res.wait()
     assert res.successful()
@@ -18,12 +25,14 @@ def test_new(lister, swh_app, celery_session_worker):
 
 
 @patch("swh.lister.launchpad.tasks.LaunchpadLister")
-def test_full(lister, swh_app, celery_session_worker):
+def test_full(lister, swh_scheduler_celery_app, swh_scheduler_celery_worker):
     # setup the mocked LaunchpadLister
     lister.return_value = lister
     lister.run.return_value = None
 
-    res = swh_app.send_task("swh.lister.launchpad.tasks.FullLaunchpadLister")
+    res = swh_scheduler_celery_app.send_task(
+        "swh.lister.launchpad.tasks.FullLaunchpadLister"
+    )
     assert res
     res.wait()
     assert res.successful()
