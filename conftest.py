@@ -3,4 +3,8 @@
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
 
+import os
+
 pytest_plugins = ["swh.scheduler.pytest_plugin"]
+
+os.environ["LC_ALL"] = "C.UTF-8"
