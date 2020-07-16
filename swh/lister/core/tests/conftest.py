@@ -27,14 +27,12 @@ def lister_db_url(postgresql_proc, postgresql):
 
 
 @pytest.fixture
-def swh_listers(request, lister_db_url, swh_scheduler):
-
+def swh_listers(mock_get_scheduler, lister_db_url, swh_scheduler):
     listers = {}
 
     # Prepare schema for all listers
     for lister_name in SUPPORTED_LISTERS:
         lister = get_lister(lister_name, db_url=lister_db_url)
-        lister.scheduler = swh_scheduler  # inject scheduler fixture
         listers[lister_name] = lister
     initialize(create_engine(lister_db_url), drop_tables=True)
 

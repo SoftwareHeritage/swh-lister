@@ -20,7 +20,7 @@ def test_get_lister_wrong_input():
     assert "Invalid lister" in str(e.value)
 
 
-def test_get_lister():
+def test_get_lister(mock_get_scheduler):
     """Instantiating a supported lister should be ok
 
     """
