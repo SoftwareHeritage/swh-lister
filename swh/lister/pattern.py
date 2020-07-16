@@ -6,7 +6,7 @@
 from dataclasses import dataclass
 from typing import Any, Dict, Generic, Iterable, Iterator, List, Optional, TypeVar
 
-from swh.scheduler import model
+from swh.scheduler import get_scheduler, model
 from swh.scheduler.interface import SchedulerInterface
 
 
@@ -222,3 +222,27 @@ class Lister(Generic[StateType, PageType]):
         """
         ret = self.scheduler.record_listed_origins(origins)
         return len(ret)
+
+    @classmethod
+    def from_config(cls, scheduler: Dict[str, Any], **config: Any):
+        """Instantiate a lister from a configuration dict.
+
+        This is basically a backwards-compatibility shim for the CLI.
+
+        Args:
+          scheduler: instantiation config for the scheduler
+          config: the configuration dict for the lister, with the following keys:
+            - credentials (optional): credentials list for the scheduler
+            - any other kwargs passed to the lister.
+
+        Returns:
+          the instantiated lister
+        """
+        # Drop the legacy config keys which aren't used for this generation of listers.
+        for legacy_key in ("storage", "lister", "celery"):
+            config.pop(legacy_key, None)
+
+        # Instantiate the scheduler
+        scheduler_instance = get_scheduler(**scheduler)
+
+        return cls(scheduler=scheduler_instance, **config)

@@ -6,7 +6,6 @@
 import pytest
 
 from swh.lister.cli import SUPPORTED_LISTERS, get_lister
-from swh.lister.core.lister_base import ListerBase
 
 from .test_utils import init_db
 
@@ -19,17 +18,16 @@ def test_get_lister_wrong_input():
     assert "Invalid lister" in str(e.value)
 
 
-def test_get_lister():
+def test_get_lister(swh_scheduler_config):
     """Instantiating a supported lister should be ok
 
     """
     db_url = init_db().url()
-    # exclude listers because they need special instantiation treatment unrelated to
-    # this test (launchpad: network mock, gnu: scheduler load task)
-    listers_to_instantiate = set(SUPPORTED_LISTERS) - {"launchpad", "gnu"}
-    for lister_name in listers_to_instantiate:
-        lst = get_lister(lister_name, db_url)
-        assert isinstance(lst, ListerBase)
+    for lister_name in SUPPORTED_LISTERS:
+        lst = get_lister(
+            lister_name, db_url, scheduler={"cls": "local", **swh_scheduler_config}
+        )
+        assert hasattr(lst, "run")
 
 
 def test_get_lister_override():
@@ -47,9 +45,7 @@ def test_get_lister_override():
     # check the override ends up defined in the lister
     for lister_name, url in listers.items():
         lst = get_lister(
-            lister_name,
-            db_url,
-            **{"url": url, "priority": "high", "policy": "oneshot",},
+            lister_name, db_url, url=url, priority="high", policy="oneshot"
         )
 
         assert lst.url == url
