@@ -9,6 +9,14 @@ from swh.lister.cli import SUPPORTED_LISTERS, get_lister
 
 from .test_utils import init_db
 
+lister_args = {
+    "phabricator": {
+        "instance": "softwareheritage",
+        "url": "https://forge.softwareheritage.org/api/diffusion.repository.search",
+        "api_token": "bogus",
+    },
+}
+
 
 def test_get_lister_wrong_input():
     """Unsupported lister should raise"""
@@ -25,7 +33,10 @@ def test_get_lister(swh_scheduler_config):
     db_url = init_db().url()
     for lister_name in SUPPORTED_LISTERS:
         lst = get_lister(
-            lister_name, db_url, scheduler={"cls": "local", **swh_scheduler_config}
+            lister_name,
+            db_url,
+            scheduler={"cls": "local", **swh_scheduler_config},
+            **lister_args.get(lister_name, {}),
         )
         assert hasattr(lst, "run")
 
@@ -38,7 +49,6 @@ def test_get_lister_override():
 
     listers = {
         "gitlab": "https://other.gitlab.uni/api/v4/",
-        "phabricator": "https://somewhere.org/api/diffusion.repository.search",
         "cgit": "https://some.where/cgit",
     }
 
