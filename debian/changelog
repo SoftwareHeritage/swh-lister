@@ -1,8 +1,14 @@
-swh-lister (0.0.50-1~swh2) UNRELEASED; urgency=medium
+swh-lister (0.1.0-1~swh1) unstable-swh; urgency=medium
 
+  [ Nicolas Dandrimont ]
   * Use setuptools-scm instead of vcversioner
 
- -- Nicolas Dandrimont <olasd@debian.org>  Mon, 06 Jul 2020 14:28:55 +0200
+  [ Software Heritage autobuilder (on jenkins-debian1) ]
+  * New upstream release 0.1.0     - (tagged by David Douard
+    <david.douard@sdfa3.org> on 2020-08-25 18:33:55 +0200)
+  * Upstream changes:     - v0.1.0
+
+ -- Software Heritage autobuilder (on jenkins-debian1) <jenkins@jenkins-debian1.internal.softwareheritage.org>  Tue, 25 Aug 2020 16:39:28 +0000
 
 swh-lister (0.0.50-1~swh1) unstable-swh; urgency=medium
 
