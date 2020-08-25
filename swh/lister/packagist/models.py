@@ -11,6 +11,7 @@ class PackagistModel(ModelBase):
     """a Packagist repository representation
 
     """
-    __tablename__ = 'packagist_repo'
+
+    __tablename__ = "packagist_repo"
 
     uid = Column(String, primary_key=True)

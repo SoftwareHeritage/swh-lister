@@ -10,18 +10,20 @@ from swh.lister.core.simple_lister import SimpleLister
 from swh.lister.gnu.models import GNUModel
 from swh.lister.gnu.tree import GNUTree
 
+from typing import Any, Dict, List
+from requests import Response
 
 logger = logging.getLogger(__name__)
 
 
 class GNULister(SimpleLister):
     MODEL = GNUModel
-    LISTER_NAME = 'gnu'
-    instance = 'gnu'
+    LISTER_NAME = "gnu"
+    instance = "gnu"
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.gnu_tree = GNUTree('https://ftp.gnu.org/tree.json.gz')
+        self.gnu_tree = GNUTree("https://ftp.gnu.org/tree.json.gz")
 
     def task_dict(self, origin_type, origin_url, **kwargs):
         """Return task format dict
@@ -49,16 +51,16 @@ class GNULister(SimpleLister):
 
         """
         artifacts = self.gnu_tree.artifacts[origin_url]
-        assert origin_type == 'tar'
+        assert origin_type == "tar"
         return utils.create_task_dict(
-            'load-archive-files',
-            kwargs.get('policy', 'oneshot'),
+            "load-archive-files",
+            kwargs.get("policy", "oneshot"),
             url=origin_url,
             artifacts=artifacts,
             retries_left=3,
         )
 
-    def safely_issue_request(self, identifier):
+    def safely_issue_request(self, identifier: int) -> None:
         """Bypass the implementation. It's now the GNUTree which deals with
         querying the gnu mirror.
 
@@ -69,7 +71,7 @@ class GNULister(SimpleLister):
         """
         return None
 
-    def list_packages(self, response):
+    def list_packages(self, response: Response) -> List[Dict[str, Any]]:
         """List the actual gnu origins (package name) with their name, url and
            associated tarballs.
 
@@ -96,16 +98,16 @@ class GNULister(SimpleLister):
         """
         return list(self.gnu_tree.projects.values())
 
-    def get_model_from_repo(self, repo):
+    def get_model_from_repo(self, repo: Dict[str, Any]) -> Dict[str, Any]:
         """Transform from repository representation to model
 
         """
         return {
-            'uid': repo['url'],
-            'name': repo['name'],
-            'full_name': repo['name'],
-            'html_url': repo['url'],
-            'origin_url': repo['url'],
-            'time_last_updated': repo['time_modified'],
-            'origin_type': 'tar',
+            "uid": repo["url"],
+            "name": repo["name"],
+            "full_name": repo["name"],
+            "html_url": repo["url"],
+            "origin_url": repo["url"],
+            "time_last_updated": repo["time_modified"],
+            "origin_type": "tar",
         }

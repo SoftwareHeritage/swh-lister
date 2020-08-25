@@ -11,7 +11,8 @@ class GNUModel(ModelBase):
     """a GNU repository representation
 
     """
-    __tablename__ = 'gnu_repo'
+
+    __tablename__ = "gnu_repo"
 
     uid = Column(String, primary_key=True)
     time_last_updated = Column(DateTime)

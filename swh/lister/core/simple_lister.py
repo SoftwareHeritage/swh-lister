@@ -24,6 +24,7 @@ class SimpleLister(ListerBase):
       information and stores those in db
 
     """
+
     flush_packet_db = 2
     """Number of iterations in-between write flushes of lister repositories to
        db (see fn:`ingest_data`).
@@ -57,14 +58,14 @@ class SimpleLister(ListerBase):
         all_injected = []
         for i, models in enumerate(utils.grouper(models_list, n=100), start=1):
             models = list(models)
-            logging.debug('models: %s' % len(models))
+            logging.debug("models: %s" % len(models))
             # inject into local db
             injected = self.inject_repo_data_into_db(models)
             # queue workers
             self.schedule_missing_tasks(models, injected)
             all_injected.append(injected)
             if (i % self.flush_packet_db) == 0:
-                logger.debug('Flushing updates at index %s', i)
+                logger.debug("Flushing updates at index %s", i)
                 self.db_session.commit()
                 self.db_session = self.mk_session()
 
@@ -88,9 +89,9 @@ class SimpleLister(ListerBase):
         dump_not_used_identifier = 0
         response, injected_repos = self.ingest_data(dump_not_used_identifier)
         if not response and not injected_repos:
-            logging.info('No response from api server, stopping')
-            status = 'uneventful'
+            logging.info("No response from api server, stopping")
+            status = "uneventful"
         else:
-            status = 'eventful'
+            status = "eventful"
 
-        return {'status': status}
+        return {"status": status}

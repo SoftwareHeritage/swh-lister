@@ -22,8 +22,9 @@ def noop(*args, **kwargs):
 
 
 def test_version_generation():
-    assert swh.lister.__version__ != 'devel', \
-        "Make sure swh.lister is installed (e.g. pip install -e .)"
+    assert (
+        swh.lister.__version__ != "devel"
+    ), "Make sure swh.lister is installed (e.g. pip install -e .)"
 
 
 class HttpListerTesterBase(abc.ABC):
@@ -35,13 +36,17 @@ class HttpListerTesterBase(abc.ABC):
     to customize for a specific listing service.
 
     """
+
     Lister = AbstractAttribute(
-        'Lister class to test')  # type: Union[AbstractAttribute, Type[Any]]
+        "Lister class to test"
+    )  # type: Union[AbstractAttribute, Type[Any]]
     lister_subdir = AbstractAttribute(
-        'bitbucket, github, etc.')  # type: Union[AbstractAttribute, str]
+        "bitbucket, github, etc."
+    )  # type: Union[AbstractAttribute, str]
     good_api_response_file = AbstractAttribute(
-        'Example good response body')  # type: Union[AbstractAttribute, str]
-    LISTER_NAME = 'fake-lister'
+        "Example good response body"
+    )  # type: Union[AbstractAttribute, str]
+    LISTER_NAME = "fake-lister"
 
     # May need to override this if the headers are used for something
     def response_headers(self, request):
@@ -53,7 +58,7 @@ class HttpListerTesterBase(abc.ABC):
     def mock_rate_quota(self, n, request, context):
         self.rate_limit += 1
         context.status_code = 429
-        context.headers['Retry-After'] = '1'
+        context.headers["Retry-After"] = "1"
         return '{"error":"dummy"}'
 
     def __init__(self, *args, **kwargs):
@@ -89,8 +94,9 @@ class HttpListerTesterBase(abc.ABC):
 
         """
         if override_config or self.fl is None:
-            self.fl = self.Lister(url='https://fakeurl',
-                                  override_config=override_config)
+            self.fl = self.Lister(
+                url="https://fakeurl", override_config=override_config
+            )
             self.fl.INITIAL_BACKOFF = 1
 
         self.fl.reset_backoff()
@@ -105,23 +111,25 @@ class HttpListerTesterBase(abc.ABC):
             task_id = 0
             current_nb_tasks = len(self.scheduler_tasks)
             if current_nb_tasks > 0:
-                task_id = self.scheduler_tasks[-1]['id'] + 1
+                task_id = self.scheduler_tasks[-1]["id"] + 1
             for task in tasks:
                 scheduler_task = dict(task)
-                scheduler_task.update({
-                    'status': 'next_run_not_scheduled',
-                    'retries_left': 0,
-                    'priority': None,
-                    'id': task_id,
-                    'current_interval': datetime.timedelta(days=64)
-                })
+                scheduler_task.update(
+                    {
+                        "status": "next_run_not_scheduled",
+                        "retries_left": 0,
+                        "priority": None,
+                        "id": task_id,
+                        "current_interval": datetime.timedelta(days=64),
+                    }
+                )
                 self.scheduler_tasks.append(scheduler_task)
                 task_id = task_id + 1
             return self.scheduler_tasks[current_nb_tasks:]
 
         def _disable_tasks(task_ids):
             for task_id in task_ids:
-                self.scheduler_tasks[task_id]['status'] = 'disabled'
+                self.scheduler_tasks[task_id]["status"] = "disabled"
 
         fl.scheduler.create_tasks = Mock(wraps=_create_tasks)
         fl.scheduler.disable_tasks = Mock(wraps=_disable_tasks)
@@ -167,26 +175,29 @@ class HttpListerTester(HttpListerTesterBase, abc.ABC):
     to customize for a specific listing service.
 
     """
+
     last_index = AbstractAttribute(
-        'Last index '
-        'in good_api_response')  # type: Union[AbstractAttribute, int]
+        "Last index " "in good_api_response"
+    )  # type: Union[AbstractAttribute, int]
     first_index = AbstractAttribute(
-        'First index in '
-        ' good_api_response')  # type: Union[AbstractAttribute, Optional[int]]
+        "First index in " " good_api_response"
+    )  # type: Union[AbstractAttribute, Optional[int]]
     bad_api_response_file = AbstractAttribute(
-        'Example bad response body')  # type: Union[AbstractAttribute, str]
+        "Example bad response body"
+    )  # type: Union[AbstractAttribute, str]
     entries_per_page = AbstractAttribute(
-        'Number of results in '
-        'good response')  # type: Union[AbstractAttribute, int]
+        "Number of results in " "good response"
+    )  # type: Union[AbstractAttribute, int]
     test_re = AbstractAttribute(
-        'Compiled regex matching the server url. Must capture the '
-        'index value.')  # type: Union[AbstractAttribute, Pattern]
+        "Compiled regex matching the server url. Must capture the " "index value."
+    )  # type: Union[AbstractAttribute, Pattern]
     convert_type = str  # type: Callable[..., Any]
     """static method used to convert the "request_index" to its right type (for
        indexing listers for example, this is in accordance with the model's
        "indexable" column).
 
     """
+
     def mock_response(self, request, context):
         self.fl.reset_backoff()
         self.rate_limit = 1
@@ -200,9 +211,11 @@ class HttpListerTester(HttpListerTesterBase, abc.ABC):
         else:
             response_file = self.bad_api_response_file
 
-        with open('swh/lister/%s/tests/%s' % (self.lister_subdir,
-                                              response_file),
-                  'r', encoding='utf-8') as r:
+        with open(
+            "swh/lister/%s/tests/%s" % (self.lister_subdir, response_file),
+            "r",
+            encoding="utf-8",
+        ) as r:
             return r.read()
 
     def request_index(self, request):
@@ -214,12 +227,9 @@ class HttpListerTester(HttpListerTesterBase, abc.ABC):
         http_mocker.get(self.test_re, text=self.mock_response)
         db = init_db()
 
-        fl = self.get_fl(override_config={
-            'lister': {
-                'cls': 'local',
-                'args': {'db': db.url()}
-                }
-            })
+        fl = self.get_fl(
+            override_config={"lister": {"cls": "local", "args": {"db": db.url()}}}
+        )
         fl.db = db
         self.init_db(db, fl.MODEL)
 
@@ -233,8 +243,7 @@ class HttpListerTester(HttpListerTesterBase, abc.ABC):
         fl.run()
 
         self.assertEqual(fl.db_last_index(), self.last_index)
-        ingested_repos = list(fl.db_query_range(self.first_index,
-                                                self.last_index))
+        ingested_repos = list(fl.db_query_range(self.first_index, self.last_index))
         self.assertEqual(len(ingested_repos), self.entries_per_page)
 
     @requests_mock.Mocker()
@@ -307,13 +316,12 @@ class HttpListerTester(HttpListerTesterBase, abc.ABC):
         """
         http_mocker.get(self.test_re, text=self.mock_response)
         fl = self.get_fl()
-        li = fl.transport_response_simplified(
-            self.get_api_response(self.first_index))
+        li = fl.transport_response_simplified(self.get_api_response(self.first_index))
         di = li[0]
         self.assertIsInstance(di, dict)
-        pubs = [k for k in vars(fl.MODEL).keys() if not k.startswith('_')]
+        pubs = [k for k in vars(fl.MODEL).keys() if not k.startswith("_")]
         for k in pubs:
-            if k not in ['last_seen', 'task_id', 'id']:
+            if k not in ["last_seen", "task_id", "id"]:
                 self.assertIn(k, di)
 
     @requests_mock.Mocker()
@@ -322,7 +330,7 @@ class HttpListerTester(HttpListerTesterBase, abc.ABC):
 
         """
         http_mocker.get(self.test_re, text=self.mock_limit_twice_response)
-        with patch.object(time, 'sleep', wraps=time.sleep) as sleepmock:
+        with patch.object(time, "sleep", wraps=time.sleep) as sleepmock:
             self.get_api_response(self.first_index)
             self.assertEqual(sleepmock.call_count, 2)
 
@@ -332,13 +340,14 @@ class HttpListerTester(HttpListerTesterBase, abc.ABC):
         fl.run()
         self.assertNotEqual(len(http_mocker.request_history), 0)
         for request in http_mocker.request_history:
-            assert 'User-Agent' in request.headers
-            user_agent = request.headers['User-Agent']
-            assert 'Software Heritage Lister' in user_agent
+            assert "User-Agent" in request.headers
+            user_agent = request.headers["User-Agent"]
+            assert "Software Heritage Lister" in user_agent
             assert swh.lister.__version__ in user_agent
 
-    def scheduled_tasks_test(self, next_api_response_file, next_last_index,
-                             http_mocker):
+    def scheduled_tasks_test(
+        self, next_api_response_file, next_last_index, http_mocker
+    ):
         """Check that no loading tasks get disabled when processing a new
         page of repositories returned by a forge API
         """
@@ -361,7 +370,7 @@ class HttpListerTester(HttpListerTesterBase, abc.ABC):
 
         # check tasks are not disabled
         for task in self.scheduler_tasks:
-            self.assertTrue(task['status'] != 'disabled')
+            self.assertTrue(task["status"] != "disabled")
 
 
 class HttpSimpleListerTester(HttpListerTesterBase, abc.ABC):
@@ -372,20 +381,20 @@ class HttpSimpleListerTester(HttpListerTesterBase, abc.ABC):
     to customize for a specific listing service.
 
     """
+
     entries = AbstractAttribute(
-        'Number of results '
-        'in good response')  # type: Union[AbstractAttribute, int]
+        "Number of results " "in good response"
+    )  # type: Union[AbstractAttribute, int]
     PAGE = AbstractAttribute(
-        "URL of the server api's unique page to retrieve and "
-        "parse for information")  # type: Union[AbstractAttribute, str]
+        "URL of the server api's unique page to retrieve and " "parse for information"
+    )  # type: Union[AbstractAttribute, str]
 
     def get_fl(self, override_config=None):
         """Retrieve an instance of fake lister (fl).
 
         """
         if override_config or self.fl is None:
-            self.fl = self.Lister(
-                                  override_config=override_config)
+            self.fl = self.Lister(override_config=override_config)
             self.fl.INITIAL_BACKOFF = 1
 
         self.fl.reset_backoff()
@@ -399,9 +408,11 @@ class HttpSimpleListerTester(HttpListerTesterBase, abc.ABC):
         context.headers.update(custom_headers)
         response_file = self.good_api_response_file
 
-        with open('swh/lister/%s/tests/%s' % (self.lister_subdir,
-                                              response_file),
-                  'r', encoding='utf-8') as r:
+        with open(
+            "swh/lister/%s/tests/%s" % (self.lister_subdir, response_file),
+            "r",
+            encoding="utf-8",
+        ) as r:
             return r.read()
 
     @requests_mock.Mocker()
@@ -410,7 +421,7 @@ class HttpSimpleListerTester(HttpListerTesterBase, abc.ABC):
 
         """
         http_mocker.get(self.PAGE, text=self.mock_limit_twice_response)
-        with patch.object(time, 'sleep', wraps=time.sleep) as sleepmock:
+        with patch.object(time, "sleep", wraps=time.sleep) as sleepmock:
             self.get_api_response(0)
             self.assertEqual(sleepmock.call_count, 2)
 
@@ -426,9 +437,9 @@ class HttpSimpleListerTester(HttpListerTesterBase, abc.ABC):
         li = fl.transport_response_simplified(li)
         di = li[0]
         self.assertIsInstance(di, dict)
-        pubs = [k for k in vars(fl.MODEL).keys() if not k.startswith('_')]
+        pubs = [k for k in vars(fl.MODEL).keys() if not k.startswith("_")]
         for k in pubs:
-            if k not in ['last_seen', 'task_id', 'id']:
+            if k not in ["last_seen", "task_id", "id"]:
                 self.assertIn(k, di)
 
     @requests_mock.Mocker()
@@ -437,8 +448,6 @@ class HttpSimpleListerTester(HttpListerTesterBase, abc.ABC):
 
         """
         http_mocker.get(self.PAGE, text=self.mock_response)
-        li = self.get_fl().list_packages(
-            self.get_api_response(0)
-        )
+        li = self.get_fl().list_packages(self.get_api_response(0))
         self.assertIsInstance(li, list)
         self.assertEqual(len(li), self.entries)

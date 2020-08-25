@@ -26,12 +26,12 @@ def _convert_type(req_index):
 
 class BitBucketListerTester(HttpListerTester, unittest.TestCase):
     Lister = BitBucketLister
-    test_re = re.compile(r'/repositories\?after=([^?&]+)')
-    lister_subdir = 'bitbucket'
-    good_api_response_file = 'data/https_api.bitbucket.org/response.json'
-    bad_api_response_file = 'data/https_api.bitbucket.org/empty_response.json'
-    first_index = _convert_type('2008-07-12T07:44:01.476818+00:00')
-    last_index = _convert_type('2008-07-19T06:16:43.044743+00:00')
+    test_re = re.compile(r"/repositories\?after=([^?&]+)")
+    lister_subdir = "bitbucket"
+    good_api_response_file = "data/https_api.bitbucket.org/response.json"
+    bad_api_response_file = "data/https_api.bitbucket.org/empty_response.json"
+    first_index = _convert_type("2008-07-12T07:44:01.476818+00:00")
+    last_index = _convert_type("2008-07-19T06:16:43.044743+00:00")
     entries_per_page = 10
     convert_type = _convert_type
 
@@ -57,57 +57,64 @@ class BitBucketListerTester(HttpListerTester, unittest.TestCase):
         self.disable_db(fl)
 
         # stores no results
-        fl.run(min_bound=self.first_index - timedelta(days=3),
-               max_bound=self.first_index)
+        fl.run(
+            min_bound=self.first_index - timedelta(days=3), max_bound=self.first_index
+        )
 
     def test_is_within_bounds(self):
         fl = self.get_fl()
-        self.assertTrue(fl.is_within_bounds(
-            iso8601.parse_date('2008-07-15'),
-            self.first_index, self.last_index))
-        self.assertFalse(fl.is_within_bounds(
-            iso8601.parse_date('2008-07-20'),
-            self.first_index, self.last_index))
-        self.assertFalse(fl.is_within_bounds(
-            iso8601.parse_date('2008-07-11'),
-            self.first_index, self.last_index))
+        self.assertTrue(
+            fl.is_within_bounds(
+                iso8601.parse_date("2008-07-15"), self.first_index, self.last_index
+            )
+        )
+        self.assertFalse(
+            fl.is_within_bounds(
+                iso8601.parse_date("2008-07-20"), self.first_index, self.last_index
+            )
+        )
+        self.assertFalse(
+            fl.is_within_bounds(
+                iso8601.parse_date("2008-07-11"), self.first_index, self.last_index
+            )
+        )
 
 
 def test_lister_bitbucket(swh_listers, requests_mock_datadir):
     """Simple bitbucket listing should create scheduled tasks (git, hg)
 
     """
-    lister = swh_listers['bitbucket']
+    lister = swh_listers["bitbucket"]
 
     lister.run()
 
-    r = lister.scheduler.search_tasks(task_type='load-hg')
+    r = lister.scheduler.search_tasks(task_type="load-hg")
     assert len(r) == 9
 
     for row in r:
-        args = row['arguments']['args']
-        kwargs = row['arguments']['kwargs']
+        args = row["arguments"]["args"]
+        kwargs = row["arguments"]["kwargs"]
 
         assert len(args) == 0
         assert len(kwargs) == 1
-        url = kwargs['url']
+        url = kwargs["url"]
 
-        assert url.startswith('https://bitbucket.org')
+        assert url.startswith("https://bitbucket.org")
 
-        assert row['policy'] == 'recurring'
-        assert row['priority'] is None
+        assert row["policy"] == "recurring"
+        assert row["priority"] is None
 
-    r = lister.scheduler.search_tasks(task_type='load-git')
+    r = lister.scheduler.search_tasks(task_type="load-git")
     assert len(r) == 1
 
     for row in r:
-        args = row['arguments']['args']
-        kwargs = row['arguments']['kwargs']
+        args = row["arguments"]["args"]
+        kwargs = row["arguments"]["kwargs"]
         assert len(args) == 0
         assert len(kwargs) == 1
-        url = kwargs['url']
+        url = kwargs["url"]
 
-        assert url.startswith('https://bitbucket.org')
+        assert url.startswith("https://bitbucket.org")
 
-        assert row['policy'] == 'recurring'
-        assert row['priority'] is None
+        assert row["policy"] == "recurring"
+        assert row["priority"] is None

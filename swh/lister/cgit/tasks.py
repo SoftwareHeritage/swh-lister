@@ -7,12 +7,12 @@ from celery import shared_task
 from .lister import CGitLister
 
 
-@shared_task(name=__name__ + '.CGitListerTask')
+@shared_task(name=__name__ + ".CGitListerTask")
 def list_cgit(**lister_args):
-    '''Lister task for CGit instances'''
+    """Lister task for CGit instances"""
     return CGitLister(**lister_args).run()
 
 
-@shared_task(name=__name__ + '.ping')
+@shared_task(name=__name__ + ".ping")
 def _ping():
-    return 'OK'
+    return "OK"

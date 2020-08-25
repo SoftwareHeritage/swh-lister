@@ -19,16 +19,23 @@ from swh.scheduler.utils import create_task_dict
 logger = logging.getLogger(__name__)
 
 
-CRAN_MIRROR = 'https://cran.r-project.org'
+CRAN_MIRROR = "https://cran.r-project.org"
 
 
 class CRANLister(SimpleLister):
     MODEL = CRANModel
-    LISTER_NAME = 'cran'
-    instance = 'cran'
+    LISTER_NAME = "cran"
+    instance = "cran"
 
-    def task_dict(self, origin_type, origin_url, version=None, html_url=None,
-                  policy=None, **kwargs):
+    def task_dict(
+        self,
+        origin_type,
+        origin_url,
+        version=None,
+        html_url=None,
+        policy=None,
+        **kwargs,
+    ):
         """Return task format dict. This creates tasks with args and kwargs
         set, for example::
 
@@ -43,15 +50,15 @@ class CRANLister(SimpleLister):
 
         """
         if not policy:
-            policy = 'oneshot'
+            policy = "oneshot"
         artifact_url = html_url
-        assert origin_type == 'tar'
+        assert origin_type == "tar"
         return create_task_dict(
-            'load-cran', policy,
-            url=origin_url, artifacts=[{
-                'url': artifact_url,
-                'version': version
-            }], retries_left=3
+            "load-cran",
+            policy,
+            url=origin_url,
+            artifacts=[{"url": artifact_url, "version": version}],
+            retries_left=3,
         )
 
     def safely_issue_request(self, identifier):
@@ -91,23 +98,22 @@ class CRANLister(SimpleLister):
         """
         return read_cran_data()
 
-    def get_model_from_repo(
-            self, repo: Mapping[str, str]) -> Mapping[str, str]:
+    def get_model_from_repo(self, repo: Mapping[str, str]) -> Mapping[str, str]:
         """Transform from repository representation to model
 
         """
-        logger.debug('repo: %s', repo)
+        logger.debug("repo: %s", repo)
         origin_url, artifact_url = compute_origin_urls(repo)
-        package = repo['Package']
-        version = repo['Version']
+        package = repo["Package"]
+        version = repo["Version"]
         return {
-            'uid': f'{package}-{version}',
-            'name': package,
-            'full_name': repo['Title'],
-            'version': version,
-            'html_url': artifact_url,
-            'origin_url': origin_url,
-            'origin_type': 'tar',
+            "uid": f"{package}-{version}",
+            "name": package,
+            "full_name": repo["Title"],
+            "version": version,
+            "html_url": artifact_url,
+            "origin_url": origin_url,
+            "origin_type": "tar",
         }
 
 
@@ -115,11 +121,10 @@ def read_cran_data() -> List[Mapping[str, str]]:
     """Execute r script to read cran listing.
 
     """
-    filepath = pkg_resources.resource_filename('swh.lister.cran',
-                                               'list_all_packages.R')
-    logger.debug('script list-all-packages.R path: %s', filepath)
+    filepath = pkg_resources.resource_filename("swh.lister.cran", "list_all_packages.R")
+    logger.debug("script list-all-packages.R path: %s", filepath)
     response = subprocess.run(filepath, stdout=subprocess.PIPE, shell=False)
-    return json.loads(response.stdout.decode('utf-8'))
+    return json.loads(response.stdout.decode("utf-8"))
 
 
 def compute_origin_urls(repo: Mapping[str, str]) -> Tuple[str, str]:
@@ -132,8 +137,8 @@ def compute_origin_urls(repo: Mapping[str, str]) -> Tuple[str, str]:
         the tuple project url, artifact url
 
     """
-    package = repo['Package']
-    version = repo['Version']
-    origin_url = f'{CRAN_MIRROR}/package={package}'
-    artifact_url = f'{CRAN_MIRROR}/src/contrib/{package}_{version}.tar.gz'
+    package = repo["Package"]
+    version = repo["Version"]
+    origin_url = f"{CRAN_MIRROR}/package={package}"
+    artifact_url = f"{CRAN_MIRROR}/src/contrib/{package}_{version}.tar.gz"
     return origin_url, artifact_url

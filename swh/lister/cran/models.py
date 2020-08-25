@@ -11,7 +11,8 @@ class CRANModel(ModelBase):
     """a CRAN repository representation
 
     """
-    __tablename__ = 'cran_repo'
+
+    __tablename__ = "cran_repo"
 
     uid = Column(String, primary_key=True)
     version = Column(String)

@@ -7,12 +7,12 @@ from celery import shared_task
 from .lister import PackagistLister
 
 
-@shared_task(name=__name__ + '.PackagistListerTask')
+@shared_task(name=__name__ + ".PackagistListerTask")
 def list_packagist(**lister_args):
-    'List the packagist (php) registry'
+    "List the packagist (php) registry"
     PackagistLister(**lister_args).run()
 
 
-@shared_task(name=__name__ + '.ping')
+@shared_task(name=__name__ + ".ping")
 def _ping():
-    return 'OK'
+    return "OK"

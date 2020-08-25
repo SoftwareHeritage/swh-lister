@@ -11,17 +11,19 @@ logger = logging.getLogger(__name__)
 
 
 try:
-    __version__ = pkg_resources.get_distribution('swh.lister').version
+    __version__ = pkg_resources.get_distribution("swh.lister").version
 except pkg_resources.DistributionNotFound:
-    __version__ = 'devel'
+    __version__ = "devel"
 
-USER_AGENT_TEMPLATE = 'Software Heritage Lister (%s)'
+USER_AGENT_TEMPLATE = "Software Heritage Lister (%s)"
 USER_AGENT = USER_AGENT_TEMPLATE % __version__
 
 
-LISTERS = {entry_point.name.split('.', 1)[1]: entry_point
-           for entry_point in pkg_resources.iter_entry_points('swh.workers')
-           if entry_point.name.split('.', 1)[0] == 'lister'}
+LISTERS = {
+    entry_point.name.split(".", 1)[1]: entry_point
+    for entry_point in pkg_resources.iter_entry_points("swh.workers")
+    if entry_point.name.split(".", 1)[0] == "lister"
+}
 
 
 SUPPORTED_LISTERS = list(LISTERS)
@@ -41,12 +43,13 @@ def get_lister(lister_name, db_url=None, **conf):
     """
     if lister_name not in LISTERS:
         raise ValueError(
-            'Invalid lister %s: only supported listers are %s' %
-            (lister_name, SUPPORTED_LISTERS))
+            "Invalid lister %s: only supported listers are %s"
+            % (lister_name, SUPPORTED_LISTERS)
+        )
     if db_url:
-        conf['lister'] = {'cls': 'local', 'args': {'db': db_url}}
+        conf["lister"] = {"cls": "local", "args": {"db": db_url}}
 
     registry_entry = LISTERS[lister_name].load()()
-    lister_cls = registry_entry['lister']
+    lister_cls = registry_entry["lister"]
     lister = lister_cls(override_config=conf)
     return lister

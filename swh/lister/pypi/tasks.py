@@ -7,12 +7,12 @@ from celery import shared_task
 from .lister import PyPILister
 
 
-@shared_task(name=__name__ + '.PyPIListerTask')
+@shared_task(name=__name__ + ".PyPIListerTask")
 def list_pypi(**lister_args):
-    'Full update of the PyPI (python) registry'
+    "Full update of the PyPI (python) registry"
     return PyPILister(**lister_args).run()
 
 
-@shared_task(name=__name__ + '.ping')
+@shared_task(name=__name__ + ".ping")
 def _ping():
-    return 'OK'
+    return "OK"
