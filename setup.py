@@ -59,15 +59,15 @@ setup(
         lister.cgit=swh.lister.cgit:register
         lister.cran=swh.lister.cran:register
         lister.debian=swh.lister.debian:register
+        lister.gitea=swh.lister.gitea:register
         lister.github=swh.lister.github:register
         lister.gitlab=swh.lister.gitlab:register
         lister.gnu=swh.lister.gnu:register
+        lister.launchpad=swh.lister.launchpad:register
         lister.npm=swh.lister.npm:register
         lister.packagist=swh.lister.packagist:register
         lister.phabricator=swh.lister.phabricator:register
         lister.pypi=swh.lister.pypi:register
-        lister.launchpad=swh.lister.launchpad:register
-        lister.gitea=swh.lister.gitea:register
     """,
     classifiers=[
         "Programming Language :: Python :: 3",
