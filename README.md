@@ -10,16 +10,18 @@ It also provides several lister implementations, contained in the
 following Python modules:
 
 - `swh.lister.bitbucket`
+- `swh.lister.cgit`
+- `swh.lister.cran`
 - `swh.lister.debian`
+- `swh.lister.gitea`
 - `swh.lister.github`
 - `swh.lister.gitlab`
 - `swh.lister.gnu`
-- `swh.lister.pypi`
+- `swh.lister.launchpad`
 - `swh.lister.npm`
-- `swh.lister.phabricator`
-- `swh.lister.cran`
-- `swh.lister.cgit`
 - `swh.lister.packagist`
+- `swh.lister.phabricator`
+- `swh.lister.pypi`
 
 Dependencies
 ------------
