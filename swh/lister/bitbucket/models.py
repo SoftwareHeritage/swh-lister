@@ -9,7 +9,8 @@ from swh.lister.core.models import IndexingModelBase
 
 class BitBucketModel(IndexingModelBase):
     """a BitBucket repository"""
-    __tablename__ = 'bitbucket_repo'
+
+    __tablename__ = "bitbucket_repo"
 
     uid = Column(String, primary_key=True)
     indexable = Column(DateTime(timezone=True), index=True)

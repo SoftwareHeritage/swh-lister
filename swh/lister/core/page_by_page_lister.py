@@ -37,6 +37,7 @@ class PageByPageLister(ListerBase):
         def get_next_target_from_response
 
     """
+
     @abc.abstractmethod
     def get_next_target_from_response(self, response):
         """Find the next server endpoint page given the entire response.
@@ -87,7 +88,7 @@ class PageByPageLister(ListerBase):
 
         """
         for m in models_list:
-            sql_repo = self.db_query_equal('uid', m['uid'])
+            sql_repo = self.db_query_equal("uid", m["uid"])
             if sql_repo:
                 return False
         return models_list
@@ -110,7 +111,7 @@ class PageByPageLister(ListerBase):
             nothing
 
         """
-        status = 'uneventful'
+        status = "uneventful"
         page = min_bound or 0
         loop_count = 0
 
@@ -118,32 +119,30 @@ class PageByPageLister(ListerBase):
         self.max_page = max_bound
 
         while self.is_within_bounds(page, self.min_page, self.max_page):
-            logging.info('listing repos starting at %s' % page)
+            logging.info("listing repos starting at %s" % page)
 
-            response, injected_repos = self.ingest_data(page,
-                                                        checks=check_existence)
+            response, injected_repos = self.ingest_data(page, checks=check_existence)
             if not response and not injected_repos:
-                logging.info('No response from api server, stopping')
+                logging.info("No response from api server, stopping")
                 break
             elif not injected_repos:
-                logging.info('Repositories already seen, stopping')
+                logging.info("Repositories already seen, stopping")
                 break
-            status = 'eventful'
+            status = "eventful"
 
             next_page = self.get_next_target_from_response(response)
 
             # termination condition
 
             if (next_page is None) or (next_page == page):
-                logging.info('stopping after page %s, no next link found' %
-                             page)
+                logging.info("stopping after page %s, no next link found" % page)
                 break
             else:
                 page = next_page
 
             loop_count += 1
             if loop_count == 20:
-                logging.info('flushing updates')
+                logging.info("flushing updates")
                 loop_count = 0
                 self.db_session.commit()
                 self.db_session = self.mk_session()
@@ -151,7 +150,7 @@ class PageByPageLister(ListerBase):
         self.db_session.commit()
         self.db_session = self.mk_session()
 
-        return {'status': status}
+        return {"status": status}
 
 
 class PageByPageHttpLister(ListerHttpTransport, PageByPageLister):
@@ -159,6 +158,7 @@ class PageByPageHttpLister(ListerHttpTransport, PageByPageLister):
        combining PageByPageLister and ListerHttpTransport.
 
     """
+
     def __init__(self, url=None, override_config=None):
         PageByPageLister.__init__(self, override_config=override_config)
         ListerHttpTransport.__init__(self, url=url)

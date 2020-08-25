@@ -1,0 +1,13 @@
+*.pyc
+*.sw?
+*~
+/.coverage
+/.coverage.*
+.eggs/
+__pycache__
+build/
+dist/
+*.egg-info
+version.txt
+.tox/
+.mypy_cache/

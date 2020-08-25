@@ -7,12 +7,12 @@ from celery import shared_task
 from .lister import DebianLister
 
 
-@shared_task(name=__name__ + '.DebianListerTask')
+@shared_task(name=__name__ + ".DebianListerTask")
 def list_debian_distribution(distribution, **lister_args):
-    '''List a Debian distribution'''
+    """List a Debian distribution"""
     return DebianLister(distribution=distribution, **lister_args).run()
 
 
-@shared_task(name=__name__ + '.ping')
+@shared_task(name=__name__ + ".ping")
 def _ping():
-    return 'OK'
+    return "OK"

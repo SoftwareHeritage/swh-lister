@@ -10,14 +10,16 @@ from swh.lister.core.tests.conftest import *  # noqa
 
 @pytest.fixture
 def lister_packagist(swh_listers):
-    lister = swh_listers['packagist']
+    lister = swh_listers["packagist"]
 
     # Amend the scheduler with an unknown yet load-packagist task type
-    lister.scheduler.create_task_type({
-        'type': 'load-packagist',
-        'description': 'Load packagist origin',
-        'backend_name': 'swh.loader.package.tasks.LoaderPackagist',
-        'default_interval': '1 day',
-    })
+    lister.scheduler.create_task_type(
+        {
+            "type": "load-packagist",
+            "description": "Load packagist origin",
+            "backend_name": "swh.loader.package.tasks.LoaderPackagist",
+            "default_interval": "1 day",
+        }
+    )
 
     return lister

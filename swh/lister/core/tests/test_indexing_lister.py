@@ -9,7 +9,7 @@ from swh.lister.core.indexing_lister import IndexingLister
 
 class MockedIndexingListerDbPartitionIndices(IndexingLister):
     # Abstract Attribute boilerplate
-    LISTER_NAME = 'DbPartitionIndices'
+    LISTER_NAME = "DbPartitionIndices"
     MODEL = type(None)
 
     # ABC boilerplate
@@ -33,9 +33,7 @@ class MockedIndexingListerDbPartitionIndices(IndexingLister):
 
 def test_db_partition_indices():
     m = MockedIndexingListerDbPartitionIndices(
-        num_entries=1000,
-        first_index=1,
-        last_index=10001,
+        num_entries=1000, first_index=1, last_index=10001,
     )
     assert m
 
@@ -49,9 +47,7 @@ def test_db_partition_indices():
 
 def test_db_partition_indices_zero_first():
     m = MockedIndexingListerDbPartitionIndices(
-        num_entries=1000,
-        first_index=0,
-        last_index=10000,
+        num_entries=1000, first_index=0, last_index=10000,
     )
     assert m
 
@@ -65,9 +61,7 @@ def test_db_partition_indices_zero_first():
 
 def test_db_partition_indices_small_index_range():
     m = MockedIndexingListerDbPartitionIndices(
-        num_entries=5000,
-        first_index=0,
-        last_index=5,
+        num_entries=5000, first_index=0, last_index=5,
     )
     assert m
 
@@ -78,8 +72,8 @@ def test_db_partition_indices_small_index_range():
 
 def test_db_partition_indices_date_indices():
     # 24 hour delta
-    first = datetime.datetime.fromisoformat('2019-11-01T00:00:00+00:00')
-    last = datetime.datetime.fromisoformat('2019-11-02T00:00:00+00:00')
+    first = datetime.datetime.fromisoformat("2019-11-01T00:00:00+00:00")
+    last = datetime.datetime.fromisoformat("2019-11-02T00:00:00+00:00")
 
     m = MockedIndexingListerDbPartitionIndices(
         # one entry per second
@@ -102,9 +96,7 @@ def test_db_partition_indices_date_indices():
 
 def test_db_partition_indices_float_index_range():
     m = MockedIndexingListerDbPartitionIndices(
-        num_entries=10000,
-        first_index=0.0,
-        last_index=1.0,
+        num_entries=10000, first_index=0.0, last_index=1.0,
     )
     assert m
 
@@ -120,9 +112,7 @@ def test_db_partition_indices_float_index_range():
 
 def test_db_partition_indices_uneven_int_index_range():
     m = MockedIndexingListerDbPartitionIndices(
-        num_entries=5641,
-        first_index=0,
-        last_index=10000,
+        num_entries=5641, first_index=0, last_index=10000,
     )
     assert m
 

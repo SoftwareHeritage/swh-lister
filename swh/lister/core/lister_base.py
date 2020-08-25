@@ -13,7 +13,7 @@ import time
 
 from sqlalchemy import create_engine, func
 from sqlalchemy.orm import sessionmaker
-from typing import Any, Dict, List, Type, Union
+from typing import Any, Dict, List, Type, Union, Optional
 
 from swh.core import config
 from swh.core.utils import grouper
@@ -21,6 +21,7 @@ from swh.scheduler import get_scheduler, utils
 
 from .abstractattribute import AbstractAttribute
 
+from requests import Response
 
 logger = logging.getLogger(__name__)
 
@@ -67,11 +68,12 @@ class ListerBase(abc.ABC, config.SWHConfig):
     """
 
     MODEL = AbstractAttribute(
-        'Subclass type (not instance) of swh.lister.core.models.ModelBase '
-        'customized for a specific service.'
+        "Subclass type (not instance) of swh.lister.core.models.ModelBase "
+        "customized for a specific service."
     )  # type: Union[AbstractAttribute, Type[Any]]
     LISTER_NAME = AbstractAttribute(
-        "Lister's name")  # type: Union[AbstractAttribute, str]
+        "Lister's name"
+    )  # type: Union[AbstractAttribute, str]
 
     def transport_request(self, identifier):
         """Given a target endpoint identifier to query, try once to request it.
@@ -137,7 +139,7 @@ class ListerBase(abc.ABC, config.SWHConfig):
         """
         pass
 
-    def filter_before_inject(self, models_list):
+    def filter_before_inject(self, models_list: List[Dict]) -> List[Dict]:
         """Filter models_list entries prior to injection in the db.
         This is ran directly after `transport_response_simplified`.
 
@@ -152,7 +154,7 @@ class ListerBase(abc.ABC, config.SWHConfig):
         """
         return models_list
 
-    def do_additional_checks(self, models_list):
+    def do_additional_checks(self, models_list: List[Dict]) -> List[Dict]:
         """Execute some additional checks on the model list (after the
         filtering).
 
@@ -169,7 +171,9 @@ class ListerBase(abc.ABC, config.SWHConfig):
         """
         return models_list
 
-    def is_within_bounds(self, inner, lower=None, upper=None):
+    def is_within_bounds(
+        self, inner: int, lower: Optional[int] = None, upper: Optional[int] = None
+    ) -> bool:
         """See if a sortable value is inside the range [lower,upper].
 
         MAY BE OVERRIDDEN, for example if the server indexable* key is
@@ -188,7 +192,7 @@ class ListerBase(abc.ABC, config.SWHConfig):
             if lower is None and upper is None:
                 return True
             elif lower is None:
-                ret = inner <= upper
+                ret = inner <= upper  # type: ignore
             elif upper is None:
                 ret = inner >= lower
             else:
@@ -196,11 +200,15 @@ class ListerBase(abc.ABC, config.SWHConfig):
 
             self.string_pattern_check(inner, lower, upper)
         except Exception as e:
-            logger.error(str(e) + ': %s, %s, %s' %
-                         (('inner=%s%s' % (type(inner), inner)),
-                          ('lower=%s%s' % (type(lower), lower)),
-                          ('upper=%s%s' % (type(upper), upper)))
-                         )
+            logger.error(
+                str(e)
+                + ": %s, %s, %s"
+                % (
+                    ("inner=%s%s" % (type(inner), inner)),
+                    ("lower=%s%s" % (type(lower), lower)),
+                    ("upper=%s%s" % (type(upper), upper)),
+                )
+            )
             raise
 
         return ret
@@ -208,30 +216,23 @@ class ListerBase(abc.ABC, config.SWHConfig):
     # You probably don't need to override anything below this line.
 
     DEFAULT_CONFIG = {
-        'scheduler': ('dict', {
-            'cls': 'remote',
-            'args': {
-                'url': 'http://localhost:5008/'
-            },
-        }),
-        'lister': ('dict', {
-            'cls': 'local',
-            'args': {
-                'db': 'postgresql:///lister',
-            },
-        }),
+        "scheduler": (
+            "dict",
+            {"cls": "remote", "args": {"url": "http://localhost:5008/"},},
+        ),
+        "lister": ("dict", {"cls": "local", "args": {"db": "postgresql:///lister",},}),
     }
 
     @property
     def CONFIG_BASE_FILENAME(self):  # noqa: N802
-        return 'lister_%s' % self.LISTER_NAME
+        return "lister_%s" % self.LISTER_NAME
 
     @property
     def ADDITIONAL_CONFIG(self):  # noqa: N802
         return {
-            'credentials': ('dict', {}),
-            'cache_responses': ('bool', False),
-            'cache_dir': ('str', '~/.cache/swh/lister/%s' % self.LISTER_NAME),
+            "credentials": ("dict", {}),
+            "cache_responses": ("bool", False),
+            "cache_dir": ("str", "~/.cache/swh/lister/%s" % self.LISTER_NAME),
         }
 
     INITIAL_BACKOFF = 10
@@ -240,21 +241,21 @@ class ListerBase(abc.ABC, config.SWHConfig):
 
     def __init__(self, override_config=None):
         self.backoff = self.INITIAL_BACKOFF
-        logger.debug('Loading config from %s' % self.CONFIG_BASE_FILENAME)
+        logger.debug("Loading config from %s" % self.CONFIG_BASE_FILENAME)
         self.config = self.parse_config_file(
             base_filename=self.CONFIG_BASE_FILENAME,
-            additional_configs=[self.ADDITIONAL_CONFIG]
+            additional_configs=[self.ADDITIONAL_CONFIG],
         )
-        self.config['cache_dir'] = os.path.expanduser(self.config['cache_dir'])
-        if self.config['cache_responses']:
-            config.prepare_folders(self.config, 'cache_dir')
+        self.config["cache_dir"] = os.path.expanduser(self.config["cache_dir"])
+        if self.config["cache_responses"]:
+            config.prepare_folders(self.config, "cache_dir")
 
         if override_config:
             self.config.update(override_config)
 
-        logger.debug('%s CONFIG=%s' % (self, self.config))
-        self.scheduler = get_scheduler(**self.config['scheduler'])
-        self.db_engine = create_engine(self.config['lister']['args']['db'])
+        logger.debug("%s CONFIG=%s" % (self, self.config))
+        self.scheduler = get_scheduler(**self.config["scheduler"])
+        self.db_engine = create_engine(self.config["lister"]["args"]["db"])
         self.mk_session = sessionmaker(bind=self.db_engine)
         self.db_session = self.mk_session()
 
@@ -262,13 +263,13 @@ class ListerBase(abc.ABC, config.SWHConfig):
         """Reset exponential backoff timeout to initial level."""
         self.backoff = self.INITIAL_BACKOFF
 
-    def back_off(self):
+    def back_off(self) -> int:
         """Get next exponential backoff timeout."""
         ret = self.backoff
         self.backoff *= 10
         return ret
 
-    def safely_issue_request(self, identifier):
+    def safely_issue_request(self, identifier: int) -> Optional[Response]:
         """Make network request with retries, rate quotas, and response logs.
 
         Protocol is handled by the implementation of the transport_request
@@ -280,7 +281,7 @@ class ListerBase(abc.ABC, config.SWHConfig):
             server response
         """
         retries_left = self.MAX_RETRIES
-        do_cache = self.config['cache_responses']
+        do_cache = self.config["cache_responses"]
         r = None
         while retries_left > 0:
             try:
@@ -288,8 +289,9 @@ class ListerBase(abc.ABC, config.SWHConfig):
             except FetchError:
                 # network-level connection error, try again
                 logger.warning(
-                    'connection error on %s: sleep for %d seconds' %
-                    (identifier, self.CONN_SLEEP))
+                    "connection error on %s: sleep for %d seconds"
+                    % (identifier, self.CONN_SLEEP)
+                )
                 time.sleep(self.CONN_SLEEP)
                 retries_left -= 1
                 continue
@@ -301,8 +303,8 @@ class ListerBase(abc.ABC, config.SWHConfig):
             must_retry, delay = self.transport_quota_check(r)
             if must_retry:
                 logger.warning(
-                    'rate limited on %s: sleep for %f seconds' %
-                    (identifier, delay))
+                    "rate limited on %s: sleep for %f seconds" % (identifier, delay)
+                )
                 time.sleep(delay)
             else:  # request ok
                 break
@@ -310,12 +312,11 @@ class ListerBase(abc.ABC, config.SWHConfig):
             retries_left -= 1
 
         if not retries_left:
-            logger.warning(
-                'giving up on %s: max retries exceeded' % identifier)
+            logger.warning("giving up on %s: max retries exceeded" % identifier)
 
         return r
 
-    def db_query_equal(self, key, value):
+    def db_query_equal(self, key: Any, value: Any):
         """Look in the db for a row with key == value
 
         Args:
@@ -327,8 +328,7 @@ class ListerBase(abc.ABC, config.SWHConfig):
         """
         if isinstance(key, str):
             key = self.MODEL.__dict__[key]
-        return self.db_session.query(self.MODEL) \
-                   .filter(key == value).first()
+        return self.db_session.query(self.MODEL).filter(key == value).first()
 
     def winnow_models(self, mlist, key, to_remove):
         """Given a list of models, remove any with <key> matching
@@ -353,8 +353,7 @@ class ListerBase(abc.ABC, config.SWHConfig):
 
     def db_num_entries(self):
         """Return the known number of entries in the lister db"""
-        return self.db_session.query(func.count('*')).select_from(self.MODEL) \
-                   .scalar()
+        return self.db_session.query(func.count("*")).select_from(self.MODEL).scalar()
 
     def db_inject_repo(self, model_dict):
         """Add/update a new repo to the db and mark it last_seen now.
@@ -367,7 +366,7 @@ class ListerBase(abc.ABC, config.SWHConfig):
             object associated with the injection
 
         """
-        sql_repo = self.db_query_equal('uid', model_dict['uid'])
+        sql_repo = self.db_query_equal("uid", model_dict["uid"])
 
         if not sql_repo:
             sql_repo = self.MODEL(**model_dict)
@@ -379,8 +378,7 @@ class ListerBase(abc.ABC, config.SWHConfig):
 
         return sql_repo
 
-    def task_dict(self, origin_type: str,
-                  origin_url: str, **kwargs) -> Dict[str, Any]:
+    def task_dict(self, origin_type: str, origin_url: str, **kwargs) -> Dict[str, Any]:
         """Return special dict format for the tasks list
 
         Args:
@@ -389,11 +387,11 @@ class ListerBase(abc.ABC, config.SWHConfig):
         Returns:
             the same information in a different form
         """
-        logger.debug('origin-url: %s, type: %s', origin_url, origin_type)
-        _type = 'load-%s' % origin_type
-        _policy = kwargs.get('policy', 'recurring')
-        priority = kwargs.get('priority')
-        kw = {'priority': priority} if priority else {}
+        logger.debug("origin-url: %s, type: %s", origin_url, origin_type)
+        _type = "load-%s" % origin_type
+        _policy = kwargs.get("policy", "recurring")
+        priority = kwargs.get("priority")
+        kw = {"priority": priority} if priority else {}
         return utils.create_task_dict(_type, _policy, url=origin_url, **kw)
 
     def string_pattern_check(self, a, b, c=None):
@@ -415,13 +413,15 @@ class ListerBase(abc.ABC, config.SWHConfig):
             pattern.
         """
         if isinstance(a, str):
-            a_pattern = re.sub('[a-zA-Z0-9]',
-                               '[a-zA-Z0-9]',
-                               re.escape(a))
-            if (isinstance(b, str) and (re.match(a_pattern, b) is None)
-               or isinstance(c, str) and (re.match(a_pattern, c) is None)):
+            a_pattern = re.sub("[a-zA-Z0-9]", "[a-zA-Z0-9]", re.escape(a))
+            if (
+                isinstance(b, str)
+                and (re.match(a_pattern, b) is None)
+                or isinstance(c, str)
+                and (re.match(a_pattern, c) is None)
+            ):
                 logger.debug(a_pattern)
-                raise TypeError('incomparable string patterns detected')
+                raise TypeError("incomparable string patterns detected")
 
     def inject_repo_data_into_db(self, models_list: List[Dict]) -> Dict:
         """Inject data into the db.
@@ -435,11 +435,12 @@ class ListerBase(abc.ABC, config.SWHConfig):
         """
         injected_repos = {}
         for m in models_list:
-            injected_repos[m['uid']] = self.db_inject_repo(m)
+            injected_repos[m["uid"]] = self.db_inject_repo(m)
         return injected_repos
 
     def schedule_missing_tasks(
-            self, models_list: List[Dict], injected_repos: Dict) -> None:
+        self, models_list: List[Dict], injected_repos: Dict
+    ) -> None:
         """Schedule any newly created db entries that do not have been
            scheduled yet.
 
@@ -457,20 +458,17 @@ class ListerBase(abc.ABC, config.SWHConfig):
         tasks = {}
 
         def _task_key(m):
-            return '%s-%s' % (
-                m['type'],
-                json.dumps(m['arguments'], sort_keys=True)
-            )
+            return "%s-%s" % (m["type"], json.dumps(m["arguments"], sort_keys=True))
 
         for m in models_list:
-            ir = injected_repos[m['uid']]
+            ir = injected_repos[m["uid"]]
             if not ir.task_id:
                 # Patching the model instance to add the policy/priority task
                 # scheduling
-                if 'policy' in self.config:
-                    m['policy'] = self.config['policy']
-                if 'priority' in self.config:
-                    m['priority'] = self.config['priority']
+                if "policy" in self.config:
+                    m["policy"] = self.config["policy"]
+                if "priority" in self.config:
+                    m["priority"] = self.config["priority"]
                 task_dict = self.task_dict(**m)
                 tasks[_task_key(task_dict)] = (ir, m, task_dict)
 
@@ -479,9 +477,9 @@ class ListerBase(abc.ABC, config.SWHConfig):
             new_tasks = self.scheduler.create_tasks(list(grouped_tasks))
             for task in new_tasks:
                 ir, m, _ = tasks[_task_key(task)]
-                ir.task_id = task['id']
+                ir.task_id = task["id"]
 
-    def ingest_data(self, identifier, checks=False):
+    def ingest_data(self, identifier: int, checks: bool = False):
         """The core data fetch sequence. Request server endpoint. Simplify and
             filter response list of repositories. Inject repo information into
             local db. Queue loader tasks for linked repositories.
@@ -517,13 +515,7 @@ class ListerBase(abc.ABC, config.SWHConfig):
         """
         datepath = utcnow().isoformat()
 
-        fname = os.path.join(
-            self.config['cache_dir'],
-            datepath + '.gz',
-        )
+        fname = os.path.join(self.config["cache_dir"], datepath + ".gz",)
 
-        with gzip.open(fname, 'w') as f:
-            f.write(bytes(
-                self.transport_response_to_string(response),
-                'UTF-8'
-            ))
+        with gzip.open(fname, "w") as f:
+            f.write(bytes(self.transport_response_to_string(response), "UTF-8"))

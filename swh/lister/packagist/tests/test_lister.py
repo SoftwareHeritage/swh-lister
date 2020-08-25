@@ -12,27 +12,29 @@ from swh.lister.packagist.lister import PackagistLister, compute_package_url
 from swh.lister.core.tests.test_lister import HttpSimpleListerTester
 
 
-expected_packages = ['0.0.0/composer-include-files', '0.0.0/laravel-env-shim',
-                     '0.0.1/try-make-package', '0099ff/dialogflowphp',
-                     '00f100/array_dot']
+expected_packages = [
+    "0.0.0/composer-include-files",
+    "0.0.0/laravel-env-shim",
+    "0.0.1/try-make-package",
+    "0099ff/dialogflowphp",
+    "00f100/array_dot",
+]
 
 expected_model = {
-            'uid': '0099ff/dialogflowphp',
-            'name': '0099ff/dialogflowphp',
-            'full_name': '0099ff/dialogflowphp',
-            'html_url':
-            'https://repo.packagist.org/p/0099ff/dialogflowphp.json',
-            'origin_url':
-            'https://repo.packagist.org/p/0099ff/dialogflowphp.json',
-            'origin_type': 'packagist',
-        }
+    "uid": "0099ff/dialogflowphp",
+    "name": "0099ff/dialogflowphp",
+    "full_name": "0099ff/dialogflowphp",
+    "html_url": "https://repo.packagist.org/p/0099ff/dialogflowphp.json",
+    "origin_url": "https://repo.packagist.org/p/0099ff/dialogflowphp.json",
+    "origin_type": "packagist",
+}
 
 
 class PackagistListerTester(HttpSimpleListerTester, unittest.TestCase):
     Lister = PackagistLister
-    PAGE = 'https://packagist.org/packages/list.json'
-    lister_subdir = 'packagist'
-    good_api_response_file = 'data/https_packagist.org/packages_list.json'
+    PAGE = "https://packagist.org/packages/list.json"
+    lister_subdir = "packagist"
+    good_api_response_file = "data/https_packagist.org/packages_list.json"
     entries = 5
 
     @requests_mock.Mocker()
@@ -52,40 +54,41 @@ class PackagistListerTester(HttpSimpleListerTester, unittest.TestCase):
 
         """
         fl = self.get_fl()
-        model = fl.transport_response_simplified(['0099ff/dialogflowphp'])
+        model = fl.transport_response_simplified(["0099ff/dialogflowphp"])
         assert len(model) == 1
         for key, values in model[0].items():
             assert values == expected_model[key]
 
-    @patch('swh.lister.packagist.lister.utils.create_task_dict')
+    @patch("swh.lister.packagist.lister.utils.create_task_dict")
     def test_task_dict(self, mock_create_tasks):
         """Test the task creation of lister
 
         """
         fl = self.get_fl()
-        fl.task_dict(origin_type='packagist', origin_url='https://abc',
-                     name='test_pack')
+        fl.task_dict(
+            origin_type="packagist", origin_url="https://abc", name="test_pack"
+        )
         mock_create_tasks.assert_called_once_with(
-            'load-packagist', 'recurring', 'test_pack', 'https://abc',
-            retries_left=3)
+            "load-packagist", "recurring", "test_pack", "https://abc", retries_left=3
+        )
 
 
 def test_compute_package_url():
-    expected_url = 'https://repo.packagist.org/p/hello.json'
-    actual_url = compute_package_url('hello')
+    expected_url = "https://repo.packagist.org/p/hello.json"
+    actual_url = compute_package_url("hello")
     assert actual_url == expected_url
 
 
 def test_packagist_lister(lister_packagist, requests_mock_datadir):
     lister_packagist.run()
 
-    r = lister_packagist.scheduler.search_tasks(task_type='load-packagist')
+    r = lister_packagist.scheduler.search_tasks(task_type="load-packagist")
     assert len(r) == 5
 
     for row in r:
-        assert row['type'] == 'load-packagist'
+        assert row["type"] == "load-packagist"
         # arguments check
-        args = row['arguments']['args']
+        args = row["arguments"]["args"]
         assert len(args) == 2
 
         package = args[0]
@@ -95,8 +98,8 @@ def test_packagist_lister(lister_packagist, requests_mock_datadir):
         assert url == expected_url
 
         # kwargs
-        kwargs = row['arguments']['kwargs']
+        kwargs = row["arguments"]["kwargs"]
         assert kwargs == {}
 
-        assert row['policy'] == 'recurring'
-        assert row['priority'] is None
+        assert row["policy"] == "recurring"
+        assert row["priority"] is None

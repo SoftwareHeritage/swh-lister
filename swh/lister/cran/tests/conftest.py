@@ -10,14 +10,16 @@ from swh.lister.core.tests.conftest import *  # noqa
 
 @pytest.fixture
 def lister_cran(swh_listers):
-    lister = swh_listers['cran']
+    lister = swh_listers["cran"]
 
     # Add the load-deb-package in the scheduler backend
-    lister.scheduler.create_task_type({
-        'type': 'load-cran',
-        'description': 'Load a CRAN package',
-        'backend_name': 'swh.loader.package.cran.tasks.LoaderCRAN',
-        'default_interval': '1 day',
-    })
+    lister.scheduler.create_task_type(
+        {
+            "type": "load-cran",
+            "description": "Load a CRAN package",
+            "backend_name": "swh.loader.package.cran.tasks.LoaderCRAN",
+            "default_interval": "1 day",
+        }
+    )
 
     return lister

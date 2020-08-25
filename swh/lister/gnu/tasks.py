@@ -7,12 +7,12 @@ from celery import shared_task
 from .lister import GNULister
 
 
-@shared_task(name=__name__ + '.GNUListerTask')
+@shared_task(name=__name__ + ".GNUListerTask")
 def list_gnu_full(**lister_args):
     """List lister for the GNU source code archive"""
     return GNULister(**lister_args).run()
 
 
-@shared_task(name=__name__ + '.ping')
+@shared_task(name=__name__ + ".ping")
 def _ping():
-    return 'OK'
+    return "OK"

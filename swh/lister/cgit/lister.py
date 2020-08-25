@@ -8,8 +8,9 @@ from urllib.parse import urlparse, urljoin
 
 from bs4 import BeautifulSoup
 from requests import Session
-from requests.adapters import HTTPAdapter
 
+from requests.adapters import HTTPAdapter
+from typing import Any, Dict, Generator, Optional
 from .models import CGitModel
 
 from swh.core.utils import grouper
@@ -49,9 +50,10 @@ class CGitLister(ListerBase):
             Args:
                 'https://git.savannah.gnu.org/git/elisp-es.git'
     """
+
     MODEL = CGitModel
-    DEFAULT_URL = 'https://git.savannah.gnu.org/cgit/'
-    LISTER_NAME = 'cgit'
+    DEFAULT_URL = "https://git.savannah.gnu.org/cgit/"
+    LISTER_NAME = "cgit"
     url_prefix_present = True
 
     def __init__(self, url=None, instance=None, override_config=None):
@@ -67,7 +69,7 @@ class CGitLister(ListerBase):
         super().__init__(override_config=override_config)
 
         if url is None:
-            url = self.config.get('url', self.DEFAULT_URL)
+            url = self.config.get("url", self.DEFAULT_URL)
         self.url = url
 
         if not instance:
@@ -76,73 +78,72 @@ class CGitLister(ListerBase):
         self.session = Session()
         self.session.mount(self.url, HTTPAdapter(max_retries=3))
         self.session.headers = {
-            'User-Agent': USER_AGENT,
+            "User-Agent": USER_AGENT,
         }
 
-    def run(self):
-        status = 'uneventful'
+    def run(self) -> Dict[str, str]:
+        status = "uneventful"
         total = 0
         for repos in grouper(self.get_repos(), 10):
-            models = list(filter(None, (self.build_model(repo)
-                                        for repo in repos)))
+            models = list(filter(None, (self.build_model(repo) for repo in repos)))
             injected_repos = self.inject_repo_data_into_db(models)
             self.schedule_missing_tasks(models, injected_repos)
             self.db_session.commit()
             total += len(injected_repos)
-            logger.debug('Scheduled %s tasks for %s', total, self.url)
-            status = 'eventful'
+            logger.debug("Scheduled %s tasks for %s", total, self.url)
+            status = "eventful"
 
-        return {'status': status}
+        return {"status": status}
 
-    def get_repos(self):
+    def get_repos(self) -> Generator[str, None, None]:
         """Generate git 'project' URLs found on the current CGit server
 
         """
         next_page = self.url
         while next_page:
             bs_idx = self.get_and_parse(next_page)
-            for tr in bs_idx.find(
-                    'div', {"class": "content"}).find_all(
-                        "tr", {"class": ""}):
-                yield urljoin(self.url, tr.find('a')['href'])
+            for tr in bs_idx.find("div", {"class": "content"}).find_all(
+                "tr", {"class": ""}
+            ):
+                yield urljoin(self.url, tr.find("a")["href"])
 
             try:
-                pager = bs_idx.find('ul', {'class': 'pager'})
-                current_page = pager.find('a', {'class': 'current'})
+                pager = bs_idx.find("ul", {"class": "pager"})
+                current_page = pager.find("a", {"class": "current"})
                 if current_page:
-                    next_page = current_page.parent.next_sibling.a['href']
+                    next_page = current_page.parent.next_sibling.a["href"]
                     next_page = urljoin(self.url, next_page)
             except (AttributeError, KeyError):
                 # no pager, or no next page
                 next_page = None
 
-    def build_model(self, repo_url):
+    def build_model(self, repo_url: str) -> Optional[Dict[str, Any]]:
         """Given the URL of a git repo project page on a CGit server,
         return the repo description (dict) suitable for insertion in the db.
         """
         bs = self.get_and_parse(repo_url)
-        urls = [x['href'] for x in bs.find_all('a', {'rel': 'vcs-git'})]
+        urls = [x["href"] for x in bs.find_all("a", {"rel": "vcs-git"})]
 
         if not urls:
-            return
+            return None
 
         # look for the http/https url, if any, and use it as origin_url
         for url in urls:
-            if urlparse(url).scheme in ('http', 'https'):
+            if urlparse(url).scheme in ("http", "https"):
                 origin_url = url
                 break
         else:
             # otherwise, choose the first one
             origin_url = urls[0]
 
-        return {'uid': repo_url,
-                'name': bs.find('a', title=re.compile('.+'))['title'],
-                'origin_type': 'git',
-                'instance': self.instance,
-                'origin_url': origin_url,
-                }
+        return {
+            "uid": repo_url,
+            "name": bs.find("a", title=re.compile(".+"))["title"],
+            "origin_type": "git",
+            "instance": self.instance,
+            "origin_url": origin_url,
+        }
 
-    def get_and_parse(self, url):
+    def get_and_parse(self, url: str) -> BeautifulSoup:
         "Get the given url and parse the retrieved HTML using BeautifulSoup"
-        return BeautifulSoup(self.session.get(url).text,
-                             features='html.parser')
+        return BeautifulSoup(self.session.get(url).text, features="html.parser")

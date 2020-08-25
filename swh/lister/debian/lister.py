@@ -13,10 +13,14 @@ import logging
 from debian.deb822 import Sources
 from sqlalchemy.orm import joinedload, load_only
 from sqlalchemy.schema import CreateTable, DropTable
-from typing import Mapping, Optional
+from typing import Mapping, Optional, Dict, Any
+from requests import Response
 
 from swh.lister.debian.models import (
-    AreaSnapshot, Distribution, DistributionSnapshot, Package,
+    AreaSnapshot,
+    Distribution,
+    DistributionSnapshot,
+    Package,
     TempPackage,
 )
 
@@ -24,9 +28,9 @@ from swh.lister.core.lister_base import ListerBase, FetchError
 from swh.lister.core.lister_transports import ListerHttpTransport
 
 decompressors = {
-    'gz': lambda f: gzip.GzipFile(fileobj=f),
-    'bz2': bz2.BZ2File,
-    'xz': lzma.LZMAFile,
+    "gz": lambda f: gzip.GzipFile(fileobj=f),
+    "bz2": bz2.BZ2File,
+    "xz": lzma.LZMAFile,
 }
 
 
@@ -36,12 +40,15 @@ logger = logging.getLogger(__name__)
 class DebianLister(ListerHttpTransport, ListerBase):
     MODEL = Package
     PATH_TEMPLATE = None
-    LISTER_NAME = 'debian'
-    instance = 'debian'
+    LISTER_NAME = "debian"
+    instance = "debian"
 
-    def __init__(self, distribution: str = 'Debian',
-                 date: Optional[datetime.datetime] = None,
-                 override_config: Mapping = {}):
+    def __init__(
+        self,
+        distribution: str = "Debian",
+        date: Optional[datetime.datetime] = None,
+        override_config: Mapping = {},
+    ):
         """Initialize the debian lister for a given distribution at a given
         date.
 
@@ -54,11 +61,12 @@ class DebianLister(ListerHttpTransport, ListerBase):
         """
         ListerHttpTransport.__init__(self, url="notused")
         ListerBase.__init__(self, override_config=override_config)
-        self.distribution = override_config.get('distribution', distribution)
-        self.date = override_config.get('date', date) or datetime.datetime.now(
-            tz=datetime.timezone.utc)
+        self.distribution = override_config.get("distribution", distribution)
+        self.date = override_config.get("date", date) or datetime.datetime.now(
+            tz=datetime.timezone.utc
+        )
 
-    def transport_request(self, identifier):
+    def transport_request(self, identifier) -> Response:
         """Subvert ListerHttpTransport.transport_request, to try several
         index URIs in turn.
 
@@ -82,9 +90,7 @@ class DebianLister(ListerHttpTransport, ListerBase):
             if response.status_code == 200:
                 break
         else:
-            raise FetchError(
-                "Could not retrieve index for %s" % self.area
-            )
+            raise FetchError("Could not retrieve index for %s" % self.area)
         self.decompressor = decompressors.get(compression)
         return response
 
@@ -94,11 +100,11 @@ class DebianLister(ListerHttpTransport, ListerBase):
         # need to return it here.
         return identifier
 
-    def request_params(self, identifier):
+    def request_params(self, identifier) -> Dict[str, Any]:
         # Enable streaming to allow wrapping the response in the decompressor
         # in transport_response_simplified.
         params = super().request_params(identifier)
-        params['stream'] = True
+        params["stream"] = True
         return params
 
     def transport_response_simplified(self, response):
@@ -117,22 +123,22 @@ class DebianLister(ListerHttpTransport, ListerBase):
             files = defaultdict(dict)
 
             for field in src_pkg._multivalued_fields:
-                if field.startswith('checksums-'):
-                    sum_name = field[len('checksums-'):]
+                if field.startswith("checksums-"):
+                    sum_name = field[len("checksums-") :]
                 else:
-                    sum_name = 'md5sum'
+                    sum_name = "md5sum"
                 if field in src_pkg:
                     for entry in src_pkg[field]:
-                        name = entry['name']
-                        files[name]['name'] = entry['name']
-                        files[name]['size'] = int(entry['size'], 10)
+                        name = entry["name"]
+                        files[name]["name"] = entry["name"]
+                        files[name]["size"] = int(entry["size"], 10)
                         files[name][sum_name] = entry[sum_name]
 
             yield {
-                'name': src_pkg['Package'],
-                'version': src_pkg['Version'],
-                'directory': src_pkg['Directory'],
-                'files': files,
+                "name": src_pkg["Package"],
+                "version": src_pkg["Version"],
+                "directory": src_pkg["Directory"],
+                "files": files,
             }
 
     def inject_repo_data_into_db(self, models_list):
@@ -148,13 +154,11 @@ class DebianLister(ListerHttpTransport, ListerBase):
         area_id = self.area.id
 
         for model in models_list:
-            name = model['name']
-            version = model['version']
-            temp_packages.append({
-                'area_id': area_id,
-                'name': name,
-                'version': version,
-            })
+            name = model["name"]
+            version = model["version"]
+            temp_packages.append(
+                {"area_id": area_id, "name": name, "version": version,}
+            )
             by_name_version[name, version] = model
 
         # Add all the listed packages to a temporary table
@@ -171,15 +175,18 @@ class DebianLister(ListerHttpTransport, ListerBase):
             )
 
         # Filter out the packages that already exist in the main Package table
-        new_packages = self.db_session\
-                           .query(TempPackage)\
-                           .options(load_only('name', 'version'))\
-                           .filter(~exists_tmp_pkg(self.db_session, Package))\
-                           .all()
+        new_packages = (
+            self.db_session.query(TempPackage)
+            .options(load_only("name", "version"))
+            .filter(~exists_tmp_pkg(self.db_session, Package))
+            .all()
+        )
 
-        self.old_area_packages = self.db_session.query(Package).filter(
-            exists_tmp_pkg(self.db_session, TempPackage)
-        ).all()
+        self.old_area_packages = (
+            self.db_session.query(Package)
+            .filter(exists_tmp_pkg(self.db_session, TempPackage))
+            .all()
+        )
 
         self.db_session.execute(DropTable(TempPackage.__table__))
 
@@ -187,8 +194,7 @@ class DebianLister(ListerHttpTransport, ListerBase):
         for package in new_packages:
             model = by_name_version[package.name, package.version]
 
-            added_packages.append(Package(area=self.area,
-                                          **model))
+            added_packages.append(Package(area=self.area, **model))
 
         self.db_session.add_all(added_packages)
         return added_packages
@@ -209,26 +215,26 @@ class DebianLister(ListerHttpTransport, ListerBase):
         """Run the lister for a given (distribution, area) tuple.
 
         """
-        distribution = self.db_session\
-                           .query(Distribution)\
-                           .options(joinedload(Distribution.areas))\
-                           .filter(Distribution.name == self.distribution)\
-                           .one_or_none()
+        distribution = (
+            self.db_session.query(Distribution)
+            .options(joinedload(Distribution.areas))
+            .filter(Distribution.name == self.distribution)
+            .one_or_none()
+        )
 
         if not distribution:
-            logger.error("Distribution %s is not registered" %
-                         self.distribution)
-            return {'status': 'failed'}
+            logger.error("Distribution %s is not registered" % self.distribution)
+            return {"status": "failed"}
 
-        if not distribution.type == 'deb':
-            logger.error("Distribution %s is not a Debian derivative" %
-                         distribution)
-            return {'status': 'failed'}
+        if not distribution.type == "deb":
+            logger.error("Distribution %s is not a Debian derivative" % distribution)
+            return {"status": "failed"}
 
         date = self.date
 
-        logger.debug('Creating snapshot for distribution %s on date %s' %
-                     (distribution, date))
+        logger.debug(
+            "Creating snapshot for distribution %s on date %s" % (distribution, date)
+        )
 
         snapshot = DistributionSnapshot(date=date, distribution=distribution)
 
@@ -240,7 +246,7 @@ class DebianLister(ListerHttpTransport, ListerBase):
 
             self.area = area
 
-            logger.debug('Processing area %s' % area)
+            logger.debug("Processing area %s" % area)
 
             _, new_area_packages = self.ingest_data(None)
             area_snapshot = AreaSnapshot(snapshot=snapshot, area=area)
@@ -252,4 +258,4 @@ class DebianLister(ListerHttpTransport, ListerBase):
 
         self.db_session.commit()
 
-        return {'status': 'eventful'}
+        return {"status": "eventful"}

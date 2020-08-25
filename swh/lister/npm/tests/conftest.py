@@ -10,14 +10,16 @@ from swh.lister.core.tests.conftest import *  # noqa
 
 @pytest.fixture
 def lister_npm(swh_listers):
-    lister = swh_listers['npm']
+    lister = swh_listers["npm"]
 
     # Add the load-deb-package in the scheduler backend
-    lister.scheduler.create_task_type({
-        'type': 'load-npm',
-        'description': 'Load npm package',
-        'backend_name': 'swh.loader.package.tasks.LoadNpm',
-        'default_interval': '1 day',
-    })
+    lister.scheduler.create_task_type(
+        {
+            "type": "load-npm",
+            "description": "Load npm package",
+            "backend_name": "swh.loader.package.tasks.LoadNpm",
+            "default_interval": "1 day",
+        }
+    )
 
     return lister

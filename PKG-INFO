@@ -1,6 +1,6 @@
 Metadata-Version: 2.1
 Name: swh.lister
-Version: 0.0.50
+Version: 0.1.0
 Summary: Software Heritage lister
 Home-page: https://forge.softwareheritage.org/diffusion/DLSGH/
 Author: Software Heritage developers
@@ -9,6 +9,7 @@ License: UNKNOWN
 Project-URL: Bug Reports, https://forge.softwareheritage.org/maniphest
 Project-URL: Funding, https://www.softwareheritage.org/donate
 Project-URL: Source, https://forge.softwareheritage.org/source/swh-lister
+Project-URL: Documentation, https://docs.softwareheritage.org/devel/swh-lister/
 Description: swh-lister
         ==========
         
@@ -21,16 +22,18 @@ Description: swh-lister
         following Python modules:
         
         - `swh.lister.bitbucket`
+        - `swh.lister.cgit`
+        - `swh.lister.cran`
         - `swh.lister.debian`
+        - `swh.lister.gitea`
         - `swh.lister.github`
         - `swh.lister.gitlab`
         - `swh.lister.gnu`
-        - `swh.lister.pypi`
+        - `swh.lister.launchpad`
         - `swh.lister.npm`
-        - `swh.lister.phabricator`
-        - `swh.lister.cran`
-        - `swh.lister.cgit`
         - `swh.lister.packagist`
+        - `swh.lister.phabricator`
+        - `swh.lister.pypi`
         
         Dependencies
         ------------
@@ -267,5 +270,6 @@ Classifier: Intended Audience :: Developers
 Classifier: License :: OSI Approved :: GNU General Public License v3 (GPLv3)
 Classifier: Operating System :: OS Independent
 Classifier: Development Status :: 5 - Production/Stable
+Requires-Python: >=3.7
 Description-Content-Type: text/markdown
 Provides-Extra: testing
