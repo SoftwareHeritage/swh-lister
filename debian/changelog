@@ -1,3 +1,9 @@
+swh-lister (0.1.0-1~swh2) unstable-swh; urgency=medium
+
+  * Update dependencies
+
+ -- Antoine R. Dumont (@ardumont) <ardumont@softwareheritage.org>  Wed, 26 Aug 2020 16:05:03 +0000
+
 swh-lister (0.1.0-1~swh1) unstable-swh; urgency=medium
 
   [ Nicolas Dandrimont ]
