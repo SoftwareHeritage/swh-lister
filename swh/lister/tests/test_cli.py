@@ -25,7 +25,9 @@ def test_get_lister(mock_get_scheduler):
 
     """
     db_url = init_db().url()
-    for lister_name in SUPPORTED_LISTERS:
+    # launchpad lister need particular setup so exclude from the checks
+    listers_to_check = set(SUPPORTED_LISTERS) | {"launchpad"}
+    for lister_name in listers_to_check:
         lst = get_lister(lister_name, db_url)
         assert isinstance(lst, ListerBase)
 
