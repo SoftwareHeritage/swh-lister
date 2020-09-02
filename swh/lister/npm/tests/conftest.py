@@ -7,11 +7,14 @@ import pytest
 
 
 @pytest.fixture
-def lister_npm(swh_listers):
-    lister = swh_listers["npm"]
+def lister_under_test():
+    return "npm"
 
-    # Add the load-deb-package in the scheduler backend
-    lister.scheduler.create_task_type(
+
+@pytest.fixture
+def lister_npm(swh_lister):
+    # Add the load-npm in the scheduler backend
+    swh_lister.scheduler.create_task_type(
         {
             "type": "load-npm",
             "description": "Load npm package",
@@ -20,4 +23,4 @@ def lister_npm(swh_listers):
         }
     )
 
-    return lister
+    return swh_lister

@@ -1,4 +1,4 @@
-# Copyright (C) 2017-2019 The Software Heritage developers
+# Copyright (C) 2017-2020 The Software Heritage developers
 # See the AUTHORS file at the top-level directory of this distribution
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
@@ -6,7 +6,10 @@
 import logging
 import re
 import unittest
+
 from datetime import datetime, timedelta
+
+import pytest
 
 from swh.lister.core.tests.test_lister import HttpListerTesterBase
 from swh.lister.gitlab.lister import GitLabLister
@@ -43,12 +46,15 @@ class GitLabListerTester(HttpListerTesterBase, unittest.TestCase):
         return '{"error":"dummy"}'
 
 
-def test_lister_gitlab(swh_listers, requests_mock_datadir):
-    lister = swh_listers["gitlab"]
+@pytest.fixture
+def lister_under_test():
+    return "gitlab"
 
-    lister.run()
 
-    r = lister.scheduler.search_tasks(task_type="load-git")
+def test_lister_gitlab(swh_lister, requests_mock_datadir):
+    swh_lister.run()
+
+    r = swh_lister.scheduler.search_tasks(task_type="load-git")
     assert len(r) == 10
 
     for row in r:

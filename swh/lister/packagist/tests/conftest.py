@@ -7,11 +7,14 @@ import pytest
 
 
 @pytest.fixture
-def lister_packagist(swh_listers):
-    lister = swh_listers["packagist"]
+def lister_under_test():
+    return "packagist"
 
+
+@pytest.fixture
+def lister_packagist(swh_lister):
     # Amend the scheduler with an unknown yet load-packagist task type
-    lister.scheduler.create_task_type(
+    swh_lister.scheduler.create_task_type(
         {
             "type": "load-packagist",
             "description": "Load packagist origin",
@@ -20,4 +23,4 @@ def lister_packagist(swh_listers):
         }
     )
 
-    return lister
+    return swh_lister

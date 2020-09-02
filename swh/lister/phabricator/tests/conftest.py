@@ -7,13 +7,16 @@ import pytest
 
 
 @pytest.fixture
-def lister_phabricator(swh_listers):
-    lister = swh_listers["phabricator"]
+def lister_under_test():
+    return "phabricator"
 
+
+@pytest.fixture
+def lister_phabricator(swh_lister):
     # Amend the credentials
-    lister.config = {
+    swh_lister.config = {
         "cache_responses": False,
-        "credentials": {"phabricator": {lister.instance: [{"password": "foo"}]}},
+        "credentials": {"phabricator": {swh_lister.instance: [{"password": "foo"}]}},
     }
 
-    return lister
+    return swh_lister

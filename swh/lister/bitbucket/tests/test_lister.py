@@ -1,4 +1,4 @@
-# Copyright (C) 2017-2019 The Software Heritage developers
+# Copyright (C) 2017-2020 The Software Heritage developers
 # See the AUTHORS file at the top-level directory of this distribution
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
@@ -10,10 +10,16 @@ from datetime import timedelta
 from urllib.parse import unquote
 
 import iso8601
+import pytest
 import requests_mock
 
 from swh.lister.bitbucket.lister import BitBucketLister
 from swh.lister.core.tests.test_lister import HttpListerTester
+
+
+@pytest.fixture
+def lister_under_test():
+    return "bitbucket"
 
 
 def _convert_type(req_index):
@@ -80,11 +86,11 @@ class BitBucketListerTester(HttpListerTester, unittest.TestCase):
         )
 
 
-def test_lister_bitbucket(swh_listers, requests_mock_datadir):
+def test_lister_bitbucket(swh_lister, requests_mock_datadir):
     """Simple bitbucket listing should create scheduled tasks (git, hg)
 
     """
-    lister = swh_listers["bitbucket"]
+    lister = swh_lister
 
     lister.run()
 
