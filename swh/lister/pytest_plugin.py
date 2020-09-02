@@ -4,12 +4,14 @@
 # See top-level LICENSE file for more information
 
 import logging
+
 import pytest
 
 from sqlalchemy import create_engine
 
 from swh.lister import get_lister, SUPPORTED_LISTERS
 from swh.lister.core.models import initialize
+
 
 logger = logging.getLogger(__name__)
 
@@ -27,11 +29,21 @@ def lister_db_url(postgresql_proc, postgresql):
 
 
 @pytest.fixture
-def swh_listers(mock_get_scheduler, lister_db_url, swh_scheduler):
+def listers_to_instantiate():
+    """Fixture to define what listers to instantiate. Because some need dedicated setup.
+
+    """
+    return set(SUPPORTED_LISTERS) - {"launchpad"}
+
+
+@pytest.fixture
+def swh_listers(
+    mock_get_scheduler, lister_db_url, swh_scheduler, listers_to_instantiate
+):
     listers = {}
 
     # Prepare schema for all listers
-    for lister_name in SUPPORTED_LISTERS:
+    for lister_name in listers_to_instantiate:
         lister = get_lister(lister_name, db_url=lister_db_url)
         listers[lister_name] = lister
     initialize(create_engine(lister_db_url), drop_tables=True)
