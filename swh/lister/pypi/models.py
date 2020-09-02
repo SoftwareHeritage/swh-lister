@@ -11,6 +11,7 @@ class PyPIModel(ModelBase):
     """a PyPI repository representation
 
     """
-    __tablename__ = 'pypi_repo'
+
+    __tablename__ = "pypi_repo"
 
     uid = Column(String, primary_key=True)

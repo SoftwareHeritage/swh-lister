@@ -1,8 +1,41 @@
-swh-lister (0.0.50-1~swh1~bpo10+1) buster-swh; urgency=medium
+swh-lister (0.1.2-1~swh1) unstable-swh; urgency=medium
 
-  * Rebuild for buster-swh
+  * New upstream release 0.1.2     - (tagged by Antoine R. Dumont
+    (@ardumont) <ardumont@softwareheritage.org> on 2020-09-02 13:07:30
+    +0200)
+  * Upstream changes:     - v0.1.2     - pytest_plugin: Instantiate only
+    lister with no particular setup     - pytest: Define plugin and
+    declare it in the root conftest
 
- -- Software Heritage autobuilder (on jenkins-debian1) <jenkins@jenkins-debian1.internal.softwareheritage.org>  Mon, 20 Jan 2020 09:55:20 +0000
+ -- Software Heritage autobuilder (on jenkins-debian1) <jenkins@jenkins-debian1.internal.softwareheritage.org>  Wed, 02 Sep 2020 11:10:14 +0000
+
+swh-lister (0.1.1-1~swh1) unstable-swh; urgency=medium
+
+  * New upstream release 0.1.1     - (tagged by Antoine R. Dumont
+    (@ardumont) <ardumont@softwareheritage.org> on 2020-09-01 16:08:48
+    +0200)
+  * Upstream changes:     - v0.1.1     - test_cli: Exclude launchpad
+    lister from the check
+
+ -- Software Heritage autobuilder (on jenkins-debian1) <jenkins@jenkins-debian1.internal.softwareheritage.org>  Tue, 01 Sep 2020 14:11:46 +0000
+
+swh-lister (0.1.0-1~swh2) unstable-swh; urgency=medium
+
+  * Update dependencies
+
+ -- Antoine R. Dumont (@ardumont) <ardumont@softwareheritage.org>  Wed, 26 Aug 2020 16:05:03 +0000
+
+swh-lister (0.1.0-1~swh1) unstable-swh; urgency=medium
+
+  [ Nicolas Dandrimont ]
+  * Use setuptools-scm instead of vcversioner
+
+  [ Software Heritage autobuilder (on jenkins-debian1) ]
+  * New upstream release 0.1.0     - (tagged by David Douard
+    <david.douard@sdfa3.org> on 2020-08-25 18:33:55 +0200)
+  * Upstream changes:     - v0.1.0
+
+ -- Software Heritage autobuilder (on jenkins-debian1) <jenkins@jenkins-debian1.internal.softwareheritage.org>  Tue, 25 Aug 2020 16:39:28 +0000
 
 swh-lister (0.0.50-1~swh1) unstable-swh; urgency=medium
 

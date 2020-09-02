@@ -20,8 +20,9 @@ class AbstractAttribute:
                 AbstractAttribute('docstring for foo')
 
     """
+
     __isabstractmethod__ = True
 
     def __init__(self, docstring=None):
         if docstring is not None:
-            self.__doc__ = 'AbstractAttribute: ' + docstring
+            self.__doc__ = "AbstractAttribute: " + docstring

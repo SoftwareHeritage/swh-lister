@@ -7,7 +7,8 @@ def register():
     from .models import PyPIModel
     from .lister import PyPILister
 
-    return {'models': [PyPIModel],
-            'lister': PyPILister,
-            'task_modules': ['%s.tasks' % __name__],
-            }
+    return {
+        "models": [PyPIModel],
+        "lister": PyPILister,
+        "task_modules": ["%s.tasks" % __name__],
+    }

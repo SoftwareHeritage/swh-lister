@@ -11,7 +11,8 @@ class CGitModel(ModelBase):
     """a CGit repository representation
 
     """
-    __tablename__ = 'cgit_repo'
+
+    __tablename__ = "cgit_repo"
 
     uid = Column(String, primary_key=True)
     instance = Column(String, index=True)

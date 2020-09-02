@@ -7,7 +7,8 @@ def register():
     from .models import CRANModel
     from .lister import CRANLister
 
-    return {'models': [CRANModel],
-            'lister': CRANLister,
-            'task_modules': ['%s.tasks' % __name__],
-            }
+    return {
+        "models": [CRANModel],
+        "lister": CRANLister,
+        "task_modules": ["%s.tasks" % __name__],
+    }

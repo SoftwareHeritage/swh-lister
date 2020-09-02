@@ -16,21 +16,21 @@ def test_lister_debian(lister_debian, datadir, requests_mock_datadir):
     # Run the lister
     lister_debian.run()
 
-    r = lister_debian.scheduler.search_tasks(task_type='load-deb-package')
+    r = lister_debian.scheduler.search_tasks(task_type="load-deb-package")
     assert len(r) == 151
 
     for row in r:
-        assert row['type'] == 'load-deb-package'
+        assert row["type"] == "load-deb-package"
         # arguments check
-        args = row['arguments']['args']
+        args = row["arguments"]["args"]
         assert len(args) == 0
 
         # kwargs
-        kwargs = row['arguments']['kwargs']
-        assert set(kwargs.keys()) == {'url', 'date', 'packages'}
+        kwargs = row["arguments"]["kwargs"]
+        assert set(kwargs.keys()) == {"url", "date", "packages"}
 
-        logger.debug('kwargs: %s', kwargs)
-        assert isinstance(kwargs['url'], str)
+        logger.debug("kwargs: %s", kwargs)
+        assert isinstance(kwargs["url"], str)
 
-        assert row['policy'] == 'oneshot'
-        assert row['priority'] is None
+        assert row["policy"] == "oneshot"
+        assert row["priority"] is None

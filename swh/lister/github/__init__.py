@@ -7,7 +7,8 @@ def register():
     from .models import GitHubModel
     from .lister import GitHubLister
 
-    return {'models': [GitHubModel],
-            'lister': GitHubLister,
-            'task_modules': ['%s.tasks' % __name__],
-            }
+    return {
+        "models": [GitHubModel],
+        "lister": GitHubLister,
+        "task_modules": ["%s.tasks" % __name__],
+    }

@@ -7,7 +7,8 @@ def register():
     from .models import GitLabModel
     from .lister import GitLabLister
 
-    return {'models': [GitLabModel],
-            'lister': GitLabLister,
-            'task_modules': ['%s.tasks' % __name__],
-            }
+    return {
+        "models": [GitLabModel],
+        "lister": GitLabLister,
+        "task_modules": ["%s.tasks" % __name__],
+    }

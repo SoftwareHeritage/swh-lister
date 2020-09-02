@@ -7,12 +7,12 @@ from celery import shared_task
 from swh.lister.cran.lister import CRANLister
 
 
-@shared_task(name=__name__ + '.CRANListerTask')
+@shared_task(name=__name__ + ".CRANListerTask")
 def list_cran(**lister_args):
-    '''Lister task for the CRAN registry'''
+    """Lister task for the CRAN registry"""
     return CRANLister(**lister_args).run()
 
 
-@shared_task(name=__name__ + '.ping')
+@shared_task(name=__name__ + ".ping")
 def _ping():
-    return 'OK'
+    return "OK"

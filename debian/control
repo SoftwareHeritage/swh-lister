@@ -10,6 +10,8 @@ Build-Depends: debhelper (>= 9),
                python3-dateutil,
                python3-debian,
                python3-iso8601,
+               python3-launchpadlib,
+               python3-testresources,
                python3-pytest,
                python3-pytest-postgresql,
                python3-requests,
@@ -20,7 +22,7 @@ Build-Depends: debhelper (>= 9),
                python3-swh.scheduler (>= 0.0.31~),
                python3-swh.storage (>= 0.0.103~),
                python3-testing.postgresql,
-               python3-vcversioner,
+               python3-setuptools-scm,
                python3-xmltodict
 Standards-Version: 3.9.6
 Homepage: https://forge.softwareheritage.org/source/swh-lister/

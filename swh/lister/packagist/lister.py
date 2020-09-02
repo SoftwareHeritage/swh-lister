@@ -23,7 +23,7 @@ def compute_package_url(repo_name: str) -> str:
     """Compute packgist package url from repo name.
 
     """
-    return 'https://repo.packagist.org/p/%s.json' % repo_name
+    return "https://repo.packagist.org/p/%s.json" % repo_name
 
 
 class PackagistLister(ListerOnePageApiTransport, SimpleLister):
@@ -52,17 +52,19 @@ class PackagistLister(ListerOnePageApiTransport, SimpleLister):
                     'https://repo.packagist.org/p/hypejunction/hypegamemechanics.json'
 
     """
+
     MODEL = PackagistModel
-    LISTER_NAME = 'packagist'
-    PAGE = 'https://packagist.org/packages/list.json'
-    instance = 'packagist'
+    LISTER_NAME = "packagist"
+    PAGE = "https://packagist.org/packages/list.json"
+    instance = "packagist"
 
     def __init__(self, override_config=None):
-        ListerOnePageApiTransport .__init__(self)
+        ListerOnePageApiTransport.__init__(self)
         SimpleLister.__init__(self, override_config=override_config)
 
-    def task_dict(self, origin_type: str, origin_url: str,
-                  **kwargs: Mapping[str, str]) -> Dict[str, Any]:
+    def task_dict(
+        self, origin_type: str, origin_url: str, **kwargs: Mapping[str, str]
+    ) -> Dict[str, Any]:
         """Return task format dict
 
         This is overridden from the lister_base as more information is
@@ -70,18 +72,20 @@ class PackagistLister(ListerOnePageApiTransport, SimpleLister):
 
         """
         return utils.create_task_dict(
-            'load-%s' % origin_type,
-            kwargs.get('policy', 'recurring'),
-            kwargs.get('name'), origin_url,
-            retries_left=3)
+            "load-%s" % origin_type,
+            kwargs.get("policy", "recurring"),
+            kwargs.get("name"),
+            origin_url,
+            retries_left=3,
+        )
 
     def list_packages(self, response: Any) -> List[str]:
         """List the actual packagist origins from the response.
 
         """
         response = json.loads(response.text)
-        packages = [name for name in response['packageNames']]
-        logger.debug('Number of packages: %s', len(packages))
+        packages = [name for name in response["packageNames"]]
+        logger.debug("Number of packages: %s", len(packages))
         random.shuffle(packages)
         return packages
 
@@ -91,10 +95,10 @@ class PackagistLister(ListerOnePageApiTransport, SimpleLister):
         """
         url = compute_package_url(repo_name)
         return {
-            'uid': repo_name,
-            'name': repo_name,
-            'full_name': repo_name,
-            'html_url': url,
-            'origin_url': url,
-            'origin_type': 'packagist',
+            "uid": repo_name,
+            "name": repo_name,
+            "full_name": repo_name,
+            "html_url": url,
+            "origin_url": url,
+            "origin_type": "packagist",
         }

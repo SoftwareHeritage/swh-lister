@@ -7,7 +7,8 @@ def register():
     from .models import CGitModel
     from .lister import CGitLister
 
-    return {'models': [CGitModel],
-            'lister': CGitLister,
-            'task_modules': ['%s.tasks' % __name__],
-            }
+    return {
+        "models": [CGitModel],
+        "lister": CGitLister,
+        "task_modules": ["%s.tasks" % __name__],
+    }

@@ -11,11 +11,13 @@ from typing import Any, List, Mapping
 logger = logging.getLogger(__name__)
 
 
-def debian_init(db_engine,
-                override_conf: Mapping[str, Any] = {},
-                distribution_name: str = 'Debian',
-                suites: List[str] = ['stretch', 'buster', 'bullseye'],
-                components: List[str] = ['main', 'contrib', 'non-free']):
+def debian_init(
+    db_engine,
+    override_conf: Mapping[str, Any] = {},
+    distribution_name: str = "Debian",
+    suites: List[str] = ["stretch", "buster", "bullseye"],
+    components: List[str] = ["main", "contrib", "non-free"],
+):
     """Initialize the debian data model.
 
     Args:
@@ -28,30 +30,32 @@ def debian_init(db_engine,
     """
     from swh.lister.debian.models import Distribution, Area
     from sqlalchemy.orm import sessionmaker
+
     db_session = sessionmaker(bind=db_engine)()
-    distrib = db_session.query(Distribution) \
-        .filter(Distribution.name == distribution_name) \
+    distrib = (
+        db_session.query(Distribution)
+        .filter(Distribution.name == distribution_name)
         .one_or_none()
+    )
 
     if distrib is None:
         distrib = Distribution(
-            name=distribution_name, type='deb',
-            mirror_uri='http://deb.debian.org/debian/'
+            name=distribution_name,
+            type="deb",
+            mirror_uri="http://deb.debian.org/debian/",
         )
         db_session.add(distrib)
 
     # Check the existing
-    existing_area = db_session.query(Area) \
-        .filter(Area.distribution == distrib) \
-        .all()
+    existing_area = db_session.query(Area).filter(Area.distribution == distrib).all()
     existing_area = set([a.name for a in existing_area])
 
-    logger.debug('Area already known: %s', ', '.join(existing_area))
+    logger.debug("Area already known: %s", ", ".join(existing_area))
 
     # Create only the new ones
     for suite in suites:
         for component in components:
-            area_name = f'{suite}/{component}'
+            area_name = f"{suite}/{component}"
             if area_name in existing_area:
                 logger.debug("Area '%s' already set, skipping", area_name)
                 continue
@@ -64,7 +68,10 @@ def debian_init(db_engine,
 
 def register() -> Mapping[str, Any]:
     from .lister import DebianLister
-    return {'models': [DebianLister.MODEL],
-            'lister': DebianLister,
-            'task_modules': ['%s.tasks' % __name__],
-            'init': debian_init}
+
+    return {
+        "models": [DebianLister.MODEL],
+        "lister": DebianLister,
+        "task_modules": ["%s.tasks" % __name__],
+        "init": debian_init,
+    }

@@ -25,12 +25,12 @@ class ABCSQLMeta(abc.ABCMeta, DeclarativeMeta):
 
 class ModelBase(SQLBase, metaclass=ABCSQLMeta):
     """a common repository"""
+
     __abstract__ = True
-    __tablename__ = \
-        AbstractAttribute  # type: Union[Type[AbstractAttribute], str]
+    __tablename__ = AbstractAttribute  # type: Union[Type[AbstractAttribute], str]
 
     uid = AbstractAttribute(
-        'Column(<uid_type>, primary_key=True)'
+        "Column(<uid_type>, primary_key=True)"
     )  # type: Union[AbstractAttribute, Column]
 
     name = Column(String, index=True)
@@ -44,19 +44,18 @@ class ModelBase(SQLBase, metaclass=ABCSQLMeta):
     task_id = Column(Integer)
 
     def __init__(self, **kw):
-        kw['last_seen'] = datetime.now()
+        kw["last_seen"] = datetime.now()
         super().__init__(**kw)
 
 
 class IndexingModelBase(ModelBase, metaclass=ABCSQLMeta):
     __abstract__ = True
-    __tablename__ = \
-        AbstractAttribute  # type: Union[Type[AbstractAttribute], str]
+    __tablename__ = AbstractAttribute  # type: Union[Type[AbstractAttribute], str]
 
     # The value used for sorting, segmenting, or api query paging,
     # because uids aren't always sequential.
     indexable = AbstractAttribute(
-        'Column(<indexable_type>, index=True)'
+        "Column(<indexable_type>, index=True)"
     )  # type: Union[AbstractAttribute, Column]
 
 
@@ -72,8 +71,8 @@ def initialize(db_engine, drop_tables=False, **kwargs):
             (re)creating them.
     """
     if drop_tables:
-        logger.info('Dropping tables')
+        logger.info("Dropping tables")
         SQLBase.metadata.drop_all(db_engine, checkfirst=True)
 
-    logger.info('Creating tables')
+    logger.info("Creating tables")
     SQLBase.metadata.create_all(db_engine, checkfirst=True)
