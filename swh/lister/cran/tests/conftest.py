@@ -5,8 +5,6 @@
 
 import pytest
 
-from swh.lister.core.tests.conftest import *  # noqa
-
 
 @pytest.fixture
 def lister_cran(swh_listers):

@@ -41,13 +41,13 @@ swh.lister.egg-info/top_level.txt
 swh/lister/__init__.py
 swh/lister/cli.py
 swh/lister/py.typed
+swh/lister/pytest_plugin.py
 swh/lister/utils.py
 swh/lister/bitbucket/__init__.py
 swh/lister/bitbucket/lister.py
 swh/lister/bitbucket/models.py
 swh/lister/bitbucket/tasks.py
 swh/lister/bitbucket/tests/__init__.py
-swh/lister/bitbucket/tests/conftest.py
 swh/lister/bitbucket/tests/test_lister.py
 swh/lister/bitbucket/tests/test_tasks.py
 swh/lister/bitbucket/tests/data/https_api.bitbucket.org/2.0_repositories,after=1970-01-01T00:00:00+00:00,pagelen=100
@@ -58,7 +58,6 @@ swh/lister/cgit/lister.py
 swh/lister/cgit/models.py
 swh/lister/cgit/tasks.py
 swh/lister/cgit/tests/__init__.py
-swh/lister/cgit/tests/conftest.py
 swh/lister/cgit/tests/repo_list.txt
 swh/lister/cgit/tests/test_lister.py
 swh/lister/cgit/tests/test_tasks.py
@@ -94,7 +93,6 @@ swh/lister/core/models.py
 swh/lister/core/page_by_page_lister.py
 swh/lister/core/simple_lister.py
 swh/lister/core/tests/__init__.py
-swh/lister/core/tests/conftest.py
 swh/lister/core/tests/test_abstractattribute.py
 swh/lister/core/tests/test_indexing_lister.py
 swh/lister/core/tests/test_lister.py
@@ -127,7 +125,6 @@ swh/lister/gitea/lister.py
 swh/lister/gitea/models.py
 swh/lister/gitea/tasks.py
 swh/lister/gitea/tests/__init__.py
-swh/lister/gitea/tests/conftest.py
 swh/lister/gitea/tests/test_lister.py
 swh/lister/gitea/tests/test_tasks.py
 swh/lister/gitea/tests/data/https_try.gitea.io/api_empty_response.json
@@ -138,7 +135,6 @@ swh/lister/github/lister.py
 swh/lister/github/models.py
 swh/lister/github/tasks.py
 swh/lister/github/tests/__init__.py
-swh/lister/github/tests/conftest.py
 swh/lister/github/tests/test_lister.py
 swh/lister/github/tests/test_tasks.py
 swh/lister/github/tests/data/https_api.github.com/empty_response.json
@@ -150,7 +146,6 @@ swh/lister/gitlab/lister.py
 swh/lister/gitlab/models.py
 swh/lister/gitlab/tasks.py
 swh/lister/gitlab/tests/__init__.py
-swh/lister/gitlab/tests/conftest.py
 swh/lister/gitlab/tests/test_lister.py
 swh/lister/gitlab/tests/test_tasks.py
 swh/lister/gitlab/tests/data/https_gitlab.com/api_empty_response.json
@@ -163,7 +158,6 @@ swh/lister/gnu/tasks.py
 swh/lister/gnu/tree.py
 swh/lister/gnu/tests/__init__.py
 swh/lister/gnu/tests/api_response.json
-swh/lister/gnu/tests/conftest.py
 swh/lister/gnu/tests/find_tarballs_output.json
 swh/lister/gnu/tests/test_lister.py
 swh/lister/gnu/tests/test_tasks.py

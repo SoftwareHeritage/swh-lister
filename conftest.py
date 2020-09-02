@@ -7,7 +7,7 @@ import os
 
 import pytest
 
-pytest_plugins = ["swh.scheduler.pytest_plugin"]
+pytest_plugins = ["swh.scheduler.pytest_plugin", "swh.lister.pytest_plugin"]
 
 os.environ["LC_ALL"] = "C.UTF-8"
 
