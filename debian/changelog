@@ -1,3 +1,14 @@
+swh-lister (0.1.2-1~swh1) unstable-swh; urgency=medium
+
+  * New upstream release 0.1.2     - (tagged by Antoine R. Dumont
+    (@ardumont) <ardumont@softwareheritage.org> on 2020-09-02 13:07:30
+    +0200)
+  * Upstream changes:     - v0.1.2     - pytest_plugin: Instantiate only
+    lister with no particular setup     - pytest: Define plugin and
+    declare it in the root conftest
+
+ -- Software Heritage autobuilder (on jenkins-debian1) <jenkins@jenkins-debian1.internal.softwareheritage.org>  Wed, 02 Sep 2020 11:10:14 +0000
+
 swh-lister (0.1.1-1~swh1) unstable-swh; urgency=medium
 
   * New upstream release 0.1.1     - (tagged by Antoine R. Dumont
