@@ -7,11 +7,14 @@ import pytest
 
 
 @pytest.fixture
-def lister_cran(swh_listers):
-    lister = swh_listers["cran"]
+def lister_under_test():
+    return "cran"
 
-    # Add the load-deb-package in the scheduler backend
-    lister.scheduler.create_task_type(
+
+@pytest.fixture
+def lister_cran(swh_lister):
+    # Add the load-cran in the scheduler backend
+    swh_lister.scheduler.create_task_type(
         {
             "type": "load-cran",
             "description": "Load a CRAN package",
@@ -20,4 +23,4 @@ def lister_cran(swh_listers):
         }
     )
 
-    return lister
+    return swh_lister

@@ -14,14 +14,19 @@ from swh.lister.debian import debian_init
 
 
 @pytest.fixture
-def lister_debian(swh_listers):
-    lister = swh_listers["debian"]
+def lister_under_test():
+    return "debian"
 
+
+@pytest.fixture
+def lister_debian(swh_lister):
     # Initialize the debian data model
-    debian_init(lister.db_engine, suites=["stretch"], components=["main", "contrib"])
+    debian_init(
+        swh_lister.db_engine, suites=["stretch"], components=["main", "contrib"]
+    )
 
     # Add the load-deb-package in the scheduler backend
-    lister.scheduler.create_task_type(
+    swh_lister.scheduler.create_task_type(
         {
             "type": "load-deb-package",
             "description": "Load a Debian package",
@@ -30,7 +35,7 @@ def lister_debian(swh_listers):
         }
     )
 
-    return lister
+    return swh_lister
 
 
 @pytest.fixture

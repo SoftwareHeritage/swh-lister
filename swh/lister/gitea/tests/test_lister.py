@@ -7,6 +7,8 @@ import logging
 import re
 import unittest
 
+import pytest
+
 from swh.lister.core.tests.test_lister import HttpListerTesterBase
 from swh.lister.gitea.lister import GiteaLister
 
@@ -38,8 +40,13 @@ class GiteaListerTester(HttpListerTesterBase, unittest.TestCase):
         return headers
 
 
-def test_lister_gitea(swh_listers, requests_mock_datadir):
-    lister: GiteaLister = swh_listers["gitea"]
+@pytest.fixture
+def lister_under_test():
+    return "gitea"
+
+
+def test_lister_gitea(swh_lister, requests_mock_datadir):
+    lister: GiteaLister = swh_lister
 
     lister.run()
     r = lister.scheduler.search_tasks(task_type="load-git")

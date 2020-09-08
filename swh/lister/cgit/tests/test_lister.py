@@ -1,13 +1,19 @@
-# Copyright (C) 2019 the Software Heritage developers
+# Copyright (C) 2019-2020 the Software Heritage developers
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
 
+import pytest
 
 from swh.lister import __version__
 
 
-def test_lister_no_page(requests_mock_datadir, swh_listers):
-    lister = swh_listers["cgit"]
+@pytest.fixture
+def lister_under_test():
+    return "cgit"
+
+
+def test_lister_no_page(requests_mock_datadir, swh_lister):
+    lister = swh_lister
 
     assert lister.url == "https://git.savannah.gnu.org/cgit/"
 
@@ -21,8 +27,8 @@ def test_lister_no_page(requests_mock_datadir, swh_listers):
     assert repos[-2] == "http://example.org/cgit/xstarcastle.git/"
 
 
-def test_lister_model(requests_mock_datadir, swh_listers):
-    lister = swh_listers["cgit"]
+def test_lister_model(requests_mock_datadir, swh_lister):
+    lister = swh_lister
 
     repo = next(lister.get_repos())
 
@@ -36,8 +42,8 @@ def test_lister_model(requests_mock_datadir, swh_listers):
     }
 
 
-def test_lister_with_pages(requests_mock_datadir, swh_listers):
-    lister = swh_listers["cgit"]
+def test_lister_with_pages(requests_mock_datadir, swh_lister):
+    lister = swh_lister
     lister.url = "https://git.tizen/cgit/"
 
     repos = list(lister.get_repos())
@@ -45,8 +51,8 @@ def test_lister_with_pages(requests_mock_datadir, swh_listers):
     assert len(repos) == 16
 
 
-def test_lister_run(requests_mock_datadir, swh_listers):
-    lister = swh_listers["cgit"]
+def test_lister_run(requests_mock_datadir, swh_lister):
+    lister = swh_lister
     lister.url = "https://git.tizen/cgit/"
     lister.run()
 
@@ -69,8 +75,8 @@ def test_lister_run(requests_mock_datadir, swh_listers):
         assert row["priority"] is None
 
 
-def test_lister_requests(requests_mock_datadir, swh_listers):
-    lister = swh_listers["cgit"]
+def test_lister_requests(requests_mock_datadir, swh_lister):
+    lister = swh_lister
     lister.url = "https://git.tizen/cgit/"
     lister.run()
 

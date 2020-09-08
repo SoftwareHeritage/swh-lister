@@ -7,7 +7,7 @@ import pytest
 
 
 from swh.lister.core.lister_base import ListerBase
-from swh.lister.cli import get_lister
+from swh.lister.cli import get_lister, SUPPORTED_LISTERS
 
 from .test_utils import init_db
 
@@ -20,11 +20,14 @@ def test_get_lister_wrong_input():
     assert "Invalid lister" in str(e.value)
 
 
-def test_get_lister(mock_get_scheduler, listers_to_instantiate):
+def test_get_lister(mock_get_scheduler):
     """Instantiating a supported lister should be ok
 
     """
     db_url = init_db().url()
+    # exclude listers because they need special instantiation treatment unrelated to
+    # this test (launchpad: network mock, gnu: scheduler load task)
+    listers_to_instantiate = set(SUPPORTED_LISTERS) - {"launchpad", "gnu"}
     for lister_name in listers_to_instantiate:
         lst = get_lister(lister_name, db_url)
         assert isinstance(lst, ListerBase)

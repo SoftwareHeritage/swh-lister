@@ -1,20 +1,26 @@
-# Copyright (C) 2019 The Software Heritage developers
+# Copyright (C) 2019-2020 The Software Heritage developers
 # See the AUTHORS file at the top-level directory of this distribution
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
 
 import logging
 
+import pytest
+
 
 logger = logging.getLogger(__name__)
 
 
-def test_gnu_lister(swh_listers, requests_mock_datadir):
-    lister = swh_listers["gnu"]
+@pytest.fixture
+def lister_under_test():
+    return "gnu"
 
-    lister.run()
 
-    r = lister.scheduler.search_tasks(task_type="load-archive-files")
+@pytest.fixture
+def test_gnu_lister(swh_lister, requests_mock_datadir):
+    swh_lister.run()
+
+    r = swh_lister.scheduler.search_tasks(task_type="load-archive-files")
     assert len(r) == 383
 
     for row in r:

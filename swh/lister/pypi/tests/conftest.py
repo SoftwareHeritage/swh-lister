@@ -7,11 +7,14 @@ import pytest
 
 
 @pytest.fixture
-def lister_pypi(swh_listers):
-    lister = swh_listers["pypi"]
+def lister_under_test():
+    return "pypi"
 
-    # Add the load-deb-package in the scheduler backend
-    lister.scheduler.create_task_type(
+
+@pytest.fixture
+def lister_pypi(swh_lister):
+    # Add the load-pypi in the scheduler backend
+    swh_lister.scheduler.create_task_type(
         {
             "type": "load-pypi",
             "description": "Load PyPI package",
@@ -20,4 +23,4 @@ def lister_pypi(swh_listers):
         }
     )
 
-    return lister
+    return swh_lister
