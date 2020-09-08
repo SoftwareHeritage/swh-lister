@@ -29,33 +29,15 @@ def lister_db_url(postgresql_proc, postgresql):
 
 
 @pytest.fixture
-def listers_to_instantiate():
-    """Fixture to define what listers to instantiate. Because some need dedicated setup.
-
-    """
-    return set(SUPPORTED_LISTERS) - {"launchpad"}
+def lister_under_test():
+    """Fixture to determine which lister to test"""
+    return "core"
 
 
 @pytest.fixture
-def swh_listers(
-    mock_get_scheduler, lister_db_url, swh_scheduler, listers_to_instantiate
-):
-    listers = {}
-
-    # Prepare schema for all listers
-    for lister_name in listers_to_instantiate:
-        lister = get_lister(lister_name, db_url=lister_db_url)
-        listers[lister_name] = lister
+def swh_lister(mock_get_scheduler, lister_db_url, swh_scheduler, lister_under_test):
+    assert lister_under_test in SUPPORTED_LISTERS
+    lister = get_lister(lister_under_test, db_url=lister_db_url)
     initialize(create_engine(lister_db_url), drop_tables=True)
 
-    # Add the load-archive-files expected by some listers (gnu, cran, ...)
-    swh_scheduler.create_task_type(
-        {
-            "type": "load-archive-files",
-            "description": "Load archive files.",
-            "backend_name": "swh.loader.package.tasks.LoadArchive",
-            "default_interval": "1 day",
-        }
-    )
-
-    return listers
+    return lister
