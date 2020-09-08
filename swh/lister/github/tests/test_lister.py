@@ -6,6 +6,7 @@
 import re
 import unittest
 
+import pytest
 import requests_mock
 
 from swh.lister.core.tests.test_lister import HttpListerTester
@@ -57,15 +58,18 @@ class GitHubListerTester(HttpListerTester, unittest.TestCase):
         )
 
 
-def test_lister_github(swh_listers, requests_mock_datadir):
+@pytest.fixture
+def lister_under_test():
+    return "github"
+
+
+def test_lister_github(swh_lister, requests_mock_datadir):
     """Simple github listing should create scheduled tasks
 
     """
-    lister = swh_listers["github"]
+    swh_lister.run()
 
-    lister.run()
-
-    r = lister.scheduler.search_tasks(task_type="load-git")
+    r = swh_lister.scheduler.search_tasks(task_type="load-git")
     assert len(r) == 100
 
     for row in r:
