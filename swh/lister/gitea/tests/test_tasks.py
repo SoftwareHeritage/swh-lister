@@ -31,7 +31,7 @@ def test_incremental(lister, swh_scheduler_celery_app, swh_scheduler_celery_work
     res.wait()
     assert res.successful()
 
-    lister.assert_called_once_with(sort="desc")
+    lister.assert_called_once_with(order="desc")
     lister.db_last_index.assert_not_called()
     lister.get_pages_information.assert_called_once_with()
     lister.run.assert_called_once_with(min_bound=1, max_bound=10, check_existence=True)
