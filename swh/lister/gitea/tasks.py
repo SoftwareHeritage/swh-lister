@@ -16,7 +16,7 @@ NBPAGES = 10
 @shared_task(name=__name__ + ".IncrementalGiteaLister")
 def list_gitea_incremental(**lister_args):
     """Incremental update of a Gitea instance"""
-    lister_args["sort"] = "desc"
+    lister_args["order"] = "desc"
     lister = GiteaLister(**lister_args)
     total_pages = lister.get_pages_information()[1]
     # stopping as soon as existing origins for that instance are detected

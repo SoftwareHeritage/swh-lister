@@ -1,28 +1,33 @@
-# Copyright (C) 2018-2019 the Software Heritage developers
+# Copyright (C) 2018-2020 the Software Heritage developers
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
 
-import unittest
+import pytest
 
 from testing.postgresql import Postgresql
 
 from swh.lister import utils
 
 
-class UtilsTest(unittest.TestCase):
-    def test_split_range(self):
-        actual_ranges = list(utils.split_range(14, 5))
-        self.assertEqual(actual_ranges, [(0, 5), (5, 10), (10, 14)])
+@pytest.mark.parametrize(
+    "total_pages,nb_pages,expected_ranges",
+    [
+        (14, 5, [(0, 4), (5, 9), (10, 14)]),
+        (19, 10, [(0, 9), (10, 19)]),
+        (20, 3, [(0, 2), (3, 5), (6, 8), (9, 11), (12, 14), (15, 17), (18, 20)]),
+        (21, 3, [(0, 2), (3, 5), (6, 8), (9, 11), (12, 14), (15, 17), (18, 21),],),
+    ],
+)
+def test_split_range(total_pages, nb_pages, expected_ranges):
+    actual_ranges = list(utils.split_range(total_pages, nb_pages))
+    assert actual_ranges == expected_ranges
 
-        actual_ranges = list(utils.split_range(19, 10))
-        self.assertEqual(actual_ranges, [(0, 10), (10, 19)])
 
-    def test_split_range_errors(self):
-        with self.assertRaises(TypeError):
-            list(utils.split_range(None, 1))
-
-        with self.assertRaises(TypeError):
-            list(utils.split_range(100, None))
+@pytest.mark.parametrize("total_pages,nb_pages", [(None, 1), (100, None)])
+def test_split_range_errors(total_pages, nb_pages):
+    for total_pages, nb_pages in [(None, 1), (100, None)]:
+        with pytest.raises(TypeError):
+            next(utils.split_range(total_pages, nb_pages))
 
 
 def init_db():

@@ -35,16 +35,13 @@ class GiteaLister(PageByPageHttpLister):
     def get_model_from_repo(self, repo: Dict[str, Any]) -> Dict[str, Any]:
         return {
             "instance": self.instance,
-            "uid": repo["id"],
+            "uid": f'{self.instance}/{repo["id"]}',
             "name": repo["name"],
             "full_name": repo["full_name"],
             "html_url": repo["html_url"],
             "origin_url": repo["clone_url"],
             "origin_type": "git",
         }
-
-    def uid(self, id: str) -> str:
-        return f"{self.instance}/{id}"
 
     def get_next_target_from_response(self, response: Response) -> Optional[int]:
         """Determine the next page identifier.
