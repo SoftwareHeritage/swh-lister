@@ -1,18 +1,18 @@
-# Copyright (C) 2018-2019  The Software Heritage developers
+# Copyright (C) 2018-2020  The Software Heritage developers
 # See the AUTHORS file at the top-level directory of this distribution
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
 
+# WARNING: do not import unnecessary things here to keep cli startup time under
+# control
 import os
 import logging
 from copy import deepcopy
 
 import click
-from sqlalchemy import create_engine
 
 from swh.core.cli import CONTEXT_SETTINGS
 from swh.lister import get_lister, SUPPORTED_LISTERS, LISTERS
-from swh.lister.core.models import initialize
 
 
 logger = logging.getLogger(__name__)
@@ -81,6 +81,8 @@ def db_init(ctx, drop_tables):
     """Initialize the database model for given listers.
 
     """
+    from sqlalchemy import create_engine
+    from swh.lister.core.models import initialize
 
     cfg = ctx.obj["config"]
     lister_cfg = cfg["lister"]
