@@ -288,13 +288,11 @@ def get_version(uri: str) -> str:
         Version detected
 
     Example:
-        For uri = https://ftp.gnu.org/gnu/8sync/8sync-0.2.0.tar.gz
-
+        >>> uri = 'https://ftp.gnu.org/gnu/8sync/8sync-0.2.0.tar.gz'
         >>> get_version(uri)
         '0.2.0'
 
-        For uri = 8sync-0.3.0.tar.gz
-
+        >>> uri = '8sync-0.3.0.tar.gz'
         >>> get_version(uri)
         '0.3.0'
 
