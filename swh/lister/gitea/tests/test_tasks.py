@@ -4,9 +4,12 @@
 # See top-level LICENSE file for more information
 
 from time import sleep
-from celery.result import GroupResult
 
-from unittest.mock import patch
+from celery.result import GroupResult
+from unittest.mock import patch, call
+
+from swh.lister.gitea.tasks import NBPAGES
+from swh.lister.utils import split_range
 
 
 def test_ping(swh_scheduler_celery_app, swh_scheduler_celery_worker):
@@ -31,7 +34,7 @@ def test_incremental(lister, swh_scheduler_celery_app, swh_scheduler_celery_work
     res.wait()
     assert res.successful()
 
-    lister.assert_called_once_with(sort="desc")
+    lister.assert_called_once_with(order="desc")
     lister.db_last_index.assert_not_called()
     lister.get_pages_information.assert_called_once_with()
     lister.run.assert_called_once_with(min_bound=1, max_bound=10, check_existence=True)
@@ -57,13 +60,11 @@ def test_range(lister, swh_scheduler_celery_app, swh_scheduler_celery_worker):
 
 @patch("swh.lister.gitea.tasks.GiteaLister")
 def test_relister(lister, swh_scheduler_celery_app, swh_scheduler_celery_worker):
+    total_pages = 85
     # setup the mocked GiteaLister
     lister.return_value = lister
     lister.run.return_value = None
-    lister.get_pages_information.return_value = (None, 85, None)
-    lister.db_partition_indices.return_value = [
-        (i, i + 9) for i in range(0, 80, 10)
-    ] + [(80, 85)]
+    lister.get_pages_information.return_value = (None, total_pages, None)
 
     res = swh_scheduler_celery_app.send_task("swh.lister.gitea.tasks.FullGiteaRelister")
     assert res
@@ -92,25 +93,21 @@ def test_relister(lister, swh_scheduler_celery_app, swh_scheduler_celery_worker)
     lister.get_pages_information.assert_called_once_with()
 
     # lister.run should have been called once per partition interval
-    for i in range(8):
-        # XXX inconsistent behavior: max_bound is EXCLUDED here
+    for min_bound, max_bound in split_range(total_pages, NBPAGES):
         assert (
-            dict(min_bound=10 * i, max_bound=10 * i + 10),
-        ) in lister.run.call_args_list
-    assert (dict(min_bound=80, max_bound=85),) in lister.run.call_args_list
+            call(min_bound=min_bound, max_bound=max_bound) in lister.run.call_args_list
+        )
 
 
 @patch("swh.lister.gitea.tasks.GiteaLister")
 def test_relister_instance(
     lister, swh_scheduler_celery_app, swh_scheduler_celery_worker
 ):
+    total_pages = 85
     # setup the mocked GiteaLister
     lister.return_value = lister
     lister.run.return_value = None
-    lister.get_pages_information.return_value = (None, 85, None)
-    lister.db_partition_indices.return_value = [
-        (i, i + 9) for i in range(0, 80, 10)
-    ] + [(80, 85)]
+    lister.get_pages_information.return_value = (None, total_pages, None)
 
     res = swh_scheduler_celery_app.send_task(
         "swh.lister.gitea.tasks.FullGiteaRelister",
@@ -142,9 +139,7 @@ def test_relister_instance(
     lister.get_pages_information.assert_called_once_with()
 
     # lister.run should have been called once per partition interval
-    for i in range(8):
-        # XXX inconsistent behavior: max_bound is EXCLUDED here
+    for min_bound, max_bound in split_range(total_pages, NBPAGES):
         assert (
-            dict(min_bound=10 * i, max_bound=10 * i + 10),
-        ) in lister.run.call_args_list
-    assert (dict(min_bound=80, max_bound=85),) in lister.run.call_args_list
+            call(min_bound=min_bound, max_bound=max_bound) in lister.run.call_args_list
+        )
