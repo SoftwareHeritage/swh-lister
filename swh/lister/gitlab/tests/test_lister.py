@@ -3,17 +3,15 @@
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
 
+from datetime import datetime, timedelta
 import logging
 import re
 import unittest
-
-from datetime import datetime, timedelta
 
 import pytest
 
 from swh.lister.core.tests.test_lister import HttpListerTesterBase
 from swh.lister.gitlab.lister import GitLabLister
-
 
 logger = logging.getLogger(__name__)
 

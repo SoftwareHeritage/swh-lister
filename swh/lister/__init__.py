@@ -4,8 +4,8 @@
 # See top-level LICENSE file for more information
 
 import logging
-import pkg_resources
 
+import pkg_resources
 
 logger = logging.getLogger(__name__)
 

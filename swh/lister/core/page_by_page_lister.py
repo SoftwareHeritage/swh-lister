@@ -5,8 +5,8 @@
 import abc
 import logging
 
-from .lister_transports import ListerHttpTransport
 from .lister_base import ListerBase
+from .lister_transports import ListerHttpTransport
 
 
 class PageByPageLister(ListerBase):

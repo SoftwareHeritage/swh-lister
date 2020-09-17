@@ -6,15 +6,13 @@
 import json
 import logging
 import random
-
 from typing import Any, Dict, List, Mapping
 
-from swh.scheduler import utils
-from swh.lister.core.simple_lister import SimpleLister
 from swh.lister.core.lister_transports import ListerOnePageApiTransport
+from swh.lister.core.simple_lister import SimpleLister
+from swh.scheduler import utils
 
 from .models import PackagistModel
-
 
 logger = logging.getLogger(__name__)
 

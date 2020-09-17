@@ -4,13 +4,12 @@
 # See top-level LICENSE file for more information
 
 import unittest
-import requests_mock
-
 from unittest.mock import patch
 
-from swh.lister.packagist.lister import PackagistLister, compute_package_url
-from swh.lister.core.tests.test_lister import HttpSimpleListerTester
+import requests_mock
 
+from swh.lister.core.tests.test_lister import HttpSimpleListerTester
+from swh.lister.packagist.lister import PackagistLister, compute_package_url
 
 expected_packages = [
     "0.0.0/composer-include-files",

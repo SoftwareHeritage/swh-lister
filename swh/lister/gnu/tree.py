@@ -3,19 +3,18 @@
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
 
+from datetime import datetime
 import gzip
 import json
 import logging
-import requests
-import re
-
-from datetime import datetime
 from os import path
 from pathlib import Path
-from pytz import utc
+import re
 from typing import Any, List, Mapping, Sequence, Tuple
 from urllib.parse import urlparse
 
+from pytz import utc
+import requests
 
 logger = logging.getLogger(__name__)
 

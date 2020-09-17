@@ -3,18 +3,17 @@
 # See top-level LICENSE file for more information
 
 import abc
-import logging
+from datetime import datetime
 from itertools import count
+import logging
+from typing import Any, Dict, List, Optional, Tuple, Union
 
 import dateutil
+from requests import Response
 from sqlalchemy import func
 
-from .lister_transports import ListerHttpTransport
 from .lister_base import ListerBase
-
-from requests import Response
-from typing import Any, Dict, List, Tuple, Optional, Union
-from datetime import datetime
+from .lister_transports import ListerHttpTransport
 
 logger = logging.getLogger(__name__)
 

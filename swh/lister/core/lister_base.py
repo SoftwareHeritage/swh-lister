@@ -10,18 +10,17 @@ import logging
 import os
 import re
 import time
+from typing import Any, Dict, List, Optional, Type, Union
 
+from requests import Response
 from sqlalchemy import create_engine, func
 from sqlalchemy.orm import sessionmaker
-from typing import Any, Dict, List, Type, Union, Optional
 
 from swh.core import config
 from swh.core.utils import grouper
 from swh.scheduler import get_scheduler, utils
 
 from .abstractattribute import AbstractAttribute
-
-from requests import Response
 
 logger = logging.getLogger(__name__)
 

@@ -4,9 +4,9 @@
 # See top-level LICENSE file for more information
 
 from time import sleep
-from celery.result import GroupResult
-
 from unittest.mock import patch
+
+from celery.result import GroupResult
 
 
 def test_ping(swh_scheduler_celery_app, swh_scheduler_celery_worker):

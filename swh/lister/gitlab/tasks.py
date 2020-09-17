@@ -9,7 +9,6 @@ from celery import group, shared_task
 from .. import utils
 from .lister import GitLabLister
 
-
 NBPAGES = 10
 
 

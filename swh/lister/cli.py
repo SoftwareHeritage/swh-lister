@@ -3,17 +3,17 @@
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
 
+from copy import deepcopy
+import logging
+
 # WARNING: do not import unnecessary things here to keep cli startup time under
 # control
 import os
-import logging
-from copy import deepcopy
 
 import click
 
 from swh.core.cli import CONTEXT_SETTINGS
-from swh.lister import get_lister, SUPPORTED_LISTERS, LISTERS
-
+from swh.lister import LISTERS, SUPPORTED_LISTERS, get_lister
 
 logger = logging.getLogger(__name__)
 
@@ -82,6 +82,7 @@ def db_init(ctx, drop_tables):
 
     """
     from sqlalchemy import create_engine
+
     from swh.lister.core.models import initialize
 
     cfg = ctx.obj["config"]

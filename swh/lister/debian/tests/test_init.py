@@ -6,8 +6,7 @@
 import pytest
 
 from swh.lister.debian import debian_init
-
-from swh.lister.debian.models import Distribution, Area
+from swh.lister.debian.models import Area, Distribution
 
 
 @pytest.fixture

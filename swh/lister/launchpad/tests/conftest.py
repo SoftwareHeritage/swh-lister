@@ -7,10 +7,12 @@ from datetime import datetime
 import json
 import os
 from unittest.mock import patch
+
 import pytest
+from sqlalchemy.engine import create_engine
+
 from swh.lister import get_lister
 from swh.lister.core.models import initialize
-from sqlalchemy.engine import create_engine
 
 
 @pytest.fixture

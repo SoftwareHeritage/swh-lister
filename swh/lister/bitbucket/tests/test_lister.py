@@ -3,10 +3,9 @@
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
 
+from datetime import timedelta
 import re
 import unittest
-
-from datetime import timedelta
 from urllib.parse import unquote
 
 import iso8601
