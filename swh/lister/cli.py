@@ -12,7 +12,7 @@ import os
 
 import click
 
-from swh.core.cli import CONTEXT_SETTINGS
+from swh.core.cli import CONTEXT_SETTINGS, swh as swh_cli_group
 from swh.lister import LISTERS, SUPPORTED_LISTERS, get_lister
 
 logger = logging.getLogger(__name__)
@@ -38,7 +38,7 @@ DEFAULT_TASK_TYPE = {
 }
 
 
-@click.group(name="lister", context_settings=CONTEXT_SETTINGS)
+@swh_cli_group.group(name="lister", context_settings=CONTEXT_SETTINGS)
 @click.option(
     "--config-file",
     "-C",
