@@ -5,7 +5,7 @@
 
 import pytest
 
-from swh.lister.debian.models import Distribution, Area
+from swh.lister.debian.models import Area, Distribution
 
 
 def test_area_index_uris_deb(session):

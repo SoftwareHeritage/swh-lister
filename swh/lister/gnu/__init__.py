@@ -4,8 +4,8 @@
 
 
 def register():
-    from .models import GNUModel
     from .lister import GNULister
+    from .models import GNUModel
 
     return {
         "models": [GNUModel],

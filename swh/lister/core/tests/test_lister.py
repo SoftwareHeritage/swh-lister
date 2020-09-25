@@ -5,12 +5,12 @@
 import abc
 import datetime
 import time
+from typing import Any, Callable, Optional, Pattern, Type, Union
 from unittest import TestCase
 from unittest.mock import Mock, patch
 
 import requests_mock
 from sqlalchemy import create_engine
-from typing import Any, Callable, Optional, Pattern, Type, Union
 
 import swh.lister
 from swh.lister.core.abstractattribute import AbstractAttribute

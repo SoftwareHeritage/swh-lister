@@ -4,12 +4,11 @@
 # See top-level LICENSE file for more information
 
 import logging
-
 from typing import Any, List
 
 from swh.core import utils
-from .lister_base import ListerBase
 
+from .lister_base import ListerBase
 
 logger = logging.getLogger(__name__)
 

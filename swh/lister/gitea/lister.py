@@ -3,13 +3,14 @@
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
 
+import re
+from typing import Any, Dict, List, MutableMapping, Optional, Tuple
+
+from requests import Response
+from urllib3.util import parse_url
+
 from ..core.page_by_page_lister import PageByPageHttpLister
 from .models import GiteaModel
-
-from typing import Any, Dict, List, Tuple, MutableMapping, Optional
-from requests import Response
-import re
-from urllib3.util import parse_url
 
 
 class GiteaLister(PageByPageHttpLister):

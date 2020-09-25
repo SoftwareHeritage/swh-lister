@@ -4,8 +4,8 @@
 
 
 def register():
-    from .models import CGitModel
     from .lister import CGitLister
+    from .models import CGitModel
 
     return {
         "models": [CGitModel],

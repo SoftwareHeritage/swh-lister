@@ -4,8 +4,8 @@
 
 
 def register():
-    from .models import GitHubModel
     from .lister import GitHubLister
+    from .models import GitHubModel
 
     return {
         "models": [GitHubModel],

@@ -4,13 +4,12 @@
 # See top-level LICENSE file for more information
 
 import re
+from typing import Any, Dict, List, Optional, Tuple
 
-from typing import Any, Dict, List, Tuple, Optional
+from requests import Response
 
 from swh.lister.core.indexing_lister import IndexingHttpLister
 from swh.lister.github.models import GitHubModel
-
-from requests import Response
 
 
 class GitHubLister(IndexingHttpLister):

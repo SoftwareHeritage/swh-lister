@@ -2,7 +2,7 @@
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
 
-from sqlalchemy import Column, Boolean, Integer
+from sqlalchemy import Boolean, Column, Integer
 
 from swh.lister.core.models import IndexingModelBase
 

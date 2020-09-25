@@ -4,8 +4,8 @@
 
 
 def register():
-    from .models import PyPIModel
     from .lister import PyPILister
+    from .models import PyPIModel
 
     return {
         "models": [PyPIModel],

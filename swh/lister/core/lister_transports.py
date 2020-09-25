@@ -3,23 +3,21 @@
 # See top-level LICENSE file for more information
 
 import abc
-import random
 from datetime import datetime
 from email.utils import parsedate
-from pprint import pformat
 import logging
+from pprint import pformat
+import random
+from typing import Any, Dict, List, Optional, Union
 
 import requests
-import xmltodict
-
-from typing import Optional, Union, Dict, Any, List
 from requests import Response
+import xmltodict
 
 from swh.lister import USER_AGENT_TEMPLATE, __version__
 
 from .abstractattribute import AbstractAttribute
 from .lister_base import FetchError
-
 
 logger = logging.getLogger(__name__)
 

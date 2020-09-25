@@ -4,9 +4,7 @@
 # See top-level LICENSE file for more information
 
 import logging
-
 from typing import Any, List, Mapping
-
 
 logger = logging.getLogger(__name__)
 
@@ -28,8 +26,9 @@ def debian_init(
         components: Default components to register per suite
 
     """
-    from swh.lister.debian.models import Distribution, Area
     from sqlalchemy.orm import sessionmaker
+
+    from swh.lister.debian.models import Area, Distribution
 
     db_session = sessionmaker(bind=db_engine)()
     distrib = (

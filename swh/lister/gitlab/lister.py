@@ -4,13 +4,13 @@
 # See top-level LICENSE file for more information
 
 import time
+from typing import Any, Dict, List, MutableMapping, Optional, Tuple, Union
+
+from requests import Response
 from urllib3.util import parse_url
 
 from ..core.page_by_page_lister import PageByPageHttpLister
 from .models import GitLabModel
-
-from typing import Any, Dict, List, Tuple, Union, MutableMapping, Optional
-from requests import Response
 
 
 class GitLabLister(PageByPageHttpLister):

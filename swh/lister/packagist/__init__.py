@@ -4,8 +4,8 @@
 
 
 def register():
-    from .models import PackagistModel
     from .lister import PackagistLister
+    from .models import PackagistModel
 
     return {
         "models": [PackagistModel],

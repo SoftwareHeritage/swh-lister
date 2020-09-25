@@ -4,8 +4,8 @@
 
 
 def register():
-    from .models import PhabricatorModel
     from .lister import PhabricatorLister
+    from .models import PhabricatorModel
 
     return {
         "models": [PhabricatorModel],

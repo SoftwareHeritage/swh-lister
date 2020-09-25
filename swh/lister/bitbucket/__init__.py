@@ -4,8 +4,8 @@
 
 
 def register():
-    from .models import BitBucketModel
     from .lister import BitBucketLister
+    from .models import BitBucketModel
 
     return {
         "models": [BitBucketModel],

@@ -1,8 +1,10 @@
-swh-lister (0.1.4-1~swh1~bpo10+1) buster-swh; urgency=medium
+swh-lister (0.1.5-1~swh1) unstable-swh; urgency=medium
 
-  * Rebuild for buster-swh
+  * New upstream release 0.1.5     - (tagged by David Douard
+    <david.douard@sdfa3.org> on 2020-09-25 11:51:57 +0200)
+  * Upstream changes:     - v0.1.5
 
- -- Software Heritage autobuilder (on jenkins-debian1) <jenkins@jenkins-debian1.internal.softwareheritage.org>  Thu, 10 Sep 2020 09:39:41 +0000
+ -- Software Heritage autobuilder (on jenkins-debian1) <jenkins@jenkins-debian1.internal.softwareheritage.org>  Fri, 25 Sep 2020 09:55:44 +0000
 
 swh-lister (0.1.4-1~swh1) unstable-swh; urgency=medium
 

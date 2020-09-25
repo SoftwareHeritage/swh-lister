@@ -3,17 +3,16 @@
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
 
-import logging
-import iso8601
-
 from datetime import datetime, timezone
+import logging
 from typing import Any, Dict, List, Optional
 from urllib import parse
+
+import iso8601
 from requests import Response
 
 from swh.lister.bitbucket.models import BitBucketModel
 from swh.lister.core.indexing_lister import IndexingHttpLister
-
 
 logger = logging.getLogger(__name__)
 
