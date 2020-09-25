@@ -4,17 +4,17 @@
 # See top-level LICENSE file for more information
 
 import json
+from os import path
 
 import pytest
 
-from os import path
 from swh.lister.gnu.tree import (
     GNUTree,
-    find_artifacts,
     check_filename_is_archive,
-    load_raw_data,
-    get_version,
+    find_artifacts,
     format_date,
+    get_version,
+    load_raw_data,
 )
 
 

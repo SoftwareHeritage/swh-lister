@@ -6,6 +6,7 @@
 import binascii
 from collections import defaultdict
 import datetime
+from typing import Any, Mapping
 
 from sqlalchemy import (
     Boolean,
@@ -19,7 +20,6 @@ from sqlalchemy import (
     Table,
     UniqueConstraint,
 )
-from typing import Any, Mapping
 
 try:
     from sqlalchemy import JSON

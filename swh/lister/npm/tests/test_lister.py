@@ -4,16 +4,14 @@
 # See top-level LICENSE file for more information
 
 import logging
-
 import re
-import requests_mock
+from typing import Any, List
 import unittest
 
+import requests_mock
+
 from swh.lister.core.tests.test_lister import HttpListerTesterBase
-from swh.lister.npm.lister import NpmLister, NpmIncrementalLister
-
-from typing import Any, List
-
+from swh.lister.npm.lister import NpmIncrementalLister, NpmLister
 
 logger = logging.getLogger(__name__)
 

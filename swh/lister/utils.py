@@ -9,13 +9,13 @@ def split_range(total_pages: int, nb_pages: int) -> Iterator[Tuple[int, int]]:
     """Split `total_pages` into mostly `nb_pages` ranges. In some cases, the last range can
     have one more element.
 
-    >>> split_range(19, 10)
+    >>> list(split_range(19, 10))
     [(0, 9), (10, 19)]
 
-    >>> split_range(20, 3)
+    >>> list(split_range(20, 3))
     [(0, 2), (3, 5), (6, 8), (9, 11), (12, 14), (15, 17), (18, 20)]
 
-    >>> split_range(21, 3)
+    >>> list(split_range(21, 3))
     [(0, 2), (3, 5), (6, 8), (9, 11), (12, 14), (15, 17), (18, 21)]
 
     """

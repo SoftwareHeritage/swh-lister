@@ -5,9 +5,8 @@
 
 import pytest
 
-
+from swh.lister.cli import SUPPORTED_LISTERS, get_lister
 from swh.lister.core.lister_base import ListerBase
-from swh.lister.cli import get_lister, SUPPORTED_LISTERS
 
 from .test_utils import init_db
 

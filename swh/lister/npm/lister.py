@@ -2,12 +2,13 @@
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
 
+from typing import Any, Dict, List, Optional
+
+from requests import Response
+
 from swh.lister.core.indexing_lister import IndexingHttpLister
 from swh.lister.npm.models import NpmModel
 from swh.scheduler.utils import create_task_dict
-
-from typing import Any, Dict, Optional, List
-from requests import Response
 
 
 class NpmListerBase(IndexingHttpLister):

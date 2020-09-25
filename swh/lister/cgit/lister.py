@@ -2,21 +2,20 @@
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
 
-import re
 import logging
-from urllib.parse import urlparse, urljoin
+import re
+from typing import Any, Dict, Generator, Optional
+from urllib.parse import urljoin, urlparse
 
 from bs4 import BeautifulSoup
 from requests import Session
-
 from requests.adapters import HTTPAdapter
-from typing import Any, Dict, Generator, Optional
-from .models import CGitModel
 
 from swh.core.utils import grouper
 from swh.lister import USER_AGENT
 from swh.lister.core.lister_base import ListerBase
 
+from .models import CGitModel
 
 logger = logging.getLogger(__name__)
 

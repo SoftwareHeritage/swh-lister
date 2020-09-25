@@ -7,15 +7,17 @@ import bz2
 from collections import defaultdict
 import datetime
 import gzip
-import lzma
 import logging
+import lzma
+from typing import Any, Dict, Mapping, Optional
 
 from debian.deb822 import Sources
+from requests import Response
 from sqlalchemy.orm import joinedload, load_only
 from sqlalchemy.schema import CreateTable, DropTable
-from typing import Mapping, Optional, Dict, Any
-from requests import Response
 
+from swh.lister.core.lister_base import FetchError, ListerBase
+from swh.lister.core.lister_transports import ListerHttpTransport
 from swh.lister.debian.models import (
     AreaSnapshot,
     Distribution,
@@ -23,9 +25,6 @@ from swh.lister.debian.models import (
     Package,
     TempPackage,
 )
-
-from swh.lister.core.lister_base import ListerBase, FetchError
-from swh.lister.core.lister_transports import ListerHttpTransport
 
 decompressors = {
     "gz": lambda f: gzip.GzipFile(fileobj=f),

@@ -3,19 +3,18 @@
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
 
+from datetime import datetime
 import gzip
 import json
 import logging
-import requests
-import re
-
-from datetime import datetime
 from os import path
 from pathlib import Path
-from pytz import utc
+import re
 from typing import Any, List, Mapping, Sequence, Tuple
 from urllib.parse import urlparse
 
+from pytz import utc
+import requests
 
 logger = logging.getLogger(__name__)
 
@@ -288,13 +287,11 @@ def get_version(uri: str) -> str:
         Version detected
 
     Example:
-        For uri = https://ftp.gnu.org/gnu/8sync/8sync-0.2.0.tar.gz
-
+        >>> uri = 'https://ftp.gnu.org/gnu/8sync/8sync-0.2.0.tar.gz'
         >>> get_version(uri)
         '0.2.0'
 
-        For uri = 8sync-0.3.0.tar.gz
-
+        >>> uri = '8sync-0.3.0.tar.gz'
         >>> get_version(uri)
         '0.3.0'
 

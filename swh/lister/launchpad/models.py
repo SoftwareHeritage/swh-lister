@@ -2,7 +2,7 @@
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
 
-from sqlalchemy import Column, String, Date
+from sqlalchemy import Column, Date, String
 
 from swh.lister.core.models import ModelBase
 

@@ -2,12 +2,12 @@
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
 
-from datetime import datetime
 from contextlib import contextmanager
+from datetime import datetime
 
 from celery import shared_task
 
-from swh.lister.npm.lister import NpmLister, NpmIncrementalLister
+from swh.lister.npm.lister import NpmIncrementalLister, NpmLister
 from swh.lister.npm.models import NpmVisitModel
 
 

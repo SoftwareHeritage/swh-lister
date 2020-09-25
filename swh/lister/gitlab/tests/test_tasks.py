@@ -4,9 +4,9 @@
 # See top-level LICENSE file for more information
 
 from time import sleep
+from unittest.mock import call, patch
 
 from celery.result import GroupResult
-from unittest.mock import patch, call
 
 from swh.lister.gitea.tasks import NBPAGES
 from swh.lister.utils import split_range

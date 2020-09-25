@@ -4,8 +4,8 @@
 
 
 def register():
-    from .models import LaunchpadModel
     from .lister import LaunchpadLister
+    from .models import LaunchpadModel
 
     return {
         "models": [LaunchpadModel],

@@ -3,9 +3,8 @@
 # See top-level LICENSE file for more information
 
 import abc
-import unittest
-
 from typing import Any
+import unittest
 
 from swh.lister.core.abstractattribute import AbstractAttribute
 
