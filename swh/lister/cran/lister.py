@@ -5,16 +5,14 @@
 
 import json
 import logging
-import pkg_resources
 import subprocess
-
 from typing import List, Mapping, Tuple
 
-from swh.lister.cran.models import CRANModel
+import pkg_resources
 
 from swh.lister.core.simple_lister import SimpleLister
+from swh.lister.cran.models import CRANModel
 from swh.scheduler.utils import create_task_dict
-
 
 logger = logging.getLogger(__name__)
 

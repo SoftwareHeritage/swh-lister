@@ -3,17 +3,15 @@
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
 
-import re
 import json
 import logging
+import re
 import unittest
 
 import requests_mock
 
 from swh.lister.core.tests.test_lister import HttpListerTester
-from swh.lister.phabricator.lister import PhabricatorLister
-from swh.lister.phabricator.lister import get_repo_url
-
+from swh.lister.phabricator.lister import PhabricatorLister, get_repo_url
 
 logger = logging.getLogger(__name__)
 

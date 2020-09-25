@@ -4,12 +4,12 @@
 # See top-level LICENSE file for more information
 
 import json
-import pytest
-
 from os import path
 from unittest.mock import patch
 
-from swh.lister.cran.lister import compute_origin_urls, CRAN_MIRROR
+import pytest
+
+from swh.lister.cran.lister import CRAN_MIRROR, compute_origin_urls
 
 
 def test_cran_compute_origin_urls():

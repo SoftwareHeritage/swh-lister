@@ -3,16 +3,17 @@
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
 
-from typing import Optional, Dict, List, Union, Tuple, Any
-
-from swh.lister.core.lister_base import ListerBase
-from .models import LaunchpadModel
-
+from datetime import datetime, timedelta
 from itertools import count
+from typing import Any, Dict, List, Optional, Tuple, Union
+
 from launchpadlib.launchpad import Launchpad  # type: ignore
 from lazr.restfulclient.resource import Collection, Entry  # type: ignore
-from datetime import datetime, timedelta
 from sqlalchemy import func
+
+from swh.lister.core.lister_base import ListerBase
+
+from .models import LaunchpadModel
 
 
 class LaunchpadLister(ListerBase):

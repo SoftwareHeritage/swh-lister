@@ -6,12 +6,10 @@
 import logging
 
 import pytest
-
 from sqlalchemy import create_engine
 
-from swh.lister import get_lister, SUPPORTED_LISTERS
+from swh.lister import SUPPORTED_LISTERS, get_lister
 from swh.lister.core.models import initialize
-
 
 logger = logging.getLogger(__name__)
 

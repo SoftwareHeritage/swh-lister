@@ -4,8 +4,8 @@
 
 
 def register():
-    from .models import CRANModel
     from .lister import CRANLister
+    from .models import CRANModel
 
     return {
         "models": [CRANModel],

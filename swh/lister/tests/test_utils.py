@@ -3,7 +3,6 @@
 # See top-level LICENSE file for more information
 
 import pytest
-
 from testing.postgresql import Postgresql
 
 from swh.lister import utils

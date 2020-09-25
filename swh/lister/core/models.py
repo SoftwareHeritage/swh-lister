@@ -5,13 +5,12 @@
 import abc
 from datetime import datetime
 import logging
+from typing import Type, Union
 
 from sqlalchemy import Column, DateTime, Integer, String
 from sqlalchemy.ext.declarative import DeclarativeMeta, declarative_base
-from typing import Type, Union
 
 from .abstractattribute import AbstractAttribute
-
 
 SQLBase = declarative_base()
 

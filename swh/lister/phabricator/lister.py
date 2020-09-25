@@ -2,20 +2,17 @@
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
 
+from collections import defaultdict
 import logging
 import random
-
+from typing import Any, Dict, List, Optional
 import urllib.parse
 
-from collections import defaultdict
-
+from requests import Response
 from sqlalchemy import func
 
 from swh.lister.core.indexing_lister import IndexingHttpLister
 from swh.lister.phabricator.models import PhabricatorModel
-
-from typing import Any, Dict, List, Optional
-from requests import Response
 
 logger = logging.getLogger(__name__)
 

@@ -4,8 +4,8 @@
 
 
 def register():
-    from .models import NpmVisitModel, NpmModel
     from .lister import NpmLister
+    from .models import NpmModel, NpmVisitModel
 
     return {
         "models": [NpmVisitModel, NpmModel],

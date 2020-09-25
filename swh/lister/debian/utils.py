@@ -6,8 +6,8 @@ import logging
 
 import click
 
-from swh.lister.debian.models import Distribution, Area, SQLBase
 from swh.lister.debian.lister import DebianLister
+from swh.lister.debian.models import Area, Distribution, SQLBase
 
 
 @click.group()

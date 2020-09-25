@@ -3,6 +3,7 @@
 # See top-level LICENSE file for more information
 
 import random
+
 from celery import group, shared_task
 
 from .lister import BitBucketLister

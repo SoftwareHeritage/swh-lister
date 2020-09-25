@@ -4,7 +4,6 @@
 # See top-level LICENSE file for more information
 
 import pytest
-
 from pytest_postgresql.janitor import DatabaseJanitor
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker

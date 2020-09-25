@@ -3,15 +3,14 @@
 # See top-level LICENSE file for more information
 
 import logging
+from typing import Any, Dict, List
 
-from swh.scheduler import utils
+from requests import Response
+
 from swh.lister.core.simple_lister import SimpleLister
-
 from swh.lister.gnu.models import GNUModel
 from swh.lister.gnu.tree import GNUTree
-
-from typing import Any, Dict, List
-from requests import Response
+from swh.scheduler import utils
 
 logger = logging.getLogger(__name__)
 

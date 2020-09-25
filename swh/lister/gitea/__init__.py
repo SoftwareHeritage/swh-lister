@@ -4,8 +4,8 @@
 
 
 def register():
-    from .models import GiteaModel
     from .lister import GiteaLister
+    from .models import GiteaModel
 
     return {
         "models": [GiteaModel],

@@ -2,9 +2,9 @@
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
 
-from sqlalchemy import Column, String, DateTime, Integer, BigInteger, Sequence
+from sqlalchemy import BigInteger, Column, DateTime, Integer, Sequence, String
 
-from swh.lister.core.models import IndexingModelBase, SQLBase, ABCSQLMeta
+from swh.lister.core.models import ABCSQLMeta, IndexingModelBase, SQLBase
 
 
 class NpmVisitModel(SQLBase, metaclass=ABCSQLMeta):

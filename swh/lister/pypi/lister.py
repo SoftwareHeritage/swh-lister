@@ -4,16 +4,16 @@
 # See top-level LICENSE file for more information
 
 import random
+from typing import Any, Dict
+
+from requests import Response
 import xmltodict
 
-from .models import PyPIModel
-
-from swh.scheduler import utils
-from swh.lister.core.simple_lister import SimpleLister
 from swh.lister.core.lister_transports import ListerOnePageApiTransport
+from swh.lister.core.simple_lister import SimpleLister
+from swh.scheduler import utils
 
-from typing import Any, Dict
-from requests import Response
+from .models import PyPIModel
 
 
 class PyPILister(ListerOnePageApiTransport, SimpleLister):
