@@ -12,7 +12,8 @@ import os
 
 import click
 
-from swh.core.cli import CONTEXT_SETTINGS, swh as swh_cli_group
+from swh.core.cli import CONTEXT_SETTINGS
+from swh.core.cli import swh as swh_cli_group
 from swh.lister import LISTERS, SUPPORTED_LISTERS, get_lister
 
 logger = logging.getLogger(__name__)
