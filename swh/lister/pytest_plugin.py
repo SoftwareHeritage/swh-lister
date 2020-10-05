@@ -4,9 +4,11 @@
 # See top-level LICENSE file for more information
 
 import logging
+import os
 
 import pytest
 from sqlalchemy import create_engine
+import yaml
 
 from swh.lister import SUPPORTED_LISTERS, get_lister
 from swh.lister.core.models import initialize
@@ -33,7 +35,28 @@ def lister_under_test():
 
 
 @pytest.fixture
-def swh_lister(mock_get_scheduler, lister_db_url, swh_scheduler, lister_under_test):
+def swh_lister_config(lister_db_url, swh_scheduler_config):
+    return {
+        "scheduler": {"cls": "local", "args": {"db": swh_scheduler_config}["db"]},
+        "lister": {"cls": "local", "args": {"db": lister_db_url},},
+        "credentials": {},
+        "cache_responses": False,
+    }
+
+
+@pytest.fixture(autouse=True)
+def swh_config(swh_lister_config, monkeypatch, tmp_path):
+    conf_path = os.path.join(str(tmp_path), "lister.yml")
+    with open(conf_path, "w") as f:
+        f.write(yaml.dump(swh_lister_config))
+    monkeypatch.setenv("SWH_CONFIG_FILENAME", conf_path)
+    return conf_path
+
+
+@pytest.fixture
+def swh_lister(
+    mock_get_scheduler, lister_db_url, swh_scheduler, lister_under_test, swh_config
+):
     assert lister_under_test in SUPPORTED_LISTERS
     lister = get_lister(lister_under_test, db_url=lister_db_url)
     initialize(create_engine(lister_db_url), drop_tables=True)
