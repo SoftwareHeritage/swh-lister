@@ -1,3 +1,15 @@
+swh-lister (0.2.0-1~swh1) unstable-swh; urgency=medium
+
+  * New upstream release 0.2.0     - (tagged by Antoine R. Dumont
+    (@ardumont) <ardumont@softwareheritage.org> on 2020-10-06 09:33:33
+    +0200)
+  * Upstream changes:     - v0.2.0     - lister*: Migrate away from
+    SWHConfig mixin     - tox.ini: pin black to the pre-commit version
+    (19.10b0) to avoid flip-flops     - Run isort after the CLI import
+    changes
+
+ -- Software Heritage autobuilder (on jenkins-debian1) <jenkins@jenkins-debian1.internal.softwareheritage.org>  Tue, 06 Oct 2020 07:36:07 +0000
+
 swh-lister (0.1.5-1~swh1) unstable-swh; urgency=medium
 
   * New upstream release 0.1.5     - (tagged by David Douard
