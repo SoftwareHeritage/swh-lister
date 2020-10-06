@@ -6,9 +6,14 @@ from typing import Any, Dict, List, Optional
 
 from requests import Response
 
+from swh.core import config
 from swh.lister.core.indexing_lister import IndexingHttpLister
 from swh.lister.npm.models import NpmModel
 from swh.scheduler.utils import create_task_dict
+
+DEFAULT_CONFIG = {
+    "loading_task_policy": "recurring",
+}
 
 
 class NpmListerBase(IndexingHttpLister):
@@ -24,17 +29,9 @@ class NpmListerBase(IndexingHttpLister):
         self, url="https://replicate.npmjs.com", per_page=1000, override_config=None
     ):
         super().__init__(url=url, override_config=override_config)
+        self.config = config.merge_configs(DEFAULT_CONFIG, self.config)
         self.per_page = per_page + 1
         self.PATH_TEMPLATE += "&limit=%s" % self.per_page
-
-    @property
-    def ADDITIONAL_CONFIG(self) -> Dict[str, Any]:
-        """(Override) Add extra configuration
-
-        """
-        default_config = super().ADDITIONAL_CONFIG
-        default_config["loading_task_policy"] = ("str", "recurring")
-        return default_config
 
     def get_model_from_repo(self, repo_name: str) -> Dict[str, str]:
         """(Override) Transform from npm package name to model

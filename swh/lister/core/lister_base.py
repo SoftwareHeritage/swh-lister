@@ -37,6 +37,14 @@ class FetchError(RuntimeError):
         return repr(self.response)
 
 
+DEFAULT_CONFIG = {
+    "scheduler": {"cls": "memory"},
+    "lister": {"cls": "local", "args": {"db": "postgresql:///lister",},},
+    "credentials": {},
+    "cache_responses": False,
+}
+
+
 class ListerBase(abc.ABC, config.SWHConfig):
     """Lister core base class.
         Generally a source code hosting service provides an API endpoint
@@ -214,39 +222,18 @@ class ListerBase(abc.ABC, config.SWHConfig):
 
     # You probably don't need to override anything below this line.
 
-    DEFAULT_CONFIG = {
-        "scheduler": (
-            "dict",
-            {"cls": "remote", "args": {"url": "http://localhost:5008/"},},
-        ),
-        "lister": ("dict", {"cls": "local", "args": {"db": "postgresql:///lister",},}),
-    }
-
-    @property
-    def CONFIG_BASE_FILENAME(self):  # noqa: N802
-        return "lister_%s" % self.LISTER_NAME
-
-    @property
-    def ADDITIONAL_CONFIG(self):  # noqa: N802
-        return {
-            "credentials": ("dict", {}),
-            "cache_responses": ("bool", False),
-            "cache_dir": ("str", "~/.cache/swh/lister/%s" % self.LISTER_NAME),
-        }
-
     INITIAL_BACKOFF = 10
     MAX_RETRIES = 7
     CONN_SLEEP = 10
 
     def __init__(self, override_config=None):
         self.backoff = self.INITIAL_BACKOFF
-        logger.debug("Loading config from %s" % self.CONFIG_BASE_FILENAME)
-        self.config = self.parse_config_file(
-            base_filename=self.CONFIG_BASE_FILENAME,
-            additional_configs=[self.ADDITIONAL_CONFIG],
-        )
-        self.config["cache_dir"] = os.path.expanduser(self.config["cache_dir"])
+        self.config = config.load_from_envvar(DEFAULT_CONFIG)
         if self.config["cache_responses"]:
+            cache_dir = self.config.get(
+                "cache_dir", f"~/.cache/swh/lister/{self.LISTER_NAME}"
+            )
+            self.config["cache_dir"] = os.path.expanduser(cache_dir)
             config.prepare_folders(self.config, "cache_dir")
 
         if override_config:
