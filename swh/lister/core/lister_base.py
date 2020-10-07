@@ -45,7 +45,7 @@ DEFAULT_CONFIG = {
 }
 
 
-class ListerBase(abc.ABC, config.SWHConfig):
+class ListerBase(abc.ABC):
     """Lister core base class.
         Generally a source code hosting service provides an API endpoint
         for listing the set of stored repositories. A Lister is the discovery
