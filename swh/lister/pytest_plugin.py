@@ -37,7 +37,7 @@ def lister_under_test():
 @pytest.fixture
 def swh_lister_config(lister_db_url, swh_scheduler_config):
     return {
-        "scheduler": {"cls": "local", "args": {"db": swh_scheduler_config}["db"]},
+        "scheduler": {"cls": "local", **swh_scheduler_config},
         "lister": {"cls": "local", "args": {"db": lister_db_url},},
         "credentials": {},
         "cache_responses": False,
