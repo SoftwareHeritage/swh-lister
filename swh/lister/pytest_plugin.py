@@ -54,9 +54,7 @@ def swh_config(swh_lister_config, monkeypatch, tmp_path):
 
 
 @pytest.fixture
-def swh_lister(
-    mock_get_scheduler, lister_db_url, swh_scheduler, lister_under_test, swh_config
-):
+def swh_lister(lister_db_url, swh_scheduler, lister_under_test, swh_config):
     assert lister_under_test in SUPPORTED_LISTERS
     lister = get_lister(lister_under_test, db_url=lister_db_url)
     initialize(create_engine(lister_db_url), drop_tables=True)
