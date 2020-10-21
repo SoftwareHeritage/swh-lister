@@ -17,13 +17,9 @@ logger = logging.getLogger(__name__)
 
 
 @pytest.fixture
-def lister_db_url(postgresql_proc, postgresql):
-    db_url = "postgresql://{user}@{host}:{port}/{dbname}".format(
-        host=postgresql_proc.host,
-        port=postgresql_proc.port,
-        user="postgres",
-        dbname="tests",
-    )
+def lister_db_url(postgresql):
+    db_params = postgresql.get_dsn_parameters()
+    db_url = "postgresql://{user}@{host}:{port}/{dbname}".format(**db_params)
     logger.debug("lister db_url: %s", db_url)
     return db_url
 
