@@ -44,4 +44,13 @@ def lister_launchpad(datadir, lister_db_url, engine, swh_scheduler):
         mock_lp_response(i) for i in range(3)
     ]
 
+    lister.scheduler.create_task_type(
+        {
+            "type": "load-git",
+            "description": "Load git repository",
+            "backend_name": "swh.loader.git.tasks.UpdateGitRepository",
+            "default_interval": "1 day",
+        }
+    )
+
     return lister
