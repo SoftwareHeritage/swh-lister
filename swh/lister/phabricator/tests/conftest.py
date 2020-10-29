@@ -18,5 +18,13 @@ def lister_phabricator(swh_lister):
         "cache_responses": False,
         "credentials": {"phabricator": {swh_lister.instance: [{"password": "foo"}]}},
     }
+    swh_lister.scheduler.create_task_type(
+        {
+            "type": "load-git",
+            "description": "Load git repository",
+            "backend_name": "swh.loader.git.tasks.UpdateGitRepository",
+            "default_interval": "1 day",
+        }
+    )
 
     return swh_lister
