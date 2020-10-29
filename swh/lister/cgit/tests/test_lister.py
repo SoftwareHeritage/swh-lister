@@ -2,22 +2,13 @@
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
 
-import pytest
-
 from swh.lister import __version__
 
 
-@pytest.fixture
-def lister_under_test():
-    return "cgit"
+def test_lister_cgit_no_page(requests_mock_datadir, lister_cgit):
+    assert lister_cgit.url == "https://git.savannah.gnu.org/cgit/"
 
-
-def test_lister_no_page(requests_mock_datadir, swh_lister):
-    lister = swh_lister
-
-    assert lister.url == "https://git.savannah.gnu.org/cgit/"
-
-    repos = list(lister.get_repos())
+    repos = list(lister_cgit.get_repos())
     assert len(repos) == 977
 
     assert repos[0] == "https://git.savannah.gnu.org/cgit/elisp-es.git/"
@@ -27,12 +18,10 @@ def test_lister_no_page(requests_mock_datadir, swh_lister):
     assert repos[-2] == "http://example.org/cgit/xstarcastle.git/"
 
 
-def test_lister_model(requests_mock_datadir, swh_lister):
-    lister = swh_lister
+def test_lister_cgit_model(requests_mock_datadir, lister_cgit):
+    repo = next(lister_cgit.get_repos())
 
-    repo = next(lister.get_repos())
-
-    model = lister.build_model(repo)
+    model = lister_cgit.build_model(repo)
     assert model == {
         "uid": "https://git.savannah.gnu.org/cgit/elisp-es.git/",
         "name": "elisp-es.git",
@@ -42,21 +31,19 @@ def test_lister_model(requests_mock_datadir, swh_lister):
     }
 
 
-def test_lister_with_pages(requests_mock_datadir, swh_lister):
-    lister = swh_lister
-    lister.url = "https://git.tizen/cgit/"
+def test_lister_cgit_with_pages(requests_mock_datadir, lister_cgit):
+    lister_cgit.url = "https://git.tizen/cgit/"
 
-    repos = list(lister.get_repos())
+    repos = list(lister_cgit.get_repos())
     # we should have 16 repos (listed on 3 pages)
     assert len(repos) == 16
 
 
-def test_lister_run(requests_mock_datadir, swh_lister):
-    lister = swh_lister
-    lister.url = "https://git.tizen/cgit/"
-    lister.run()
+def test_lister_cgit_run(requests_mock_datadir, lister_cgit):
+    lister_cgit.url = "https://git.tizen/cgit/"
+    lister_cgit.run()
 
-    r = lister.scheduler.search_tasks(task_type="load-git")
+    r = lister_cgit.scheduler.search_tasks(task_type="load-git")
     assert len(r) == 16
 
     for row in r:
@@ -75,10 +62,9 @@ def test_lister_run(requests_mock_datadir, swh_lister):
         assert row["priority"] is None
 
 
-def test_lister_requests(requests_mock_datadir, swh_lister):
-    lister = swh_lister
-    lister.url = "https://git.tizen/cgit/"
-    lister.run()
+def test_lister_cgit_requests(requests_mock_datadir, lister_cgit):
+    lister_cgit.url = "https://git.tizen/cgit/"
+    lister_cgit.run()
 
     assert len(requests_mock_datadir.request_history) != 0
     for request in requests_mock_datadir.request_history:
