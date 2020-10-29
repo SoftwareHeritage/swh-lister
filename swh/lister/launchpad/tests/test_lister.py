@@ -5,7 +5,6 @@
 
 
 def test_launchpad_lister(lister_launchpad, datadir):
-
     lister_launchpad.run()
 
     assert (
@@ -30,4 +29,4 @@ def test_launchpad_lister(lister_launchpad, datadir):
 
         assert row["policy"] == "recurring"
         assert row["priority"] is None
-        assert row["retries_left"] == 0
+        assert row["retries_left"] == 3
