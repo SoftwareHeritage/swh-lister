@@ -3,13 +3,32 @@
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
 
+import os
+
 import pytest
 from pytest_postgresql.janitor import DatabaseJanitor
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
+from swh.core.db.pytest_plugin import postgresql_fact
 from swh.lister.core.models import SQLBase
+
 from swh.lister.debian import debian_init
+import swh.scheduler
+
+SQL_DIR = os.path.join(os.path.dirname(swh.scheduler.__file__), "sql")
+postgresql_scheduler = postgresql_fact(
+    "postgresql_proc",
+    db_name="scheduler-lister",
+    dump_files=os.path.join(SQL_DIR, "*.sql"),
+    # do not truncate the task tables, it's required in between test
+    no_truncate_tables={"dbversion", "priority_ratio", "task"},
+)
+
+
+@pytest.fixture
+def swh_scheduler_config(postgresql_scheduler):
+    return {"db": postgresql_scheduler.dsn}
 
 
 @pytest.fixture
