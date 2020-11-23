@@ -73,7 +73,7 @@ def check_tasks(tasks: List[Any]):
         assert row["priority"] is None
 
 
-def test_lister_npm_basic_listing(lister_npm, requests_mock_datadir):
+def test_npm_lister_basic_listing(lister_npm, requests_mock_datadir):
     lister_npm.run()
 
     tasks = lister_npm.scheduler.search_tasks(task_type="load-npm")
@@ -82,7 +82,7 @@ def test_lister_npm_basic_listing(lister_npm, requests_mock_datadir):
     check_tasks(tasks)
 
 
-def test_lister_npm_listing_pagination(lister_npm, requests_mock_datadir):
+def test_npm_lister_listing_pagination(lister_npm, requests_mock_datadir):
     lister = lister_npm
     # Patch per page pagination
     lister.per_page = 10 + 1

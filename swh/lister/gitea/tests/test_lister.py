@@ -7,8 +7,6 @@ import logging
 import re
 import unittest
 
-import pytest
-
 from swh.lister.core.tests.test_lister import HttpListerTesterBase
 from swh.lister.gitea.lister import GiteaLister
 
@@ -40,16 +38,9 @@ class GiteaListerTester(HttpListerTesterBase, unittest.TestCase):
         return headers
 
 
-@pytest.fixture
-def lister_under_test():
-    return "gitea"
-
-
-def test_lister_gitea(swh_lister, requests_mock_datadir):
-    lister: GiteaLister = swh_lister
-
-    lister.run()
-    r = lister.scheduler.search_tasks(task_type="load-git")
+def test_lister_gitea(lister_gitea, requests_mock_datadir):
+    lister_gitea.run()
+    r = lister_gitea.scheduler.search_tasks(task_type="load-git")
     assert len(r) == 3
 
     for row in r:

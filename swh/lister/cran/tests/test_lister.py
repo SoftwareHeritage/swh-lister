@@ -29,17 +29,15 @@ def test_cran_compute_origin_urls_failure():
 
 @patch("swh.lister.cran.lister.read_cran_data")
 def test_cran_lister_cran(mock_cran, datadir, lister_cran):
-    lister = lister_cran
-
     with open(path.join(datadir, "list-r-packages.json")) as f:
         data = json.loads(f.read())
 
     mock_cran.return_value = data
     assert len(data) == 6
 
-    lister.run()
+    lister_cran.run()
 
-    r = lister.scheduler.search_tasks(task_type="load-cran")
+    r = lister_cran.scheduler.search_tasks(task_type="load-cran")
     assert len(r) == 6
 
     for row in r:
@@ -63,7 +61,7 @@ def test_cran_lister_cran(mock_cran, datadir, lister_cran):
 
         origin_url = kwargs["url"]
         record = (
-            lister.db_session.query(lister.MODEL)
+            lister_cran.db_session.query(lister_cran.MODEL)
             .filter(origin_url == origin_url)
             .first()
         )

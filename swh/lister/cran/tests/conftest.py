@@ -13,7 +13,6 @@ def lister_under_test():
 
 @pytest.fixture
 def lister_cran(swh_lister):
-    # Add the load-cran in the scheduler backend
     swh_lister.scheduler.create_task_type(
         {
             "type": "load-cran",

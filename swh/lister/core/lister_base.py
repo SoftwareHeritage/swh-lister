@@ -456,6 +456,7 @@ class ListerBase(abc.ABC):
                 if "priority" in self.config:
                     m["priority"] = self.config["priority"]
                 task_dict = self.task_dict(**m)
+                task_dict.setdefault("retries_left", 3)
                 tasks[_task_key(task_dict)] = (ir, m, task_dict)
 
         gen_tasks = (task_dicts for (_, _, task_dicts) in tasks.values())

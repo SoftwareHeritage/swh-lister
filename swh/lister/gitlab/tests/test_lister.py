@@ -49,10 +49,10 @@ def lister_under_test():
     return "gitlab"
 
 
-def test_lister_gitlab(swh_lister, requests_mock_datadir):
-    swh_lister.run()
+def test_lister_gitlab(lister_gitlab, requests_mock_datadir):
+    lister_gitlab.run()
 
-    r = swh_lister.scheduler.search_tasks(task_type="load-git")
+    r = lister_gitlab.scheduler.search_tasks(task_type="load-git")
     assert len(r) == 10
 
     for row in r:
