@@ -9,14 +9,12 @@ import os
 from unittest.mock import patch
 
 import pytest
-from sqlalchemy.engine import create_engine
 
 from swh.lister import get_lister
-from swh.lister.core.models import initialize
 
 
 @pytest.fixture
-def lister_launchpad(datadir, lister_db_url, swh_scheduler):
+def lister_launchpad(datadir, lister_db_url, engine, swh_scheduler):
     class Collection:
         entries = []
 
@@ -42,11 +40,17 @@ def lister_launchpad(datadir, lister_db_url, swh_scheduler):
     with patch("launchpadlib.launchpad.Launchpad.login_anonymously"):
         lister = get_lister("launchpad", db_url=lister_db_url)
 
-    lister.scheduler = swh_scheduler  # inject scheduler fixture
     lister.launchpad.git_repositories.getRepositories.side_effect = [
         mock_lp_response(i) for i in range(3)
     ]
 
-    initialize(create_engine(lister_db_url), drop_tables=True)
+    lister.scheduler.create_task_type(
+        {
+            "type": "load-git",
+            "description": "Load git repository",
+            "backend_name": "swh.loader.git.tasks.UpdateGitRepository",
+            "default_interval": "1 day",
+        }
+    )
 
     return lister

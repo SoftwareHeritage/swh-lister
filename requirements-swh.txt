@@ -1,2 +1,2 @@
-swh.core >= 0.3
-swh.scheduler >= 0.7.0
+swh.core[db] >= 0.9
+swh.scheduler >= 0.8

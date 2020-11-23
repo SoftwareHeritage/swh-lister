@@ -5,21 +5,13 @@
 
 import logging
 
-import pytest
-
 logger = logging.getLogger(__name__)
 
 
-@pytest.fixture
-def lister_under_test():
-    return "gnu"
+def test_gnu_lister(lister_gnu, requests_mock_datadir):
+    lister_gnu.run()
 
-
-@pytest.fixture
-def test_gnu_lister(swh_lister, requests_mock_datadir):
-    swh_lister.run()
-
-    r = swh_lister.scheduler.search_tasks(task_type="load-archive-files")
+    r = lister_gnu.scheduler.search_tasks(task_type="load-archive-files")
     assert len(r) == 383
 
     for row in r:
