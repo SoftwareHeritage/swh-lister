@@ -1,3 +1,16 @@
+swh-lister (0.4.0-1~swh1) unstable-swh; urgency=medium
+
+  * New upstream release 0.4.0     - (tagged by Antoine R. Dumont
+    (@ardumont) <ardumont@softwareheritage.org> on 2020-11-23 15:47:05
+    +0100)
+  * Upstream changes:     - v0.4.0     - requirements: Rework
+    dependencies     - tests: Reduce db initialization fixtures to a
+    minimum     - Create listing task with a default of 3 if unspecified
+    - lister.pytest_plugin: Simplify fixture setup     - tests: Clarify
+    listers test configuration
+
+ -- Software Heritage autobuilder (on jenkins-debian1) <jenkins@jenkins-debian1.internal.softwareheritage.org>  Mon, 23 Nov 2020 14:52:03 +0000
+
 swh-lister (0.3.0-1~swh1) unstable-swh; urgency=medium
 
   * New upstream release 0.3.0     - (tagged by Antoine R. Dumont
