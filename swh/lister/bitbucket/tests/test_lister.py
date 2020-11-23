@@ -9,16 +9,10 @@ import unittest
 from urllib.parse import unquote
 
 import iso8601
-import pytest
 import requests_mock
 
 from swh.lister.bitbucket.lister import BitBucketLister
 from swh.lister.core.tests.test_lister import HttpListerTester
-
-
-@pytest.fixture
-def lister_under_test():
-    return "bitbucket"
 
 
 def _convert_type(req_index):
@@ -85,15 +79,13 @@ class BitBucketListerTester(HttpListerTester, unittest.TestCase):
         )
 
 
-def test_lister_bitbucket(swh_lister, requests_mock_datadir):
+def test_lister_bitbucket(lister_bitbucket, requests_mock_datadir):
     """Simple bitbucket listing should create scheduled tasks (git, hg)
 
     """
-    lister = swh_lister
+    lister_bitbucket.run()
 
-    lister.run()
-
-    r = lister.scheduler.search_tasks(task_type="load-hg")
+    r = lister_bitbucket.scheduler.search_tasks(task_type="load-hg")
     assert len(r) == 9
 
     for row in r:
@@ -109,7 +101,7 @@ def test_lister_bitbucket(swh_lister, requests_mock_datadir):
         assert row["policy"] == "recurring"
         assert row["priority"] is None
 
-    r = lister.scheduler.search_tasks(task_type="load-git")
+    r = lister_bitbucket.scheduler.search_tasks(task_type="load-git")
     assert len(r) == 1
 
     for row in r:

@@ -17,13 +17,9 @@ logger = logging.getLogger(__name__)
 
 
 @pytest.fixture
-def lister_db_url(postgresql_proc, postgresql):
-    db_url = "postgresql://{user}@{host}:{port}/{dbname}".format(
-        host=postgresql_proc.host,
-        port=postgresql_proc.port,
-        user="postgres",
-        dbname="tests",
-    )
+def lister_db_url(postgresql):
+    db_params = postgresql.get_dsn_parameters()
+    db_url = "postgresql://{user}@{host}:{port}/{dbname}".format(**db_params)
     logger.debug("lister db_url: %s", db_url)
     return db_url
 
@@ -54,9 +50,13 @@ def swh_config(swh_lister_config, monkeypatch, tmp_path):
 
 
 @pytest.fixture
-def swh_lister(lister_db_url, swh_scheduler, lister_under_test, swh_config):
-    assert lister_under_test in SUPPORTED_LISTERS
-    lister = get_lister(lister_under_test, db_url=lister_db_url)
-    initialize(create_engine(lister_db_url), drop_tables=True)
+def engine(lister_db_url):
+    engine = create_engine(lister_db_url)
+    initialize(engine, drop_tables=True)
+    return engine
 
-    return lister
+
+@pytest.fixture
+def swh_lister(engine, lister_db_url, lister_under_test, swh_config):
+    assert lister_under_test in SUPPORTED_LISTERS
+    return get_lister(lister_under_test, db_url=lister_db_url)
