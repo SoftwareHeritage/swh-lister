@@ -1,6 +1,4 @@
 pytest
 requests_mock
-swh.core[db]
 sqlalchemy-stubs
-swh.scheduler[testing] >= 0.5
 testing.postgresql
