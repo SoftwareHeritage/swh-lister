@@ -6,6 +6,7 @@
 from dataclasses import dataclass
 from typing import Any, Dict, Generic, Iterable, Iterator, List, Optional, TypeVar
 
+from swh.core.config import load_from_envvar
 from swh.scheduler import get_scheduler, model
 from swh.scheduler.interface import SchedulerInterface
 
@@ -246,3 +247,14 @@ class Lister(Generic[StateType, PageType]):
         scheduler_instance = get_scheduler(**scheduler)
 
         return cls(scheduler=scheduler_instance, **config)
+
+    @classmethod
+    def from_configfile(cls, **kwargs: Any):
+        """Instantiate a lister from the configuration loaded from the
+        SWH_CONFIG_FILENAME envvar, with potential extra keyword arguments.
+
+        Args:
+            kwargs: kwargs passed to the lister instantiation
+        """
+        config = load_from_envvar()
+        return cls.from_config(**config, **kwargs)
