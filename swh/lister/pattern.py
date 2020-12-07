@@ -258,3 +258,13 @@ class Lister(Generic[StateType, PageType]):
         """
         config = load_from_envvar()
         return cls.from_config(**config, **kwargs)
+
+
+class StatelessLister(Lister[None, PageType], Generic[PageType]):
+    def state_from_dict(self, d: BackendStateType) -> None:
+        """Always return empty state"""
+        return None
+
+    def state_to_dict(self, state: None) -> BackendStateType:
+        """Always set empty state"""
+        return {}

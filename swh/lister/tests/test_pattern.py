@@ -111,3 +111,53 @@ def test_run(swh_scheduler):
     assert stored_lister.current_state["updated"] == "yes"
 
     check_listed_origins(swh_scheduler, lister, stored_lister)
+
+
+class InstantiableStatelessLister(pattern.StatelessLister[PageType]):
+    LISTER_NAME = "test-stateless-lister"
+
+
+def test_stateless_instantiation(swh_scheduler):
+    lister = InstantiableStatelessLister(
+        scheduler=swh_scheduler, url="https://example.com", instance="example.com",
+    )
+
+    # check the lister was registered in the scheduler backend
+    stored_lister = swh_scheduler.get_or_create_lister(
+        name="test-stateless-lister", instance_name="example.com"
+    )
+    assert stored_lister == lister.lister_obj
+    assert stored_lister.current_state == {}
+    assert lister.state is None
+
+    with pytest.raises(NotImplementedError):
+        lister.run()
+
+
+class RunnableStatelessLister(ListerMixin, InstantiableStatelessLister):
+    def finalize(self):
+        self.updated = True
+
+
+def test_stateless_run(swh_scheduler):
+    lister = RunnableStatelessLister(
+        scheduler=swh_scheduler, url="https://example.com", instance="example.com"
+    )
+
+    update_date = lister.lister_obj.updated
+
+    run_result = lister.run()
+
+    assert run_result.pages == 2
+    assert run_result.origins == 20
+
+    stored_lister = swh_scheduler.get_or_create_lister(
+        name="test-stateless-lister", instance_name="example.com"
+    )
+
+    # Check that the finalize operation happened
+    assert stored_lister.updated > update_date
+    assert stored_lister.current_state == {}
+
+    # And that all origins are stored
+    check_listed_origins(swh_scheduler, lister, stored_lister)
