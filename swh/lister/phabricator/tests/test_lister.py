@@ -6,7 +6,7 @@
 import importlib.resources
 import json
 
-from swh.lister.phabricator.lister import get_repo_url
+from swh.lister.phabricator.lister import PhabricatorLister, get_repo_url
 
 
 def test_get_repo_url():
@@ -27,3 +27,23 @@ def test_get_repo_url():
         repo = json.load(f)
     expected_name = "https://svn.blender.org/svnroot/bf-blender/"
     assert get_repo_url(repo["attachments"]["uris"]["uris"]) == expected_name
+
+
+def test_lister_url_param(swh_scheduler):
+    FORGE_BASE_URL = "https://forge.softwareheritage.org"
+    API_REPOSITORY_PATH = "/api/diffusion.repository.search"
+
+    for url in (
+        FORGE_BASE_URL,
+        f"{FORGE_BASE_URL}/",
+        f"{FORGE_BASE_URL}/{API_REPOSITORY_PATH}",
+        f"{FORGE_BASE_URL}/{API_REPOSITORY_PATH}/",
+    ):
+
+        lister = PhabricatorLister(
+            scheduler=swh_scheduler, url=FORGE_BASE_URL, instance="swh", api_token="foo"
+        )
+
+        expected_url = f"{FORGE_BASE_URL}{API_REPOSITORY_PATH}"
+
+        assert lister.url == expected_url

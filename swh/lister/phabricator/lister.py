@@ -5,6 +5,7 @@ from collections import defaultdict
 import logging
 import random
 from typing import Any, Dict, Iterator, List, Optional
+from urllib.parse import urljoin
 
 import requests
 
@@ -20,7 +21,18 @@ PageType = List[Dict[str, Any]]
 
 
 class PhabricatorLister(StatelessLister[PageType]):
+    """
+    List all repositories hosted on a Phabricator instance.
+
+    Args:
+        url: base URL of a phabricator forge
+            (for instance https://forge.softwareheritage.org)
+        instance: string identifier for the listed forge
+        api_token: authentication token for Conduit API
+    """
+
     LISTER_NAME = "phabricator"
+    API_REPOSITORY_PATH = "/api/diffusion.repository.search"
 
     def __init__(
         self,
@@ -30,7 +42,9 @@ class PhabricatorLister(StatelessLister[PageType]):
         api_token: Optional[str] = None,
         credentials: CredentialsType = None,
     ):
-        super().__init__(scheduler, url, instance, credentials)
+        super().__init__(
+            scheduler, urljoin(url, self.API_REPOSITORY_PATH), instance, credentials
+        )
 
         self.session = requests.Session()
         self.session.headers.update(

@@ -25,7 +25,7 @@ def test_phabricator_lister_task(
     lister.run.return_value = lister_stats
 
     task_params = {
-        "url": "https://forge.softwareheritage.org/api/diffusion.repository.search",
+        "url": "https://forge.softwareheritage.org",
         "instance": "swh",
         "api_token": None,
     }
