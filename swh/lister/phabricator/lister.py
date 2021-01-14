@@ -91,7 +91,7 @@ class PhabricatorLister(StatelessLister[PageType]):
         while True:
             params = self.get_request_params(after)
             logger.debug(
-                "Retrieving results on URI=%s, parameters %s",
+                "Retrieving results on URI %s with parameters %s",
                 self.url,
                 self.filter_params(params),
             )
@@ -99,12 +99,13 @@ class PhabricatorLister(StatelessLister[PageType]):
 
             if response.status_code != 200:
                 logger.warning(
-                    "Got unexpected status_code %s on %s: %s",
+                    "Unexpected HTTP status code %s on %s: %s",
                     response.status_code,
                     response.url,
                     response.content,
                 )
-                break
+
+            response.raise_for_status()
 
             response_data = response.json()
 

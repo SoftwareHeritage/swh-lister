@@ -7,6 +7,7 @@ import json
 from pathlib import Path
 
 import pytest
+from requests.exceptions import HTTPError
 
 from swh.lister import USER_AGENT
 from swh.lister.phabricator.lister import PhabricatorLister, get_repo_url
@@ -111,3 +112,24 @@ def test_lister(
     scheduler_origins = swh_scheduler.get_listed_origins(lister.lister_obj.id).origins
 
     assert len(scheduler_origins) == expected_nb_origins
+
+
+def test_lister_request_error(
+    swh_scheduler, requests_mock, phabricator_repositories_page1,
+):
+    FORGE_BASE_URL = "https://forge.softwareheritage.org"
+
+    lister = PhabricatorLister(
+        scheduler=swh_scheduler, url=FORGE_BASE_URL, instance="swh", api_token="foo"
+    )
+
+    requests_mock.post(
+        f"{FORGE_BASE_URL}{lister.API_REPOSITORY_PATH}",
+        [
+            {"status_code": 200, "json": phabricator_repositories_page1},
+            {"status_code": 500, "reason": "Internal Server Error"},
+        ],
+    )
+
+    with pytest.raises(HTTPError):
+        lister.run()
