@@ -3,9 +3,17 @@
 # See top-level LICENSE file for more information
 
 import pytest
+import requests
+from requests.status_codes import codes
+from tenacity.wait import wait_fixed
 from testing.postgresql import Postgresql
 
-from swh.lister import utils
+from swh.lister.utils import (
+    MAX_NUMBER_ATTEMPTS,
+    WAIT_EXP_BASE,
+    split_range,
+    throttling_retry,
+)
 
 
 @pytest.mark.parametrize(
@@ -18,7 +26,7 @@ from swh.lister import utils
     ],
 )
 def test_split_range(total_pages, nb_pages, expected_ranges):
-    actual_ranges = list(utils.split_range(total_pages, nb_pages))
+    actual_ranges = list(split_range(total_pages, nb_pages))
     assert actual_ranges == expected_ranges
 
 
@@ -26,7 +34,7 @@ def test_split_range(total_pages, nb_pages, expected_ranges):
 def test_split_range_errors(total_pages, nb_pages):
     for total_pages, nb_pages in [(None, 1), (100, None)]:
         with pytest.raises(TypeError):
-            next(utils.split_range(total_pages, nb_pages))
+            next(split_range(total_pages, nb_pages))
 
 
 def init_db():
@@ -39,3 +47,87 @@ def init_db():
     initdb_args = Postgresql.DEFAULT_SETTINGS["initdb_args"]
     initdb_args = " ".join([initdb_args, "-E UTF-8"])
     return Postgresql(initdb_args=initdb_args)
+
+
+TEST_URL = "https://example.og/api/repositories"
+
+
+@throttling_retry()
+def make_request():
+    response = requests.get(TEST_URL)
+    response.raise_for_status()
+    return response
+
+
+def _assert_sleep_calls(mocker, mock_sleep, sleep_params):
+    try:
+        mock_sleep.assert_has_calls([mocker.call(param) for param in sleep_params])
+    except AssertionError:
+        # tenacity < 5.1 has a different behavior for wait_exponential
+        # https://github.com/jd/tenacity/commit/aac4307a0aa30d7befd0ebe4212ee4fc69083a95
+        mock_sleep.assert_has_calls(
+            [mocker.call(param * WAIT_EXP_BASE) for param in sleep_params]
+        )
+
+
+def test_throttling_retry(requests_mock, mocker):
+    data = {"result": {}}
+    requests_mock.get(
+        TEST_URL,
+        [
+            {"status_code": codes.too_many_requests},
+            {"status_code": codes.too_many_requests},
+            {"status_code": codes.ok, "json": data},
+        ],
+    )
+
+    mock_sleep = mocker.patch.object(make_request.retry, "sleep")
+
+    response = make_request()
+
+    _assert_sleep_calls(mocker, mock_sleep, [1, WAIT_EXP_BASE])
+
+    assert response.json() == data
+
+
+def test_throttling_retry_max_attemps(requests_mock, mocker):
+    requests_mock.get(
+        TEST_URL, [{"status_code": codes.too_many_requests}] * (MAX_NUMBER_ATTEMPTS),
+    )
+
+    mock_sleep = mocker.patch.object(make_request.retry, "sleep")
+
+    with pytest.raises(requests.exceptions.HTTPError) as e:
+        make_request()
+
+    assert e.value.response.status_code == codes.too_many_requests
+
+    _assert_sleep_calls(
+        mocker,
+        mock_sleep,
+        [float(WAIT_EXP_BASE ** i) for i in range(MAX_NUMBER_ATTEMPTS - 1)],
+    )
+
+
+@throttling_retry(wait=wait_fixed(WAIT_EXP_BASE))
+def make_request_wait_fixed():
+    response = requests.get(TEST_URL)
+    response.raise_for_status()
+    return response
+
+
+def test_throttling_retry_wait_fixed(requests_mock, mocker):
+    requests_mock.get(
+        TEST_URL,
+        [
+            {"status_code": codes.too_many_requests},
+            {"status_code": codes.too_many_requests},
+            {"status_code": codes.ok},
+        ],
+    )
+
+    mock_sleep = mocker.patch.object(make_request_wait_fixed.retry, "sleep")
+
+    make_request_wait_fixed()
+
+    _assert_sleep_calls(mocker, mock_sleep, [WAIT_EXP_BASE] * 2)
