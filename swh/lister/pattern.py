@@ -251,13 +251,15 @@ class Lister(Generic[StateType, PageType]):
     @classmethod
     def from_configfile(cls, **kwargs: Any):
         """Instantiate a lister from the configuration loaded from the
-        SWH_CONFIG_FILENAME envvar, with potential extra keyword arguments.
+        SWH_CONFIG_FILENAME envvar, with potential extra keyword arguments
+        if their value is not None.
 
         Args:
             kwargs: kwargs passed to the lister instantiation
         """
-        config = load_from_envvar()
-        return cls.from_config(**config, **kwargs)
+        config = dict(load_from_envvar())
+        config.update({k: v for k, v in kwargs.items() if v is not None})
+        return cls.from_config(**config)
 
 
 class StatelessLister(Lister[None, PageType], Generic[PageType]):

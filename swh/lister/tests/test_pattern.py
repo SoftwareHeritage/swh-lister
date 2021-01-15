@@ -39,6 +39,29 @@ def test_instantiation(swh_scheduler):
         lister.run()
 
 
+def test_instantiation_from_configfile(swh_scheduler, mocker):
+    mock_load_from_envvar = mocker.patch("swh.lister.pattern.load_from_envvar")
+    mock_get_scheduler = mocker.patch("swh.lister.pattern.get_scheduler")
+    mock_load_from_envvar.return_value = {
+        "scheduler": {},
+        "url": "foo",
+        "instance": "bar",
+    }
+    mock_get_scheduler.return_value = swh_scheduler
+
+    lister = InstantiableLister.from_configfile()
+    assert lister.url == "foo"
+    assert lister.instance == "bar"
+
+    lister = InstantiableLister.from_configfile(url="bar", instance="foo")
+    assert lister.url == "bar"
+    assert lister.instance == "foo"
+
+    lister = InstantiableLister.from_configfile(url=None, instance="foo")
+    assert lister.url == "foo"
+    assert lister.instance == "foo"
+
+
 if TYPE_CHECKING:
     _Base = pattern.Lister[Any, PageType]
 else:
