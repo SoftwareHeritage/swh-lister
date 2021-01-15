@@ -1,97 +1,200 @@
-# Copyright (C) 2018-2019 The Software Heritage developers
+# Copyright (C) 2018-2021 The Software Heritage developers
 # See the AUTHORS file at the top-level directory of this distribution
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
 
-import logging
-import re
-from typing import Any, List
-import unittest
+from itertools import chain
+import json
+from pathlib import Path
 
-import requests_mock
+import iso8601
+import pytest
+from requests.exceptions import HTTPError
 
-from swh.lister.core.tests.test_lister import HttpListerTesterBase
-from swh.lister.npm.lister import NpmIncrementalLister, NpmLister
-
-logger = logging.getLogger(__name__)
-
-
-class NpmListerTester(HttpListerTesterBase, unittest.TestCase):
-    Lister = NpmLister
-    test_re = re.compile(r'^.*/_all_docs\?startkey="(.+)".*')
-    lister_subdir = "npm"
-    good_api_response_file = "data/replicate.npmjs.com/api_response.json"
-    bad_api_response_file = "data/api_empty_response.json"
-    first_index = "jquery"
-    entries_per_page = 100
-
-    @requests_mock.Mocker()
-    def test_is_within_bounds(self, http_mocker):
-        # disable this test from HttpListerTesterBase as
-        # it can not succeed for the npm lister due to the
-        # overriding of the string_pattern_check method
-        pass
+from swh.lister import USER_AGENT
+from swh.lister.npm.lister import NpmLister, NpmListerState
 
 
-class NpmIncrementalListerTester(HttpListerTesterBase, unittest.TestCase):
-    Lister = NpmIncrementalLister
-    test_re = re.compile(r"^.*/_changes\?since=([0-9]+).*")
-    lister_subdir = "npm"
-    good_api_response_file = "data/api_inc_response.json"
-    bad_api_response_file = "data/api_inc_empty_response.json"
-    first_index = "6920642"
-    entries_per_page = 100
-
-    @requests_mock.Mocker()
-    def test_is_within_bounds(self, http_mocker):
-        # disable this test from HttpListerTesterBase as
-        # it can not succeed for the npm lister due to the
-        # overriding of the string_pattern_check method
-        pass
+@pytest.fixture
+def npm_full_listing_page1(datadir):
+    return json.loads(Path(datadir, "npm_full_page1.json").read_text())
 
 
-def check_tasks(tasks: List[Any]):
-    """Ensure scheduled tasks are in the expected format.
+@pytest.fixture
+def npm_full_listing_page2(datadir):
+    return json.loads(Path(datadir, "npm_full_page2.json").read_text())
 
 
-    """
-    for row in tasks:
-        logger.debug("row: %s", row)
-        assert row["type"] == "load-npm"
-        # arguments check
-        args = row["arguments"]["args"]
-        assert len(args) == 0
-
-        # kwargs
-        kwargs = row["arguments"]["kwargs"]
-        assert len(kwargs) == 1
-        package_url = kwargs["url"]
-        package_name = package_url.split("/")[-1]
-        assert package_url == f"https://www.npmjs.com/package/{package_name}"
-
-        assert row["policy"] == "recurring"
-        assert row["priority"] is None
+@pytest.fixture
+def npm_incremental_listing_page1(datadir):
+    return json.loads(Path(datadir, "npm_incremental_page1.json").read_text())
 
 
-def test_npm_lister_basic_listing(lister_npm, requests_mock_datadir):
-    lister_npm.run()
-
-    tasks = lister_npm.scheduler.search_tasks(task_type="load-npm")
-    assert len(tasks) == 100
-
-    check_tasks(tasks)
+@pytest.fixture
+def npm_incremental_listing_page2(datadir):
+    return json.loads(Path(datadir, "npm_incremental_page2.json").read_text())
 
 
-def test_npm_lister_listing_pagination(lister_npm, requests_mock_datadir):
-    lister = lister_npm
-    # Patch per page pagination
-    lister.per_page = 10 + 1
-    lister.PATH_TEMPLATE = lister.PATH_TEMPLATE.replace(
-        "&limit=1001", "&limit=%s" % lister.per_page
+def _check_listed_npm_packages(lister, packages, scheduler_origins):
+    for package in packages:
+        package_name = package["doc"]["name"]
+        latest_version = package["doc"]["dist-tags"]["latest"]
+        package_last_update = iso8601.parse_date(package["doc"]["time"][latest_version])
+        origin_url = lister.PACKAGE_URL_TEMPLATE.format(package_name=package_name)
+
+        scheduler_origin = [o for o in scheduler_origins if o.url == origin_url]
+        assert scheduler_origin
+        assert scheduler_origin[0].last_update == package_last_update
+
+
+def _match_request(request):
+    return request.headers.get("User-Agent") == USER_AGENT
+
+
+def _url_params(page_size, **kwargs):
+    params = {"limit": page_size, "include_docs": "true"}
+    params.update(**kwargs)
+    return params
+
+
+def test_npm_lister_full(
+    swh_scheduler, requests_mock, mocker, npm_full_listing_page1, npm_full_listing_page2
+):
+    """Simulate a full listing of four npm packages in two pages"""
+    page_size = 2
+    lister = NpmLister(scheduler=swh_scheduler, page_size=page_size, incremental=False)
+
+    requests_mock.get(
+        lister.API_FULL_LISTING_URL,
+        [{"json": npm_full_listing_page1}, {"json": npm_full_listing_page2},],
+        additional_matcher=_match_request,
     )
+
+    spy_get = mocker.spy(lister.session, "get")
+
+    stats = lister.run()
+    assert stats.pages == 2
+    assert stats.origins == page_size * stats.pages
+
+    spy_get.assert_has_calls(
+        [
+            mocker.call(
+                lister.API_FULL_LISTING_URL,
+                params=_url_params(page_size + 1, startkey='""'),
+            ),
+            mocker.call(
+                lister.API_FULL_LISTING_URL,
+                params=_url_params(
+                    page_size + 1,
+                    startkey=f'"{npm_full_listing_page1["rows"][-1]["id"]}"',
+                ),
+            ),
+        ]
+    )
+
+    scheduler_origins = swh_scheduler.get_listed_origins(lister.lister_obj.id).origins
+
+    _check_listed_npm_packages(
+        lister,
+        chain(npm_full_listing_page1["rows"][:-1], npm_full_listing_page2["rows"]),
+        scheduler_origins,
+    )
+
+    assert lister.get_state_from_scheduler() == NpmListerState()
+
+
+def test_npm_lister_incremental(
+    swh_scheduler,
+    requests_mock,
+    mocker,
+    npm_incremental_listing_page1,
+    npm_incremental_listing_page2,
+):
+    """Simulate an incremental listing of four npm packages in two pages"""
+    page_size = 2
+    lister = NpmLister(scheduler=swh_scheduler, page_size=page_size, incremental=True)
+
+    requests_mock.get(
+        lister.API_INCREMENTAL_LISTING_URL,
+        [
+            {"json": npm_incremental_listing_page1},
+            {"json": npm_incremental_listing_page2},
+            {"json": {"results": []}},
+        ],
+        additional_matcher=_match_request,
+    )
+
+    spy_get = mocker.spy(lister.session, "get")
+
+    assert lister.get_state_from_scheduler() == NpmListerState()
+
+    stats = lister.run()
+    assert stats.pages == 2
+    assert stats.origins == page_size * stats.pages
+
+    last_seq = npm_incremental_listing_page2["results"][-1]["seq"]
+
+    spy_get.assert_has_calls(
+        [
+            mocker.call(
+                lister.API_INCREMENTAL_LISTING_URL,
+                params=_url_params(page_size, since="0"),
+            ),
+            mocker.call(
+                lister.API_INCREMENTAL_LISTING_URL,
+                params=_url_params(
+                    page_size,
+                    since=str(npm_incremental_listing_page1["results"][-1]["seq"]),
+                ),
+            ),
+            mocker.call(
+                lister.API_INCREMENTAL_LISTING_URL,
+                params=_url_params(page_size, since=str(last_seq)),
+            ),
+        ]
+    )
+
+    scheduler_origins = swh_scheduler.get_listed_origins(lister.lister_obj.id).origins
+
+    _check_listed_npm_packages(
+        lister,
+        chain(
+            npm_incremental_listing_page1["results"],
+            npm_incremental_listing_page2["results"],
+        ),
+        scheduler_origins,
+    )
+
+    assert lister.get_state_from_scheduler() == NpmListerState(last_seq=last_seq)
+
+
+def test_npm_lister_incremental_restart(
+    swh_scheduler, requests_mock, mocker,
+):
+    """Check incremental npm listing will restart from saved state"""
+    page_size = 2
+    last_seq = 67
+    lister = NpmLister(scheduler=swh_scheduler, page_size=page_size, incremental=True)
+    lister.state = NpmListerState(last_seq=last_seq)
+
+    requests_mock.get(lister.API_INCREMENTAL_LISTING_URL, json={"results": []})
+
+    spy_get = mocker.spy(lister.session, "get")
+
     lister.run()
 
-    tasks = lister.scheduler.search_tasks(task_type="load-npm")
-    assert len(tasks) == 2 * 10  # only 2 files with 10 results each
+    spy_get.assert_called_with(
+        lister.API_INCREMENTAL_LISTING_URL,
+        params=_url_params(page_size, since=str(last_seq)),
+    )
 
-    check_tasks(tasks)
+
+def test_npm_lister_http_error(
+    swh_scheduler, requests_mock, mocker,
+):
+    lister = NpmLister(scheduler=swh_scheduler)
+
+    requests_mock.get(lister.API_FULL_LISTING_URL, status_code=500)
+
+    with pytest.raises(HTTPError):
+        lister.run()
