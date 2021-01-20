@@ -1,260 +1,287 @@
-# Copyright (C) 2017-2019 The Software Heritage developers
+# Copyright (C) 2017-2021 The Software Heritage developers
 # See the AUTHORS file at the top-level directory of this distribution
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
 
+
 import bz2
 from collections import defaultdict
-import datetime
+from dataclasses import dataclass, field
 import gzip
+from itertools import product
 import logging
 import lzma
-from typing import Any, Dict, Mapping, Optional
+from typing import Any, Callable, Dict, Iterator, List, Set, Tuple
+from urllib.parse import urljoin
 
 from debian.deb822 import Sources
-from requests import Response
-from sqlalchemy.orm import joinedload, load_only
-from sqlalchemy.schema import CreateTable, DropTable
+import requests
 
-from swh.lister.core.lister_base import FetchError, ListerBase
-from swh.lister.core.lister_transports import ListerHttpTransport
-from swh.lister.debian.models import (
-    AreaSnapshot,
-    Distribution,
-    DistributionSnapshot,
-    Package,
-    TempPackage,
-)
+from swh.scheduler.interface import SchedulerInterface
+from swh.scheduler.model import ListedOrigin
 
-decompressors = {
+from .. import USER_AGENT
+from ..pattern import Lister
+
+logger = logging.getLogger(__name__)
+
+decompressors: Dict[str, Callable[[Any], Any]] = {
     "gz": lambda f: gzip.GzipFile(fileobj=f),
     "bz2": bz2.BZ2File,
     "xz": lzma.LZMAFile,
 }
 
+Suite = str
+Component = str
+PkgName = str
+PkgVersion = str
+DebianOrigin = str
+DebianPageType = Iterator[Sources]
 
-logger = logging.getLogger(__name__)
+
+@dataclass
+class DebianListerState:
+    """State of debian lister"""
+
+    package_versions: Dict[PkgName, Set[PkgVersion]] = field(default_factory=dict)
+    """Dictionary mapping a package name to all the versions found during
+    last listing"""
 
 
-class DebianLister(ListerHttpTransport, ListerBase):
-    MODEL = Package
-    PATH_TEMPLATE = None
+class DebianLister(Lister[DebianListerState, DebianPageType]):
+    """
+    List source packages for a given debian or derivative distribution.
+
+    The lister will create a snapshot for each package name from all its
+    available versions.
+
+    If a package snapshot is different from the last listing operation,
+    it will be send to the scheduler that will create a loading task
+    to archive newly found source code.
+
+    Args:
+        scheduler: instance of SchedulerInterface
+        distribution: identifier of listed distribution (e.g. Debian, Ubuntu)
+        mirror_url: debian package archives mirror URL
+        suites: list of distribution suites to process
+        components: list of package components to process
+    """
+
     LISTER_NAME = "debian"
-    instance = "debian"
 
     def __init__(
         self,
+        scheduler: SchedulerInterface,
         distribution: str = "Debian",
-        date: Optional[datetime.datetime] = None,
-        override_config: Mapping = {},
+        mirror_url: str = "http://deb.debian.org/debian/",
+        suites: List[Suite] = ["stretch", "buster", "bullseye"],
+        components: List[Component] = ["main", "contrib", "non-free"],
     ):
-        """Initialize the debian lister for a given distribution at a given
-        date.
-
-        Args:
-            distribution: name of the distribution (e.g. "Debian")
-            date: date the snapshot is taken (defaults to now if empty)
-            override_config: Override configuration (which takes precedence
-               over the parameters if provided)
-
-        """
-        ListerHttpTransport.__init__(self, url="notused")
-        ListerBase.__init__(self, override_config=override_config)
-        self.distribution = override_config.get("distribution", distribution)
-        self.date = override_config.get("date", date) or datetime.datetime.now(
-            tz=datetime.timezone.utc
+        super().__init__(
+            scheduler=scheduler, url=mirror_url, instance=distribution,
         )
 
-    def transport_request(self, identifier) -> Response:
-        """Subvert ListerHttpTransport.transport_request, to try several
-        index URIs in turn.
+        # to ensure urljoin will produce valid Sources URL
+        if not self.url.endswith("/"):
+            self.url += "/"
 
-        The Debian repository format supports several compression algorithms
-        across the ages, so we try several URIs.
+        self.distribution = distribution
+        self.suites = suites
+        self.components = components
 
-        Once we have found a working URI, we break and set `self.decompressor`
-        to the one that matched.
+        self.session = requests.Session()
+        self.session.headers.update({"User-Agent": USER_AGENT})
 
-        Returns:
-            a requests Response object.
+        # will hold all listed origins info
+        self.listed_origins: Dict[DebianOrigin, ListedOrigin] = {}
+        # will contain origin urls that have already been listed
+        # in a previous page
+        self.sent_origins: Set[DebianOrigin] = set()
+        # will contain already listed package info that need to be sent
+        # to the scheduler for update in the commit_page method
+        self.origins_to_update: Dict[DebianOrigin, ListedOrigin] = {}
+        # will contain the lister state after a call to run
+        self.package_versions: Dict[PkgName, Set[PkgVersion]] = {}
 
-        Raises:
-            FetchError: when all the URIs failed to be retrieved.
-        """
-        response = None
-        compression = None
+    def state_from_dict(self, d: Dict[str, Any]) -> DebianListerState:
+        return DebianListerState(package_versions={k: set(v) for k, v in d.items()})
 
-        for uri, compression in self.area.index_uris():
-            response = super().transport_request(uri)
+    def state_to_dict(self, state: DebianListerState) -> Dict[str, Any]:
+        return {k: list(v) for k, v in state.package_versions.items()}
+
+    def debian_index_urls(
+        self, suite: Suite, component: Component
+    ) -> Iterator[Tuple[str, str]]:
+        """Return an iterator on possible Sources file URLs as multiple compression
+        formats can be used."""
+        compression_exts = ("xz", "bz2", "gz")
+        base_url = urljoin(self.url, f"dists/{suite}/{component}/source/Sources")
+        for ext in compression_exts:
+            yield (f"{base_url}.{ext}", ext)
+        yield (base_url, "")
+
+    def page_request(self, suite: Suite, component: Component) -> DebianPageType:
+        """Return parsed package Sources file for a given debian suite and component."""
+        for url, compression in self.debian_index_urls(suite, component):
+            response = requests.get(url, stream=True)
+            logging.debug("Fetched URL: %s, status code: %s", url, response.status_code)
             if response.status_code == 200:
                 break
         else:
-            raise FetchError("Could not retrieve index for %s" % self.area)
-        self.decompressor = decompressors.get(compression)
-        return response
+            raise Exception(
+                "Could not retrieve sources index for %s/%s", suite, component
+            )
 
-    def request_uri(self, identifier):
-        # In the overridden transport_request, we pass
-        # ListerBase.transport_request() the full URI as identifier, so we
-        # need to return it here.
-        return identifier
-
-    def request_params(self, identifier) -> Dict[str, Any]:
-        # Enable streaming to allow wrapping the response in the decompressor
-        # in transport_response_simplified.
-        params = super().request_params(identifier)
-        params["stream"] = True
-        return params
-
-    def transport_response_simplified(self, response):
-        """Decompress and parse the package index fetched in `transport_request`.
-
-        For each package, we "pivot" the file list entries (Files,
-        Checksums-Sha1, Checksums-Sha256), to return a files dict mapping
-        filenames to their checksums.
-        """
-        if self.decompressor:
-            data = self.decompressor(response.raw)
+        decompressor = decompressors.get(compression)
+        if decompressor:
+            data = decompressor(response.raw)
         else:
             data = response.raw
 
-        for src_pkg in Sources.iter_paragraphs(data.readlines()):
-            files = defaultdict(dict)
+        return Sources.iter_paragraphs(data.readlines())
 
-            for field in src_pkg._multivalued_fields:
-                if field.startswith("checksums-"):
-                    sum_name = field[len("checksums-") :]
+    def get_pages(self) -> Iterator[DebianPageType]:
+        """Return an iterator on parsed debian package Sources files, one per combination
+        of debian suite and component."""
+        for suite, component in product(self.suites, self.components):
+            logger.debug(
+                "Processing %s %s source packages info for %s component.",
+                self.instance,
+                suite,
+                component,
+            )
+            self.current_suite = suite
+            self.current_component = component
+            yield self.page_request(suite, component)
+
+    def origin_url_for_package(self, package_name: PkgName) -> DebianOrigin:
+        """Return the origin url for the given package"""
+        return f"deb://{self.instance}/packages/{package_name}"
+
+    def get_origins_from_page(self, page: DebianPageType) -> Iterator[ListedOrigin]:
+        """Convert a page of debian package sources into an iterator of ListedOrigin.
+
+        Please note that the returned origins correspond to packages only
+        listed for the first time in order to get an accurate origins counter
+        in the statistics returned by the run method of the lister.
+
+        Packages already listed in another page but with different versions will
+        be put in cache by the method and updated ListedOrigin objects will
+        be sent to the scheduler later in the commit_page method.
+
+        Indeed as multiple debian suites can be processed, a similar set of
+        package names can be listed for two different package source pages,
+        only their version will differ, resulting in origins counted multiple
+        times in lister statistics.
+        """
+        assert self.lister_obj.id is not None
+
+        origins_to_send = {}
+        self.origins_to_update = {}
+
+        # iterate on each package source info
+        for src_pkg in page:
+            # gather package files info that will be used by the debian loader
+            files: Dict[str, Dict[str, Any]] = defaultdict(dict)
+            for field_ in src_pkg._multivalued_fields:
+                if field_.startswith("checksums-"):
+                    sum_name = field_[len("checksums-") :]
                 else:
                     sum_name = "md5sum"
-                if field in src_pkg:
-                    for entry in src_pkg[field]:
+                if field_ in src_pkg:
+                    for entry in src_pkg[field_]:
                         name = entry["name"]
                         files[name]["name"] = entry["name"]
                         files[name]["size"] = int(entry["size"], 10)
                         files[name][sum_name] = entry[sum_name]
 
-            yield {
-                "name": src_pkg["Package"],
-                "version": src_pkg["Version"],
-                "directory": src_pkg["Directory"],
-                "files": files,
-            }
+            # extract package name and version
+            package_name = src_pkg["Package"]
+            package_version = src_pkg["Version"]
+            # build origin url
+            origin_url = self.origin_url_for_package(package_name)
 
-    def inject_repo_data_into_db(self, models_list):
-        """Generate the Package entries that didn't previously exist.
-
-        Contrary to ListerBase, we don't actually insert the data in
-        database. `schedule_missing_tasks` does it once we have the
-        origin and task identifiers.
-        """
-        by_name_version = {}
-        temp_packages = []
-
-        area_id = self.area.id
-
-        for model in models_list:
-            name = model["name"]
-            version = model["version"]
-            temp_packages.append(
-                {"area_id": area_id, "name": name, "version": version,}
-            )
-            by_name_version[name, version] = model
-
-        # Add all the listed packages to a temporary table
-        self.db_session.execute(CreateTable(TempPackage.__table__))
-        self.db_session.bulk_insert_mappings(TempPackage, temp_packages)
-
-        def exists_tmp_pkg(db_session, model):
-            return (
-                db_session.query(model)
-                .filter(Package.area_id == TempPackage.area_id)
-                .filter(Package.name == TempPackage.name)
-                .filter(Package.version == TempPackage.version)
-                .exists()
+            # create package version key as expected by the debian loader
+            package_version_key = (
+                f"{self.current_suite}/{self.current_component}/{package_version}"
             )
 
-        # Filter out the packages that already exist in the main Package table
-        new_packages = (
-            self.db_session.query(TempPackage)
-            .options(load_only("name", "version"))
-            .filter(~exists_tmp_pkg(self.db_session, Package))
-            .all()
-        )
+            # this is the first time a package is listed
+            if origin_url not in self.listed_origins:
+                # create a ListedOrigin object for it that can be later
+                # updated with new package versions info
+                self.listed_origins[origin_url] = ListedOrigin(
+                    lister_id=self.lister_obj.id,
+                    url=origin_url,
+                    visit_type="deb",
+                    extra_loader_arguments={"date": None, "packages": {}},
+                )
+                # origin will be yielded at the end of that method
+                origins_to_send[origin_url] = self.listed_origins[origin_url]
+                # init set that will contain all listed package versions
+                self.package_versions[package_name] = set()
 
-        self.old_area_packages = (
-            self.db_session.query(Package)
-            .filter(exists_tmp_pkg(self.db_session, TempPackage))
-            .all()
-        )
+            # package has already been listed in a previous page or current page
+            elif origin_url not in origins_to_send:
+                # if package has been listed in a previous page, its new versions
+                # will be added to its ListedOrigin object but the update will
+                # be sent to the scheduler in the commit_page method
+                self.origins_to_update[origin_url] = self.listed_origins[origin_url]
 
-        self.db_session.execute(DropTable(TempPackage.__table__))
+            # update package versions data in parameter that will be provided
+            # to the debian loader
+            self.listed_origins[origin_url].extra_loader_arguments["packages"].update(
+                {
+                    package_version_key: {
+                        "name": package_name,
+                        "version": package_version,
+                        "files": files,
+                    }
+                }
+            )
 
-        added_packages = []
-        for package in new_packages:
-            model = by_name_version[package.name, package.version]
+            # add package version key to the set of found versions
+            self.package_versions[package_name].add(package_version_key)
 
-            added_packages.append(Package(area=self.area, **model))
+            # package has already been listed during a previous listing process
+            if package_name in self.state.package_versions:
+                new_versions = (
+                    self.package_versions[package_name]
+                    - self.state.package_versions[package_name]
+                )
+                # no new versions so far, no need to send the origin to the scheduler
+                if not new_versions:
+                    origins_to_send.pop(origin_url, None)
+                    self.origins_to_update.pop(origin_url, None)
+                # new versions found, ensure the origin will be sent to the scheduler
+                elif origin_url not in self.sent_origins:
+                    self.origins_to_update.pop(origin_url, None)
+                    origins_to_send[origin_url] = self.listed_origins[origin_url]
 
-        self.db_session.add_all(added_packages)
-        return added_packages
-
-    def schedule_missing_tasks(self, models_list, added_packages):
-        """We create tasks at the end of the full snapshot processing"""
-        return
-
-    def create_tasks_for_snapshot(self, snapshot):
-        tasks = [
-            snapshot.task_for_package(name, versions)
-            for name, versions in snapshot.get_packages().items()
-        ]
-
-        return self.scheduler.create_tasks(tasks)
-
-    def run(self):
-        """Run the lister for a given (distribution, area) tuple.
-
-        """
-        distribution = (
-            self.db_session.query(Distribution)
-            .options(joinedload(Distribution.areas))
-            .filter(Distribution.name == self.distribution)
-            .one_or_none()
-        )
-
-        if not distribution:
-            logger.error("Distribution %s is not registered" % self.distribution)
-            return {"status": "failed"}
-
-        if not distribution.type == "deb":
-            logger.error("Distribution %s is not a Debian derivative" % distribution)
-            return {"status": "failed"}
-
-        date = self.date
+        # update already counted origins with changes since last page
+        self.sent_origins.update(origins_to_send.keys())
 
         logger.debug(
-            "Creating snapshot for distribution %s on date %s" % (distribution, date)
+            "Found %s new packages, %s packages with new versions.",
+            len(origins_to_send),
+            len(self.origins_to_update),
+        )
+        logger.debug(
+            "Current total number of listed packages is equal to %s.",
+            len(self.listed_origins),
         )
 
-        snapshot = DistributionSnapshot(date=date, distribution=distribution)
+        yield from origins_to_send.values()
 
-        self.db_session.add(snapshot)
+    def get_origins_to_update(self) -> Iterator[ListedOrigin]:
+        yield from self.origins_to_update.values()
 
-        for area in distribution.areas:
-            if not area.active:
-                continue
+    def commit_page(self, page: DebianPageType):
+        """Send to scheduler already listed origins where new versions have been found
+        in current page."""
+        self.send_origins(self.get_origins_to_update())
 
-            self.area = area
-
-            logger.debug("Processing area %s" % area)
-
-            _, new_area_packages = self.ingest_data(None)
-            area_snapshot = AreaSnapshot(snapshot=snapshot, area=area)
-            self.db_session.add(area_snapshot)
-            area_snapshot.packages.extend(new_area_packages)
-            area_snapshot.packages.extend(self.old_area_packages)
-
-        self.create_tasks_for_snapshot(snapshot)
-
-        self.db_session.commit()
-
-        return {"status": "eventful"}
+    def finalize(self):
+        # set mapping between listed package names and versions as lister state
+        self.state.package_versions = self.package_versions
+        self.updated = len(self.sent_origins) > 0
