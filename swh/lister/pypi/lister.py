@@ -3,65 +3,70 @@
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
 
-import random
-from typing import Any, Dict
+import logging
+from typing import Iterator, List
 
-from requests import Response
+import requests
 import xmltodict
 
-from swh.lister.core.lister_transports import ListerOnePageApiTransport
-from swh.lister.core.simple_lister import SimpleLister
-from swh.scheduler import utils
+from swh.scheduler.interface import SchedulerInterface
+from swh.scheduler.model import ListedOrigin
 
-from .models import PyPIModel
+from .. import USER_AGENT
+from ..pattern import StatelessLister
+
+logger = logging.getLogger(__name__)
+
+PackageListPage = List[str]
 
 
-class PyPILister(ListerOnePageApiTransport, SimpleLister):
-    MODEL = PyPIModel
+class PyPILister(StatelessLister[PackageListPage]):
+    """List origins from PyPI.
+
+    """
+
     LISTER_NAME = "pypi"
-    PAGE = "https://pypi.org/simple/"
-    instance = "pypi"  # As of today only the main pypi.org is used
+    INSTANCE = "pypi"  # As of today only the main pypi.org is used
 
-    def __init__(self, override_config=None):
-        ListerOnePageApiTransport.__init__(self)
-        SimpleLister.__init__(self, override_config=override_config)
+    PACKAGE_LIST_URL = "https://pypi.org/simple/"
+    PACKAGE_URL = "https://pypi.org/project/{package_name}/"
 
-    def task_dict(self, origin_type: str, origin_url: str, **kwargs):
-        """(Override) Return task format dict
+    def __init__(self, scheduler: SchedulerInterface):
+        super().__init__(
+            scheduler=scheduler,
+            credentials=None,
+            url=self.PACKAGE_LIST_URL,
+            instance=self.INSTANCE,
+        )
 
-        This is overridden from the lister_base as more information is
-        needed for the ingestion task creation.
+        self.session = requests.Session()
+        self.session.headers.update(
+            {"Accept": "application/html", "User-Agent": USER_AGENT}
+        )
 
-        """
-        _type = "load-%s" % origin_type
-        _policy = kwargs.get("policy", "recurring")
-        return utils.create_task_dict(_type, _policy, url=origin_url)
+    def get_pages(self) -> Iterator[PackageListPage]:
 
-    def list_packages(self, response: Response) -> list:
-        """(Override) List the actual pypi origins from the response.
+        response = self.session.get(self.PACKAGE_LIST_URL)
 
-        """
-        result = xmltodict.parse(response.content)
-        _packages = [p["#text"] for p in result["html"]["body"]["a"]]
-        random.shuffle(_packages)
-        return _packages
+        response.raise_for_status()
 
-    def origin_url(self, repo_name: str) -> str:
-        """Returns origin_url
+        page_xmldict = xmltodict.parse(response.content)
+        page_results = [p["#text"] for p in page_xmldict["html"]["body"]["a"]]
 
-        """
-        return "https://pypi.org/project/%s/" % repo_name
+        yield page_results
 
-    def get_model_from_repo(self, repo_name: str) -> Dict[str, Any]:
-        """(Override) Transform from repository representation to model
+    def get_origins_from_page(
+        self, packages_name: PackageListPage
+    ) -> Iterator[ListedOrigin]:
+        """Convert a page of PyPI repositories into a list of ListedOrigins."""
+        assert self.lister_obj.id is not None
 
-        """
-        origin_url = self.origin_url(repo_name)
-        return {
-            "uid": origin_url,
-            "name": repo_name,
-            "full_name": repo_name,
-            "html_url": origin_url,
-            "origin_url": origin_url,
-            "origin_type": "pypi",
-        }
+        for package_name in packages_name:
+            package_url = self.PACKAGE_URL.format(package_name=package_name)
+
+            yield ListedOrigin(
+                lister_id=self.lister_obj.id,
+                url=package_url,
+                visit_type="pypi",
+                last_update=None,  # available on PyPI JSON API
+            )
