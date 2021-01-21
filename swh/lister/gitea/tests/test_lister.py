@@ -5,7 +5,6 @@
 
 import json
 from pathlib import Path
-from pprint import pprint
 from typing import Dict, List, Tuple
 
 import pytest
@@ -14,9 +13,9 @@ import requests
 from swh.lister.gitea.lister import GiteaLister, RepoListPage
 from swh.scheduler.model import ListedOrigin
 
-TRYGITEA_BASEURL = "https://try.gitea.io/api/v1/"
-TRYGITEA_P1_URL = TRYGITEA_BASEURL + "repos/search?sort=id&order=asc&limit=3&page=1"
-TRYGITEA_P2_URL = TRYGITEA_BASEURL + "repos/search?sort=id&order=asc&limit=3&page=2"
+TRYGITEA_URL = "https://try.gitea.io/api/v1/"
+TRYGITEA_P1_URL = TRYGITEA_URL + "repos/search?sort=id&order=asc&limit=3&page=1"
+TRYGITEA_P2_URL = TRYGITEA_URL + "repos/search?sort=id&order=asc&limit=3&page=2"
 
 
 @pytest.fixture
@@ -58,10 +57,13 @@ def check_listed_origins(lister_urls: List[str], scheduler_origins: List[ListedO
 def test_gitea_full_listing(
     swh_scheduler, requests_mock, mocker, trygitea_p1, trygitea_p2
 ):
-    """Covers full listing of multiple pages, instance inference from URL,
-    rate-limit, token authentication, token from credentials,
-    page size (required for test), checking page results and listed origins,
-    statelessness."""
+    """Covers full listing of multiple pages, rate-limit, page size (required for test),
+    checking page results and listed origins, statelessness."""
+
+    kwargs = dict(url=TRYGITEA_URL, instance="try_gitea", page_size=3)
+    lister = GiteaLister(scheduler=swh_scheduler, **kwargs)
+
+    lister.get_origins_from_page = mocker.spy(lister, "get_origins_from_page")
 
     p1_text, p1_headers, p1_result, p1_origin_urls = trygitea_p1
     p2_text, p2_headers, p2_result, p2_origin_urls = trygitea_p2
@@ -75,21 +77,6 @@ def test_gitea_full_listing(
         ],
     )
 
-    instance = "try.gitea.io"
-    api_token = "p"
-    creds = {"gitea": {instance: [{"username": "u", "password": api_token}]}}
-    kwargs = dict(url=TRYGITEA_BASEURL, page_size=3, credentials=creds)
-
-    lister = GiteaLister(scheduler=swh_scheduler, **kwargs)
-
-    assert lister.instance == instance
-    assert (
-        "Authorization" in lister.session.headers
-        and lister.session.headers["Authorization"].lower() == "token %s" % api_token
-    )
-
-    lister.get_origins_from_page = mocker.spy(lister, "get_origins_from_page")
-
     # end test setup
 
     stats = lister.run()
@@ -99,23 +86,63 @@ def test_gitea_full_listing(
     assert stats.pages == 2
     assert stats.origins == 6
 
-    # ~pprint(lister.get_origins_from_page.call_args_list)
     calls = [mocker.call(p1_result), mocker.call(p2_result)]
     lister.get_origins_from_page.assert_has_calls(calls)
 
     scheduler_origins = swh_scheduler.get_listed_origins(lister.lister_obj.id).origins
 
-    assert lister.get_state_from_scheduler() is None
     check_listed_origins(p1_origin_urls + p2_origin_urls, scheduler_origins)
+
+    assert lister.get_state_from_scheduler() is None
+
+
+def test_gitea_auth_instance(swh_scheduler, requests_mock, trygitea_p1):
+    """Covers token authentication, token from credentials,
+    instance inference from URL."""
+
+    api_token = "teapot"
+    instance = "try.gitea.io"
+    creds = {"gitea": {instance: [{"username": "u", "password": api_token}]}}
+
+    kwargs1 = dict(url=TRYGITEA_URL, api_token=api_token)
+    lister = GiteaLister(scheduler=swh_scheduler, **kwargs1)
+
+    # test API token
+    assert "Authorization" in lister.session.headers
+    assert lister.session.headers["Authorization"].lower() == "token %s" % api_token
+
+    kwargs2 = dict(url=TRYGITEA_URL, credentials=creds)
+    lister = GiteaLister(scheduler=swh_scheduler, **kwargs2)
+
+    # test API token from credentials
+    assert "Authorization" in lister.session.headers
+    assert lister.session.headers["Authorization"].lower() == "token %s" % api_token
+
+    # test instance inference from URL
+    assert lister.instance
+    assert "gitea" in lister.instance  # infer something related to that
+
+    # setup requests mocking
+    p1_text, p1_headers, _, _ = trygitea_p1
+    p1_headers["Link"] = p1_headers["Link"].replace("next", "")  # only 1 page
+
+    base_url = TRYGITEA_URL + lister.REPO_LIST_PATH
+    requests_mock.get(base_url, text=p1_text, headers=p1_headers)
+
+    # now check the lister runs without error
+    stats = lister.run()
+
+    assert stats.pages == 1
 
 
 @pytest.mark.parametrize("http_code", [400, 500, 502])
 def test_gitea_list_http_error(swh_scheduler, requests_mock, http_code):
     """Test handling of some HTTP errors commonly encountered"""
 
-    requests_mock.get(TRYGITEA_P1_URL, status_code=http_code)
+    lister = GiteaLister(scheduler=swh_scheduler, url=TRYGITEA_URL, page_size=3)
 
-    lister = GiteaLister(scheduler=swh_scheduler, url=TRYGITEA_BASEURL, page_size=3)
+    base_url = TRYGITEA_URL + lister.REPO_LIST_PATH
+    requests_mock.get(base_url, status_code=http_code)
 
     with pytest.raises(requests.HTTPError):
         lister.run()
