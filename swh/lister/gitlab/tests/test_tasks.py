@@ -8,7 +8,7 @@ from unittest.mock import call, patch
 
 from celery.result import GroupResult
 
-from swh.lister.gitea.tasks import NBPAGES
+from swh.lister.gitlab.tasks import NBPAGES
 from swh.lister.utils import split_range
 
 
