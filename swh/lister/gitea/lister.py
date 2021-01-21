@@ -1,89 +1,135 @@
-# Copyright (C) 2018-2020 The Software Heritage developers
+# Copyright (C) 2018-2021 The Software Heritage developers
 # See the AUTHORS file at the top-level directory of this distribution
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
 
-import re
-from typing import Any, Dict, List, MutableMapping, Optional, Tuple
+import logging
+from typing import Any, Dict, Iterator, List, Optional
+from urllib.parse import urljoin
 
-from requests import Response
+import iso8601
+import requests
+from tenacity.before_sleep import before_sleep_log
 from urllib3.util import parse_url
 
-from ..core.page_by_page_lister import PageByPageHttpLister
-from .models import GiteaModel
+from swh.lister.utils import throttling_retry
+from swh.scheduler.interface import SchedulerInterface
+from swh.scheduler.model import ListedOrigin
+
+from .. import USER_AGENT
+from ..pattern import CredentialsType, StatelessLister
+
+logger = logging.getLogger(__name__)
+
+RepoListPage = List[Dict[str, Any]]
 
 
-class GiteaLister(PageByPageHttpLister):
-    # Template path expecting an integer that represents the page id
-    PATH_TEMPLATE = "repos/search?page=%d&sort=id"
-    DEFAULT_URL = "https://try.gitea.io/api/v1/"
-    MODEL = GiteaModel
+class GiteaLister(StatelessLister[RepoListPage]):
+    """List origins from Gitea.
+
+    Gitea API documentation: https://try.gitea.io/api/swagger
+
+    The API does pagination and provides navigation URLs through the 'Link' header.
+    The default value for page size is the maximum value observed on the instances
+    accessible at https://try.gitea.io/api/v1/ and https://codeberg.org/api/v1/."""
+
     LISTER_NAME = "gitea"
 
+    REPO_LIST_PATH = "repos/search"
+
     def __init__(
-        self, url=None, instance=None, override_config=None, order="asc", limit=3
+        self,
+        scheduler: SchedulerInterface,
+        url: str,
+        instance: Optional[str] = None,
+        api_token: Optional[str] = None,
+        page_size: int = 50,
+        credentials: CredentialsType = None,
     ):
-        super().__init__(url=url, override_config=override_config)
         if instance is None:
-            instance = parse_url(self.url).host
-        self.instance = instance
-        self.PATH_TEMPLATE = "%s&order=%s&limit=%s" % (
-            self.PATH_TEMPLATE,
-            order,
-            limit,
+            instance = parse_url(url).host
+
+        super().__init__(
+            scheduler=scheduler, credentials=credentials, url=url, instance=instance,
         )
 
-    def get_model_from_repo(self, repo: Dict[str, Any]) -> Dict[str, Any]:
-        return {
-            "instance": self.instance,
-            "uid": f'{self.instance}/{repo["id"]}',
-            "name": repo["name"],
-            "full_name": repo["full_name"],
-            "html_url": repo["html_url"],
-            "origin_url": repo["clone_url"],
-            "origin_type": "git",
+        self.query_params = {
+            "sort": "id",
+            "order": "asc",
+            "limit": page_size,
+            "page": 1,
         }
 
-    def get_next_target_from_response(self, response: Response) -> Optional[int]:
-        """Determine the next page identifier.
-
-        """
-        if "next" in response.links:
-            next_url = response.links["next"]["url"]
-            return self.get_page_from_url(next_url)
-        return None
-
-    def get_page_from_url(self, url: str) -> int:
-        page_re = re.compile(r"^.*/search\?.*page=(\d+)")
-        return int(page_re.match(url).group(1))  # type: ignore
-
-    def transport_response_simplified(self, response: Response) -> List[Dict[str, Any]]:
-        repos = response.json()["data"]
-        return [self.get_model_from_repo(repo) for repo in repos]
-
-    def get_pages_information(
-        self,
-    ) -> Tuple[Optional[int], Optional[int], Optional[int]]:
-        """Determine pages information.
-
-        """
-        response = self.transport_head(identifier=1)  # type: ignore
-        if not response.ok:
-            raise ValueError(
-                "Problem during information fetch: %s" % response.status_code
-            )
-        h = response.headers
-        return (
-            self._get_int(h, "x-total-count"),
-            int(self.get_page_from_url(response.links["last"]["url"])),
-            self._get_int(h, "x-per-page"),
+        self.session = requests.Session()
+        self.session.headers.update(
+            {"Accept": "application/json", "User-Agent": USER_AGENT,}
         )
 
-    def _get_int(self, headers: MutableMapping[str, Any], key: str) -> Optional[int]:
-        _val = headers.get(key)
-        if _val:
-            return int(_val)
-        return None
+        if api_token is None and len(self.credentials) > 0:
+            logger.warning(
+                "Gitea lister support only API token authentication "
+                " as of now. Will use the first password as token."
+            )
+            api_token = self.credentials[0]["password"]
 
-    def run(self, min_bound=1, max_bound=None, check_existence=False):
-        return super().run(min_bound, max_bound, check_existence)
+        if api_token:
+            self.session.headers["Authorization"] = "Token %s" % api_token
+
+    @throttling_retry(before_sleep=before_sleep_log(logger, logging.WARNING))
+    def page_request(self, url: str, params: Dict[str, Any]) -> requests.Response:
+
+        logger.info("Fetching URL %s with params %s", url, params)
+
+        response = self.session.get(url, params=params)
+
+        if response.status_code != 200:
+            logger.warning(
+                "Unexpected HTTP status code %s on %s: %s",
+                response.status_code,
+                response.url,
+                response.content,
+            )
+        response.raise_for_status()
+
+        return response
+
+    @classmethod
+    def results_simplified(cls, body: Dict[str, RepoListPage]) -> RepoListPage:
+        fields_filter = ["id", "clone_url", "updated_at"]
+        return [{k: r[k] for k in fields_filter} for r in body["data"]]
+
+    def get_pages(self) -> Iterator[RepoListPage]:
+        # base with trailing slash, path without leading slash for urljoin
+        url: str = urljoin(self.url, self.REPO_LIST_PATH)
+
+        response = self.page_request(url, self.query_params)
+
+        while True:
+            page_results = self.results_simplified(response.json())
+
+            yield page_results
+
+            assert len(response.links) > 0, "API changed: no Link header found"
+            if "next" in response.links:
+                url = response.links["next"]["url"]
+            else:
+                # last page
+                break
+
+            response = self.page_request(url, {})
+
+    def get_origins_from_page(self, page: RepoListPage) -> Iterator[ListedOrigin]:
+        """Convert a page of Gitea repositories into a list of ListedOrigins.
+
+        """
+        assert self.lister_obj.id is not None
+
+        for repo in page:
+            last_update = iso8601.parse_date(repo["updated_at"])
+
+            yield ListedOrigin(
+                lister_id=self.lister_obj.id,
+                url=repo["clone_url"],
+                visit_type="git",
+                last_update=last_update,
+            )

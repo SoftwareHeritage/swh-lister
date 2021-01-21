@@ -5,10 +5,9 @@
 
 def register():
     from .lister import GiteaLister
-    from .models import GiteaModel
 
     return {
-        "models": [GiteaModel],
+        "models": [],
         "lister": GiteaLister,
         "task_modules": ["%s.tasks" % __name__],
     }
