@@ -15,6 +15,7 @@ lister_args = {
         "url": "https://forge.softwareheritage.org/api/diffusion.repository.search",
         "api_token": "bogus",
     },
+    "gitea": {"url": "https://try.gitea.io/api/v1/",},
 }
 
 
