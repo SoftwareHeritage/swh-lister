@@ -37,9 +37,7 @@ def test_pypi_list(swh_scheduler, requests_mock, mocker, pypi_packages_testdata)
 
     t_content, t_names, t_urls = pypi_packages_testdata
 
-    requests_mock.get(
-        PyPILister.PACKAGE_LIST_URL, [{"content": t_content, "status_code": 200},],
-    )
+    requests_mock.get(PyPILister.PACKAGE_LIST_URL, content=t_content)
 
     lister = PyPILister(scheduler=swh_scheduler)
 
