@@ -1,71 +1,65 @@
-# Copyright (C) 2019-2020 the Software Heritage developers
+# Copyright (C) 2019-2021 The Software Heritage developers
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
 
+from typing import List
+
 from swh.lister import __version__
+from swh.lister.cgit.lister import CGitLister
+from swh.lister.pattern import ListerStats
 
 
-def test_lister_cgit_no_page(requests_mock_datadir, lister_cgit):
-    assert lister_cgit.url == "https://git.savannah.gnu.org/cgit/"
+def test_lister_cgit_get_pages_one_page(requests_mock_datadir, swh_scheduler):
+    url = "https://git.savannah.gnu.org/cgit/"
+    lister_cgit = CGitLister(swh_scheduler, url=url)
 
-    repos = list(lister_cgit.get_repos())
-    assert len(repos) == 977
+    repos: List[List[str]] = list(lister_cgit.get_pages())
+    flattened_repos = sum(repos, [])
+    assert len(flattened_repos) == 977
 
-    assert repos[0] == "https://git.savannah.gnu.org/cgit/elisp-es.git/"
+    assert flattened_repos[0] == "https://git.savannah.gnu.org/cgit/elisp-es.git/"
     # note the url below is NOT a subpath of /cgit/
-    assert repos[-1] == "https://git.savannah.gnu.org/path/to/yetris.git/"  # noqa
+    assert (
+        flattened_repos[-1] == "https://git.savannah.gnu.org/path/to/yetris.git/"
+    )  # noqa
     # note the url below is NOT on the same server
-    assert repos[-2] == "http://example.org/cgit/xstarcastle.git/"
+    assert flattened_repos[-2] == "http://example.org/cgit/xstarcastle.git/"
 
 
-def test_lister_cgit_model(requests_mock_datadir, lister_cgit):
-    repo = next(lister_cgit.get_repos())
+def test_lister_cgit_get_pages_with_pages(requests_mock_datadir, swh_scheduler):
+    url = "https://git.tizen/cgit/"
+    lister_cgit = CGitLister(swh_scheduler, url=url)
 
-    model = lister_cgit.build_model(repo)
-    assert model == {
-        "uid": "https://git.savannah.gnu.org/cgit/elisp-es.git/",
-        "name": "elisp-es.git",
-        "origin_type": "git",
-        "instance": "git.savannah.gnu.org",
-        "origin_url": "https://git.savannah.gnu.org/git/elisp-es.git",
-    }
-
-
-def test_lister_cgit_with_pages(requests_mock_datadir, lister_cgit):
-    lister_cgit.url = "https://git.tizen/cgit/"
-
-    repos = list(lister_cgit.get_repos())
+    repos: List[List[str]] = list(lister_cgit.get_pages())
+    flattened_repos = sum(repos, [])
     # we should have 16 repos (listed on 3 pages)
-    assert len(repos) == 16
+    assert len(repos) == 3
+    assert len(flattened_repos) == 16
 
 
-def test_lister_cgit_run(requests_mock_datadir, lister_cgit):
-    lister_cgit.url = "https://git.tizen/cgit/"
-    lister_cgit.run()
+def test_lister_cgit_run(requests_mock_datadir, swh_scheduler):
+    """cgit lister supports pagination"""
 
-    r = lister_cgit.scheduler.search_tasks(task_type="load-git")
-    assert len(r) == 16
+    url = "https://git.tizen/cgit/"
+    lister_cgit = CGitLister(swh_scheduler, url=url)
 
-    for row in r:
-        assert row["type"] == "load-git"
-        # arguments check
-        args = row["arguments"]["args"]
-        assert len(args) == 0
+    stats = lister_cgit.run()
 
-        # kwargs
-        kwargs = row["arguments"]["kwargs"]
-        assert len(kwargs) == 1
-        url = kwargs["url"]
-        assert url.startswith("https://git.tizen")
+    expected_nb_origins = 16
+    assert stats == ListerStats(pages=3, origins=expected_nb_origins)
 
-        assert row["policy"] == "recurring"
-        assert row["priority"] is None
+    # test page parsing
+    scheduler_origins = swh_scheduler.get_listed_origins(
+        lister_cgit.lister_obj.id
+    ).origins
+    assert len(scheduler_origins) == expected_nb_origins
 
+    # test listed repositories
+    for listed_origin in scheduler_origins:
+        assert listed_origin.visit_type == "git"
+        assert listed_origin.url.startswith("https://git.tizen")
 
-def test_lister_cgit_requests(requests_mock_datadir, lister_cgit):
-    lister_cgit.url = "https://git.tizen/cgit/"
-    lister_cgit.run()
-
+    # test user agent content
     assert len(requests_mock_datadir.request_history) != 0
     for request in requests_mock_datadir.request_history:
         assert "User-Agent" in request.headers

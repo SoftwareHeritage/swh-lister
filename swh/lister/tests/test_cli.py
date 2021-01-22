@@ -39,35 +39,3 @@ def test_get_lister(swh_scheduler_config):
             **lister_args.get(lister_name, {}),
         )
         assert hasattr(lst, "run")
-
-
-def test_get_lister_override():
-    """Overriding the lister configuration should populate its config
-
-    """
-    db_url = init_db().url()
-
-    listers = {
-        "cgit": "https://some.where/cgit",
-    }
-
-    # check the override ends up defined in the lister
-    for lister_name, url in listers.items():
-        lst = get_lister(
-            lister_name, db_url, url=url, priority="high", policy="oneshot"
-        )
-
-        assert lst.url == url
-        assert lst.config["priority"] == "high"
-        assert lst.config["policy"] == "oneshot"
-
-    # check the default urls are used and not the override (since it's not
-    # passed)
-    for lister_name, url in listers.items():
-        lst = get_lister(lister_name, db_url)
-
-        # no override so this does not end up in lister's configuration
-        assert "url" not in lst.config
-        assert "priority" not in lst.config
-        assert "oneshot" not in lst.config
-        assert lst.url == lst.DEFAULT_URL
