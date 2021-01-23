@@ -100,6 +100,7 @@ class GitLabLister(Lister[GitLabListerState, PageResult]):
             instance=instance,
         )
         self.incremental = incremental
+        self.last_page: Optional[str] = None
 
         self.session = requests.Session()
         self.session.headers.update(
@@ -136,12 +137,13 @@ class GitLabLister(Lister[GitLabListerState, PageResult]):
 
     def get_pages(self) -> Iterator[PageResult]:
         next_page: Optional[str]
-        if self.incremental and self.state is not None:
+        if self.incremental and self.state and self.state.last_seen_next_link:
             next_page = self.state.last_seen_next_link
         else:
             next_page = f"{self.url}projects?page=1&order_by=id&sort=asc&per_page=20"
 
         while next_page:
+            self.last_page = next_page
             page_result = self.get_page_result(next_page)
             yield page_result
             next_page = page_result.next_page
@@ -171,11 +173,14 @@ class GitLabLister(Lister[GitLabListerState, PageResult]):
         if self.incremental:
             # link: https://${project-api}/?...&page=2x...
             next_page = page_result.next_page
+            if not next_page and self.last_page:
+                next_page = self.last_page
 
             if next_page:
                 page_id = _parse_page_id(next_page)
                 previous_next_page = self.state.last_seen_next_link
                 previous_page_id = _parse_page_id(previous_next_page)
+
                 if previous_next_page is None or (
                     previous_page_id and page_id and previous_page_id < page_id
                 ):
@@ -194,7 +199,7 @@ class GitLabLister(Lister[GitLabListerState, PageResult]):
             scheduler_state = self.get_state_from_scheduler()
             previous_next_page_id = _parse_page_id(scheduler_state.last_seen_next_link)
 
-            if (
+            if (not previous_next_page_id and next_page_id) or (
                 previous_next_page_id
                 and next_page_id
                 and previous_next_page_id < next_page_id

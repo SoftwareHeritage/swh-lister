@@ -102,6 +102,67 @@ def test_lister_gitlab_with_pages(swh_scheduler, requests_mock, datadir):
         assert listed_origin.url.startswith(f"https://{instance}")
 
 
+def test_lister_gitlab_incremental(swh_scheduler, requests_mock, datadir):
+    """Gitlab lister supports pagination
+
+    """
+    instance = "gite.lirmm.fr"
+    url = api_url(instance)
+
+    url_page1 = url_page(url, 1)
+    response1 = gitlab_page_response(datadir, instance, 1)
+    url_page2 = url_page(url, 2)
+    response2 = gitlab_page_response(datadir, instance, 2)
+    url_page3 = url_page(url, 3)
+    response3 = gitlab_page_response(datadir, instance, 3)
+
+    requests_mock.get(
+        url_page1,
+        [{"json": response1, "headers": {"Link": f"<{url_page2}>; rel=next"}}],
+        additional_matcher=_match_request,
+    )
+    requests_mock.get(
+        url_page2, [{"json": response2}], additional_matcher=_match_request,
+    )
+
+    lister = GitLabLister(swh_scheduler, url=url, instance=instance, incremental=True)
+    listed_result = lister.run()
+
+    expected_nb_origins = len(response1) + len(response2)
+    assert listed_result == ListerStats(pages=2, origins=expected_nb_origins)
+    assert lister.state.last_seen_next_link == url_page2
+
+    lister2 = GitLabLister(swh_scheduler, url=url, instance=instance, incremental=True)
+    requests_mock.reset()
+    # Lister will start back at the last stop
+    requests_mock.get(
+        url_page2,
+        [{"json": response2, "headers": {"Link": f"<{url_page3}>; rel=next"}}],
+        additional_matcher=_match_request,
+    )
+    requests_mock.get(
+        url_page3, [{"json": response3}], additional_matcher=_match_request,
+    )
+
+    listed_result2 = lister2.run()
+
+    assert listed_result2 == ListerStats(
+        pages=2, origins=len(response2) + len(response3)
+    )
+    assert lister2.state.last_seen_next_link == url_page3
+
+    assert lister.lister_obj.id == lister2.lister_obj.id
+    scheduler_origins = lister2.scheduler.get_listed_origins(
+        lister2.lister_obj.id
+    ).origins
+
+    assert len(scheduler_origins) == len(response1) + len(response2) + len(response3)
+
+    for listed_origin in scheduler_origins:
+        assert listed_origin.visit_type == "git"
+        assert listed_origin.url.startswith(f"https://{instance}")
+
+
 @pytest.mark.parametrize(
     "url,expected_result",
     [
