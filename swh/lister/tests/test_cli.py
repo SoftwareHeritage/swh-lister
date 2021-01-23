@@ -48,7 +48,6 @@ def test_get_lister_override():
     db_url = init_db().url()
 
     listers = {
-        "gitlab": "https://other.gitlab.uni/api/v4/",
         "cgit": "https://some.where/cgit",
     }
 
