@@ -9,17 +9,3 @@ import pytest
 @pytest.fixture
 def lister_under_test():
     return "cran"
-
-
-@pytest.fixture
-def lister_cran(swh_lister):
-    swh_lister.scheduler.create_task_type(
-        {
-            "type": "load-cran",
-            "description": "Load a CRAN package",
-            "backend_name": "swh.loader.package.cran.tasks.LoaderCRAN",
-            "default_interval": "1 day",
-        }
-    )
-
-    return swh_lister

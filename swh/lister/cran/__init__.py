@@ -5,10 +5,9 @@
 
 def register():
     from .lister import CRANLister
-    from .models import CRANModel
 
     return {
-        "models": [CRANModel],
+        "models": [],
         "lister": CRANLister,
         "task_modules": ["%s.tasks" % __name__],
     }

@@ -4,6 +4,6 @@
 # all the packages of R and their description, then convert the API
 # response to JSON string and print it
 
-db <- tools::CRAN_package_db()[, c("Package", "Version", "Title", "Description")]
+db <- tools::CRAN_package_db()[, c("Package", "Version")]
 dbjson <- jsonlite::toJSON(db)
 print(dbjson)
