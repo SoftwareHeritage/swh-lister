@@ -9,10 +9,13 @@ from pathlib import Path
 from typing import Dict, List
 
 import pytest
+from requests.status_codes import codes
 
 from swh.lister import USER_AGENT
 from swh.lister.gitlab.lister import GitLabLister, _parse_page_id
 from swh.lister.pattern import ListerStats
+from swh.lister.tests.test_utils import _assert_sleep_calls
+from swh.lister.utils import WAIT_EXP_BASE
 
 logger = logging.getLogger(__name__)
 
@@ -103,7 +106,7 @@ def test_lister_gitlab_with_pages(swh_scheduler, requests_mock, datadir):
 
 
 def test_lister_gitlab_incremental(swh_scheduler, requests_mock, datadir):
-    """Gitlab lister supports pagination
+    """Gitlab lister supports incremental visits
 
     """
     instance = "gite.lirmm.fr"
@@ -161,6 +164,47 @@ def test_lister_gitlab_incremental(swh_scheduler, requests_mock, datadir):
     for listed_origin in scheduler_origins:
         assert listed_origin.visit_type == "git"
         assert listed_origin.url.startswith(f"https://{instance}")
+
+
+def test_lister_gitlab_rate_limit(swh_scheduler, requests_mock, datadir, mocker):
+    """Gitlab lister supports rate-limit
+
+    """
+    instance = "gite.lirmm.fr"
+    url = api_url(instance)
+
+    url_page1 = url_page(url, 1)
+    response1 = gitlab_page_response(datadir, instance, 1)
+    url_page2 = url_page(url, 2)
+    response2 = gitlab_page_response(datadir, instance, 2)
+
+    requests_mock.get(
+        url_page1,
+        [{"json": response1, "headers": {"Link": f"<{url_page2}>; rel=next"}}],
+        additional_matcher=_match_request,
+    )
+    requests_mock.get(
+        url_page2,
+        [
+            # rate limited twice
+            {"status_code": codes.forbidden, "headers": {"RateLimit-Remaining": "0"}},
+            {"status_code": codes.forbidden, "headers": {"RateLimit-Remaining": "0"}},
+            # ok
+            {"json": response2},
+        ],
+        additional_matcher=_match_request,
+    )
+
+    lister = GitLabLister(swh_scheduler, url=url, instance=instance)
+    # To avoid this test being too slow, we mock sleep within the retry behavior
+    mock_sleep = mocker.patch.object(lister.get_page_result.retry, "sleep")
+
+    listed_result = lister.run()
+
+    expected_nb_origins = len(response1) + len(response2)
+    assert listed_result == ListerStats(pages=2, origins=expected_nb_origins)
+
+    _assert_sleep_calls(mocker, mock_sleep, [1, WAIT_EXP_BASE])
 
 
 @pytest.mark.parametrize(
