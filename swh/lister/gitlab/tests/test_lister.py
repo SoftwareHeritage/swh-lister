@@ -24,10 +24,6 @@ def api_url(instance: str) -> str:
     return f"https://{instance}/api/v4/"
 
 
-def url_page(api_url: str, page_id: int) -> str:
-    return f"{api_url}projects?page={page_id}&order_by=id&sort=asc&per_page=20"
-
-
 def _match_request(request):
     return request.headers.get("User-Agent") == USER_AGENT
 
@@ -37,24 +33,20 @@ def test_lister_gitlab(datadir, swh_scheduler, requests_mock):
 
     """
     instance = "gitlab.com"
-    url = api_url(instance)
+    lister = GitLabLister(swh_scheduler, url=api_url(instance), instance=instance)
 
     response = gitlab_page_response(datadir, instance, 1)
 
     requests_mock.get(
-        url_page(url, 1), [{"json": response}], additional_matcher=_match_request,
+        lister.page_url(1), [{"json": response}], additional_matcher=_match_request,
     )
 
-    lister_gitlab = GitLabLister(
-        swh_scheduler, url=api_url(instance), instance=instance
-    )
-
-    listed_result = lister_gitlab.run()
+    listed_result = lister.run()
     expected_nb_origins = len(response)
     assert listed_result == ListerStats(pages=1, origins=expected_nb_origins)
 
-    scheduler_origins = lister_gitlab.scheduler.get_listed_origins(
-        lister_gitlab.lister_obj.id
+    scheduler_origins = lister.scheduler.get_listed_origins(
+        lister.lister_obj.id
     ).origins
     assert len(scheduler_origins) == expected_nb_origins
 
@@ -74,22 +66,21 @@ def test_lister_gitlab_with_pages(swh_scheduler, requests_mock, datadir):
 
     """
     instance = "gite.lirmm.fr"
-    url = api_url(instance)
+    lister = GitLabLister(swh_scheduler, url=api_url(instance))
 
     response1 = gitlab_page_response(datadir, instance, 1)
     response2 = gitlab_page_response(datadir, instance, 2)
 
     requests_mock.get(
-        url_page(url, 1),
-        [{"json": response1, "headers": {"Link": f"<{url_page(url, 2)}>; rel=next"}}],
+        lister.page_url(1),
+        [{"json": response1, "headers": {"Link": f"<{lister.page_url(2)}>; rel=next"}}],
         additional_matcher=_match_request,
     )
 
     requests_mock.get(
-        url_page(url, 2), [{"json": response2}], additional_matcher=_match_request,
+        lister.page_url(2), [{"json": response2}], additional_matcher=_match_request,
     )
 
-    lister = GitLabLister(swh_scheduler, url=url)
     listed_result = lister.run()
 
     expected_nb_origins = len(response1) + len(response2)
@@ -111,12 +102,13 @@ def test_lister_gitlab_incremental(swh_scheduler, requests_mock, datadir):
     """
     instance = "gite.lirmm.fr"
     url = api_url(instance)
+    lister = GitLabLister(swh_scheduler, url=url, instance=instance, incremental=True)
 
-    url_page1 = url_page(url, 1)
+    url_page1 = lister.page_url(1)
     response1 = gitlab_page_response(datadir, instance, 1)
-    url_page2 = url_page(url, 2)
+    url_page2 = lister.page_url(2)
     response2 = gitlab_page_response(datadir, instance, 2)
-    url_page3 = url_page(url, 3)
+    url_page3 = lister.page_url(3)
     response3 = gitlab_page_response(datadir, instance, 3)
 
     requests_mock.get(
@@ -128,7 +120,6 @@ def test_lister_gitlab_incremental(swh_scheduler, requests_mock, datadir):
         url_page2, [{"json": response2}], additional_matcher=_match_request,
     )
 
-    lister = GitLabLister(swh_scheduler, url=url, instance=instance, incremental=True)
     listed_result = lister.run()
 
     expected_nb_origins = len(response1) + len(response2)
@@ -172,10 +163,11 @@ def test_lister_gitlab_rate_limit(swh_scheduler, requests_mock, datadir, mocker)
     """
     instance = "gite.lirmm.fr"
     url = api_url(instance)
+    lister = GitLabLister(swh_scheduler, url=url, instance=instance)
 
-    url_page1 = url_page(url, 1)
+    url_page1 = lister.page_url(1)
     response1 = gitlab_page_response(datadir, instance, 1)
-    url_page2 = url_page(url, 2)
+    url_page2 = lister.page_url(2)
     response2 = gitlab_page_response(datadir, instance, 2)
 
     requests_mock.get(
@@ -195,7 +187,6 @@ def test_lister_gitlab_rate_limit(swh_scheduler, requests_mock, datadir, mocker)
         additional_matcher=_match_request,
     )
 
-    lister = GitLabLister(swh_scheduler, url=url, instance=instance)
     # To avoid this test being too slow, we mock sleep within the retry behavior
     mock_sleep = mocker.patch.object(lister.get_page_result.retry, "sleep")
 

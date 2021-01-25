@@ -142,12 +142,15 @@ class GitLabLister(Lister[GitLabListerState, PageResult]):
 
         return PageResult(repositories, next_page)
 
+    def page_url(self, page_id: int) -> str:
+        return f"{self.url}projects?page={page_id}&order_by=id&sort=asc&per_page=20"
+
     def get_pages(self) -> Iterator[PageResult]:
         next_page: Optional[str]
         if self.incremental and self.state and self.state.last_seen_next_link:
             next_page = self.state.last_seen_next_link
         else:
-            next_page = f"{self.url}projects?page=1&order_by=id&sort=asc&per_page=20"
+            next_page = self.page_url(1)
 
         while next_page:
             self.last_page = next_page
