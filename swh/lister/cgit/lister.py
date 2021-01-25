@@ -35,7 +35,9 @@ class CGitLister(StatelessLister[Repositories]):
 
     LISTER_NAME = "cgit"
 
-    def __init__(self, scheduler: SchedulerInterface, url=None, instance=None):
+    def __init__(
+        self, scheduler: SchedulerInterface, url: str, instance: Optional[str] = None
+    ):
         """Lister class for CGit repositories.
 
         Args:
@@ -47,6 +49,7 @@ class CGitLister(StatelessLister[Repositories]):
         """
         if not instance:
             instance = urlparse(url).hostname
+        assert instance is not None  # Make mypy happy
 
         super().__init__(
             scheduler=scheduler, credentials=None, url=url, instance=instance,

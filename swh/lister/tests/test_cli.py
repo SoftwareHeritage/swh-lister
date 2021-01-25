@@ -10,6 +10,7 @@ from swh.lister.cli import SUPPORTED_LISTERS, get_lister
 from .test_utils import init_db
 
 lister_args = {
+    "cgit": {"url": "https://git.eclipse.org/c/",},
     "phabricator": {
         "instance": "softwareheritage",
         "url": "https://forge.softwareheritage.org/api/diffusion.repository.search",
