@@ -79,6 +79,13 @@ class GitLabLister(Lister[GitLabListerState, PageResult]):
     By default, the lister runs in incremental mode: it lists all repositories,
     starting with the `last_seen_next_link` stored in the scheduler backend.
 
+    Args:
+        scheduler: a scheduler instance
+        url: the api v4 url of the gitlab instance to visit (e.g.
+          https://gitlab.com/api/v4/)
+        instance: a specific instance name (e.g. gitlab, tor, git-kernel, ...)
+        incremental: defines if incremental listing is activated or not
+
     """
 
     LISTER_NAME = "gitlab"
@@ -86,9 +93,9 @@ class GitLabLister(Lister[GitLabListerState, PageResult]):
     def __init__(
         self,
         scheduler,
-        url=None,
-        instance=None,
-        credentials: CredentialsType = None,
+        url: Optional[str] = None,
+        instance: Optional[str] = None,
+        credentials: Optional[CredentialsType] = None,
         incremental: bool = False,
     ):
         if instance is None:
