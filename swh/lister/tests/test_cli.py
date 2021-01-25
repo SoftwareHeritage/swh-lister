@@ -17,6 +17,7 @@ lister_args = {
         "api_token": "bogus",
     },
     "gitea": {"url": "https://try.gitea.io/api/v1/",},
+    "gitlab": {"url": "https://gitlab.ow2.org/api/v4", "instance": "ow2",},
 }
 
 
