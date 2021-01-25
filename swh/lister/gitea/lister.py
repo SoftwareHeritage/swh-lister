@@ -4,6 +4,7 @@
 # See top-level LICENSE file for more information
 
 import logging
+import random
 from typing import Any, Dict, Iterator, List, Optional
 from urllib.parse import urljoin
 
@@ -65,12 +66,18 @@ class GiteaLister(StatelessLister[RepoListPage]):
             {"Accept": "application/json", "User-Agent": USER_AGENT,}
         )
 
-        if api_token is None and len(self.credentials) > 0:
-            logger.warning(
-                "Gitea lister support only API token authentication "
-                " as of now. Will use the first password as token."
-            )
-            api_token = self.credentials[0]["password"]
+        if api_token is None:
+            if len(self.credentials) > 0:
+                cred = random.choice(self.credentials)
+                username = cred.get("username")
+                api_token = cred["password"]
+                logger.warning(
+                    "Using authentication token from user %s", username or "???"
+                )
+            else:
+                logger.warning(
+                    "No authentication token set in configuration, using anonymous mode"
+                )
 
         if api_token:
             self.session.headers["Authorization"] = "Token %s" % api_token
