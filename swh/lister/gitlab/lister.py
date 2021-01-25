@@ -9,6 +9,7 @@ import random
 from typing import Any, Dict, Iterator, Optional, Tuple
 from urllib.parse import parse_qs, urlparse
 
+import iso8601
 import requests
 from requests.exceptions import HTTPError
 from requests.status_codes import codes
@@ -174,8 +175,7 @@ class GitLabLister(Lister[GitLabListerState, PageResult]):
                 lister_id=self.lister_obj.id,
                 url=repo["http_url_to_repo"],
                 visit_type="git",
-                # TODO: Support "last_activity_at" as update information
-                # last_update=repo["last_activity_at"],
+                last_update=iso8601.parse_date(repo["last_activity_at"]),
             )
 
     def commit_page(self, page_result: PageResult) -> None:

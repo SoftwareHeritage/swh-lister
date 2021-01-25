@@ -53,6 +53,7 @@ def test_lister_gitlab(datadir, swh_scheduler, requests_mock):
     for listed_origin in scheduler_origins:
         assert listed_origin.visit_type == "git"
         assert listed_origin.url.startswith(f"https://{instance}")
+        assert listed_origin.last_update is not None
 
 
 def gitlab_page_response(datadir, instance: str, page_id: int) -> List[Dict]:
@@ -94,6 +95,7 @@ def test_lister_gitlab_with_pages(swh_scheduler, requests_mock, datadir):
     for listed_origin in scheduler_origins:
         assert listed_origin.visit_type == "git"
         assert listed_origin.url.startswith(f"https://{instance}")
+        assert listed_origin.last_update is not None
 
 
 def test_lister_gitlab_incremental(swh_scheduler, requests_mock, datadir):
@@ -155,6 +157,7 @@ def test_lister_gitlab_incremental(swh_scheduler, requests_mock, datadir):
     for listed_origin in scheduler_origins:
         assert listed_origin.visit_type == "git"
         assert listed_origin.url.startswith(f"https://{instance}")
+        assert listed_origin.last_update is not None
 
 
 def test_lister_gitlab_rate_limit(swh_scheduler, requests_mock, datadir, mocker):
