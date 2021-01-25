@@ -2,10 +2,11 @@
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
 
+from datetime import datetime, timezone
 import json
 import logging
 import subprocess
-from typing import Dict, Iterator, List, Tuple
+from typing import Dict, Iterator, List, Optional, Tuple
 
 import pkg_resources
 
@@ -47,6 +48,7 @@ class CRANLister(StatelessLister[PageType]):
                 lister_id=self.lister_obj.id,
                 url=origin_url,
                 visit_type="tar",
+                last_update=parse_packaged_date(package_info),
                 extra_loader_arguments={
                     "artifacts": [
                         {"url": artifact_url, "version": package_info["Version"]}
@@ -96,3 +98,28 @@ def compute_origin_urls(package_info: Dict[str, str]) -> Tuple[str, str]:
     origin_url = f"{CRAN_MIRROR}/package={package}"
     artifact_url = f"{CRAN_MIRROR}/src/contrib/{package}_{version}.tar.gz"
     return origin_url, artifact_url
+
+
+def parse_packaged_date(package_info: Dict[str, str]) -> Optional[datetime]:
+    packaged_at_str = package_info.get("Packaged", "")
+    packaged_at = None
+    if packaged_at_str:
+        try:
+            # Packaged field format: "%Y-%m-%d %H:%M:%S UTC; <packager>",
+            packaged_at = datetime.strptime(
+                packaged_at_str.split(" UTC;")[0], "%Y-%m-%d %H:%M:%S",
+            ).replace(tzinfo=timezone.utc)
+        except Exception:
+            try:
+                # Some old packages have a different date format:
+                # "%a %b %d %H:%M:%S %Y; <packager>"
+                packaged_at = datetime.strptime(
+                    packaged_at_str.split(";")[0], "%a %b %d %H:%M:%S %Y",
+                ).replace(tzinfo=timezone.utc)
+            except Exception:
+                logger.debug(
+                    "Could not parse %s package release date: %s",
+                    package_info["Package"],
+                    packaged_at_str,
+                )
+    return packaged_at

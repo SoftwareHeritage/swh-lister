@@ -2,27 +2,39 @@
 
     {
         "Package": "SeleMix",
-        "Version": "1.0.1"
+        "Version": "1.0.2",
+        "Packaged": "2020-11-28 22:16:43 UTC; Teresa"
     },
     {
         "Package": "plink",
-        "Version": "1.5-1"
+        "Version": "1.5-1",
+        "Packaged": "2017-04-26 11:36:15 UTC; Jonathan"
     },
     {
-        "Package": "justifier",
-        "Version": "0.1.0"
+        "Package": "jsonlite",
+        "Version": "1.7.2",
+        "Packaged": "2020-12-09 13:54:18 UTC; jeroen"
+
     },
     {
         "Package": "Records",
-        "Version": "1.0"
+        "Version": "1.0",
+        "Packaged": "2012-10-29 08:57:37 UTC; ripley"
     },
     {
         "Package": "scRNAtools",
-        "Version": "1.0"
+        "Version": "1.0",
+        "Packaged": "2018-07-04 00:49:45 UTC; dell"
     },
     {
         "Package": "Deriv",
-        "Version": "3.9.0"
+        "Version": "4.1.2",
+        "Packaged": "2020-12-10 11:12:28 UTC; sokol"
+    },
+    {
+        "Package": "BayesValidate",
+        "Version": "0.0",
+        "Packaged": "Thu Mar 30 10:48:35 2006; hornik"
     }
 
 ]

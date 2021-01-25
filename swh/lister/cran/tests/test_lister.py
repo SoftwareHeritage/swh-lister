@@ -3,12 +3,18 @@
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
 
+from datetime import datetime, timezone
 import json
 from os import path
 
 import pytest
 
-from swh.lister.cran.lister import CRAN_MIRROR, CRANLister, compute_origin_urls
+from swh.lister.cran.lister import (
+    CRAN_MIRROR,
+    CRANLister,
+    compute_origin_urls,
+    parse_packaged_date,
+)
 
 
 def test_cran_compute_origin_urls():
@@ -24,6 +30,32 @@ def test_cran_compute_origin_urls_failure():
     for incomplete_repo in [{"Version": "0.0.1"}, {"Package": "package"}, {}]:
         with pytest.raises(KeyError):
             compute_origin_urls(incomplete_repo)
+
+
+def test_parse_packaged_date():
+    common_date_format = {
+        "Package": "test",
+        "Packaged": "2017-04-26 11:36:15 UTC; Jonathan",
+    }
+    assert parse_packaged_date(common_date_format) == datetime(
+        year=2017, month=4, day=26, hour=11, minute=36, second=15, tzinfo=timezone.utc
+    )
+    old_date_format = {
+        "Package": "test",
+        "Packaged": "Thu Mar 30 10:48:35 2006; hornik",
+    }
+    assert parse_packaged_date(old_date_format) == datetime(
+        year=2006, month=3, day=30, hour=10, minute=48, second=35, tzinfo=timezone.utc
+    )
+    invalid_date_format = {
+        "Package": "test",
+        "Packaged": "foo",
+    }
+    assert parse_packaged_date(invalid_date_format) is None
+    missing_date = {
+        "Package": "test",
+    }
+    assert parse_packaged_date(missing_date) is None
 
 
 def test_cran_lister_cran(datadir, swh_scheduler, mocker):
@@ -55,3 +87,5 @@ def test_cran_lister_cran(datadir, swh_scheduler, mocker):
         assert filtered_origins[0].extra_loader_arguments == {
             "artifacts": [{"url": artifact_url, "version": package_info["Version"]}]
         }
+
+        filtered_origins[0].last_update == parse_packaged_date(package_info)
