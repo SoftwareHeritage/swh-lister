@@ -6,6 +6,7 @@
 from dataclasses import asdict, dataclass
 from datetime import datetime
 import logging
+import random
 from typing import Any, Dict, Iterator, List, Optional
 from urllib import parse
 
@@ -82,13 +83,11 @@ class BitbucketLister(Lister[BitbucketListerState, List[Dict[str, Any]]]):
         )
 
         if len(self.credentials) > 0:
-            if len(self.credentials) > 1:
-                logger.warning(
-                    "Bitbucket lister support only one username:password"
-                    " pair as of now. Will use the first one."
-                )
-            cred = self.credentials[0]
+            cred = random.choice(self.credentials)
+            logger.warning("Using Bitbucket credentials from user %s", cred["username"])
             self.set_credentials(cred["username"], cred["password"])
+        else:
+            logger.warning("No credentials set in configuration, using anonymous mode")
 
     def state_from_dict(self, d: Dict[str, Any]) -> BitbucketListerState:
         last_repo_cdate = d.get("last_repo_cdate")
