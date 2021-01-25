@@ -93,7 +93,7 @@ class GitLabLister(Lister[GitLabListerState, PageResult]):
     def __init__(
         self,
         scheduler,
-        url: Optional[str] = None,
+        url=None,
         instance: Optional[str] = None,
         credentials: Optional[CredentialsType] = None,
         incremental: bool = False,
