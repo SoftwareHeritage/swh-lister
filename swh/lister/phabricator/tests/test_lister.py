@@ -109,7 +109,7 @@ def test_lister(
     assert stats.pages == 2
     assert stats.origins == expected_nb_origins
 
-    scheduler_origins = swh_scheduler.get_listed_origins(lister.lister_obj.id).origins
+    scheduler_origins = swh_scheduler.get_listed_origins(lister.lister_obj.id).results
 
     assert len(scheduler_origins) == expected_nb_origins
 

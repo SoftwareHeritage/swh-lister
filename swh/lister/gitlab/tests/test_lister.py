@@ -47,7 +47,7 @@ def test_lister_gitlab(datadir, swh_scheduler, requests_mock):
 
     scheduler_origins = lister.scheduler.get_listed_origins(
         lister.lister_obj.id
-    ).origins
+    ).results
     assert len(scheduler_origins) == expected_nb_origins
 
     for listed_origin in scheduler_origins:
@@ -88,7 +88,7 @@ def test_lister_gitlab_with_pages(swh_scheduler, requests_mock, datadir):
 
     scheduler_origins = lister.scheduler.get_listed_origins(
         lister.lister_obj.id
-    ).origins
+    ).results
     assert len(scheduler_origins) == expected_nb_origins
 
     for listed_origin in scheduler_origins:
@@ -148,7 +148,7 @@ def test_lister_gitlab_incremental(swh_scheduler, requests_mock, datadir):
     assert lister.lister_obj.id == lister2.lister_obj.id
     scheduler_origins = lister2.scheduler.get_listed_origins(
         lister2.lister_obj.id
-    ).origins
+    ).results
 
     assert len(scheduler_origins) == len(response1) + len(response2) + len(response3)
 

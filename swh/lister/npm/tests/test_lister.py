@@ -92,7 +92,7 @@ def test_npm_lister_full(
         ]
     )
 
-    scheduler_origins = swh_scheduler.get_listed_origins(lister.lister_obj.id).origins
+    scheduler_origins = swh_scheduler.get_listed_origins(lister.lister_obj.id).results
 
     _check_listed_npm_packages(
         lister,
@@ -154,7 +154,7 @@ def test_npm_lister_incremental(
         ]
     )
 
-    scheduler_origins = swh_scheduler.get_listed_origins(lister.lister_obj.id).origins
+    scheduler_origins = swh_scheduler.get_listed_origins(lister.lister_obj.id).results
 
     _check_listed_npm_packages(
         lister,

@@ -59,7 +59,7 @@ def test_bitbucket_incremental_lister(
     # First listing
     stats = lister.run()
 
-    scheduler_origins = swh_scheduler.get_listed_origins(lister.lister_obj.id).origins
+    scheduler_origins = swh_scheduler.get_listed_origins(lister.lister_obj.id).results
 
     assert stats.pages == 2
     assert stats.origins == 20
@@ -115,7 +115,7 @@ def test_bitbucket_lister_rate_limit_hit(
 
     assert stats.pages == 2
     assert stats.origins == 20
-    assert len(swh_scheduler.get_listed_origins(lister.lister_obj.id).origins) == 20
+    assert len(swh_scheduler.get_listed_origins(lister.lister_obj.id).results) == 20
 
 
 def test_bitbucket_full_lister(
@@ -165,7 +165,7 @@ def test_bitbucket_full_lister(
     assert stats.pages == 2
     assert stats.origins == 20
 
-    scheduler_origins = swh_scheduler.get_listed_origins(lister.lister_obj.id).origins
+    scheduler_origins = swh_scheduler.get_listed_origins(lister.lister_obj.id).results
 
     # 20 because scheduler upserts based on (id, type, url)
     assert len(scheduler_origins) == 20

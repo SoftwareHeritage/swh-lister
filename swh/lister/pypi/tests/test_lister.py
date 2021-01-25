@@ -46,7 +46,7 @@ def test_pypi_list(swh_scheduler, requests_mock, mocker, pypi_packages_testdata)
 
     stats = lister.run()
 
-    scheduler_origins = swh_scheduler.get_listed_origins(lister.lister_obj.id).origins
+    scheduler_origins = swh_scheduler.get_listed_origins(lister.lister_obj.id).results
 
     lister.session.get.assert_called_once_with(lister.PACKAGE_LIST_URL)
     lister.get_origins_from_page.assert_called_once_with(t_names)
@@ -76,5 +76,5 @@ def test_pypi_list_http_error(swh_scheduler, requests_mock, mocker, http_code):
 
     lister.session.get.assert_called_once_with(lister.PACKAGE_LIST_URL)
 
-    scheduler_origins = swh_scheduler.get_listed_origins(lister.lister_obj.id).origins
+    scheduler_origins = swh_scheduler.get_listed_origins(lister.lister_obj.id).results
     assert len(scheduler_origins) == 0

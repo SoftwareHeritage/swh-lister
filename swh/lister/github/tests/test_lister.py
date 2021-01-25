@@ -88,8 +88,8 @@ def check_origin_4321(swh_scheduler: SchedulerInterface, lister: Lister) -> None
     origin_4321_req = swh_scheduler.get_listed_origins(
         url="https://github.com/origin/4321"
     )
-    assert len(origin_4321_req.origins) == 1
-    origin_4321 = origin_4321_req.origins[0]
+    assert len(origin_4321_req.results) == 1
+    origin_4321 = origin_4321_req.results[0]
     assert origin_4321.lister_id == lister.id
     assert origin_4321.visit_type == "git"
     assert origin_4321.last_update == datetime.datetime(
@@ -102,8 +102,8 @@ def check_origin_5555(swh_scheduler: SchedulerInterface, lister: Lister) -> None
     origin_5555_req = swh_scheduler.get_listed_origins(
         url="https://github.com/origin/5555"
     )
-    assert len(origin_5555_req.origins) == 1
-    origin_5555 = origin_5555_req.origins[0]
+    assert len(origin_5555_req.results) == 1
+    origin_5555 = origin_5555_req.results[0]
     assert origin_5555.lister_id == lister.id
     assert origin_5555.visit_type == "git"
     assert origin_5555.last_update is None
@@ -121,7 +121,7 @@ def test_from_empty_state(
     assert res == ListerStats(pages=NUM_PAGES, origins=ORIGIN_COUNT)
 
     listed_origins = swh_scheduler.get_listed_origins(limit=ORIGIN_COUNT + 1)
-    assert len(listed_origins.origins) == ORIGIN_COUNT
+    assert len(listed_origins.results) == ORIGIN_COUNT
     assert listed_origins.next_page_token is None
 
     lister_data = get_lister_data(swh_scheduler)
@@ -152,7 +152,7 @@ def test_incremental(swh_scheduler, caplog, requests_mocker) -> None:
     assert res == ListerStats(pages=expected_pages, origins=expected_origins)
 
     listed_origins = swh_scheduler.get_listed_origins(limit=expected_origins + 1)
-    assert len(listed_origins.origins) == expected_origins
+    assert len(listed_origins.results) == expected_origins
     assert listed_origins.next_page_token is None
 
     lister_data = get_lister_data(swh_scheduler)

@@ -93,9 +93,9 @@ def check_listed_origins(swh_scheduler, lister, stored_lister):
     # And check the state of origins in the scheduler
     ret = swh_scheduler.get_listed_origins()
     assert ret.next_page_token is None
-    assert len(ret.origins) == len(lister_urls)
+    assert len(ret.results) == len(lister_urls)
 
-    for origin, expected_url in zip(ret.origins, lister_urls):
+    for origin, expected_url in zip(ret.results, lister_urls):
         assert origin.url == expected_url
         assert origin.lister_id == stored_lister.id
 

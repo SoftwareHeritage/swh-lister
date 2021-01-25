@@ -51,7 +51,7 @@ def test_lister_cgit_run(requests_mock_datadir, swh_scheduler):
     # test page parsing
     scheduler_origins = swh_scheduler.get_listed_origins(
         lister_cgit.lister_obj.id
-    ).origins
+    ).results
     assert len(scheduler_origins) == expected_nb_origins
 
     # test listed repositories

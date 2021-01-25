@@ -89,7 +89,7 @@ def test_gitea_full_listing(
     calls = [mocker.call(p1_result), mocker.call(p2_result)]
     lister.get_origins_from_page.assert_has_calls(calls)
 
-    scheduler_origins = swh_scheduler.get_listed_origins(lister.lister_obj.id).origins
+    scheduler_origins = swh_scheduler.get_listed_origins(lister.lister_obj.id).results
 
     check_listed_origins(p1_origin_urls + p2_origin_urls, scheduler_origins)
 
@@ -147,5 +147,5 @@ def test_gitea_list_http_error(swh_scheduler, requests_mock, http_code):
     with pytest.raises(requests.HTTPError):
         lister.run()
 
-    scheduler_origins = swh_scheduler.get_listed_origins(lister.lister_obj.id).origins
+    scheduler_origins = swh_scheduler.get_listed_origins(lister.lister_obj.id).results
     assert len(scheduler_origins) == 0
