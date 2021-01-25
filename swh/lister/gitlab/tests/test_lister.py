@@ -198,6 +198,21 @@ def test_lister_gitlab_rate_limit(swh_scheduler, requests_mock, datadir, mocker)
     assert_sleep_calls(mocker, mock_sleep, [1, WAIT_EXP_BASE])
 
 
+def test_lister_gitlab_credentials(swh_scheduler):
+    """Gitlab lister supports credentials configuration
+
+    """
+    instance = "gitlab"
+    credentials = {
+        "gitlab": {instance: [{"username": "user", "password": "api-token"}]}
+    }
+    url = api_url(instance)
+    lister = GitLabLister(
+        scheduler=swh_scheduler, url=url, instance=instance, credentials=credentials
+    )
+    assert lister.session.headers["Authorization"] == "Bearer api-token"
+
+
 @pytest.mark.parametrize(
     "url,expected_result",
     [

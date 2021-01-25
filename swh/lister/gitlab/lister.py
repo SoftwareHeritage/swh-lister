@@ -5,6 +5,7 @@
 
 from dataclasses import asdict, dataclass
 import logging
+import random
 from typing import Any, Dict, Iterator, Optional, Tuple
 from urllib.parse import parse_qs, urlparse
 
@@ -101,10 +102,7 @@ class GitLabLister(Lister[GitLabListerState, PageResult]):
         if instance is None:
             instance = parse_url(url).host
         super().__init__(
-            scheduler=scheduler,
-            credentials=None,  # anonymous for now
-            url=url,
-            instance=instance,
+            scheduler=scheduler, url=url, instance=instance, credentials=credentials,
         )
         self.incremental = incremental
         self.last_page: Optional[str] = None
@@ -113,6 +111,15 @@ class GitLabLister(Lister[GitLabListerState, PageResult]):
         self.session.headers.update(
             {"Accept": "application/json", "User-Agent": USER_AGENT}
         )
+
+        if len(self.credentials) > 0:
+            cred = random.choice(self.credentials)
+            logger.info(
+                "Using %s credentials from user %s", self.instance, cred["username"]
+            )
+            api_token = cred["password"]
+            if api_token:
+                self.session.headers["Authorization"] = f"Bearer {api_token}"
 
     def state_from_dict(self, d: Dict[str, Any]) -> GitLabListerState:
         return GitLabListerState(**d)
