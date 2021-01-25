@@ -59,7 +59,7 @@ def make_request():
     return response
 
 
-def _assert_sleep_calls(mocker, mock_sleep, sleep_params):
+def assert_sleep_calls(mocker, mock_sleep, sleep_params):
     try:
         mock_sleep.assert_has_calls([mocker.call(param) for param in sleep_params])
     except AssertionError:
@@ -85,7 +85,7 @@ def test_throttling_retry(requests_mock, mocker):
 
     response = make_request()
 
-    _assert_sleep_calls(mocker, mock_sleep, [1, WAIT_EXP_BASE])
+    assert_sleep_calls(mocker, mock_sleep, [1, WAIT_EXP_BASE])
 
     assert response.json() == data
 
@@ -102,7 +102,7 @@ def test_throttling_retry_max_attemps(requests_mock, mocker):
 
     assert e.value.response.status_code == codes.too_many_requests
 
-    _assert_sleep_calls(
+    assert_sleep_calls(
         mocker,
         mock_sleep,
         [float(WAIT_EXP_BASE ** i) for i in range(MAX_NUMBER_ATTEMPTS - 1)],
@@ -130,4 +130,4 @@ def test_throttling_retry_wait_fixed(requests_mock, mocker):
 
     make_request_wait_fixed()
 
-    _assert_sleep_calls(mocker, mock_sleep, [WAIT_EXP_BASE] * 2)
+    assert_sleep_calls(mocker, mock_sleep, [WAIT_EXP_BASE] * 2)

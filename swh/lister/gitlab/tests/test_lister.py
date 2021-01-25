@@ -14,7 +14,7 @@ from requests.status_codes import codes
 from swh.lister import USER_AGENT
 from swh.lister.gitlab.lister import GitLabLister, _parse_page_id
 from swh.lister.pattern import ListerStats
-from swh.lister.tests.test_utils import _assert_sleep_calls
+from swh.lister.tests.test_utils import assert_sleep_calls
 from swh.lister.utils import WAIT_EXP_BASE
 
 logger = logging.getLogger(__name__)
@@ -204,7 +204,7 @@ def test_lister_gitlab_rate_limit(swh_scheduler, requests_mock, datadir, mocker)
     expected_nb_origins = len(response1) + len(response2)
     assert listed_result == ListerStats(pages=2, origins=expected_nb_origins)
 
-    _assert_sleep_calls(mocker, mock_sleep, [1, WAIT_EXP_BASE])
+    assert_sleep_calls(mocker, mock_sleep, [1, WAIT_EXP_BASE])
 
 
 @pytest.mark.parametrize(
