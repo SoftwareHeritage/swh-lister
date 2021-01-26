@@ -2,10 +2,13 @@
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
 
+from datetime import datetime, timedelta, timezone
 from typing import List
 
+import pytest
+
 from swh.lister import __version__
-from swh.lister.cgit.lister import CGitLister
+from swh.lister.cgit.lister import CGitLister, _parse_last_updated_date
 from swh.lister.pattern import ListerStats
 
 
@@ -17,13 +20,15 @@ def test_lister_cgit_get_pages_one_page(requests_mock_datadir, swh_scheduler):
     flattened_repos = sum(repos, [])
     assert len(flattened_repos) == 977
 
-    assert flattened_repos[0] == "https://git.savannah.gnu.org/cgit/elisp-es.git/"
+    assert (
+        flattened_repos[0]["url"] == "https://git.savannah.gnu.org/cgit/elisp-es.git/"
+    )
     # note the url below is NOT a subpath of /cgit/
     assert (
-        flattened_repos[-1] == "https://git.savannah.gnu.org/path/to/yetris.git/"
+        flattened_repos[-1]["url"] == "https://git.savannah.gnu.org/path/to/yetris.git/"
     )  # noqa
     # note the url below is NOT on the same server
-    assert flattened_repos[-2] == "http://example.org/cgit/xstarcastle.git/"
+    assert flattened_repos[-2]["url"] == "http://example.org/cgit/xstarcastle.git/"
 
 
 def test_lister_cgit_get_pages_with_pages(requests_mock_datadir, swh_scheduler):
@@ -37,7 +42,7 @@ def test_lister_cgit_get_pages_with_pages(requests_mock_datadir, swh_scheduler):
     assert len(flattened_repos) == 16
 
 
-def test_lister_cgit_run(requests_mock_datadir, swh_scheduler):
+def test_lister_cgit_run_with_page(requests_mock_datadir, swh_scheduler):
     """cgit lister supports pagination"""
 
     url = "https://git.tizen/cgit/"
@@ -66,3 +71,74 @@ def test_lister_cgit_run(requests_mock_datadir, swh_scheduler):
         user_agent = request.headers["User-Agent"]
         assert "Software Heritage Lister" in user_agent
         assert __version__ in user_agent
+
+
+def test_lister_cgit_run_populates_last_update(requests_mock_datadir, swh_scheduler):
+    """cgit lister returns last updated date"""
+
+    url = "https://git.tizen/cgit"
+
+    urls_without_date = [
+        f"https://git.tizen.org/cgit/{suffix_url}"
+        for suffix_url in ["All-Projects", "All-Users", "Lock-Projects",]
+    ]
+
+    lister_cgit = CGitLister(swh_scheduler, url=url)
+
+    stats = lister_cgit.run()
+
+    expected_nb_origins = 16
+    assert stats == ListerStats(pages=3, origins=expected_nb_origins)
+
+    # test page parsing
+    scheduler_origins = swh_scheduler.get_listed_origins(
+        lister_cgit.lister_obj.id
+    ).results
+    assert len(scheduler_origins) == expected_nb_origins
+
+    # test listed repositories
+    for listed_origin in scheduler_origins:
+        if listed_origin.url in urls_without_date:
+            assert listed_origin.last_update is None
+        else:
+            assert listed_origin.last_update is not None
+
+
+@pytest.mark.parametrize(
+    "date_str,expected_date",
+    [
+        ({}, None),
+        ("unexpected date", None),
+        ("2020-0140-10 10:10:10 (GMT)", None),
+        (
+            "2020-01-10 10:10:10 (GMT)",
+            datetime(
+                year=2020,
+                month=1,
+                day=10,
+                hour=10,
+                minute=10,
+                second=10,
+                tzinfo=timezone.utc,
+            ),
+        ),
+        (
+            "2019-08-04 05:10:41 +0100",
+            datetime(
+                year=2019,
+                month=8,
+                day=4,
+                hour=5,
+                minute=10,
+                second=41,
+                tzinfo=timezone(timedelta(hours=1)),
+            ),
+        ),
+    ],
+)
+def test_lister_cgit_date_parsing(date_str, expected_date):
+    """test cgit lister date parsing"""
+
+    repository = {"url": "url", "last_updated_date": date_str}
+
+    assert _parse_last_updated_date(repository) == expected_date

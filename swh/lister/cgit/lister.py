@@ -2,8 +2,10 @@
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
 
+from datetime import datetime, timezone
 import logging
-from typing import Iterator, List, Optional
+import re
+from typing import Any, Dict, Iterator, List, Optional
 from urllib.parse import urljoin, urlparse
 
 from bs4 import BeautifulSoup
@@ -16,7 +18,7 @@ from swh.scheduler.model import ListedOrigin
 
 logger = logging.getLogger(__name__)
 
-Repositories = List[str]
+Repositories = List[Dict[str, Any]]
 
 
 class CGitLister(StatelessLister[Repositories]):
@@ -68,7 +70,8 @@ class CGitLister(StatelessLister[Repositories]):
 
     def get_pages(self) -> Iterator[Repositories]:
         """Generate git 'project' URLs found on the current CGit server
-
+            The last_update date is retrieved on the list of repo page to avoid
+            to compute it on the repository details which only give a date per branch
         """
         next_page: Optional[str] = self.url
         while next_page:
@@ -78,7 +81,16 @@ class CGitLister(StatelessLister[Repositories]):
             for tr in bs_idx.find("div", {"class": "content"}).find_all(
                 "tr", {"class": ""}
             ):
-                page_results.append(urljoin(self.url, tr.find("a")["href"]))
+                url = urljoin(self.url, tr.find("a")["href"])
+                span = tr.find("span", {"class": re.compile("age-")})
+                if span:
+                    last_updated_date = span["title"]
+                else:
+                    last_updated_date = None
+
+                page_results.append(
+                    {"url": url, "last_updated_date": last_updated_date}
+                )
 
             yield page_results
 
@@ -99,8 +111,8 @@ class CGitLister(StatelessLister[Repositories]):
         """Convert a page of cgit repositories into a list of ListedOrigins."""
         assert self.lister_obj.id is not None
 
-        for repository_url in repositories:
-            origin_url = self._get_origin_from_repository_url(repository_url)
+        for repository in repositories:
+            origin_url = self._get_origin_from_repository_url(repository["url"])
             if not origin_url:
                 continue
 
@@ -108,7 +120,7 @@ class CGitLister(StatelessLister[Repositories]):
                 lister_id=self.lister_obj.id,
                 url=origin_url,
                 visit_type="git",
-                last_update=None,
+                last_update=_parse_last_updated_date(repository),
             )
 
     def _get_origin_from_repository_url(self, repository_url: str) -> Optional[str]:
@@ -134,3 +146,28 @@ class CGitLister(StatelessLister[Repositories]):
             # otherwise, choose the first one
             origin_url = urls[0]
         return origin_url
+
+
+def _parse_last_updated_date(repository: Dict[str, Any]) -> Optional[datetime]:
+    """Parse the last updated date"""
+    date = repository.get("last_updated_date")
+    if not date:
+        return None
+
+    parsed_date = None
+    for date_format in ("%Y-%m-%d %H:%M:%S %z", "%Y-%m-%d %H:%M:%S (%Z)"):
+        try:
+            parsed_date = datetime.strptime(date, date_format)
+            # force UTC to avoid naive datetime
+            if not parsed_date.tzinfo:
+                parsed_date = parsed_date.replace(tzinfo=timezone.utc)
+            break
+        except Exception:
+            pass
+
+    if not parsed_date:
+        logger.warning(
+            "Could not parse %s last_updated date: %s", repository["url"], date,
+        )
+
+    return parsed_date
