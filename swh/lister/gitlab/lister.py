@@ -7,7 +7,7 @@ from dataclasses import asdict, dataclass
 import logging
 import random
 from typing import Any, Dict, Iterator, Optional, Tuple
-from urllib.parse import parse_qs, urlparse
+from urllib.parse import parse_qs, urlencode, urlparse
 
 import iso8601
 import requests
@@ -61,15 +61,18 @@ def _if_rate_limited(retry_state) -> bool:
     return False
 
 
-def _parse_page_id(url: Optional[str]) -> Optional[int]:
-    """Given an url, extract a return the 'page' query parameter associated value or None.
+def _parse_id_after(url: Optional[str]) -> Optional[int]:
+    """Given an url, extract a return the 'id_after' query parameter associated value
+    or None.
+
+    This is the the repository id used for pagination purposes.
 
     """
     if not url:
         return None
-    # link: https://${project-api}/?...&page=2x...
+    # link: https://${project-api}/?...&id_after=2x...
     query_data = parse_qs(urlparse(url).query)
-    page = query_data.get("page")
+    page = query_data.get("id_after")
     if page and len(page) > 0:
         return int(page[0])
     return None
@@ -150,15 +153,22 @@ class GitLabLister(Lister[GitLabListerState, PageResult]):
 
         return PageResult(repositories, next_page)
 
-    def page_url(self, page_id: int) -> str:
-        return f"{self.url}projects?page={page_id}&order_by=id&sort=asc&per_page=20"
+    def page_url(self, id_after: Optional[int] = None) -> str:
+        parameters = {
+            "pagination": "keyset",
+            "order_by": "id",
+            "sort": "asc",
+        }
+        if id_after is not None:
+            parameters["id_after"] = str(id_after)
+        return f"{self.url}projects?{urlencode(parameters)}"
 
     def get_pages(self) -> Iterator[PageResult]:
         next_page: Optional[str]
         if self.incremental and self.state and self.state.last_seen_next_link:
             next_page = self.state.last_seen_next_link
         else:
-            next_page = self.page_url(1)
+            next_page = self.page_url()
 
         while next_page:
             self.last_page = next_page
@@ -194,12 +204,12 @@ class GitLabLister(Lister[GitLabListerState, PageResult]):
                 next_page = self.last_page
 
             if next_page:
-                page_id = _parse_page_id(next_page)
+                id_after = _parse_id_after(next_page)
                 previous_next_page = self.state.last_seen_next_link
-                previous_page_id = _parse_page_id(previous_next_page)
+                previous_id_after = _parse_id_after(previous_next_page)
 
                 if previous_next_page is None or (
-                    previous_page_id and page_id and previous_page_id < page_id
+                    previous_id_after and id_after and previous_id_after < id_after
                 ):
                     self.state.last_seen_next_link = next_page
 
@@ -212,13 +222,15 @@ class GitLabLister(Lister[GitLabListerState, PageResult]):
         next_page = self.state.last_seen_next_link
         if self.incremental and next_page:
             # link: https://${project-api}/?...&page=2x...
-            next_page_id = _parse_page_id(next_page)
+            next_id_after = _parse_id_after(next_page)
             scheduler_state = self.get_state_from_scheduler()
-            previous_next_page_id = _parse_page_id(scheduler_state.last_seen_next_link)
+            previous_next_id_after = _parse_id_after(
+                scheduler_state.last_seen_next_link
+            )
 
-            if (not previous_next_page_id and next_page_id) or (
-                previous_next_page_id
-                and next_page_id
-                and previous_next_page_id < next_page_id
+            if (not previous_next_id_after and next_id_after) or (
+                previous_next_id_after
+                and next_id_after
+                and previous_next_id_after < next_id_after
             ):
                 self.updated = True

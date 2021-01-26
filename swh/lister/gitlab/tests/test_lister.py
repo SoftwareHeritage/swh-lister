@@ -12,7 +12,7 @@ import pytest
 from requests.status_codes import codes
 
 from swh.lister import USER_AGENT
-from swh.lister.gitlab.lister import GitLabLister, _parse_page_id
+from swh.lister.gitlab.lister import GitLabLister, _parse_id_after
 from swh.lister.pattern import ListerStats
 from swh.lister.tests.test_utils import assert_sleep_calls
 from swh.lister.utils import WAIT_EXP_BASE
@@ -38,7 +38,7 @@ def test_lister_gitlab(datadir, swh_scheduler, requests_mock):
     response = gitlab_page_response(datadir, instance, 1)
 
     requests_mock.get(
-        lister.page_url(1), [{"json": response}], additional_matcher=_match_request,
+        lister.page_url(), [{"json": response}], additional_matcher=_match_request,
     )
 
     listed_result = lister.run()
@@ -56,9 +56,9 @@ def test_lister_gitlab(datadir, swh_scheduler, requests_mock):
         assert listed_origin.last_update is not None
 
 
-def gitlab_page_response(datadir, instance: str, page_id: int) -> List[Dict]:
+def gitlab_page_response(datadir, instance: str, id_after: int) -> List[Dict]:
     """Return list of repositories (out of test dataset)"""
-    datapath = Path(datadir, f"https_{instance}", f"api_response_page{page_id}.json")
+    datapath = Path(datadir, f"https_{instance}", f"api_response_page{id_after}.json")
     return json.loads(datapath.read_text()) if datapath.exists else []
 
 
@@ -73,7 +73,7 @@ def test_lister_gitlab_with_pages(swh_scheduler, requests_mock, datadir):
     response2 = gitlab_page_response(datadir, instance, 2)
 
     requests_mock.get(
-        lister.page_url(1),
+        lister.page_url(),
         [{"json": response1, "headers": {"Link": f"<{lister.page_url(2)}>; rel=next"}}],
         additional_matcher=_match_request,
     )
@@ -106,7 +106,7 @@ def test_lister_gitlab_incremental(swh_scheduler, requests_mock, datadir):
     url = api_url(instance)
     lister = GitLabLister(swh_scheduler, url=url, instance=instance, incremental=True)
 
-    url_page1 = lister.page_url(1)
+    url_page1 = lister.page_url()
     response1 = gitlab_page_response(datadir, instance, 1)
     url_page2 = lister.page_url(2)
     response2 = gitlab_page_response(datadir, instance, 2)
@@ -168,7 +168,7 @@ def test_lister_gitlab_rate_limit(swh_scheduler, requests_mock, datadir, mocker)
     url = api_url(instance)
     lister = GitLabLister(swh_scheduler, url=url, instance=instance)
 
-    url_page1 = lister.page_url(1)
+    url_page1 = lister.page_url()
     response1 = gitlab_page_response(datadir, instance, 1)
     url_page2 = lister.page_url(2)
     response2 = gitlab_page_response(datadir, instance, 2)
@@ -221,9 +221,9 @@ def test_lister_gitlab_credentials(swh_scheduler):
     [
         (None, None),
         ("http://dummy/?query=1", None),
-        ("http://dummy/?foo=bar&page=1&some=result", 1),
-        ("http://dummy/?foo=bar&page=&some=result", None),
+        ("http://dummy/?foo=bar&id_after=1&some=result", 1),
+        ("http://dummy/?foo=bar&id_after=&some=result", None),
     ],
 )
-def test__parse_page_id(url, expected_result):
-    assert _parse_page_id(url) == expected_result
+def test__parse_id_after(url, expected_result):
+    assert _parse_id_after(url) == expected_result
