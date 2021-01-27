@@ -1,154 +1,190 @@
-# Copyright (C) 2018-2019 the Software Heritage developers
+# Copyright (C) 2018-2021 the Software Heritage developers
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
 
-from typing import Any, Dict, List, Optional
+from dataclasses import asdict, dataclass
+import logging
+from typing import Any, Dict, Iterator, List, Optional
 
-from requests import Response
+import iso8601
+import requests
+from tenacity.before_sleep import before_sleep_log
 
-from swh.core import config
-from swh.lister.core.indexing_lister import IndexingHttpLister
-from swh.lister.npm.models import NpmModel
-from swh.scheduler.utils import create_task_dict
+from swh.lister import USER_AGENT
+from swh.lister.pattern import CredentialsType, Lister
+from swh.lister.utils import throttling_retry
+from swh.scheduler.interface import SchedulerInterface
+from swh.scheduler.model import ListedOrigin
 
-DEFAULT_CONFIG = {
-    "loading_task_policy": "recurring",
-}
+logger = logging.getLogger(__name__)
 
 
-class NpmListerBase(IndexingHttpLister):
-    """List packages available in the npm registry in a paginated way
+@dataclass
+class NpmListerState:
+    """State of npm lister"""
+
+    last_seq: Optional[int] = None
+
+
+class NpmLister(Lister[NpmListerState, List[Dict[str, Any]]]):
+    """
+    List all packages hosted on the npm registry.
+
+    The lister is based on the npm replication API powered by a
+    CouchDB database (https://docs.couchdb.org/en/stable/api/database/).
+
+    Args:
+        scheduler: a scheduler instance
+        page_size: number of packages info to return per page when querying npm API
+        incremental: defines if incremental listing should be used, in that case
+            only modified or new packages since last incremental listing operation
+            will be returned, otherwise all packages will be listed in lexicographical
+            order
 
     """
 
-    MODEL = NpmModel
     LISTER_NAME = "npm"
-    instance = "npm"
+    INSTANCE = "npm"
+
+    API_BASE_URL = "https://replicate.npmjs.com"
+    API_INCREMENTAL_LISTING_URL = f"{API_BASE_URL}/_changes"
+    API_FULL_LISTING_URL = f"{API_BASE_URL}/_all_docs"
+    PACKAGE_URL_TEMPLATE = "https://www.npmjs.com/package/{package_name}"
 
     def __init__(
-        self, url="https://replicate.npmjs.com", per_page=1000, override_config=None
+        self,
+        scheduler: SchedulerInterface,
+        page_size: int = 1000,
+        incremental: bool = False,
+        credentials: CredentialsType = None,
     ):
-        super().__init__(url=url, override_config=override_config)
-        self.config = config.merge_configs(DEFAULT_CONFIG, self.config)
-        self.per_page = per_page + 1
-        self.PATH_TEMPLATE += "&limit=%s" % self.per_page
+        super().__init__(
+            scheduler=scheduler,
+            credentials=credentials,
+            url=self.API_INCREMENTAL_LISTING_URL
+            if incremental
+            else self.API_FULL_LISTING_URL,
+            instance=self.INSTANCE,
+        )
 
-    def get_model_from_repo(self, repo_name: str) -> Dict[str, str]:
-        """(Override) Transform from npm package name to model
+        self.page_size = page_size
+        if not incremental:
+            # in full listing mode, first package in each page corresponds to the one
+            # provided as the startkey query parameter value, so we increment the page
+            # size by one to avoid double package processing
+            self.page_size += 1
+        self.incremental = incremental
 
-        """
-        package_url = "https://www.npmjs.com/package/%s" % repo_name
-        return {
-            "uid": repo_name,
-            "indexable": repo_name,
-            "name": repo_name,
-            "full_name": repo_name,
-            "html_url": package_url,
-            "origin_url": package_url,
-            "origin_type": "npm",
-        }
+        self.session = requests.Session()
+        self.session.headers.update(
+            {"Accept": "application/json", "User-Agent": USER_AGENT}
+        )
 
-    def task_dict(self, origin_type: str, origin_url: str, **kwargs):
-        """(Override) Return task dict for loading a npm package into the
-        archive.
+    def state_from_dict(self, d: Dict[str, Any]) -> NpmListerState:
+        return NpmListerState(**d)
 
-        This is overridden from the lister_base as more information is
-        needed for the ingestion task creation.
+    def state_to_dict(self, state: NpmListerState) -> Dict[str, Any]:
+        return asdict(state)
 
-        """
-        task_type = "load-%s" % origin_type
-        task_policy = self.config["loading_task_policy"]
-        return create_task_dict(task_type, task_policy, url=origin_url)
+    def request_params(self, last_package_id: str) -> Dict[str, Any]:
+        # include package JSON document to get its last update date
+        params = {"limit": self.page_size, "include_docs": "true"}
+        if self.incremental:
+            params["since"] = last_package_id
+        else:
+            params["startkey"] = last_package_id
+        return params
 
-    def request_headers(self) -> Dict[str, Any]:
-        """(Override) Set requests headers to send when querying the npm
-        registry.
+    @throttling_retry(before_sleep=before_sleep_log(logger, logging.WARNING))
+    def page_request(self, last_package_id: str) -> requests.Response:
+        params = self.request_params(last_package_id)
+        logger.debug("Fetching URL %s with params %s", self.url, params)
+        response = self.session.get(self.url, params=params)
+        if response.status_code != 200:
+            logger.warning(
+                "Unexpected HTTP status code %s on %s: %s",
+                response.status_code,
+                response.url,
+                response.content,
+            )
+        response.raise_for_status()
+        return response
 
-        """
-        headers = super().request_headers()
-        headers["Accept"] = "application/json"
-        return headers
+    def get_pages(self) -> Iterator[List[Dict[str, Any]]]:
+        last_package_id: str = "0" if self.incremental else '""'
+        if (
+            self.incremental
+            and self.state is not None
+            and self.state.last_seq is not None
+        ):
+            last_package_id = str(self.state.last_seq)
 
-    def string_pattern_check(self, inner: int, lower: int, upper: int = None):
-        """ (Override) Inhibit the effect of that method as packages indices
-        correspond to package names and thus do not respect any kind
-        of fixed length string pattern
+        while True:
 
-        """
-        pass
+            response = self.page_request(last_package_id)
 
+            data = response.json()
+            page = data["results"] if self.incremental else data["rows"]
 
-class NpmLister(NpmListerBase):
-    """List all packages available in the npm registry in a paginated way
+            if not page:
+                break
 
-    """
+            if self.incremental or len(page) < self.page_size:
+                yield page
+            else:
+                yield page[:-1]
 
-    PATH_TEMPLATE = '/_all_docs?startkey="%s"'
+            if len(page) < self.page_size:
+                break
 
-    def get_next_target_from_response(self, response: Response) -> Optional[str]:
-        """(Override) Get next npm package name to continue the listing
+            last_package_id = (
+                str(page[-1]["seq"]) if self.incremental else f'"{page[-1]["id"]}"'
+            )
 
-        """
-        repos = response.json()["rows"]
-        return repos[-1]["id"] if len(repos) == self.per_page else None
+    def get_origins_from_page(
+        self, page: List[Dict[str, Any]]
+    ) -> Iterator[ListedOrigin]:
+        """Convert a page of Npm repositories into a list of ListedOrigin."""
+        assert self.lister_obj.id is not None
 
-    def transport_response_simplified(self, response: Response) -> List[Dict[str, str]]:
-        """(Override) Transform npm registry response to list for model manipulation
-
-        """
-        repos = response.json()["rows"]
-        if len(repos) == self.per_page:
-            repos = repos[:-1]
-        return [self.get_model_from_repo(repo["id"]) for repo in repos]
-
-
-class NpmIncrementalLister(NpmListerBase):
-    """List packages in the npm registry, updated since a specific
-    update_seq value of the underlying CouchDB database, in a paginated way.
-
-    """
-
-    PATH_TEMPLATE = "/_changes?since=%s"
-
-    @property
-    def CONFIG_BASE_FILENAME(self):  # noqa: N802
-        return "lister_npm_incremental"
-
-    def get_next_target_from_response(self, response: Response) -> Optional[str]:
-        """(Override) Get next npm package name to continue the listing.
-
-        """
-        repos = response.json()["results"]
-        return repos[-1]["seq"] if len(repos) == self.per_page else None
-
-    def transport_response_simplified(self, response: Response) -> List[Dict[str, str]]:
-        """(Override) Transform npm registry response to list for model
-        manipulation.
-
-        """
-        repos = response.json()["results"]
-        if len(repos) == self.per_page:
-            repos = repos[:-1]
-        return [self.get_model_from_repo(repo["id"]) for repo in repos]
-
-    def filter_before_inject(self, models_list: List[Dict[str, Any]]):
-        """(Override) Filter out documents in the CouchDB database
-        not related to a npm package.
-
-        """
-        models_filtered = []
-        for model in models_list:
-            package_name = model["name"]
-            # document related to CouchDB internals
-            if package_name.startswith("_design/"):
+        for package in page:
+            # no source code to archive here
+            if not package["doc"].get("versions", {}):
                 continue
-            models_filtered.append(model)
-        return models_filtered
 
-    def disable_deleted_repo_tasks(self, start, end, keep_these):
-        """(Override) Disable the processing performed by that method as it is
-        not relevant in this incremental lister context. It also raises an
-        exception due to a different index type (int instead of str).
+            package_name = package["doc"]["name"]
+            package_latest_version = (
+                package["doc"].get("dist-tags", {}).get("latest", "")
+            )
 
-        """
-        pass
+            last_update = None
+            if package_latest_version in package["doc"].get("time", {}):
+                last_update = iso8601.parse_date(
+                    package["doc"]["time"][package_latest_version]
+                )
+
+            yield ListedOrigin(
+                lister_id=self.lister_obj.id,
+                url=self.PACKAGE_URL_TEMPLATE.format(package_name=package_name),
+                visit_type="npm",
+                last_update=last_update,
+            )
+
+    def commit_page(self, page: List[Dict[str, Any]]):
+        """Update the currently stored state using the latest listed page."""
+        if self.incremental:
+            last_package = page[-1]
+            last_seq = last_package["seq"]
+
+            if self.state.last_seq is None or last_seq > self.state.last_seq:
+                self.state.last_seq = last_seq
+
+    def finalize(self):
+        if self.incremental and self.state.last_seq is not None:
+            scheduler_state = self.get_state_from_scheduler()
+
+            if (
+                scheduler_state.last_seq is None
+                or self.state.last_seq > scheduler_state.last_seq
+            ):
+                self.updated = True

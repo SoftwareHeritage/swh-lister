@@ -1,0 +1,123 @@
+{
+  "values": [{
+    "scm": "git",
+    "updated_on": "2012-08-08T21:49:39.837528+00:00",
+    "created_on": "2011-09-03T12:33:16.028393+00:00",
+    "slug": "jreversepro",
+    "links": {
+      "clone": [{
+        "href": "https://bitbucket.org/puffnfresh/jreversepro.git"
+      }, {
+        "href": "git@bitbucket.org:puffnfresh/jreversepro.git"
+      }]
+    }
+  }, {
+    "scm": "git",
+    "updated_on": "2012-07-24T08:11:00.229299+00:00",
+    "created_on": "2011-09-08T01:43:21.182004+00:00",
+    "slug": "jira4-compat",
+    "links": {
+      "clone": [{
+        "href": "https://bitbucket.org/mrdon/jira4-compat.git"
+      }, {
+        "href": "git@bitbucket.org:mrdon/jira4-compat.git"
+      }]
+    }
+  }, {
+    "scm": "git",
+    "updated_on": "2019-03-29T16:07:35.214957+00:00",
+    "created_on": "2011-09-12T20:21:47.109184+00:00",
+    "slug": "chrome-confluence-activity-stream",
+    "links": {
+      "clone": [{
+        "href": "https://bitbucket.org/rmanalan/chrome-confluence-activity-stream.git"
+      }, {
+        "href": "git@bitbucket.org:rmanalan/chrome-confluence-activity-stream.git"
+      }]
+    }
+  }, {
+    "scm": "git",
+    "updated_on": "2014-03-31T14:30:43.850637+00:00",
+    "created_on": "2011-09-14T05:21:02.811713+00:00",
+    "slug": "anode",
+    "links": {
+      "clone": [{
+        "href": "https://bitbucket.org/tarkasteve/anode.git"
+      }, {
+        "href": "git@bitbucket.org:tarkasteve/anode.git"
+      }]
+    }
+  }, {
+    "scm": "git",
+    "updated_on": "2011-11-02T07:45:17.681629+00:00",
+    "created_on": "2011-09-20T04:27:56.852255+00:00",
+    "slug": "pac-release-plugin",
+    "links": {
+      "clone": [{
+        "href": "https://bitbucket.org/jschumacher/pac-release-plugin.git"
+      }, {
+        "href": "git@bitbucket.org:jschumacher/pac-release-plugin.git"
+      }]
+    }
+  }, {
+    "scm": "git",
+    "updated_on": "2012-07-27T00:54:30.098265+00:00",
+    "created_on": "2011-09-21T00:05:50.970472+00:00",
+    "slug": "metadata-confluence-plugin",
+    "links": {
+      "clone": [{
+        "href": "https://bitbucket.org/jwalton/metadata-confluence-plugin.git"
+      }, {
+        "href": "git@bitbucket.org:jwalton/metadata-confluence-plugin.git"
+      }]
+    }
+  }, {
+    "scm": "git",
+    "updated_on": "2014-01-18T05:28:48.832287+00:00",
+    "created_on": "2011-09-21T22:05:29.955410+00:00",
+    "slug": "coffee-script",
+    "links": {
+      "clone": [{
+        "href": "https://bitbucket.org/detkin/coffee-script.git"
+      }, {
+        "href": "git@bitbucket.org:detkin/coffee-script.git"
+      }]
+    }
+  }, {
+    "scm": "git",
+    "updated_on": "2012-07-17T23:32:25.879023+00:00",
+    "created_on": "2011-09-27T08:37:17.132670+00:00",
+    "slug": "taleo-link-fix",
+    "links": {
+      "clone": [{
+        "href": "https://bitbucket.org/christo/taleo-link-fix.git"
+      }, {
+        "href": "git@bitbucket.org:christo/taleo-link-fix.git"
+      }]
+    }
+  }, {
+    "scm": "git",
+    "updated_on": "2012-06-26T22:55:05.634860+00:00",
+    "created_on": "2011-09-27T21:10:47.586400+00:00",
+    "slug": "bdoc",
+    "links": {
+      "clone": [{
+        "href": "https://bitbucket.org/rmanalan/bdoc.git"
+      }, {
+        "href": "git@bitbucket.org:rmanalan/bdoc.git"
+      }]
+    }
+  }, {
+    "scm": "git",
+    "updated_on": "2020-04-20T18:16:50.540634+00:00",
+    "created_on": "2011-09-29T23:36:49.719055+00:00",
+    "slug": "git",
+    "links": {
+      "clone": [{
+        "href": "https://bitbucket.org/mirror/git.git"
+      }, {
+        "href": "git@bitbucket.org:mirror/git.git"
+      }]
+    }
+  }]
+}

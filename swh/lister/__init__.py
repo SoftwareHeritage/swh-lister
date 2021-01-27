@@ -7,6 +7,8 @@ import logging
 
 import pkg_resources
 
+from swh.lister import pattern
+
 logger = logging.getLogger(__name__)
 
 
@@ -51,5 +53,8 @@ def get_lister(lister_name, db_url=None, **conf):
 
     registry_entry = LISTERS[lister_name].load()()
     lister_cls = registry_entry["lister"]
-    lister = lister_cls(override_config=conf)
-    return lister
+    if issubclass(lister_cls, pattern.Lister):
+        return lister_cls.from_config(**conf)
+    else:
+        # Old-style lister
+        return lister_cls(override_config=conf)
