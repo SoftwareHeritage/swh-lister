@@ -1,3 +1,25 @@
+swh-lister (0.5.0-1~swh1) unstable-swh; urgency=medium
+
+  * New upstream release 0.5.0     - (tagged by Antoine R. Dumont
+    (@ardumont) <ardumont@softwareheritage.org> on 2021-01-27 14:33:24
+    +0100)
+  * Upstream changes:     - v0.5.0     - cgit: Add support for
+    last_update information during listing     - Port Debian lister to
+    new lister api     - gitlab: Implement keyset-based pagination
+    listing     - cran: Retrieve last update date for each listed
+    package     - Port CRAN lister to new lister api     - gitlab: Add
+    support for last_update information during listing     - Port Gitea
+    lister to new lister api     - Port cgit lister to the new lister
+    api     - bitbucket: Pick random credentials in configuration and
+    improve logging     - Port Gitlab lister to the new lister api     -
+    Port Npm lister to new lister api     - Port PyPI lister to new
+    lister api     - Port Bitbucket lister to new lister api     - Port
+    Phabricator lister to new lister api     - Port GitHub lister to new
+    lister api     - Introduce a simpler base pattern for lister
+    implementations
+
+ -- Software Heritage autobuilder (on jenkins-debian1) <jenkins@jenkins-debian1.internal.softwareheritage.org>  Wed, 27 Jan 2021 13:40:34 +0000
+
 swh-lister (0.4.0-1~swh1) unstable-swh; urgency=medium
 
   * New upstream release 0.4.0     - (tagged by Antoine R. Dumont
