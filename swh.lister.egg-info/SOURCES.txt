@@ -85,15 +85,12 @@ swh/lister/cgit/tests/data/https_git.tizen/cgit_apps_core_preloaded_ug-setting-g
 swh/lister/cgit/tests/data/https_git.tizen/cgit_apps_core_preloaded_ug-setting-homescreen-efl
 swh/lister/core/__init__.py
 swh/lister/core/abstractattribute.py
-swh/lister/core/indexing_lister.py
 swh/lister/core/lister_base.py
 swh/lister/core/lister_transports.py
 swh/lister/core/models.py
-swh/lister/core/page_by_page_lister.py
 swh/lister/core/simple_lister.py
 swh/lister/core/tests/__init__.py
 swh/lister/core/tests/test_abstractattribute.py
-swh/lister/core/tests/test_indexing_lister.py
 swh/lister/core/tests/test_lister.py
 swh/lister/core/tests/test_model.py
 swh/lister/cran/__init__.py

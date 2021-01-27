@@ -10,6 +10,7 @@ from urllib.parse import urljoin, urlparse
 
 from bs4 import BeautifulSoup
 import requests
+from requests.exceptions import HTTPError
 
 from swh.lister import USER_AGENT
 from swh.lister.pattern import StatelessLister
@@ -76,6 +77,7 @@ class CGitLister(StatelessLister[Repositories]):
         next_page: Optional[str] = self.url
         while next_page:
             bs_idx = self._get_and_parse(next_page)
+
             page_results = []
 
             for tr in bs_idx.find("div", {"class": "content"}).find_all(
@@ -113,7 +115,7 @@ class CGitLister(StatelessLister[Repositories]):
 
         for repository in repositories:
             origin_url = self._get_origin_from_repository_url(repository["url"])
-            if not origin_url:
+            if origin_url is None:
                 continue
 
             yield ListedOrigin(
@@ -125,7 +127,15 @@ class CGitLister(StatelessLister[Repositories]):
 
     def _get_origin_from_repository_url(self, repository_url: str) -> Optional[str]:
         """Extract the git url from the repository page"""
-        bs = self._get_and_parse(repository_url)
+        try:
+            bs = self._get_and_parse(repository_url)
+        except HTTPError as e:
+            logger.warning(
+                "Unexpected HTTP status code %s on %s",
+                e.response.status_code,
+                e.response.url,
+            )
+            return None
 
         # origin urls are listed on the repository page
         # TODO check if forcing https is better or not ?

@@ -7,6 +7,7 @@ from typing import List
 
 import pytest
 
+from swh.core.pytest_plugin import requests_mock_datadir_factory
 from swh.lister import __version__
 from swh.lister.cgit.lister import CGitLister, _parse_last_updated_date
 from swh.lister.pattern import ListerStats
@@ -142,3 +143,20 @@ def test_lister_cgit_date_parsing(date_str, expected_date):
     repository = {"url": "url", "last_updated_date": date_str}
 
     assert _parse_last_updated_date(repository) == expected_date
+
+
+requests_mock_datadir_missing_url = requests_mock_datadir_factory(
+    ignore_urls=["https://git.tizen/cgit/adaptation/ap_samsung/audio-hal-e4x12/",]
+)
+
+
+def test_lister_cgit_get_origin_from_repo_failing(
+    requests_mock_datadir_missing_url, swh_scheduler
+):
+    url = "https://git.tizen/cgit/"
+    lister_cgit = CGitLister(swh_scheduler, url=url)
+
+    stats = lister_cgit.run()
+
+    expected_nb_origins = 15
+    assert stats == ListerStats(pages=3, origins=expected_nb_origins)
