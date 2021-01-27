@@ -36,8 +36,7 @@ def test_get_lister(swh_scheduler_config):
     db_url = init_db().url()
     # Drop launchpad lister from the lister to check, its test setup is more involved
     # than the other listers and it's not currently done here
-    supported_listers = set(SUPPORTED_LISTERS) - {"launchpad"}
-    for lister_name in supported_listers:
+    for lister_name in SUPPORTED_LISTERS:
         lst = get_lister(
             lister_name,
             db_url,
