@@ -1,0 +1,78 @@
+Package: git
+Binary: git, git-man, git-doc, git-cvs, git-svn, git-mediawiki, git-email, git-daemon-run, git-daemon-sysvinit, git-gui, gitk, git-el, gitweb, git-all
+Version: 1:2.20.1-2+deb10u3
+Maintainer: Gerrit Pape <pape@smarden.org>
+Uploaders: Jonathan Nieder <jrnieder@gmail.com>, Anders Kaseorg <andersk@mit.edu>
+Build-Depends: libz-dev, gettext, libpcre2-dev | libpcre3-dev, libcurl4-gnutls-dev, libexpat1-dev, subversion, libsvn-perl, libyaml-perl, tcl, python, libhttp-date-perl | libtime-parsedate-perl, libcgi-pm-perl, liberror-perl, libmailtools-perl, cvs, cvsps, libdbd-sqlite3-perl, unzip, libio-pty-perl, debhelper (>= 9), dh-exec (>= 0.7), dh-apache2, dpkg-dev (>= 1.16.2~)
+Build-Depends-Indep: asciidoc (>= 8.6.10), xmlto, docbook-xsl
+Architecture: any all
+Standards-Version: 4.3.0.1
+Format: 3.0 (quilt)
+Files:
+ fcfb1e01b74dfa383f8171ae7d331de9 2923 git_2.20.1-2+deb10u3.dsc
+ 5fb4ff92b56ce3172b99c1c74c046c1a 5359872 git_2.20.1.orig.tar.xz
+ 3b629f9b0d2da6fa6ce5816478a57e09 646216 git_2.20.1-2+deb10u3.debian.tar.xz
+Vcs-Browser: https://repo.or.cz/w/git/debian.git/
+Vcs-Git: https://repo.or.cz/r/git/debian.git/
+Checksums-Sha256:
+ 6322d0dbe9b867a6cd1cd75f95a4a20335faa2030c38688f460ddaaaacbd4d06 2923 git_2.20.1-2+deb10u3.dsc
+ 9d2e91e2faa2ea61ba0a70201d023b36f54d846314591a002c610ea2ab81c3e9 5359872 git_2.20.1.orig.tar.xz
+ 3c6e2f8495350bccd0981d579d4d1cac6b0e051e1f7ba8b1d22c842bd4cb3453 646216 git_2.20.1-2+deb10u3.debian.tar.xz
+Homepage: https://git-scm.com/
+Package-List:
+ git deb vcs optional arch=any
+ git-all deb vcs optional arch=all
+ git-cvs deb vcs optional arch=all
+ git-daemon-run deb vcs optional arch=all
+ git-daemon-sysvinit deb vcs optional arch=all
+ git-doc deb doc optional arch=all
+ git-el deb vcs optional arch=all
+ git-email deb vcs optional arch=all
+ git-gui deb vcs optional arch=all
+ git-man deb doc optional arch=all
+ git-mediawiki deb vcs optional arch=all
+ git-svn deb vcs optional arch=all
+ gitk deb vcs optional arch=all
+ gitweb deb vcs optional arch=all
+Directory: pool/main/g/git
+Priority: source
+Section: vcs
+
+Package: subversion
+Binary: subversion, libsvn1, libsvn-dev, libsvn-doc, libapache2-mod-svn, python-subversion, subversion-tools, libsvn-java, libsvn-perl, ruby-svn
+Version: 1.10.4-1+deb10u1
+Maintainer: James McCoy <jamessan@debian.org>
+Build-Depends: apache2-dev (>= 2.4.16), autoconf, bash-completion, chrpath, debhelper (>= 11~), default-jdk-headless (>= 2:1.6) [!hurd-i386 !hppa !sparc], dh-apache2, dh-python, doxygen, junit [!hurd-i386 !hppa !sparc], libapr1-dev, libaprutil1-dev, libdb5.3-dev, libdbus-1-dev, liblz4-dev (>= 0.0~r129), libkf5coreaddons-dev, libkf5i18n-dev, libkf5wallet-dev, libperl-dev, libsasl2-dev, libsecret-1-dev, libserf-dev (>= 1.3.9-4~), libsqlite3-dev (>= 3.8.7), libtool, libutf8proc-dev, perl, python-all-dev (>= 2.7), rename, ruby, ruby-dev, swig, zlib1g-dev
+Build-Conflicts: libsvn-dev (<< 1.10~)
+Architecture: any all
+Standards-Version: 4.3.0
+Format: 3.0 (quilt)
+Files:
+ 70b1d3c8ae91301a3f7766b8181d09c9 3428 subversion_1.10.4-1+deb10u1.dsc
+ fcfd1bcd95a8b44e6a6de3a97425aead 11347907 subversion_1.10.4.orig.tar.gz
+ 98e9c6902e6a18973b3d936657384a88 2107 subversion_1.10.4.orig.tar.gz.asc
+ a4a14bcff3cef49d0d9388356213f3e4 438024 subversion_1.10.4-1+deb10u1.debian.tar.xz
+Vcs-Browser: https://salsa.debian.org/jamessan/subversion
+Vcs-Git: https://salsa.debian.org/jamessan/subversion.git
+Checksums-Sha256:
+ c9956fd5b850924dd123048b39195b3d591f55b9cbdf18d4d2a0f496f7decc72 3428 subversion_1.10.4-1+deb10u1.dsc
+ 354022a837596eb1b5676639ea8d73aa326fa8b2c610d8e1b39aeb7228921f4e 11347907 subversion_1.10.4.orig.tar.gz
+ bc6173c43ac837f875d9f2921e118c194455796b419769e155496cf084376428 2107 subversion_1.10.4.orig.tar.gz.asc
+ 1bc8900ef1b9d2af84827dab0fd0164e2058381be3bba0db6fd13cbc858c9b1e 438024 subversion_1.10.4-1+deb10u1.debian.tar.xz
+Homepage: http://subversion.apache.org/
+Package-List:
+ libapache2-mod-svn deb httpd optional arch=any
+ libsvn-dev deb libdevel optional arch=any
+ libsvn-doc deb doc optional arch=all
+ libsvn-java deb java optional arch=any
+ libsvn-perl deb perl optional arch=any
+ libsvn1 deb libs optional arch=any
+ python-subversion deb python optional arch=any
+ ruby-svn deb ruby optional arch=any
+ subversion deb vcs optional arch=any
+ subversion-tools deb vcs optional arch=any
+Testsuite: autopkgtest
+Testsuite-Triggers: apache2, wget
+Directory: pool/main/s/subversion
+Priority: source
+Section: vcs

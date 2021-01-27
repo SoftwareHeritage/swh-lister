@@ -1,0 +1,107 @@
+Package: git
+Binary: git, git-man, git-doc, git-cvs, git-svn, git-mediawiki, git-email, git-daemon-run, git-daemon-sysvinit, git-gui, gitk, git-el, gitweb, git-all
+Version: 1:2.29.2-1
+Maintainer: Jonathan Nieder <jrnieder@gmail.com>
+Uploaders: Anders Kaseorg <andersk@mit.edu>
+Build-Depends: libz-dev, gettext, libpcre2-dev | libpcre3-dev, libcurl4-gnutls-dev, libexpat1-dev, subversion, libsvn-perl, libyaml-perl, tcl, python3, libhttp-date-perl | libtime-parsedate-perl, libcgi-pm-perl, liberror-perl, libmailtools-perl, cvs, cvsps, libdbd-sqlite3-perl, unzip, libio-pty-perl, debhelper-compat (= 10), dh-exec (>= 0.7), dh-apache2, dpkg-dev (>= 1.16.2~)
+Build-Depends-Indep: asciidoc (>= 8.6.10), xmlto, docbook-xsl
+Architecture: any all
+Standards-Version: 4.3.0.1
+Format: 3.0 (quilt)
+Files:
+ ef246c390b2673819cd55085984fb6bc 2867 git_2.29.2-1.dsc
+ f5f9d4e7a3c633bc7a9178cfd822045f 6187988 git_2.29.2.orig.tar.xz
+ cfed1fd3dffd4fb31a0319e51471877f 663292 git_2.29.2-1.debian.tar.xz
+Vcs-Browser: https://repo.or.cz/w/git/debian.git/
+Vcs-Git: https://repo.or.cz/r/git/debian.git/
+Checksums-Sha256:
+ 9f2203314f0d076e24750fa29f38d1bb49d4124f3e8d8789b751c84473e57ead 2867 git_2.29.2-1.dsc
+ f2fc436ebe657821a1360bcd1e5f4896049610082419143d60f6fa13c2f607c1 6187988 git_2.29.2.orig.tar.xz
+ ad79671893257ca6205156c7c58d06e265d793f076c0efc8e225e832217f760a 663292 git_2.29.2-1.debian.tar.xz
+Homepage: https://git-scm.com/
+Package-List:
+ git deb vcs optional arch=any
+ git-all deb vcs optional arch=all
+ git-cvs deb vcs optional arch=all
+ git-daemon-run deb vcs optional arch=all
+ git-daemon-sysvinit deb vcs optional arch=all
+ git-doc deb doc optional arch=all
+ git-el deb vcs optional arch=all
+ git-email deb vcs optional arch=all
+ git-gui deb vcs optional arch=all
+ git-man deb doc optional arch=all
+ git-mediawiki deb vcs optional arch=all
+ git-svn deb vcs optional arch=all
+ gitk deb vcs optional arch=all
+ gitweb deb vcs optional arch=all
+Directory: pool/main/g/git
+Priority: source
+Section: vcs
+
+Package: subversion
+Binary: subversion, libsvn1, libsvn-dev, libsvn-doc, libapache2-mod-svn, python3-subversion, subversion-tools, libsvn-java, libsvn-perl, ruby-svn
+Version: 1.14.0-3
+Maintainer: James McCoy <jamessan@debian.org>
+Build-Depends: autoconf, bash-completion, chrpath, debhelper-compat (= 12), default-jdk-headless (>= 2:1.8) [!hurd-i386 !hppa !sparc] <!pkg.subversion.nojava>, dh-apache2, dh-python, doxygen, junit4 [!hurd-i386 !hppa !sparc] <!pkg.subversion.nojava>, libapr1-dev, libaprutil1-dev, libdb5.3-dev, libdbus-1-dev, liblz4-dev (>= 0.0~r129), libkf5coreaddons-dev <!pkg.subversion.nokde>, libkf5i18n-dev <!pkg.subversion.nokde>, libkf5wallet-dev <!pkg.subversion.nokde>, libperl-dev, libsasl2-dev, libsecret-1-dev, libserf-dev (>= 1.3.9-4~), libsqlite3-dev (>= 3.8.7), libtool, libutf8proc-dev, perl, py3c-dev, python3-all-dev, rename, ruby <!pkg.subversion.noruby>, ruby-dev <!pkg.subversion.noruby>, swig (>= 3.0.10), zlib1g-dev
+Build-Conflicts: libsvn-dev (>= 1.15~), libsvn-dev (<< 1.14~), libsvn1 (>= 1.15~), libsvn1 (<< 1.14~)
+Architecture: any all
+Standards-Version: 4.5.0
+Format: 3.0 (quilt)
+Files:
+ 65f7c225ddbcc855b57341954268098b 3807 subversion_1.14.0-3.dsc
+ 0136e67d8f58731b2858b9f2dba7c536 11519871 subversion_1.14.0.orig.tar.gz
+ f68b938ba71e19f333069bfd3c6ec236 3917 subversion_1.14.0.orig.tar.gz.asc
+ de6248e80a7f8b6481606ff16a9e9237 427396 subversion_1.14.0-3.debian.tar.xz
+Vcs-Browser: https://salsa.debian.org/jamessan/subversion
+Vcs-Git: https://salsa.debian.org/jamessan/subversion.git
+Checksums-Sha256:
+ ebe6e2417a79ad5254072d994ccf6313489a90f299304ee2ccfb6ebe1392c580 3807 subversion_1.14.0-3.dsc
+ ef3d1147535e41874c304fb5b9ea32745fbf5d7faecf2ce21d4115b567e937d0 11519871 subversion_1.14.0.orig.tar.gz
+ 98333df38d29a64500d4ad1693741d3d087485555207289b4e53af309abac71a 3917 subversion_1.14.0.orig.tar.gz.asc
+ fd5383bf82ccf89acd7caf0fd80dc01ee2f7a3e163dcab6b2646ad01b7b746d9 427396 subversion_1.14.0-3.debian.tar.xz
+Homepage: http://subversion.apache.org/
+Dgit: 6ef306f777223c0d5c2eaab0586420ada61435f3 debian archive/debian/1.14.0-3 https://git.dgit.debian.org/subversion
+Package-List:
+ libapache2-mod-svn deb httpd optional arch=any
+ libsvn-dev deb libdevel optional arch=any
+ libsvn-doc deb doc optional arch=all
+ libsvn-java deb java optional arch=any profile=!pkg.subversion.nojava
+ libsvn-perl deb perl optional arch=any
+ libsvn1 deb libs optional arch=any
+ python3-subversion deb python optional arch=any
+ ruby-svn deb ruby optional arch=any profile=!pkg.subversion.noruby
+ subversion deb vcs optional arch=any
+ subversion-tools deb vcs optional arch=any
+Testsuite: autopkgtest
+Testsuite-Triggers: apache2, wget
+Directory: pool/main/s/subversion
+Priority: source
+Section: vcs
+
+Package: hg-git
+Binary: mercurial-git
+Version: 0.9.0-2
+Maintainer: Debian Python Team <team+python@tracker.debian.org>
+Uploaders: Tristan Seligmann <mithrandi@debian.org>
+Build-Depends: debhelper-compat (= 13), dh-python, git, python3-mercurial, openssh-client, python3, python3-dulwich (>= 0.20.6), python3-setuptools, unzip
+Architecture: all
+Standards-Version: 4.5.0
+Format: 3.0 (quilt)
+Files:
+ 7dee1b877cf129c1f6ee618ebf690179 2090 hg-git_0.9.0-2.dsc
+ bcf30d513d8463332288aa93c1c67d3e 129138 hg-git_0.9.0.orig.tar.bz2
+ 5674d6e2e8271150adf68b08833e4806 6996 hg-git_0.9.0-2.debian.tar.xz
+Vcs-Browser: https://salsa.debian.org/python-team/packages/hg-git
+Vcs-Git: https://salsa.debian.org/python-team/packages/hg-git.git
+Checksums-Sha256:
+ a40beaef731c00a820d89918afedc1f01580d87f6e8c29e74903b1e108e38b27 2090 hg-git_0.9.0-2.dsc
+ eedd8773de76b21b47fd21a7e5c04c05c7ab0ecfc62a54bc947eb225b2c44424 129138 hg-git_0.9.0.orig.tar.bz2
+ ded524f1688a248a0eefbd0cf9843daedf60001cc39bfbb9e89734742fa4a4d2 6996 hg-git_0.9.0-2.debian.tar.xz
+Homepage: https://hg-git.github.io/
+Package-List:
+ mercurial-git deb vcs optional arch=all
+Testsuite: autopkgtest
+Testsuite-Triggers: git, openssh-client, unzip
+Directory: pool/main/h/hg-git
+Priority: source
+Section: vcs

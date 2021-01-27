@@ -1,7 +1,10 @@
 from time import sleep
-from unittest.mock import patch
+from unittest.mock import call, patch
 
 from celery.result import GroupResult
+
+from swh.lister.github.lister import GitHubListerState
+from swh.lister.pattern import ListerStats
 
 
 def test_ping(swh_scheduler_celery_app, swh_scheduler_celery_worker):
@@ -15,9 +18,9 @@ def test_ping(swh_scheduler_celery_app, swh_scheduler_celery_worker):
 @patch("swh.lister.github.tasks.GitHubLister")
 def test_incremental(lister, swh_scheduler_celery_app, swh_scheduler_celery_worker):
     # setup the mocked GitHubLister
-    lister.return_value = lister
-    lister.db_last_index.return_value = 42
-    lister.run.return_value = None
+    lister.from_configfile.return_value = lister
+    lister.state = GitHubListerState()
+    lister.run.return_value = ListerStats(pages=5, origins=5000)
 
     res = swh_scheduler_celery_app.send_task(
         "swh.lister.github.tasks.IncrementalGitHubLister"
@@ -26,35 +29,39 @@ def test_incremental(lister, swh_scheduler_celery_app, swh_scheduler_celery_work
     res.wait()
     assert res.successful()
 
-    lister.assert_called_once_with()
-    lister.db_last_index.assert_called_once_with()
-    lister.run.assert_called_once_with(min_bound=42, max_bound=None)
+    lister.from_configfile.assert_called_once_with()
 
 
 @patch("swh.lister.github.tasks.GitHubLister")
 def test_range(lister, swh_scheduler_celery_app, swh_scheduler_celery_worker):
     # setup the mocked GitHubLister
     lister.return_value = lister
-    lister.run.return_value = None
+    lister.from_configfile.return_value = lister
+    lister.run.return_value = ListerStats(pages=5, origins=5000)
 
     res = swh_scheduler_celery_app.send_task(
-        "swh.lister.github.tasks.RangeGitHubLister", kwargs=dict(start=12, end=42)
+        "swh.lister.github.tasks.RangeGitHubLister",
+        kwargs=dict(first_id=12, last_id=42),
     )
     assert res
     res.wait()
     assert res.successful()
 
-    lister.assert_called_once_with()
-    lister.db_last_index.assert_not_called()
-    lister.run.assert_called_once_with(min_bound=12, max_bound=42)
+    lister.from_configfile.assert_called_once_with(first_id=12, last_id=42)
+    lister.run.assert_called_once_with()
 
 
 @patch("swh.lister.github.tasks.GitHubLister")
-def test_relister(lister, swh_scheduler_celery_app, swh_scheduler_celery_worker):
+def test_lister_full(lister, swh_scheduler_celery_app, swh_scheduler_celery_worker):
+    last_index = 1000000
+    expected_bounds = list(range(0, last_index + 1, 100000))
+    if expected_bounds[-1] != last_index:
+        expected_bounds.append(last_index)
+
     # setup the mocked GitHubLister
-    lister.return_value = lister
-    lister.run.return_value = None
-    lister.db_partition_indices.return_value = [(i, i + 9) for i in range(0, 50, 10)]
+    lister.state = GitHubListerState(last_seen_id=last_index)
+    lister.from_configfile.return_value = lister
+    lister.run.return_value = ListerStats(pages=10, origins=10000)
 
     res = swh_scheduler_celery_app.send_task(
         "swh.lister.github.tasks.FullGitHubRelister"
@@ -74,18 +81,13 @@ def test_relister(lister, swh_scheduler_celery_app, swh_scheduler_celery_worker)
             break
         sleep(1)
 
-    lister.assert_called_with()
+    # pulling the state out of the database
+    assert lister.from_configfile.call_args_list[0] == call()
 
-    # one by the FullGitHubRelister task
-    # + 5 for the RangeGitHubLister subtasks
-    assert lister.call_count == 6
-
-    lister.db_last_index.assert_not_called()
-    lister.db_partition_indices.assert_called_once_with(10000)
-
-    # lister.run should have been called once per partition interval
-    for i in range(5):
-        # XXX inconsistent behavior: max_bound is INCLUDED here
-        assert (
-            dict(min_bound=10 * i, max_bound=10 * i + 9),
-        ) in lister.run.call_args_list
+    # Calls for each of the ranges
+    range_calls = lister.from_configfile.call_args_list[1:]
+    # Check exhaustivity of the range calls
+    assert sorted(range_calls, key=lambda c: c[1]["first_id"]) == [
+        call(first_id=f, last_id=l)
+        for f, l in zip(expected_bounds[:-1], expected_bounds[1:])
+    ]

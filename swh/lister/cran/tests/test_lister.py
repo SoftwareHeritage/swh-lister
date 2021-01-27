@@ -1,15 +1,20 @@
-# Copyright (C) 2019-2020 The Software Heritage developers
+# Copyright (C) 2019-2021 The Software Heritage developers
 # See the AUTHORS file at the top-level directory of this distribution
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
 
+from datetime import datetime, timezone
 import json
 from os import path
-from unittest.mock import patch
 
 import pytest
 
-from swh.lister.cran.lister import CRAN_MIRROR, compute_origin_urls
+from swh.lister.cran.lister import (
+    CRAN_MIRROR,
+    CRANLister,
+    compute_origin_urls,
+    parse_packaged_date,
+)
 
 
 def test_cran_compute_origin_urls():
@@ -27,43 +32,60 @@ def test_cran_compute_origin_urls_failure():
             compute_origin_urls(incomplete_repo)
 
 
-@patch("swh.lister.cran.lister.read_cran_data")
-def test_cran_lister_cran(mock_cran, datadir, lister_cran):
+def test_parse_packaged_date():
+    common_date_format = {
+        "Package": "test",
+        "Packaged": "2017-04-26 11:36:15 UTC; Jonathan",
+    }
+    assert parse_packaged_date(common_date_format) == datetime(
+        year=2017, month=4, day=26, hour=11, minute=36, second=15, tzinfo=timezone.utc
+    )
+    old_date_format = {
+        "Package": "test",
+        "Packaged": "Thu Mar 30 10:48:35 2006; hornik",
+    }
+    assert parse_packaged_date(old_date_format) == datetime(
+        year=2006, month=3, day=30, hour=10, minute=48, second=35, tzinfo=timezone.utc
+    )
+    invalid_date_format = {
+        "Package": "test",
+        "Packaged": "foo",
+    }
+    assert parse_packaged_date(invalid_date_format) is None
+    missing_date = {
+        "Package": "test",
+    }
+    assert parse_packaged_date(missing_date) is None
+
+
+def test_cran_lister_cran(datadir, swh_scheduler, mocker):
     with open(path.join(datadir, "list-r-packages.json")) as f:
-        data = json.loads(f.read())
+        cran_data = json.loads(f.read())
 
-    mock_cran.return_value = data
-    assert len(data) == 6
+    lister = CRANLister(swh_scheduler)
 
-    lister_cran.run()
+    mock_cran = mocker.patch("swh.lister.cran.lister.read_cran_data")
 
-    r = lister_cran.scheduler.search_tasks(task_type="load-cran")
-    assert len(r) == 6
+    mock_cran.return_value = cran_data
 
-    for row in r:
-        assert row["type"] == "load-cran"
-        # arguments check
-        args = row["arguments"]["args"]
-        assert len(args) == 0
+    stats = lister.run()
 
-        # kwargs
-        kwargs = row["arguments"]["kwargs"]
-        assert len(kwargs) == 2
-        assert set(kwargs.keys()) == {"url", "artifacts"}
+    assert stats.pages == 1
+    assert stats.origins == len(cran_data)
 
-        artifacts = kwargs["artifacts"]
-        assert len(artifacts) == 1
+    scheduler_origins = swh_scheduler.get_listed_origins(lister.lister_obj.id).results
 
-        assert set(artifacts[0].keys()) == {"url", "version"}
+    assert len(scheduler_origins) == len(cran_data)
 
-        assert row["policy"] == "oneshot"
-        assert row["retries_left"] == 3
+    for package_info in cran_data:
+        origin_url, artifact_url = compute_origin_urls(package_info)
 
-        origin_url = kwargs["url"]
-        record = (
-            lister_cran.db_session.query(lister_cran.MODEL)
-            .filter(origin_url == origin_url)
-            .first()
-        )
-        assert record
-        assert record.uid == f"{record.name}-{record.version}"
+        filtered_origins = [o for o in scheduler_origins if o.url == origin_url]
+
+        assert len(filtered_origins) == 1
+
+        assert filtered_origins[0].extra_loader_arguments == {
+            "artifacts": [{"url": artifact_url, "version": package_info["Version"]}]
+        }
+
+        filtered_origins[0].last_update == parse_packaged_date(package_info)

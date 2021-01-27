@@ -8,9 +8,10 @@ from .lister import PyPILister
 
 
 @shared_task(name=__name__ + ".PyPIListerTask")
-def list_pypi(**lister_args):
-    "Full update of the PyPI (python) registry"
-    return PyPILister(**lister_args).run()
+def list_pypi():
+    "Full listing of the PyPI registry"
+    lister = PyPILister.from_configfile()
+    return lister.run().dict()
 
 
 @shared_task(name=__name__ + ".ping")

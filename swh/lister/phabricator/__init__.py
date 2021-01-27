@@ -5,10 +5,9 @@
 
 def register():
     from .lister import PhabricatorLister
-    from .models import PhabricatorModel
 
     return {
-        "models": [PhabricatorModel],
+        "models": [],
         "lister": PhabricatorLister,
         "task_modules": ["%s.tasks" % __name__],
     }

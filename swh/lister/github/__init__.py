@@ -5,10 +5,9 @@
 
 def register():
     from .lister import GitHubLister
-    from .models import GitHubModel
 
     return {
-        "models": [GitHubModel],
+        "models": [],
         "lister": GitHubLister,
         "task_modules": ["%s.tasks" % __name__],
     }

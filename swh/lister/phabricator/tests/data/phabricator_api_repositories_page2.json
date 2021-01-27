@@ -1,0 +1,1308 @@
+{
+  "result": {
+    "data": [{
+      "id": 8,
+      "type": "REPO",
+      "phid": "PHID-REPO-6yxfwkp54snt37kjzv56",
+      "fields": {
+        "name": "Git loader",
+        "vcs": "git",
+        "callsign": "DLDG",
+        "shortName": "swh-loader-git",
+        "status": "active",
+        "isImporting": false,
+        "almanacServicePHID": null,
+        "refRules": {
+          "fetchRules": [],
+          "trackRules": [],
+          "permanentRefRules": ["master"]
+        },
+        "defaultBranch": "master",
+        "description": {
+          "raw": ""
+        },
+        "spacePHID": null,
+        "dateCreated": 1441877841,
+        "dateModified": 1585394438,
+        "policy": {
+          "view": "public",
+          "edit": "PHID-PROJ-zqzomfxtpkd5jgltioiy",
+          "diffusion.push": "users"
+        }
+      },
+      "attachments": {
+        "uris": {
+          "uris": [{
+            "id": "810",
+            "type": "RURI",
+            "phid": "PHID-RURI-m757ey5cjtqoswnp4jfn",
+            "fields": {
+              "repositoryPHID": "PHID-REPO-6yxfwkp54snt37kjzv56",
+              "uri": {
+                "raw": "git@github.com:SoftwareHeritage\/swh-loader-git.git",
+                "display": "git@github.com:SoftwareHeritage\/swh-loader-git.git",
+                "effective": "git@github.com:SoftwareHeritage\/swh-loader-git.git",
+                "normalized": "github.com\/SoftwareHeritage\/swh-loader-git"
+              },
+              "io": {
+                "raw": "mirror",
+                "default": "none",
+                "effective": "mirror"
+              },
+              "display": {
+                "raw": "never",
+                "default": "never",
+                "effective": "never"
+              },
+              "credentialPHID": "PHID-CDTL-hwgnkw6vk2nrh475bvkf",
+              "disabled": false,
+              "builtin": {
+                "protocol": null,
+                "identifier": null
+              },
+              "dateCreated": "1486571111",
+              "dateModified": "1486571111"
+            }
+          }, {
+            "id": "51",
+            "type": "RURI",
+            "phid": "PHID-RURI-caomlqx42p6ndbd4dwwy",
+            "fields": {
+              "repositoryPHID": "PHID-REPO-6yxfwkp54snt37kjzv56",
+              "uri": {
+                "raw": "https:\/\/id",
+                "display": "https:\/\/forge.softwareheritage.org\/diffusion\/8\/swh-loader-git.git",
+                "effective": "https:\/\/forge.softwareheritage.org\/diffusion\/8\/swh-loader-git.git",
+                "normalized": "\u003cbase-uri\u003e\/diffusion\/8"
+              },
+              "io": {
+                "raw": "read",
+                "default": "readwrite",
+                "effective": "read"
+              },
+              "display": {
+                "raw": "default",
+                "default": "never",
+                "effective": "never"
+              },
+              "credentialPHID": null,
+              "disabled": false,
+              "builtin": {
+                "protocol": "https",
+                "identifier": "id"
+              },
+              "dateCreated": "1465923366",
+              "dateModified": "1465923366"
+            }
+          }, {
+            "id": "50",
+            "type": "RURI",
+            "phid": "PHID-RURI-opinwxwlqq5w2nzy4c4z",
+            "fields": {
+              "repositoryPHID": "PHID-REPO-6yxfwkp54snt37kjzv56",
+              "uri": {
+                "raw": "https:\/\/shortname",
+                "display": "https:\/\/forge.softwareheritage.org\/source\/swh-loader-git.git",
+                "effective": "https:\/\/forge.softwareheritage.org\/source\/swh-loader-git.git",
+                "normalized": "\u003cbase-uri\u003e\/source\/swh-loader-git"
+              },
+              "io": {
+                "raw": "read",
+                "default": "readwrite",
+                "effective": "read"
+              },
+              "display": {
+                "raw": "default",
+                "default": "always",
+                "effective": "always"
+              },
+              "credentialPHID": null,
+              "disabled": false,
+              "builtin": {
+                "protocol": "https",
+                "identifier": "shortname"
+              },
+              "dateCreated": "1465923366",
+              "dateModified": "1465923366"
+            }
+          }, {
+            "id": "49",
+            "type": "RURI",
+            "phid": "PHID-RURI-nnlls52bb2nif7dtsvuc",
+            "fields": {
+              "repositoryPHID": "PHID-REPO-6yxfwkp54snt37kjzv56",
+              "uri": {
+                "raw": "https:\/\/callsign",
+                "display": "https:\/\/forge.softwareheritage.org\/diffusion\/DLDG\/swh-loader-git.git",
+                "effective": "https:\/\/forge.softwareheritage.org\/diffusion\/DLDG\/swh-loader-git.git",
+                "normalized": "\u003cbase-uri\u003e\/diffusion\/DLDG"
+              },
+              "io": {
+                "raw": "read",
+                "default": "readwrite",
+                "effective": "read"
+              },
+              "display": {
+                "raw": "default",
+                "default": "never",
+                "effective": "never"
+              },
+              "credentialPHID": null,
+              "disabled": false,
+              "builtin": {
+                "protocol": "https",
+                "identifier": "callsign"
+              },
+              "dateCreated": "1465923366",
+              "dateModified": "1465923366"
+            }
+          }, {
+            "id": "48",
+            "type": "RURI",
+            "phid": "PHID-RURI-acwrxzvkjzd4ulsfz6er",
+            "fields": {
+              "repositoryPHID": "PHID-REPO-6yxfwkp54snt37kjzv56",
+              "uri": {
+                "raw": "ssh:\/\/id",
+                "display": "ssh:\/\/git@forge.softwareheritage.org\/diffusion\/8\/swh-loader-git.git",
+                "effective": "ssh:\/\/git@forge.softwareheritage.org\/diffusion\/8\/swh-loader-git.git",
+                "normalized": "\u003cbase-uri\u003e\/diffusion\/8"
+              },
+              "io": {
+                "raw": "default",
+                "default": "readwrite",
+                "effective": "readwrite"
+              },
+              "display": {
+                "raw": "default",
+                "default": "never",
+                "effective": "never"
+              },
+              "credentialPHID": null,
+              "disabled": false,
+              "builtin": {
+                "protocol": "ssh",
+                "identifier": "id"
+              },
+              "dateCreated": "1465923366",
+              "dateModified": "1465923366"
+            }
+          }, {
+            "id": "47",
+            "type": "RURI",
+            "phid": "PHID-RURI-mwsdfswyruannmalcdgl",
+            "fields": {
+              "repositoryPHID": "PHID-REPO-6yxfwkp54snt37kjzv56",
+              "uri": {
+                "raw": "ssh:\/\/shortname",
+                "display": "ssh:\/\/git@forge.softwareheritage.org\/source\/swh-loader-git.git",
+                "effective": "ssh:\/\/git@forge.softwareheritage.org\/source\/swh-loader-git.git",
+                "normalized": "\u003cbase-uri\u003e\/source\/swh-loader-git"
+              },
+              "io": {
+                "raw": "default",
+                "default": "readwrite",
+                "effective": "readwrite"
+              },
+              "display": {
+                "raw": "default",
+                "default": "always",
+                "effective": "always"
+              },
+              "credentialPHID": null,
+              "disabled": false,
+              "builtin": {
+                "protocol": "ssh",
+                "identifier": "shortname"
+              },
+              "dateCreated": "1465923366",
+              "dateModified": "1465923366"
+            }
+          }, {
+            "id": "46",
+            "type": "RURI",
+            "phid": "PHID-RURI-3mp7uo2nsawcb3b2uteq",
+            "fields": {
+              "repositoryPHID": "PHID-REPO-6yxfwkp54snt37kjzv56",
+              "uri": {
+                "raw": "ssh:\/\/callsign",
+                "display": "ssh:\/\/git@forge.softwareheritage.org\/diffusion\/DLDG\/swh-loader-git.git",
+                "effective": "ssh:\/\/git@forge.softwareheritage.org\/diffusion\/DLDG\/swh-loader-git.git",
+                "normalized": "\u003cbase-uri\u003e\/diffusion\/DLDG"
+              },
+              "io": {
+                "raw": "default",
+                "default": "readwrite",
+                "effective": "readwrite"
+              },
+              "display": {
+                "raw": "default",
+                "default": "never",
+                "effective": "never"
+              },
+              "credentialPHID": null,
+              "disabled": false,
+              "builtin": {
+                "protocol": "ssh",
+                "identifier": "callsign"
+              },
+              "dateCreated": "1465923366",
+              "dateModified": "1465923366"
+            }
+          }]
+        }
+      }
+    }, {
+      "id": 9,
+      "type": "REPO",
+      "phid": "PHID-REPO-b2cdo5agfixco2mqreuy",
+      "fields": {
+        "name": "Git loader - test data",
+        "vcs": "git",
+        "callsign": "DLDGT",
+        "shortName": "git-loader-test-data",
+        "status": "inactive",
+        "isImporting": false,
+        "almanacServicePHID": null,
+        "refRules": {
+          "fetchRules": [],
+          "trackRules": [],
+          "permanentRefRules": []
+        },
+        "defaultBranch": "master",
+        "description": {
+          "raw": ""
+        },
+        "spacePHID": null,
+        "dateCreated": 1441877841,
+        "dateModified": 1585394165,
+        "policy": {
+          "view": "public",
+          "edit": "PHID-PROJ-zqzomfxtpkd5jgltioiy",
+          "diffusion.push": "PHID-PROJ-zqzomfxtpkd5jgltioiy"
+        }
+      },
+      "attachments": {
+        "uris": {
+          "uris": [{
+            "id": "811",
+            "type": "RURI",
+            "phid": "PHID-RURI-uhpi5u226sqfmwcpzpsa",
+            "fields": {
+              "repositoryPHID": "PHID-REPO-b2cdo5agfixco2mqreuy",
+              "uri": {
+                "raw": "git@github.com:SoftwareHeritage\/git-loader-test-data.git",
+                "display": "git@github.com:SoftwareHeritage\/git-loader-test-data.git",
+                "effective": "git@github.com:SoftwareHeritage\/git-loader-test-data.git",
+                "normalized": "github.com\/SoftwareHeritage\/git-loader-test-data"
+              },
+              "io": {
+                "raw": "mirror",
+                "default": "none",
+                "effective": "mirror"
+              },
+              "display": {
+                "raw": "never",
+                "default": "never",
+                "effective": "never"
+              },
+              "credentialPHID": "PHID-CDTL-hwgnkw6vk2nrh475bvkf",
+              "disabled": false,
+              "builtin": {
+                "protocol": null,
+                "identifier": null
+              },
+              "dateCreated": "1486571113",
+              "dateModified": "1486571113"
+            }
+          }, {
+            "id": "60",
+            "type": "RURI",
+            "phid": "PHID-RURI-76btknuireumkts2qqcn",
+            "fields": {
+              "repositoryPHID": "PHID-REPO-b2cdo5agfixco2mqreuy",
+              "uri": {
+                "raw": "https:\/\/id",
+                "display": "https:\/\/forge.softwareheritage.org\/diffusion\/9\/git-loader-test-data.git",
+                "effective": "https:\/\/forge.softwareheritage.org\/diffusion\/9\/git-loader-test-data.git",
+                "normalized": "\u003cbase-uri\u003e\/diffusion\/9"
+              },
+              "io": {
+                "raw": "read",
+                "default": "readwrite",
+                "effective": "read"
+              },
+              "display": {
+                "raw": "default",
+                "default": "never",
+                "effective": "never"
+              },
+              "credentialPHID": null,
+              "disabled": false,
+              "builtin": {
+                "protocol": "https",
+                "identifier": "id"
+              },
+              "dateCreated": "1465923366",
+              "dateModified": "1465923366"
+            }
+          }, {
+            "id": "59",
+            "type": "RURI",
+            "phid": "PHID-RURI-qiudxih5pqk46btodq52",
+            "fields": {
+              "repositoryPHID": "PHID-REPO-b2cdo5agfixco2mqreuy",
+              "uri": {
+                "raw": "https:\/\/shortname",
+                "display": "https:\/\/forge.softwareheritage.org\/source\/git-loader-test-data.git",
+                "effective": "https:\/\/forge.softwareheritage.org\/source\/git-loader-test-data.git",
+                "normalized": "\u003cbase-uri\u003e\/source\/git-loader-test-data"
+              },
+              "io": {
+                "raw": "read",
+                "default": "readwrite",
+                "effective": "read"
+              },
+              "display": {
+                "raw": "default",
+                "default": "always",
+                "effective": "always"
+              },
+              "credentialPHID": null,
+              "disabled": false,
+              "builtin": {
+                "protocol": "https",
+                "identifier": "shortname"
+              },
+              "dateCreated": "1465923366",
+              "dateModified": "1465923366"
+            }
+          }, {
+            "id": "58",
+            "type": "RURI",
+            "phid": "PHID-RURI-ge4uegurx2y4f7bivvvs",
+            "fields": {
+              "repositoryPHID": "PHID-REPO-b2cdo5agfixco2mqreuy",
+              "uri": {
+                "raw": "https:\/\/callsign",
+                "display": "https:\/\/forge.softwareheritage.org\/diffusion\/DLDGT\/git-loader-test-data.git",
+                "effective": "https:\/\/forge.softwareheritage.org\/diffusion\/DLDGT\/git-loader-test-data.git",
+                "normalized": "\u003cbase-uri\u003e\/diffusion\/DLDGT"
+              },
+              "io": {
+                "raw": "read",
+                "default": "readwrite",
+                "effective": "read"
+              },
+              "display": {
+                "raw": "default",
+                "default": "never",
+                "effective": "never"
+              },
+              "credentialPHID": null,
+              "disabled": false,
+              "builtin": {
+                "protocol": "https",
+                "identifier": "callsign"
+              },
+              "dateCreated": "1465923366",
+              "dateModified": "1465923366"
+            }
+          }, {
+            "id": "57",
+            "type": "RURI",
+            "phid": "PHID-RURI-hykqfusjkkosx46alejf",
+            "fields": {
+              "repositoryPHID": "PHID-REPO-b2cdo5agfixco2mqreuy",
+              "uri": {
+                "raw": "ssh:\/\/id",
+                "display": "ssh:\/\/git@forge.softwareheritage.org\/diffusion\/9\/git-loader-test-data.git",
+                "effective": "ssh:\/\/git@forge.softwareheritage.org\/diffusion\/9\/git-loader-test-data.git",
+                "normalized": "\u003cbase-uri\u003e\/diffusion\/9"
+              },
+              "io": {
+                "raw": "default",
+                "default": "readwrite",
+                "effective": "readwrite"
+              },
+              "display": {
+                "raw": "default",
+                "default": "never",
+                "effective": "never"
+              },
+              "credentialPHID": null,
+              "disabled": false,
+              "builtin": {
+                "protocol": "ssh",
+                "identifier": "id"
+              },
+              "dateCreated": "1465923366",
+              "dateModified": "1465923366"
+            }
+          }, {
+            "id": "56",
+            "type": "RURI",
+            "phid": "PHID-RURI-smauekehnvde7rdhrvon",
+            "fields": {
+              "repositoryPHID": "PHID-REPO-b2cdo5agfixco2mqreuy",
+              "uri": {
+                "raw": "ssh:\/\/shortname",
+                "display": "ssh:\/\/git@forge.softwareheritage.org\/source\/git-loader-test-data.git",
+                "effective": "ssh:\/\/git@forge.softwareheritage.org\/source\/git-loader-test-data.git",
+                "normalized": "\u003cbase-uri\u003e\/source\/git-loader-test-data"
+              },
+              "io": {
+                "raw": "default",
+                "default": "readwrite",
+                "effective": "readwrite"
+              },
+              "display": {
+                "raw": "default",
+                "default": "always",
+                "effective": "always"
+              },
+              "credentialPHID": null,
+              "disabled": false,
+              "builtin": {
+                "protocol": "ssh",
+                "identifier": "shortname"
+              },
+              "dateCreated": "1465923366",
+              "dateModified": "1465923366"
+            }
+          }, {
+            "id": "55",
+            "type": "RURI",
+            "phid": "PHID-RURI-ma6mpnw3e4hni6hcru4w",
+            "fields": {
+              "repositoryPHID": "PHID-REPO-b2cdo5agfixco2mqreuy",
+              "uri": {
+                "raw": "ssh:\/\/callsign",
+                "display": "ssh:\/\/git@forge.softwareheritage.org\/diffusion\/DLDGT\/git-loader-test-data.git",
+                "effective": "ssh:\/\/git@forge.softwareheritage.org\/diffusion\/DLDGT\/git-loader-test-data.git",
+                "normalized": "\u003cbase-uri\u003e\/diffusion\/DLDGT"
+              },
+              "io": {
+                "raw": "default",
+                "default": "readwrite",
+                "effective": "readwrite"
+              },
+              "display": {
+                "raw": "default",
+                "default": "never",
+                "effective": "never"
+              },
+              "credentialPHID": null,
+              "disabled": false,
+              "builtin": {
+                "protocol": "ssh",
+                "identifier": "callsign"
+              },
+              "dateCreated": "1465923366",
+              "dateModified": "1465923366"
+            }
+          }]
+        }
+      }
+    }, {
+      "id": 10,
+      "type": "REPO",
+      "phid": "PHID-REPO-4ocen5dkqx4i5pe34knp",
+      "fields": {
+        "name": "CGit lister",
+        "vcs": "git",
+        "callsign": "DLSCG",
+        "shortName": "swh-lister-cgit",
+        "status": "inactive",
+        "isImporting": false,
+        "almanacServicePHID": null,
+        "refRules": {
+          "fetchRules": [],
+          "trackRules": [],
+          "permanentRefRules": []
+        },
+        "defaultBranch": "master",
+        "description": {
+          "raw": ""
+        },
+        "spacePHID": null,
+        "dateCreated": 1441877841,
+        "dateModified": 1585394138,
+        "policy": {
+          "view": "public",
+          "edit": "PHID-PROJ-zqzomfxtpkd5jgltioiy",
+          "diffusion.push": "PHID-PROJ-zqzomfxtpkd5jgltioiy"
+        }
+      },
+      "attachments": {
+        "uris": {
+          "uris": [{
+            "id": "813",
+            "type": "RURI",
+            "phid": "PHID-RURI-5voo6vvnvdd72k4anjob",
+            "fields": {
+              "repositoryPHID": "PHID-REPO-4ocen5dkqx4i5pe34knp",
+              "uri": {
+                "raw": "git@github.com:SoftwareHeritage\/swh-lister-cgit.git",
+                "display": "git@github.com:SoftwareHeritage\/swh-lister-cgit.git",
+                "effective": "git@github.com:SoftwareHeritage\/swh-lister-cgit.git",
+                "normalized": "github.com\/SoftwareHeritage\/swh-lister-cgit"
+              },
+              "io": {
+                "raw": "mirror",
+                "default": "none",
+                "effective": "mirror"
+              },
+              "display": {
+                "raw": "never",
+                "default": "never",
+                "effective": "never"
+              },
+              "credentialPHID": "PHID-CDTL-hwgnkw6vk2nrh475bvkf",
+              "disabled": false,
+              "builtin": {
+                "protocol": null,
+                "identifier": null
+              },
+              "dateCreated": "1486571119",
+              "dateModified": "1486571119"
+            }
+          }, {
+            "id": "69",
+            "type": "RURI",
+            "phid": "PHID-RURI-q6pr6zzemgn64iv5h4mz",
+            "fields": {
+              "repositoryPHID": "PHID-REPO-4ocen5dkqx4i5pe34knp",
+              "uri": {
+                "raw": "https:\/\/id",
+                "display": "https:\/\/forge.softwareheritage.org\/diffusion\/10\/swh-lister-cgit.git",
+                "effective": "https:\/\/forge.softwareheritage.org\/diffusion\/10\/swh-lister-cgit.git",
+                "normalized": "\u003cbase-uri\u003e\/diffusion\/10"
+              },
+              "io": {
+                "raw": "read",
+                "default": "readwrite",
+                "effective": "read"
+              },
+              "display": {
+                "raw": "default",
+                "default": "never",
+                "effective": "never"
+              },
+              "credentialPHID": null,
+              "disabled": false,
+              "builtin": {
+                "protocol": "https",
+                "identifier": "id"
+              },
+              "dateCreated": "1465923366",
+              "dateModified": "1465923366"
+            }
+          }, {
+            "id": "68",
+            "type": "RURI",
+            "phid": "PHID-RURI-dchphkf7afnsz6o3d6s7",
+            "fields": {
+              "repositoryPHID": "PHID-REPO-4ocen5dkqx4i5pe34knp",
+              "uri": {
+                "raw": "https:\/\/shortname",
+                "display": "https:\/\/forge.softwareheritage.org\/source\/swh-lister-cgit.git",
+                "effective": "https:\/\/forge.softwareheritage.org\/source\/swh-lister-cgit.git",
+                "normalized": "\u003cbase-uri\u003e\/source\/swh-lister-cgit"
+              },
+              "io": {
+                "raw": "read",
+                "default": "readwrite",
+                "effective": "read"
+              },
+              "display": {
+                "raw": "default",
+                "default": "always",
+                "effective": "always"
+              },
+              "credentialPHID": null,
+              "disabled": false,
+              "builtin": {
+                "protocol": "https",
+                "identifier": "shortname"
+              },
+              "dateCreated": "1465923366",
+              "dateModified": "1465923366"
+            }
+          }, {
+            "id": "67",
+            "type": "RURI",
+            "phid": "PHID-RURI-oemnx7vueo7av5ergwhg",
+            "fields": {
+              "repositoryPHID": "PHID-REPO-4ocen5dkqx4i5pe34knp",
+              "uri": {
+                "raw": "https:\/\/callsign",
+                "display": "https:\/\/forge.softwareheritage.org\/diffusion\/DLSCG\/swh-lister-cgit.git",
+                "effective": "https:\/\/forge.softwareheritage.org\/diffusion\/DLSCG\/swh-lister-cgit.git",
+                "normalized": "\u003cbase-uri\u003e\/diffusion\/DLSCG"
+              },
+              "io": {
+                "raw": "read",
+                "default": "readwrite",
+                "effective": "read"
+              },
+              "display": {
+                "raw": "default",
+                "default": "never",
+                "effective": "never"
+              },
+              "credentialPHID": null,
+              "disabled": false,
+              "builtin": {
+                "protocol": "https",
+                "identifier": "callsign"
+              },
+              "dateCreated": "1465923366",
+              "dateModified": "1465923366"
+            }
+          }, {
+            "id": "66",
+            "type": "RURI",
+            "phid": "PHID-RURI-ffucdrzfyqtwr2gpno37",
+            "fields": {
+              "repositoryPHID": "PHID-REPO-4ocen5dkqx4i5pe34knp",
+              "uri": {
+                "raw": "ssh:\/\/id",
+                "display": "ssh:\/\/git@forge.softwareheritage.org\/diffusion\/10\/swh-lister-cgit.git",
+                "effective": "ssh:\/\/git@forge.softwareheritage.org\/diffusion\/10\/swh-lister-cgit.git",
+                "normalized": "\u003cbase-uri\u003e\/diffusion\/10"
+              },
+              "io": {
+                "raw": "default",
+                "default": "readwrite",
+                "effective": "readwrite"
+              },
+              "display": {
+                "raw": "default",
+                "default": "never",
+                "effective": "never"
+              },
+              "credentialPHID": null,
+              "disabled": false,
+              "builtin": {
+                "protocol": "ssh",
+                "identifier": "id"
+              },
+              "dateCreated": "1465923366",
+              "dateModified": "1465923366"
+            }
+          }, {
+            "id": "65",
+            "type": "RURI",
+            "phid": "PHID-RURI-vskwaaeuxrc2nanreaj3",
+            "fields": {
+              "repositoryPHID": "PHID-REPO-4ocen5dkqx4i5pe34knp",
+              "uri": {
+                "raw": "ssh:\/\/shortname",
+                "display": "ssh:\/\/git@forge.softwareheritage.org\/source\/swh-lister-cgit.git",
+                "effective": "ssh:\/\/git@forge.softwareheritage.org\/source\/swh-lister-cgit.git",
+                "normalized": "\u003cbase-uri\u003e\/source\/swh-lister-cgit"
+              },
+              "io": {
+                "raw": "default",
+                "default": "readwrite",
+                "effective": "readwrite"
+              },
+              "display": {
+                "raw": "default",
+                "default": "always",
+                "effective": "always"
+              },
+              "credentialPHID": null,
+              "disabled": false,
+              "builtin": {
+                "protocol": "ssh",
+                "identifier": "shortname"
+              },
+              "dateCreated": "1465923366",
+              "dateModified": "1465923366"
+            }
+          }, {
+            "id": "64",
+            "type": "RURI",
+            "phid": "PHID-RURI-bl27gg5whneoxiytxmaj",
+            "fields": {
+              "repositoryPHID": "PHID-REPO-4ocen5dkqx4i5pe34knp",
+              "uri": {
+                "raw": "ssh:\/\/callsign",
+                "display": "ssh:\/\/git@forge.softwareheritage.org\/diffusion\/DLSCG\/swh-lister-cgit.git",
+                "effective": "ssh:\/\/git@forge.softwareheritage.org\/diffusion\/DLSCG\/swh-lister-cgit.git",
+                "normalized": "\u003cbase-uri\u003e\/diffusion\/DLSCG"
+              },
+              "io": {
+                "raw": "default",
+                "default": "readwrite",
+                "effective": "readwrite"
+              },
+              "display": {
+                "raw": "default",
+                "default": "never",
+                "effective": "never"
+              },
+              "credentialPHID": null,
+              "disabled": false,
+              "builtin": {
+                "protocol": "ssh",
+                "identifier": "callsign"
+              },
+              "dateCreated": "1465923366",
+              "dateModified": "1465923366"
+            }
+          }]
+        }
+      }
+    }, {
+      "id": 11,
+      "type": "REPO",
+      "phid": "PHID-REPO-lthllz32wb4x72kkdcs3",
+      "fields": {
+        "name": "Listers",
+        "vcs": "git",
+        "callsign": "DLS",
+        "shortName": "swh-lister",
+        "status": "active",
+        "isImporting": false,
+        "almanacServicePHID": null,
+        "refRules": {
+          "fetchRules": [],
+          "trackRules": [],
+          "permanentRefRules": ["master"]
+        },
+        "defaultBranch": "master",
+        "description": {
+          "raw": ""
+        },
+        "spacePHID": null,
+        "dateCreated": 1441877841,
+        "dateModified": 1585394439,
+        "policy": {
+          "view": "public",
+          "edit": "PHID-PROJ-zqzomfxtpkd5jgltioiy",
+          "diffusion.push": "users"
+        }
+      },
+      "attachments": {
+        "uris": {
+          "uris": [{
+            "id": "846",
+            "type": "RURI",
+            "phid": "PHID-RURI-42rboz7opl2zz2hjvy6m",
+            "fields": {
+              "repositoryPHID": "PHID-REPO-lthllz32wb4x72kkdcs3",
+              "uri": {
+                "raw": "git@github.com:SoftwareHeritage\/swh-lister.git",
+                "display": "git@github.com:SoftwareHeritage\/swh-lister.git",
+                "effective": "git@github.com:SoftwareHeritage\/swh-lister.git",
+                "normalized": "github.com\/SoftwareHeritage\/swh-lister"
+              },
+              "io": {
+                "raw": "mirror",
+                "default": "none",
+                "effective": "mirror"
+              },
+              "display": {
+                "raw": "never",
+                "default": "never",
+                "effective": "never"
+              },
+              "credentialPHID": "PHID-CDTL-hwgnkw6vk2nrh475bvkf",
+              "disabled": false,
+              "builtin": {
+                "protocol": null,
+                "identifier": null
+              },
+              "dateCreated": "1486652955",
+              "dateModified": "1492792215"
+            }
+          }, {
+            "id": "845",
+            "type": "RURI",
+            "phid": "PHID-RURI-ezu77cg7xd47beaqklnh",
+            "fields": {
+              "repositoryPHID": "PHID-REPO-lthllz32wb4x72kkdcs3",
+              "uri": {
+                "raw": "git@github.com:SoftwareHeritage\/swh-lister-github.git",
+                "display": "git@github.com:SoftwareHeritage\/swh-lister-github.git",
+                "effective": "git@github.com:SoftwareHeritage\/swh-lister-github.git",
+                "normalized": "github.com\/SoftwareHeritage\/swh-lister-github"
+              },
+              "io": {
+                "raw": "mirror",
+                "default": "none",
+                "effective": "mirror"
+              },
+              "display": {
+                "raw": "never",
+                "default": "never",
+                "effective": "never"
+              },
+              "credentialPHID": "PHID-CDTL-hwgnkw6vk2nrh475bvkf",
+              "disabled": true,
+              "builtin": {
+                "protocol": null,
+                "identifier": null
+              },
+              "dateCreated": "1486652889",
+              "dateModified": "1492792358"
+            }
+          }, {
+            "id": "78",
+            "type": "RURI",
+            "phid": "PHID-RURI-b5uflskla4letdsvbnjv",
+            "fields": {
+              "repositoryPHID": "PHID-REPO-lthllz32wb4x72kkdcs3",
+              "uri": {
+                "raw": "https:\/\/id",
+                "display": "https:\/\/forge.softwareheritage.org\/diffusion\/11\/swh-lister.git",
+                "effective": "https:\/\/forge.softwareheritage.org\/diffusion\/11\/swh-lister.git",
+                "normalized": "\u003cbase-uri\u003e\/diffusion\/11"
+              },
+              "io": {
+                "raw": "read",
+                "default": "readwrite",
+                "effective": "read"
+              },
+              "display": {
+                "raw": "default",
+                "default": "never",
+                "effective": "never"
+              },
+              "credentialPHID": null,
+              "disabled": false,
+              "builtin": {
+                "protocol": "https",
+                "identifier": "id"
+              },
+              "dateCreated": "1465923366",
+              "dateModified": "1465923366"
+            }
+          }, {
+            "id": "77",
+            "type": "RURI",
+            "phid": "PHID-RURI-tkpmxuj27b757c2gbnmb",
+            "fields": {
+              "repositoryPHID": "PHID-REPO-lthllz32wb4x72kkdcs3",
+              "uri": {
+                "raw": "https:\/\/shortname",
+                "display": "https:\/\/forge.softwareheritage.org\/source\/swh-lister.git",
+                "effective": "https:\/\/forge.softwareheritage.org\/source\/swh-lister.git",
+                "normalized": "\u003cbase-uri\u003e\/source\/swh-lister"
+              },
+              "io": {
+                "raw": "read",
+                "default": "readwrite",
+                "effective": "read"
+              },
+              "display": {
+                "raw": "default",
+                "default": "always",
+                "effective": "always"
+              },
+              "credentialPHID": null,
+              "disabled": false,
+              "builtin": {
+                "protocol": "https",
+                "identifier": "shortname"
+              },
+              "dateCreated": "1465923366",
+              "dateModified": "1465923366"
+            }
+          }, {
+            "id": "76",
+            "type": "RURI",
+            "phid": "PHID-RURI-f6dcl6mnnd7oi5rdxw26",
+            "fields": {
+              "repositoryPHID": "PHID-REPO-lthllz32wb4x72kkdcs3",
+              "uri": {
+                "raw": "https:\/\/callsign",
+                "display": "https:\/\/forge.softwareheritage.org\/diffusion\/DLS\/swh-lister.git",
+                "effective": "https:\/\/forge.softwareheritage.org\/diffusion\/DLS\/swh-lister.git",
+                "normalized": "\u003cbase-uri\u003e\/diffusion\/DLS"
+              },
+              "io": {
+                "raw": "read",
+                "default": "readwrite",
+                "effective": "read"
+              },
+              "display": {
+                "raw": "default",
+                "default": "never",
+                "effective": "never"
+              },
+              "credentialPHID": null,
+              "disabled": false,
+              "builtin": {
+                "protocol": "https",
+                "identifier": "callsign"
+              },
+              "dateCreated": "1465923366",
+              "dateModified": "1465923366"
+            }
+          }, {
+            "id": "75",
+            "type": "RURI",
+            "phid": "PHID-RURI-dqcif6i64qt3yiyuztmf",
+            "fields": {
+              "repositoryPHID": "PHID-REPO-lthllz32wb4x72kkdcs3",
+              "uri": {
+                "raw": "ssh:\/\/id",
+                "display": "ssh:\/\/git@forge.softwareheritage.org\/diffusion\/11\/swh-lister.git",
+                "effective": "ssh:\/\/git@forge.softwareheritage.org\/diffusion\/11\/swh-lister.git",
+                "normalized": "\u003cbase-uri\u003e\/diffusion\/11"
+              },
+              "io": {
+                "raw": "default",
+                "default": "readwrite",
+                "effective": "readwrite"
+              },
+              "display": {
+                "raw": "default",
+                "default": "never",
+                "effective": "never"
+              },
+              "credentialPHID": null,
+              "disabled": false,
+              "builtin": {
+                "protocol": "ssh",
+                "identifier": "id"
+              },
+              "dateCreated": "1465923366",
+              "dateModified": "1465923366"
+            }
+          }, {
+            "id": "74",
+            "type": "RURI",
+            "phid": "PHID-RURI-j63yjozb5zd3zqrmuv4q",
+            "fields": {
+              "repositoryPHID": "PHID-REPO-lthllz32wb4x72kkdcs3",
+              "uri": {
+                "raw": "ssh:\/\/shortname",
+                "display": "ssh:\/\/git@forge.softwareheritage.org\/source\/swh-lister.git",
+                "effective": "ssh:\/\/git@forge.softwareheritage.org\/source\/swh-lister.git",
+                "normalized": "\u003cbase-uri\u003e\/source\/swh-lister"
+              },
+              "io": {
+                "raw": "default",
+                "default": "readwrite",
+                "effective": "readwrite"
+              },
+              "display": {
+                "raw": "default",
+                "default": "always",
+                "effective": "always"
+              },
+              "credentialPHID": null,
+              "disabled": false,
+              "builtin": {
+                "protocol": "ssh",
+                "identifier": "shortname"
+              },
+              "dateCreated": "1465923366",
+              "dateModified": "1465923366"
+            }
+          }, {
+            "id": "73",
+            "type": "RURI",
+            "phid": "PHID-RURI-dnad7c6pfowgxlfua6gy",
+            "fields": {
+              "repositoryPHID": "PHID-REPO-lthllz32wb4x72kkdcs3",
+              "uri": {
+                "raw": "ssh:\/\/callsign",
+                "display": "ssh:\/\/git@forge.softwareheritage.org\/diffusion\/DLS\/swh-lister.git",
+                "effective": "ssh:\/\/git@forge.softwareheritage.org\/diffusion\/DLS\/swh-lister.git",
+                "normalized": "\u003cbase-uri\u003e\/diffusion\/DLS"
+              },
+              "io": {
+                "raw": "default",
+                "default": "readwrite",
+                "effective": "readwrite"
+              },
+              "display": {
+                "raw": "default",
+                "default": "never",
+                "effective": "never"
+              },
+              "credentialPHID": null,
+              "disabled": false,
+              "builtin": {
+                "protocol": "ssh",
+                "identifier": "callsign"
+              },
+              "dateCreated": "1465923366",
+              "dateModified": "1465923366"
+            }
+          }]
+        }
+      }
+    }, {
+      "id": 12,
+      "type": "REPO",
+      "phid": "PHID-REPO-kasovubyed5uxxpadvs3",
+      "fields": {
+        "name": "Storage manager",
+        "vcs": "git",
+        "callsign": "DSTO",
+        "shortName": "swh-storage",
+        "status": "active",
+        "isImporting": false,
+        "almanacServicePHID": null,
+        "refRules": {
+          "fetchRules": [],
+          "trackRules": [],
+          "permanentRefRules": ["master", "debian\/unstable-swh", "debian\/buster-swh", "debian\/upstream", "pristine-tar"]
+        },
+        "defaultBranch": "master",
+        "description": {
+          "raw": ""
+        },
+        "spacePHID": null,
+        "dateCreated": 1441877842,
+        "dateModified": 1591274378,
+        "policy": {
+          "view": "public",
+          "edit": "PHID-PROJ-zqzomfxtpkd5jgltioiy",
+          "diffusion.push": "users"
+        }
+      },
+      "attachments": {
+        "uris": {
+          "uris": [{
+            "id": "683",
+            "type": "RURI",
+            "phid": "PHID-RURI-4rjkye2jxnp7lgnqmsoa",
+            "fields": {
+              "repositoryPHID": "PHID-REPO-kasovubyed5uxxpadvs3",
+              "uri": {
+                "raw": "git@github.com:SoftwareHeritage\/swh-storage.git",
+                "display": "git@github.com:SoftwareHeritage\/swh-storage.git",
+                "effective": "git@github.com:SoftwareHeritage\/swh-storage.git",
+                "normalized": "github.com\/SoftwareHeritage\/swh-storage"
+              },
+              "io": {
+                "raw": "mirror",
+                "default": "none",
+                "effective": "mirror"
+              },
+              "display": {
+                "raw": "never",
+                "default": "never",
+                "effective": "never"
+              },
+              "credentialPHID": "PHID-CDTL-hwgnkw6vk2nrh475bvkf",
+              "disabled": false,
+              "builtin": {
+                "protocol": null,
+                "identifier": null
+              },
+              "dateCreated": "1474643061",
+              "dateModified": "1519746814"
+            }
+          }, {
+            "id": "87",
+            "type": "RURI",
+            "phid": "PHID-RURI-npie2vfeegszyxgmaee5",
+            "fields": {
+              "repositoryPHID": "PHID-REPO-kasovubyed5uxxpadvs3",
+              "uri": {
+                "raw": "https:\/\/id",
+                "display": "https:\/\/forge.softwareheritage.org\/diffusion\/12\/swh-storage.git",
+                "effective": "https:\/\/forge.softwareheritage.org\/diffusion\/12\/swh-storage.git",
+                "normalized": "\u003cbase-uri\u003e\/diffusion\/12"
+              },
+              "io": {
+                "raw": "read",
+                "default": "readwrite",
+                "effective": "read"
+              },
+              "display": {
+                "raw": "default",
+                "default": "never",
+                "effective": "never"
+              },
+              "credentialPHID": null,
+              "disabled": false,
+              "builtin": {
+                "protocol": "https",
+                "identifier": "id"
+              },
+              "dateCreated": "1465923366",
+              "dateModified": "1465923366"
+            }
+          }, {
+            "id": "86",
+            "type": "RURI",
+            "phid": "PHID-RURI-7dxwck2ab6dedc7kkyay",
+            "fields": {
+              "repositoryPHID": "PHID-REPO-kasovubyed5uxxpadvs3",
+              "uri": {
+                "raw": "https:\/\/forge.softwareheritage.org\/source\/swh-storage.git",
+                "display": "https:\/\/forge.softwareheritage.org\/source\/swh-storage.git",
+                "effective": "https:\/\/forge.softwareheritage.org\/source\/swh-storage.git",
+                "normalized": "\u003cbase-uri\u003e\/source\/swh-storage"
+              },
+              "io": {
+                "raw": "readwrite",
+                "default": "readwrite",
+                "effective": "readwrite"
+              },
+              "display": {
+                "raw": "default",
+                "default": "always",
+                "effective": "always"
+              },
+              "credentialPHID": null,
+              "disabled": false,
+              "builtin": {
+                "protocol": "https",
+                "identifier": "shortname"
+              },
+              "dateCreated": "1465923366",
+              "dateModified": "1560864903"
+            }
+          }, {
+            "id": "85",
+            "type": "RURI",
+            "phid": "PHID-RURI-kgiwcdlqfjlg6tbas4xq",
+            "fields": {
+              "repositoryPHID": "PHID-REPO-kasovubyed5uxxpadvs3",
+              "uri": {
+                "raw": "git@github.com:SoftwareHeritage\/mirror-tryout.git",
+                "display": "https:\/\/forge.softwareheritage.org\/diffusion\/DSTO\/swh-storage.git",
+                "effective": "https:\/\/forge.softwareheritage.org\/diffusion\/DSTO\/swh-storage.git",
+                "normalized": "\u003cbase-uri\u003e\/diffusion\/DSTO"
+              },
+              "io": {
+                "raw": "read",
+                "default": "readwrite",
+                "effective": "read"
+              },
+              "display": {
+                "raw": "never",
+                "default": "never",
+                "effective": "never"
+              },
+              "credentialPHID": "",
+              "disabled": false,
+              "builtin": {
+                "protocol": "https",
+                "identifier": "callsign"
+              },
+              "dateCreated": "1465923366",
+              "dateModified": "1485783470"
+            }
+          }, {
+            "id": "84",
+            "type": "RURI",
+            "phid": "PHID-RURI-n5qnymw6y7os3quhonmt",
+            "fields": {
+              "repositoryPHID": "PHID-REPO-kasovubyed5uxxpadvs3",
+              "uri": {
+                "raw": "ssh:\/\/id",
+                "display": "ssh:\/\/git@forge.softwareheritage.org\/diffusion\/12\/swh-storage.git",
+                "effective": "ssh:\/\/git@forge.softwareheritage.org\/diffusion\/12\/swh-storage.git",
+                "normalized": "\u003cbase-uri\u003e\/diffusion\/12"
+              },
+              "io": {
+                "raw": "default",
+                "default": "readwrite",
+                "effective": "readwrite"
+              },
+              "display": {
+                "raw": "default",
+                "default": "never",
+                "effective": "never"
+              },
+              "credentialPHID": null,
+              "disabled": false,
+              "builtin": {
+                "protocol": "ssh",
+                "identifier": "id"
+              },
+              "dateCreated": "1465923366",
+              "dateModified": "1465923366"
+            }
+          }, {
+            "id": "83",
+            "type": "RURI",
+            "phid": "PHID-RURI-nnaxsbmjekmw6lcd2qfz",
+            "fields": {
+              "repositoryPHID": "PHID-REPO-kasovubyed5uxxpadvs3",
+              "uri": {
+                "raw": "ssh:\/\/shortname",
+                "display": "ssh:\/\/git@forge.softwareheritage.org\/source\/swh-storage.git",
+                "effective": "ssh:\/\/git@forge.softwareheritage.org\/source\/swh-storage.git",
+                "normalized": "\u003cbase-uri\u003e\/source\/swh-storage"
+              },
+              "io": {
+                "raw": "default",
+                "default": "readwrite",
+                "effective": "readwrite"
+              },
+              "display": {
+                "raw": "default",
+                "default": "always",
+                "effective": "always"
+              },
+              "credentialPHID": null,
+              "disabled": false,
+              "builtin": {
+                "protocol": "ssh",
+                "identifier": "shortname"
+              },
+              "dateCreated": "1465923366",
+              "dateModified": "1465923366"
+            }
+          }, {
+            "id": "82",
+            "type": "RURI",
+            "phid": "PHID-RURI-zgmgow3nmbn6nv2j7lzt",
+            "fields": {
+              "repositoryPHID": "PHID-REPO-kasovubyed5uxxpadvs3",
+              "uri": {
+                "raw": "ssh:\/\/callsign",
+                "display": "ssh:\/\/git@forge.softwareheritage.org\/diffusion\/DSTO\/swh-storage.git",
+                "effective": "ssh:\/\/git@forge.softwareheritage.org\/diffusion\/DSTO\/swh-storage.git",
+                "normalized": "\u003cbase-uri\u003e\/diffusion\/DSTO"
+              },
+              "io": {
+                "raw": "default",
+                "default": "readwrite",
+                "effective": "readwrite"
+              },
+              "display": {
+                "raw": "default",
+                "default": "never",
+                "effective": "never"
+              },
+              "credentialPHID": null,
+              "disabled": false,
+              "builtin": {
+                "protocol": "ssh",
+                "identifier": "callsign"
+              },
+              "dateCreated": "1465923366",
+              "dateModified": "1465923366"
+            }
+          }]
+        }
+      }
+    }],
+    "maps": {},
+    "query": {
+      "queryKey": null
+    },
+    "cursor": {
+      "limit": 5,
+      "after": null,
+      "before": "8",
+      "order": "oldest"
+    }
+  },
+  "error_code": null,
+  "error_info": null
+}
