@@ -1,3 +1,16 @@
+swh-lister (0.5.1-1~swh1) unstable-swh; urgency=medium
+
+  * New upstream release 0.5.1     - (tagged by Antoine R. Dumont
+    (@ardumont) <ardumont@softwareheritage.org> on 2021-01-27 16:39:20
+    +0100)
+  * Upstream changes:     - v0.5.1     - launchpad: Actually mock the
+    anonymous login to launchpad     - Drop no longer
+    swh.lister.core.{indexing,page_by_page}_lister     - tests: Drop
+    unneeded reset instruction     - cgit: Don't stop the listing when a
+    repository page is not available
+
+ -- Software Heritage autobuilder (on jenkins-debian1) <jenkins@jenkins-debian1.internal.softwareheritage.org>  Wed, 27 Jan 2021 15:47:39 +0000
+
 swh-lister (0.5.0-1~swh1) unstable-swh; urgency=medium
 
   * New upstream release 0.5.0     - (tagged by Antoine R. Dumont
