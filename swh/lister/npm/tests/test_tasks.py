@@ -1,15 +1,9 @@
-# Copyright (C) 2019-2020  The Software Heritage developers
+# Copyright (C) 2019-2021  The Software Heritage developers
 # See the AUTHORS file at the top-level directory of this distribution
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
 
-from contextlib import contextmanager
-from unittest.mock import patch
-
-
-@contextmanager
-def mock_save(lister):
-    yield
+from swh.lister.pattern import ListerStats
 
 
 def test_ping(swh_scheduler_celery_app, swh_scheduler_celery_worker):
@@ -20,34 +14,31 @@ def test_ping(swh_scheduler_celery_app, swh_scheduler_celery_worker):
     assert res.result == "OK"
 
 
-@patch("swh.lister.npm.tasks.save_registry_state")
-@patch("swh.lister.npm.tasks.NpmLister")
-def test_lister(lister, save, swh_scheduler_celery_app, swh_scheduler_celery_worker):
-    # setup the mocked NpmLister
-    lister.return_value = lister
-    lister.run.return_value = None
-    save.side_effect = mock_save
+def test_full_lister_task(
+    swh_scheduler_celery_app, swh_scheduler_celery_worker, mocker
+):
+    stats = ListerStats(pages=10, origins=900)
+    mock_lister = mocker.patch("swh.lister.npm.tasks.NpmLister")
+    mock_lister.from_configfile.return_value = mock_lister
+    mock_lister.run.return_value = stats
 
     res = swh_scheduler_celery_app.send_task("swh.lister.npm.tasks.NpmListerTask")
     assert res
     res.wait()
     assert res.successful()
 
-    lister.assert_called_once_with()
-    lister.run.assert_called_once_with()
+    mock_lister.from_configfile.assert_called_once_with(incremental=False)
+    mock_lister.run.assert_called_once_with()
+    assert res.result == stats.dict()
 
 
-@patch("swh.lister.npm.tasks.save_registry_state")
-@patch("swh.lister.npm.tasks.get_last_update_seq")
-@patch("swh.lister.npm.tasks.NpmIncrementalLister")
-def test_incremental(
-    lister, seq, save, swh_scheduler_celery_app, swh_scheduler_celery_worker
+def test_incremental_lister_task(
+    swh_scheduler_celery_app, swh_scheduler_celery_worker, mocker
 ):
-    # setup the mocked NpmLister
-    lister.return_value = lister
-    lister.run.return_value = None
-    seq.return_value = 42
-    save.side_effect = mock_save
+    stats = ListerStats(pages=10, origins=900)
+    mock_lister = mocker.patch("swh.lister.npm.tasks.NpmLister")
+    mock_lister.from_configfile.return_value = mock_lister
+    mock_lister.run.return_value = stats
 
     res = swh_scheduler_celery_app.send_task(
         "swh.lister.npm.tasks.NpmIncrementalListerTask"
@@ -56,6 +47,6 @@ def test_incremental(
     res.wait()
     assert res.successful()
 
-    lister.assert_called_once_with()
-    seq.assert_called_once_with(lister)
-    lister.run.assert_called_once_with(min_bound=42)
+    mock_lister.from_configfile.assert_called_once_with(incremental=True)
+    mock_lister.run.assert_called_once_with()
+    assert res.result == stats.dict()

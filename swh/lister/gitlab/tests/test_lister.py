@@ -1,70 +1,229 @@
-# Copyright (C) 2017-2020 The Software Heritage developers
+# Copyright (C) 2017-2021 The Software Heritage developers
 # See the AUTHORS file at the top-level directory of this distribution
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
 
-from datetime import datetime, timedelta
+import json
 import logging
-import re
-import unittest
+from pathlib import Path
+from typing import Dict, List
 
 import pytest
+from requests.status_codes import codes
 
-from swh.lister.core.tests.test_lister import HttpListerTesterBase
-from swh.lister.gitlab.lister import GitLabLister
+from swh.lister import USER_AGENT
+from swh.lister.gitlab.lister import GitLabLister, _parse_id_after
+from swh.lister.pattern import ListerStats
+from swh.lister.tests.test_utils import assert_sleep_calls
+from swh.lister.utils import WAIT_EXP_BASE
 
 logger = logging.getLogger(__name__)
 
 
-class GitLabListerTester(HttpListerTesterBase, unittest.TestCase):
-    Lister = GitLabLister
-    test_re = re.compile(r"^.*/projects.*page=(\d+).*")
-    lister_subdir = "gitlab"
-    good_api_response_file = "data/gitlab.com/api_response.json"
-    bad_api_response_file = "data/gitlab.com/api_empty_response.json"
-    first_index = 1
-    entries_per_page = 10
-    convert_type = int
-
-    def response_headers(self, request):
-        headers = {"RateLimit-Remaining": "1"}
-        if self.request_index(request) == self.first_index:
-            headers.update(
-                {"x-next-page": "3",}
-            )
-
-        return headers
-
-    def mock_rate_quota(self, n, request, context):
-        self.rate_limit += 1
-        context.status_code = 403
-        context.headers["RateLimit-Remaining"] = "0"
-        one_second = int((datetime.now() + timedelta(seconds=1.5)).timestamp())
-        context.headers["RateLimit-Reset"] = str(one_second)
-        return '{"error":"dummy"}'
+def api_url(instance: str) -> str:
+    return f"https://{instance}/api/v4/"
 
 
-@pytest.fixture
-def lister_under_test():
-    return "gitlab"
+def _match_request(request):
+    return request.headers.get("User-Agent") == USER_AGENT
 
 
-def test_lister_gitlab(lister_gitlab, requests_mock_datadir):
-    lister_gitlab.run()
+def test_lister_gitlab(datadir, swh_scheduler, requests_mock):
+    """Gitlab lister supports full listing
 
-    r = lister_gitlab.scheduler.search_tasks(task_type="load-git")
-    assert len(r) == 10
+    """
+    instance = "gitlab.com"
+    lister = GitLabLister(swh_scheduler, url=api_url(instance), instance=instance)
 
-    for row in r:
-        assert row["type"] == "load-git"
-        # arguments check
-        args = row["arguments"]["args"]
-        assert len(args) == 0
+    response = gitlab_page_response(datadir, instance, 1)
 
-        # kwargs
-        kwargs = row["arguments"]["kwargs"]
-        url = kwargs["url"]
-        assert url.startswith("https://gitlab.com")
+    requests_mock.get(
+        lister.page_url(), [{"json": response}], additional_matcher=_match_request,
+    )
 
-        assert row["policy"] == "recurring"
-        assert row["priority"] is None
+    listed_result = lister.run()
+    expected_nb_origins = len(response)
+    assert listed_result == ListerStats(pages=1, origins=expected_nb_origins)
+
+    scheduler_origins = lister.scheduler.get_listed_origins(
+        lister.lister_obj.id
+    ).results
+    assert len(scheduler_origins) == expected_nb_origins
+
+    for listed_origin in scheduler_origins:
+        assert listed_origin.visit_type == "git"
+        assert listed_origin.url.startswith(f"https://{instance}")
+        assert listed_origin.last_update is not None
+
+
+def gitlab_page_response(datadir, instance: str, id_after: int) -> List[Dict]:
+    """Return list of repositories (out of test dataset)"""
+    datapath = Path(datadir, f"https_{instance}", f"api_response_page{id_after}.json")
+    return json.loads(datapath.read_text()) if datapath.exists else []
+
+
+def test_lister_gitlab_with_pages(swh_scheduler, requests_mock, datadir):
+    """Gitlab lister supports pagination
+
+    """
+    instance = "gite.lirmm.fr"
+    lister = GitLabLister(swh_scheduler, url=api_url(instance))
+
+    response1 = gitlab_page_response(datadir, instance, 1)
+    response2 = gitlab_page_response(datadir, instance, 2)
+
+    requests_mock.get(
+        lister.page_url(),
+        [{"json": response1, "headers": {"Link": f"<{lister.page_url(2)}>; rel=next"}}],
+        additional_matcher=_match_request,
+    )
+
+    requests_mock.get(
+        lister.page_url(2), [{"json": response2}], additional_matcher=_match_request,
+    )
+
+    listed_result = lister.run()
+
+    expected_nb_origins = len(response1) + len(response2)
+    assert listed_result == ListerStats(pages=2, origins=expected_nb_origins)
+
+    scheduler_origins = lister.scheduler.get_listed_origins(
+        lister.lister_obj.id
+    ).results
+    assert len(scheduler_origins) == expected_nb_origins
+
+    for listed_origin in scheduler_origins:
+        assert listed_origin.visit_type == "git"
+        assert listed_origin.url.startswith(f"https://{instance}")
+        assert listed_origin.last_update is not None
+
+
+def test_lister_gitlab_incremental(swh_scheduler, requests_mock, datadir):
+    """Gitlab lister supports incremental visits
+
+    """
+    instance = "gite.lirmm.fr"
+    url = api_url(instance)
+    lister = GitLabLister(swh_scheduler, url=url, instance=instance, incremental=True)
+
+    url_page1 = lister.page_url()
+    response1 = gitlab_page_response(datadir, instance, 1)
+    url_page2 = lister.page_url(2)
+    response2 = gitlab_page_response(datadir, instance, 2)
+    url_page3 = lister.page_url(3)
+    response3 = gitlab_page_response(datadir, instance, 3)
+
+    requests_mock.get(
+        url_page1,
+        [{"json": response1, "headers": {"Link": f"<{url_page2}>; rel=next"}}],
+        additional_matcher=_match_request,
+    )
+    requests_mock.get(
+        url_page2, [{"json": response2}], additional_matcher=_match_request,
+    )
+
+    listed_result = lister.run()
+
+    expected_nb_origins = len(response1) + len(response2)
+    assert listed_result == ListerStats(pages=2, origins=expected_nb_origins)
+    assert lister.state.last_seen_next_link == url_page2
+
+    lister2 = GitLabLister(swh_scheduler, url=url, instance=instance, incremental=True)
+    requests_mock.reset()
+    # Lister will start back at the last stop
+    requests_mock.get(
+        url_page2,
+        [{"json": response2, "headers": {"Link": f"<{url_page3}>; rel=next"}}],
+        additional_matcher=_match_request,
+    )
+    requests_mock.get(
+        url_page3, [{"json": response3}], additional_matcher=_match_request,
+    )
+
+    listed_result2 = lister2.run()
+
+    assert listed_result2 == ListerStats(
+        pages=2, origins=len(response2) + len(response3)
+    )
+    assert lister2.state.last_seen_next_link == url_page3
+
+    assert lister.lister_obj.id == lister2.lister_obj.id
+    scheduler_origins = lister2.scheduler.get_listed_origins(
+        lister2.lister_obj.id
+    ).results
+
+    assert len(scheduler_origins) == len(response1) + len(response2) + len(response3)
+
+    for listed_origin in scheduler_origins:
+        assert listed_origin.visit_type == "git"
+        assert listed_origin.url.startswith(f"https://{instance}")
+        assert listed_origin.last_update is not None
+
+
+def test_lister_gitlab_rate_limit(swh_scheduler, requests_mock, datadir, mocker):
+    """Gitlab lister supports rate-limit
+
+    """
+    instance = "gite.lirmm.fr"
+    url = api_url(instance)
+    lister = GitLabLister(swh_scheduler, url=url, instance=instance)
+
+    url_page1 = lister.page_url()
+    response1 = gitlab_page_response(datadir, instance, 1)
+    url_page2 = lister.page_url(2)
+    response2 = gitlab_page_response(datadir, instance, 2)
+
+    requests_mock.get(
+        url_page1,
+        [{"json": response1, "headers": {"Link": f"<{url_page2}>; rel=next"}}],
+        additional_matcher=_match_request,
+    )
+    requests_mock.get(
+        url_page2,
+        [
+            # rate limited twice
+            {"status_code": codes.forbidden, "headers": {"RateLimit-Remaining": "0"}},
+            {"status_code": codes.forbidden, "headers": {"RateLimit-Remaining": "0"}},
+            # ok
+            {"json": response2},
+        ],
+        additional_matcher=_match_request,
+    )
+
+    # To avoid this test being too slow, we mock sleep within the retry behavior
+    mock_sleep = mocker.patch.object(lister.get_page_result.retry, "sleep")
+
+    listed_result = lister.run()
+
+    expected_nb_origins = len(response1) + len(response2)
+    assert listed_result == ListerStats(pages=2, origins=expected_nb_origins)
+
+    assert_sleep_calls(mocker, mock_sleep, [1, WAIT_EXP_BASE])
+
+
+def test_lister_gitlab_credentials(swh_scheduler):
+    """Gitlab lister supports credentials configuration
+
+    """
+    instance = "gitlab"
+    credentials = {
+        "gitlab": {instance: [{"username": "user", "password": "api-token"}]}
+    }
+    url = api_url(instance)
+    lister = GitLabLister(
+        scheduler=swh_scheduler, url=url, instance=instance, credentials=credentials
+    )
+    assert lister.session.headers["Authorization"] == "Bearer api-token"
+
+
+@pytest.mark.parametrize(
+    "url,expected_result",
+    [
+        (None, None),
+        ("http://dummy/?query=1", None),
+        ("http://dummy/?foo=bar&id_after=1&some=result", 1),
+        ("http://dummy/?foo=bar&id_after=&some=result", None),
+    ],
+)
+def test__parse_id_after(url, expected_result):
+    assert _parse_id_after(url) == expected_result

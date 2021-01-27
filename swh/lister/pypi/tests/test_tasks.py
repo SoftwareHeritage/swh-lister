@@ -5,6 +5,8 @@
 
 from unittest.mock import patch
 
+from swh.lister.pattern import ListerStats
+
 
 def test_ping(swh_scheduler_celery_app, swh_scheduler_celery_worker):
     res = swh_scheduler_celery_app.send_task("swh.lister.pypi.tasks.ping")
@@ -17,14 +19,13 @@ def test_ping(swh_scheduler_celery_app, swh_scheduler_celery_worker):
 @patch("swh.lister.pypi.tasks.PyPILister")
 def test_lister(lister, swh_scheduler_celery_app, swh_scheduler_celery_worker):
     # setup the mocked PypiLister
-    lister.return_value = lister
-    lister.run.return_value = None
+    lister.from_configfile.return_value = lister
+    lister.run.return_value = ListerStats(pages=1, origins=0)
 
     res = swh_scheduler_celery_app.send_task("swh.lister.pypi.tasks.PyPIListerTask")
     assert res
     res.wait()
     assert res.successful()
 
-    lister.assert_called_once_with()
-    lister.db_last_index.assert_not_called()
+    lister.from_configfile.assert_called_once_with()
     lister.run.assert_called_once_with()

@@ -1,0 +1,168 @@
+{
+  "total_rows": 1496482,
+  "offset": 2,
+  "rows": [{
+      "id": "-keyboardevent",
+      "key": "-keyboardevent",
+      "value": {
+        "rev": "1-0fdff278618c4f8c1026889f1b525483"
+      },
+      "doc": {
+        "_id": "-keyboardevent",
+        "_rev": "1-0fdff278618c4f8c1026889f1b525483",
+        "name": "-keyboardevent",
+        "dist-tags": {
+          "latest": "1.0.0"
+        },
+        "versions": {
+          "1.0.0": {
+            "name": "-keyboardevent",
+            "version": "1.0.0",
+            "description": "监听键盘事件",
+            "main": "index.js",
+            "scripts": {
+              "test": "echo \"Error: no test specified\" && exit 1"
+            },
+            "repository": {
+              "type": "git",
+              "url": "git+https://github.com/RegExpRegExp/-KeyboardEvent.git"
+            },
+            "author": {
+              "name": "yanggw"
+            },
+            "license": "ISO",
+            "bugs": {
+              "url": "https://github.com/RegExpRegExp/-KeyboardEvent/issues"
+            },
+            "homepage": "https://github.com/RegExpRegExp/-KeyboardEvent#readme",
+            "gitHead": "e8c5683b98d68b915eeb79656ce6717efca676b3",
+            "_id": "-keyboardevent@1.0.0",
+            "_nodeVersion": "12.10.0",
+            "_npmVersion": "6.10.3",
+            "dist": {
+              "integrity": "sha512-8G0t8AQlDyfE2xGIXpte6gFQs2lr48BoQYMGHTytshClyKUfzmX7YHYLxerqX2rp82KgsPCgq1r/3yC2UTmr/g==",
+              "shasum": "b81a787d8748ffaf882a73f3ae47f1d38a8da5d5",
+              "tarball": "https://registry.npmjs.org/-keyboardevent/-/-keyboardevent-1.0.0.tgz",
+              "fileCount": 3,
+              "unpackedSize": 2714,
+              "npm-signature": "-----BEGIN PGP SIGNATURE-----\r\nVersion: OpenPGP.js v3.0.13\r\nComment: https://openpgpjs.org\r\n\r\nwsFcBAEBCAAQBQJfbYnwCRA9TVsSAnZWagAAtDgP/0LCWxCot5zaM4KZXv/6\nlAdCfVDpFhmsV7I5v0pvVu4aY2OQt5VnPQD6nSfrlKflLSB88+Asoi4X2Xhh\nT1/zo8GE+RFUJ98Kh/1H53+6KQiMEZVWlxKMf9LxgBy8TRVcpZaj9BNCr7wG\nZ2t+NR6LaVvb1WkEB0ZtWzbHA3IMucIibkLC4W/JIZtzjmPl4FWUr1Aq/BMS\nr4dd7WROxObns+Na8p10UAEGYkEZjL68L7g2gm7u/70nCV+IvG/Q5ACufxxM\npxJycEto6v/3LbEmNxocnKZaYwLFc7Mhx5zIytvGS29e1FEoRx3Qyyq5opMA\nANWuv1zq1r/m4XtPL5ZN0PtkIRdWHz4xIdOVEI9GuCfFxiY/vd4/vYDWNUZL\nNk11LGR0VYeJaPYCdz0BrYK2R425/LVThkvy/n2EWQ81gpsnVDeerwVfNj2L\n6GsTUqceDnLLNEjhdQEGsCvMsF72974W0bolXdJjwKx8z+30lUmzOIvXPNrB\nt/O6kDCerhd0aMT6KADNMtijci9Mnm2AovcwWa9M8jfw2LsF2zbXYPfZ1CIK\nDbhgF9QUWZyOT2rahkN7Hn7G7OH8dndiuAa+liggB2DJkhZS1XelMJfShGJj\nMYmZ9LYykLocD3gbi4+pE/Y200UlE+MNrc8Jp+MWaXbwjTkfj+V/mAao0Q3z\nIL5/\r\n=Ye2g\r\n-----END PGP SIGNATURE-----\r\n"
+            },
+            "maintainers": [{
+              "name": "yanggw",
+              "email": "2993065178@qq.com"
+            }],
+            "_npmUser": {
+              "name": "yanggw",
+              "email": "2993065178@qq.com"
+            },
+            "directories": {},
+            "_npmOperationalInternal": {
+              "host": "s3://npm-registry-packages",
+              "tmp": "tmp/-keyboardevent_1.0.0_1601014256394_0.736974638502927"
+            },
+            "_hasShrinkwrap": false
+          }
+        },
+        "time": {
+          "created": "2020-09-25T06:10:56.357Z",
+          "1.0.0": "2020-09-25T06:10:56.513Z",
+          "modified": "2020-09-25T06:10:58.774Z"
+        },
+        "maintainers": [{
+          "name": "yanggw",
+          "email": "2993065178@qq.com"
+        }],
+        "description": "监听键盘事件",
+        "homepage": "https://github.com/RegExpRegExp/-KeyboardEvent#readme",
+        "repository": {
+          "type": "git",
+          "url": "git+https://github.com/RegExpRegExp/-KeyboardEvent.git"
+        },
+        "author": {
+          "name": "yanggw"
+        },
+        "bugs": {
+          "url": "https://github.com/RegExpRegExp/-KeyboardEvent/issues"
+        },
+        "license": "ISO",
+        "readme": "# -KeyboardEvent\r\n监听键盘事件\r\n",
+        "readmeFilename": "README.md"
+      }
+    },
+    {
+      "id": "-lidonghui",
+      "key": "-lidonghui",
+      "value": {
+        "rev": "1-1aa03a85878671cdb74b789c2b124578"
+      },
+      "doc": {
+        "_id": "-lidonghui",
+        "_rev": "1-1aa03a85878671cdb74b789c2b124578",
+        "name": "-lidonghui",
+        "dist-tags": {
+          "latest": "1.0.0"
+        },
+        "versions": {
+          "1.0.0": {
+            "name": "-lidonghui",
+            "version": "1.0.0",
+            "description": "",
+            "main": "index.js",
+            "scripts": {
+              "test": "echo \"Error: no test specified\" && exit 1"
+            },
+            "bin": {
+              "test1-cli": "bin/index.js"
+            },
+            "keywords": [],
+            "author": "",
+            "license": "ISC",
+            "dependencies": {
+              "axios": "^0.19.2",
+              "commander": "^5.0.0",
+              "inquirer": "^7.1.0"
+            },
+            "_id": "-lidonghui@1.0.0",
+            "_nodeVersion": "12.14.0",
+            "_npmVersion": "6.13.4",
+            "dist": {
+              "integrity": "sha512-1eUTEDU1kgAAsQ85uCEAp9tDsEIh3WNa5dB/ks8Uhf9Nh2RR37EeTGyxszn2A1B+MN+Q0fWrpCfBFzrrFyLFnA==",
+              "shasum": "be7ffedc328bd123ba13c468a89ebcf0cfe76777",
+              "tarball": "https://registry.npmjs.org/-lidonghui/-/-lidonghui-1.0.0.tgz",
+              "fileCount": 2,
+              "unpackedSize": 1024,
+              "npm-signature": "-----BEGIN PGP SIGNATURE-----\r\nVersion: OpenPGP.js v3.0.4\r\nComment: https://openpgpjs.org\r\n\r\nwsFcBAEBCAAQBQJenVH+CRA9TVsSAnZWagAAEIMP/ipex7Yo+T2LqfWtFuZz\n5NuXhcnaNyANXyJ7iQCYzq1ynq+tkwBOTM7FNLkTbIiIUsn8d6JlAt5CfIFZ\nrfaYDK7BhU4E8KfLoSC0VqyaprTSvAeqeQDEAguYM9Nbt4TWa7W2HoorgQd7\njUAuGpRqvkw8Omh3eOvhqEa0Y5mkRf853ndJHD425bAww2R0KCA7RuOBO1MW\nnPZqBe3XOgJmsyEW+yl2tSGVq2hEEeD3C0G9x5K2ZfxZKVU7lGfqRlUdo7na\nTLJU6YZPTB9AhDTM9b8XFUMWlEtvHcwvGvuB+gLupXqWwEfwSqWg/2TJ11AQ\nMBFeC1xSav0BCv6kFxFBRwz1k7IAdVYatLnmqwNsIGwjWsyfmIThSNzYTIq6\nE/E0iD2gSAsLW5r7U0t+rk4sWLmu4xbLDvT1xpEY7C00Zj4NXJhdXSo5BR45\n1IBiU96LqEA2bIw+TsyaFO7w/chgpvd8mU0g34tYQCcAts56ZhCr43x5kUSY\ns7hm1b3MB5qpOBbom1Ta24xjvoJwxv2Et/T7zfZoXzHDyX9BgUCiVIvupxd9\nzR5LdyXIh6JdiVBAgEftbm59FEVrxVfAAi/sFMNJKp8pE1ELrSp/gulzxDd2\nC5Hq1z5RNFRQUlbkMJHLIDOZLAvdkPKieE+uFJ7WTYCPEL9nvQoIJiO9UFH1\njKtU\r\n=Opv1\r\n-----END PGP SIGNATURE-----\r\n"
+            },
+            "maintainers": [{
+              "name": "tenderli",
+              "email": "l2369660482@163.com"
+            }],
+            "_npmUser": {
+              "name": "tenderli",
+              "email": "l2369660482@163.com"
+            },
+            "directories": {},
+            "_npmOperationalInternal": {
+              "host": "s3://npm-registry-packages",
+              "tmp": "tmp/-lidonghui_1.0.0_1587368445998_0.028137547296155807"
+            },
+            "_hasShrinkwrap": false
+          }
+        },
+        "time": {
+          "created": "2020-04-20T07:40:45.997Z",
+          "1.0.0": "2020-04-20T07:40:46.087Z",
+          "modified": "2020-04-20T07:40:48.525Z"
+        },
+        "maintainers": [{
+          "name": "tenderli",
+          "email": "l2369660482@163.com"
+        }],
+        "keywords": [],
+        "license": "ISC",
+        "readme": "ERROR: No README data found!",
+        "readmeFilename": ""
+      }
+    }
+  ]
+}

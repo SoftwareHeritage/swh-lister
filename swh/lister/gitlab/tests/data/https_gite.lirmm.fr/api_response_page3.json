@@ -1,0 +1,22 @@
+[
+  {
+    "avatar_url": null,
+    "created_at": "2020-11-18T18:26:08.538Z",
+    "default_branch": "master",
+    "description": "PID WRapper for urdfdom and urdfdom_headers project, provided by ROS but independent from ROS.",
+    "forks_count": 0,
+    "http_url_to_repo": "https://gite.lirmm.fr/rob-miscellaneous/wrappers/urdfdom.git",
+    "id": 4363,
+    "last_activity_at": "2020-11-19T08:56:18.573Z",
+    "name": "urdfdom",
+    "name_with_namespace": "rob-miscellaneous / wrappers / urdfdom",
+    "namespace": {},
+    "path": "urdfdom",
+    "path_with_namespace": "rob-miscellaneous/wrappers/urdfdom",
+    "readme_url": "https://gite.lirmm.fr/rob-miscellaneous/wrappers/urdfdom/-/blob/master/README.md",
+    "ssh_url_to_repo": "git@gite.lirmm.fr:rob-miscellaneous/wrappers/urdfdom.git",
+    "star_count": 0,
+    "tag_list": [],
+    "web_url": "https://gite.lirmm.fr/rob-miscellaneous/wrappers/urdfdom"
+  }
+]

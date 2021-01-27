@@ -1,0 +1,113 @@
+Package: dh-elpa
+Binary: dh-elpa
+Version: 0.0.18
+Maintainer: Debian Emacs addons team <pkg-emacsen-addons@lists.alioth.debian.org>
+Uploaders: David Bremner <bremner@debian.org>
+Build-Depends: debhelper (>= 9), emacs24-nox | emacs24 (>= 24~) | emacs24-lucid (>= 24~)
+Architecture: all
+Standards-Version: 3.9.6
+Format: 1.0
+Files:
+ 25beb4376110fe075460f4b7776d0349 1471 dh-elpa_0.0.18.dsc
+ dc0d3b42c1db80cac9817f43c171bfb3 10038 dh-elpa_0.0.18.tar.gz
+Vcs-Browser: http://anonscm.debian.org/cgit/pkg-emacsen/pkg/dh-elpa.git/
+Vcs-Git: git://anonscm.debian.org/pkg-emacsen/pkg/dh-elpa.git
+Checksums-Sha256:
+ 87fb2f13d4a8cdea0cec752cc9873eef1c92961655315d2f14d178f9b1b7fc43 1471 dh-elpa_0.0.18.dsc
+ 24e5be28cda286398db0018d9577493445c61a0602e239ca285a2981f1068b10 10038 dh-elpa_0.0.18.tar.gz
+Package-List:
+ dh-elpa deb devel optional arch=all
+Extra-Source-Only: yes
+Directory: pool/main/d/dh-elpa
+Priority: extra
+Section: misc
+
+Package: dh-elpa
+Binary: dh-elpa
+Version: 0.0.19
+Maintainer: Debian Emacs addons team <pkg-emacsen-addons@lists.alioth.debian.org>
+Uploaders: David Bremner <bremner@debian.org>
+Build-Depends: debhelper (>= 9), emacs24-nox | emacs24 (>= 24~) | emacs24-lucid (>= 24~)
+Architecture: all
+Standards-Version: 3.9.6
+Format: 1.0
+Files:
+ e4513c0f2112ba60031777ad0a65f9dc 1471 dh-elpa_0.0.19.dsc
+ ac70db483578ecac510612e1b894e53b 10291 dh-elpa_0.0.19.tar.gz
+Vcs-Browser: http://anonscm.debian.org/cgit/pkg-emacsen/pkg/dh-elpa.git/
+Vcs-Git: git://anonscm.debian.org/pkg-emacsen/pkg/dh-elpa.git
+Checksums-Sha256:
+ 796a96fad0b03eb589f47c44406f8d32e5b8881dce34c425f1c915650618235c 1471 dh-elpa_0.0.19.dsc
+ 4bb0a0ecdb75585e168a56a53c79e620b2da70584db9d29e136a3ae9f8a92a76 10291 dh-elpa_0.0.19.tar.gz
+Package-List:
+ dh-elpa deb devel optional arch=all
+Extra-Source-Only: yes
+Directory: pool/main/d/dh-elpa
+Priority: extra
+Section: misc
+
+Package: dh-elpa
+Binary: dh-elpa
+Version: 0.0.20
+Maintainer: Debian Emacs addons team <pkg-emacsen-addons@lists.alioth.debian.org>
+Uploaders: David Bremner <bremner@debian.org>, Sean Whitton <spwhitton@spwhitton.name>,
+Build-Depends: debhelper (>= 9.20151004), emacs24-nox | emacs24 (>= 24~) | emacs24-lucid (>= 24~)
+Architecture: all
+Standards-Version: 3.9.8
+Format: 1.0
+Files:
+ 82455df65ccd88896cdc083541d29236 1526 dh-elpa_0.0.20.dsc
+ 4a7cc13b097e44228b5635c400e33202 12884 dh-elpa_0.0.20.tar.gz
+Vcs-Browser: https://anonscm.debian.org/cgit/pkg-emacsen/pkg/dh-elpa.git/
+Vcs-Git: https://anonscm.debian.org/pkg-emacsen/pkg/dh-elpa.git
+Checksums-Sha256:
+ 77c9761b1359c256ad25d4c7a826a27643a0094929a4cb3ac8cdaa0fcdb02d1b 1526 dh-elpa_0.0.20.dsc
+ 13e4c6ffaaa6cd793d19de677af470ac0edac098779627e9f8555644a7da42f0 12884 dh-elpa_0.0.20.tar.gz
+Package-List:
+ dh-elpa deb devel optional arch=all
+Extra-Source-Only: yes
+Directory: pool/main/d/dh-elpa
+Priority: extra
+Section: misc
+
+Package: git
+Binary: git, git-man, git-core, git-doc, git-arch, git-cvs, git-svn, git-mediawiki, git-email, git-daemon-run, git-daemon-sysvinit, git-gui, gitk, git-el, gitweb, git-all
+Version: 1:2.11.0-3+deb9u7
+Maintainer: Gerrit Pape <pape@smarden.org>
+Uploaders: Jonathan Nieder <jrnieder@gmail.com>, Anders Kaseorg <andersk@mit.edu>
+Build-Depends: libz-dev, libpcre3-dev, gettext, libcurl4-gnutls-dev, libexpat1-dev, subversion, libsvn-perl, libyaml-perl, tcl, libhttp-date-perl | libtime-modules-perl, libcgi-pm-perl, python, cvs, cvsps, libdbd-sqlite3-perl, unzip, libio-pty-perl, debhelper (>= 9), dh-exec (>= 0.7), dh-apache2, dpkg-dev (>= 1.16.2~)
+Build-Depends-Indep: asciidoc, xmlto, docbook-xsl
+Architecture: any all
+Standards-Version: 3.9.6.0
+Format: 3.0 (quilt)
+Files:
+ e594aeada05ecb15253cc5768412ce3b 2944 git_2.11.0-3+deb9u7.dsc
+ dd4e3360e28aec5bb902fb34dd7fce3b 4197984 git_2.11.0.orig.tar.xz
+ e8d896e5307397f0e106e6a85c1b8682 610188 git_2.11.0-3+deb9u7.debian.tar.xz
+Vcs-Browser: http://repo.or.cz/w/git/debian.git/
+Vcs-Git: https://repo.or.cz/r/git/debian.git/
+Checksums-Sha256:
+ 7f2be1b1709c216ad06590687cc8fc0ff6b55a6c3e0ad6ec32b2567ce10adec1 2944 git_2.11.0-3+deb9u7.dsc
+ 7e7e8d69d494892373b87007674be5820a4bc1ef596a0117d03ea3169119fd0b 4197984 git_2.11.0.orig.tar.xz
+ 3f54b7ea7b8cda477ddb559c63de063c5bd49d8ab772330c05c79ace546ce38d 610188 git_2.11.0-3+deb9u7.debian.tar.xz
+Homepage: https://git-scm.com/
+Package-List:
+ git deb vcs optional arch=any
+ git-all deb vcs optional arch=all
+ git-arch deb vcs optional arch=all
+ git-core deb vcs optional arch=all
+ git-cvs deb vcs optional arch=all
+ git-daemon-run deb vcs optional arch=all
+ git-daemon-sysvinit deb vcs extra arch=all
+ git-doc deb doc optional arch=all
+ git-el deb vcs optional arch=all
+ git-email deb vcs optional arch=all
+ git-gui deb vcs optional arch=all
+ git-man deb doc optional arch=all
+ git-mediawiki deb vcs optional arch=all
+ git-svn deb vcs optional arch=all
+ gitk deb vcs optional arch=all
+ gitweb deb vcs optional arch=all
+Directory: pool/main/g/git
+Priority: source
+Section: vcs

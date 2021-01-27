@@ -5,10 +5,9 @@
 
 def register():
     from .lister import PyPILister
-    from .models import PyPIModel
 
     return {
-        "models": [PyPIModel],
+        "models": [],
         "lister": PyPILister,
         "task_modules": ["%s.tasks" % __name__],
     }
