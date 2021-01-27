@@ -7,9 +7,7 @@
 def test_launchpad_lister(lister_launchpad, datadir):
     lister_launchpad.run()
 
-    assert (
-        len(lister_launchpad.launchpad.git_repositories.getRepositories.mock_calls) == 3
-    )
+    assert len(lister_launchpad.get_repos.mock_calls) == 3
 
     r = lister_launchpad.scheduler.search_tasks(task_type="load-git")
     assert len(r) == 30

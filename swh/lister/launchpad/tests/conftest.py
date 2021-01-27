@@ -37,12 +37,12 @@ def lister_launchpad(datadir, lister_db_url, engine, swh_scheduler):
         with open(response_filepath, "r", encoding="utf-8") as f:
             return Collection(json.load(f))
 
-    with patch("launchpadlib.launchpad.Launchpad.login_anonymously"):
+    with patch("swh.lister.launchpad.lister.Launchpad") as m:
+        m.login_anonymously.return_value = m
+        m.git_repositories.getRepositories.side_effect = [
+            mock_lp_response(i) for i in range(3)
+        ]
         lister = get_lister("launchpad", db_url=lister_db_url)
-
-    lister.launchpad.git_repositories.getRepositories.side_effect = [
-        mock_lp_response(i) for i in range(3)
-    ]
 
     lister.scheduler.create_task_type(
         {

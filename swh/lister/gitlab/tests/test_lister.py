@@ -129,7 +129,7 @@ def test_lister_gitlab_incremental(swh_scheduler, requests_mock, datadir):
     assert lister.state.last_seen_next_link == url_page2
 
     lister2 = GitLabLister(swh_scheduler, url=url, instance=instance, incremental=True)
-    requests_mock.reset()
+
     # Lister will start back at the last stop
     requests_mock.get(
         url_page2,
