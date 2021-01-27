@@ -20,14 +20,14 @@ class LaunchpadLister(ListerBase):
     MODEL = LaunchpadModel
     LISTER_NAME = "launchpad"
     instance = "launchpad"
-    launchpad: Launchpad
     flush_packet_db = 20
 
     def __init__(self, override_config=None):
         super().__init__(override_config=override_config)
-        self.launchpad = Launchpad.login_anonymously(
+        launchpad = Launchpad.login_anonymously(
             "softwareheritage", "production", version="devel"
         )
+        self.get_repos = launchpad.git_repositories.getRepositories
 
     def get_model_from_repo(self, repo: Entry) -> Dict[str, Union[str, datetime]]:
         return {
@@ -47,11 +47,6 @@ class LaunchpadLister(ListerBase):
             self.get_model_from_repo(repo) for repo in response[: len(response.entries)]
         ]
 
-    def get_git_repos(self, threshold: Optional[datetime]) -> Collection:
-        get_repos = self.launchpad.git_repositories.getRepositories
-
-        return get_repos(order_by="most neglected first", modified_since_date=threshold)
-
     def db_last_threshold(self) -> Optional[datetime]:
         t = self.db_session.query(func.max(self.MODEL.date_last_modified)).first()
         if t:
@@ -70,7 +65,9 @@ class LaunchpadLister(ListerBase):
             identifier: Resource identifier.
             checks: Additional checks required
         """
-        response = self.get_git_repos(identifier)
+        response = self.get_repos(
+            order_by="most neglected first", modified_since_date=identifier
+        )
         models_list = self.lib_response_simplified(response)
         models_list = self.filter_before_inject(models_list)
         if checks:
