@@ -129,9 +129,10 @@ def db_init(ctx, drop_tables):
     type=click.Choice(["high", "medium", "low"]),
     help="Task priority for the listed repositories to ingest",
 )
+@click.option("--legacy", help="Allow unported lister to run with such flag")
 @click.argument("options", nargs=-1)
 @click.pass_context
-def run(ctx, lister, priority, options):
+def run(ctx, lister, priority, options, legacy):
     from swh.scheduler.cli.utils import parse_options
 
     config = deepcopy(ctx.obj["config"])
@@ -139,8 +140,9 @@ def run(ctx, lister, priority, options):
     if options:
         config.update(parse_options(options)[1])
 
-    config["priority"] = priority
-    config["policy"] = "oneshot"
+    if legacy:
+        config["priority"] = priority
+        config["policy"] = "oneshot"
 
     get_lister(lister, **config).run()
 

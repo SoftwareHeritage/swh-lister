@@ -216,6 +216,16 @@ def test_lister_gitlab_credentials(swh_scheduler):
     assert lister.session.headers["Authorization"] == "Bearer api-token"
 
 
+@pytest.mark.parametrize("url", [api_url("gitlab").rstrip("/"), api_url("gitlab"),])
+def test_lister_gitlab_url_computation(url, swh_scheduler):
+    lister = GitLabLister(scheduler=swh_scheduler, url=url)
+    assert not lister.url.endswith("/")
+
+    page_url = lister.page_url()
+    # ensure the generated url contains the separated /
+    assert page_url.startswith(f"{lister.url}/projects")
+
+
 @pytest.mark.parametrize(
     "url,expected_result",
     [
