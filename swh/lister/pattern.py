@@ -7,6 +7,7 @@ from dataclasses import dataclass
 from typing import Any, Dict, Generic, Iterable, Iterator, List, Optional, TypeVar
 
 from swh.core.config import load_from_envvar
+from swh.core.utils import grouper
 from swh.scheduler import get_scheduler, model
 from swh.scheduler.interface import SchedulerInterface
 
@@ -221,8 +222,12 @@ class Lister(Generic[StateType, PageType]):
         Returns:
           the number of listed origins recorded in the scheduler
         """
-        ret = self.scheduler.record_listed_origins(origins)
-        return len(ret)
+        count = 0
+        for batch_origins in grouper(origins, n=100):
+            ret = self.scheduler.record_listed_origins(batch_origins)
+            count += len(ret)
+
+        return count
 
     @classmethod
     def from_config(cls, scheduler: Dict[str, Any], **config: Any):
