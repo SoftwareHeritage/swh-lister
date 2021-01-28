@@ -1,8 +1,13 @@
-swh-lister (0.5.4-1~swh1~bpo10+1) buster-swh; urgency=medium
+swh-lister (0.6.0-1~swh1) unstable-swh; urgency=medium
 
-  * Rebuild for buster-swh
+  * New upstream release 0.6.0     - (tagged by Antoine R. Dumont
+    (@ardumont) <ardumont@softwareheritage.org> on 2021-01-28 15:48:32
+    +0100)
+  * Upstream changes:     - v0.6.0     - launchpad: Reimplement lister
+    using new Lister API     - Make stateless lister constructors
+    compatible with credentials
 
- -- Software Heritage autobuilder (on jenkins-debian1) <jenkins@jenkins-debian1.internal.softwareheritage.org>  Thu, 28 Jan 2021 10:30:10 +0000
+ -- Software Heritage autobuilder (on jenkins-debian1) <jenkins@jenkins-debian1.internal.softwareheritage.org>  Thu, 28 Jan 2021 14:52:49 +0000
 
 swh-lister (0.5.4-1~swh1) unstable-swh; urgency=medium
 

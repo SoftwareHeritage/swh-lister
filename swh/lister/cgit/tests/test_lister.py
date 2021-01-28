@@ -160,3 +160,39 @@ def test_lister_cgit_get_origin_from_repo_failing(
 
     expected_nb_origins = 15
     assert stats == ListerStats(pages=3, origins=expected_nb_origins)
+
+
+@pytest.mark.parametrize(
+    "credentials, expected_credentials",
+    [
+        (None, []),
+        ({"key": "value"}, []),
+        (
+            {"cgit": {"tizen": [{"username": "user", "password": "pass"}]}},
+            [{"username": "user", "password": "pass"}],
+        ),
+    ],
+)
+def test_lister_cgit_instantiation_with_credentials(
+    credentials, expected_credentials, swh_scheduler
+):
+    url = "https://git.tizen/cgit/"
+    lister = CGitLister(
+        swh_scheduler, url=url, instance="tizen", credentials=credentials
+    )
+
+    # Credentials are allowed in constructor
+    assert lister.credentials == expected_credentials
+
+
+def test_lister_cgit_from_configfile(swh_scheduler_config, mocker):
+    load_from_envvar = mocker.patch("swh.lister.pattern.load_from_envvar")
+    load_from_envvar.return_value = {
+        "scheduler": {"cls": "local", **swh_scheduler_config},
+        "url": "https://git.tizen/cgit/",
+        "instance": "tizen",
+        "credentials": {},
+    }
+    lister = CGitLister.from_configfile()
+    assert lister.scheduler is not None
+    assert lister.credentials is not None
