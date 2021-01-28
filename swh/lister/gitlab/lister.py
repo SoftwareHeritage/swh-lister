@@ -106,7 +106,10 @@ class GitLabLister(Lister[GitLabListerState, PageResult]):
         if instance is None:
             instance = parse_url(url).host
         super().__init__(
-            scheduler=scheduler, url=url, instance=instance, credentials=credentials,
+            scheduler=scheduler,
+            url=url.rstrip("/"),
+            instance=instance,
+            credentials=credentials,
         )
         self.incremental = incremental
         self.last_page: Optional[str] = None
@@ -161,7 +164,7 @@ class GitLabLister(Lister[GitLabListerState, PageResult]):
         }
         if id_after is not None:
             parameters["id_after"] = str(id_after)
-        return f"{self.url}projects?{urlencode(parameters)}"
+        return f"{self.url}/projects?{urlencode(parameters)}"
 
     def get_pages(self) -> Iterator[PageResult]:
         next_page: Optional[str]
