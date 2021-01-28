@@ -89,3 +89,34 @@ def test_cran_lister_cran(datadir, swh_scheduler, mocker):
         }
 
         filtered_origins[0].last_update == parse_packaged_date(package_info)
+
+
+@pytest.mark.parametrize(
+    "credentials, expected_credentials",
+    [
+        (None, []),
+        ({"key": "value"}, []),
+        (
+            {"CRAN": {"cran": [{"username": "user", "password": "pass"}]}},
+            [{"username": "user", "password": "pass"}],
+        ),
+    ],
+)
+def test_lister_cran_instantiation_with_credentials(
+    credentials, expected_credentials, swh_scheduler
+):
+    lister = CRANLister(swh_scheduler, credentials=credentials)
+
+    # Credentials are allowed in constructor
+    assert lister.credentials == expected_credentials
+
+
+def test_lister_cran_from_configfile(swh_scheduler_config, mocker):
+    load_from_envvar = mocker.patch("swh.lister.pattern.load_from_envvar")
+    load_from_envvar.return_value = {
+        "scheduler": {"cls": "local", **swh_scheduler_config},
+        "credentials": {},
+    }
+    lister = CRANLister.from_configfile()
+    assert lister.scheduler is not None
+    assert lister.credentials is not None

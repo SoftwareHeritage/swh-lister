@@ -3,8 +3,6 @@
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
 
-from unittest.mock import patch
-
 from swh.lister.pattern import ListerStats
 
 
@@ -16,11 +14,11 @@ def test_cgit_ping(swh_scheduler_celery_app, swh_scheduler_celery_worker):
     assert res.result == "OK"
 
 
-@patch("swh.lister.cgit.tasks.CGitLister")
 def test_cgit_lister_task(
-    lister, swh_scheduler_celery_app, swh_scheduler_celery_worker
+    swh_scheduler_celery_app, swh_scheduler_celery_worker, mocker
 ):
     # setup the mocked CGitLister
+    lister = mocker.patch("swh.lister.cgit.tasks.CGitLister")
     lister.from_configfile.return_value = lister
     lister.run.return_value = ListerStats(pages=10, origins=500)
 
