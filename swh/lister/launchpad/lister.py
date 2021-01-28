@@ -3,7 +3,7 @@
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
 
-from dataclasses import asdict, dataclass
+from dataclasses import dataclass
 from datetime import datetime
 import logging
 from typing import Any, Dict, Iterator, Optional
@@ -65,8 +65,8 @@ class LaunchpadLister(Lister[LaunchpadListerState, LaunchpadPageType]):
         return LaunchpadListerState(**d)
 
     def state_to_dict(self, state: LaunchpadListerState) -> Dict[str, Any]:
-        d = asdict(state)
-        date_last_modified = d.get("date_last_modified")
+        d: Dict[str, Optional[str]] = {"date_last_modified": None}
+        date_last_modified = state.date_last_modified
         if date_last_modified is not None:
             d["date_last_modified"] = date_last_modified.isoformat()
         return d
