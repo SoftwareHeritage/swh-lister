@@ -93,12 +93,15 @@ class LaunchpadLister(Lister[LaunchpadListerState, LaunchpadPageType]):
         """
         assert self.lister_obj.id is not None
 
+        prev_origin_url = None
+
         for repo in page:
 
             origin_url = repo.git_https_url
 
-            # filter out origins with invalid URL
-            if not origin_url.startswith("https://"):
+            # filter out origins with invalid URL or origin previously listed
+            # (last modified repository will be listed twice by launchpadlib)
+            if not origin_url.startswith("https://") or origin_url == prev_origin_url:
                 continue
 
             last_update = repo.date_last_modified
@@ -106,6 +109,8 @@ class LaunchpadLister(Lister[LaunchpadListerState, LaunchpadPageType]):
             self.date_last_modified = last_update
 
             logger.debug("Found origin %s last updated on %s", origin_url, last_update)
+
+            prev_origin_url = origin_url
 
             yield ListedOrigin(
                 lister_id=self.lister_obj.id,

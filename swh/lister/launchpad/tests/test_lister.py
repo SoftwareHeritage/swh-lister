@@ -154,3 +154,22 @@ def test_launchpad_lister_invalid_url_filtering(
     assert not lister.updated
     assert stats.pages == 1
     assert stats.origins == 0
+
+
+def test_launchpad_lister_duplicated_origin(
+    swh_scheduler, mocker,
+):
+    origin = _Repo(
+        {
+            "git_https_url": "https://git.launchpad.net/test",
+            "date_last_modified": "2021-01-14 21:05:31.231406+00:00",
+        }
+    )
+    origins = [origin, origin]
+    _mock_getRepositories(mocker, origins)
+    lister = LaunchpadLister(scheduler=swh_scheduler)
+    stats = lister.run()
+
+    assert lister.updated
+    assert stats.pages == 1
+    assert stats.origins == 1
