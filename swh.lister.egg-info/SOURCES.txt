@@ -151,15 +151,13 @@ swh/lister/gnu/tests/data/tree.min.json
 swh/lister/gnu/tests/data/https_ftp.gnu.org/tree.json.gz
 swh/lister/launchpad/__init__.py
 swh/lister/launchpad/lister.py
-swh/lister/launchpad/models.py
 swh/lister/launchpad/tasks.py
 swh/lister/launchpad/tests/__init__.py
 swh/lister/launchpad/tests/conftest.py
 swh/lister/launchpad/tests/test_lister.py
 swh/lister/launchpad/tests/test_tasks.py
-swh/lister/launchpad/tests/data/response0.json
-swh/lister/launchpad/tests/data/response1.json
-swh/lister/launchpad/tests/data/response2.json
+swh/lister/launchpad/tests/data/launchpad_response1.json
+swh/lister/launchpad/tests/data/launchpad_response2.json
 swh/lister/npm/__init__.py
 swh/lister/npm/lister.py
 swh/lister/npm/tasks.py

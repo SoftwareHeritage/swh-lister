@@ -1,10 +1,10 @@
-# Copyright (C) 2018-2019 The Software Heritage developers
+# Copyright (C) 2018-2021 The Software Heritage developers
 # See the AUTHORS file at the top-level directory of this distribution
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
 
 import logging
-from typing import Iterator, List
+from typing import Iterator, List, Optional
 
 import requests
 import xmltodict
@@ -13,7 +13,7 @@ from swh.scheduler.interface import SchedulerInterface
 from swh.scheduler.model import ListedOrigin
 
 from .. import USER_AGENT
-from ..pattern import StatelessLister
+from ..pattern import CredentialsType, StatelessLister
 
 logger = logging.getLogger(__name__)
 
@@ -31,12 +31,16 @@ class PyPILister(StatelessLister[PackageListPage]):
     PACKAGE_LIST_URL = "https://pypi.org/simple/"
     PACKAGE_URL = "https://pypi.org/project/{package_name}/"
 
-    def __init__(self, scheduler: SchedulerInterface):
+    def __init__(
+        self,
+        scheduler: SchedulerInterface,
+        credentials: Optional[CredentialsType] = None,
+    ):
         super().__init__(
             scheduler=scheduler,
-            credentials=None,
             url=self.PACKAGE_LIST_URL,
             instance=self.INSTANCE,
+            credentials=credentials,
         )
 
         self.session = requests.Session()

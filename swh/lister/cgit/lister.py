@@ -13,7 +13,7 @@ import requests
 from requests.exceptions import HTTPError
 
 from swh.lister import USER_AGENT
-from swh.lister.pattern import StatelessLister
+from swh.lister.pattern import CredentialsType, StatelessLister
 from swh.scheduler.interface import SchedulerInterface
 from swh.scheduler.model import ListedOrigin
 
@@ -39,7 +39,11 @@ class CGitLister(StatelessLister[Repositories]):
     LISTER_NAME = "cgit"
 
     def __init__(
-        self, scheduler: SchedulerInterface, url: str, instance: Optional[str] = None
+        self,
+        scheduler: SchedulerInterface,
+        url: str,
+        instance: Optional[str] = None,
+        credentials: Optional[CredentialsType] = None,
     ):
         """Lister class for CGit repositories.
 
@@ -55,7 +59,7 @@ class CGitLister(StatelessLister[Repositories]):
         assert instance is not None  # Make mypy happy
 
         super().__init__(
-            scheduler=scheduler, credentials=None, url=url, instance=instance,
+            scheduler=scheduler, url=url, instance=instance, credentials=credentials,
         )
 
         self.session = requests.Session()
