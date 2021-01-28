@@ -78,3 +78,34 @@ def test_pypi_list_http_error(swh_scheduler, requests_mock, mocker, http_code):
 
     scheduler_origins = swh_scheduler.get_listed_origins(lister.lister_obj.id).results
     assert len(scheduler_origins) == 0
+
+
+@pytest.mark.parametrize(
+    "credentials, expected_credentials",
+    [
+        (None, []),
+        ({"key": "value"}, []),
+        (
+            {"pypi": {"pypi": [{"username": "user", "password": "pass"}]}},
+            [{"username": "user", "password": "pass"}],
+        ),
+    ],
+)
+def test_lister_pypi_instantiation_with_credentials(
+    credentials, expected_credentials, swh_scheduler
+):
+    lister = PyPILister(swh_scheduler, credentials=credentials)
+
+    # Credentials are allowed in constructor
+    assert lister.credentials == expected_credentials
+
+
+def test_lister_pypi_from_configfile(swh_scheduler_config, mocker):
+    load_from_envvar = mocker.patch("swh.lister.pattern.load_from_envvar")
+    load_from_envvar.return_value = {
+        "scheduler": {"cls": "local", **swh_scheduler_config},
+        "credentials": {},
+    }
+    lister = PyPILister.from_configfile()
+    assert lister.scheduler is not None
+    assert lister.credentials is not None

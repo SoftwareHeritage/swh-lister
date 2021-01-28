@@ -10,7 +10,7 @@ from typing import Dict, Iterator, List, Optional, Tuple
 
 import pkg_resources
 
-from swh.lister.pattern import StatelessLister
+from swh.lister.pattern import CredentialsType, StatelessLister
 from swh.scheduler.interface import SchedulerInterface
 from swh.scheduler.model import ListedOrigin
 
@@ -29,9 +29,13 @@ class CRANLister(StatelessLister[PageType]):
     LISTER_NAME = "CRAN"
 
     def __init__(
-        self, scheduler: SchedulerInterface,
+        self,
+        scheduler: SchedulerInterface,
+        credentials: Optional[CredentialsType] = None,
     ):
-        super().__init__(scheduler, url=CRAN_MIRROR, instance="cran")
+        super().__init__(
+            scheduler, url=CRAN_MIRROR, instance="cran", credentials=credentials
+        )
 
     def get_pages(self) -> Iterator[PageType]:
         """
