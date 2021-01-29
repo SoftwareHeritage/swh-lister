@@ -28,12 +28,19 @@ class CGitLister(StatelessLister[Repositories]):
     This lister will retrieve the list of published git repositories by
     parsing the HTML page(s) of the index retrieved at `url`.
 
-    For each found git repository, a query is made at the given url found
-    in this index to gather published "Clone" URLs to be used as origin
-    URL for that git repo.
+    The lister currently defines 2 listing behaviors:
 
-    If several "Clone" urls are provided, prefer the http/https one, if
-    any, otherwise fallback to the first one.
+    - If the `base_git_url` is provided, the listed origin urls are computed out of the
+      base git url link and the one listed in the main listed page (resulting in less
+      HTTP queries than the 2nd behavior below). This is expected to be the main
+      deployed behavior.
+
+    - Otherwise (with no `base_git_url`), for each found git repository listed, one
+      extra HTTP query is made at the given url found in the main listing page to gather
+      published "Clone" URLs to be used as origin URL for that git repo. If several
+      "Clone" urls are provided, prefer the http/https one, if any, otherwise fallback
+      to the first one.
+
     """
 
     LISTER_NAME = "cgit"
@@ -44,14 +51,17 @@ class CGitLister(StatelessLister[Repositories]):
         url: str,
         instance: Optional[str] = None,
         credentials: Optional[CredentialsType] = None,
+        base_git_url: Optional[str] = None,
     ):
         """Lister class for CGit repositories.
 
         Args:
-            url (str): main URL of the CGit instance, i.e. url of the index
+            url: main URL of the CGit instance, i.e. url of the index
                 of published git repositories on this instance.
-            instance (str): Name of cgit instance. Defaults to url's hostname
+            instance: Name of cgit instance. Defaults to url's hostname
                 if unset.
+            base_git_url: Optional base git url which allows the origin url
+                computations.
 
         """
         if not instance:
@@ -66,6 +76,7 @@ class CGitLister(StatelessLister[Repositories]):
         self.session.headers.update(
             {"Accept": "application/html", "User-Agent": USER_AGENT}
         )
+        self.base_git_url = base_git_url
 
     def _get_and_parse(self, url: str) -> BeautifulSoup:
         """Get the given url and parse the retrieved HTML using BeautifulSoup"""
@@ -87,7 +98,19 @@ class CGitLister(StatelessLister[Repositories]):
             for tr in bs_idx.find("div", {"class": "content"}).find_all(
                 "tr", {"class": ""}
             ):
-                url = urljoin(self.url, tr.find("a")["href"])
+                repository_link = tr.find("a")["href"]
+                repo_url = None
+                git_url = None
+
+                base_url = urljoin(self.url, repository_link)
+                if self.base_git_url:  # mapping provided
+                    # computing git url
+                    git_url = base_url.replace(self.url, self.base_git_url)
+                else:
+                    # we compute the git detailed page url from which we will retrieve
+                    # the git url (cf. self.get_origins_from_page)
+                    repo_url = base_url
+
                 span = tr.find("span", {"class": re.compile("age-")})
                 if span:
                     last_updated_date = span["title"]
@@ -95,7 +118,11 @@ class CGitLister(StatelessLister[Repositories]):
                     last_updated_date = None
 
                 page_results.append(
-                    {"url": url, "last_updated_date": last_updated_date}
+                    {
+                        "url": repo_url,
+                        "git_url": git_url,
+                        "last_updated_date": last_updated_date,
+                    }
                 )
 
             yield page_results
@@ -117,8 +144,10 @@ class CGitLister(StatelessLister[Repositories]):
         """Convert a page of cgit repositories into a list of ListedOrigins."""
         assert self.lister_obj.id is not None
 
-        for repository in repositories:
-            origin_url = self._get_origin_from_repository_url(repository["url"])
+        for repo in repositories:
+            origin_url = repo["git_url"] or self._get_origin_from_repository_url(
+                repo["url"]
+            )
             if origin_url is None:
                 continue
 
@@ -126,7 +155,7 @@ class CGitLister(StatelessLister[Repositories]):
                 lister_id=self.lister_obj.id,
                 url=origin_url,
                 visit_type="git",
-                last_update=_parse_last_updated_date(repository),
+                last_update=_parse_last_updated_date(repo),
             )
 
     def _get_origin_from_repository_url(self, repository_url: str) -> Optional[str]:
