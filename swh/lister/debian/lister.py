@@ -11,7 +11,7 @@ import gzip
 from itertools import product
 import logging
 import lzma
-from typing import Any, Callable, Dict, Iterator, List, Set, Tuple
+from typing import Any, Callable, Dict, Iterator, List, Optional, Set, Tuple
 from urllib.parse import urljoin
 
 from debian.deb822 import Sources
@@ -21,7 +21,7 @@ from swh.scheduler.interface import SchedulerInterface
 from swh.scheduler.model import ListedOrigin
 
 from .. import USER_AGENT
-from ..pattern import Lister
+from ..pattern import CredentialsType, Lister
 
 logger = logging.getLogger(__name__)
 
@@ -76,9 +76,13 @@ class DebianLister(Lister[DebianListerState, DebianPageType]):
         mirror_url: str = "http://deb.debian.org/debian/",
         suites: List[Suite] = ["stretch", "buster", "bullseye"],
         components: List[Component] = ["main", "contrib", "non-free"],
+        credentials: Optional[CredentialsType] = None,
     ):
         super().__init__(
-            scheduler=scheduler, url=mirror_url, instance=distribution,
+            scheduler=scheduler,
+            url=mirror_url,
+            instance=distribution,
+            credentials=credentials,
         )
 
         # to ensure urljoin will produce valid Sources URL
