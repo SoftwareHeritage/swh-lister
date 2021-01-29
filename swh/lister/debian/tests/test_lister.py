@@ -199,3 +199,34 @@ def test_lister_debian_updated_packages(
             assert stats.origins == 0
         else:
             assert stats.origins != 0
+
+
+@pytest.mark.parametrize(
+    "credentials, expected_credentials",
+    [
+        (None, []),
+        ({"key": "value"}, []),
+        (
+            {"debian": {"Debian": [{"username": "user", "password": "pass"}]}},
+            [{"username": "user", "password": "pass"}],
+        ),
+    ],
+)
+def test_lister_debian_instantiation_with_credentials(
+    credentials, expected_credentials, swh_scheduler
+):
+    lister = DebianLister(swh_scheduler, credentials=credentials)
+
+    # Credentials are allowed in constructor
+    assert lister.credentials == expected_credentials
+
+
+def test_lister_debian_from_configfile(swh_scheduler_config, mocker):
+    load_from_envvar = mocker.patch("swh.lister.pattern.load_from_envvar")
+    load_from_envvar.return_value = {
+        "scheduler": {"cls": "local", **swh_scheduler_config},
+        "credentials": {},
+    }
+    lister = DebianLister.from_configfile()
+    assert lister.scheduler is not None
+    assert lister.credentials is not None

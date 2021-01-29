@@ -9,7 +9,7 @@ from .lister import LaunchpadLister
 
 
 @shared_task(name=__name__ + ".ping")
-def ping():
+def _ping():
     return "OK"
 
 
