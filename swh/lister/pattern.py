@@ -223,7 +223,7 @@ class Lister(Generic[StateType, PageType]):
           the number of listed origins recorded in the scheduler
         """
         count = 0
-        for batch_origins in grouper(origins, n=100):
+        for batch_origins in grouper(origins, n=1000):
             ret = self.scheduler.record_listed_origins(batch_origins)
             count += len(ret)
 
