@@ -196,3 +196,38 @@ def test_lister_cgit_from_configfile(swh_scheduler_config, mocker):
     lister = CGitLister.from_configfile()
     assert lister.scheduler is not None
     assert lister.credentials is not None
+
+
+@pytest.mark.parametrize(
+    "url,base_git_url,expected_nb_origins",
+    [
+        ("https://git.eclipse.org/c", "https://eclipse.org/r", 5),
+        ("https://git.baserock.org/cgit/", "https://git.baserock.org/git/", 3),
+        ("https://jff.email/cgit/", "git://jff.email/opt/git/", 6),
+    ],
+)
+def test_lister_cgit_with_base_git_url(
+    url, base_git_url, expected_nb_origins, requests_mock_datadir, swh_scheduler
+):
+    """With base git url provided, listed urls should be the computed origin urls
+
+    """
+    lister_cgit = CGitLister(swh_scheduler, url=url, base_git_url=base_git_url,)
+
+    stats = lister_cgit.run()
+
+    assert stats == ListerStats(pages=1, origins=expected_nb_origins)
+
+    # test page parsing
+    scheduler_origins = swh_scheduler.get_listed_origins(
+        lister_cgit.lister_obj.id
+    ).results
+    assert len(scheduler_origins) == expected_nb_origins
+
+    # test listed repositories
+    for listed_origin in scheduler_origins:
+        assert listed_origin.visit_type == "git"
+        assert listed_origin.url.startswith(base_git_url)
+        assert (
+            listed_origin.url.startswith(url) is False
+        ), f"url should be mapped to {base_git_url}"

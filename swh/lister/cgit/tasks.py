@@ -10,9 +10,13 @@ from .lister import CGitLister
 
 
 @shared_task(name=__name__ + ".CGitListerTask")
-def list_cgit(url: str, instance: Optional[str] = None,) -> Dict[str, str]:
+def list_cgit(
+    url: str, instance: Optional[str] = None, base_git_url: Optional[str] = None
+) -> Dict[str, str]:
     """Lister task for CGit instances"""
-    lister = CGitLister.from_configfile(url=url, instance=instance)
+    lister = CGitLister.from_configfile(
+        url=url, instance=instance, base_git_url=base_git_url
+    )
     return lister.run().dict()
 
 
