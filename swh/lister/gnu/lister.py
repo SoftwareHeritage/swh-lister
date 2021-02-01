@@ -1,112 +1,68 @@
-# Copyright (C) 2019 the Software Heritage developers
+# Copyright (C) 2019-2021  The Software Heritage developers
+# See the AUTHORS file at the top-level directory of this distribution
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
 
 import logging
-from typing import Any, Dict, List
+from typing import Any, Iterator, Mapping
 
-from requests import Response
+import iso8601
 
-from swh.lister.core.simple_lister import SimpleLister
-from swh.lister.gnu.models import GNUModel
-from swh.lister.gnu.tree import GNUTree
-from swh.scheduler import utils
+from swh.scheduler.interface import SchedulerInterface
+from swh.scheduler.model import ListedOrigin
+
+from ..pattern import CredentialsType, StatelessLister
+from .tree import GNUTree
 
 logger = logging.getLogger(__name__)
 
+GNUPageType = Mapping[str, Any]
 
-class GNULister(SimpleLister):
-    MODEL = GNUModel
-    LISTER_NAME = "gnu"
-    instance = "gnu"
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.gnu_tree = GNUTree("https://ftp.gnu.org/tree.json.gz")
+class GNULister(StatelessLister[GNUPageType]):
+    """
+    List all GNU projects and associated artifacts.
+    """
 
-    def task_dict(self, origin_type, origin_url, **kwargs):
-        """Return task format dict
+    LISTER_NAME = "GNU"
+    GNU_FTP_URL = "https://ftp.gnu.org"
 
-        This is overridden from the lister_base as more information is
-        needed for the ingestion task creation.
-
-        This creates tasks with args and kwargs set, for example:
-
-        .. code-block:: python
-
-            args:
-            kwargs: {
-                'url': 'https://ftp.gnu.org/gnu/3dldf/',
-                'artifacts': [{
-                    'url': 'https://...',
-                    'time': '2003-12-09T21:43:20+00:00',
-                    'length': 128,
-                    'version': '1.0.1',
-                    'filename': 'something-1.0.1.tar.gz',
-                },
-                ...
-                ]
-            }
-
-        """
-        artifacts = self.gnu_tree.artifacts[origin_url]
-        assert origin_type == "tar"
-        return utils.create_task_dict(
-            "load-archive-files",
-            kwargs.get("policy", "oneshot"),
-            url=origin_url,
-            artifacts=artifacts,
-            retries_left=3,
+    def __init__(
+        self, scheduler: SchedulerInterface, credentials: CredentialsType = None,
+    ):
+        super().__init__(
+            scheduler=scheduler,
+            url=self.GNU_FTP_URL,
+            instance="GNU",
+            credentials=credentials,
         )
+        self.gnu_tree = GNUTree(f"{self.url}/tree.json.gz")
 
-    def safely_issue_request(self, identifier: int) -> None:
-        """Bypass the implementation. It's now the GNUTree which deals with
-        querying the gnu mirror.
-
-        As an implementation detail, we cannot change simply the base
-        SimpleLister as other implementation still uses it. This shall be part
-        of another refactoring pass.
-
+    def get_pages(self) -> Iterator[GNUPageType]:
         """
-        return None
-
-    def list_packages(self, response: Response) -> List[Dict[str, Any]]:
-        """List the actual gnu origins (package name) with their name, url and
-           associated tarballs.
-
-        Args:
-            response: Unused
-
-        Returns:
-            List of packages name, url, last modification time::
-
-                [
-                    {
-                        'name': '3dldf',
-                        'url': 'https://ftp.gnu.org/gnu/3dldf/',
-                        'time_modified': '2003-12-09T20:43:20+00:00'
-                    },
-                    {
-                        'name': '8sync',
-                        'url': 'https://ftp.gnu.org/gnu/8sync/',
-                        'time_modified': '2016-12-06T02:37:10+00:00'
-                    },
-                    ...
-                ]
-
+        Yield a single page listing all GNU projects.
         """
-        return list(self.gnu_tree.projects.values())
+        yield self.gnu_tree.projects
 
-    def get_model_from_repo(self, repo: Dict[str, Any]) -> Dict[str, Any]:
-        """Transform from repository representation to model
-
+    def get_origins_from_page(self, page: GNUPageType) -> Iterator[ListedOrigin]:
         """
-        return {
-            "uid": repo["url"],
-            "name": repo["name"],
-            "full_name": repo["name"],
-            "html_url": repo["url"],
-            "origin_url": repo["url"],
-            "time_last_updated": repo["time_modified"],
-            "origin_type": "tar",
-        }
+        Iterate on all GNU projects and yield ListedOrigin instances.
+        """
+        assert self.lister_obj.id is not None
+
+        artifacts = self.gnu_tree.artifacts
+
+        for project_name, project_info in page.items():
+
+            origin_url = project_info["url"]
+            last_update = iso8601.parse_date(project_info["time_modified"])
+
+            logger.debug("Found origin %s last updated on %s", origin_url, last_update)
+
+            yield ListedOrigin(
+                lister_id=self.lister_obj.id,
+                url=origin_url,
+                visit_type="tar",
+                last_update=last_update,
+                extra_loader_arguments={"artifacts": artifacts[project_name]},
+            )
