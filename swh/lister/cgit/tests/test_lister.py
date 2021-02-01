@@ -21,15 +21,13 @@ def test_lister_cgit_get_pages_one_page(requests_mock_datadir, swh_scheduler):
     flattened_repos = sum(repos, [])
     assert len(flattened_repos) == 977
 
-    assert (
-        flattened_repos[0]["url"] == "https://git.savannah.gnu.org/cgit/elisp-es.git/"
-    )
+    assert flattened_repos[0]["url"] == "https://git.savannah.gnu.org/cgit/elisp-es.git"
     # note the url below is NOT a subpath of /cgit/
     assert (
-        flattened_repos[-1]["url"] == "https://git.savannah.gnu.org/path/to/yetris.git/"
+        flattened_repos[-1]["url"] == "https://git.savannah.gnu.org/path/to/yetris.git"
     )  # noqa
     # note the url below is NOT on the same server
-    assert flattened_repos[-2]["url"] == "http://example.org/cgit/xstarcastle.git/"
+    assert flattened_repos[-2]["url"] == "http://example.org/cgit/xstarcastle.git"
 
 
 def test_lister_cgit_get_pages_with_pages(requests_mock_datadir, swh_scheduler):
@@ -146,7 +144,7 @@ def test_lister_cgit_date_parsing(date_str, expected_date):
 
 
 requests_mock_datadir_missing_url = requests_mock_datadir_factory(
-    ignore_urls=["https://git.tizen/cgit/adaptation/ap_samsung/audio-hal-e4x12/",]
+    ignore_urls=["https://git.tizen/cgit/adaptation/ap_samsung/audio-hal-e4x12",]
 )
 
 
