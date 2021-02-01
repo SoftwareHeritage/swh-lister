@@ -102,7 +102,7 @@ class CGitLister(StatelessLister[Repositories]):
                 repo_url = None
                 git_url = None
 
-                base_url = urljoin(self.url, repository_link)
+                base_url = urljoin(self.url, repository_link).strip("/")
                 if self.base_git_url:  # mapping provided
                     # computing git url
                     git_url = base_url.replace(self.url, self.base_git_url)
