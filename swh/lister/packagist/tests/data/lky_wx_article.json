@@ -1,0 +1,239 @@
+{
+  "packages": {
+    "lky/wx_article": {
+      "1.0": {
+        "name": "lky/wx_article",
+        "description": "wx article editor",
+        "keywords": [
+          "laravel",
+          "WxGzhArticle"
+        ],
+        "homepage": "https://github.com/lky/wxgzharticle",
+        "version": "1.0",
+        "version_normalized": "1.0.0.0",
+        "license": [
+          "MIT"
+        ],
+        "authors": [{
+          "name": "lky",
+          "email": "2747865797@qq.com",
+          "homepage": "http://lky.kim"
+        }],
+        "source": {
+          "type": "git",
+          "url": "https://github.com/gitlky/wx_article.git",
+          "reference": "bd1826f17a42a1d3da44c4562af3be370687466b"
+        },
+        "dist": {
+          "type": "zip",
+          "url": "https://api.github.com/repos/gitlky/wx_article/zipball/bd1826f17a42a1d3da44c4562af3be370687466b",
+          "reference": "bd1826f17a42a1d3da44c4562af3be370687466b",
+          "shasum": ""
+        },
+        "type": "library",
+        "time": "2018-08-28T06:51:46+00:00",
+        "autoload": {
+          "psr-4": {
+            "lky\\WxGzhArticle\\": "src/"
+          }
+        },
+        "extra": {
+          "laravel": {
+            "providers": [
+              "lky\\WxGzhArticle\\WxGzhArticleServiceProvider"
+            ],
+            "aliases": {
+              "WxGzhArticle": "lky\\WxGzhArticle\\Facades\\WxGzhArticle"
+            }
+          }
+        },
+        "require": {
+          "illuminate/support": "~5",
+          "ixudra/curl": "6.*",
+          "guzzlehttp/guzzle": "6.*",
+          "laravel/framework": "5.2.*",
+          "php": ">=5.6.4"
+        },
+        "require-dev": {
+          "phpunit/phpunit": "~6.0",
+          "orchestra/testbench": "~3.0"
+        },
+        "uid": 2493149
+      },
+      "dev-master": {
+        "name": "lky/wx_article",
+        "description": "wx article editor",
+        "keywords": [
+          "laravel",
+          "WxGzhArticle"
+        ],
+        "homepage": "https://github.com/lky/wx_article",
+        "version": "dev-master",
+        "version_normalized": "9999999-dev",
+        "license": [
+          "MIT"
+        ],
+        "authors": [{
+          "name": "lky",
+          "email": "2747865797@qq.com",
+          "homepage": "http://lky.kim"
+        }],
+        "source": {
+          "type": "git",
+          "url": "https://github.com/gitlky/wx_article.git",
+          "reference": "9ef7cddfe1a9715cee52acc7a97d4f51d0f6e2be"
+        },
+        "dist": {
+          "type": "zip",
+          "url": "https://api.github.com/repos/gitlky/wx_article/zipball/9ef7cddfe1a9715cee52acc7a97d4f51d0f6e2be",
+          "reference": "9ef7cddfe1a9715cee52acc7a97d4f51d0f6e2be",
+          "shasum": ""
+        },
+        "type": "library",
+        "time": "2018-08-30T07:37:09+00:00",
+        "autoload": {
+          "psr-4": {
+            "lky\\WxGzhArticle\\": "src/"
+          }
+        },
+        "extra": {
+          "laravel": {
+            "providers": [
+              "lky\\WxGzhArticle\\WxGzhArticleServiceProvider"
+            ],
+            "aliases": {
+              "WxGzhArticle": "lky\\WxGzhArticle\\Facades\\WxGzhArticle"
+            }
+          }
+        },
+        "default-branch": true,
+        "require": {
+          "ixudra/curl": "6.*",
+          "guzzlehttp/guzzle": "6.*",
+          "laravel/framework": ">=5.2.0",
+          "php": ">=5.6.4"
+        },
+        "require-dev": {
+          "phpunit/phpunit": "~6.0",
+          "orchestra/testbench": "~3.0"
+        },
+        "uid": 4096807
+      },
+      "v1.2": {
+        "name": "lky/wx_article",
+        "description": "wx article editor",
+        "keywords": [
+          "laravel",
+          "WxGzhArticle"
+        ],
+        "homepage": "https://github.com/lky/wx_article",
+        "version": "v1.2",
+        "version_normalized": "1.2.0.0",
+        "license": [
+          "MIT"
+        ],
+        "authors": [{
+          "name": "lky",
+          "email": "2747865797@qq.com",
+          "homepage": "http://lky.kim"
+        }],
+        "source": {
+          "type": "git",
+          "url": "https://github.com/gitlky/wx_article.git",
+          "reference": "d332d20b8d848018c7e6a43e7fe47a78cdb926b7"
+        },
+        "dist": {
+          "type": "zip",
+          "url": "https://api.github.com/repos/gitlky/wx_article/zipball/d332d20b8d848018c7e6a43e7fe47a78cdb926b7",
+          "reference": "d332d20b8d848018c7e6a43e7fe47a78cdb926b7",
+          "shasum": ""
+        },
+        "type": "library",
+        "autoload": {
+          "psr-4": {
+            "lky\\WxGzhArticle\\": "src/"
+          }
+        },
+        "extra": {
+          "laravel": {
+            "providers": [
+              "lky\\WxGzhArticle\\WxGzhArticleServiceProvider"
+            ],
+            "aliases": {
+              "WxGzhArticle": "lky\\WxGzhArticle\\Facades\\WxGzhArticle"
+            }
+          }
+        },
+        "require": {
+          "ixudra/curl": "6.*",
+          "guzzlehttp/guzzle": "6.*",
+          "laravel/framework": ">=5.2.0",
+          "php": ">=5.6.4"
+        },
+        "require-dev": {
+          "phpunit/phpunit": "~6.0",
+          "orchestra/testbench": "~3.0"
+        },
+        "uid": 2493150
+      },
+      "v1.6": {
+        "name": "lky/wx_article",
+        "description": "wx article editor",
+        "keywords": [
+          "laravel",
+          "WxGzhArticle"
+        ],
+        "homepage": "https://github.com/lky/wx_article",
+        "version": "v1.6",
+        "version_normalized": "1.6.0.0",
+        "license": [
+          "MIT"
+        ],
+        "authors": [{
+          "name": "lky",
+          "email": "2747865797@qq.com",
+          "homepage": "http://lky.kim"
+        }],
+        "source": {
+          "type": "git",
+          "url": "https://github.com/gitlky/wx_article.git",
+          "reference": "d332d20b8d848018c7e6a43e7fe47a78cdb926b7"
+        },
+        "dist": {
+          "type": "zip",
+          "url": "https://api.github.com/repos/gitlky/wx_article/zipball/d332d20b8d848018c7e6a43e7fe47a78cdb926b7",
+          "reference": "d332d20b8d848018c7e6a43e7fe47a78cdb926b7",
+          "shasum": ""
+        },
+        "type": "library",
+        "time": "2018-08-29T08:26:06+00:00",
+        "autoload": {
+          "psr-4": {
+            "lky\\WxGzhArticle\\": "src/"
+          }
+        },
+        "extra": {
+          "laravel": {
+            "providers": [
+              "lky\\WxGzhArticle\\WxGzhArticleServiceProvider"
+            ],
+            "aliases": {
+              "WxGzhArticle": "lky\\WxGzhArticle\\Facades\\WxGzhArticle"
+            }
+          }
+        },
+        "require": {
+          "ixudra/curl": "6.*",
+          "guzzlehttp/guzzle": "6.*",
+          "laravel/framework": ">=5.2.0",
+          "php": ">=5.6.4"
+        },
+        "require-dev": {
+          "phpunit/phpunit": "~6.0",
+          "orchestra/testbench": "~3.0"
+        },
+        "uid": 2427550
+      }
+    }
+  }
+}
