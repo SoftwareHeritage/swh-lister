@@ -60,6 +60,8 @@ swh/lister/cgit/tests/__init__.py
 swh/lister/cgit/tests/repo_list.txt
 swh/lister/cgit/tests/test_lister.py
 swh/lister/cgit/tests/test_tasks.py
+swh/lister/cgit/tests/data/https_git.baserock.org/cgit
+swh/lister/cgit/tests/data/https_git.eclipse.org/c
 swh/lister/cgit/tests/data/https_git.savannah.gnu.org/README
 swh/lister/cgit/tests/data/https_git.savannah.gnu.org/cgit
 swh/lister/cgit/tests/data/https_git.savannah.gnu.org/cgit_elisp-es.git
@@ -83,6 +85,7 @@ swh/lister/cgit/tests/data/https_git.tizen/cgit_adaptation_panda_libnl
 swh/lister/cgit/tests/data/https_git.tizen/cgit_adaptation_xorg_driver_xserver-xorg-misc
 swh/lister/cgit/tests/data/https_git.tizen/cgit_apps_core_preloaded_ug-setting-gallery-efl
 swh/lister/cgit/tests/data/https_git.tizen/cgit_apps_core_preloaded_ug-setting-homescreen-efl
+swh/lister/cgit/tests/data/https_jff.email/cgit
 swh/lister/core/__init__.py
 swh/lister/core/abstractattribute.py
 swh/lister/core/lister_base.py
@@ -136,13 +139,9 @@ swh/lister/gitlab/tests/data/https_gite.lirmm.fr/api_response_page3.json
 swh/lister/gitlab/tests/data/https_gitlab.com/api_response_page1.json
 swh/lister/gnu/__init__.py
 swh/lister/gnu/lister.py
-swh/lister/gnu/models.py
 swh/lister/gnu/tasks.py
 swh/lister/gnu/tree.py
 swh/lister/gnu/tests/__init__.py
-swh/lister/gnu/tests/api_response.json
-swh/lister/gnu/tests/conftest.py
-swh/lister/gnu/tests/find_tarballs_output.json
 swh/lister/gnu/tests/test_lister.py
 swh/lister/gnu/tests/test_tasks.py
 swh/lister/gnu/tests/test_tree.py

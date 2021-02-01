@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang='en'>
+  <head>
+    <title>Lorry Depot</title>
+    <meta name='generator' content='cgit v1.2.1'/>
+    <meta name='robots' content='index, nofollow'/>
+    <link rel='stylesheet' type='text/css' href='/cgit-css/cgit.css'/>
+    <link rel='shortcut icon' href='/favicon.ico'/>
+  </head>
+  <body>
+    <div id='cgit'><table id='header'>
+        <tr>
+          <td class='logo' rowspan='2'><a href='/cgit/'><img src='/cgit-css/cgit.png' alt='cgit logo'/></a></td>
+          <td class='main'>Lorry Depot</td></tr>
+        <tr><td class='sub'>Mirror Repositories</td></tr></table>
+      <table class='tabs'><tr><td>
+            <a class='active' href='/cgit/'>index</a></td><td class='form'><form method='get' action='/cgit/'>
+              <input type='search' name='q' size='10' value=''/>
+              <input type='submit' value='search'/>
+      </form></td></tr></table>
+      <div class='content'>
+        <table summary='repository list' class='list nowrap'><tr class='nohover'><th class='left'><a href='/cgit/?s=name'>Name</a></th><th class='left'><a href='/cgit/?s=desc'>Description</a></th><th class='left'><a href='/cgit/?s=idle'>Idle</a></th><th class='left'>Links</th></tr>
+          <tr><td class='toplevel-repo'><a title='baserock/baserock/baserock-chroot.git' href='/cgit/baserock/baserock/baserock-chroot.git/'>baserock/baserock/baserock-chroot.git</a></td><td><a href='/cgit/baserock/baserock/baserock-chroot.git/'>Tools for working with Baserock chroots
+            </a></td><td><span class='age-years' title='2015-05-20 09:59:01 +0000'>6 years</span></td><td><a class='button' href='/cgit/baserock/baserock/baserock-chroot.git/'>summary</a><a class='button' href='/cgit/baserock/baserock/baserock-chroot.git/log/'>log</a><a class='button' href='/cgit/baserock/baserock/baserock-chroot.git/tree/'>tree</a></td></tr>
+          <tr><td class='toplevel-repo'><a title='baserock/baserock/bsp-support.git' href='/cgit/baserock/baserock/bsp-support.git/'>baserock/baserock/bsp-support.git</a></td><td><a href='/cgit/baserock/baserock/bsp-support.git/'>Programs and configuration needed to support specific devices
+            </a></td><td><span class='age-years' title='2015-10-25 19:53:10 +0000'>5 years</span></td><td><a class='button' href='/cgit/baserock/baserock/bsp-support.git/'>summary</a><a class='button' href='/cgit/baserock/baserock/bsp-support.git/log/'>log</a><a class='button' href='/cgit/baserock/baserock/bsp-support.git/tree/'>tree</a></td></tr>
+          <tr><td class='toplevel-repo'><a title='baserock/baserock/definitions.git' href='/cgit/baserock/baserock/definitions.git/'>baserock/baserock/definitions.git</a></td><td><a href='/cgit/baserock/baserock/definitions.git/'>gitlab.com: baserock/definitions.git
+            </a></td><td><span class='age-months' title='2019-05-15 17:58:47 +0000'>21 months</span></td><td><a class='button' href='/cgit/baserock/baserock/definitions.git/'>summary</a><a class='button' href='/cgit/baserock/baserock/definitions.git/log/'>log</a><a class='button' href='/cgit/baserock/baserock/definitions.git/tree/'>tree</a></td></tr>
+        </table>
+      </div> <!-- class=content -->
+    </div> <!-- id=cgit -->
+  </body>
+</html>

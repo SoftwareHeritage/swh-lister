@@ -1,47 +1,36 @@
-# Copyright (C) 2019-2020 The Software Heritage developers
+# Copyright (C) 2019-2021 The Software Heritage developers
 # See the AUTHORS file at the top-level directory of this distribution
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
 
-import logging
-
-logger = logging.getLogger(__name__)
+from ..lister import GNULister
 
 
-def test_gnu_lister(lister_gnu, requests_mock_datadir):
-    lister_gnu.run()
+def test_gnu_lister(swh_scheduler, requests_mock_datadir):
+    lister = GNULister(scheduler=swh_scheduler)
 
-    r = lister_gnu.scheduler.search_tasks(task_type="load-archive-files")
-    assert len(r) == 383
+    stats = lister.run()
 
-    for row in r:
-        assert row["type"] == "load-archive-files"
-        # arguments check
-        args = row["arguments"]["args"]
-        assert len(args) == 0
+    assert stats.pages == 1
+    assert stats.origins == 383
 
-        # kwargs
-        kwargs = row["arguments"]["kwargs"]
-        assert set(kwargs.keys()) == {"url", "artifacts"}
+    scheduler_origins = swh_scheduler.get_listed_origins(lister.lister_obj.id).results
 
-        url = kwargs["url"]
-        assert url.startswith("https://ftp.gnu.org")
+    assert len(scheduler_origins) == stats.origins
 
-        url_suffix = url.split("https://ftp.gnu.org")[1]
-        assert "gnu" in url_suffix or "old-gnu" in url_suffix
+    for origin in scheduler_origins:
+        assert origin.url.startswith(GNULister.GNU_FTP_URL)
+        assert origin.last_update is not None
+        assert "artifacts" in origin.extra_loader_arguments
+        assert len(origin.extra_loader_arguments["artifacts"]) > 0
 
-        artifacts = kwargs["artifacts"]
-        # check the artifact's structure
-        artifact = artifacts[0]
-        assert set(artifact.keys()) == {"url", "length", "time", "filename", "version"}
 
-        for artifact in artifacts:
-            logger.debug(artifact)
-            # 'time' is an isoformat string now
-            for key in ["url", "time", "filename", "version"]:
-                assert isinstance(artifact[key], str)
-            assert isinstance(artifact["length"], int)
-
-        assert row["policy"] == "oneshot"
-        assert row["priority"] is None
-        assert row["retries_left"] == 3
+def test_gnu_lister_from_configfile(swh_scheduler_config, mocker):
+    load_from_envvar = mocker.patch("swh.lister.pattern.load_from_envvar")
+    load_from_envvar.return_value = {
+        "scheduler": {"cls": "local", **swh_scheduler_config},
+        "credentials": {},
+    }
+    lister = GNULister.from_configfile()
+    assert lister.scheduler is not None
+    assert lister.credentials is not None

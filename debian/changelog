@@ -1,8 +1,14 @@
-swh-lister (0.6.1-1~swh1~bpo10+1) buster-swh; urgency=medium
+swh-lister (0.7.0-1~swh1) unstable-swh; urgency=medium
 
-  * Rebuild for buster-swh
+  * New upstream release 0.7.0     - (tagged by Antoine R. Dumont
+    (@ardumont) <ardumont@softwareheritage.org> on 2021-02-01 09:31:30
+    +0100)
+  * Upstream changes:     - v0.7.0     - pattern: Bump packet split to
+    chunk of 1000 records     - cgit: Compute origin urls out of a base
+    git url when provided.     - gnu: Reimplement lister using new
+    Lister API
 
- -- Software Heritage autobuilder (on jenkins-debian1) <jenkins@jenkins-debian1.internal.softwareheritage.org>  Fri, 29 Jan 2021 08:13:20 +0000
+ -- Software Heritage autobuilder (on jenkins-debian1) <jenkins@jenkins-debian1.internal.softwareheritage.org>  Mon, 01 Feb 2021 08:35:14 +0000
 
 swh-lister (0.6.1-1~swh1) unstable-swh; urgency=medium
 

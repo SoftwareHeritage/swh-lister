@@ -22,7 +22,7 @@ def test_cgit_lister_task(
     lister.from_configfile.return_value = lister
     lister.run.return_value = ListerStats(pages=10, origins=500)
 
-    kwargs = dict(url="https://git.kernel.org/", instance="kernel")
+    kwargs = dict(url="https://git.kernel.org/", instance="kernel", base_git_url=None)
 
     res = swh_scheduler_celery_app.send_task(
         "swh.lister.cgit.tasks.CGitListerTask", kwargs=kwargs,
