@@ -10,7 +10,6 @@ def register() -> Mapping[str, Any]:
     from .lister import DebianLister
 
     return {
-        "models": [],
         "lister": DebianLister,
         "task_modules": ["%s.tasks" % __name__],
     }
