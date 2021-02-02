@@ -6,6 +6,5 @@ setuptools
 xmltodict
 iso8601
 beautifulsoup4
-pytz
 launchpadlib
 tenacity
