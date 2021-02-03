@@ -7,7 +7,6 @@ def register():
     from .lister import GiteaLister
 
     return {
-        "models": [],
         "lister": GiteaLister,
         "task_modules": ["%s.tasks" % __name__],
     }

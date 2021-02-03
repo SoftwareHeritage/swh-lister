@@ -1,5 +1,3 @@
 pytest
 pytest-mock
 requests_mock
-sqlalchemy-stubs
-testing.postgresql

@@ -1,4 +1,4 @@
-# Copyright (C) 2019-2020  The Software Heritage developers
+# Copyright (C) 2019-2021  The Software Heritage developers
 # See the AUTHORS file at the top-level directory of this distribution
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
@@ -6,8 +6,6 @@
 import pytest
 
 from swh.lister.cli import SUPPORTED_LISTERS, get_lister
-
-from .test_utils import init_db
 
 lister_args = {
     "cgit": {"url": "https://git.eclipse.org/c/",},
@@ -33,13 +31,11 @@ def test_get_lister(swh_scheduler_config):
     """Instantiating a supported lister should be ok
 
     """
-    db_url = init_db().url()
     # Drop launchpad lister from the lister to check, its test setup is more involved
     # than the other listers and it's not currently done here
     for lister_name in SUPPORTED_LISTERS:
         lst = get_lister(
             lister_name,
-            db_url,
             scheduler={"cls": "local", **swh_scheduler_config},
             **lister_args.get(lister_name, {}),
         )

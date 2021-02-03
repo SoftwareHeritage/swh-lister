@@ -7,7 +7,6 @@ def register():
     from .lister import NpmLister
 
     return {
-        "models": [],
         "lister": NpmLister,
         "task_modules": ["%s.tasks" % __name__],
         "task_types": {
