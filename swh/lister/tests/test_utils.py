@@ -6,7 +6,6 @@ import pytest
 import requests
 from requests.status_codes import codes
 from tenacity.wait import wait_fixed
-from testing.postgresql import Postgresql
 
 from swh.lister.utils import (
     MAX_NUMBER_ATTEMPTS,
@@ -35,18 +34,6 @@ def test_split_range_errors(total_pages, nb_pages):
     for total_pages, nb_pages in [(None, 1), (100, None)]:
         with pytest.raises(TypeError):
             next(split_range(total_pages, nb_pages))
-
-
-def init_db():
-    """Factorize the db_url instantiation
-
-    Returns:
-        db object to ease db manipulation
-
-    """
-    initdb_args = Postgresql.DEFAULT_SETTINGS["initdb_args"]
-    initdb_args = " ".join([initdb_args, "-E UTF-8"])
-    return Postgresql(initdb_args=initdb_args)
 
 
 TEST_URL = "https://example.og/api/repositories"

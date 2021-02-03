@@ -7,7 +7,6 @@ def register():
     from .lister import BitbucketLister
 
     return {
-        "models": [],
         "lister": BitbucketLister,
         "task_modules": ["%s.tasks" % __name__],
     }

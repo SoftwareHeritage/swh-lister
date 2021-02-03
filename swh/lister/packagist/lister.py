@@ -1,102 +1,182 @@
-# Copyright (C) 2019  The Software Heritage developers
+# Copyright (C) 2019-2021  The Software Heritage developers
 # See the AUTHORS file at the top-level directory of this distribution
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
 
-import json
+from dataclasses import dataclass
+from datetime import datetime, timezone
 import logging
-import random
-from typing import Any, Dict, List, Mapping
+from typing import Any, Dict, Iterator, List, Optional
 
-from swh.lister.core.lister_transports import ListerOnePageApiTransport
-from swh.lister.core.simple_lister import SimpleLister
-from swh.scheduler import utils
+import iso8601
+import requests
 
-from .models import PackagistModel
+from swh.scheduler.interface import SchedulerInterface
+from swh.scheduler.model import ListedOrigin
+
+from .. import USER_AGENT
+from ..pattern import CredentialsType, Lister
 
 logger = logging.getLogger(__name__)
 
+PackagistPageType = List[str]
 
-def compute_package_url(repo_name: str) -> str:
-    """Compute packgist package url from repo name.
 
+@dataclass
+class PackagistListerState:
+    """State of Packagist lister"""
+
+    last_listing_date: Optional[datetime] = None
+    """Last date when packagist lister was executed"""
+
+
+class PackagistLister(Lister[PackagistListerState, PackagistPageType]):
     """
-    return "https://repo.packagist.org/p/%s.json" % repo_name
+    List all Packagist projects and send associated origins to scheduler.
 
+    The lister queries the Packagist API, whose documentation can be found at
+    https://packagist.org/apidoc.
 
-class PackagistLister(ListerOnePageApiTransport, SimpleLister):
-    """List packages available in the Packagist package manager.
-
-        The lister sends the request to the url present in the class
-        variable `PAGE`, to receive a list of all the package names
-        present in the Packagist package manager. Iterates over all the
-        packages and constructs the metadata url of the package from
-        the name of the package and creates a loading task::
-
-            Task:
-                Type: load-packagist
-                Policy: recurring
-                Args:
-                    <package_name>
-                    <package_metadata_url>
-
-        Example::
-
-            Task:
-                Type: load-packagist
-                Policy: recurring
-                Args:
-                    'hypejunction/hypegamemechanics'
-                    'https://repo.packagist.org/p/hypejunction/hypegamemechanics.json'
-
+    For each package, its metadata are retrieved using Packagist API endpoints
+    whose responses are served from static files, which are guaranteed to be
+    efficient on the Packagist side (no dymamic queries).
+    Furthermore, subsequent listing will send the "If-Modified-Since" HTTP
+    header to only retrieve packages metadata updated since the previous listing
+    operation in order to save bandwidth and return only origins which might have
+    new released versions.
     """
 
-    MODEL = PackagistModel
-    LISTER_NAME = "packagist"
-    PAGE = "https://packagist.org/packages/list.json"
-    instance = "packagist"
+    LISTER_NAME = "Packagist"
+    PACKAGIST_PACKAGES_LIST_URL = "https://packagist.org/packages/list.json"
+    PACKAGIST_REPO_BASE_URL = "https://repo.packagist.org/p"
 
-    def __init__(self, override_config=None):
-        ListerOnePageApiTransport.__init__(self)
-        SimpleLister.__init__(self, override_config=override_config)
-
-    def task_dict(
-        self, origin_type: str, origin_url: str, **kwargs: Mapping[str, str]
-    ) -> Dict[str, Any]:
-        """Return task format dict
-
-        This is overridden from the lister_base as more information is
-        needed for the ingestion task creation.
-
-        """
-        return utils.create_task_dict(
-            "load-%s" % origin_type,
-            kwargs.get("policy", "recurring"),
-            kwargs.get("name"),
-            origin_url,
-            retries_left=3,
+    def __init__(
+        self, scheduler: SchedulerInterface, credentials: CredentialsType = None,
+    ):
+        super().__init__(
+            scheduler=scheduler,
+            url=self.PACKAGIST_PACKAGES_LIST_URL,
+            instance="packagist",
+            credentials=credentials,
         )
 
-    def list_packages(self, response: Any) -> List[str]:
-        """List the actual packagist origins from the response.
+        self.session = requests.Session()
+        self.session.headers.update(
+            {"Accept": "application/json", "User-Agent": USER_AGENT}
+        )
+        self.listing_date = datetime.now().astimezone(tz=timezone.utc)
 
+    def state_from_dict(self, d: Dict[str, Any]) -> PackagistListerState:
+        last_listing_date = d.get("last_listing_date")
+        if last_listing_date is not None:
+            d["last_listing_date"] = iso8601.parse_date(last_listing_date)
+        return PackagistListerState(**d)
+
+    def state_to_dict(self, state: PackagistListerState) -> Dict[str, Any]:
+        d: Dict[str, Optional[str]] = {"last_listing_date": None}
+        last_listing_date = state.last_listing_date
+        if last_listing_date is not None:
+            d["last_listing_date"] = last_listing_date.isoformat()
+        return d
+
+    def api_request(self, url: str) -> Any:
+        logger.debug("Fetching URL %s", url)
+
+        response = self.session.get(url)
+
+        if response.status_code not in (200, 304):
+            logger.warning(
+                "Unexpected HTTP status code %s on %s: %s",
+                response.status_code,
+                response.url,
+                response.content,
+            )
+
+        response.raise_for_status()
+
+        # response is empty when status code is 304
+        return response.json() if response.status_code == 200 else {}
+
+    def get_pages(self) -> Iterator[PackagistPageType]:
         """
-        response = json.loads(response.text)
-        packages = [name for name in response["packageNames"]]
-        logger.debug("Number of packages: %s", len(packages))
-        random.shuffle(packages)
-        return packages
-
-    def get_model_from_repo(self, repo_name: str) -> Mapping[str, str]:
-        """Transform from repository representation to model
-
+        Yield a single page listing all Packagist projects.
         """
-        url = compute_package_url(repo_name)
-        return {
-            "uid": repo_name,
-            "name": repo_name,
-            "full_name": repo_name,
-            "html_url": url,
-            "origin_url": url,
-            "origin_type": "packagist",
-        }
+        yield self.api_request(self.PACKAGIST_PACKAGES_LIST_URL)["packageNames"]
+
+    def get_origins_from_page(self, page: PackagistPageType) -> Iterator[ListedOrigin]:
+        """
+        Iterate on all Packagist projects and yield ListedOrigin instances.
+        """
+        assert self.lister_obj.id is not None
+
+        # save some bandwidth by only getting packages metadata updated since
+        # last listing
+        if self.state.last_listing_date is not None:
+            if_modified_since = self.state.last_listing_date.strftime(
+                "%a, %d %b %Y %H:%M:%S GMT"
+            )
+            self.session.headers["If-Modified-Since"] = if_modified_since
+
+        # to ensure origins will not be listed multiple times
+        origin_urls = set()
+
+        for package_name in page:
+            try:
+                metadata = self.api_request(
+                    f"{self.PACKAGIST_REPO_BASE_URL}/{package_name}.json"
+                )
+                if not metadata.get("packages", {}):
+                    # package metadata not updated since last listing
+                    continue
+                if package_name not in metadata["packages"]:
+                    # missing package metadata in response
+                    continue
+                versions_info = metadata["packages"][package_name].values()
+            except requests.exceptions.HTTPError:
+                # error when getting package metadata (usually 404 when a
+                # package has been removed), skip it and process next package
+                continue
+
+            origin_url = None
+            visit_type = None
+            last_update = None
+
+            # extract origin url for package, vcs type and latest release date
+            for version_info in versions_info:
+                origin_url = version_info.get("source", {}).get("url", "")
+                if not origin_url:
+                    continue
+                # can be git, hg or svn
+                visit_type = version_info.get("source", {}).get("type", "")
+                dist_time_str = version_info.get("time", "")
+                if not dist_time_str:
+                    continue
+                dist_time = iso8601.parse_date(dist_time_str)
+                if last_update is None or dist_time > last_update:
+                    last_update = dist_time
+
+            # skip package with already seen origin url or with missing required info
+            if visit_type is None or origin_url is None or origin_url in origin_urls:
+                continue
+
+            # bitbucket closed its mercurial hosting service, those origins can not be
+            # loaded into the archive anymore
+            if visit_type == "hg" and origin_url.startswith("https://bitbucket.org/"):
+                continue
+
+            origin_urls.add(origin_url)
+
+            logger.debug(
+                "Found package %s last updated on %s", package_name, last_update
+            )
+
+            yield ListedOrigin(
+                lister_id=self.lister_obj.id,
+                url=origin_url,
+                visit_type=visit_type,
+                last_update=last_update,
+            )
+
+    def finalize(self) -> None:
+        self.state.last_listing_date = self.listing_date
+        self.updated = True

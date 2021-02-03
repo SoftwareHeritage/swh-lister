@@ -7,7 +7,6 @@ def register():
     from .lister import GitHubLister
 
     return {
-        "models": [],
         "lister": GitHubLister,
         "task_modules": ["%s.tasks" % __name__],
     }

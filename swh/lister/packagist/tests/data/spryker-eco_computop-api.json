@@ -1,0 +1,141 @@
+{
+  "packages": {
+    "spryker-eco/computop-api": {
+      "1.0.0": {
+        "name": "spryker-eco/computop-api",
+        "description": "Computop API Module",
+        "keywords": [],
+        "homepage": "",
+        "version": "1.0.0",
+        "version_normalized": "1.0.0.0",
+        "license": [
+          "MIT"
+        ],
+        "authors": [],
+        "source": {
+          "type": "git",
+          "url": "https://github.com/spryker-eco/computop-api.git",
+          "reference": "d75dc7d2c80bd93e65081b26433ee559d2c92f0a"
+        },
+        "dist": {
+          "type": "zip",
+          "url": "https://api.github.com/repos/spryker-eco/computop-api/zipball/d75dc7d2c80bd93e65081b26433ee559d2c92f0a",
+          "reference": "d75dc7d2c80bd93e65081b26433ee559d2c92f0a",
+          "shasum": ""
+        },
+        "type": "library",
+        "time": "2018-08-31T11:51:23+00:00",
+        "autoload": {
+          "psr-4": {
+            "SprykerEco\\": "src/SprykerEco/"
+          }
+        },
+        "extra": {
+          "branch-alias": {
+            "dev-master": "1.0.x-dev"
+          }
+        },
+        "require": {
+          "php": ">=7.1",
+          "spryker/kernel": "^3.0.0",
+          "spryker/transfer": "^3.0.0",
+          "spryker/util-text": "^1.0.0",
+          "spryker/guzzle": "^2.2.0"
+        },
+        "require-dev": {
+          "spryker/code-sniffer": "dev-master"
+        },
+        "uid": 2432548
+      },
+      "dev-dev": {
+        "name": "spryker-eco/computop-api",
+        "description": "Computop API Module",
+        "keywords": [],
+        "homepage": "",
+        "version": "dev-dev",
+        "version_normalized": "dev-dev",
+        "license": [
+          "MIT"
+        ],
+        "authors": [],
+        "source": {},
+        "dist": {
+          "type": "zip",
+          "url": "https://api.github.com/repos/spryker-eco/computop-api/zipball/7a695d1e412132296546d072364f410186572790",
+          "reference": "7a695d1e412132296546d072364f410186572790",
+          "shasum": ""
+        },
+        "type": "library",
+        "time": "2018-08-31T11:38:22+00:00",
+        "autoload": {
+          "psr-4": {
+            "SprykerEco\\": "src/SprykerEco/"
+          }
+        },
+        "extra": {
+          "branch-alias": {
+            "dev-master": "1.0.x-dev"
+          }
+        },
+        "require": {
+          "php": ">=7.1",
+          "spryker/kernel": "^3.0.0",
+          "spryker/transfer": "^3.0.0",
+          "spryker/util-text": "^1.0.0",
+          "spryker/guzzle": "^2.2.0"
+        },
+        "require-dev": {
+          "spryker/code-sniffer": "dev-master"
+        },
+        "uid": 2209824
+      },
+      "dev-master": {
+        "name": "spryker-eco/computop-api",
+        "description": "ComputopApi module",
+        "keywords": [],
+        "homepage": "",
+        "version": "dev-master",
+        "version_normalized": "9999999-dev",
+        "license": [
+          "MIT"
+        ],
+        "authors": [],
+        "source": {
+          "type": "git",
+          "url": "https://github.com/spryker-eco/computop-api.git",
+          "reference": "7ac81d5db52c0639bc06a61a35d7738a964fde88"
+        },
+        "dist": {
+          "type": "zip",
+          "url": "https://api.github.com/repos/spryker-eco/computop-api/zipball/7ac81d5db52c0639bc06a61a35d7738a964fde88",
+          "reference": "7ac81d5db52c0639bc06a61a35d7738a964fde88",
+          "shasum": ""
+        },
+        "type": "library",
+        "time": "2020-06-22T15:50:29+00:00",
+        "autoload": {
+          "psr-4": {
+            "SprykerEco\\": "src/SprykerEco/"
+          }
+        },
+        "extra": {
+          "branch-alias": {
+            "dev-master": "1.0.x-dev"
+          }
+        },
+        "default-branch": true,
+        "require": {
+          "php": ">=7.1",
+          "spryker/kernel": "^3.0.0",
+          "spryker/transfer": "^3.0.0",
+          "spryker/util-text": "^1.0.0",
+          "spryker/guzzle": "^2.2.0"
+        },
+        "require-dev": {
+          "spryker/code-sniffer": "dev-master"
+        },
+        "uid": 4006827
+      }
+    }
+  }
+}

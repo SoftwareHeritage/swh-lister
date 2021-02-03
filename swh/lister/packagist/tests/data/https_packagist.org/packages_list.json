@@ -1,9 +1,0 @@
-{
-    "packageNames": [
-      "0.0.0/composer-include-files",
-      "0.0.0/laravel-env-shim",
-      "0.0.1/try-make-package",
-      "0099ff/dialogflowphp",
-      "00f100/array_dot"
-    ]
-}
