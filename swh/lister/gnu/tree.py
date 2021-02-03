@@ -1,9 +1,9 @@
-# Copyright (C) 2019 The Software Heritage developers
+# Copyright (C) 2019-2021 The Software Heritage developers
 # See the AUTHORS file at the top-level directory of this distribution
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
 
-from datetime import datetime
+from datetime import datetime, timezone
 import gzip
 import json
 import logging
@@ -13,7 +13,6 @@ import re
 from typing import Any, List, Mapping, Sequence, Tuple
 from urllib.parse import urlparse
 
-from pytz import utc
 import requests
 
 logger = logging.getLogger(__name__)
@@ -334,4 +333,4 @@ def format_date(timestamp: str) -> str:
     """Format a string timestamp to an isoformat string
 
     """
-    return datetime.fromtimestamp(int(timestamp), tz=utc).isoformat()
+    return datetime.fromtimestamp(int(timestamp), tz=timezone.utc).isoformat()

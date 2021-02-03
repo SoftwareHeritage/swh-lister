@@ -1,0 +1,78 @@
+{
+  "packages": {
+    "den1n/contextmenu": {
+      "dev-default": {
+        "name": "den1n/contextmenu",
+        "description": "Context menu custom element.",
+        "keywords": [
+          "javascript",
+          "JS",
+          "contextmenu",
+          "den1n"
+        ],
+        "homepage": "https://bitbucket.org/den1n/contextmenu",
+        "version": "dev-default",
+        "version_normalized": "9999999-dev",
+        "license": [
+          "MIT"
+        ],
+        "authors": [{
+          "name": "Dmitry Kadochnikov",
+          "email": "iqmass@gmail.com"
+        }],
+        "source": {
+          "type": "hg",
+          "url": "https://bitbucket.org/den1n/contextmenu",
+          "reference": "c207786b3dcf90fc7796a99dcb9e5fdb860ef2ba"
+        },
+        "dist": {
+          "type": "zip",
+          "url": "https://bitbucket.org/den1n/contextmenu/get/c207786b3dcf90fc7796a99dcb9e5fdb860ef2ba.zip",
+          "reference": "c207786b3dcf90fc7796a99dcb9e5fdb860ef2ba",
+          "shasum": ""
+        },
+        "type": "library",
+        "time": "2019-08-27T10:42:55+00:00",
+        "default-branch": true,
+        "require": {
+          "den1n/xelement": "^1.0"
+        },
+        "uid": 4101245
+      },
+      "v1.0.0": {
+        "name": "den1n/contextmenu",
+        "description": "Simple DOM JS context menu.",
+        "keywords": [
+          "javascript",
+          "JS",
+          "contextmenu",
+          "den1n"
+        ],
+        "homepage": "https://bitbucket.org/den1n/contextmenu",
+        "version": "v1.0.0",
+        "version_normalized": "1.0.0.0",
+        "license": [
+          "MIT"
+        ],
+        "authors": [{
+          "name": "Dmitry Kadochnikov",
+          "email": "iqmass@gmail.com"
+        }],
+        "source": {
+          "type": "hg",
+          "url": "https://bitbucket.org/den1n/contextmenu",
+          "reference": "278e30a199d1f0e1a8789a4b798814722bd11065"
+        },
+        "dist": {
+          "type": "zip",
+          "url": "https://bitbucket.org/den1n/contextmenu/get/278e30a199d1f0e1a8789a4b798814722bd11065.zip",
+          "reference": "278e30a199d1f0e1a8789a4b798814722bd11065",
+          "shasum": ""
+        },
+        "type": "library",
+        "time": "2018-03-07T10:08:41+00:00",
+        "uid": 1968017
+      }
+    }
+  }
+}

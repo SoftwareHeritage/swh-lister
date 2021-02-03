@@ -1,12 +1,9 @@
-SQLAlchemy
-arrow
 python_debian
 requests
 setuptools
 xmltodict
 iso8601
 beautifulsoup4
-pytz
 launchpadlib
 tenacity
 swh.core[db]>=0.9
@@ -16,5 +13,3 @@ swh.scheduler>=0.8
 pytest
 pytest-mock
 requests_mock
-sqlalchemy-stubs
-testing.postgresql
