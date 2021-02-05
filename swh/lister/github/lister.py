@@ -36,6 +36,14 @@ def init_session(session: Optional[requests.Session] = None) -> requests.Session
     return session
 
 
+def github_request(
+    url: str, session: Optional[requests.Session] = None
+) -> requests.Response:
+    session = init_session(session)
+
+    return session.get(url)
+
+
 @dataclass
 class GitHubListerState:
     """State of the GitHub lister"""
@@ -161,7 +169,7 @@ class GitHubLister(Lister[GitHubListerState, List[Dict[str, Any]]]):
             max_attempts = 1 if self.anonymous else len(self.credentials)
             reset_times: Dict[int, int] = {}  # token index -> time
             for attempt in range(max_attempts):
-                response = self.session.get(current_url)
+                response = github_request(current_url, self.session)
                 if not (
                     # GitHub returns inconsistent status codes between unauthenticated
                     # rate limit and authenticated rate limits. Handle both.
