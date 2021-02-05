@@ -45,8 +45,17 @@ class CRANLister(StatelessLister[PageType]):
 
     def get_origins_from_page(self, page: PageType) -> Iterator[ListedOrigin]:
         assert self.lister_obj.id is not None
+
+        seen_urls = set()
         for package_info in page:
             origin_url, artifact_url = compute_origin_urls(package_info)
+
+            if origin_url in seen_urls:
+                # prevent multiple listing of an origin,
+                # most recent version will be listed first
+                continue
+
+            seen_urls.add(origin_url)
 
             yield ListedOrigin(
                 lister_id=self.lister_obj.id,

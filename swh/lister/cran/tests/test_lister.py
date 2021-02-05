@@ -105,6 +105,22 @@ def test_cran_lister_cran(datadir, swh_scheduler, mocker):
         filtered_origins[0].last_update == parse_packaged_date(package_info)
 
 
+def test_cran_lister_duplicated_origins(datadir, swh_scheduler, mocker):
+    with open(path.join(datadir, "list-r-packages.json")) as f:
+        cran_data = json.loads(f.read())
+
+    lister = CRANLister(swh_scheduler)
+
+    mock_cran = mocker.patch("swh.lister.cran.lister.read_cran_data")
+
+    mock_cran.return_value = cran_data + cran_data
+
+    stats = lister.run()
+
+    assert stats.pages == 1
+    assert stats.origins == len(cran_data)
+
+
 @pytest.mark.parametrize(
     "credentials, expected_credentials",
     [
