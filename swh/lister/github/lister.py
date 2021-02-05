@@ -23,6 +23,19 @@ from ..pattern import CredentialsType, Lister
 logger = logging.getLogger(__name__)
 
 
+def init_session(session: Optional[requests.Session] = None) -> requests.Session:
+    """Initialize a requests session with the proper headers for requests to
+    GitHub."""
+    if not session:
+        session = requests.Session()
+
+    session.headers.update(
+        {"Accept": "application/vnd.github.v3+json", "User-Agent": USER_AGENT}
+    )
+
+    return session
+
+
 @dataclass
 class GitHubListerState:
     """State of the GitHub lister"""
@@ -88,10 +101,7 @@ class GitHubLister(Lister[GitHubListerState, List[Dict[str, Any]]]):
 
         self.relisting = self.first_id is not None or self.last_id is not None
 
-        self.session = requests.Session()
-        self.session.headers.update(
-            {"Accept": "application/vnd.github.v3+json", "User-Agent": USER_AGENT}
-        )
+        self.session = init_session()
 
         random.shuffle(self.credentials)
 
