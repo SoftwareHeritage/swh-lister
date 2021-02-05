@@ -108,22 +108,28 @@ def parse_packaged_date(package_info: Dict[str, str]) -> Optional[datetime]:
     packaged_at_str = package_info.get("Packaged", "")
     packaged_at = None
     if packaged_at_str:
-        try:
-            # Packaged field format: "%Y-%m-%d %H:%M:%S UTC; <packager>",
-            packaged_at = datetime.strptime(
-                packaged_at_str.split(" UTC;")[0], "%Y-%m-%d %H:%M:%S",
-            ).replace(tzinfo=timezone.utc)
-        except Exception:
+        packaged_at_str = packaged_at_str.replace(" UTC", "")
+        # Packaged field possible formats:
+        #   - "%Y-%m-%d %H:%M:%S[.%f] UTC; <packager>",
+        #   - "%a %b %d %H:%M:%S %Y; <packager>"
+        for date_format in (
+            "%Y-%m-%d %H:%M:%S",
+            "%Y-%m-%d %H:%M:%S.%f",
+            "%a %b %d %H:%M:%S %Y",
+        ):
             try:
-                # Some old packages have a different date format:
-                # "%a %b %d %H:%M:%S %Y; <packager>"
                 packaged_at = datetime.strptime(
-                    packaged_at_str.split(";")[0], "%a %b %d %H:%M:%S %Y",
+                    packaged_at_str.split(";")[0], date_format,
                 ).replace(tzinfo=timezone.utc)
+                break
             except Exception:
-                logger.debug(
-                    "Could not parse %s package release date: %s",
-                    package_info["Package"],
-                    packaged_at_str,
-                )
+                continue
+
+        if packaged_at is None:
+            logger.debug(
+                "Could not parse %s package release date: %s",
+                package_info["Package"],
+                packaged_at_str,
+            )
+
     return packaged_at

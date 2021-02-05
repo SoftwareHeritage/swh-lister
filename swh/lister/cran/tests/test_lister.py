@@ -40,6 +40,20 @@ def test_parse_packaged_date():
     assert parse_packaged_date(common_date_format) == datetime(
         year=2017, month=4, day=26, hour=11, minute=36, second=15, tzinfo=timezone.utc
     )
+    common_date_format = {
+        "Package": "test",
+        "Packaged": "2017-04-26 11:36:15.123456 UTC; Jonathan",
+    }
+    assert parse_packaged_date(common_date_format) == datetime(
+        year=2017,
+        month=4,
+        day=26,
+        hour=11,
+        minute=36,
+        second=15,
+        microsecond=123456,
+        tzinfo=timezone.utc,
+    )
     old_date_format = {
         "Package": "test",
         "Packaged": "Thu Mar 30 10:48:35 2006; hornik",
