@@ -34,207 +34,54 @@ Local deployment
 
 ## lister configuration
 
-Each lister implemented so far by Software Heritage (`github`, `gitlab`, `debian`, `pypi`, `npm`)
+Each lister implemented so far by Software Heritage (`bitbucket`, `cgit`, `cran`, `debian`,
+`gitea`, `github`, `gitlab`, `gnu`, `launchpad`, `npm`, `packagist`, `phabricator`, `pypi`)
 must be configured by following the instructions below (please note that you have to replace
 `<lister_name>` by one of the lister name introduced above).
 
 ### Preparation steps
 
-1. `mkdir ~/.config/swh/ ~/.cache/swh/lister/<lister_name>/`
-2. create configuration file `~/.config/swh/lister_<lister_name>.yml`
-3. Bootstrap the db instance schema
-
-```lang=bash
-$ createdb lister-<lister_name>
-$ python3 -m swh.lister.cli --db-url postgres:///lister-<lister_name> <lister_name>
-```
-
-Note: This bootstraps a minimum data set needed for the lister to run.
+1. `mkdir ~/.config/swh/`
+2. create configuration file `~/.config/swh/listers.yml`
 
 ### Configuration file sample
 
-Minimalistic configuration shared by all listers to add in file `~/.config/swh/lister_<lister_name>.yml`:
+Minimalistic configuration shared by all listers to add in file `~/.config/swh/listers.yml`:
 
 ```lang=yml
-storage:
-  cls: 'remote'
-  args:
-    url: 'http://localhost:5002/'
-
 scheduler:
   cls: 'remote'
   args:
     url: 'http://localhost:5008/'
 
-lister:
-  cls: 'local'
-  args:
-    # see http://docs.sqlalchemy.org/en/latest/core/engines.html#database-urls
-    db: 'postgresql:///lister-<lister_name>'
-
-credentials: []
-cache_responses: True
-cache_dir: /home/user/.cache/swh/lister/<lister_name>/
+credentials: {}
 ```
 
-Note: This expects storage (5002) and scheduler (5008) services to run locally
+Note: This expects scheduler (5008) service to run locally
 
-## lister-github
+## Executing a lister
 
-Once configured, you can execute a GitHub lister using the following instructions in a `python3` script:
+Once configured, a lister can be executed by using the `swh` CLI tool with the
+following options and commands:
 
-```lang=python
-import logging
-from swh.lister.github.tasks import range_github_lister
-
-logging.basicConfig(level=logging.DEBUG)
-range_github_lister(364, 365)
-...
+```
+$ swh --log-level DEBUG lister -C ~/.config/swh/listers.yml run --lister <lister_name> [lister_parameters]
 ```
 
-## lister-gitlab
+Examples:
 
-Once configured, you can execute a GitLab lister using the instructions detailed in the `python3` scripts below:
-
-```lang=python
-import logging
-from swh.lister.gitlab.tasks import range_gitlab_lister
-
-logging.basicConfig(level=logging.DEBUG)
-range_gitlab_lister(1, 2, {
-    'instance': 'debian',
-    'api_baseurl': 'https://salsa.debian.org/api/v4',
-    'sort': 'asc',
-    'per_page': 20
-})
 ```
+$ swh --log-level DEBUG lister -C ~/.config/swh/listers.yml run --lister bitbucket
 
-```lang=python
-import logging
-from swh.lister.gitlab.tasks import full_gitlab_relister
+$ swh --log-level DEBUG lister -C ~/.config/swh/listers.yml run --lister cran
 
-logging.basicConfig(level=logging.DEBUG)
-full_gitlab_relister({
-    'instance': '0xacab',
-    'api_baseurl': 'https://0xacab.org/api/v4',
-    'sort': 'asc',
-    'per_page': 20
-})
-```
+$ swh --log-level DEBUG lister -C ~/.config/swh/listers.yml run --lister gitea url=https://codeberg.org/api/v1/
 
-```lang=python
-import logging
-from swh.lister.gitlab.tasks import incremental_gitlab_lister
+$ swh --log-level DEBUG lister -C ~/.config/swh/listers.yml run --lister gitlab url=https://salsa.debian.org/api/v4/
 
-logging.basicConfig(level=logging.DEBUG)
-incremental_gitlab_lister({
-    'instance': 'freedesktop.org',
-    'api_baseurl': 'https://gitlab.freedesktop.org/api/v4',
-    'sort': 'asc',
-    'per_page': 20
-})
-```
+$ swh --log-level DEBUG lister -C ~/.config/swh/listers.yml run --lister npm
 
-## lister-debian
-
-Once configured, you can execute a Debian lister using the following instructions in a `python3` script:
-
-```lang=python
-import logging
-from swh.lister.debian.tasks import debian_lister
-
-logging.basicConfig(level=logging.DEBUG)
-debian_lister('Debian')
-```
-
-## lister-pypi
-
-Once configured, you can execute a PyPI lister using the following instructions in a `python3` script:
-
-```lang=python
-import logging
-from swh.lister.pypi.tasks import pypi_lister
-
-logging.basicConfig(level=logging.DEBUG)
-pypi_lister()
-```
-
-## lister-npm
-
-Once configured, you can execute a npm lister using the following instructions in a `python3` REPL:
-
-```lang=python
-import logging
-from swh.lister.npm.tasks import npm_lister
-
-logging.basicConfig(level=logging.DEBUG)
-npm_lister()
-```
-
-## lister-phabricator
-
-Once configured, you can execute a Phabricator lister using the following instructions in a `python3` script:
-
-```lang=python
-import logging
-from swh.lister.phabricator.tasks import incremental_phabricator_lister
-
-logging.basicConfig(level=logging.DEBUG)
-incremental_phabricator_lister(forge_url='https://forge.softwareheritage.org', api_token='XXXX')
-```
-
-## lister-gnu
-
-Once configured, you can execute a PyPI lister using the following instructions in a `python3` script:
-
-```lang=python
-import logging
-from swh.lister.gnu.tasks import gnu_lister
-
-logging.basicConfig(level=logging.DEBUG)
-gnu_lister()
-```
-
-## lister-cran
-
-Once configured, you can execute a CRAN lister using the following instructions in a `python3` script:
-
-```lang=python
-import logging
-from swh.lister.cran.tasks import cran_lister
-
-logging.basicConfig(level=logging.DEBUG)
-cran_lister()
-```
-
-## lister-cgit
-
-Once configured, you can execute a cgit lister using the following instructions
-in a `python3` script:
-
-```lang=python
-import logging
-from swh.lister.cgit.tasks import cgit_lister
-
-logging.basicConfig(level=logging.DEBUG)
-# simple cgit instance
-cgit_lister(url='https://git.kernel.org/')
-# cgit instance whose listed repositories differ from the base url
-cgit_lister(url='https://cgit.kde.org/',
-            url_prefix='https://anongit.kde.org/')
-```
-
-## lister-packagist
-
-Once configured, you can execute a Packagist lister using the following instructions
-in a `python3` script:
-
-```lang=python
-import logging
-from swh.lister.packagist.tasks import packagist_lister
-
-logging.basicConfig(level=logging.DEBUG)
-packagist_lister()
+$ swh --log-level DEBUG lister -C ~/.config/swh/listers.yml run --lister pypi
 ```
 
 Licensing
