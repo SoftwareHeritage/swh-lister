@@ -1,8 +1,12 @@
-swh-lister (0.9.0-1~swh1~bpo10+1) buster-swh; urgency=medium
+swh-lister (0.9.1-1~swh1) unstable-swh; urgency=medium
 
-  * Rebuild for buster-swh
+  * New upstream release 0.9.1     - (tagged by Antoine R. Dumont
+    (@ardumont) <ardumont@softwareheritage.org> on 2021-02-08 14:09:27
+    +0100)
+  * Upstream changes:     - v0.9.1     - debian: Update archive mirror
+    URL templates to process
 
- -- Software Heritage autobuilder (on jenkins-debian1) <jenkins@jenkins-debian1.internal.softwareheritage.org>  Mon, 08 Feb 2021 07:54:53 +0000
+ -- Software Heritage autobuilder (on jenkins-debian1) <jenkins@jenkins-debian1.internal.softwareheritage.org>  Mon, 08 Feb 2021 13:12:05 +0000
 
 swh-lister (0.9.0-1~swh1) unstable-swh; urgency=medium
 
