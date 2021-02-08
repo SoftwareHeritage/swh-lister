@@ -119,8 +119,11 @@ class DebianLister(Lister[DebianListerState, DebianPageType]):
         """Return an iterator on possible Sources file URLs as multiple compression
         formats can be used."""
         compression_exts = ("xz", "bz2", "gz")
-        base_url = urljoin(self.url, f"dists/{suite}/{component}/source/Sources")
-        for ext in compression_exts:
+        base_urls = [
+            urljoin(self.url, f"dists/{suite}/{component}/source/Sources"),
+            urljoin(self.url, f"dists/{suite}/updates/{component}/source/Sources"),
+        ]
+        for base_url, ext in product(base_urls, compression_exts):
             yield (f"{base_url}.{ext}", ext)
         yield (base_url, "")
 
