@@ -80,8 +80,8 @@ After the execution of lister is complete, you can see the loading task created:
 
     ~/swh-environment/swh-lister$ swh scheduler task list
 
-You can also check the repositories listed by the lister from the database in
-which the lister output is stored. To connect to the database::
+You can also check the repositories listed by the lister from the scheduler database
+in which the lister output is stored. To connect to the database::
 
-    ~/swh-environment/swh-docker-dev$ docker-compose exec swh-lister bash -c \
-       'psql swh-listers'
+    ~/swh-environment/docker$ docker-compose exec swh-scheduler bash -c \
+      'psql swh-scheduler -c "select url from listed_origins"'

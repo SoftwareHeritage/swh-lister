@@ -6,8 +6,8 @@
 import logging
 from typing import Iterator, List, Optional
 
+from bs4 import BeautifulSoup
 import requests
-import xmltodict
 
 from swh.scheduler.interface import SchedulerInterface
 from swh.scheduler.model import ListedOrigin
@@ -54,8 +54,9 @@ class PyPILister(StatelessLister[PackageListPage]):
 
         response.raise_for_status()
 
-        page_xmldict = xmltodict.parse(response.content)
-        page_results = [p["#text"] for p in page_xmldict["html"]["body"]["a"]]
+        page = BeautifulSoup(response.content, features="html.parser")
+
+        page_results = [p.text for p in page.find_all("a")]
 
         yield page_results
 
