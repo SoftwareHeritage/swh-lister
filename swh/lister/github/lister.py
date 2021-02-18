@@ -36,12 +36,33 @@ def init_session(session: Optional[requests.Session] = None) -> requests.Session
     return session
 
 
+class RateLimited(Exception):
+    def __init__(self, response):
+        self.response = response
+
+
 def github_request(
-    url: str, session: Optional[requests.Session] = None
+    url: str, token: Optional[str] = None, session: Optional[requests.Session] = None
 ) -> requests.Response:
     session = init_session(session)
 
-    return session.get(url)
+    headers = {}
+    if token:
+        headers["Authorization"] = f"token {token}"
+
+    response = session.get(url, headers=headers)
+
+    anonymous = token is None and "Authorization" not in session.headers
+
+    if (
+        # GitHub returns inconsistent status codes between unauthenticated
+        # rate limit and authenticated rate limits. Handle both.
+        response.status_code == 429
+        or (anonymous and response.status_code == 403)
+    ):
+        raise RateLimited(response)
+
+    return response
 
 
 @dataclass
@@ -169,14 +190,11 @@ class GitHubLister(Lister[GitHubListerState, List[Dict[str, Any]]]):
             max_attempts = 1 if self.anonymous else len(self.credentials)
             reset_times: Dict[int, int] = {}  # token index -> time
             for attempt in range(max_attempts):
-                response = github_request(current_url, self.session)
-                if not (
-                    # GitHub returns inconsistent status codes between unauthenticated
-                    # rate limit and authenticated rate limits. Handle both.
-                    response.status_code == 429
-                    or (self.anonymous and response.status_code == 403)
-                ):
-                    # Not rate limited, exit this loop.
+                try:
+                    response = github_request(current_url, session=self.session)
+                except RateLimited as e:
+                    response = e.response
+                else:
                     break
 
                 ratelimit_reset = response.headers.get("X-Ratelimit-Reset")
