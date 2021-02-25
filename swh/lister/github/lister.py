@@ -13,7 +13,13 @@ from urllib.parse import parse_qs, urlparse
 
 import iso8601
 import requests
-from tenacity import retry, retry_any, retry_if_exception_type, wait_exponential
+from tenacity import (
+    retry,
+    retry_any,
+    retry_if_exception_type,
+    retry_if_result,
+    wait_exponential,
+)
 
 from swh.scheduler.interface import SchedulerInterface
 from swh.scheduler.model import ListedOrigin
@@ -65,6 +71,8 @@ class RateLimited(Exception):
         # ChunkedEncodingErrors happen when the TLS connection gets reset, e.g.
         # when running the lister on a connection with high latency
         retry_if_exception_type(requests.exceptions.ChunkedEncodingError),
+        # 502 status codes happen for a Server Error, sometimes
+        retry_if_result(lambda r: r.status_code == 502),
     ),
 )
 def github_request(
