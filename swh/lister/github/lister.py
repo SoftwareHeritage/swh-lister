@@ -306,6 +306,10 @@ class GitHubLister(Lister[GitHubListerState, List[Dict[str, Any]]]):
         assert self.lister_obj.id is not None
 
         for repo in page:
+            if not repo:
+                # null repositories in listings happen sometimes...
+                continue
+
             pushed_at_str = repo.get("pushed_at")
             pushed_at: Optional[datetime.datetime] = None
             if pushed_at_str:
@@ -322,6 +326,11 @@ class GitHubLister(Lister[GitHubListerState, List[Dict[str, Any]]]):
         """Update the currently stored state using the latest listed page"""
         if self.relisting:
             # Don't update internal state when relisting
+            return
+
+        if not page:
+            # Sometimes, when you reach the end of the world, GitHub returns an empty
+            # page of repositories
             return
 
         last_id = page[-1]["id"]
