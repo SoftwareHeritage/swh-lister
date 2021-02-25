@@ -39,6 +39,23 @@ def init_session(session: Optional[requests.Session] = None) -> requests.Session
 
 class RateLimited(Exception):
     def __init__(self, response):
+        self.reset_time: Optional[int]
+
+        # Figure out how long we need to sleep because of that rate limit
+        ratelimit_reset = response.headers.get("X-Ratelimit-Reset")
+        retry_after = response.headers.get("Retry-After")
+        if ratelimit_reset is not None:
+            self.reset_time = int(ratelimit_reset)
+        elif retry_after is not None:
+            self.reset_time = int(time.time()) + int(retry_after) + 1
+        else:
+            logger.warning(
+                "Received a rate-limit-like status code %s, but no rate-limit "
+                "headers set. Response content: %s",
+                response.status_code,
+                response.content,
+            )
+            self.reset_time = None
         self.response = response
 
 
@@ -201,31 +218,23 @@ class GitHubLister(Lister[GitHubListerState, List[Dict[str, Any]]]):
             for attempt in range(max_attempts):
                 try:
                     response = github_request(current_url, session=self.session)
-                except RateLimited as e:
-                    response = e.response
-                else:
                     break
+                except RateLimited as e:
+                    reset_info = "(unknown reset)"
+                    if e.reset_time is not None:
+                        reset_times[self.token_index] = e.reset_time
+                        reset_info = "(resetting in %ss)" % (e.reset_time - time.time())
 
-                ratelimit_reset = response.headers.get("X-Ratelimit-Reset")
-                if ratelimit_reset is None:
-                    logger.warning(
-                        "Rate-limit reached and X-Ratelimit-Reset value not found. "
-                        "Response content: %s",
-                        response.content,
-                    )
-                else:
-                    reset_times[self.token_index] = int(ratelimit_reset)
-
-                if not self.anonymous:
-                    logger.info(
-                        "Rate limit exhausted for current user %s (resetting at %s)",
-                        self.current_user,
-                        ratelimit_reset,
-                    )
-                    # Use next token in line
-                    self.set_next_session_token()
-                    # Wait one second to avoid triggering GitHub's abuse rate limits.
-                    time.sleep(1)
+                    if not self.anonymous:
+                        logger.info(
+                            "Rate limit exhausted for current user %s %s",
+                            self.current_user,
+                            reset_info,
+                        )
+                        # Use next token in line
+                        self.set_next_session_token()
+                        # Wait one second to avoid triggering GitHub's abuse rate limits
+                        time.sleep(1)
             else:
                 # All tokens have been rate-limited. What do we do?
 
