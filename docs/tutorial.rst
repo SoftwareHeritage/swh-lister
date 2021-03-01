@@ -3,363 +3,363 @@
 Tutorial: list the content of your favorite forge in just a few steps
 =====================================================================
 
-(the `original version
-<https://www.softwareheritage.org/2017/03/24/list-the-content-of-your-favorite-forge-in-just-a-few-steps/>`_
-of this article appeared on the Software Heritage blog)
+Overview
+--------
 
-Back in November 2016, Nicolas Dandrimont wrote about structural code changes
-`leading to a massive (+15 million!) upswing in the number of repositories
-archived by Software Heritage
-<https://www.softwareheritage.org/2016/11/09/listing-47-million-repositories-refactoring-our-github-lister/>`_
-through a combination of automatic linkage between the listing and loading
-scheduler, new understanding of how to deal with extremely large repository
-hosts like `GitHub <https://github.com/>`_, and activating a new set of
-repositories that had previously been skipped over.
+The three major phases of work in Software Heritage's preservation process, on the
+technical side, are *listing software sources*, *scheduling updates* and *loading the
+software artifacts into the archive*.
 
-In the post, Nicolas outlined the three major phases of work in Software
-Heritage's preservation process (listing, scheduling updates, loading) and
-highlighted that the ability to preserve the world's free software heritage
-depends on our ability to find and list the repositories.
+A previous effort in 2017 consisted in designing the framework to make lister a
+straightforward "fill in the blanks" process, based on gained experience on the
+diversity found in the listed services. This is the second iteration on the lister
+framework design, comprising a library and an API which is easier to work with and less
+"magic" (read implicit). This new design is part of a larger effort in redesigning the
+scheduling system for the recurring tasks updating the content of the archive.
 
-At the time, Software Heritage was only able to list projects on
-GitHub. Focusing early on GitHub, one of the largest and most active forge in
-the world, allowed for a big value-to-effort ratio and a rapid launch for the
-archive. As the old Italian proverb goes, "Il meglio è nemico del bene," or in
-modern English parlance, "Perfect is the enemy of good," right? Right. So the
-plan from the beginning was to implement a lister for GitHub, then maybe
-implement another one, and then take a few giant steps backward and squint our
-eyes.
+.. _fundamentals:
 
-Why? Because source code hosting services don't behave according to a unified
-standard. Each new service requires dedicated development time to implement a
-new scraping client for the non-transferable requirements and intricacies of
-that service's API. At the time, doing it in an extensible and adaptable way
-required a level of exposure to the myriad differences between these services
-that we just didn't think we had yet.
-
-Nicolas' post closed by saying "We haven't carved out a stable API yet that
-allows you to just fill in the blanks, as we only have the GitHub lister
-currently, and a proven API will emerge organically only once we have some
-diversity."
-
-That has since changed. As of March 6, 2017, the Software Heritage **lister
-code has been aggressively restructured, abstracted, and commented** to make
-creating new listers significantly easier. There may yet be a few kinks to iron
-out, but **now making a new lister is practically like filling in the blanks**.
+Fundamentals
+------------
 
 Fundamentally, a basic lister must follow these steps:
 
 1. Issue a network request for a service endpoint.
-2. Convert the response into a canonical format.
-3. Populate a work queue for fetching and ingesting source repositories.
+2. Convert the response data into a model object.
+3. Send the model object to the scheduler.
 
-Steps 1 and 3 are generic problems, so they can get generic solutions hidden
-away in the base code, most of which never needs to change. That leaves us to
-implement step 2, which can be trivially done now for services with a clean web
-APIs.
+Steps 1 and 3 are generic problems, that are often already solved by helpers or in other
+listers. That leaves us mainly to implement step 2, which is simple when the remote
+service provides an API.
 
-In the new code, we've tried to hide away as much generic functionality as
-possible, turning it into set-and-forget plumbing between a few simple
-customized elements. Different hosting services might use different network
-protocols, rate-limit messages, or pagination schemes, but, as long as there is
-some way to get a list of the hosted repositories, we think that the new base
-code will make getting those repositories much easier.
+.. _prerequisites:
 
-First, let me give you the 30,000 foot view…
+Prerequisites
+-------------
 
-The old GitHub-specific lister code looked like this (265 lines of Python):
+Skills:
 
-.. figure:: images/old_github_lister.png
+* object-oriented Python
+* requesting remote services through HTTP
+* scrapping if no API is offered
 
-By contrast, the new GitHub-specific code looks like this (34 lines of Python):
+Analysis of the target service. Prepare the following elements to write the lister:
 
-.. figure:: images/new_github_lister.png
+* instance names and URLs
+* requesting scheme: base URL, path, query_string, POST data, headers
+* authentication types and which one to support, if any
+* rate-limiting: HTTP codes and headers used
+* data format: JSON/XML/HTML/...?
+* mapping between remote data and needed data (ListedOrigin model, internal state)
 
-And the new BitBucket-specific code is even shorter and looks like this (24 lines of Python):
+We will now walk through the steps to build a new lister.
+Please use this template to start with: :download:`new_lister_template.py`
 
-.. figure:: images/new_bitbucket_lister.png
+.. _lister-declaration:
 
-And now this is common shared code in a few abstract base classes, with some new features and loads of docstring comments (in red):
+Lister declaration
+------------------
 
-.. figure:: images/new_base.png
+In order to write a lister, two basic elements are required. These are the
+:py:class:`Lister` base class and the :py:class:`ListedOrigin` scheduler model class.
+Optionally, for listers that need to keep a state and support incremental listing, an
+additional object :py:class:`ListerState` will come into play.
 
-So how does the lister code work now, and **how might a contributing developer
-go about making a new one**
+Each lister must subclass :py:class:`Lister <swh.lister.pattern.Lister>` either directly
+or through a subclass such as :py:class:`StatelessLister
+<swh.lister.pattern.StatelessLister>` for stateless ones.
 
-The first thing to know is that we now have a generic lister base class and ORM
-model. A subclass of the lister base should already be able to do almost
-everything needed to complete a listing task for a single service
-request/response cycle with the following implementation requirements:
+We extensively type-annotate our listers, as any new code, which makes proeminent that
+those lister classes are generic, and take the following parameters:
 
-1. A member variable must be declared called ``MODEL``, which is equal to a
-   subclass (Note: type, not instance) of the base ORM model. The reasons for
-   using a subclass is mostly just because different services use different
-   incompatible primary identifiers for their repositories. The model
-   subclasses are typically only one or two additional variable declarations.
+* :py:class:`Lister`: the lister state type, the page type
+* :py:class:`StatelessLister`: only the page type
 
-2. A method called ``transport_request`` must be implemented, which takes the
-   complete target identifier (e.g., a URL) and tries to request it one time
-   using whatever transport protocol is required for interacting with the
-   service. It should not attempt to retry on timeouts or do anything else with
-   the response (that is already done for you). It should just either return
-   the response or raise a ``FetchError`` exception.
+You can can start by declaring a stateless lister and leave the implementation of state
+for later if the listing needs it. We will see how to in :ref:`handling-lister-state`.
 
-3. A method called ``transport_response_to_string`` must be implemented, which
-   takes the entire response of the request in (1) and converts it to a string
-   for logging purposes.
+Both the lister state type and the page type are user-defined types. However, while the
+page type may only exist as a type annotation, the state type for a stateful lister must
+be associated with a concrete object. The state type is commonly defined as a dataclass
+whereas the page type is often a mere annotation, potentially given a nice alias.
 
-4. A method called ``transport_quota_check`` must be implemented, which takes
-   the entire response of the request in (1) and checks to see if the process
-   has run afoul of any query quotas or rate limits. If the service says to
-   wait before making more requests, the method should return ``True`` and also
-   the number of seconds to wait, otherwise it returns ``False``.
+Example lister declaration::
 
-5. A method called ``transport_response_simplified`` must be implemented, which
-   also takes the entire response of the request in (1) and converts it to a
-   Python list of dicts (one dict for each repository) with keys given
-   according to the aforementioned ``MODEL`` class members.
+    NewForgePage = List[Dict[str, Any]]
 
-Because 1, 2, 3, and 4 are basically dependent only on the chosen network
-protocol, we also have an HTTP mix-in module, which supplements the lister base
-and provides default implementations for those methods along with optional
-request header injection using the Python Requests library. The
-``transport_quota_check`` method as provided follows the IETF standard for
-communicating rate limits with `HTTP code 429
-<https://tools.ietf.org/html/rfc6585#section-4>`_ which some hosting services
-have chosen not to follow, so it's possible that a specific lister will need to
-override it.
+    @dataclass
+    class NewForgeListerState:
+        ...
 
-On top of all of that, we also provide another layer over the base lister class
-which adds support for sequentially looping over indices. What are indices?
-Well, some services (`BitBucket <https://bitbucket.org/>`_ and GitHub for
-example) don't send you the entire list of all of their repositories at once,
-because that server response would be unwieldy. Instead they paginate their
-results, and they also allow you to query their APIs like this:
-``https://server_address.tld/query_type?start_listing_from_id=foo``. Changing
-the value of 'foo' lets you fetch a set of repositories starting from there. We
-call 'foo' an index, and we call a service that works this way an indexing
-service. GitHub uses the repository unique identifier and BitBucket uses the
-repository creation time, but a service can really use anything as long as the
-values monotonically increase with new repositories. A good indexing service
-also includes the URL of the next page with a later 'foo' in its responses. For
-these indexing services we provide another intermediate lister called the
-indexing lister. Instead of inheriting from :class:`ListerBase
-<swh.lister.core.lister_base.ListerBase>`, the lister class would inherit
-from :class:`IndexingLister
-<swh.lister.core.indexing_lister.IndexingLister>`. Along with the
-requirements of the lister base, the indexing lister base adds one extra
-requirement:
+    class NewForgeLister(Lister[NewForgeListerState, NewForgePage]):
+        LISTER_NAME = "My"
+        ...
 
-1. A method called ``get_next_target_from_response`` must be defined, which
-   takes a complete request response and returns the index ('foo' above) of the
-   next page.
+The new lister must declare a name through the :py:attr:`LISTER_NAME` class attribute.
 
-So those are all the basic requirements. There are, of course, a few other
-little bits and pieces (covered for now in the code's docstring comments), but
-for the most part that's it. It sounds like a lot of information to absorb and
-implement, but remember that most of the implementation requirements mentioned
-above are already provided for 99% of services by the HTTP mix-in module. It
-looks much simpler when we look at the actual implementations of the two
-new-style indexing listers we currently have…
+.. _lister-construction:
+
+Lister construction
+-------------------
+
+The lister constructor is only required to ask for a :py:class:`SchedulerInterface`
+object to pass to the base class. But it does not mean that it is all that's needed for
+it to useful. A lister need information on which remote service to talk to. It needs an
+URL.
+
+Some services are centralized and offered by a single organization. Think of Github.
+Others are offered by many people across the Internet, each using a different hosting,
+each providing specific data. Think of the many Gitlab instances. We need a name to
+identify each instance, and even if there is only one, we need its URL to access it
+concretely.
+
+Now, you may think of any strategy to infer the information or hardcode it, but the base
+class needs an URL and an instance name. In any case, for a multi-instance service, you
+better be explicit and require the URL as constructor argument. We recommend the URL to
+be some form of a base URL, to be concatenated with any variable part appearing either
+because there exist multiple instances or the URL need recomputation in the listing
+process.
+
+If we need any credentials to access a remote service, and do so in our polite but
+persistent fashion (remember that we want fresh information), you are encouraged to
+provide support for authenticated access. The base class support handling credentials as
+a set of identifier/secret pair. It knows how to load from a secrets store the right
+ones for the current ("lister name", "instance name") setting, if none were originally
+provided through the task parameters. You can ask for other types of access tokens in a
+separate parameter, but then you lose this advantage.
+
+Example of a typical lister constructor::
+
+    def __init__(
+        self,
+        scheduler: SchedulerInterface,
+        url: str,
+        instance: str,
+        credentials: CredentialsType = None,
+    ):
+        super().__init__(
+            scheduler=scheduler, url=url, instance=instance, credentials=credentials,
+        )
+        ...
+
+.. _core-lister-functionality:
+
+Core lister functionality
+-------------------------
+
+For the lister to contribute data to the archive, you now have to write the logic to
+fetch data from the remote service, and format it in the canonical form the scheduler
+expects, as outined in :ref:`fundamentals`. To this purpose, the two methods to
+implement are::
+
+    def get_pages(self) -> Iterator[NewForgePage]:
+        ...
+
+    def get_origins_from_page(self, page: NewForgePage) -> Iterator[ListedOrigin]:
+        ...
+
+Those two core functions are called by the principal lister method,
+:py:meth:`Lister.run`, found in the base class.
+
+:py:meth:`get_pages` is the guts of the lister. It takes no arguments and must produce
+data pages. An iterator is fine here, as the :py:meth:`Lister.run` method only mean to
+iterate in a single pass on it. This method gets its input from a network request to a
+remote service's endpoint to retrieve the data we long for.
+
+Depending on whether the data is adequately structured for our purpose can be tricky.
+Here you may have to show off your data scraping skills, or just consume a well-designed
+API. Those aspects are discussed more specifically in the section
+:ref:`handling-specific-topics`.
+
+In any case, we want the data we return to be usefully filtered and structured. The
+easiest way to create an iterator is to use the `yield` keyword. Yield each data page
+you have structured in accordance with the page type you have declared. The page type
+exists only for static type checking of data passed from :py:meth:`get_pages` to
+:py:meth:`get_origins_from_page`; you can choose whatever fits the bill.
+
+:py:meth:`get_origins_from_page` is simpler. For each individual software origin you
+have received in the page, you convert and yield a :py:class:`ListedOrigin` model
+object. This datatype has the following mandatory fields:
+
+* lister id: you generally fill this with the value of :py:attr:`self.lister_obj.id`
+
+* visit type: the type of software distribution format the service provides. For use by
+  a corresponding loader. It is an identifier, so you have to either use an existing
+  value or craft a new one if you get off the beaten track and tackle a new software
+  source. But then you will have to discuss the name with the core developers.
+
+  Example: Phabricator is a forge that can handle Git or SVN repositories. The visit
+  type would be "git" when listing such a repo that provides a Git URL that we can load.
+
+* origin URL: an URL that, combined with the visit type, will serve as the input of
+  loader.
+
+This datatype can also further be detailed with the optional fields:
+
+* last update date: freshness information on this origin, which is useful to the
+  scheduler for optimizing its scheduling decisions. Fill it if provided by the service,
+  at no substantial additional runtime cost, e.g. in the same request.
+
+  * extra loader arguments: extra parameters to be passed to the loader for it to be
+  able to load the origin. It is needed for example when additional context is needed
+  along with the URL to effectively load from the origin.
+
+See the definition of ListedOrigin_.
+
+Now that that we showed how those two methods operate, let's put it together by showing
+how they fit in the principal :py:meth:`Lister.run` method::
+
+    def run(self) -> ListerStats:
+
+        full_stats = ListerStats()
+
+        try:
+            for page in self.get_pages():
+                full_stats.pages += 1
+                origins = self.get_origins_from_page(page)
+                full_stats.origins += self.send_origins(origins)
+                self.commit_page(page)
+        finally:
+            self.finalize()
+            if self.updated:
+                self.set_state_in_scheduler()
+
+        return full_stats
+
+:py:meth:`Lister.send_origins` is the method that sends listed origins to the scheduler.
+
+The :py:class:`ListerState` datastructure, defined along the base lister class, is used
+to compute the number of listed pages and origins in a single lister run. It is useful
+both for the scheduler that automatically collects this information and to test the
+lister.
+
+You see that the bulk of a lister run consists in streaming data gathered from the
+remote service to the scheduler. And this is done under a ``try...finally`` construct to
+have the lister state reliably recorded in case of unhandled error. We will explain the
+role of the remaining methods and attributes appearing here in the next section as it is
+related to the lister state.
+
+.. _ListedOrigin: https://archive.softwareheritage.org/browse/swh:1:rev:03460207a17d82635ef5a6f12358392143eb9eef/?origin_url=https://forge.softwareheritage.org/source/swh-scheduler.git&path=swh/scheduler/model.py&revision=03460207a17d82635ef5a6f12358392143eb9eef#L134-L177
+
+.. _handling-lister-state:
+
+Handling lister state
+---------------------
+
+With what we have covered until now you can write a stateless lister. Unfortunately,
+some services provide too much data to efficiently deal with it in a one-shot fashion.
+Listing a given software source can take several hours or days to process. Our listers
+can also give valid output, but fail on an unexpected condition and would have to start
+over. As we want to be able to resume the listing process from a given element, provided
+by the remote service and guaranteed to be ordered, such as a date or a numeric
+identifier, we need to deal with state.
+
+The remaining part of the lister API is reserved for dealing with lister state.
+
+If the service to list has no pagination, then the data set to handle is small enough to
+not require keeping lister state. In the opposite case, you will have to determine which
+piece of information should be recorded in the lister state. As said earlier, we
+recommend declaring a dataclass for the lister state::
+
+    @dataclass
+    class NewForgeListerState:
+        current: str = ""
+
+    class NewForgeLister(Lister[NewForgeListerState, NewForgePage]):
+        ...
+
+A pair of methods, :py:meth:`state_from_dict` and :py:meth:`state_to_dict` are used to
+respectively import lister state from the scheduler and export lister state to the
+scheduler. Some fields may need help to be serialized to the scheduler, such as dates,
+so this needs to be handled there.
+
+Where is the state used? Taking the general case of a paginating service, the lister
+state is used at the beginning of the :py:meth:`get_pages` method to initialize the
+variables associated with the last listing progress. That way we can start from an
+arbitrary element, or just the first one if there is no last lister state.
+
+The :py:meth:`commit_page` is called on successful page processing, after the new
+origins are sent to the scheduler. Here you should mainly update the lister state by
+taking into account the new page processed, e.g. advance a date or serial field.
+
+Finally, upon either completion or error, the :py:meth:`finalize` is called. There you
+must set attribute :py:attr:`updated` to True if you were successful in advancing in the
+listing process. To do this you will commonly retrieve the latest saved lister state
+from the scheduler and compare with your current lister state. If lister state was
+updated, ultimately the current lister state will be recorded in the scheduler.
+
+We have now seen the stateful lister API. Note that some listers may implement more
+flexibility in the use of lister state. Some allow an `incremental` parameter that
+governs whether or not we will do a stateful listing or not. It is up to you to support
+additional functionality if it seems relevant.
+
+.. _handling-specific-topics:
+
+Handling specific topics
+------------------------
+
+Here is a quick coverage of common topics left out from lister construction and
+:py:meth:`get_pages` descriptions.
+
+Sessions
+^^^^^^^^
+
+When requesting a web service repeatedly, most parameters including headers do not
+change and could be set up once initially. We recommend setting up a e.g. HTTP session,
+as instance attribute so that further requesting code can focus on what really changes.
+Some ubiquitous HTTP headers include "Accept" to set to the service response format and
+"User-Agent" for which we provide a recommended value :py:const:`USER_AGENT` to be
+imported from :py:mod:`swh.lister`. Authentication is also commonly provided through
+headers, so you can also set it up in the session.
+
+Transport error handling
+^^^^^^^^^^^^^^^^^^^^^^^^
+
+We generally recommend logging every unhandleable error with the response content and
+then immediately stop the listing by doing an equivalent of
+:py:meth:`Response.raise_for_status` from the `requests` library. As for rate-limiting
+errors, we have a strategy of using a flexible decorator to handle the retrying for us.
+It is based on the `tenacity` library and accessible as :py:func:`throttling_retry` from
+:py:mod:`swh.lister.utils`.
+
+Pagination
+^^^^^^^^^^
+
+This one is a moving target. You have to understand how the pagination mechanics of the
+particular service works. Some guidelines though. The identifier may be minimal (an id
+to pass as query parameter), compound (a set of such parameters) or complete (a whole
+URL). If the service provides the next URL, use it. The piece of information may be
+found either in the response body, or in a header. Once identified, you still have to
+implement the logic of requesting and extracting it in a loop and quitting the loop when
+there is no more data to fetch.
+
+Page results
+^^^^^^^^^^^^
+
+First, when retrieving page results, which involves some protocols and parsing logic,
+please make sure that any deviance from what was expected will result in an
+informational error. You also have to simplify the results, both with filtering request
+parameters if the service supports it, and by extracting from the response only the
+information needed into a structured page. This all makes for easier debugging.
+
+Testing your lister
+-------------------
 
 When developing a new lister, it's important to test. For this, add the tests
 (check `swh/lister/*/tests/`) and register the celery tasks in the main
 conftest.py (`swh/lister/core/tests/conftest.py`).
 
-Another important step is to actually run it within the
-docker-dev (:ref:`run-lister-tutorial`).
+Another important step is to actually run it within the docker-dev
+(:ref:`run-lister-tutorial`).
 
-This is the entire source code for the BitBucket repository lister::
+More about listers
+------------------
 
-    # Copyright (C) 2017 the Software Heritage developers
-    # License: GNU General Public License version 3 or later
-    # See top-level LICENSE file for more information
+See current implemented listers as examples (GitHub_, Bitbucket_, CGit_, GitLab_ ).
 
-    from urllib import parse
-    from swh.lister.bitbucket.models import BitBucketModel
-    from swh.lister.core.indexing_lister import IndexingHttpLister
+Old (2017) lister tutorial :ref:`lister-tutorial-2017`
 
-    class BitBucketLister(IndexingHttpLister):
-        PATH_TEMPLATE = '/repositories?after=%s'
-        MODEL = BitBucketModel
-
-        def get_model_from_repo(self, repo):
-            return {'uid': repo['uuid'],
-                    'indexable': repo['created_on'],
-                    'name': repo['name'],
-                    'full_name': repo['full_name'],
-                    'html_url': repo['links']['html']['href'],
-                    'origin_url': repo['links']['clone'][0]['href'],
-                    'origin_type': repo['scm'],
-                    'description': repo['description']}
-
-        def get_next_target_from_response(self, response):
-            body = response.json()
-            if 'next' in body:
-                return parse.unquote(body['next'].split('after=')[1])
-            else:
-                return None
-
-        def transport_response_simplified(self, response):
-            repos = response.json()['values']
-            return [self.get_model_from_repo(repo) for repo in repos]
-
-And this is the entire source code for the GitHub repository lister::
-
-    # Copyright (C) 2017 the Software Heritage developers
-    # License: GNU General Public License version 3 or later
-    # See top-level LICENSE file for more information
-
-    import time
-    from swh.lister.core.indexing_lister import IndexingHttpLister
-    from swh.lister.github.models import GitHubModel
-
-    class GitHubLister(IndexingHttpLister):
-	PATH_TEMPLATE = '/repositories?since=%d'
-	MODEL = GitHubModel
-
-	def get_model_from_repo(self, repo):
-	    return {'uid': repo['id'],
-		    'indexable': repo['id'],
-		    'name': repo['name'],
-		    'full_name': repo['full_name'],
-		    'html_url': repo['html_url'],
-		    'origin_url': repo['html_url'],
-		    'origin_type': 'git',
-		    'description': repo['description']}
-
-	def get_next_target_from_response(self, response):
-	    if 'next' in response.links:
-		next_url = response.links['next']['url']
-		return int(next_url.split('since=')[1])
-	    else:
-		return None
-
-	def transport_response_simplified(self, response):
-	    repos = response.json()
-	    return [self.get_model_from_repo(repo) for repo in repos]
-
-	def request_headers(self):
-	    return {'Accept': 'application/vnd.github.v3+json'}
-
-	def transport_quota_check(self, response):
-	    remain = int(response.headers['X-RateLimit-Remaining'])
-	    if response.status_code == 403 and remain == 0:
-		reset_at = int(response.headers['X-RateLimit-Reset'])
-		delay = min(reset_at - time.time(), 3600)
-		return True, delay
-	    else:
-		return False, 0
-
-We can see that there are some common elements:
-
-* Both use the HTTP transport mixin (:class:`IndexingHttpLister
-  <swh.lister.core.indexing_lister.IndexingHttpLister>`) just combines
-  :class:`ListerHttpTransport
-  <swh.lister.core.lister_transports.ListerHttpTransport>` and
-  :class:`IndexingLister
-  <swh.lister.core.indexing_lister.IndexingLister>`) to get most of the
-  network request functionality for free.
-
-* Both also define ``MODEL`` and ``PATH_TEMPLATE`` variables. It should be
-  clear to developers that ``PATH_TEMPLATE``, when combined with the base
-  service URL (e.g., ``https://some_service.com``) and passed a value (the
-  'foo' index described earlier) results in a complete identifier for making
-  API requests to these services. It is required by our HTTP module.
-
-* Both services respond using JSON, so both implementations of
-  ``transport_response_simplified`` are similar and quite short.
-
-We can also see that there are a few differences:
-
-* GitHub sends the next URL as part of the response header, while BitBucket
-  sends it in the response body.
-
-* GitHub differentiates API versions with a request header (our HTTP
-  transport mix-in will automatically use any headers provided by an
-  optional request_headers method that we implement here), while
-  BitBucket has it as part of their base service URL.  BitBucket uses
-  the IETF standard HTTP 429 response code for their rate limit
-  notifications (the HTTP transport mix-in automatically handles
-  that), while GitHub uses their own custom response headers that need
-  special treatment.
-
-* But look at them! 58 lines of Python code, combined, to absorb all
-  repositories from two of the largest and most influential source code hosting
-  services.
-
-Ok, so what is going on behind the scenes?
-
-To trace the operation of the code, let's start with a sample instantiation and
-progress from there to see which methods get called when. What follows will be
-a series of extremely reductionist pseudocode methods. This is not what the
-code actually looks like (it's not even real code), but it does have the same
-basic flow. Bear with me while I try to lay out lister operation in a
-quasi-linear way…::
-
-    # main task
-
-    ghl = GitHubLister(lister_name='github.com',
-		       api_baseurl='https://github.com')
-    ghl.run()
-
-⇓ (IndexingLister.run)::
-
-    # IndexingLister.run
-
-    identifier = None
-    do
-	response, repos = ListerBase.ingest_data(identifier)
-	identifier = GitHubLister.get_next_target_from_response(response)
-    while(identifier)
-
-⇓ (ListerBase.ingest_data)::
-
-    # ListerBase.ingest_data
-
-    response = ListerBase.safely_issue_request(identifier)
-    repos = GitHubLister.transport_response_simplified(response)
-    injected = ListerBase.inject_repo_data_into_db(repos)
-    return response, injected
-
-⇓ (ListerBase.safely_issue_request)::
-
-    # ListerBase.safely_issue_request
-
-    repeat:
-	resp = ListerHttpTransport.transport_request(identifier)
-	retry, delay = ListerHttpTransport.transport_quota_check(resp)
-	if retry:
-	    sleep(delay)
-    until((not retry) or too_many_retries)
-    return resp
-
-⇓ (ListerHttpTransport.transport_request)::
-
-    # ListerHttpTransport.transport_request
-
-    path = ListerBase.api_baseurl
-	 + ListerHttpTransport.PATH_TEMPLATE % identifier
-    headers = ListerHttpTransport.request_headers()
-    return http.get(path, headers)
-
-(Oh look, there's our ``PATH_TEMPLATE``)
-
-⇓ (ListerHttpTransport.request_headers)::
-
-    # ListerHttpTransport.request_headers
-
-    override → GitHubLister.request_headers
-
-↑↑ (ListerBase.safely_issue_request)
-
-⇓ (ListerHttpTransport.transport_quota_check)::
-
-    # ListerHttpTransport.transport_quota_check
-
-    override → GitHubLister.transport_quota_check
-
-And then we're done. From start to finish, I hope this helps you understand how
-the few customized pieces fit into the new shared plumbing.
-
-Now you can go and write up a lister for a code hosting site we don't have yet!
+.. _GitHub: https://forge.softwareheritage.org/source/swh-lister/browse/master/swh/lister/github/lister.py
+.. _Bitbucket: https://forge.softwareheritage.org/source/swh-lister/browse/master/swh/lister/bitbucket/lister.py
+.. _CGit: https://forge.softwareheritage.org/source/swh-lister/browse/master/swh/lister/cgit/lister.py
+.. _GitLab: https://forge.softwareheritage.org/source/swh-lister/browse/master/swh/lister/gitlab/lister.py
