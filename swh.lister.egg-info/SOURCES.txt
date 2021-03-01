@@ -22,7 +22,9 @@ docs/Makefile
 docs/cli.rst
 docs/conf.py
 docs/index.rst
+docs/new_lister_template.py
 docs/run_a_new_lister.rst
+docs/tutorial-2017.rst
 docs/tutorial.rst
 docs/_static/.placeholder
 docs/_templates/.placeholder
