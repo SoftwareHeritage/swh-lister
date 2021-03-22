@@ -1,7 +1,7 @@
 .. _run-lister-tutorial:
 
 Tutorial: run a lister within docker-dev in just a few steps
-=====================================================================
+============================================================
 
 It is a good practice to run your new lister in docker-dev. This provides an almost
 production-like environment. Testing the lister in docker dev prior to deployment

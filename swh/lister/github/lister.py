@@ -13,6 +13,13 @@ from urllib.parse import parse_qs, urlparse
 
 import iso8601
 import requests
+from tenacity import (
+    retry,
+    retry_any,
+    retry_if_exception_type,
+    retry_if_result,
+    wait_exponential,
+)
 
 from swh.scheduler.interface import SchedulerInterface
 from swh.scheduler.model import ListedOrigin
@@ -21,6 +28,75 @@ from .. import USER_AGENT
 from ..pattern import CredentialsType, Lister
 
 logger = logging.getLogger(__name__)
+
+
+def init_session(session: Optional[requests.Session] = None) -> requests.Session:
+    """Initialize a requests session with the proper headers for requests to
+    GitHub."""
+    if not session:
+        session = requests.Session()
+
+    session.headers.update(
+        {"Accept": "application/vnd.github.v3+json", "User-Agent": USER_AGENT}
+    )
+
+    return session
+
+
+class RateLimited(Exception):
+    def __init__(self, response):
+        self.reset_time: Optional[int]
+
+        # Figure out how long we need to sleep because of that rate limit
+        ratelimit_reset = response.headers.get("X-Ratelimit-Reset")
+        retry_after = response.headers.get("Retry-After")
+        if ratelimit_reset is not None:
+            self.reset_time = int(ratelimit_reset)
+        elif retry_after is not None:
+            self.reset_time = int(time.time()) + int(retry_after) + 1
+        else:
+            logger.warning(
+                "Received a rate-limit-like status code %s, but no rate-limit "
+                "headers set. Response content: %s",
+                response.status_code,
+                response.content,
+            )
+            self.reset_time = None
+        self.response = response
+
+
+@retry(
+    wait=wait_exponential(multiplier=1, min=4, max=10),
+    retry=retry_any(
+        # ChunkedEncodingErrors happen when the TLS connection gets reset, e.g.
+        # when running the lister on a connection with high latency
+        retry_if_exception_type(requests.exceptions.ChunkedEncodingError),
+        # 502 status codes happen for a Server Error, sometimes
+        retry_if_result(lambda r: r.status_code == 502),
+    ),
+)
+def github_request(
+    url: str, token: Optional[str] = None, session: Optional[requests.Session] = None
+) -> requests.Response:
+    session = init_session(session)
+
+    headers = {}
+    if token:
+        headers["Authorization"] = f"token {token}"
+
+    response = session.get(url, headers=headers)
+
+    anonymous = token is None and "Authorization" not in session.headers
+
+    if (
+        # GitHub returns inconsistent status codes between unauthenticated
+        # rate limit and authenticated rate limits. Handle both.
+        response.status_code == 429
+        or (anonymous and response.status_code == 403)
+    ):
+        raise RateLimited(response)
+
+    return response
 
 
 @dataclass
@@ -88,10 +164,7 @@ class GitHubLister(Lister[GitHubListerState, List[Dict[str, Any]]]):
 
         self.relisting = self.first_id is not None or self.last_id is not None
 
-        self.session = requests.Session()
-        self.session.headers.update(
-            {"Accept": "application/vnd.github.v3+json", "User-Agent": USER_AGENT}
-        )
+        self.session = init_session()
 
         random.shuffle(self.credentials)
 
@@ -151,36 +224,25 @@ class GitHubLister(Lister[GitHubListerState, List[Dict[str, Any]]]):
             max_attempts = 1 if self.anonymous else len(self.credentials)
             reset_times: Dict[int, int] = {}  # token index -> time
             for attempt in range(max_attempts):
-                response = self.session.get(current_url)
-                if not (
-                    # GitHub returns inconsistent status codes between unauthenticated
-                    # rate limit and authenticated rate limits. Handle both.
-                    response.status_code == 429
-                    or (self.anonymous and response.status_code == 403)
-                ):
-                    # Not rate limited, exit this loop.
+                try:
+                    response = github_request(current_url, session=self.session)
                     break
+                except RateLimited as e:
+                    reset_info = "(unknown reset)"
+                    if e.reset_time is not None:
+                        reset_times[self.token_index] = e.reset_time
+                        reset_info = "(resetting in %ss)" % (e.reset_time - time.time())
 
-                ratelimit_reset = response.headers.get("X-Ratelimit-Reset")
-                if ratelimit_reset is None:
-                    logger.warning(
-                        "Rate-limit reached and X-Ratelimit-Reset value not found. "
-                        "Response content: %s",
-                        response.content,
-                    )
-                else:
-                    reset_times[self.token_index] = int(ratelimit_reset)
-
-                if not self.anonymous:
-                    logger.info(
-                        "Rate limit exhausted for current user %s (resetting at %s)",
-                        self.current_user,
-                        ratelimit_reset,
-                    )
-                    # Use next token in line
-                    self.set_next_session_token()
-                    # Wait one second to avoid triggering GitHub's abuse rate limits.
-                    time.sleep(1)
+                    if not self.anonymous:
+                        logger.info(
+                            "Rate limit exhausted for current user %s %s",
+                            self.current_user,
+                            reset_info,
+                        )
+                        # Use next token in line
+                        self.set_next_session_token()
+                        # Wait one second to avoid triggering GitHub's abuse rate limits
+                        time.sleep(1)
             else:
                 # All tokens have been rate-limited. What do we do?
 
@@ -244,6 +306,10 @@ class GitHubLister(Lister[GitHubListerState, List[Dict[str, Any]]]):
         assert self.lister_obj.id is not None
 
         for repo in page:
+            if not repo:
+                # null repositories in listings happen sometimes...
+                continue
+
             pushed_at_str = repo.get("pushed_at")
             pushed_at: Optional[datetime.datetime] = None
             if pushed_at_str:
@@ -260,6 +326,11 @@ class GitHubLister(Lister[GitHubListerState, List[Dict[str, Any]]]):
         """Update the currently stored state using the latest listed page"""
         if self.relisting:
             # Don't update internal state when relisting
+            return
+
+        if not page:
+            # Sometimes, when you reach the end of the world, GitHub returns an empty
+            # page of repositories
             return
 
         last_id = page[-1]["id"]
