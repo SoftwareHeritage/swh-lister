@@ -1,8 +1,12 @@
-swh-lister (0.10.0-1~swh1~bpo10+1) buster-swh; urgency=medium
+swh-lister (1.0.0-1~swh1) unstable-swh; urgency=medium
 
-  * Rebuild for buster-swh
+  * New upstream release 1.0.0     - (tagged by Nicolas Dandrimont
+    <nicolas@dandrimont.eu> on 2021-03-22 10:56:04 +0100)
+  * Upstream changes:     - Release swh.lister v1.0.0     - All listers
+    have been rewritten and are ready to be used in production     -
+    with the most recent version of the swh.scheduler APIs.
 
- -- Software Heritage autobuilder (on jenkins-debian1) <jenkins@jenkins-debian1.internal.softwareheritage.org>  Mon, 01 Mar 2021 09:03:55 +0000
+ -- Software Heritage autobuilder (on jenkins-debian1) <jenkins@jenkins-debian1.internal.softwareheritage.org>  Mon, 22 Mar 2021 10:13:35 +0000
 
 swh-lister (0.10.0-1~swh1) unstable-swh; urgency=medium
 
