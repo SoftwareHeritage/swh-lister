@@ -27,7 +27,7 @@ Here are the steps you need to follow to run a lister within your local environm
 2. Follow the instruction mentioned under heading **Preparation steps** and
    **Configuration file sample** in README.md of swh-lister.
 3. Add in the lister configuration the new ``task_modules`` and ``task_queues``
-   entry for the your new lister. You need to amend the conf/lister.yml file to
+   entry for the your new lister. You need to amend the docker/conf/lister.yml file to
    add the entries. Here is an example for GNU lister::
 
     celery:
