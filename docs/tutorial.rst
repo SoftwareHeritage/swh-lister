@@ -357,8 +357,6 @@ More about listers
 
 See current implemented listers as examples (GitHub_, Bitbucket_, CGit_, GitLab_ ).
 
-Old (2017) lister tutorial :ref:`lister-tutorial-2017`
-
 .. _GitHub: https://forge.softwareheritage.org/source/swh-lister/browse/master/swh/lister/github/lister.py
 .. _Bitbucket: https://forge.softwareheritage.org/source/swh-lister/browse/master/swh/lister/bitbucket/lister.py
 .. _CGit: https://forge.softwareheritage.org/source/swh-lister/browse/master/swh/lister/cgit/lister.py
