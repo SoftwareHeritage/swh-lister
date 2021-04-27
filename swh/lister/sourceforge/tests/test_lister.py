@@ -13,7 +13,7 @@ from requests.exceptions import HTTPError
 from swh.lister import USER_AGENT
 from swh.lister.sourceforge.lister import (
     MAIN_SITEMAP_URL,
-    PROJECT_REST_URL_FORMAT,
+    PROJECT_API_URL_FORMAT,
     SourceForgeLister,
 )
 
@@ -28,7 +28,7 @@ TEST_PROJECTS = {
 }
 
 URLS_MATCHER = {
-    PROJECT_REST_URL_FORMAT.format(namespace=namespace, project=project): project
+    PROJECT_API_URL_FORMAT.format(namespace=namespace, project=project): project
     for project, namespace in TEST_PROJECTS.items()
 }
 

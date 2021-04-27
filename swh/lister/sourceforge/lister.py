@@ -50,12 +50,12 @@ SourceForgeListerPage = List[SourceForgeListerEntry]
 MAIN_SITEMAP_URL = "https://sourceforge.net/allura_sitemap/sitemap.xml"
 SITEMAP_XML_NAMESPACE = "{http://www.sitemaps.org/schemas/sitemap/0.9}"
 
-# REST resource endpoint for information about the given project.
+# API resource endpoint for information about the given project.
 #
 # `namespace`: Project namespace. Very often `p`, but can be something else like
 #              `adobe`
 # `project`: Project name, e.g. `seedai`. Can be a subproject, e.g `backapps/website`.
-PROJECT_REST_URL_FORMAT = "https://sourceforge.net/rest/{namespace}/{project}"
+PROJECT_API_URL_FORMAT = "https://sourceforge.net/rest/{namespace}/{project}"
 
 # Predictable URL for cloning (in the broad sense) a VCS registered for the project.
 #
@@ -116,7 +116,7 @@ class SourceForgeLister(StatelessLister[SourceForgeListerPage]):
         projects.
         Each XML sub-sitemap lists project pages, which are not unique per project: a
         project can have a wiki, a home, a git, an svn, etc.
-        For each unique project, we query a REST endpoint that lists (among
+        For each unique project, we query an API endpoint that lists (among
         other things) the tools associated with said project, some of which are
         the VCS used. Subprojects are considered separate projects.
         Lastly we use the information of which VCS are used to build the predictable
@@ -196,7 +196,7 @@ class SourceForgeLister(StatelessLister[SourceForgeListerPage]):
     def _get_pages_for_project(
         self, namespace, project, last_modified
     ) -> SourceForgeListerPage:
-        endpoint = PROJECT_REST_URL_FORMAT.format(namespace=namespace, project=project)
+        endpoint = PROJECT_API_URL_FORMAT.format(namespace=namespace, project=project)
         res = self.page_request(endpoint, {}).json()
 
         tools = res.get("tools")
