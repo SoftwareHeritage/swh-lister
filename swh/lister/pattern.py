@@ -145,11 +145,12 @@ class Lister(Generic[StateType, PageType]):
         return self.state_from_dict(self.lister_obj.current_state)
 
     def set_state_in_scheduler(self) -> None:
-        """Update the state in the scheduler backend from the state of the current instance.
+        """Update the state in the scheduler backend from the state of the current
+        instance.
 
         Raises:
-          :class:`swh.scheduler.exc.StaleData` in case of a race condition between
-          concurrent listers (from :meth:`swh.scheduler.Scheduler.update_lister`).
+          swh.scheduler.exc.StaleData: in case of a race condition between
+            concurrent listers (from :meth:`swh.scheduler.Scheduler.update_lister`).
         """
         self.lister_obj.current_state = self.state_to_dict(self.state)
         self.lister_obj = self.scheduler.update_lister(self.lister_obj)
