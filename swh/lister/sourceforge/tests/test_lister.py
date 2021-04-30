@@ -2,11 +2,13 @@
 # See the AUTHORS file at the top-level directory of this distribution
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
+import datetime
 import functools
 import json
 from pathlib import Path
 import re
 
+from iso8601 import iso8601
 import pytest
 from requests.exceptions import HTTPError
 
@@ -15,9 +17,12 @@ from swh.lister.sourceforge.lister import (
     MAIN_SITEMAP_URL,
     PROJECT_API_URL_FORMAT,
     SourceForgeLister,
+    SourceForgeListerState,
 )
 
 # Mapping of project name to namespace
+from swh.scheduler.model import ListedOrigin
+
 TEST_PROJECTS = {
     "adobexmp": "adobe",
     "backapps": "p",
@@ -55,6 +60,22 @@ def get_project_json(datadir, request, context):
 
 def _check_request_headers(request):
     return request.headers.get("User-Agent") == USER_AGENT
+
+
+def _check_listed_origins(lister, swh_scheduler):
+    scheduler_origins = swh_scheduler.get_listed_origins(lister.lister_obj.id).results
+    res = {o.url: (o.visit_type, str(o.last_update.date())) for o in scheduler_origins}
+    assert res == {
+        "svn.code.sf.net/p/backapps/website/code": ("svn", "2021-02-11"),
+        "git.code.sf.net/p/os3dmodels/git": ("git", "2017-03-31"),
+        "svn.code.sf.net/p/os3dmodels/svn": ("svn", "2017-03-31"),
+        "git.code.sf.net/p/mramm/files": ("git", "2019-04-04"),
+        "git.code.sf.net/p/mramm/git": ("git", "2019-04-04"),
+        "svn.code.sf.net/p/mramm/svn": ("svn", "2019-04-04"),
+        "git.code.sf.net/p/mojunk/git": ("git", "2017-12-31"),
+        "git.code.sf.net/p/mojunk/git2": ("git", "2017-12-31"),
+        "svn.code.sf.net/p/mojunk/svn": ("svn", "2017-12-31"),
+    }
 
 
 def test_sourceforge_lister_full(swh_scheduler, requests_mock, datadir):
@@ -96,20 +117,157 @@ def test_sourceforge_lister_full(swh_scheduler, requests_mock, datadir):
     # adobe and backapps itself have no repos.
     assert stats.pages == 4
     assert stats.origins == 9
-
-    scheduler_origins = swh_scheduler.get_listed_origins(lister.lister_obj.id).results
-    res = {o.url: (o.visit_type, str(o.last_update.date())) for o in scheduler_origins}
-    assert res == {
-        "svn.code.sf.net/p/backapps/website/code": ("svn", "2021-02-11"),
-        "git.code.sf.net/p/os3dmodels/git": ("git", "2017-03-31"),
-        "svn.code.sf.net/p/os3dmodels/svn": ("svn", "2017-03-31"),
-        "git.code.sf.net/p/mramm/files": ("git", "2019-04-04"),
-        "git.code.sf.net/p/mramm/git": ("git", "2019-04-04"),
-        "svn.code.sf.net/p/mramm/svn": ("svn", "2019-04-04"),
-        "git.code.sf.net/p/mojunk/git": ("git", "2017-12-31"),
-        "git.code.sf.net/p/mojunk/git2": ("git", "2017-12-31"),
-        "svn.code.sf.net/p/mojunk/svn": ("svn", "2017-12-31"),
+    expected_state = {
+        "subsitemap_last_modified": {
+            "https://sourceforge.net/allura_sitemap/sitemap-0.xml": "2021-03-18",
+            "https://sourceforge.net/allura_sitemap/sitemap-1.xml": "2021-03-18",
+        },
+        "empty_projects": {
+            "https://sourceforge.net/rest/p/backapps": "2021-02-11",
+            "https://sourceforge.net/rest/adobe/adobexmp": "2017-10-17",
+        },
     }
+    assert lister.state_to_dict(lister.state) == expected_state
+
+    _check_listed_origins(lister, swh_scheduler)
+
+
+def test_sourceforge_lister_incremental(swh_scheduler, requests_mock, datadir, mocker):
+    """
+    Simulate an incremental listing of an artificially restricted sourceforge.
+    Same dataset as the full run, because it's enough to validate the different cases.
+    """
+    lister = SourceForgeLister(scheduler=swh_scheduler, incremental=True)
+
+    requests_mock.get(
+        MAIN_SITEMAP_URL,
+        text=get_main_sitemap(datadir),
+        additional_matcher=_check_request_headers,
+    )
+
+    def not_called(request, *args, **kwargs):
+        raise AssertionError(f"Should not have been called: '{request.url}'")
+
+    requests_mock.get(
+        "https://sourceforge.net/allura_sitemap/sitemap-0.xml",
+        text=get_subsitemap_0(datadir),
+        additional_matcher=_check_request_headers,
+    )
+    requests_mock.get(
+        "https://sourceforge.net/allura_sitemap/sitemap-1.xml",
+        text=not_called,
+        additional_matcher=_check_request_headers,
+    )
+
+    def filtered_get_project_json(request, context):
+        # These projects should not be requested again
+        assert URLS_MATCHER[request.url] not in {"adobe", "mojunk"}
+        return get_project_json(datadir, request, context)
+
+    requests_mock.get(
+        re.compile("https://sourceforge.net/rest/.*"),
+        json=filtered_get_project_json,
+        additional_matcher=_check_request_headers,
+    )
+
+    faked_listed_origins = [
+        # mramm: changed
+        ListedOrigin(
+            lister_id=lister.lister_obj.id,
+            visit_type="git",
+            url="git.code.sf.net/p/mramm/files",
+            last_update=iso8601.parse_date("2019-01-01"),
+        ),
+        ListedOrigin(
+            lister_id=lister.lister_obj.id,
+            visit_type="git",
+            url="git.code.sf.net/p/mramm/git",
+            last_update=iso8601.parse_date("2019-01-01"),
+        ),
+        ListedOrigin(
+            lister_id=lister.lister_obj.id,
+            visit_type="svn",
+            url="svn.code.sf.net/p/mramm/svn",
+            last_update=iso8601.parse_date("2019-01-01"),
+        ),
+        # stayed the same, even though its subsitemap has changed
+        ListedOrigin(
+            lister_id=lister.lister_obj.id,
+            visit_type="git",
+            url="git.code.sf.net/p/os3dmodels/git",
+            last_update=iso8601.parse_date("2017-03-31"),
+        ),
+        ListedOrigin(
+            lister_id=lister.lister_obj.id,
+            visit_type="svn",
+            url="svn.code.sf.net/p/os3dmodels/svn",
+            last_update=iso8601.parse_date("2017-03-31"),
+        ),
+        # others: stayed the same, should be skipped
+        ListedOrigin(
+            lister_id=lister.lister_obj.id,
+            visit_type="git",
+            url="git.code.sf.net/p/mojunk/git",
+            last_update=iso8601.parse_date("2017-12-31"),
+        ),
+        ListedOrigin(
+            lister_id=lister.lister_obj.id,
+            visit_type="git",
+            url="git.code.sf.net/p/mojunk/git2",
+            last_update=iso8601.parse_date("2017-12-31"),
+        ),
+        ListedOrigin(
+            lister_id=lister.lister_obj.id,
+            visit_type="svn",
+            url="svn.code.sf.net/p/mojunk/svn",
+            last_update=iso8601.parse_date("2017-12-31"),
+        ),
+        ListedOrigin(
+            lister_id=lister.lister_obj.id,
+            visit_type="svn",
+            url="svn.code.sf.net/p/backapps/website/code",
+            last_update=iso8601.parse_date("2021-02-11"),
+        ),
+    ]
+    swh_scheduler.record_listed_origins(faked_listed_origins)
+
+    to_date = datetime.date.fromisoformat
+    faked_state = SourceForgeListerState(
+        subsitemap_last_modified={
+            # changed
+            "https://sourceforge.net/allura_sitemap/sitemap-0.xml": to_date(
+                "2021-02-18"
+            ),
+            # stayed the same
+            "https://sourceforge.net/allura_sitemap/sitemap-1.xml": to_date(
+                "2021-03-18"
+            ),
+        },
+        empty_projects={
+            "https://sourceforge.net/rest/p/backapps": to_date("2020-02-11"),
+            "https://sourceforge.net/rest/adobe/adobexmp": to_date("2017-10-17"),
+        },
+    )
+    lister.state = faked_state
+
+    stats = lister.run()
+    # - mramm (3 repos),  # changed
+    assert stats.pages == 1
+    assert stats.origins == 3
+    expected_state = {
+        "subsitemap_last_modified": {
+            "https://sourceforge.net/allura_sitemap/sitemap-0.xml": "2021-03-18",
+            "https://sourceforge.net/allura_sitemap/sitemap-1.xml": "2021-03-18",
+        },
+        "empty_projects": {
+            "https://sourceforge.net/rest/p/backapps": "2021-02-11",  # changed
+            "https://sourceforge.net/rest/adobe/adobexmp": "2017-10-17",
+        },
+    }
+    assert lister.state_to_dict(lister.state) == expected_state
+
+    # origins have been updated
+    _check_listed_origins(lister, swh_scheduler)
 
 
 def test_sourceforge_lister_retry(swh_scheduler, requests_mock, mocker, datadir):
