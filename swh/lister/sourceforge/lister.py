@@ -2,24 +2,25 @@
 # See the AUTHORS file at the top-level directory of this distribution
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 import datetime
 from enum import Enum
 import logging
 import re
-from typing import Iterator, List, Set
+from typing import Any, Dict, Iterator, List, Optional, Set, Tuple
 from xml.etree import ElementTree
 
 import iso8601
 import requests
 from tenacity.before_sleep import before_sleep_log
 
+from swh.core.api.classes import stream_results
 from swh.lister.utils import throttling_retry
 from swh.scheduler.interface import SchedulerInterface
 from swh.scheduler.model import ListedOrigin
 
 from .. import USER_AGENT
-from ..pattern import StatelessLister
+from ..pattern import Lister
 
 logger = logging.getLogger(__name__)
 
@@ -43,6 +44,30 @@ class SourceForgeListerEntry:
     vcs: VcsNames
     url: str
     last_modified: datetime.date
+
+
+SubSitemapNameT = str
+ProjectNameT = str
+# SourceForge only offers day-level granularity, which is good enough for our purposes
+LastModifiedT = datetime.date
+
+
+@dataclass
+class SourceForgeListerState:
+    """Current state of the SourceForge lister in incremental runs
+    """
+
+    """If the subsitemap does not exist, we assume a full run of this subsitemap
+    is needed. If the date is the same, we skip the subsitemap, otherwise we
+    request the subsitemap and look up every project's "last modified" date
+    to compare against `ListedOrigins` from the database."""
+    subsitemap_last_modified: Dict[SubSitemapNameT, LastModifiedT] = field(
+        default_factory=dict
+    )
+    """Some projects (not the majority, but still meaningful) have no VCS for us to
+    archive. We need to remember a mapping of their API URL to their "last modified"
+    date so we don't keep querying them needlessly every time."""
+    empty_projects: Dict[str, LastModifiedT] = field(default_factory=dict)
 
 
 SourceForgeListerPage = List[SourceForgeListerEntry]
@@ -71,8 +96,11 @@ PROJ_URL_RE = re.compile(
     r"^https://sourceforge.net/(?P<namespace>[^/]+)/(?P<project>[^/]+)/(?P<rest>.*)?"
 )
 
+# Mapping of `(namespace, project name)` to `last modified` date.
+ProjectsLastModifiedCache = Dict[Tuple[str, str], LastModifiedT]
 
-class SourceForgeLister(StatelessLister[SourceForgeListerPage]):
+
+class SourceForgeLister(Lister[SourceForgeListerState, SourceForgeListerPage]):
     """List origins from the "SourceForge" forge.
 
     """
@@ -80,16 +108,75 @@ class SourceForgeLister(StatelessLister[SourceForgeListerPage]):
     # Part of the lister API, that identifies this lister
     LISTER_NAME = "sourceforge"
 
-    def __init__(self, scheduler: SchedulerInterface):
+    def __init__(self, scheduler: SchedulerInterface, incremental: bool = False):
         super().__init__(
             scheduler=scheduler, url="https://sourceforge.net", instance="main"
         )
 
+        # Will hold the currently saved "last modified" dates to compare against our
+        # requests.
+        self._project_last_modified: Optional[ProjectsLastModifiedCache] = None
         self.session = requests.Session()
         # Declare the USER_AGENT is more sysadm-friendly for the forge we list
         self.session.headers.update(
             {"Accept": "application/json", "User-Agent": USER_AGENT}
         )
+        self.incremental = incremental
+
+    def state_from_dict(self, d: Dict[str, Dict[str, Any]]) -> SourceForgeListerState:
+        subsitemaps = {
+            k: datetime.date.fromisoformat(v)
+            for k, v in d.get("subsitemap_last_modified", {}).items()
+        }
+        empty_projects = {
+            k: datetime.date.fromisoformat(v)
+            for k, v in d.get("empty_projects", {}).items()
+        }
+        return SourceForgeListerState(
+            subsitemap_last_modified=subsitemaps, empty_projects=empty_projects
+        )
+
+    def state_to_dict(self, state: SourceForgeListerState) -> Dict[str, Any]:
+        return {
+            "subsitemap_last_modified": {
+                k: v.isoformat() for k, v in state.subsitemap_last_modified.items()
+            },
+            "empty_projects": {
+                k: v.isoformat() for k, v in state.empty_projects.items()
+            },
+        }
+
+    def projects_last_modified(self) -> ProjectsLastModifiedCache:
+        if not self.incremental:
+            # No point in loading the previous results if we're doing a full run
+            return {}
+        if self._project_last_modified is not None:
+            return self._project_last_modified
+        # We know there will be at least that many origins
+        stream = stream_results(
+            self.scheduler.get_listed_origins, self.lister_obj.id, limit=300_000
+        )
+        listed_origins = dict()
+        # Projects can have slashes in them if they're subprojects, but the
+        # mointpoint (last component) cannot.
+        url_match = re.compile(
+            r".*\.code\.sf\.net/(?P<namespace>[^/]+)/(?P<project>.+)/.*"
+        )
+        for origin in stream:
+            url = origin.url
+            match = url_match.match(url)
+            assert match is not None
+            matches = match.groupdict()
+            namespace = matches["namespace"]
+            project = matches["project"]
+            # "Last modified" dates are the same across all VCS (tools, even)
+            # within a project or subproject. An assertion here would be overkill.
+            last_modified = origin.last_update
+            assert last_modified is not None
+            listed_origins[(namespace, project)] = last_modified.date()
+
+        self._project_last_modified = listed_origins
+        return listed_origins
 
     @throttling_retry(before_sleep=before_sleep_log(logger, logging.WARNING))
     def page_request(self, url, params) -> requests.Response:
@@ -126,11 +213,21 @@ class SourceForgeLister(StatelessLister[SourceForgeListerPage]):
         tree = ElementTree.fromstring(sitemap_contents)
 
         for subsitemap in tree.iterfind(f"{SITEMAP_XML_NAMESPACE}sitemap"):
-            # TODO use when adding incremental support
-            # last_modified = sub_sitemap.find(f"{SITEMAP_XML_NAMESPACE}lastmod")
+            last_modified_el = subsitemap.find(f"{SITEMAP_XML_NAMESPACE}lastmod")
+            assert last_modified_el is not None and last_modified_el.text is not None
+            last_modified = datetime.date.fromisoformat(last_modified_el.text)
             location = subsitemap.find(f"{SITEMAP_XML_NAMESPACE}loc")
-            assert location is not None
+            assert location is not None and location.text is not None
             sub_url = location.text
+
+            if self.incremental:
+                recorded_last_mod = self.state.subsitemap_last_modified.get(sub_url)
+                if recorded_last_mod == last_modified:
+                    # The entire subsitemap hasn't changed, so none of its projects
+                    # have either, skip it.
+                    continue
+
+            self.state.subsitemap_last_modified[sub_url] = last_modified
             subsitemap_contents = self.page_request(sub_url, {}).text
             subtree = ElementTree.fromstring(subsitemap_contents)
 
@@ -151,7 +248,7 @@ class SourceForgeLister(StatelessLister[SourceForgeListerPage]):
     def _get_pages_from_subsitemap(
         self, subtree: ElementTree.Element
     ) -> Iterator[SourceForgeListerPage]:
-        projects: Set[str] = set()
+        projects: Set[ProjectNameT] = set()
         for project_block in subtree.iterfind(f"{SITEMAP_XML_NAMESPACE}url"):
             last_modified_block = project_block.find(f"{SITEMAP_XML_NAMESPACE}lastmod")
             assert last_modified_block is not None
@@ -197,6 +294,28 @@ class SourceForgeLister(StatelessLister[SourceForgeListerPage]):
         self, namespace, project, last_modified
     ) -> SourceForgeListerPage:
         endpoint = PROJECT_API_URL_FORMAT.format(namespace=namespace, project=project)
+        empty_project_last_modified = self.state.empty_projects.get(endpoint)
+        if empty_project_last_modified is not None:
+            if last_modified == empty_project_last_modified.isoformat():
+                # Project has not changed, so is still empty, meaning it has
+                # no VCS attached that we can archive.
+                logger.debug(f"Project {namespace}/{project} is still empty")
+                return []
+
+        if self.incremental:
+            expected = self.projects_last_modified().get((namespace, project))
+
+            if expected is not None:
+                if expected.isoformat() == last_modified:
+                    # Project has not changed
+                    logger.debug(f"Project {namespace}/{project} has not changed")
+                    return []
+                else:
+                    logger.debug(f"Project {namespace}/{project} was updated")
+            else:
+                msg = "New project during an incremental run: %s/%s"
+                logger.debug(msg, namespace, project)
+
         res = self.page_request(endpoint, {}).json()
 
         tools = res.get("tools")
@@ -220,5 +339,11 @@ class SourceForgeLister(StatelessLister[SourceForgeListerPage]):
                 vcs=VcsNames(tool_name), url=url, last_modified=last_modified
             )
             hits.append(entry)
+
+        if not hits:
+            date = datetime.date.fromisoformat(last_modified)
+            self.state.empty_projects[endpoint] = date
+        else:
+            self.state.empty_projects.pop(endpoint, None)
 
         return hits
