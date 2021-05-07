@@ -273,10 +273,11 @@ def test_sourceforge_lister_incremental(swh_scheduler, requests_mock, datadir, m
 
 
 def test_sourceforge_lister_retry(swh_scheduler, requests_mock, mocker, datadir):
-    # Exponential retries take a long time, so stub time.sleep
-    mocked_sleep = mocker.patch("time.sleep", return_value=None)
 
     lister = SourceForgeLister(scheduler=swh_scheduler)
+
+    # Exponential retries take a long time, so stub time.sleep
+    mocked_sleep = mocker.patch.object(lister.page_request.retry, "sleep")
 
     requests_mock.get(
         MAIN_SITEMAP_URL,
