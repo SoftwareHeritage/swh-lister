@@ -68,6 +68,7 @@ setup(
         lister.packagist=swh.lister.packagist:register
         lister.phabricator=swh.lister.phabricator:register
         lister.pypi=swh.lister.pypi:register
+        lister.sourceforge=swh.lister.sourceforge:register
     """,
     classifiers=[
         "Programming Language :: Python :: 3",

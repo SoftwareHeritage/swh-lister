@@ -1,8 +1,36 @@
-swh-lister (1.0.0-1~swh1~bpo10+1) buster-swh; urgency=medium
+swh-lister (1.2.2-1~swh1) unstable-swh; urgency=medium
 
-  * Rebuild for buster-swh
+  * New upstream release 1.2.2     - (tagged by Antoine Lambert
+    <antoine.lambert@inria.fr> on 2021-05-07 14:43:24 +0200)
+  * Upstream changes:     - version 1.2.2
 
- -- Software Heritage autobuilder (on jenkins-debian1) <jenkins@jenkins-debian1.internal.softwareheritage.org>  Mon, 22 Mar 2021 10:15:31 +0000
+ -- Software Heritage autobuilder (on jenkins-debian1) <jenkins@jenkins-debian1.internal.softwareheritage.org>  Fri, 07 May 2021 12:50:12 +0000
+
+swh-lister (1.2.1-1~swh1) unstable-swh; urgency=medium
+
+  * New upstream release 1.2.1     - (tagged by Antoine Lambert
+    <antoine.lambert@inria.fr> on 2021-05-07 14:10:36 +0200)
+  * Upstream changes:     - version 1.2.1
+
+ -- Software Heritage autobuilder (on jenkins-debian1) <jenkins@jenkins-debian1.internal.softwareheritage.org>  Fri, 07 May 2021 12:17:16 +0000
+
+swh-lister (1.2.0-1~swh1) unstable-swh; urgency=medium
+
+  * New upstream release 1.2.0     - (tagged by Antoine R. Dumont
+    (@ardumont) <ardumont@softwareheritage.org> on 2021-05-06 15:17:51
+    +0200)
+  * Upstream changes:     - v1.2.0     - Make the SourceForge lister
+    incremental
+
+ -- Software Heritage autobuilder (on jenkins-debian1) <jenkins@jenkins-debian1.internal.softwareheritage.org>  Fri, 07 May 2021 10:43:11 +0000
+
+swh-lister (1.1.0-1~swh1) unstable-swh; urgency=medium
+
+  * New upstream release 1.1.0     - (tagged by Antoine Lambert
+    <antoine.lambert@inria.fr> on 2021-04-29 14:29:27 +0200)
+  * Upstream changes:     - version 1.1.0
+
+ -- Software Heritage autobuilder (on jenkins-debian1) <jenkins@jenkins-debian1.internal.softwareheritage.org>  Thu, 29 Apr 2021 12:33:59 +0000
 
 swh-lister (1.0.0-1~swh1) unstable-swh; urgency=medium
 

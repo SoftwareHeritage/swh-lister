@@ -34,7 +34,7 @@ class BitbucketListerState:
 
 
 class BitbucketLister(Lister[BitbucketListerState, List[Dict[str, Any]]]):
-    """List origins from Bitbucket using its REST API.
+    """List origins from Bitbucket using its API.
 
     Bitbucket API has the following rate-limit configuration:
 

@@ -200,7 +200,7 @@ This datatype can also further be detailed with the optional fields:
   scheduler for optimizing its scheduling decisions. Fill it if provided by the service,
   at no substantial additional runtime cost, e.g. in the same request.
 
-  * extra loader arguments: extra parameters to be passed to the loader for it to be
+* extra loader arguments: extra parameters to be passed to the loader for it to be
   able to load the origin. It is needed for example when additional context is needed
   along with the URL to effectively load from the origin.
 
@@ -356,8 +356,6 @@ More about listers
 ------------------
 
 See current implemented listers as examples (GitHub_, Bitbucket_, CGit_, GitLab_ ).
-
-Old (2017) lister tutorial :ref:`lister-tutorial-2017`
 
 .. _GitHub: https://forge.softwareheritage.org/source/swh-lister/browse/master/swh/lister/github/lister.py
 .. _Bitbucket: https://forge.softwareheritage.org/source/swh-lister/browse/master/swh/lister/bitbucket/lister.py
