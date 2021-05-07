@@ -20,7 +20,7 @@ from swh.scheduler.interface import SchedulerInterface
 from swh.scheduler.model import ListedOrigin
 
 from .. import USER_AGENT
-from ..pattern import Lister
+from ..pattern import CredentialsType, Lister
 
 logger = logging.getLogger(__name__)
 
@@ -108,9 +108,17 @@ class SourceForgeLister(Lister[SourceForgeListerState, SourceForgeListerPage]):
     # Part of the lister API, that identifies this lister
     LISTER_NAME = "sourceforge"
 
-    def __init__(self, scheduler: SchedulerInterface, incremental: bool = False):
+    def __init__(
+        self,
+        scheduler: SchedulerInterface,
+        incremental: bool = False,
+        credentials: Optional[CredentialsType] = None,
+    ):
         super().__init__(
-            scheduler=scheduler, url="https://sourceforge.net", instance="main"
+            scheduler=scheduler,
+            url="https://sourceforge.net",
+            instance="main",
+            credentials=credentials,
         )
 
         # Will hold the currently saved "last modified" dates to compare against our

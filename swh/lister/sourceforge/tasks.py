@@ -15,6 +15,12 @@ def list_sourceforge_full() -> Dict[str, int]:
     return SourceForgeLister.from_configfile().run().dict()
 
 
+@shared_task(name=__name__ + ".IncrementalSourceForgeLister")
+def list_sourceforge_incremental() -> Dict[str, int]:
+    """Full update of a SourceForge instance"""
+    return SourceForgeLister.from_configfile(incremental=True).run().dict()
+
+
 @shared_task(name=__name__ + ".ping")
 def _ping():
     return "OK"
