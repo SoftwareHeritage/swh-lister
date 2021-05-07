@@ -55,4 +55,15 @@
         <lastmod>2017-10-17</lastmod>
         <changefreq>daily</changefreq>
     </url>
+    <!-- Copied from subsitemap-1 to test an update to an empty project -->
+    <url>
+        <loc>https://sourceforge.net/projects/backapps/files/</loc>
+        <lastmod>2021-02-11</lastmod>
+        <changefreq>daily</changefreq>
+    </url>
+    <url>
+        <loc>https://sourceforge.net/p/backapps/tickets/</loc>
+        <lastmod>2021-02-11</lastmod>
+        <changefreq>daily</changefreq>
+    </url>
 </urlset>
