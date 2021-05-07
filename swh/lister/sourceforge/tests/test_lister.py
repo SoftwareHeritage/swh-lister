@@ -19,6 +19,8 @@ from swh.lister.sourceforge.lister import (
     SourceForgeLister,
     SourceForgeListerState,
 )
+from swh.lister.tests.test_utils import assert_sleep_calls
+from swh.lister.utils import WAIT_EXP_BASE
 
 # Mapping of project name to namespace
 from swh.scheduler.model import ListedOrigin
@@ -324,8 +326,7 @@ def test_sourceforge_lister_retry(swh_scheduler, requests_mock, mocker, datadir)
     }
 
     # Test `time.sleep` is called with exponential retries
-    calls = [1.0, 10.0, 1.0, 1.0]
-    mocked_sleep.assert_has_calls([mocker.call(c) for c in calls])
+    assert_sleep_calls(mocker, mocked_sleep, [1, WAIT_EXP_BASE, 1, 1])
 
 
 @pytest.mark.parametrize("status_code", [500, 503, 504, 403, 404])
