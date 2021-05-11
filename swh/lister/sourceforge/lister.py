@@ -195,10 +195,9 @@ class SourceForgeLister(Lister[SourceForgeListerState, SourceForgeListerPage]):
         if response.status_code != 200:
             # Log response content to ease debugging
             logger.warning(
-                "Unexpected HTTP status code %s on %s: %s",
+                "Unexpected HTTP status code %s for URL %s",
                 response.status_code,
                 response.url,
-                response.content,
             )
         # The lister must fail on blocking errors
         response.raise_for_status()
@@ -294,7 +293,8 @@ class SourceForgeLister(Lister[SourceForgeListerState, SourceForgeListerPage]):
                 else:
                     logger.debug("Project '%s' does not have any VCS", project)
             else:
-                # Should always match, let's log it
+                # Should almost always match, let's log it
+                # The only ones that don't match are mostly specialized one-off URLs.
                 msg = "Project URL '%s' does not match expected pattern"
                 logger.warning(msg, project_url)
 
@@ -324,11 +324,15 @@ class SourceForgeLister(Lister[SourceForgeListerState, SourceForgeListerPage]):
                 msg = "New project during an incremental run: %s/%s"
                 logger.debug(msg, namespace, project)
 
-        res = self.page_request(endpoint, {}).json()
+        try:
+            res = self.page_request(endpoint, {}).json()
+        except requests.HTTPError:
+            # We've already logged in `page_request`
+            return []
 
         tools = res.get("tools")
         if tools is None:
-            # This probably never happens
+            # This rarely happens, on very old URLs
             logger.warning("Project '%s' does not have any tools", endpoint)
             return []
 
