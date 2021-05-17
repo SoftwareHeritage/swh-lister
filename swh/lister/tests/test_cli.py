@@ -17,6 +17,7 @@ lister_args = {
     "gitea": {"url": "https://try.gitea.io/api/v1/",},
     "tuleap": {"url": "https://tuleap.net",},
     "gitlab": {"url": "https://gitlab.ow2.org/api/v4", "instance": "ow2",},
+    "opam": {"url": "https://opam.ocaml.org", "instance": "opam"},
 }
 
 

@@ -65,6 +65,7 @@ setup(
         lister.gnu=swh.lister.gnu:register
         lister.launchpad=swh.lister.launchpad:register
         lister.npm=swh.lister.npm:register
+        lister.opam=swh.lister.opam:register
         lister.packagist=swh.lister.packagist:register
         lister.phabricator=swh.lister.phabricator:register
         lister.pypi=swh.lister.pypi:register
