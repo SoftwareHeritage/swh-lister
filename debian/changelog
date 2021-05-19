@@ -1,3 +1,13 @@
+swh-lister (1.3.1-1~swh1) unstable-swh; urgency=medium
+
+  * New upstream release 1.3.1     - (tagged by Antoine R. Dumont
+    (@ardumont) <ardumont@softwareheritage.org> on 2021-05-19 11:25:59
+    +0200)
+  * Upstream changes:     - v1.3.1     - sourceforge: don't abort on
+    error for project
+
+ -- Software Heritage autobuilder (on jenkins-debian1) <jenkins@jenkins-debian1.internal.softwareheritage.org>  Wed, 19 May 2021 09:30:14 +0000
+
 swh-lister (1.3.0-1~swh1) unstable-swh; urgency=medium
 
   * New upstream release 1.3.0     - (tagged by Antoine R. Dumont
