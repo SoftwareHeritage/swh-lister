@@ -338,3 +338,58 @@ def test_sourceforge_lister_http_error(swh_scheduler, requests_mock, status_code
 
     with pytest.raises(HTTPError):
         lister.run()
+
+
+@pytest.mark.parametrize("status_code", [500, 503, 504, 403, 404])
+def test_sourceforge_lister_project_error(
+    datadir, swh_scheduler, requests_mock, status_code,
+):
+    lister = SourceForgeLister(scheduler=swh_scheduler)
+
+    requests_mock.get(
+        MAIN_SITEMAP_URL,
+        text=get_main_sitemap(datadir),
+        additional_matcher=_check_request_headers,
+    )
+    requests_mock.get(
+        "https://sourceforge.net/allura_sitemap/sitemap-0.xml",
+        text=get_subsitemap_0(datadir),
+        additional_matcher=_check_request_headers,
+    )
+    requests_mock.get(
+        "https://sourceforge.net/allura_sitemap/sitemap-1.xml",
+        text=get_subsitemap_1(datadir),
+        additional_matcher=_check_request_headers,
+    )
+    # Request mocks precedence is LIFO
+    requests_mock.get(
+        re.compile("https://sourceforge.net/rest/.*"),
+        json=functools.partial(get_project_json, datadir),
+        additional_matcher=_check_request_headers,
+    )
+    # Make all `mramm` requests fail
+    # `mramm` is in subsitemap 0, which ensures we keep listing after an error.
+    requests_mock.get(
+        re.compile("https://sourceforge.net/rest/p/mramm"), status_code=status_code
+    )
+
+    stats = lister.run()
+    # - os3dmodels (2 repos),
+    # - mojunk (3 repos),
+    # - backapps/website (1 repo).
+    # adobe and backapps itself have no repos.
+    # Did *not* list mramm
+    assert stats.pages == 3
+    assert stats.origins == 6
+
+    scheduler_origins = swh_scheduler.get_listed_origins(lister.lister_obj.id).results
+    res = {o.url: (o.visit_type, str(o.last_update.date())) for o in scheduler_origins}
+    # Ensure no `mramm` origins are listed, but all others are.
+    assert res == {
+        "svn.code.sf.net/p/backapps/website/code": ("svn", "2021-02-11"),
+        "git.code.sf.net/p/os3dmodels/git": ("git", "2017-03-31"),
+        "svn.code.sf.net/p/os3dmodels/svn": ("svn", "2017-03-31"),
+        "git.code.sf.net/p/mojunk/git": ("git", "2017-12-31"),
+        "git.code.sf.net/p/mojunk/git2": ("git", "2017-12-31"),
+        "svn.code.sf.net/p/mojunk/svn": ("svn", "2017-12-31"),
+    }
