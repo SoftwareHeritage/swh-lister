@@ -342,6 +342,25 @@ informational error. You also have to simplify the results, both with filtering 
 parameters if the service supports it, and by extracting from the response only the
 information needed into a structured page. This all makes for easier debugging.
 
+Misc files
+^^^^^^^^^^^^^^^
+
+There are also a few files that need to be modified outside of the lister directory, namely:
+
+* `/setup.py` to add your lister to the end of the list in the *setup* section:
+
+    entry_points="""
+        [swh.cli.subcommands]
+        lister=swh.lister.cli
+        [swh.workers]
+        lister.bitbucket=swh.lister.bitbucket:register
+        lister.cgit=swh.lister.cgit:register
+        ..."""
+
+* `/swh/lister/tests/test_cli.py` to get a default set of parameters in scheduler-related tests.
+* `/README.md` to reference the new lister.
+* `/CONTRIBUTORS` to add your name.
+
 Testing your lister
 -------------------
 

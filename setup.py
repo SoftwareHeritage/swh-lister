@@ -69,6 +69,7 @@ setup(
         lister.phabricator=swh.lister.phabricator:register
         lister.pypi=swh.lister.pypi:register
         lister.sourceforge=swh.lister.sourceforge:register
+        lister.tuleap=swh.lister.tuleap:register
     """,
     classifiers=[
         "Programming Language :: Python :: 3",
