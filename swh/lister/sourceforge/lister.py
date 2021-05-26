@@ -15,7 +15,7 @@ import requests
 from tenacity.before_sleep import before_sleep_log
 
 from swh.core.api.classes import stream_results
-from swh.lister.utils import throttling_retry
+from swh.lister.utils import retry_policy_generic, throttling_retry
 from swh.scheduler.interface import SchedulerInterface
 from swh.scheduler.model import ListedOrigin
 
@@ -186,7 +186,10 @@ class SourceForgeLister(Lister[SourceForgeListerState, SourceForgeListerPage]):
         self._project_last_modified = listed_origins
         return listed_origins
 
-    @throttling_retry(before_sleep=before_sleep_log(logger, logging.WARNING))
+    @throttling_retry(
+        retry=retry_policy_generic,
+        before_sleep=before_sleep_log(logger, logging.WARNING),
+    )
     def page_request(self, url, params) -> requests.Response:
         # Log listed URL to ease debugging
         logger.debug("Fetching URL %s with params %s", url, params)
