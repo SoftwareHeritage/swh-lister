@@ -331,20 +331,33 @@ def test_sourceforge_lister_retry(swh_scheduler, requests_mock, mocker, datadir)
 
 
 @pytest.mark.parametrize("status_code", [500, 503, 504, 403, 404])
-def test_sourceforge_lister_http_error(swh_scheduler, requests_mock, status_code):
+def test_sourceforge_lister_http_error(
+    swh_scheduler, requests_mock, status_code, mocker
+):
     lister = SourceForgeLister(scheduler=swh_scheduler)
+
+    # Exponential retries take a long time, so stub time.sleep
+    mocked_sleep = mocker.patch.object(lister.page_request.retry, "sleep")
 
     requests_mock.get(MAIN_SITEMAP_URL, status_code=status_code)
 
     with pytest.raises(HTTPError):
         lister.run()
 
+    exp_retries = []
+    if status_code >= 500:
+        exp_retries = [1.0, 10.0, 100.0, 1000.0]
+
+    assert_sleep_calls(mocker, mocked_sleep, exp_retries)
+
 
 @pytest.mark.parametrize("status_code", [500, 503, 504, 403, 404])
 def test_sourceforge_lister_project_error(
-    datadir, swh_scheduler, requests_mock, status_code,
+    datadir, swh_scheduler, requests_mock, status_code, mocker
 ):
     lister = SourceForgeLister(scheduler=swh_scheduler)
+    # Exponential retries take a long time, so stub time.sleep
+    mocker.patch.object(lister.page_request.retry, "sleep")
 
     requests_mock.get(
         MAIN_SITEMAP_URL,

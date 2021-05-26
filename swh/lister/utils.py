@@ -2,9 +2,9 @@
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
 
-from typing import Iterator, Tuple
+from typing import Callable, Iterator, Tuple
 
-from requests.exceptions import HTTPError
+from requests.exceptions import ConnectionError, HTTPError
 from requests.status_codes import codes
 from tenacity import retry as tenacity_retry
 from tenacity.stop import stop_after_attempt
@@ -45,6 +45,16 @@ def is_throttling_exception(e: Exception) -> bool:
     )
 
 
+def is_retryable_exception(e: Exception) -> bool:
+    """
+    Checks if an exception is worth retrying (connection, throttling or a server error).
+    """
+    is_connection_error = isinstance(e, ConnectionError)
+    is_500_error = isinstance(e, HTTPError) and e.response.status_code >= 500
+
+    return is_connection_error or is_throttling_exception(e) or is_500_error
+
+
 def retry_attempt(retry_state):
     """
     Utility function to get last retry attempt info based on the
@@ -58,16 +68,35 @@ def retry_attempt(retry_state):
     return attempt
 
 
+def retry_if_exception(retry_state, predicate: Callable[[Exception], bool]) -> bool:
+    """
+    Custom tenacity retry predicate for handling exceptions with the given predicate.
+    """
+    attempt = retry_attempt(retry_state)
+    if attempt.failed:
+        exception = attempt.exception()
+        return predicate(exception)
+    return False
+
+
 def retry_if_throttling(retry_state) -> bool:
     """
     Custom tenacity retry predicate for handling HTTP responses with
     status code 429 (too many requests).
     """
-    attempt = retry_attempt(retry_state)
-    if attempt.failed:
-        exception = attempt.exception()
-        return is_throttling_exception(exception)
-    return False
+    return retry_if_exception(retry_state, is_throttling_exception)
+
+
+def retry_policy_generic(retry_state) -> bool:
+    """
+    Custom tenacity retry predicate for handling failed requests:
+        - ConnectionError
+        - Server errors (status >= 500)
+        - Throttling errors (status == 429)
+
+    This does not handle 404, 403 or other status codes.
+    """
+    return retry_if_exception(retry_state, is_retryable_exception)
 
 
 WAIT_EXP_BASE = 10
