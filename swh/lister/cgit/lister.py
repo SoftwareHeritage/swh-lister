@@ -112,10 +112,7 @@ class CGitLister(StatelessLister[Repositories]):
                     repo_url = base_url
 
                 span = tr.find("span", {"class": re.compile("age-")})
-                if span:
-                    last_updated_date = span["title"]
-                else:
-                    last_updated_date = None
+                last_updated_date = span.get("title") if span else None
 
                 page_results.append(
                     {
