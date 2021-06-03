@@ -90,7 +90,7 @@ PROJECT_API_URL_FORMAT = "https://sourceforge.net/rest/{namespace}/{project}"
 # `project`: Project name, e.g. `seedai`. Can be a subproject, e.g `backapps/website`.
 # `mount_point`: url path used by the repo. For example, the Code::Blocks project uses
 #                `git` (https://git.code.sf.net/p/codeblocks/git).
-CLONE_URL_FORMAT = "{vcs}.code.sf.net/{namespace}/{project}/{mount_point}"
+CLONE_URL_FORMAT = "https://{vcs}.code.sf.net/{namespace}/{project}/{mount_point}"
 
 PROJ_URL_RE = re.compile(
     r"^https://sourceforge.net/(?P<namespace>[^/]+)/(?P<project>[^/]+)/(?P<rest>.*)?"
