@@ -68,15 +68,15 @@ def _check_listed_origins(lister, swh_scheduler):
     scheduler_origins = swh_scheduler.get_listed_origins(lister.lister_obj.id).results
     res = {o.url: (o.visit_type, str(o.last_update.date())) for o in scheduler_origins}
     assert res == {
-        "svn.code.sf.net/p/backapps/website/code": ("svn", "2021-02-11"),
-        "git.code.sf.net/p/os3dmodels/git": ("git", "2017-03-31"),
-        "svn.code.sf.net/p/os3dmodels/svn": ("svn", "2017-03-31"),
-        "git.code.sf.net/p/mramm/files": ("git", "2019-04-04"),
-        "git.code.sf.net/p/mramm/git": ("git", "2019-04-04"),
-        "svn.code.sf.net/p/mramm/svn": ("svn", "2019-04-04"),
-        "git.code.sf.net/p/mojunk/git": ("git", "2017-12-31"),
-        "git.code.sf.net/p/mojunk/git2": ("git", "2017-12-31"),
-        "svn.code.sf.net/p/mojunk/svn": ("svn", "2017-12-31"),
+        "https://svn.code.sf.net/p/backapps/website/code": ("svn", "2021-02-11"),
+        "https://git.code.sf.net/p/os3dmodels/git": ("git", "2017-03-31"),
+        "https://svn.code.sf.net/p/os3dmodels/svn": ("svn", "2017-03-31"),
+        "https://git.code.sf.net/p/mramm/files": ("git", "2019-04-04"),
+        "https://git.code.sf.net/p/mramm/git": ("git", "2019-04-04"),
+        "https://svn.code.sf.net/p/mramm/svn": ("svn", "2019-04-04"),
+        "https://git.code.sf.net/p/mojunk/git": ("git", "2017-12-31"),
+        "https://git.code.sf.net/p/mojunk/git2": ("git", "2017-12-31"),
+        "https://svn.code.sf.net/p/mojunk/svn": ("svn", "2017-12-31"),
     }
 
 
@@ -177,57 +177,57 @@ def test_sourceforge_lister_incremental(swh_scheduler, requests_mock, datadir, m
         ListedOrigin(
             lister_id=lister.lister_obj.id,
             visit_type="git",
-            url="git.code.sf.net/p/mramm/files",
+            url="https://git.code.sf.net/p/mramm/files",
             last_update=iso8601.parse_date("2019-01-01"),
         ),
         ListedOrigin(
             lister_id=lister.lister_obj.id,
             visit_type="git",
-            url="git.code.sf.net/p/mramm/git",
+            url="https://git.code.sf.net/p/mramm/git",
             last_update=iso8601.parse_date("2019-01-01"),
         ),
         ListedOrigin(
             lister_id=lister.lister_obj.id,
             visit_type="svn",
-            url="svn.code.sf.net/p/mramm/svn",
+            url="https://svn.code.sf.net/p/mramm/svn",
             last_update=iso8601.parse_date("2019-01-01"),
         ),
         # stayed the same, even though its subsitemap has changed
         ListedOrigin(
             lister_id=lister.lister_obj.id,
             visit_type="git",
-            url="git.code.sf.net/p/os3dmodels/git",
+            url="https://git.code.sf.net/p/os3dmodels/git",
             last_update=iso8601.parse_date("2017-03-31"),
         ),
         ListedOrigin(
             lister_id=lister.lister_obj.id,
             visit_type="svn",
-            url="svn.code.sf.net/p/os3dmodels/svn",
+            url="https://svn.code.sf.net/p/os3dmodels/svn",
             last_update=iso8601.parse_date("2017-03-31"),
         ),
         # others: stayed the same, should be skipped
         ListedOrigin(
             lister_id=lister.lister_obj.id,
             visit_type="git",
-            url="git.code.sf.net/p/mojunk/git",
+            url="https://git.code.sf.net/p/mojunk/git",
             last_update=iso8601.parse_date("2017-12-31"),
         ),
         ListedOrigin(
             lister_id=lister.lister_obj.id,
             visit_type="git",
-            url="git.code.sf.net/p/mojunk/git2",
+            url="https://git.code.sf.net/p/mojunk/git2",
             last_update=iso8601.parse_date("2017-12-31"),
         ),
         ListedOrigin(
             lister_id=lister.lister_obj.id,
             visit_type="svn",
-            url="svn.code.sf.net/p/mojunk/svn",
+            url="https://svn.code.sf.net/p/mojunk/svn",
             last_update=iso8601.parse_date("2017-12-31"),
         ),
         ListedOrigin(
             lister_id=lister.lister_obj.id,
             visit_type="svn",
-            url="svn.code.sf.net/p/backapps/website/code",
+            url="https://svn.code.sf.net/p/backapps/website/code",
             last_update=iso8601.parse_date("2021-02-11"),
         ),
     ]
@@ -315,15 +315,15 @@ def test_sourceforge_lister_retry(swh_scheduler, requests_mock, mocker, datadir)
 
     scheduler_origins = swh_scheduler.get_listed_origins(lister.lister_obj.id).results
     assert {o.url: o.visit_type for o in scheduler_origins} == {
-        "svn.code.sf.net/p/backapps/website/code": "svn",
-        "git.code.sf.net/p/os3dmodels/git": "git",
-        "svn.code.sf.net/p/os3dmodels/svn": "svn",
-        "git.code.sf.net/p/mramm/files": "git",
-        "git.code.sf.net/p/mramm/git": "git",
-        "svn.code.sf.net/p/mramm/svn": "svn",
-        "git.code.sf.net/p/mojunk/git": "git",
-        "git.code.sf.net/p/mojunk/git2": "git",
-        "svn.code.sf.net/p/mojunk/svn": "svn",
+        "https://svn.code.sf.net/p/backapps/website/code": "svn",
+        "https://git.code.sf.net/p/os3dmodels/git": "git",
+        "https://svn.code.sf.net/p/os3dmodels/svn": "svn",
+        "https://git.code.sf.net/p/mramm/files": "git",
+        "https://git.code.sf.net/p/mramm/git": "git",
+        "https://svn.code.sf.net/p/mramm/svn": "svn",
+        "https://git.code.sf.net/p/mojunk/git": "git",
+        "https://git.code.sf.net/p/mojunk/git2": "git",
+        "https://svn.code.sf.net/p/mojunk/svn": "svn",
     }
 
     # Test `time.sleep` is called with exponential retries
@@ -399,10 +399,10 @@ def test_sourceforge_lister_project_error(
     res = {o.url: (o.visit_type, str(o.last_update.date())) for o in scheduler_origins}
     # Ensure no `mramm` origins are listed, but all others are.
     assert res == {
-        "svn.code.sf.net/p/backapps/website/code": ("svn", "2021-02-11"),
-        "git.code.sf.net/p/os3dmodels/git": ("git", "2017-03-31"),
-        "svn.code.sf.net/p/os3dmodels/svn": ("svn", "2017-03-31"),
-        "git.code.sf.net/p/mojunk/git": ("git", "2017-12-31"),
-        "git.code.sf.net/p/mojunk/git2": ("git", "2017-12-31"),
-        "svn.code.sf.net/p/mojunk/svn": ("svn", "2017-12-31"),
+        "https://svn.code.sf.net/p/backapps/website/code": ("svn", "2021-02-11"),
+        "https://git.code.sf.net/p/os3dmodels/git": ("git", "2017-03-31"),
+        "https://svn.code.sf.net/p/os3dmodels/svn": ("svn", "2017-03-31"),
+        "https://git.code.sf.net/p/mojunk/git": ("git", "2017-12-31"),
+        "https://git.code.sf.net/p/mojunk/git2": ("git", "2017-12-31"),
+        "https://svn.code.sf.net/p/mojunk/svn": ("svn", "2017-12-31"),
     }
