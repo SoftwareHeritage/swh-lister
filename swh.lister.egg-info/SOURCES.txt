@@ -195,6 +195,7 @@ swh/lister/sourceforge/tests/data/main-sitemap.xml
 swh/lister/sourceforge/tests/data/mojunk.json
 swh/lister/sourceforge/tests/data/mramm.json
 swh/lister/sourceforge/tests/data/os3dmodels.json
+swh/lister/sourceforge/tests/data/random-mercurial.json
 swh/lister/sourceforge/tests/data/subsitemap-0.xml
 swh/lister/sourceforge/tests/data/subsitemap-1.xml
 swh/lister/tests/__init__.py
