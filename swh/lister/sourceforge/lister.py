@@ -351,6 +351,10 @@ class SourceForgeLister(Lister[SourceForgeListerState, SourceForgeListerPage]):
                 project=project,
                 mount_point=tool["mount_point"],
             )
+            if tool_name == VcsNames.MERCURIAL.value:
+                # SourceForge does not yet support anonymous HTTPS cloning for Mercurial
+                # See https://sourceforge.net/p/forge/feature-requests/727/
+                url = url.replace("https://", "http://")
             entry = SourceForgeListerEntry(
                 vcs=VcsNames(tool_name), url=url, last_modified=last_modified
             )

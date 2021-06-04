@@ -1,0 +1,53 @@
+{
+  "shortname": "random-mercurial",
+  "name": "Mercurial",
+  "_id": "4bf3fc291be1ce2f10000051",
+  "url": "https://sourceforge.net/p/random-mercurial/",
+  "private": false,
+  "short_description": "This is an example mercurial project",
+  "creation_date": "2010-11-10",
+  "summary": "",
+  "external_homepage": "",
+  "video_url": "",
+  "socialnetworks": [],
+  "status": "active",
+  "moved_to_url": "",
+  "preferred_support_tool": "",
+  "preferred_support_url": "",
+  "developers": [
+    {
+      "username": "Alphare",
+      "name": "Raphaël Gomès",
+      "url": "https://sourceforge.net/u/alphare/"
+    }
+  ],
+  "tools": [
+    {
+      "name": "hg",
+      "mount_point": "hg",
+      "url": "/p/random-mercurial/hg/",
+      "icons": {
+        "24": "images/code_24.png",
+        "32": "images/code_32.png",
+        "48": "images/code_48.png"
+      },
+      "installable": true,
+      "tool_label": "Mercurial",
+      "mount_label": "Mercurial"
+    }
+  ],
+  "labels": [],
+  "categories": {
+    "audience": [],
+    "developmentstatus": [],
+    "environment": [],
+    "language": [],
+    "license": [],
+    "translation": [],
+    "os": [],
+    "database": [],
+    "topic": []
+  },
+  "icon_url": null,
+  "screenshots": []
+}
