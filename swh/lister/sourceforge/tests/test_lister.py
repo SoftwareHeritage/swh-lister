@@ -32,6 +32,7 @@ TEST_PROJECTS = {
     "mojunk": "p",
     "mramm": "p",
     "os3dmodels": "p",
+    "random-mercurial": "p",
 }
 
 URLS_MATCHER = {
@@ -77,6 +78,7 @@ def _check_listed_origins(lister, swh_scheduler):
         "https://git.code.sf.net/p/mojunk/git": ("git", "2017-12-31"),
         "https://git.code.sf.net/p/mojunk/git2": ("git", "2017-12-31"),
         "https://svn.code.sf.net/p/mojunk/svn": ("svn", "2017-12-31"),
+        "http://hg.code.sf.net/p/random-mercurial/hg": ("hg", "2019-05-02"),
     }
 
 
@@ -115,10 +117,11 @@ def test_sourceforge_lister_full(swh_scheduler, requests_mock, datadir):
     # - os3dmodels (2 repos),
     # - mramm (3 repos),
     # - mojunk (3 repos),
-    # - backapps/website (1 repo).
+    # - backapps/website (1 repo),
+    # - random-mercurial (1 repo).
     # adobe and backapps itself have no repos.
-    assert stats.pages == 4
-    assert stats.origins == 9
+    assert stats.pages == 5
+    assert stats.origins == 10
     expected_state = {
         "subsitemap_last_modified": {
             "https://sourceforge.net/allura_sitemap/sitemap-0.xml": "2021-03-18",
@@ -230,6 +233,12 @@ def test_sourceforge_lister_incremental(swh_scheduler, requests_mock, datadir, m
             url="https://svn.code.sf.net/p/backapps/website/code",
             last_update=iso8601.parse_date("2021-02-11"),
         ),
+        ListedOrigin(
+            lister_id=lister.lister_obj.id,
+            visit_type="hg",
+            url="http://hg.code.sf.net/p/random-mercurial/hg",
+            last_update=iso8601.parse_date("2019-05-02"),
+        ),
     ]
     swh_scheduler.record_listed_origins(faked_listed_origins)
 
@@ -308,10 +317,11 @@ def test_sourceforge_lister_retry(swh_scheduler, requests_mock, mocker, datadir)
     # - os3dmodels (2 repos),
     # - mramm (3 repos),
     # - mojunk (3 repos),
-    # - backapps/website (1 repo).
+    # - backapps/website (1 repo),
+    # - random-mercurial (1 repo).
     # adobe and backapps itself have no repos.
-    assert stats.pages == 4
-    assert stats.origins == 9
+    assert stats.pages == 5
+    assert stats.origins == 10
 
     scheduler_origins = swh_scheduler.get_listed_origins(lister.lister_obj.id).results
     assert {o.url: o.visit_type for o in scheduler_origins} == {
@@ -324,6 +334,7 @@ def test_sourceforge_lister_retry(swh_scheduler, requests_mock, mocker, datadir)
         "https://git.code.sf.net/p/mojunk/git": "git",
         "https://git.code.sf.net/p/mojunk/git2": "git",
         "https://svn.code.sf.net/p/mojunk/svn": "svn",
+        "http://hg.code.sf.net/p/random-mercurial/hg": "hg",
     }
 
     # Test `time.sleep` is called with exponential retries
@@ -389,11 +400,12 @@ def test_sourceforge_lister_project_error(
     stats = lister.run()
     # - os3dmodels (2 repos),
     # - mojunk (3 repos),
-    # - backapps/website (1 repo).
+    # - backapps/website (1 repo),
+    # - random-mercurial (1 repo).
     # adobe and backapps itself have no repos.
     # Did *not* list mramm
-    assert stats.pages == 3
-    assert stats.origins == 6
+    assert stats.pages == 4
+    assert stats.origins == 7
 
     scheduler_origins = swh_scheduler.get_listed_origins(lister.lister_obj.id).results
     res = {o.url: (o.visit_type, str(o.last_update.date())) for o in scheduler_origins}
@@ -405,4 +417,5 @@ def test_sourceforge_lister_project_error(
         "https://git.code.sf.net/p/mojunk/git": ("git", "2017-12-31"),
         "https://git.code.sf.net/p/mojunk/git2": ("git", "2017-12-31"),
         "https://svn.code.sf.net/p/mojunk/svn": ("svn", "2017-12-31"),
+        "http://hg.code.sf.net/p/random-mercurial/hg": ("hg", "2019-05-02"),
     }
