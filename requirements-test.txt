@@ -1,3 +1,6 @@
 pytest
 pytest-mock
 requests_mock
+types-click
+types-pyyaml
+types-requests
