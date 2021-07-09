@@ -19,7 +19,8 @@ Build-Depends: debhelper (>= 9),
                python3-swh.core.db.pytestplugin (>= 0.9),
                python3-swh.scheduler (>= 0.0.31~),
                python3-tenacity,
-               python3-setuptools-scm
+               python3-setuptools-scm,
+               opam,
 Standards-Version: 3.9.6
 Homepage: https://forge.softwareheritage.org/source/swh-lister/
 
