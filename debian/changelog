@@ -1,8 +1,19 @@
-swh-lister (1.3.6-1~swh1~bpo10+1) buster-swh; urgency=medium
+swh-lister (1.4.0-1~swh2) unstable-swh; urgency=medium
 
-  * Rebuild for buster-swh
+  * Bump new release
 
- -- Software Heritage autobuilder (on jenkins-debian1) <jenkins@jenkins-debian1.internal.softwareheritage.org>  Fri, 04 Jun 2021 10:05:36 +0000
+ -- Antoine R. Dumont (@ardumont) <ardumont@softwareheritage.org>  Fri, 09 Jul 2021 13:17:00 +0200
+
+swh-lister (1.4.0-1~swh1) unstable-swh; urgency=medium
+
+  * New upstream release 1.4.0     - (tagged by Antoine R. Dumont
+    (@ardumont) <ardumont@softwareheritage.org> on 2021-07-09 13:01:04
+    +0200)
+  * Upstream changes:     - v1.4.0     - New Tuleap lister     - New
+    Opam lister     - Make PyPI lister incremental     - Make PyPI
+    lister complete the information on origins
+
+ -- Software Heritage autobuilder (on jenkins-debian1) <jenkins@jenkins-debian1.internal.softwareheritage.org>  Fri, 09 Jul 2021 11:06:37 +0000
 
 swh-lister (1.3.6-1~swh1) unstable-swh; urgency=medium
 

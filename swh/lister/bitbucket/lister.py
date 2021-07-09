@@ -67,7 +67,7 @@ class BitbucketLister(Lister[BitbucketListerState, List[Dict[str, Any]]]):
 
         self.incremental = incremental
 
-        self.url_params = {
+        self.url_params: Dict[str, Any] = {
             "pagelen": page_size,
             # only return needed JSON fields in bitbucket API responses
             # (also prevent errors 500 when listing)
