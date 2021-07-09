@@ -1,3 +1,9 @@
+swh-lister (1.4.0-1~swh2) unstable-swh; urgency=medium
+
+  * Bump new release
+
+ -- Antoine R. Dumont (@ardumont) <ardumont@softwareheritage.org>  Fri, 09 Jul 2021 13:17:00 +0200
+
 swh-lister (1.4.0-1~swh1) unstable-swh; urgency=medium
 
   * New upstream release 1.4.0     - (tagged by Antoine R. Dumont
