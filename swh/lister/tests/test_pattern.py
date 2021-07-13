@@ -1,4 +1,4 @@
-# Copyright (C) 2020  The Software Heritage developers
+# Copyright (C) 2020-2021  The Software Heritage developers
 # See the AUTHORS file at the top-level directory of this distribution
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
@@ -37,6 +37,18 @@ def test_instantiation(swh_scheduler):
 
     with pytest.raises(NotImplementedError):
         lister.run()
+
+
+def test_lister_instance_name(swh_scheduler):
+    lister = InstantiableLister(
+        scheduler=swh_scheduler, url="https://example.org", instance="example"
+    )
+
+    assert lister.instance == "example"
+
+    lister = InstantiableLister(scheduler=swh_scheduler, url="https://example.org")
+
+    assert lister.instance == "example.org"
 
 
 def test_instantiation_from_configfile(swh_scheduler, mocker):

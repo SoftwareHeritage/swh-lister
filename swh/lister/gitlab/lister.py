@@ -14,7 +14,6 @@ import requests
 from requests.exceptions import HTTPError
 from requests.status_codes import codes
 from tenacity.before_sleep import before_sleep_log
-from urllib3.util import parse_url
 
 from swh.lister import USER_AGENT
 from swh.lister.pattern import CredentialsType, Lister
@@ -88,7 +87,8 @@ class GitLabLister(Lister[GitLabListerState, PageResult]):
         scheduler: a scheduler instance
         url: the api v4 url of the gitlab instance to visit (e.g.
           https://gitlab.com/api/v4/)
-        instance: a specific instance name (e.g. gitlab, tor, git-kernel, ...)
+        instance: a specific instance name (e.g. gitlab, tor, git-kernel, ...),
+            url network location will be used if not provided
         incremental: defines if incremental listing is activated or not
 
     """
@@ -103,8 +103,6 @@ class GitLabLister(Lister[GitLabListerState, PageResult]):
         credentials: Optional[CredentialsType] = None,
         incremental: bool = False,
     ):
-        if instance is None:
-            instance = parse_url(url).host
         super().__init__(
             scheduler=scheduler,
             url=url.rstrip("/"),
