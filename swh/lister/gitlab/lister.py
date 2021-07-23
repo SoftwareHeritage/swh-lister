@@ -14,11 +14,10 @@ import requests
 from requests.exceptions import HTTPError
 from requests.status_codes import codes
 from tenacity.before_sleep import before_sleep_log
-from urllib3.util import parse_url
 
 from swh.lister import USER_AGENT
 from swh.lister.pattern import CredentialsType, Lister
-from swh.lister.utils import retry_attempt, throttling_retry
+from swh.lister.utils import is_retryable_exception, retry_attempt, throttling_retry
 from swh.scheduler.model import ListedOrigin
 
 logger = logging.getLogger(__name__)
@@ -57,7 +56,7 @@ def _if_rate_limited(retry_state) -> bool:
             isinstance(exc, HTTPError)
             and exc.response.status_code == codes.forbidden
             and int(exc.response.headers.get("RateLimit-Remaining", "0")) == 0
-        )
+        ) or is_retryable_exception(exc)
     return False
 
 
@@ -88,7 +87,8 @@ class GitLabLister(Lister[GitLabListerState, PageResult]):
         scheduler: a scheduler instance
         url: the api v4 url of the gitlab instance to visit (e.g.
           https://gitlab.com/api/v4/)
-        instance: a specific instance name (e.g. gitlab, tor, git-kernel, ...)
+        instance: a specific instance name (e.g. gitlab, tor, git-kernel, ...),
+            url network location will be used if not provided
         incremental: defines if incremental listing is activated or not
 
     """
@@ -103,8 +103,6 @@ class GitLabLister(Lister[GitLabListerState, PageResult]):
         credentials: Optional[CredentialsType] = None,
         incremental: bool = False,
     ):
-        if instance is None:
-            instance = parse_url(url).host
         super().__init__(
             scheduler=scheduler,
             url=url.rstrip("/"),
@@ -113,6 +111,7 @@ class GitLabLister(Lister[GitLabListerState, PageResult]):
         )
         self.incremental = incremental
         self.last_page: Optional[str] = None
+        self.per_page = 100
 
         self.session = requests.Session()
         self.session.headers.update(
@@ -147,7 +146,25 @@ class GitLabLister(Lister[GitLabListerState, PageResult]):
                 response.url,
                 response.content,
             )
-        response.raise_for_status()
+
+        # GitLab API can return errors 500 when listing projects.
+        # https://gitlab.com/gitlab-org/gitlab/-/issues/262629
+        # To avoid ending the listing prematurely, skip buggy URLs and move
+        # to next pages.
+        if response.status_code == 500:
+            id_after = _parse_id_after(url)
+            assert id_after is not None
+            while True:
+                next_id_after = id_after + self.per_page
+                url = url.replace(f"id_after={id_after}", f"id_after={next_id_after}")
+                response = self.session.get(url)
+                if response.status_code == 200:
+                    break
+                else:
+                    id_after = next_id_after
+        else:
+            response.raise_for_status()
+
         repositories: Tuple[Repository, ...] = tuple(response.json())
         if hasattr(response, "links") and response.links.get("next"):
             next_page = response.links["next"]["url"]
@@ -161,6 +178,8 @@ class GitLabLister(Lister[GitLabListerState, PageResult]):
             "pagination": "keyset",
             "order_by": "id",
             "sort": "asc",
+            "simple": "true",
+            "per_page": f"{self.per_page}",
         }
         if id_after is not None:
             parameters["id_after"] = str(id_after)
