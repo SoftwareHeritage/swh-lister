@@ -17,7 +17,7 @@ from tenacity.before_sleep import before_sleep_log
 
 from swh.lister import USER_AGENT
 from swh.lister.pattern import CredentialsType, Lister
-from swh.lister.utils import retry_attempt, throttling_retry
+from swh.lister.utils import is_retryable_exception, retry_attempt, throttling_retry
 from swh.scheduler.model import ListedOrigin
 
 logger = logging.getLogger(__name__)
@@ -56,7 +56,7 @@ def _if_rate_limited(retry_state) -> bool:
             isinstance(exc, HTTPError)
             and exc.response.status_code == codes.forbidden
             and int(exc.response.headers.get("RateLimit-Remaining", "0")) == 0
-        )
+        ) or is_retryable_exception(exc)
     return False
 
 

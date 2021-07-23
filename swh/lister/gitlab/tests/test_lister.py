@@ -201,6 +201,49 @@ def test_lister_gitlab_rate_limit(swh_scheduler, requests_mock, datadir, mocker)
     assert_sleep_calls(mocker, mock_sleep, [1, WAIT_EXP_BASE])
 
 
+@pytest.mark.parametrize("status_code", [502, 503, 520])
+def test_lister_gitlab_http_errors(
+    swh_scheduler, requests_mock, datadir, mocker, status_code
+):
+    """Gitlab lister should retry requests when encountering HTTP 50x errors
+
+    """
+    instance = "gite.lirmm.fr"
+    url = api_url(instance)
+    lister = GitLabLister(swh_scheduler, url=url, instance=instance)
+
+    url_page1 = lister.page_url()
+    response1 = gitlab_page_response(datadir, instance, 1)
+    url_page2 = lister.page_url(2)
+    response2 = gitlab_page_response(datadir, instance, 2)
+
+    requests_mock.get(
+        url_page1,
+        [{"json": response1, "headers": {"Link": f"<{url_page2}>; rel=next"}}],
+        additional_matcher=_match_request,
+    )
+    requests_mock.get(
+        url_page2,
+        [
+            # first request ends up with error
+            {"status_code": status_code},
+            # second request is ok
+            {"json": response2},
+        ],
+        additional_matcher=_match_request,
+    )
+
+    # To avoid this test being too slow, we mock sleep within the retry behavior
+    mock_sleep = mocker.patch.object(lister.get_page_result.retry, "sleep")
+
+    listed_result = lister.run()
+
+    expected_nb_origins = len(response1) + len(response2)
+    assert listed_result == ListerStats(pages=2, origins=expected_nb_origins)
+
+    assert_sleep_calls(mocker, mock_sleep, [1])
+
+
 def test_lister_gitlab_credentials(swh_scheduler):
     """Gitlab lister supports credentials configuration
 
