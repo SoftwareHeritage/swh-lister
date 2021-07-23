@@ -111,6 +111,7 @@ class GitLabLister(Lister[GitLabListerState, PageResult]):
         )
         self.incremental = incremental
         self.last_page: Optional[str] = None
+        self.per_page = 100
 
         self.session = requests.Session()
         self.session.headers.update(
@@ -145,7 +146,25 @@ class GitLabLister(Lister[GitLabListerState, PageResult]):
                 response.url,
                 response.content,
             )
-        response.raise_for_status()
+
+        # GitLab API can return errors 500 when listing projects.
+        # https://gitlab.com/gitlab-org/gitlab/-/issues/262629
+        # To avoid ending the listing prematurely, skip buggy URLs and move
+        # to next pages.
+        if response.status_code == 500:
+            id_after = _parse_id_after(url)
+            assert id_after is not None
+            while True:
+                next_id_after = id_after + self.per_page
+                url = url.replace(f"id_after={id_after}", f"id_after={next_id_after}")
+                response = self.session.get(url)
+                if response.status_code == 200:
+                    break
+                else:
+                    id_after = next_id_after
+        else:
+            response.raise_for_status()
+
         repositories: Tuple[Repository, ...] = tuple(response.json())
         if hasattr(response, "links") and response.links.get("next"):
             next_page = response.links["next"]["url"]
@@ -160,7 +179,7 @@ class GitLabLister(Lister[GitLabListerState, PageResult]):
             "order_by": "id",
             "sort": "asc",
             "simple": "true",
-            "per_page": "100",
+            "per_page": f"{self.per_page}",
         }
         if id_after is not None:
             parameters["id_after"] = str(id_after)

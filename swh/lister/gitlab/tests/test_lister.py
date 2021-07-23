@@ -244,6 +244,39 @@ def test_lister_gitlab_http_errors(
     assert_sleep_calls(mocker, mock_sleep, [1])
 
 
+def test_lister_gitlab_http_error_500(swh_scheduler, requests_mock, datadir):
+    """Gitlab lister should skip buggy URL and move to next page.
+
+    """
+    instance = "gite.lirmm.fr"
+    url = api_url(instance)
+    lister = GitLabLister(swh_scheduler, url=url, instance=instance)
+
+    url_page1 = lister.page_url()
+    response1 = gitlab_page_response(datadir, instance, 1)
+    url_page2 = lister.page_url(lister.per_page)
+    url_page3 = lister.page_url(2 * lister.per_page)
+    response3 = gitlab_page_response(datadir, instance, 3)
+
+    requests_mock.get(
+        url_page1,
+        [{"json": response1, "headers": {"Link": f"<{url_page2}>; rel=next"}}],
+        additional_matcher=_match_request,
+    )
+    requests_mock.get(
+        url_page2, [{"status_code": 500},], additional_matcher=_match_request,
+    )
+
+    requests_mock.get(
+        url_page3, [{"json": response3}], additional_matcher=_match_request,
+    )
+
+    listed_result = lister.run()
+
+    expected_nb_origins = len(response1) + len(response3)
+    assert listed_result == ListerStats(pages=2, origins=expected_nb_origins)
+
+
 def test_lister_gitlab_credentials(swh_scheduler):
     """Gitlab lister supports credentials configuration
 
