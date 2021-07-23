@@ -10,7 +10,6 @@ from urllib.parse import urljoin
 import iso8601
 import requests
 from tenacity.before_sleep import before_sleep_log
-from urllib3.util import parse_url
 
 from swh.lister.utils import throttling_retry
 from swh.scheduler.interface import SchedulerInterface
@@ -51,9 +50,6 @@ class TuleapLister(StatelessLister[RepoPage]):
         instance: Optional[str] = None,
         credentials: CredentialsType = None,
     ):
-        if instance is None:
-            instance = parse_url(url).host
-
         super().__init__(
             scheduler=scheduler, credentials=credentials, url=url, instance=instance,
         )
