@@ -159,6 +159,8 @@ class GitLabLister(Lister[GitLabListerState, PageResult]):
             "pagination": "keyset",
             "order_by": "id",
             "sort": "asc",
+            "simple": "true",
+            "per_page": "100",
         }
         if id_after is not None:
             parameters["id_after"] = str(id_after)
