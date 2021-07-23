@@ -1,3 +1,17 @@
+swh-lister (1.5.0-1~swh1) unstable-swh; urgency=medium
+
+  * New upstream release 1.5.0     - (tagged by Antoine R. Dumont
+    (@ardumont) <ardumont@softwareheritage.org> on 2021-07-23 16:28:50
+    +0200)
+  * Upstream changes:     - v1.5.0     - gitlab: Handle HTTP status code
+    500 when listing projects     - gitlab: Update requests query
+    parameters     - gitlab: Adapt requests retry policy to consider
+    HTTP 50x status codes     - opam: Directly use the --root flag
+    instead of using an env variable     - pattern: Use URL network
+    location as instance name when not provided
+
+ -- Software Heritage autobuilder (on jenkins-debian1) <jenkins@jenkins-debian1.internal.softwareheritage.org>  Fri, 23 Jul 2021 14:32:51 +0000
+
 swh-lister (1.4.0-1~swh2) unstable-swh; urgency=medium
 
   * Bump new release
