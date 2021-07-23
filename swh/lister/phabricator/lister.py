@@ -1,4 +1,4 @@
-# Copyright (C) 2019-2020 the Software Heritage developers
+# Copyright (C) 2019-2021 the Software Heritage developers
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
 from collections import defaultdict
@@ -27,7 +27,8 @@ class PhabricatorLister(StatelessLister[PageType]):
     Args:
         url: base URL of a phabricator forge
             (for instance https://forge.softwareheritage.org)
-        instance: string identifier for the listed forge
+        instance: string identifier for the listed forge,
+            URL network location will be used if not provided
         api_token: authentication token for Conduit API
     """
 
@@ -38,7 +39,7 @@ class PhabricatorLister(StatelessLister[PageType]):
         self,
         scheduler: SchedulerInterface,
         url: str,
-        instance: str,
+        instance: Optional[str] = None,
         api_token: Optional[str] = None,
         credentials: CredentialsType = None,
     ):

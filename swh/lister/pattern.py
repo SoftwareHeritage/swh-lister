@@ -1,10 +1,13 @@
-# Copyright (C) 2020  The Software Heritage developers
+# Copyright (C) 2020-2021  The Software Heritage developers
 # See the AUTHORS file at the top-level directory of this distribution
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
 
+from __future__ import annotations
+
 from dataclasses import dataclass
 from typing import Any, Dict, Generic, Iterable, Iterator, List, Optional, TypeVar
+from urllib.parse import urlparse
 
 from swh.core.config import load_from_envvar
 from swh.core.utils import grouper
@@ -17,10 +20,10 @@ class ListerStats:
     pages: int = 0
     origins: int = 0
 
-    def __add__(self, other: "ListerStats") -> "ListerStats":
+    def __add__(self, other: ListerStats) -> ListerStats:
         return self.__class__(self.pages + other.pages, self.origins + other.origins)
 
-    def __iadd__(self, other: "ListerStats"):
+    def __iadd__(self, other: ListerStats):
         self.pages += other.pages
         self.origins += other.origins
 
@@ -65,8 +68,8 @@ class Lister(Generic[StateType, PageType]):
       scheduler: the instance of the Scheduler being used to register the
         origins listed by this lister
       url: a URL representing this lister, e.g. the API's base URL
-      instance: the instance name used, in conjunction with :attr:`LISTER_NAME`, to
-        uniquely identify this lister instance.
+      instance: the instance name, to uniquely identify this lister instance,
+        if not provided the URL network location will be used
       credentials: dictionary of credentials for all listers. The first level
         identifies the :attr:`LISTER_NAME`, the second level the lister
         :attr:`instance`. The final level is a list of dicts containing the
@@ -86,14 +89,17 @@ class Lister(Generic[StateType, PageType]):
         self,
         scheduler: SchedulerInterface,
         url: str,
-        instance: str,
+        instance: Optional[str] = None,
         credentials: CredentialsType = None,
     ):
         if not self.LISTER_NAME:
             raise ValueError("Must set the LISTER_NAME attribute on Lister classes")
 
         self.url = url
-        self.instance = instance
+        if instance is not None:
+            self.instance = instance
+        else:
+            self.instance = urlparse(url).netloc
 
         self.scheduler = scheduler
 

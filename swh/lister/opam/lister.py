@@ -51,9 +51,19 @@ class OpamLister(StatelessLister[PageType]):
             scheduler=scheduler, credentials=credentials, url=url, instance=instance,
         )
         self.env = os.environ.copy()
-        self.env["OPAMROOT"] = tempfile.mkdtemp(prefix="swh_opam_lister")
+        self.opamroot = tempfile.mkdtemp(prefix="swh_opam_lister")
         call(
-            ["opam", "init", "--reinit", "--bare", "--no-setup", instance, url],
+            [
+                "opam",
+                "init",
+                "--reinit",
+                "--bare",
+                "--no-setup",
+                "--root",
+                self.opamroot,
+                instance,
+                url,
+            ],
             env=self.env,
         )
 
@@ -66,6 +76,8 @@ class OpamLister(StatelessLister[PageType]):
                 "--no-switch",
                 "--repos",
                 self.instance,
+                "--root",
+                self.opamroot,
                 "--normalise",
                 "--short",
             ],
@@ -87,7 +99,7 @@ class OpamLister(StatelessLister[PageType]):
             url=url,
             last_update=None,
             extra_loader_arguments={
-                "opam_root": self.env["OPAMROOT"],
+                "opam_root": self.opamroot,
                 "opam_instance": self.instance,
                 "opam_url": self.url,
                 "opam_package": page,

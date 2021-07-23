@@ -58,16 +58,12 @@ class CGitLister(StatelessLister[Repositories]):
         Args:
             url: main URL of the CGit instance, i.e. url of the index
                 of published git repositories on this instance.
-            instance: Name of cgit instance. Defaults to url's hostname
+            instance: Name of cgit instance. Defaults to url's network location
                 if unset.
             base_git_url: Optional base git url which allows the origin url
                 computations.
 
         """
-        if not instance:
-            instance = urlparse(url).hostname
-        assert instance is not None  # Make mypy happy
-
         super().__init__(
             scheduler=scheduler, url=url, instance=instance, credentials=credentials,
         )
