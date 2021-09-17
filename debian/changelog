@@ -1,3 +1,13 @@
+swh-lister (1.6.0-1~swh1) unstable-swh; urgency=medium
+
+  * New upstream release 1.6.0     - (tagged by Antoine R. Dumont
+    (@ardumont) <ardumont@softwareheritage.org> on 2021-09-17 10:50:28
+    +0200)
+  * Upstream changes:     - v1.6.0     - gitlab: Allow listing of
+    instances providing multiple vcs_type
+
+ -- Software Heritage autobuilder (on jenkins-debian1) <jenkins@jenkins-debian1.internal.softwareheritage.org>  Fri, 17 Sep 2021 08:55:14 +0000
+
 swh-lister (1.5.0-1~swh1) unstable-swh; urgency=medium
 
   * New upstream release 1.5.0     - (tagged by Antoine R. Dumont
