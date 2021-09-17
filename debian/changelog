@@ -1,8 +1,13 @@
-swh-lister (1.6.0-1~swh1~bpo10+1) buster-swh; urgency=medium
+swh-lister (1.7.0-1~swh1) unstable-swh; urgency=medium
 
-  * Rebuild for buster-swh
+  * New upstream release 1.7.0     - (tagged by Antoine R. Dumont
+    (@ardumont) <ardumont@softwareheritage.org> on 2021-09-17 13:37:22
+    +0200)
+  * Upstream changes:     - v1.7.0     - gitlab: Allow ingestion of
+    hg_git origins as hg ones (some instance can list tose e.g     -
+    foss.heptapod.net)
 
- -- Software Heritage autobuilder (on jenkins-debian1) <jenkins@jenkins-debian1.internal.softwareheritage.org>  Fri, 17 Sep 2021 08:57:38 +0000
+ -- Software Heritage autobuilder (on jenkins-debian1) <jenkins@jenkins-debian1.internal.softwareheritage.org>  Fri, 17 Sep 2021 11:41:52 +0000
 
 swh-lister (1.6.0-1~swh1) unstable-swh; urgency=medium
 
