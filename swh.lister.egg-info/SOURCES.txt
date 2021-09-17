@@ -123,6 +123,7 @@ swh/lister/gitlab/tasks.py
 swh/lister/gitlab/tests/__init__.py
 swh/lister/gitlab/tests/test_lister.py
 swh/lister/gitlab/tests/test_tasks.py
+swh/lister/gitlab/tests/data/https_foss.heptapod.net/api_response_page1.json
 swh/lister/gitlab/tests/data/https_gite.lirmm.fr/api_response_page1.json
 swh/lister/gitlab/tests/data/https_gite.lirmm.fr/api_response_page2.json
 swh/lister/gitlab/tests/data/https_gite.lirmm.fr/api_response_page3.json
