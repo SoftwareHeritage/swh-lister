@@ -57,11 +57,16 @@ def test_lister_gitlab(datadir, swh_scheduler, requests_mock):
 
 
 def test_lister_gitlab_heptapod(datadir, swh_scheduler, requests_mock):
-    """Gitlab lister ignores some vcs_type
+    """Heptapod lister happily lists hg, hg_git as hg and git origins
 
     """
+    name = "heptapod"
     instance = "foss.heptapod.net"
-    lister = GitLabLister(swh_scheduler, url=api_url(instance), instance=instance)
+    lister = GitLabLister(
+        swh_scheduler, url=api_url(instance), name=name, instance=instance
+    )
+    assert lister.LISTER_NAME == name
+
     response = gitlab_page_response(datadir, instance, 1)
 
     requests_mock.get(
