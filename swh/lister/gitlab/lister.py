@@ -97,16 +97,17 @@ class GitLabLister(Lister[GitLabListerState, PageResult]):
 
     """
 
-    LISTER_NAME = "gitlab"
-
     def __init__(
         self,
         scheduler,
         url: str,
+        name: Optional[str] = "gitlab",
         instance: Optional[str] = None,
         credentials: Optional[CredentialsType] = None,
         incremental: bool = False,
     ):
+        if name is not None:
+            self.LISTER_NAME = name
         super().__init__(
             scheduler=scheduler,
             url=url.rstrip("/"),
