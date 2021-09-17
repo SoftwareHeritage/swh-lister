@@ -12,7 +12,7 @@ import pytest
 from requests.status_codes import codes
 
 from swh.lister import USER_AGENT
-from swh.lister.gitlab.lister import IGNORED_DVCS, GitLabLister, _parse_id_after
+from swh.lister.gitlab.lister import GitLabLister, _parse_id_after
 from swh.lister.pattern import ListerStats
 from swh.lister.tests.test_utils import assert_sleep_calls
 from swh.lister.utils import WAIT_EXP_BASE
@@ -69,11 +69,10 @@ def test_lister_gitlab_heptapod(datadir, swh_scheduler, requests_mock):
     )
 
     listed_result = lister.run()
-    expected_nb_origins = 0
+    expected_nb_origins = len(response)
+
     for entry in response:
-        if entry["vcs_type"] in IGNORED_DVCS:
-            continue
-        expected_nb_origins += 1
+        assert entry["vcs_type"] in ("hg", "hg_git")
 
     assert listed_result == ListerStats(pages=1, origins=expected_nb_origins)
 
