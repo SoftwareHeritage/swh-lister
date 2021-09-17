@@ -12,7 +12,7 @@ import pytest
 from requests.status_codes import codes
 
 from swh.lister import USER_AGENT
-from swh.lister.gitlab.lister import GitLabLister, _parse_id_after
+from swh.lister.gitlab.lister import IGNORED_DVCS, GitLabLister, _parse_id_after
 from swh.lister.pattern import ListerStats
 from swh.lister.tests.test_utils import assert_sleep_calls
 from swh.lister.utils import WAIT_EXP_BASE
@@ -52,6 +52,38 @@ def test_lister_gitlab(datadir, swh_scheduler, requests_mock):
 
     for listed_origin in scheduler_origins:
         assert listed_origin.visit_type == "git"
+        assert listed_origin.url.startswith(f"https://{instance}")
+        assert listed_origin.last_update is not None
+
+
+def test_lister_gitlab_heptapod(datadir, swh_scheduler, requests_mock):
+    """Gitlab lister ignores some vcs_type
+
+    """
+    instance = "foss.heptapod.net"
+    lister = GitLabLister(swh_scheduler, url=api_url(instance), instance=instance)
+    response = gitlab_page_response(datadir, instance, 1)
+
+    requests_mock.get(
+        lister.page_url(), [{"json": response}], additional_matcher=_match_request,
+    )
+
+    listed_result = lister.run()
+    expected_nb_origins = 0
+    for entry in response:
+        if entry["vcs_type"] in IGNORED_DVCS:
+            continue
+        expected_nb_origins += 1
+
+    assert listed_result == ListerStats(pages=1, origins=expected_nb_origins)
+
+    scheduler_origins = lister.scheduler.get_listed_origins(
+        lister.lister_obj.id
+    ).results
+    assert len(scheduler_origins) == expected_nb_origins
+
+    for listed_origin in scheduler_origins:
+        assert listed_origin.visit_type == "hg"
         assert listed_origin.url.startswith(f"https://{instance}")
         assert listed_origin.last_update is not None
 

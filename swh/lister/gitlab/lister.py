@@ -23,6 +23,9 @@ from swh.scheduler.model import ListedOrigin
 logger = logging.getLogger(__name__)
 
 
+IGNORED_DVCS = ("hg_git",)
+
+
 @dataclass
 class GitLabListerState:
     """State of the GitLabLister"""
@@ -203,10 +206,17 @@ class GitLabLister(Lister[GitLabListerState, PageResult]):
 
         repositories = page_result.repositories if page_result.repositories else []
         for repo in repositories:
+            visit_type = repo.get("vcs_type", "git")
+            url = repo["http_url_to_repo"]
+            if visit_type in IGNORED_DVCS:
+                logger.warning(
+                    "Ignoring origin %s with type '%s'", url, visit_type,
+                )
+                continue
             yield ListedOrigin(
                 lister_id=self.lister_obj.id,
-                url=repo["http_url_to_repo"],
-                visit_type="git",
+                url=url,
+                visit_type=visit_type,
                 last_update=iso8601.parse_date(repo["last_activity_at"]),
             )
 
