@@ -6,23 +6,40 @@
 import io
 from unittest.mock import MagicMock
 
+import pytest
+
 from swh.lister.opam.lister import OpamLister
 
+module_name = "swh.lister.opam.lister"
 
-def test_urls(swh_scheduler, mocker):
+
+@pytest.fixture
+def mock_opam(mocker):
+    """Fixture to bypass the actual opam calls within the test context.
+
+    """
+    # inhibits the real `subprocess.call` which prepares the required internal opam
+    # state
+    mock_init = mocker.patch(f"{module_name}.call", return_value=None)
+    # replaces the real Popen with a fake one (list origins command)
+    mocked_popen = MagicMock()
+    mocked_popen.stdout = io.BytesIO(b"bar\nbaz\nfoo\n")
+    mock_open = mocker.patch(f"{module_name}.Popen", return_value=mocked_popen)
+    return mock_init, mock_open
+
+
+def test_urls(swh_scheduler, mock_opam):
+    mock_init, mock_popen = mock_opam
 
     instance_url = "https://opam.ocaml.org"
 
     lister = OpamLister(swh_scheduler, url=instance_url, instance="opam")
 
-    mocked_popen = MagicMock()
-    mocked_popen.stdout = io.BytesIO(b"bar\nbaz\nfoo\n")
-
-    # replaces the real Popen with a fake one
-    mocker.patch("swh.lister.opam.lister.Popen", return_value=mocked_popen)
-
     # call the lister and get all listed origins urls
     stats = lister.run()
+
+    assert mock_init.called
+    assert mock_popen.called
 
     assert stats.pages == 3
     assert stats.origins == 3
@@ -41,7 +58,6 @@ def test_urls(swh_scheduler, mocker):
 
 
 def test_opam_binary(datadir, swh_scheduler):
-
     instance_url = f"file://{datadir}/fake_opam_repo"
 
     lister = OpamLister(swh_scheduler, url=instance_url, instance="fake")

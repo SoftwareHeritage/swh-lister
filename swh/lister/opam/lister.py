@@ -51,7 +51,12 @@ class OpamLister(StatelessLister[PageType]):
             scheduler=scheduler, credentials=credentials, url=url, instance=instance,
         )
         self.env = os.environ.copy()
+        # Opam root folder is initialized in the :meth:`get_pages` method as no
+        # side-effect should happen in the constructor to ease instantiation
         self.opamroot = tempfile.mkdtemp(prefix="swh_opam_lister")
+
+    def get_pages(self) -> Iterator[PageType]:
+        # Initialize the opam root directory with the opam instance data to list.
         call(
             [
                 "opam",
@@ -61,13 +66,12 @@ class OpamLister(StatelessLister[PageType]):
                 "--no-setup",
                 "--root",
                 self.opamroot,
-                instance,
-                url,
+                self.instance,
+                self.url,
             ],
             env=self.env,
         )
-
-    def get_pages(self) -> Iterator[PageType]:
+        # Actually list opam instance data
         proc = Popen(
             [
                 "opam",
