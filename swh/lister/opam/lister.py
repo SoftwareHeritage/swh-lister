@@ -8,7 +8,7 @@ import logging
 import os
 from subprocess import PIPE, Popen, call
 import tempfile
-from typing import Iterator
+from typing import Iterator, Optional
 
 from swh.lister.pattern import StatelessLister
 from swh.scheduler.interface import SchedulerInterface
@@ -44,7 +44,7 @@ class OpamLister(StatelessLister[PageType]):
         self,
         scheduler: SchedulerInterface,
         url: str,
-        instance: str,
+        instance: Optional[str] = None,
         credentials: CredentialsType = None,
     ):
         super().__init__(

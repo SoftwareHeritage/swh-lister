@@ -28,12 +28,22 @@ def mock_opam(mocker):
     return mock_init, mock_open
 
 
+def test_lister_opam_optional_instance(swh_scheduler):
+    """Instance name should be optional and default to be built out of the netloc."""
+    netloc = "opam.ocaml.org"
+    instance_url = f"https://{netloc}"
+
+    lister = OpamLister(swh_scheduler, url=instance_url)
+    assert lister.instance == netloc
+
+
 def test_urls(swh_scheduler, mock_opam):
     mock_init, mock_popen = mock_opam
 
     instance_url = "https://opam.ocaml.org"
 
     lister = OpamLister(swh_scheduler, url=instance_url, instance="opam")
+    assert lister.instance == "opam"
 
     # call the lister and get all listed origins urls
     stats = lister.run()
