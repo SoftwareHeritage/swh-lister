@@ -4,6 +4,7 @@
 # See top-level LICENSE file for more information
 
 import io
+from tempfile import mkdtemp
 from unittest.mock import MagicMock
 
 import pytest
@@ -33,8 +34,9 @@ def test_lister_opam_optional_instance(swh_scheduler):
     netloc = "opam.ocaml.org"
     instance_url = f"https://{netloc}"
 
-    lister = OpamLister(swh_scheduler, url=instance_url)
+    lister = OpamLister(swh_scheduler, url=instance_url,)
     assert lister.instance == netloc
+    assert lister.opamroot.endswith(lister.instance)
 
 
 def test_urls(swh_scheduler, mock_opam):
@@ -42,7 +44,12 @@ def test_urls(swh_scheduler, mock_opam):
 
     instance_url = "https://opam.ocaml.org"
 
-    lister = OpamLister(swh_scheduler, url=instance_url, instance="opam")
+    lister = OpamLister(
+        swh_scheduler,
+        url=instance_url,
+        instance="opam",
+        opam_root=mkdtemp(prefix="swh_opam_lister"),
+    )
     assert lister.instance == "opam"
 
     # call the lister and get all listed origins urls
@@ -70,7 +77,12 @@ def test_urls(swh_scheduler, mock_opam):
 def test_opam_binary(datadir, swh_scheduler):
     instance_url = f"file://{datadir}/fake_opam_repo"
 
-    lister = OpamLister(swh_scheduler, url=instance_url, instance="fake")
+    lister = OpamLister(
+        swh_scheduler,
+        url=instance_url,
+        instance="fake",
+        opam_root=mkdtemp(prefix="swh_opam_lister"),
+    )
 
     stats = lister.run()
 
