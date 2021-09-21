@@ -4,7 +4,7 @@
 # See top-level LICENSE file for more information
 
 import logging
-from typing import Any, Iterator, Mapping
+from typing import Any, Iterator, Mapping, Optional
 
 import iso8601
 
@@ -36,12 +36,16 @@ class GNULister(StatelessLister[GNUPageType]):
             instance="GNU",
             credentials=credentials,
         )
-        self.gnu_tree = GNUTree(f"{self.url}/tree.json.gz")
+        # no side-effect calls in constructor, if extra state is needed, as preconized
+        # by the pattern docstring, this must happen in the get_pages method.
+        self.gnu_tree: Optional[GNUTree] = None
 
     def get_pages(self) -> Iterator[GNUPageType]:
         """
         Yield a single page listing all GNU projects.
         """
+        # first fetch the manifest to parse
+        self.gnu_tree = GNUTree(f"{self.url}/tree.json.gz")
         yield self.gnu_tree.projects
 
     def get_origins_from_page(self, page: GNUPageType) -> Iterator[ListedOrigin]:
@@ -49,6 +53,7 @@ class GNULister(StatelessLister[GNUPageType]):
         Iterate on all GNU projects and yield ListedOrigin instances.
         """
         assert self.lister_obj.id is not None
+        assert self.gnu_tree is not None
 
         artifacts = self.gnu_tree.artifacts
 
