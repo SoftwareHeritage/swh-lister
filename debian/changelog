@@ -1,3 +1,16 @@
+swh-lister (1.9.0-1~swh1) unstable-swh; urgency=medium
+
+  * New upstream release 1.9.0     - (tagged by Antoine R. Dumont
+    (@ardumont) <ardumont@softwareheritage.org> on 2021-09-21 11:23:23
+    +0200)
+  * Upstream changes:     - v1.9.0     - gnu: Respect the pattern
+    docstring about state initialization     - opam: Allow defining
+    where to actually install the opam_root folder     - opam: Make the
+    instance optional and derived from the url     - opam: Move the
+    state initialization into the get_pages method
+
+ -- Software Heritage autobuilder (on jenkins-debian1) <jenkins@jenkins-debian1.internal.softwareheritage.org>  Tue, 21 Sep 2021 09:29:04 +0000
+
 swh-lister (1.8.0-1~swh1) unstable-swh; urgency=medium
 
   * New upstream release 1.8.0     - (tagged by Antoine R. Dumont
