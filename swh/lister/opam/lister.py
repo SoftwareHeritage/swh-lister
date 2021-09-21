@@ -7,8 +7,7 @@ import io
 import logging
 import os
 from subprocess import PIPE, Popen, call
-import tempfile
-from typing import Iterator
+from typing import Iterator, Optional
 
 from swh.lister.pattern import StatelessLister
 from swh.scheduler.interface import SchedulerInterface
@@ -44,14 +43,20 @@ class OpamLister(StatelessLister[PageType]):
         self,
         scheduler: SchedulerInterface,
         url: str,
-        instance: str,
+        instance: Optional[str] = None,
         credentials: CredentialsType = None,
+        opam_root: str = "/tmp/opam/",
     ):
         super().__init__(
             scheduler=scheduler, credentials=credentials, url=url, instance=instance,
         )
         self.env = os.environ.copy()
-        self.opamroot = tempfile.mkdtemp(prefix="swh_opam_lister")
+        # Opam root folder is initialized in the :meth:`get_pages` method as no
+        # side-effect should happen in the constructor to ease instantiation
+        self.opamroot = os.path.join(opam_root, self.instance)
+
+    def get_pages(self) -> Iterator[PageType]:
+        # Initialize the opam root directory with the opam instance data to list.
         call(
             [
                 "opam",
@@ -61,13 +66,12 @@ class OpamLister(StatelessLister[PageType]):
                 "--no-setup",
                 "--root",
                 self.opamroot,
-                instance,
-                url,
+                self.instance,
+                self.url,
             ],
             env=self.env,
         )
-
-    def get_pages(self) -> Iterator[PageType]:
+        # Actually list opam instance data
         proc = Popen(
             [
                 "opam",
