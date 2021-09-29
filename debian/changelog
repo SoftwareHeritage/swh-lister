@@ -1,3 +1,13 @@
+swh-lister (2.0.0-1~swh1) unstable-swh; urgency=medium
+
+  * New upstream release 2.0.0     - (tagged by Antoine R. Dumont
+    (@ardumont) <ardumont@softwareheritage.org> on 2021-09-29 09:21:37
+    +0200)
+  * Upstream changes:     - v2.0.0     - opam: Share opam root directory
+    even on multiple instances
+
+ -- Software Heritage autobuilder (on jenkins-debian1) <jenkins@jenkins-debian1.internal.softwareheritage.org>  Wed, 29 Sep 2021 07:31:03 +0000
+
 swh-lister (1.9.0-1~swh1) unstable-swh; urgency=medium
 
   * New upstream release 1.9.0     - (tagged by Antoine R. Dumont
