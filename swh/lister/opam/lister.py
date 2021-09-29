@@ -7,7 +7,7 @@ import io
 import logging
 import os
 from subprocess import PIPE, Popen, call
-from typing import Iterator, Optional
+from typing import Any, Dict, Iterator, Optional
 
 from swh.lister.pattern import StatelessLister
 from swh.scheduler.interface import SchedulerInterface
@@ -53,24 +53,12 @@ class OpamLister(StatelessLister[PageType]):
         self.env = os.environ.copy()
         # Opam root folder is initialized in the :meth:`get_pages` method as no
         # side-effect should happen in the constructor to ease instantiation
-        self.opamroot = os.path.join(opam_root, self.instance)
+        self.opam_root = opam_root
 
     def get_pages(self) -> Iterator[PageType]:
-        # Initialize the opam root directory with the opam instance data to list.
-        call(
-            [
-                "opam",
-                "init",
-                "--reinit",
-                "--bare",
-                "--no-setup",
-                "--root",
-                self.opamroot,
-                self.instance,
-                self.url,
-            ],
-            env=self.env,
-        )
+        # Initialize the opam root directory
+        opam_init(self.opam_root, self.instance, self.url, self.env)
+
         # Actually list opam instance data
         proc = Popen(
             [
@@ -78,10 +66,11 @@ class OpamLister(StatelessLister[PageType]):
                 "list",
                 "--all",
                 "--no-switch",
+                "--safe",
                 "--repos",
                 self.instance,
                 "--root",
-                self.opamroot,
+                self.opam_root,
                 "--normalise",
                 "--short",
             ],
@@ -103,9 +92,50 @@ class OpamLister(StatelessLister[PageType]):
             url=url,
             last_update=None,
             extra_loader_arguments={
-                "opam_root": self.opamroot,
+                "opam_root": self.opam_root,
                 "opam_instance": self.instance,
                 "opam_url": self.url,
                 "opam_package": page,
             },
         )
+
+
+def opam_init(opam_root: str, instance: str, url: str, env: Dict[str, Any]) -> None:
+    """Initialize an opam_root folder.
+
+    Args:
+        opam_root: The opam root folder to initialize
+        instance: Name of the opam repository to add or initialize
+        url: The associated url of the opam repository to add or initialize
+        env: The global environment to use for the opam command.
+
+    Returns:
+        None.
+
+    """
+    if not os.path.exists(opam_root) or not os.listdir(opam_root):
+        command = [
+            "opam",
+            "init",
+            "--reinit",
+            "--bare",
+            "--no-setup",
+            "--root",
+            opam_root,
+            instance,
+            url,
+        ]
+    else:
+        # The repository exists and is populated, we just add another instance in the
+        # repository. If it's already setup, it's a noop
+        command = [
+            "opam",
+            "repository",
+            "add",
+            "--root",
+            opam_root,
+            instance,
+            url,
+        ]
+    # Actually execute the command
+    call(command, env=env)
