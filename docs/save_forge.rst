@@ -49,3 +49,29 @@ For example:
      Keyword args:
        limit: 100
        url: 'https://codeberg.org/api/v1/'
+
+.. _register-task-type:
+
+Register task types to the scheduler
+------------------------------------
+
+- To register new task types, ensure you have the code at the required version:
+
+  - docker environment: use :file:`docker-compose.override.yml` with the desired
+    :ref:`volume for both lister and scheduler* containers<run-lister-tutorial>`
+  - for production/staging, upgrade the swh package first then trigger the cli.
+
+- Use the ``swh scheduler task-type register`` command:
+
+::
+
+   $ swh scheduler --config-file /etc/softwareheritage/scheduler.yml task-type register
+   INFO:swh.core.config:Loading config file /etc/softwareheritage/scheduler.yml
+   INFO:swh.scheduler.cli.task_type:Loading entrypoint for plugin lister.launchpad
+   INFO:swh.scheduler.cli.task_type:Create task type list-launchpad-incremental in scheduler
+   INFO:swh.scheduler.cli.task_type:Create task type list-launchpad-full in scheduler
+   INFO:swh.scheduler.cli.task_type:Create task type list-launchpad-new in scheduler
+   ...
+
+
+Note: The command is idempotent so it can be executed multiple times.
