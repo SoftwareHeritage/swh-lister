@@ -253,7 +253,6 @@ class SourceForgeLister(Lister[SourceForgeListerState, SourceForgeListerPage]):
                 visit_type=hit.vcs.value,
                 url=hit.url,
                 last_update=iso8601.parse_date(hit.last_modified),
-                enabled=False,
             )
 
     def _get_pages_from_subsitemap(
