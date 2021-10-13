@@ -24,6 +24,7 @@ docs/conf.py
 docs/index.rst
 docs/new_lister_template.py
 docs/run_a_new_lister.rst
+docs/save_forge.rst
 docs/tutorial.rst
 docs/_static/.placeholder
 docs/_templates/.placeholder
