@@ -60,7 +60,7 @@ class CRANLister(StatelessLister[PageType]):
             yield ListedOrigin(
                 lister_id=self.lister_obj.id,
                 url=origin_url,
-                visit_type="tar",
+                visit_type="cran",
                 last_update=parse_packaged_date(package_info),
                 extra_loader_arguments={
                     "artifacts": [
