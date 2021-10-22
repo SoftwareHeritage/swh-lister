@@ -3,6 +3,7 @@
 # See top-level LICENSE file for more information
 
 from datetime import datetime, timedelta, timezone
+import os
 from typing import List
 
 import pytest
@@ -229,3 +230,30 @@ def test_lister_cgit_with_base_git_url(
         assert (
             listed_origin.url.startswith(url) is False
         ), f"url should be mapped to {base_git_url}"
+
+
+def test_lister_cgit_get_pages_with_pages_and_retry(
+    requests_mock_datadir, requests_mock, datadir, mocker, swh_scheduler
+):
+    url = "https://git.tizen/cgit/"
+
+    with open(os.path.join(datadir, "https_git.tizen/cgit,ofs=50"), "rb") as page:
+
+        requests_mock.get(
+            f"{url}?ofs=50",
+            [
+                {"content": None, "status_code": 429},
+                {"content": None, "status_code": 429},
+                {"content": page.read(), "status_code": 200},
+            ],
+        )
+
+        lister_cgit = CGitLister(swh_scheduler, url=url)
+
+        mocker.patch.object(lister_cgit._get_and_parse.retry, "sleep")
+
+        repos: List[List[str]] = list(lister_cgit.get_pages())
+        flattened_repos = sum(repos, [])
+        # we should have 16 repos (listed on 3 pages)
+        assert len(repos) == 3
+        assert len(flattened_repos) == 16
