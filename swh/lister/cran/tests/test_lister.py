@@ -99,7 +99,13 @@ def test_cran_lister_cran(datadir, swh_scheduler, mocker):
         assert len(filtered_origins) == 1
 
         assert filtered_origins[0].extra_loader_arguments == {
-            "artifacts": [{"url": artifact_url, "version": package_info["Version"]}]
+            "artifacts": [
+                {
+                    "url": artifact_url,
+                    "version": package_info["Version"],
+                    "package": package_info["Package"],
+                }
+            ]
         }
 
         filtered_origins[0].last_update == parse_packaged_date(package_info)
