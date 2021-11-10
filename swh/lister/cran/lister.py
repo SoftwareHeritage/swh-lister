@@ -64,7 +64,11 @@ class CRANLister(StatelessLister[PageType]):
                 last_update=parse_packaged_date(package_info),
                 extra_loader_arguments={
                     "artifacts": [
-                        {"url": artifact_url, "version": package_info["Version"]}
+                        {
+                            "url": artifact_url,
+                            "version": package_info["Version"],
+                            "package": package_info["Package"],
+                        }
                     ]
                 },
             )
