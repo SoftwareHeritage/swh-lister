@@ -79,10 +79,10 @@ def test_lister_opam_optional_instance(swh_scheduler):
     assert lister.opam_root == "/tmp/opam/"
 
 
-def test_urls(swh_scheduler, mock_opam):
+def test_urls(swh_scheduler, mock_opam, tmp_path):
     mock_init, mock_popen = mock_opam
     instance_url = "https://opam.ocaml.org"
-    tmp_folder = mkdtemp(prefix="swh_opam_lister")
+    tmp_folder = mkdtemp(dir=tmp_path, prefix="swh_opam_lister")
 
     lister = OpamLister(
         swh_scheduler, url=instance_url, instance="opam", opam_root=tmp_folder,
@@ -112,14 +112,14 @@ def test_urls(swh_scheduler, mock_opam):
     assert expected_urls == result_urls
 
 
-def test_opam_binary(datadir, swh_scheduler):
+def test_opam_binary(datadir, swh_scheduler, tmp_path):
     instance_url = f"file://{datadir}/fake_opam_repo"
 
     lister = OpamLister(
         swh_scheduler,
         url=instance_url,
         instance="fake",
-        opam_root=mkdtemp(prefix="swh_opam_lister"),
+        opam_root=mkdtemp(dir=tmp_path, prefix="swh_opam_lister"),
     )
 
     stats = lister.run()
@@ -141,14 +141,14 @@ def test_opam_binary(datadir, swh_scheduler):
     assert expected_urls == result_urls
 
 
-def test_opam_multi_instance(datadir, swh_scheduler):
+def test_opam_multi_instance(datadir, swh_scheduler, tmp_path):
     instance_url = f"file://{datadir}/fake_opam_repo"
 
     lister = OpamLister(
         swh_scheduler,
         url=instance_url,
         instance="fake",
-        opam_root=mkdtemp(prefix="swh_opam_lister"),
+        opam_root=mkdtemp(dir=tmp_path, prefix="swh_opam_lister"),
     )
 
     stats = lister.run()
