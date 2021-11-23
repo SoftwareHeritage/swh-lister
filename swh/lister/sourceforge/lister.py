@@ -248,11 +248,13 @@ class SourceForgeLister(Lister[SourceForgeListerState, SourceForgeListerPage]):
     ) -> Iterator[ListedOrigin]:
         assert self.lister_obj.id is not None
         for hit in page:
+            last_modified: str = str(hit.last_modified)
+            last_update: datetime.datetime = iso8601.parse_date(last_modified)
             yield ListedOrigin(
                 lister_id=self.lister_obj.id,
                 visit_type=hit.vcs.value,
                 url=hit.url,
-                last_update=iso8601.parse_date(hit.last_modified),
+                last_update=last_update,
             )
 
     def _get_pages_from_subsitemap(
