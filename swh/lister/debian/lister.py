@@ -11,6 +11,7 @@ import gzip
 from itertools import product
 import logging
 import lzma
+import os
 from typing import Any, Callable, Dict, Iterator, List, Optional, Set, Tuple
 from urllib.parse import urljoin
 
@@ -198,9 +199,12 @@ class DebianLister(Lister[DebianListerState, DebianPageType]):
                 if field_ in src_pkg:
                     for entry in src_pkg[field_]:
                         name = entry["name"]
-                        files[name]["name"] = entry["name"]
+                        files[name]["name"] = name
                         files[name]["size"] = int(entry["size"], 10)
                         files[name][sum_name] = entry[sum_name]
+                        files[name]["uri"] = os.path.join(
+                            self.url, src_pkg["Directory"], name
+                        )
 
             # extract package name and version
             package_name = src_pkg["Package"]
