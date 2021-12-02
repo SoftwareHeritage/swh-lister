@@ -225,7 +225,7 @@ class DebianLister(Lister[DebianListerState, DebianPageType]):
                     lister_id=self.lister_obj.id,
                     url=origin_url,
                     visit_type="deb",
-                    extra_loader_arguments={"date": None, "packages": {}},
+                    extra_loader_arguments={"packages": {}},
                 )
                 # origin will be yielded at the end of that method
                 origins_to_send[origin_url] = self.listed_origins[origin_url]
