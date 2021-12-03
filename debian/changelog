@@ -1,3 +1,15 @@
+swh-lister (2.4.0-1~swh1) unstable-swh; urgency=medium
+
+  * New upstream release 2.4.0     - (tagged by Antoine R. Dumont
+    (@ardumont) <ardumont@softwareheritage.org> on 2021-12-03 12:17:36
+    +0100)
+  * Upstream changes:     - v2.4.0     - debian: Update
+    extra_loader_arguments dict produced ListedOrigin models     -
+    debian: Add missing file URIs in lister output     - Deduplicate
+    origins in the GitHub lister     - lister: Add new maven lister
+
+ -- Software Heritage autobuilder (on jenkins-debian1) <jenkins@jenkins-debian1.internal.softwareheritage.org>  Fri, 03 Dec 2021 11:21:58 +0000
+
 swh-lister (2.3.0-1~swh1) unstable-swh; urgency=medium
 
   * New upstream release 2.3.0     - (tagged by Valentin Lorentz
