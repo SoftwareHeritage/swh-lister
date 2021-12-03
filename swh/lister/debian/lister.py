@@ -134,19 +134,17 @@ class DebianLister(Lister[DebianListerState, DebianPageType]):
             response = requests.get(url, stream=True)
             logging.debug("Fetched URL: %s, status code: %s", url, response.status_code)
             if response.status_code == 200:
+                decompressor = decompressors.get(compression)
+                if decompressor:
+                    data = decompressor(response.raw).readlines()
+                else:
+                    data = response.raw.readlines()
                 break
         else:
-            raise Exception(
-                "Could not retrieve sources index for %s/%s", suite, component
-            )
+            data = ""
+            logger.debug("Could not retrieve sources index for %s/%s", suite, component)
 
-        decompressor = decompressors.get(compression)
-        if decompressor:
-            data = decompressor(response.raw)
-        else:
-            data = response.raw
-
-        return Sources.iter_paragraphs(data.readlines())
+        return Sources.iter_paragraphs(data)
 
     def get_pages(self) -> Iterator[DebianPageType]:
         """Return an iterator on parsed debian package Sources files, one per combination
