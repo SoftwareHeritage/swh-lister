@@ -1,3 +1,9 @@
+swh.lister (2.4.0-1~swh2) unstable-swh; urgency=medium
+
+  * Update missing deps and release
+
+ -- Antoine R. Dumont (@ardumont) <ardumont@softwareheritage.org>  Fri, 03 Dec 2021 12:37:13 +0100
+
 swh-lister (2.4.0-1~swh1) unstable-swh; urgency=medium
 
   * New upstream release 2.4.0     - (tagged by Antoine R. Dumont
