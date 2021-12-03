@@ -36,7 +36,7 @@ from swh.scheduler.interface import SchedulerInterface
 
 _mirror_url = "http://deb.debian.org/debian"
 _suites = ["stretch", "buster", "bullseye"]
-_components = ["main"]
+_components = ["main", "foo"]
 
 SourcesText = str
 
@@ -59,6 +59,7 @@ def _init_test(
     debian_sources: Dict[Suite, SourcesText],
     requests_mock,
 ) -> Tuple[DebianLister, DebianSuitePkgSrcInfo]:
+
     lister = DebianLister(
         scheduler=swh_scheduler,
         mirror_url=_mirror_url,
@@ -78,6 +79,9 @@ def _init_test(
                 requests_mock.get(idx_url, status_code=404)
             else:
                 requests_mock.get(idx_url, text=sources)
+
+        for idx_url, _ in lister.debian_index_urls(suite, _components[1]):
+            requests_mock.get(idx_url, status_code=404)
 
     return lister, suite_pkg_info
 
@@ -198,7 +202,7 @@ def test_lister_debian_updated_packages(
             lister_previous_state=lister_previous_state,
         )
 
-        assert stats.pages == len(sources)
+        assert stats.pages == len(sources) * len(_components)
         assert stats.origins == len(origin_urls)
 
         lister_previous_state = lister.state.package_versions
