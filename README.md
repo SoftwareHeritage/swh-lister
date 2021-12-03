@@ -18,6 +18,7 @@ following Python modules:
 - `swh.lister.gitlab`
 - `swh.lister.gnu`
 - `swh.lister.launchpad`
+- `swh.lister.maven`
 - `swh.lister.npm`
 - `swh.lister.packagist`
 - `swh.lister.phabricator`
@@ -36,7 +37,7 @@ Local deployment
 ## lister configuration
 
 Each lister implemented so far by Software Heritage (`bitbucket`, `cgit`, `cran`, `debian`,
-`gitea`, `github`, `gitlab`, `gnu`, `launchpad`, `npm`, `packagist`, `phabricator`, `pypi`, `tuleap`)
+`gitea`, `github`, `gitlab`, `gnu`, `launchpad`, `npm`, `packagist`, `phabricator`, `pypi`, `tuleap`, `maven`)
 must be configured by following the instructions below (please note that you have to replace
 `<lister_name>` by one of the lister name introduced above).
 

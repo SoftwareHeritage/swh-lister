@@ -8,7 +8,7 @@ import datetime
 import logging
 import random
 import time
-from typing import Any, Dict, Iterator, List, Optional
+from typing import Any, Dict, Iterator, List, Optional, Set
 from urllib.parse import parse_qs, urlparse
 
 import iso8601
@@ -305,10 +305,16 @@ class GitHubLister(Lister[GitHubListerState, List[Dict[str, Any]]]):
         """
         assert self.lister_obj.id is not None
 
+        seen_in_page: Set[str] = set()
+
         for repo in page:
             if not repo:
                 # null repositories in listings happen sometimes...
                 continue
+
+            if repo["html_url"] in seen_in_page:
+                continue
+            seen_in_page.add(repo["html_url"])
 
             pushed_at_str = repo.get("pushed_at")
             pushed_at: Optional[datetime.datetime] = None

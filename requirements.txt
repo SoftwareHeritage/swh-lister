@@ -5,3 +5,4 @@ iso8601
 beautifulsoup4
 launchpadlib
 tenacity
+xmltodict

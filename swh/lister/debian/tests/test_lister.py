@@ -4,6 +4,7 @@
 # See top-level LICENSE file for more information
 
 from collections import defaultdict
+import os
 from pathlib import Path
 from typing import Dict, List, Set, Tuple
 
@@ -117,11 +118,19 @@ def _check_listed_origins(
                     ]
 
                     assert filtered_origins
+                    packages = filtered_origins[0].extra_loader_arguments["packages"]
                     # check the version info are available
-                    assert (
-                        package_version_key
-                        in filtered_origins[0].extra_loader_arguments["packages"]
-                    )
+                    assert package_version_key in packages
+
+                    # check package files URIs are available
+                    for file in pkg_src["files"]:
+                        filename = file["name"]
+                        file_uri = os.path.join(
+                            _mirror_url, pkg_src["Directory"], filename
+                        )
+                        package_files = packages[package_version_key]["files"]
+                        assert filename in package_files
+                        assert package_files[filename]["uri"] == file_uri
 
                     # check listed package version is in lister state
                     assert package_name in lister.state.package_versions
