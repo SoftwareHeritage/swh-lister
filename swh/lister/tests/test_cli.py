@@ -18,6 +18,10 @@ lister_args = {
     "tuleap": {"url": "https://tuleap.net",},
     "gitlab": {"url": "https://gitlab.ow2.org/api/v4", "instance": "ow2",},
     "opam": {"url": "https://opam.ocaml.org", "instance": "opam"},
+    "maven": {
+        "url": "https://repo1.maven.org/maven2/",
+        "index_url": "http://indexes/export.fld",
+    },
 }
 
 
