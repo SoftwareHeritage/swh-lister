@@ -4,6 +4,7 @@
 # See top-level LICENSE file for more information
 
 from collections import defaultdict
+from email.utils import formatdate
 import os
 from pathlib import Path
 from typing import Dict, List, Set, Tuple
@@ -78,7 +79,11 @@ def _init_test(
             if compression:
                 requests_mock.get(idx_url, status_code=404)
             else:
-                requests_mock.get(idx_url, text=sources)
+                requests_mock.get(
+                    idx_url,
+                    text=sources,
+                    headers={"Last-Modified": formatdate(usegmt=True)},
+                )
 
         for idx_url, _ in lister.debian_index_urls(suite, _components[1]):
             requests_mock.get(idx_url, status_code=404)
@@ -122,6 +127,7 @@ def _check_listed_origins(
                     ]
 
                     assert filtered_origins
+                    assert filtered_origins[0].last_update is not None
                     packages = filtered_origins[0].extra_loader_arguments["packages"]
                     # check the version info are available
                     assert package_version_key in packages
