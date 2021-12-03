@@ -1,8 +1,10 @@
-swh-lister (2.5.0-1~swh1~bpo10+1) buster-swh; urgency=medium
+swh-lister (2.6.0-1~swh1) unstable-swh; urgency=medium
 
-  * Rebuild for buster-swh
+  * New upstream release 2.6.0     - (tagged by Antoine Lambert
+    <anlambert@softwareheritage.org> on 2021-12-03 16:17:52 +0100)
+  * Upstream changes:     - version 2.6.0
 
- -- Software Heritage autobuilder (on jenkins-debian1) <jenkins@jenkins-debian1.internal.softwareheritage.org>  Fri, 03 Dec 2021 13:52:25 +0000
+ -- Software Heritage autobuilder (on jenkins-debian1) <jenkins@jenkins-debian1.internal.softwareheritage.org>  Fri, 03 Dec 2021 15:22:00 +0000
 
 swh-lister (2.5.0-1~swh1) unstable-swh; urgency=medium
 
