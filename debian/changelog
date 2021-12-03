@@ -1,3 +1,9 @@
+swh-lister (2.4.0-1~swh3) unstable-swh; urgency=medium
+
+  * Fix changelog error and actual correct release
+
+ -- Antoine R. Dumont (@ardumont) <ardumont@softwareheritage.org>  Fri, 03 Dec 2021 12:45:00 +0100
+
 swh.lister (2.4.0-1~swh2) unstable-swh; urgency=medium
 
   * Update missing deps and release
