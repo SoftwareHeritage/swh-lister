@@ -7,6 +7,7 @@
 import bz2
 from collections import defaultdict
 from dataclasses import dataclass, field
+from email.utils import parsedate_to_datetime
 import gzip
 from itertools import product
 import logging
@@ -134,6 +135,10 @@ class DebianLister(Lister[DebianListerState, DebianPageType]):
             response = requests.get(url, stream=True)
             logging.debug("Fetched URL: %s, status code: %s", url, response.status_code)
             if response.status_code == 200:
+                last_modified = response.headers.get("Last-Modified")
+                self.last_sources_update = (
+                    parsedate_to_datetime(last_modified) if last_modified else None
+                )
                 decompressor = decompressors.get(compression)
                 if decompressor:
                     data = decompressor(response.raw).readlines()
@@ -224,6 +229,7 @@ class DebianLister(Lister[DebianListerState, DebianPageType]):
                     url=origin_url,
                     visit_type="deb",
                     extra_loader_arguments={"packages": {}},
+                    last_update=self.last_sources_update,
                 )
                 # origin will be yielded at the end of that method
                 origins_to_send[origin_url] = self.listed_origins[origin_url]
