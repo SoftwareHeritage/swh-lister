@@ -4,7 +4,8 @@
 # See top-level LICENSE file for more information
 
 from collections import defaultdict
-from email.utils import formatdate
+from datetime import datetime
+from email.utils import formatdate, parsedate_to_datetime
 import os
 from pathlib import Path
 from typing import Dict, List, Set, Tuple
@@ -38,6 +39,7 @@ from swh.scheduler.interface import SchedulerInterface
 _mirror_url = "http://deb.debian.org/debian"
 _suites = ["stretch", "buster", "bullseye"]
 _components = ["main", "foo"]
+_last_modified = {}
 
 SourcesText = str
 
@@ -70,19 +72,22 @@ def _init_test(
 
     suite_pkg_info: DebianSuitePkgSrcInfo = {}
 
-    for suite, sources in debian_sources.items():
+    for i, (suite, sources) in enumerate(debian_sources.items()):
+        # ensure to generate a different date for each suite
+        last_modified = formatdate(timeval=datetime.now().timestamp() + i, usegmt=True)
         suite_pkg_info[suite] = defaultdict(list)
         for pkg_src in Sources.iter_paragraphs(sources):
             suite_pkg_info[suite][pkg_src["Package"]].append(pkg_src)
+            # backup package last update date
+            global _last_modified
+            _last_modified[pkg_src["Package"]] = last_modified
 
         for idx_url, compression in lister.debian_index_urls(suite, _components[0]):
             if compression:
                 requests_mock.get(idx_url, status_code=404)
             else:
                 requests_mock.get(
-                    idx_url,
-                    text=sources,
-                    headers={"Last-Modified": formatdate(usegmt=True)},
+                    idx_url, text=sources, headers={"Last-Modified": last_modified},
                 )
 
         for idx_url, _ in lister.debian_index_urls(suite, _components[1]):
@@ -127,7 +132,10 @@ def _check_listed_origins(
                     ]
 
                     assert filtered_origins
-                    assert filtered_origins[0].last_update is not None
+                    expected_last_update = parsedate_to_datetime(
+                        _last_modified[pkg_src["Package"]]
+                    )
+                    assert filtered_origins[0].last_update == expected_last_update
                     packages = filtered_origins[0].extra_loader_arguments["packages"]
                     # check the version info are available
                     assert package_version_key in packages
