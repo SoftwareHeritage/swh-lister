@@ -255,6 +255,15 @@ class DebianLister(Lister[DebianListerState, DebianPageType]):
                 }
             )
 
+            if self.listed_origins[origin_url].last_update is None or (
+                self.last_sources_update is not None
+                and self.last_sources_update  # type: ignore
+                > self.listed_origins[origin_url].last_update
+            ):
+                # update debian package last update if current processed sources index
+                # has a greater modification date
+                self.listed_origins[origin_url].last_update = self.last_sources_update
+
             # add package version key to the set of found versions
             self.package_versions[package_name].add(package_version_key)
 
