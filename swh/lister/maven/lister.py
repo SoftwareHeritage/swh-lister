@@ -302,6 +302,7 @@ class MavenLister(Lister[MavenListerState, RepoPage]):
                             "gid": page["gid"],
                             "aid": page["aid"],
                             "version": page["version"],
+                            "base_url": self.BASE_URL,
                         }
                     ]
                 },

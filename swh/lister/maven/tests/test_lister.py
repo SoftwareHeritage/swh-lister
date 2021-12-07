@@ -122,6 +122,7 @@ def test_maven_full_listing(
                     assert src.get("gid") == artifact["gid"]
                     assert src.get("aid") == artifact["aid"]
                     assert src.get("version") == artifact["version"]
+                    assert MVN_URL == artifact["base_url"]
                     break
             else:
                 raise AssertionError
