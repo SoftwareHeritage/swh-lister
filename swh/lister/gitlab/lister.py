@@ -17,7 +17,7 @@ from tenacity.before_sleep import before_sleep_log
 
 from swh.lister import USER_AGENT
 from swh.lister.pattern import CredentialsType, Lister
-from swh.lister.utils import is_retryable_exception, retry_attempt, throttling_retry
+from swh.lister.utils import is_retryable_exception, throttling_retry
 from swh.scheduler.model import ListedOrigin
 
 logger = logging.getLogger(__name__)
@@ -53,7 +53,7 @@ def _if_rate_limited(retry_state) -> bool:
     with specific ratelimit header.
 
     """
-    attempt = retry_attempt(retry_state)
+    attempt = retry_state.outcome
     if attempt.failed:
         exc = attempt.exception()
         return (

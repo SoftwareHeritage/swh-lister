@@ -13,7 +13,7 @@ from xmlrpc.client import Fault, ServerProxy
 
 from tenacity.before_sleep import before_sleep_log
 
-from swh.lister.utils import retry_attempt, throttling_retry
+from swh.lister.utils import throttling_retry
 from swh.scheduler.interface import SchedulerInterface
 from swh.scheduler.model import ListedOrigin
 
@@ -49,7 +49,7 @@ def _if_rate_limited(retry_state) -> bool:
         in 1 seconds.'>
 
     """
-    attempt = retry_attempt(retry_state)
+    attempt = retry_state.outcome
     return attempt.failed and isinstance(attempt.exception(), Fault)
 
 
