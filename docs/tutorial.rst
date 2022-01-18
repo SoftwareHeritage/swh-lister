@@ -204,7 +204,7 @@ This datatype can also further be detailed with the optional fields:
   able to load the origin. It is needed for example when additional context is needed
   along with the URL to effectively load from the origin.
 
-See the definition of ListedOrigin_.
+See the definition of :swh_web:`ListedOrigin <browse/swh:1:rev:03460207a17d82635ef5a6f12358392143eb9eef/?origin_url=https://forge.softwareheritage.org/source/swh-scheduler.git&path=swh/scheduler/model.py&revision=03460207a17d82635ef5a6f12358392143eb9eef#L134-L177>`.
 
 Now that that we showed how those two methods operate, let's put it together by showing
 how they fit in the principal :py:meth:`Lister.run` method::
@@ -238,8 +238,6 @@ remote service to the scheduler. And this is done under a ``try...finally`` cons
 have the lister state reliably recorded in case of unhandled error. We will explain the
 role of the remaining methods and attributes appearing here in the next section as it is
 related to the lister state.
-
-.. _ListedOrigin: https://archive.softwareheritage.org/browse/swh:1:rev:03460207a17d82635ef5a6f12358392143eb9eef/?origin_url=https://forge.softwareheritage.org/source/swh-scheduler.git&path=swh/scheduler/model.py&revision=03460207a17d82635ef5a6f12358392143eb9eef#L134-L177
 
 .. _handling-lister-state:
 
