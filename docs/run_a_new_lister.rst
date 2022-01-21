@@ -9,8 +9,8 @@ reduces the chances of encountering errors when turning it for production.
 Here are the steps you need to follow to run a lister within your local environment.
 
 
-1. You must edit the docker-compose override file (`docker-compose.override.yml`).
-   following the sample provided ::
+1. You must edit the docker-compose override file (:file:`docker-compose.override.yml`).
+   following the sample provided::
 
         version: '2'
 
@@ -19,7 +19,7 @@ Here are the steps you need to follow to run a lister within your local environm
             volumes:
             - "$SWH_ENVIRONMENT_HOME/swh-lister:/src/swh-lister"
 
-   The file named `docker-compose.override.yml` will automatically be loaded by
+   The file named :file:`docker-compose.override.yml` will automatically be loaded by
    ``docker-compose``.Having an override makes it possible to run a docker container
    with some swh packages installed from sources instead of using the latest
    published packages from pypi. For more details, you may refer to README.md
@@ -45,7 +45,7 @@ Here are the steps you need to follow to run a lister within your local environm
     ~/swh-environment/swh-docker-dev$ docker-compose up -d
 
 5. Add the lister task-type in the scheduler.  For example, if you want to
-   add pypi lister task-type ::
+   add pypi lister task-type::
 
     ~/swh-environment$ swh scheduler task-type add list-gnu-full \
         "swh.lister.gnu.tasks.GNUListerTask" "Full GNU lister" \
