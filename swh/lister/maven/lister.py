@@ -141,7 +141,7 @@ class MavenLister(Lister[MavenListerState, RepoPage]):
         # ]
 
         # Download the main text index file.
-        logger.info(f"Downloading text index from {self.INDEX_URL}.")
+        logger.info("Downloading text index from %s.", self.INDEX_URL)
         assert self.INDEX_URL is not None
         response = requests.get(self.INDEX_URL, stream=True)
         response.raise_for_status()
@@ -240,7 +240,7 @@ class MavenLister(Lister[MavenListerState, RepoPage]):
                         yield artifact_metadata_d
                         url_src = None
 
-        logger.info(f"Found {len(out_pom)} poms.")
+        logger.info("Found %s poms.", len(out_pom))
 
         # Now fetch pom files and scan them for scm info.
 
@@ -265,9 +265,9 @@ class MavenLister(Lister[MavenListerState, RepoPage]):
                     else:
                         logger.debug("No scm.connection in pom %s", pom)
                 else:
-                    logger.debug(f"No scm in pom {pom}")
+                    logger.debug("No scm in pom %s", pom)
             except xmltodict.expat.ExpatError as error:
-                logger.info(f"Could not parse POM {pom} XML: {error}. Next.")
+                logger.info("Could not parse POM %s XML: %s. Next.", pom, error)
 
     def get_origins_from_page(self, page: RepoPage) -> Iterator[ListedOrigin]:
         """Convert a page of Maven repositories into a list of ListedOrigins.
