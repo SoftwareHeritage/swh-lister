@@ -229,12 +229,15 @@ class MavenLister(Lister[MavenListerState, RepoPage]):
                     if m_time is not None and url_src is not None:
                         time = m_time.group("mtime")
                         jar_src["time"] = int(time)
-                        logger.debug(f"* Yielding jar {url_src}.")
-                        yield {
+                        artifact_metadata_d = {
                             "type": "maven",
                             "url": url_src,
                             **jar_src,
                         }
+                        logger.debug(
+                            "* Yielding jar %s: %s", url_src, artifact_metadata_d
+                        )
+                        yield artifact_metadata_d
                         url_src = None
 
         logger.info(f"Found {len(out_pom)} poms.")
@@ -251,14 +254,16 @@ class MavenLister(Lister[MavenListerState, RepoPage]):
                         scm = project["project"]["scm"]["connection"]
                         gid = project["project"]["groupId"]
                         aid = project["project"]["artifactId"]
-                        yield {
+                        artifact_metadata_d = {
                             "type": "scm",
                             "doc": out_pom[pom],
                             "url": scm,
                             "project": f"{gid}.{aid}",
                         }
+                        logger.debug("* Yielding pom %s: %s", pom, artifact_metadata_d)
+                        yield artifact_metadata_d
                     else:
-                        logger.debug(f"No scm.connection in pom {pom}")
+                        logger.debug("No scm.connection in pom %s", pom)
                 else:
                     logger.debug(f"No scm in pom {pom}")
             except xmltodict.expat.ExpatError as error:
