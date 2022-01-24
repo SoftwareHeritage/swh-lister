@@ -341,11 +341,11 @@ parameters if the service supports it, and by extracting from the response only 
 information needed into a structured page. This all makes for easier debugging.
 
 Misc files
-^^^^^^^^^^^^^^^
+^^^^^^^^^^
 
 There are also a few files that need to be modified outside of the lister directory, namely:
 
-* :file:`/setup.py` to add your lister to the end of the list in the *setup* section:
+* :file:`/setup.py` to add your lister to the end of the list in the *setup* section::
 
     entry_points="""
         [swh.cli.subcommands]
