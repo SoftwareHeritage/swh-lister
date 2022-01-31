@@ -274,6 +274,7 @@ class MavenLister(Lister[MavenListerState, RepoPage]):
 
         """
         assert self.lister_obj.id is not None
+        scm_types_ok = ("git", "svn", "hg", "cvs", "bzr")
         if page["type"] == "scm":
             # If origin is a scm url: detect scm type and yield.
             # Note that the official format is:
@@ -283,11 +284,12 @@ class MavenLister(Lister[MavenListerState, RepoPage]):
             m_scm = re.match(r"^scm:(?P<type>[^:]+):(?P<url>.*)$", page["url"])
             if m_scm is not None:
                 scm_type = m_scm.group("type")
-                scm_url = m_scm.group("url")
-                origin = ListedOrigin(
-                    lister_id=self.lister_obj.id, url=scm_url, visit_type=scm_type,
-                )
-                yield origin
+                if scm_type in scm_types_ok:
+                    scm_url = m_scm.group("url")
+                    origin = ListedOrigin(
+                        lister_id=self.lister_obj.id, url=scm_url, visit_type=scm_type,
+                    )
+                    yield origin
             else:
                 if page["url"].endswith(".git"):
                     origin = ListedOrigin(

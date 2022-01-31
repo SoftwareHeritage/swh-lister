@@ -70,6 +70,12 @@ def maven_pom_1(datadir) -> str:
 
 
 @pytest.fixture
+def maven_pom_1_malformed(datadir) -> str:
+    text = Path(datadir, "https_maven.org", "sprova4j-0.1.0.malformed.pom").read_text()
+    return text
+
+
+@pytest.fixture
 def maven_pom_2(datadir) -> str:
     text = Path(datadir, "https_maven.org", "sprova4j-0.1.1.pom").read_text()
     return text
@@ -112,6 +118,63 @@ def test_maven_full_listing(
 
     origin_urls = [origin.url for origin in scheduler_origins]
     assert sorted(origin_urls) == sorted(LIST_GIT + LIST_SRC)
+
+    for origin in scheduler_origins:
+        if origin.visit_type == "maven":
+            for src in LIST_SRC_DATA:
+                if src.get("url") == origin.url:
+                    artifact = origin.extra_loader_arguments["artifacts"][0]
+                    assert src.get("time") == artifact["time"]
+                    assert src.get("gid") == artifact["gid"]
+                    assert src.get("aid") == artifact["aid"]
+                    assert src.get("version") == artifact["version"]
+                    assert MVN_URL == artifact["base_url"]
+                    break
+            else:
+                raise AssertionError
+    scheduler_state = lister.get_state_from_scheduler()
+    assert scheduler_state is not None
+    assert scheduler_state.last_seen_doc == -1
+    assert scheduler_state.last_seen_pom == -1
+
+
+def test_maven_full_listing_malformed(
+    swh_scheduler,
+    requests_mock,
+    mocker,
+    maven_index,
+    maven_pom_1_malformed,
+    maven_pom_2,
+):
+    """Covers full listing of multiple pages, checking page results with a malformed
+    scm entry in pom."""
+
+    lister = MavenLister(
+        scheduler=swh_scheduler,
+        url=MVN_URL,
+        instance="maven.org",
+        index_url=INDEX_URL,
+        incremental=False,
+    )
+
+    # Set up test.
+    index_text = maven_index
+    requests_mock.get(INDEX_URL, text=index_text)
+    requests_mock.get(URL_POM_1, text=maven_pom_1_malformed)
+    requests_mock.get(URL_POM_2, text=maven_pom_2)
+
+    # Then run the lister.
+    stats = lister.run()
+
+    # Start test checks.
+    assert stats.pages == 4
+    assert stats.origins == 3
+
+    scheduler_origins = swh_scheduler.get_listed_origins(lister.lister_obj.id).results
+
+    origin_urls = [origin.url for origin in scheduler_origins]
+    LIST_SRC_1 = ("https://github.com/aldialimucaj/sprova4j.git",)
+    assert sorted(origin_urls) == sorted(LIST_SRC_1 + LIST_SRC)
 
     for origin in scheduler_origins:
         if origin.visit_type == "maven":
