@@ -55,24 +55,11 @@ def is_retryable_exception(e: Exception) -> bool:
     return is_connection_error or is_throttling_exception(e) or is_500_error
 
 
-def retry_attempt(retry_state):
-    """
-    Utility function to get last retry attempt info based on the
-    tenacity version (as debian buster packages version 4.12).
-    """
-    try:
-        attempt = retry_state.outcome
-    except AttributeError:
-        # tenacity < 5.0
-        attempt = retry_state
-    return attempt
-
-
 def retry_if_exception(retry_state, predicate: Callable[[Exception], bool]) -> bool:
     """
     Custom tenacity retry predicate for handling exceptions with the given predicate.
     """
-    attempt = retry_attempt(retry_state)
+    attempt = retry_state.outcome
     if attempt.failed:
         exception = attempt.exception()
         return predicate(exception)

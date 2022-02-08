@@ -4,5 +4,5 @@ setuptools
 iso8601
 beautifulsoup4
 launchpadlib
-tenacity
+tenacity >= 6.2
 xmltodict
