@@ -1,3 +1,20 @@
+swh-lister (2.6.2-1~swh1) unstable-swh; urgency=medium
+
+  * New upstream release 2.6.2     - (tagged by Antoine R. Dumont
+    (@ardumont) <ardumont@softwareheritage.org> on 2022-02-08 10:39:05
+    +0100)
+  * Upstream changes:     - v2.6.2     - Remove no longer needed
+    tenacity workarounds     - maven: Fix undef last_update in
+    ListedOrigins.     - maven: dismiss origins if they are malformed -
+    e.g. wrong pom scm format, add test.     - maven: Let logging
+    instruction do the formatting     - maven: Add more debug logging
+    instruction     - maven: Pass the base URL of the Maven instance to
+    the loader     - docs: Fix ReST syntax and sphinx warnings     - Pin
+    mypy and drop type annotations which makes mypy unhappy     -
+    requirements-test: Pin pytest to < 7.0.0
+
+ -- Software Heritage autobuilder (on jenkins-debian1) <jenkins@jenkins-debian1.internal.softwareheritage.org>  Tue, 08 Feb 2022 09:43:37 +0000
+
 swh-lister (2.6.1-1~swh1) unstable-swh; urgency=medium
 
   * New upstream release 2.6.1     - (tagged by Antoine Lambert
