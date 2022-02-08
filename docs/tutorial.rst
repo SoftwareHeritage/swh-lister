@@ -172,7 +172,7 @@ API. Those aspects are discussed more specifically in the section
 :ref:`handling-specific-topics`.
 
 In any case, we want the data we return to be usefully filtered and structured. The
-easiest way to create an iterator is to use the `yield` keyword. Yield each data page
+easiest way to create an iterator is to use the ``yield`` keyword. Yield each data page
 you have structured in accordance with the page type you have declared. The page type
 exists only for static type checking of data passed from :py:meth:`get_pages` to
 :py:meth:`get_origins_from_page`; you can choose whatever fits the bill.
@@ -204,7 +204,7 @@ This datatype can also further be detailed with the optional fields:
   able to load the origin. It is needed for example when additional context is needed
   along with the URL to effectively load from the origin.
 
-See the definition of ListedOrigin_.
+See the definition of :swh_web:`ListedOrigin <browse/swh:1:rev:03460207a17d82635ef5a6f12358392143eb9eef/?origin_url=https://forge.softwareheritage.org/source/swh-scheduler.git&path=swh/scheduler/model.py&revision=03460207a17d82635ef5a6f12358392143eb9eef#L134-L177>`.
 
 Now that that we showed how those two methods operate, let's put it together by showing
 how they fit in the principal :py:meth:`Lister.run` method::
@@ -238,8 +238,6 @@ remote service to the scheduler. And this is done under a ``try...finally`` cons
 have the lister state reliably recorded in case of unhandled error. We will explain the
 role of the remaining methods and attributes appearing here in the next section as it is
 related to the lister state.
-
-.. _ListedOrigin: https://archive.softwareheritage.org/browse/swh:1:rev:03460207a17d82635ef5a6f12358392143eb9eef/?origin_url=https://forge.softwareheritage.org/source/swh-scheduler.git&path=swh/scheduler/model.py&revision=03460207a17d82635ef5a6f12358392143eb9eef#L134-L177
 
 .. _handling-lister-state:
 
@@ -317,9 +315,9 @@ Transport error handling
 
 We generally recommend logging every unhandleable error with the response content and
 then immediately stop the listing by doing an equivalent of
-:py:meth:`Response.raise_for_status` from the `requests` library. As for rate-limiting
+:py:meth:`Response.raise_for_status` from the ``requests`` library. As for rate-limiting
 errors, we have a strategy of using a flexible decorator to handle the retrying for us.
-It is based on the `tenacity` library and accessible as :py:func:`throttling_retry` from
+It is based on the ``tenacity`` library and accessible as :py:func:`throttling_retry` from
 :py:mod:`swh.lister.utils`.
 
 Pagination
@@ -343,11 +341,11 @@ parameters if the service supports it, and by extracting from the response only 
 information needed into a structured page. This all makes for easier debugging.
 
 Misc files
-^^^^^^^^^^^^^^^
+^^^^^^^^^^
 
 There are also a few files that need to be modified outside of the lister directory, namely:
 
-* `/setup.py` to add your lister to the end of the list in the *setup* section:
+* :file:`/setup.py` to add your lister to the end of the list in the *setup* section::
 
     entry_points="""
         [swh.cli.subcommands]
@@ -357,16 +355,16 @@ There are also a few files that need to be modified outside of the lister direct
         lister.cgit=swh.lister.cgit:register
         ..."""
 
-* `/swh/lister/tests/test_cli.py` to get a default set of parameters in scheduler-related tests.
-* `/README.md` to reference the new lister.
-* `/CONTRIBUTORS` to add your name.
+* :file:`/swh/lister/tests/test_cli.py` to get a default set of parameters in scheduler-related tests.
+* :file:`/README.md` to reference the new lister.
+* :file:`/CONTRIBUTORS` to add your name.
 
 Testing your lister
 -------------------
 
 When developing a new lister, it's important to test. For this, add the tests
-(check `swh/lister/*/tests/`) and register the celery tasks in the main
-conftest.py (`swh/lister/core/tests/conftest.py`).
+(check :file:`swh/lister/*/tests/`) and register the celery tasks in the main
+conftest.py (:file:`swh/lister/core/tests/conftest.py`).
 
 Another important step is to actually run it within the docker-dev
 (:ref:`run-lister-tutorial`).
