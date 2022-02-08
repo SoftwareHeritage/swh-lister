@@ -1,4 +1,4 @@
-# Copyright (C) 2018-2020 the Software Heritage developers
+# Copyright (C) 2018-2021 the Software Heritage developers
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
 
@@ -47,14 +47,7 @@ def make_request():
 
 
 def assert_sleep_calls(mocker, mock_sleep, sleep_params):
-    try:
-        mock_sleep.assert_has_calls([mocker.call(param) for param in sleep_params])
-    except AssertionError:
-        # tenacity < 5.1 has a different behavior for wait_exponential
-        # https://github.com/jd/tenacity/commit/aac4307a0aa30d7befd0ebe4212ee4fc69083a95
-        mock_sleep.assert_has_calls(
-            [mocker.call(param * WAIT_EXP_BASE) for param in sleep_params]
-        )
+    mock_sleep.assert_has_calls([mocker.call(param) for param in sleep_params])
 
 
 def test_throttling_retry(requests_mock, mocker):

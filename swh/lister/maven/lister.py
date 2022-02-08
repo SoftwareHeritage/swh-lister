@@ -4,6 +4,7 @@
 # See top-level LICENSE file for more information
 
 from dataclasses import asdict, dataclass
+from datetime import datetime, timezone
 import logging
 import re
 from typing import Any, Dict, Iterator, Optional
@@ -141,7 +142,7 @@ class MavenLister(Lister[MavenListerState, RepoPage]):
         # ]
 
         # Download the main text index file.
-        logger.info(f"Downloading text index from {self.INDEX_URL}.")
+        logger.info("Downloading text index from %s.", self.INDEX_URL)
         assert self.INDEX_URL is not None
         response = requests.get(self.INDEX_URL, stream=True)
         response.raise_for_status()
@@ -229,15 +230,18 @@ class MavenLister(Lister[MavenListerState, RepoPage]):
                     if m_time is not None and url_src is not None:
                         time = m_time.group("mtime")
                         jar_src["time"] = int(time)
-                        logger.debug(f"* Yielding jar {url_src}.")
-                        yield {
+                        artifact_metadata_d = {
                             "type": "maven",
                             "url": url_src,
                             **jar_src,
                         }
+                        logger.debug(
+                            "* Yielding jar %s: %s", url_src, artifact_metadata_d
+                        )
+                        yield artifact_metadata_d
                         url_src = None
 
-        logger.info(f"Found {len(out_pom)} poms.")
+        logger.info("Found %s poms.", len(out_pom))
 
         # Now fetch pom files and scan them for scm info.
 
@@ -251,24 +255,27 @@ class MavenLister(Lister[MavenListerState, RepoPage]):
                         scm = project["project"]["scm"]["connection"]
                         gid = project["project"]["groupId"]
                         aid = project["project"]["artifactId"]
-                        yield {
+                        artifact_metadata_d = {
                             "type": "scm",
                             "doc": out_pom[pom],
                             "url": scm,
                             "project": f"{gid}.{aid}",
                         }
+                        logger.debug("* Yielding pom %s: %s", pom, artifact_metadata_d)
+                        yield artifact_metadata_d
                     else:
-                        logger.debug(f"No scm.connection in pom {pom}")
+                        logger.debug("No scm.connection in pom %s", pom)
                 else:
-                    logger.debug(f"No scm in pom {pom}")
+                    logger.debug("No scm in pom %s", pom)
             except xmltodict.expat.ExpatError as error:
-                logger.info(f"Could not parse POM {pom} XML: {error}. Next.")
+                logger.info("Could not parse POM %s XML: %s. Next.", pom, error)
 
     def get_origins_from_page(self, page: RepoPage) -> Iterator[ListedOrigin]:
         """Convert a page of Maven repositories into a list of ListedOrigins.
 
         """
         assert self.lister_obj.id is not None
+        scm_types_ok = ("git", "svn", "hg", "cvs", "bzr")
         if page["type"] == "scm":
             # If origin is a scm url: detect scm type and yield.
             # Note that the official format is:
@@ -278,11 +285,12 @@ class MavenLister(Lister[MavenListerState, RepoPage]):
             m_scm = re.match(r"^scm:(?P<type>[^:]+):(?P<url>.*)$", page["url"])
             if m_scm is not None:
                 scm_type = m_scm.group("type")
-                scm_url = m_scm.group("url")
-                origin = ListedOrigin(
-                    lister_id=self.lister_obj.id, url=scm_url, visit_type=scm_type,
-                )
-                yield origin
+                if scm_type in scm_types_ok:
+                    scm_url = m_scm.group("url")
+                    origin = ListedOrigin(
+                        lister_id=self.lister_obj.id, url=scm_url, visit_type=scm_type,
+                    )
+                    yield origin
             else:
                 if page["url"].endswith(".git"):
                     origin = ListedOrigin(
@@ -291,17 +299,29 @@ class MavenLister(Lister[MavenListerState, RepoPage]):
                     yield origin
         else:
             # Origin is a source archive:
+            last_update_dt = None
+            last_update_iso = ""
+            last_update_seconds = str(page["time"])[:-3]
+            try:
+                last_update_dt = datetime.fromtimestamp(int(last_update_seconds))
+                last_update_dt_tz = last_update_dt.astimezone(timezone.utc)
+            except OverflowError:
+                logger.warning("- Failed to convert datetime %s.", last_update_seconds)
+            if last_update_dt:
+                last_update_iso = last_update_dt_tz.isoformat()
             origin = ListedOrigin(
                 lister_id=self.lister_obj.id,
                 url=page["url"],
                 visit_type=page["type"],
+                last_update=last_update_dt,
                 extra_loader_arguments={
                     "artifacts": [
                         {
-                            "time": page["time"],
+                            "time": last_update_iso,
                             "gid": page["gid"],
                             "aid": page["aid"],
                             "version": page["version"],
+                            "base_url": self.BASE_URL,
                         }
                     ]
                 },
