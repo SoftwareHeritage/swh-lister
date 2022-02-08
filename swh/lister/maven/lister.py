@@ -4,6 +4,7 @@
 # See top-level LICENSE file for more information
 
 from dataclasses import asdict, dataclass
+from datetime import datetime, timezone
 import logging
 import re
 from typing import Any, Dict, Iterator, Optional
@@ -298,14 +299,25 @@ class MavenLister(Lister[MavenListerState, RepoPage]):
                     yield origin
         else:
             # Origin is a source archive:
+            last_update_dt = None
+            last_update_iso = ""
+            last_update_seconds = str(page["time"])[:-3]
+            try:
+                last_update_dt = datetime.fromtimestamp(int(last_update_seconds))
+                last_update_dt_tz = last_update_dt.astimezone(timezone.utc)
+            except OverflowError:
+                logger.warning("- Failed to convert datetime %s.", last_update_seconds)
+            if last_update_dt:
+                last_update_iso = last_update_dt_tz.isoformat()
             origin = ListedOrigin(
                 lister_id=self.lister_obj.id,
                 url=page["url"],
                 visit_type=page["type"],
+                last_update=last_update_dt,
                 extra_loader_arguments={
                     "artifacts": [
                         {
-                            "time": page["time"],
+                            "time": last_update_iso,
                             "gid": page["gid"],
                             "aid": page["aid"],
                             "version": page["version"],
