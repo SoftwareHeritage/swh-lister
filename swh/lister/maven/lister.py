@@ -313,7 +313,7 @@ class MavenLister(Lister[MavenListerState, RepoPage]):
                 lister_id=self.lister_obj.id,
                 url=page["url"],
                 visit_type=page["type"],
-                last_update=last_update_dt,
+                last_update=last_update_dt_tz,
                 extra_loader_arguments={
                     "artifacts": [
                         {
