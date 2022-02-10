@@ -24,7 +24,7 @@ from swh.scheduler.interface import SchedulerInterface
 
 # Those tests use sample debian Sources files whose content has been extracted
 # from the real Sources files from stretch, buster and bullseye suite.
-# They contain the follwowing package source info
+# They contain the following package source info
 #  - stretch:
 #      * dh-elpa (versions: 0.0.18, 0.0.19, 0.0.20),
 #      * git (version: 1:2.11.0-3+deb9u7)
