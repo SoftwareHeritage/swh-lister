@@ -1,3 +1,13 @@
+swh-lister (2.6.4-1~swh1) unstable-swh; urgency=medium
+
+  * New upstream release 2.6.4     - (tagged by Antoine R. Dumont
+    (@ardumont) <ardumont@softwareheritage.org> on 2022-02-14 16:57:38
+    +0100)
+  * Upstream changes:     - v2.6.4     - sourceforge: fix support for
+    listing bzr origins
+
+ -- Software Heritage autobuilder (on jenkins-debian1) <jenkins@jenkins-debian1.internal.softwareheritage.org>  Mon, 14 Feb 2022 16:01:23 +0000
+
 swh-lister (2.6.3-1~swh1) unstable-swh; urgency=medium
 
   * New upstream release 2.6.3     - (tagged by Antoine R. Dumont
