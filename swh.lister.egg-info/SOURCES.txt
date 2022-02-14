@@ -224,6 +224,7 @@ swh/lister/sourceforge/tests/test_tasks.py
 swh/lister/sourceforge/tests/data/adobexmp.json
 swh/lister/sourceforge/tests/data/backapps-website.json
 swh/lister/sourceforge/tests/data/backapps.json
+swh/lister/sourceforge/tests/data/bzr-repo.json
 swh/lister/sourceforge/tests/data/main-sitemap.xml
 swh/lister/sourceforge/tests/data/mojunk.json
 swh/lister/sourceforge/tests/data/mramm.json

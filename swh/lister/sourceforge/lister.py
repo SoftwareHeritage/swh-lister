@@ -84,6 +84,9 @@ PROJECT_API_URL_FORMAT = "https://sourceforge.net/rest/{namespace}/{project}"
 
 # Predictable URL for cloning (in the broad sense) a VCS registered for the project.
 #
+# Warning: does not apply to bzr repos, and Mercurial are http only, see use of this
+# constant below.
+#
 # `vcs`: VCS type, one of `VCS_NAMES`
 # `namespace`: Project namespace. Very often `p`, but can be something else like
 #              `adobe`.
@@ -170,13 +173,24 @@ class SourceForgeLister(Lister[SourceForgeListerState, SourceForgeListerPage]):
         url_match = re.compile(
             r".*\.code\.sf\.net/(?P<namespace>[^/]+)/(?P<project>.+)/.*"
         )
+        bzr_url_match = re.compile(
+            r"http://(?P<project>[^/]+).bzr.sourceforge.net/bzrroot/([^/]+)"
+        )
+
         for origin in stream:
             url = origin.url
             match = url_match.match(url)
-            assert match is not None
-            matches = match.groupdict()
-            namespace = matches["namespace"]
-            project = matches["project"]
+            if match is None:
+                # Should be a bzr special endpoint
+                match = bzr_url_match.match(url)
+                assert match is not None
+                matches = match.groupdict()
+                project = matches["project"]
+                namespace = "p"  # no special namespacing for bzr projects
+            else:
+                matches = match.groupdict()
+                namespace = matches["namespace"]
+                project = matches["project"]
             # "Last modified" dates are the same across all VCS (tools, even)
             # within a project or subproject. An assertion here would be overkill.
             last_modified = origin.last_update
@@ -356,6 +370,11 @@ class SourceForgeLister(Lister[SourceForgeListerState, SourceForgeListerPage]):
                 # SourceForge does not yet support anonymous HTTPS cloning for Mercurial
                 # See https://sourceforge.net/p/forge/feature-requests/727/
                 url = url.replace("https://", "http://")
+            if tool_name == VcsNames.BAZAAR.value:
+                # SourceForge has removed support for bzr and only keeps legacy projects
+                # around at a separate (also not https) URL. Bzr projects are very rare
+                # and a lot of them are 404 now.
+                url = f"http://{project}.bzr.sourceforge.net/bzrroot/{project}"
             entry = SourceForgeListerEntry(
                 vcs=VcsNames(tool_name), url=url, last_modified=last_modified
             )
