@@ -29,6 +29,7 @@ TEST_PROJECTS = {
     "adobexmp": "adobe",
     "backapps": "p",
     "backapps/website": "p",
+    "bzr-repo": "p",
     "mojunk": "p",
     "mramm": "p",
     "os3dmodels": "p",
@@ -79,6 +80,7 @@ def _check_listed_origins(lister, swh_scheduler):
         "https://git.code.sf.net/p/mojunk/git2": ("git", "2017-12-31"),
         "https://svn.code.sf.net/p/mojunk/svn": ("svn", "2017-12-31"),
         "http://hg.code.sf.net/p/random-mercurial/hg": ("hg", "2019-05-02"),
+        "http://bzr-repo.bzr.sourceforge.net/bzrroot/bzr-repo": ("bzr", "2021-01-27"),
     }
 
 
@@ -119,9 +121,10 @@ def test_sourceforge_lister_full(swh_scheduler, requests_mock, datadir):
     # - mojunk (3 repos),
     # - backapps/website (1 repo),
     # - random-mercurial (1 repo).
+    # - bzr-repo (1 repo).
     # adobe and backapps itself have no repos.
-    assert stats.pages == 5
-    assert stats.origins == 10
+    assert stats.pages == 6
+    assert stats.origins == 11
     expected_state = {
         "subsitemap_last_modified": {
             "https://sourceforge.net/allura_sitemap/sitemap-0.xml": "2021-03-18",
@@ -239,6 +242,12 @@ def test_sourceforge_lister_incremental(swh_scheduler, requests_mock, datadir, m
             url="http://hg.code.sf.net/p/random-mercurial/hg",
             last_update=iso8601.parse_date("2019-05-02"),
         ),
+        ListedOrigin(
+            lister_id=lister.lister_obj.id,
+            visit_type="bzr",
+            url="http://bzr-repo.bzr.sourceforge.net/bzrroot/bzr-repo",
+            last_update=iso8601.parse_date("2021-01-27"),
+        ),
     ]
     swh_scheduler.record_listed_origins(faked_listed_origins)
 
@@ -319,9 +328,10 @@ def test_sourceforge_lister_retry(swh_scheduler, requests_mock, mocker, datadir)
     # - mojunk (3 repos),
     # - backapps/website (1 repo),
     # - random-mercurial (1 repo).
+    # - bzr-repo (1 repo).
     # adobe and backapps itself have no repos.
-    assert stats.pages == 5
-    assert stats.origins == 10
+    assert stats.pages == 6
+    assert stats.origins == 11
 
     scheduler_origins = swh_scheduler.get_listed_origins(lister.lister_obj.id).results
     assert {o.url: o.visit_type for o in scheduler_origins} == {
@@ -335,6 +345,7 @@ def test_sourceforge_lister_retry(swh_scheduler, requests_mock, mocker, datadir)
         "https://git.code.sf.net/p/mojunk/git2": "git",
         "https://svn.code.sf.net/p/mojunk/svn": "svn",
         "http://hg.code.sf.net/p/random-mercurial/hg": "hg",
+        "http://bzr-repo.bzr.sourceforge.net/bzrroot/bzr-repo": "bzr",
     }
 
     # Test `time.sleep` is called with exponential retries
@@ -402,10 +413,11 @@ def test_sourceforge_lister_project_error(
     # - mojunk (3 repos),
     # - backapps/website (1 repo),
     # - random-mercurial (1 repo).
+    # - bzr-repo (1 repo).
     # adobe and backapps itself have no repos.
     # Did *not* list mramm
-    assert stats.pages == 4
-    assert stats.origins == 7
+    assert stats.pages == 5
+    assert stats.origins == 8
 
     scheduler_origins = swh_scheduler.get_listed_origins(lister.lister_obj.id).results
     res = {o.url: (o.visit_type, str(o.last_update.date())) for o in scheduler_origins}
@@ -418,4 +430,5 @@ def test_sourceforge_lister_project_error(
         "https://git.code.sf.net/p/mojunk/git2": ("git", "2017-12-31"),
         "https://svn.code.sf.net/p/mojunk/svn": ("svn", "2017-12-31"),
         "http://hg.code.sf.net/p/random-mercurial/hg": ("hg", "2019-05-02"),
+        "http://bzr-repo.bzr.sourceforge.net/bzrroot/bzr-repo": ("bzr", "2021-01-27"),
     }

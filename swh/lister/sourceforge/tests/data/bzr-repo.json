@@ -1,0 +1,53 @@
+{
+    "shortname": "bzr-repo",
+    "name": "Bazaar repo",
+    "_id": "4bf3fc291be1ce2f10000052",
+    "url": "https://sourceforge.net/p/bzr-repo/",
+    "private": false,
+    "short_description": "This is an example bzr project",
+    "creation_date": "2009-10-10",
+    "summary": "",
+    "external_homepage": "",
+    "video_url": "",
+    "socialnetworks": [],
+    "status": "active",
+    "moved_to_url": "",
+    "preferred_support_tool": "",
+    "preferred_support_url": "",
+    "developers": [
+      {
+        "username": "Alphare",
+        "name": "Raphaël Gomès",
+        "url": "https://sourceforge.net/u/alphare/"
+      }
+    ],
+    "tools": [
+      {
+        "name": "bzr",
+        "mount_point": "bzr",
+        "url": "/p/bzr-repo/bazaar/",
+        "icons": {
+          "24": "images/code_24.png",
+          "32": "images/code_32.png",
+          "48": "images/code_48.png"
+        },
+        "installable": true,
+        "tool_label": "Bazaar",
+        "mount_label": "Bazaar"
+      }
+    ],
+    "labels": [],
+    "categories": {
+      "audience": [],
+      "developmentstatus": [],
+      "environment": [],
+      "language": [],
+      "license": [],
+      "translation": [],
+      "os": [],
+      "database": [],
+      "topic": []
+    },
+    "icon_url": null,
+    "screenshots": []
+  }
