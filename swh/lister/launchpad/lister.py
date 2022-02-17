@@ -148,19 +148,13 @@ class LaunchpadLister(Lister[LaunchpadListerState, LaunchpadPageType]):
         """
         assert self.lister_obj.id is not None
 
-        prev_origin_url: Dict[str, Optional[str]] = {"git": None, "bzr": None}
-
         vcs_type, repos = page
 
         for repo in repos:
             origin_url = origin(vcs_type, repo)
 
-            # filter out origins with invalid URL or origin previously listed
-            # (last modified repository will be listed twice by launchpadlib)
-            if (
-                not origin_url.startswith("https://")
-                or origin_url == prev_origin_url[vcs_type]
-            ):
+            # filter out origins with invalid URL
+            if not origin_url.startswith("https://"):
                 continue
 
             last_update = repo.date_last_modified
@@ -173,8 +167,6 @@ class LaunchpadLister(Lister[LaunchpadListerState, LaunchpadPageType]):
                 vcs_type,
                 last_update,
             )
-
-            prev_origin_url[vcs_type] = origin_url
 
             yield ListedOrigin(
                 lister_id=self.lister_obj.id,
