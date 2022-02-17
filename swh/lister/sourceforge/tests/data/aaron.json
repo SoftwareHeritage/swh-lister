@@ -1,0 +1,236 @@
+{
+  "shortname": "aaron",
+  "name": "Aaron: the app, service, and net monitor",
+  "_id": "5139010d5fcbc97960fd66bb",
+  "url": "https://sourceforge.net/p/aaron/",
+  "private": false,
+  "short_description": "Aaron is an application, service, and network availability monitoring and alert daemon.  Notification of unavailable services, networks, etc., levels is sent to the appropriate roles.  Aaron is highly customizable enterprise class monitoring software.",
+  "creation_date": "2001-06-24",
+  "summary": "",
+  "external_homepage": "http://aaron.sourceforge.net",
+  "video_url": "",
+  "socialnetworks": [],
+  "status": "active",
+  "moved_to_url": "",
+  "preferred_support_tool": "",
+  "preferred_support_url": "",
+  "developers": [
+    {
+      "username": "kapelmeister",
+      "name": "Steve Nickels",
+      "url": "https://sourceforge.net/u/kapelmeister/"
+    },
+    {
+      "username": "thetitan",
+      "name": "Sean Chittenden",
+      "url": "https://sourceforge.net/u/thetitan/"
+    },
+    {
+      "username": "stwalker",
+      "name": "Scott Walker",
+      "url": "https://sourceforge.net/u/stwalker/"
+    }
+  ],
+  "tools": [
+    {
+      "name": "support",
+      "mount_point": "support",
+      "url": "/p/aaron/support/",
+      "icons": {
+        "24": "images/sftheme/24x24/blog_24.png",
+        "32": "images/sftheme/32x32/blog_32.png",
+        "48": "images/sftheme/48x48/blog_48.png"
+      },
+      "installable": false,
+      "tool_label": "Support",
+      "mount_label": "Support"
+    },
+    {
+      "name": "mailman",
+      "mount_point": "mailman",
+      "url": "/p/aaron/mailman/",
+      "icons": {
+        "24": "images/forums_24.png",
+        "32": "images/forums_32.png",
+        "48": "images/forums_48.png"
+      },
+      "installable": false,
+      "tool_label": "Mailing Lists",
+      "mount_label": "Mailing Lists"
+    },
+    {
+      "name": "reviews",
+      "mount_point": "reviews",
+      "url": "/p/aaron/reviews/",
+      "icons": {
+        "24": "images/sftheme/24x24/blog_24.png",
+        "32": "images/sftheme/32x32/blog_32.png",
+        "48": "images/sftheme/48x48/blog_48.png"
+      },
+      "installable": false,
+      "tool_label": "Reviews",
+      "mount_label": "Reviews"
+    },
+    {
+      "name": "wiki",
+      "mount_point": "wiki",
+      "url": "/p/aaron/wiki/",
+      "icons": {
+        "24": "images/wiki_24.png",
+        "32": "images/wiki_32.png",
+        "48": "images/wiki_48.png"
+      },
+      "installable": true,
+      "tool_label": "Wiki",
+      "mount_label": "Wiki"
+    },
+    {
+      "name": "summary",
+      "mount_point": "summary",
+      "url": "/p/aaron/summary/",
+      "icons": {
+        "24": "images/sftheme/24x24/blog_24.png",
+        "32": "images/sftheme/32x32/blog_32.png",
+        "48": "images/sftheme/48x48/blog_48.png"
+      },
+      "installable": false,
+      "tool_label": "Summary",
+      "mount_label": "Summary",
+      "sourceforge_group_id": 29993
+    },
+    {
+      "name": "files-sf",
+      "mount_point": "files",
+      "url": "/p/aaron/files/",
+      "icons": {
+        "24": "images/downloads_24.png",
+        "32": "images/downloads_32.png",
+        "48": "images/downloads_48.png"
+      },
+      "installable": false,
+      "tool_label": "Files",
+      "mount_label": "Files"
+    },
+    {
+      "name": "cvs",
+      "mount_point": "code",
+      "url": "/p/aaron/code/",
+      "icons": {
+        "24": "images/code_24.png",
+        "32": "images/code_32.png",
+        "48": "images/code_48.png"
+      },
+      "installable": false,
+      "tool_label": "CVS",
+      "mount_label": "Code"
+    },
+    {
+      "name": "activity",
+      "mount_point": "activity",
+      "url": "/p/aaron/activity/",
+      "icons": {
+        "24": "images/admin_24.png",
+        "32": "images/admin_32.png",
+        "48": "images/admin_48.png"
+      },
+      "installable": false,
+      "tool_label": "Tool",
+      "mount_label": "Activity"
+    },
+    {
+      "name": "discussion",
+      "mount_point": "discussion",
+      "url": "/p/aaron/discussion/",
+      "icons": {
+        "24": "images/forums_24.png",
+        "32": "images/forums_32.png",
+        "48": "images/forums_48.png"
+      },
+      "installable": true,
+      "tool_label": "Discussion",
+      "mount_label": "Discussion"
+    }
+  ],
+  "labels": [],
+  "categories": {
+    "audience": [
+      {
+        "id": 4,
+        "shortname": "sysadmins",
+        "fullname": "System Administrators",
+        "fullpath": "Intended Audience :: by End-User Class :: System Administrators"
+      }
+    ],
+    "developmentstatus": [
+      {
+        "id": 8,
+        "shortname": "prealpha",
+        "fullname": "2 - Pre-Alpha",
+        "fullpath": "Development Status :: 2 - Pre-Alpha"
+      },
+      {
+        "id": 7,
+        "shortname": "planning",
+        "fullname": "1 - Planning",
+        "fullpath": "Development Status :: 1 - Planning"
+      }
+    ],
+    "environment": [
+      {
+        "id": 238,
+        "shortname": "daemon",
+        "fullname": "Non-interactive (Daemon)",
+        "fullpath": "User Interface :: Non-interactive (Daemon)"
+      }
+    ],
+    "language": [
+      {
+        "id": 164,
+        "shortname": "c",
+        "fullname": "C",
+        "fullpath": "Programming Language :: C"
+      },
+      {
+        "id": 293,
+        "shortname": "ruby",
+        "fullname": "Ruby",
+        "fullpath": "Programming Language :: Ruby"
+      }
+    ],
+    "license": [
+      {
+        "id": 296,
+        "shortname": "apache",
+        "fullname": "Apache Software License",
+        "fullpath": "License :: OSI-Approved Open Source :: Apache Software License"
+      }
+    ],
+    "translation": [
+      {
+        "id": 275,
+        "shortname": "english",
+        "fullname": "English",
+        "fullpath": "Translations :: English"
+      }
+    ],
+    "os": [
+      {
+        "id": 235,
+        "shortname": "independent",
+        "fullname": "OS Independent (Written in an interpreted language)",
+        "fullpath": "Operating System :: Grouping and Descriptive Categories :: OS Independent (Written in an interpreted language)"
+      }
+    ],
+    "database": [],
+    "topic": [
+      {
+        "id": 152,
+        "shortname": "monitoring",
+        "fullname": "Monitoring",
+        "fullpath": "Topic :: System :: Networking :: Monitoring"
+      }
+    ]
+  },
+  "icon_url": null,
+  "screenshots": []
+}
