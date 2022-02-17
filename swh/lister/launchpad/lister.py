@@ -10,8 +10,10 @@ from typing import Any, Dict, Iterator, Optional, Tuple
 
 import iso8601
 from launchpadlib.launchpad import Launchpad
+from lazr.restfulclient.errors import RestfulError
 from lazr.restfulclient.resource import Collection
 
+from swh.lister.utils import retry_if_exception, throttling_retry
 from swh.scheduler.interface import SchedulerInterface
 from swh.scheduler.model import ListedOrigin
 
@@ -36,6 +38,10 @@ class LaunchpadListerState:
 def origin(vcs_type: str, repo: Any) -> str:
     """Determine the origin url out of a repository with a given vcs_type"""
     return repo.git_https_url if vcs_type == "git" else repo.web_link
+
+
+def retry_if_restful_error(retry_state):
+    return retry_if_exception(retry_state, lambda e: isinstance(e, RestfulError))
 
 
 class LaunchpadLister(Lister[LaunchpadListerState, LaunchpadPageType]):
@@ -90,6 +96,23 @@ class LaunchpadLister(Lister[LaunchpadListerState, LaunchpadPageType]):
                     d[attribute_name] = date_last_modified.isoformat()
         return d
 
+    @throttling_retry(retry=retry_if_restful_error)
+    def _page_request(
+        self, launchpad, vcs_type: str, date_last_modified: Optional[datetime]
+    ) -> Optional[Collection]:
+        """Querying the page of results for a given vcs_type since the date_last_modified. If
+        some issues occurs, this will deal with the retrying policy.
+
+        """
+        get_vcs_fns = {
+            "git": launchpad.git_repositories.getRepositories,
+            "bzr": launchpad.branches.getBranches,
+        }
+
+        return get_vcs_fns[vcs_type](
+            order_by="most neglected first", modified_since_date=date_last_modified,
+        )
+
     def get_pages(self) -> Iterator[LaunchpadPageType]:
         """
         Yields an iterator on all git/bzr repositories hosted on Launchpad sorted
@@ -103,26 +126,30 @@ class LaunchpadLister(Lister[LaunchpadListerState, LaunchpadPageType]):
                 "git": self.state.git_date_last_modified,
                 "bzr": self.state.bzr_date_last_modified,
             }
-        for vcs_type, get_vcs_fn in [
-            ("git", launchpad.git_repositories.getRepositories),
-            ("bzr", launchpad.branches.getBranches),
-        ]:
-            yield vcs_type, get_vcs_fn(
-                order_by="most neglected first",
-                modified_since_date=self.date_last_modified[vcs_type],
-            )
+        for vcs_type in ["git", "bzr"]:
+            try:
+                result = self._page_request(
+                    launchpad, vcs_type, self.date_last_modified[vcs_type]
+                )
+            except RestfulError as e:
+                logger.warning("Listing %s origins raised %s", vcs_type, e)
+                result = None
+            if not result:
+                continue
+            yield vcs_type, result
 
+    @throttling_retry(retry=retry_if_restful_error)
     def get_origins_from_page(self, page: LaunchpadPageType) -> Iterator[ListedOrigin]:
         """
         Iterate on all git repositories and yield ListedOrigin instances.
         """
         assert self.lister_obj.id is not None
 
-        prev_origin_url: Dict[str, Optional[str]] = {"git": None, "bzr": None}
-
         vcs_type, repos = page
 
         assert vcs_type in {"git", "bzr"}
+
+        prev_origin_url: Dict[str, Optional[str]] = {"git": None, "bzr": None}
 
         for repo in repos:
             origin_url = origin(vcs_type, repo)

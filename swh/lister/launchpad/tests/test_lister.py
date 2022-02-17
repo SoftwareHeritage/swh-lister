@@ -8,6 +8,7 @@ import json
 from pathlib import Path
 from typing import List
 
+from lazr.restfulclient.errors import RestfulError
 import pytest
 
 from ..lister import LaunchpadLister, origin
@@ -57,11 +58,18 @@ def launchpad_bzr_response(datadir):
 def _mock_launchpad(mocker, launchpad_response, launchpad_bzr_response=None):
     mock_launchpad = mocker.patch("swh.lister.launchpad.lister.Launchpad")
     mock_getRepositories = mock_launchpad.git_repositories.getRepositories
-    mock_getRepositories.return_value = launchpad_response
+    if isinstance(launchpad_response, Exception):
+        mock_getRepositories.side_effect = launchpad_response
+    else:
+        mock_getRepositories.return_value = launchpad_response
     mock_getBranches = mock_launchpad.branches.getBranches
-    mock_getBranches.return_value = (
-        [] if launchpad_bzr_response is None else launchpad_bzr_response
-    )
+    if launchpad_bzr_response is not None:
+        if isinstance(launchpad_bzr_response, Exception):
+            mock_getBranches.side_effect = launchpad_bzr_response
+        else:
+            mock_getBranches.return_value = launchpad_bzr_response
+    else:
+        mock_getBranches.return_value = []  # empty page
     mock_launchpad.login_anonymously.return_value = mock_launchpad
 
     return mock_getRepositories, mock_getBranches
@@ -166,7 +174,7 @@ def test_launchpad_incremental_lister(
 
     assert lister.incremental
     assert lister.updated
-    assert stats.pages == 2, "Empty bzr response still accounts for 1 page"
+    assert stats.pages == 1, "Empty bzr page response is ignored"
     assert stats.origins == len(launchpad_response2)
 
     mock_getRepositories.assert_called_once_with(
@@ -192,7 +200,7 @@ def test_launchpad_lister_invalid_url_filtering(
     stats = lister.run()
 
     assert not lister.updated
-    assert stats.pages == 1 + 1, "Empty pages are still accounted for (1 git, 1 bzr)"
+    assert stats.pages == 1, "Empty pages are ignored(only 1 git page of results)"
     assert stats.origins == 0
 
 
@@ -211,5 +219,38 @@ def test_launchpad_lister_duplicated_origin(
     stats = lister.run()
 
     assert lister.updated
-    assert stats.pages == 1 + 1, "Empty bzr page is still accounted for (1 git, 1 bzr)"
+    assert stats.pages == 1, "Empty bzr page are ignored (only 1 git page of results)"
     assert stats.origins == 1
+
+
+def test_launchpad_lister_raise_during_listing(
+    swh_scheduler, mocker, launchpad_response1, launchpad_bzr_response
+):
+    lister = LaunchpadLister(scheduler=swh_scheduler)
+    # Exponential retries take a long time, so stub time.sleep
+    mocker.patch.object(lister._page_request.retry, "sleep")
+
+    mock_getRepositories, mock_getBranches = _mock_launchpad(
+        mocker,
+        RestfulError("Refuse to list git page"),  # breaks git page listing
+        launchpad_bzr_response,
+    )
+
+    stats = lister.run()
+
+    assert lister.updated
+    assert stats.pages == 1
+    assert stats.origins == len(launchpad_bzr_response)
+
+    mock_getRepositories, mock_getBranches = _mock_launchpad(
+        mocker,
+        launchpad_response1,
+        RestfulError("Refuse to list bzr"),  # breaks bzr page listing
+    )
+
+    lister = LaunchpadLister(scheduler=swh_scheduler)
+    stats = lister.run()
+
+    assert lister.updated
+    assert stats.pages == 1
+    assert stats.origins == len(launchpad_response1)
