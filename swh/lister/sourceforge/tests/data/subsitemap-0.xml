@@ -1,6 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
+        <loc>https://sourceforge.net/projects/aaron/files/</loc>
+        <lastmod>2013-03-07</lastmod>
+        <changefreq>daily</changefreq>
+    </url>
+    <url>
+        <loc>https://sourceforge.net/p/aaron/home/</loc>
+        <lastmod>2013-03-07</lastmod>
+        <changefreq>daily</changefreq>
+    </url>
+    <url>
+        <loc>https://sourceforge.net/p/aaron/tickets/</loc>
+        <lastmod>2013-03-07</lastmod>
+        <changefreq>daily</changefreq>
+    </url>
+    <url>
         <loc>https://sourceforge.net/projects/os3dmodels/files/</loc>
         <lastmod>2017-03-31</lastmod>
         <changefreq>daily</changefreq>
