@@ -26,6 +26,7 @@ from swh.lister.utils import WAIT_EXP_BASE
 from swh.scheduler.model import ListedOrigin
 
 TEST_PROJECTS = {
+    "aaron": "p",
     "adobexmp": "adobe",
     "backapps": "p",
     "backapps/website": "p",
@@ -62,6 +63,10 @@ def get_project_json(datadir, request, context):
     return json.loads(Path(datadir, f"{project}.json").read_text())
 
 
+def get_cvs_info_page(datadir):
+    return Path(datadir, "aaron.html").read_text()
+
+
 def _check_request_headers(request):
     return request.headers.get("User-Agent") == USER_AGENT
 
@@ -81,6 +86,8 @@ def _check_listed_origins(lister, swh_scheduler):
         "https://svn.code.sf.net/p/mojunk/svn": ("svn", "2017-12-31"),
         "http://hg.code.sf.net/p/random-mercurial/hg": ("hg", "2019-05-02"),
         "http://bzr-repo.bzr.sourceforge.net/bzrroot/bzr-repo": ("bzr", "2021-01-27"),
+        "rsync://a.cvs.sourceforge.net/cvsroot/aaron/aaron": ("cvs", "2013-03-07"),
+        "rsync://a.cvs.sourceforge.net/cvsroot/aaron/www": ("cvs", "2013-03-07"),
     }
 
 
@@ -114,6 +121,11 @@ def test_sourceforge_lister_full(swh_scheduler, requests_mock, datadir):
         json=functools.partial(get_project_json, datadir),
         additional_matcher=_check_request_headers,
     )
+    requests_mock.get(
+        re.compile("http://aaron.cvs.sourceforge.net/"),
+        text=get_cvs_info_page(datadir),
+        additional_matcher=_check_request_headers,
+    )
 
     stats = lister.run()
     # - os3dmodels (2 repos),
@@ -123,8 +135,8 @@ def test_sourceforge_lister_full(swh_scheduler, requests_mock, datadir):
     # - random-mercurial (1 repo).
     # - bzr-repo (1 repo).
     # adobe and backapps itself have no repos.
-    assert stats.pages == 6
-    assert stats.origins == 11
+    assert stats.pages == 7
+    assert stats.origins == 13
     expected_state = {
         "subsitemap_last_modified": {
             "https://sourceforge.net/allura_sitemap/sitemap-0.xml": "2021-03-18",
@@ -175,6 +187,12 @@ def test_sourceforge_lister_incremental(swh_scheduler, requests_mock, datadir, m
     requests_mock.get(
         re.compile("https://sourceforge.net/rest/.*"),
         json=filtered_get_project_json,
+        additional_matcher=_check_request_headers,
+    )
+
+    requests_mock.get(
+        re.compile("http://aaron.cvs.sourceforge.net/"),
+        text=get_cvs_info_page(datadir),
         additional_matcher=_check_request_headers,
     )
 
@@ -272,8 +290,8 @@ def test_sourceforge_lister_incremental(swh_scheduler, requests_mock, datadir, m
 
     stats = lister.run()
     # - mramm (3 repos),  # changed
-    assert stats.pages == 1
-    assert stats.origins == 3
+    assert stats.pages == 2
+    assert stats.origins == 5
     expected_state = {
         "subsitemap_last_modified": {
             "https://sourceforge.net/allura_sitemap/sitemap-0.xml": "2021-03-18",
@@ -322,6 +340,12 @@ def test_sourceforge_lister_retry(swh_scheduler, requests_mock, mocker, datadir)
         additional_matcher=_check_request_headers,
     )
 
+    requests_mock.get(
+        re.compile("http://aaron.cvs.sourceforge.net/"),
+        text=get_cvs_info_page(datadir),
+        additional_matcher=_check_request_headers,
+    )
+
     stats = lister.run()
     # - os3dmodels (2 repos),
     # - mramm (3 repos),
@@ -330,23 +354,10 @@ def test_sourceforge_lister_retry(swh_scheduler, requests_mock, mocker, datadir)
     # - random-mercurial (1 repo).
     # - bzr-repo (1 repo).
     # adobe and backapps itself have no repos.
-    assert stats.pages == 6
-    assert stats.origins == 11
+    assert stats.pages == 7
+    assert stats.origins == 13
 
-    scheduler_origins = swh_scheduler.get_listed_origins(lister.lister_obj.id).results
-    assert {o.url: o.visit_type for o in scheduler_origins} == {
-        "https://svn.code.sf.net/p/backapps/website/code": "svn",
-        "https://git.code.sf.net/p/os3dmodels/git": "git",
-        "https://svn.code.sf.net/p/os3dmodels/svn": "svn",
-        "https://git.code.sf.net/p/mramm/files": "git",
-        "https://git.code.sf.net/p/mramm/git": "git",
-        "https://svn.code.sf.net/p/mramm/svn": "svn",
-        "https://git.code.sf.net/p/mojunk/git": "git",
-        "https://git.code.sf.net/p/mojunk/git2": "git",
-        "https://svn.code.sf.net/p/mojunk/svn": "svn",
-        "http://hg.code.sf.net/p/random-mercurial/hg": "hg",
-        "http://bzr-repo.bzr.sourceforge.net/bzrroot/bzr-repo": "bzr",
-    }
+    _check_listed_origins(lister, swh_scheduler)
 
     # Test `time.sleep` is called with exponential retries
     assert_sleep_calls(mocker, mocked_sleep, [1, WAIT_EXP_BASE, 1, 1])
@@ -406,6 +417,11 @@ def test_sourceforge_lister_project_error(
     # `mramm` is in subsitemap 0, which ensures we keep listing after an error.
     requests_mock.get(
         re.compile("https://sourceforge.net/rest/p/mramm"), status_code=status_code
+    )
+
+    # Make request to CVS info page fail
+    requests_mock.get(
+        re.compile("http://aaron.cvs.sourceforge.net/"), status_code=status_code
     )
 
     stats = lister.run()

@@ -147,6 +147,7 @@ swh/lister/launchpad/tests/__init__.py
 swh/lister/launchpad/tests/conftest.py
 swh/lister/launchpad/tests/test_lister.py
 swh/lister/launchpad/tests/test_tasks.py
+swh/lister/launchpad/tests/data/launchpad_bzr_response.json
 swh/lister/launchpad/tests/data/launchpad_response1.json
 swh/lister/launchpad/tests/data/launchpad_response2.json
 swh/lister/maven/README.md
@@ -221,6 +222,8 @@ swh/lister/sourceforge/tasks.py
 swh/lister/sourceforge/tests/__init__.py
 swh/lister/sourceforge/tests/test_lister.py
 swh/lister/sourceforge/tests/test_tasks.py
+swh/lister/sourceforge/tests/data/aaron.html
+swh/lister/sourceforge/tests/data/aaron.json
 swh/lister/sourceforge/tests/data/adobexmp.json
 swh/lister/sourceforge/tests/data/backapps-website.json
 swh/lister/sourceforge/tests/data/backapps.json

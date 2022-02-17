@@ -10,6 +10,7 @@ import re
 from typing import Any, Dict, Iterator, List, Optional, Set, Tuple
 from xml.etree import ElementTree
 
+from bs4 import BeautifulSoup
 import iso8601
 import requests
 from tenacity.before_sleep import before_sleep_log
@@ -360,6 +361,35 @@ class SourceForgeLister(Lister[SourceForgeListerState, SourceForgeListerPage]):
             tool_name = tool["name"]
             if tool_name not in VCS_NAMES:
                 continue
+            if tool_name == VcsNames.CVS.value:
+                # CVS projects are different from other VCS ones, they use the rsync
+                # protocol, a list of modules needs to be fetched from an info page
+                # and multiple origin URLs can be produced for a same project.
+                cvs_info_url = f"http://{project}.cvs.sourceforge.net"
+                try:
+                    response = self.page_request(cvs_info_url, params={})
+                except requests.HTTPError:
+                    logger.warning(
+                        "CVS info page could not be fetched, skipping project '%s'",
+                        project,
+                    )
+                    continue
+                else:
+                    bs = BeautifulSoup(response.text, features="html.parser")
+                    cvs_base_url = "rsync://a.cvs.sourceforge.net/cvsroot"
+                    for text in [b.text for b in bs.find_all("b")]:
+                        match = re.search(fr".*/cvsroot/{project} co -P (.+)", text)
+                        if match is not None:
+                            module = match.group(1)
+                            url = f"{cvs_base_url}/{project}/{module}"
+                            hits.append(
+                                SourceForgeListerEntry(
+                                    vcs=VcsNames(tool_name),
+                                    url=url,
+                                    last_modified=last_modified,
+                                )
+                            )
+                    continue
             url = CLONE_URL_FORMAT.format(
                 vcs=tool_name,
                 namespace=namespace,
