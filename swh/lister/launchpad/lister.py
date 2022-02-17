@@ -25,6 +25,9 @@ VcsType = str
 LaunchpadPageType = Tuple[VcsType, Collection]
 
 
+SUPPORTED_VCS_TYPES = ("git", "bzr")
+
+
 @dataclass
 class LaunchpadListerState:
     """State of Launchpad lister"""
@@ -76,7 +79,7 @@ class LaunchpadLister(Lister[LaunchpadListerState, LaunchpadPageType]):
         }
 
     def state_from_dict(self, d: Dict[str, Any]) -> LaunchpadListerState:
-        for vcs_type in ["git", "bzr"]:
+        for vcs_type in SUPPORTED_VCS_TYPES:
             key = f"{vcs_type}_date_last_modified"
             date_last_modified = d.get(key)
             if date_last_modified is not None:
@@ -86,7 +89,7 @@ class LaunchpadLister(Lister[LaunchpadListerState, LaunchpadPageType]):
 
     def state_to_dict(self, state: LaunchpadListerState) -> Dict[str, Any]:
         d: Dict[str, Optional[str]] = {}
-        for vcs_type in ["git", "bzr"]:
+        for vcs_type in SUPPORTED_VCS_TYPES:
             attribute_name = f"{vcs_type}_date_last_modified"
             d[attribute_name] = None
 
@@ -126,7 +129,7 @@ class LaunchpadLister(Lister[LaunchpadListerState, LaunchpadPageType]):
                 "git": self.state.git_date_last_modified,
                 "bzr": self.state.bzr_date_last_modified,
             }
-        for vcs_type in ["git", "bzr"]:
+        for vcs_type in SUPPORTED_VCS_TYPES:
             try:
                 result = self._page_request(
                     launchpad, vcs_type, self.date_last_modified[vcs_type]
@@ -145,11 +148,9 @@ class LaunchpadLister(Lister[LaunchpadListerState, LaunchpadPageType]):
         """
         assert self.lister_obj.id is not None
 
-        vcs_type, repos = page
-
-        assert vcs_type in {"git", "bzr"}
-
         prev_origin_url: Dict[str, Optional[str]] = {"git": None, "bzr": None}
+
+        vcs_type, repos = page
 
         for repo in repos:
             origin_url = origin(vcs_type, repo)
