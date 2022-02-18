@@ -1,3 +1,13 @@
+swh-lister (2.7.1-1~swh1) unstable-swh; urgency=medium
+
+  * New upstream release 2.7.1     - (tagged by Antoine R. Dumont
+    (@ardumont) <ardumont@softwareheritage.org> on 2022-02-18 10:42:52
+    +0100)
+  * Upstream changes:     - v2.7.1     - launchpad: Ignore erratic page
+    and continue listing next page
+
+ -- Software Heritage autobuilder (on jenkins-debian1) <jenkins@jenkins-debian1.internal.softwareheritage.org>  Fri, 18 Feb 2022 09:46:37 +0000
+
 swh-lister (2.7.0-1~swh1) unstable-swh; urgency=medium
 
   * New upstream release 2.7.0     - (tagged by Antoine R. Dumont
