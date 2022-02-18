@@ -12,6 +12,7 @@ import iso8601
 from launchpadlib.launchpad import Launchpad
 from lazr.restfulclient.errors import RestfulError
 from lazr.restfulclient.resource import Collection
+from tenacity.before_sleep import before_sleep_log
 
 from swh.lister.utils import retry_if_exception, throttling_retry
 from swh.scheduler.interface import SchedulerInterface
@@ -99,7 +100,10 @@ class LaunchpadLister(Lister[LaunchpadListerState, LaunchpadPageType]):
                     d[attribute_name] = date_last_modified.isoformat()
         return d
 
-    @throttling_retry(retry=retry_if_restful_error)
+    @throttling_retry(
+        retry=retry_if_restful_error,
+        before_sleep=before_sleep_log(logger, logging.WARNING),
+    )
     def _page_request(
         self, launchpad, vcs_type: str, date_last_modified: Optional[datetime]
     ) -> Optional[Collection]:
@@ -141,7 +145,6 @@ class LaunchpadLister(Lister[LaunchpadListerState, LaunchpadPageType]):
                 continue
             yield vcs_type, result
 
-    @throttling_retry(retry=retry_if_restful_error)
     def get_origins_from_page(self, page: LaunchpadPageType) -> Iterator[ListedOrigin]:
         """
         Iterate on all git repositories and yield ListedOrigin instances.
@@ -150,30 +153,33 @@ class LaunchpadLister(Lister[LaunchpadListerState, LaunchpadPageType]):
 
         vcs_type, repos = page
 
-        for repo in repos:
-            origin_url = origin(vcs_type, repo)
+        try:
+            for repo in repos:
+                origin_url = origin(vcs_type, repo)
 
-            # filter out origins with invalid URL
-            if not origin_url.startswith("https://"):
-                continue
+                # filter out origins with invalid URL
+                if not origin_url.startswith("https://"):
+                    continue
 
-            last_update = repo.date_last_modified
+                last_update = repo.date_last_modified
 
-            self.date_last_modified[vcs_type] = last_update
+                self.date_last_modified[vcs_type] = last_update
 
-            logger.debug(
-                "Found origin %s with type %s last updated on %s",
-                origin_url,
-                vcs_type,
-                last_update,
-            )
+                logger.debug(
+                    "Found origin %s with type %s last updated on %s",
+                    origin_url,
+                    vcs_type,
+                    last_update,
+                )
 
-            yield ListedOrigin(
-                lister_id=self.lister_obj.id,
-                visit_type=vcs_type,
-                url=origin_url,
-                last_update=last_update,
-            )
+                yield ListedOrigin(
+                    lister_id=self.lister_obj.id,
+                    visit_type=vcs_type,
+                    url=origin_url,
+                    last_update=last_update,
+                )
+        except RestfulError as e:
+            logger.warning("Listing %s origins raised %s", vcs_type, e)
 
     def finalize(self) -> None:
         git_date_last_modified = self.date_last_modified["git"]
