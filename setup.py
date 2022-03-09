@@ -67,6 +67,7 @@ setup(
         lister.github=swh.lister.github:register
         lister.gitlab=swh.lister.gitlab:register
         lister.gnu=swh.lister.gnu:register
+        lister.golang=swh.lister.golang:register
         lister.launchpad=swh.lister.launchpad:register
         lister.npm=swh.lister.npm:register
         lister.opam=swh.lister.opam:register
