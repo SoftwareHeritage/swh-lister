@@ -1,8 +1,10 @@
-swh-lister (2.7.1-1~swh1~bpo10+1) buster-swh; urgency=medium
+swh-lister (2.7.2-1~swh1) unstable-swh; urgency=medium
 
-  * Rebuild for buster-swh
+  * New upstream release 2.7.2     - (tagged by Antoine Lambert
+    <anlambert@softwareheritage.org> on 2022-03-11 13:34:15 +0100)
+  * Upstream changes:     - version 2.7.2
 
- -- Software Heritage autobuilder (on jenkins-debian1) <jenkins@jenkins-debian1.internal.softwareheritage.org>  Fri, 18 Feb 2022 09:50:07 +0000
+ -- Software Heritage autobuilder (on jenkins-debian1) <jenkins@jenkins-debian1.internal.softwareheritage.org>  Fri, 11 Mar 2022 12:38:38 +0000
 
 swh-lister (2.7.1-1~swh1) unstable-swh; urgency=medium
 
