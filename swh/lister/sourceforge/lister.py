@@ -177,17 +177,25 @@ class SourceForgeLister(Lister[SourceForgeListerState, SourceForgeListerPage]):
         bzr_url_match = re.compile(
             r"http://(?P<project>[^/]+).bzr.sourceforge.net/bzrroot/([^/]+)"
         )
+        cvs_url_match = re.compile(
+            r"rsync://a.cvs.sourceforge.net/cvsroot/(?P<project>.+)/([^/]+)"
+        )
 
         for origin in stream:
             url = origin.url
             match = url_match.match(url)
             if match is None:
-                # Should be a bzr special endpoint
-                match = bzr_url_match.match(url)
-                assert match is not None
-                matches = match.groupdict()
+                # Could be a bzr or cvs special endpoint
+                bzr_match = bzr_url_match.match(url)
+                cvs_match = cvs_url_match.match(url)
+                matches = None
+                if bzr_match is not None:
+                    matches = bzr_match.groupdict()
+                elif cvs_match is not None:
+                    matches = cvs_match.groupdict()
+                assert matches
                 project = matches["project"]
-                namespace = "p"  # no special namespacing for bzr projects
+                namespace = "p"  # no special namespacing for bzr and cvs projects
             else:
                 matches = match.groupdict()
                 namespace = matches["namespace"]
