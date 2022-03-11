@@ -266,6 +266,18 @@ def test_sourceforge_lister_incremental(swh_scheduler, requests_mock, datadir, m
             url="http://bzr-repo.bzr.sourceforge.net/bzrroot/bzr-repo",
             last_update=iso8601.parse_date("2021-01-27"),
         ),
+        ListedOrigin(
+            lister_id=lister.lister_obj.id,
+            visit_type="cvs",
+            url="rsync://a.cvs.sourceforge.net/cvsroot/aaron/aaron",
+            last_update=iso8601.parse_date("2013-03-07"),
+        ),
+        ListedOrigin(
+            lister_id=lister.lister_obj.id,
+            visit_type="cvs",
+            url="rsync://a.cvs.sourceforge.net/cvsroot/aaron/www",
+            last_update=iso8601.parse_date("2013-03-07"),
+        ),
     ]
     swh_scheduler.record_listed_origins(faked_listed_origins)
 
@@ -289,9 +301,10 @@ def test_sourceforge_lister_incremental(swh_scheduler, requests_mock, datadir, m
     lister.state = faked_state
 
     stats = lister.run()
+
     # - mramm (3 repos),  # changed
-    assert stats.pages == 2
-    assert stats.origins == 5
+    assert stats.pages == 1
+    assert stats.origins == 3
     expected_state = {
         "subsitemap_last_modified": {
             "https://sourceforge.net/allura_sitemap/sitemap-0.xml": "2021-03-18",
