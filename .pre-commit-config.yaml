@@ -17,6 +17,7 @@ repos:
       - id: codespell
         name: Check source code spelling
         exclude: ^(swh/lister/.*/tests/data/.*)$
+        args: [-L crate]
         stages: [commit]
       - id: codespell
         name: Check commit message spelling
