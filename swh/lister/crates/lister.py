@@ -42,7 +42,9 @@ class CratesLister(StatelessLister[CratesListerPage]):
     )
 
     def __init__(
-        self, scheduler: SchedulerInterface, credentials: CredentialsType = None,
+        self,
+        scheduler: SchedulerInterface,
+        credentials: CredentialsType = None,
     ):
         super().__init__(
             scheduler=scheduler,
@@ -55,7 +57,12 @@ class CratesLister(StatelessLister[CratesListerPage]):
         """Get crates.io-index repository up to date running git command."""
 
         subprocess.check_call(
-            ["git", "clone", self.INDEX_REPOSITORY_URL, self.DESTINATION_PATH,]
+            [
+                "git",
+                "clone",
+                self.INDEX_REPOSITORY_URL,
+                self.DESTINATION_PATH,
+            ]
         )
 
     def get_crates_index(self) -> List[Path]:

@@ -24,7 +24,10 @@ logger = logging.getLogger(__name__)
     "--config-file",
     "-C",
     default=None,
-    type=click.Path(exists=True, dir_okay=False,),
+    type=click.Path(
+        exists=True,
+        dir_okay=False,
+    ),
     help="Configuration file.",
 )
 @click.pass_context

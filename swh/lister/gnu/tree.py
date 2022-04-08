@@ -19,9 +19,7 @@ logger = logging.getLogger(__name__)
 
 
 class GNUTree:
-    """Gnu Tree's representation
-
-    """
+    """Gnu Tree's representation"""
 
     def __init__(self, url: str):
         self.url = url  # filepath or uri
@@ -330,7 +328,5 @@ def load_raw_data(url: str) -> Sequence[Mapping]:
 
 
 def format_date(timestamp: str) -> str:
-    """Format a string timestamp to an isoformat string
-
-    """
+    """Format a string timestamp to an isoformat string"""
     return datetime.fromtimestamp(int(timestamp), tz=timezone.utc).isoformat()

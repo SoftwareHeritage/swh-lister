@@ -66,7 +66,10 @@ def test_npm_lister_full(
 
     requests_mock.get(
         lister.API_FULL_LISTING_URL,
-        [{"json": npm_full_listing_page1}, {"json": npm_full_listing_page2},],
+        [
+            {"json": npm_full_listing_page1},
+            {"json": npm_full_listing_page2},
+        ],
         additional_matcher=_match_request,
     )
 
@@ -169,7 +172,9 @@ def test_npm_lister_incremental(
 
 
 def test_npm_lister_incremental_restart(
-    swh_scheduler, requests_mock, mocker,
+    swh_scheduler,
+    requests_mock,
+    mocker,
 ):
     """Check incremental npm listing will restart from saved state"""
     page_size = 2
@@ -190,7 +195,9 @@ def test_npm_lister_incremental_restart(
 
 
 def test_npm_lister_http_error(
-    swh_scheduler, requests_mock, mocker,
+    swh_scheduler,
+    requests_mock,
+    mocker,
 ):
     lister = NpmLister(scheduler=swh_scheduler)
 

@@ -48,7 +48,10 @@ class OpamLister(StatelessLister[PageType]):
         opam_root: str = "/tmp/opam/",
     ):
         super().__init__(
-            scheduler=scheduler, credentials=credentials, url=url, instance=instance,
+            scheduler=scheduler,
+            credentials=credentials,
+            url=url,
+            instance=instance,
         )
         self.env = os.environ.copy()
         # Opam root folder is initialized in the :meth:`get_pages` method as no

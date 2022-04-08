@@ -21,7 +21,8 @@ def test_full_listing(swh_scheduler_celery_app, swh_scheduler_celery_worker, moc
 
     kwargs = dict(url="https://tuleap.net")
     res = swh_scheduler_celery_app.send_task(
-        "swh.lister.tuleap.tasks.FullTuleapLister", kwargs=kwargs,
+        "swh.lister.tuleap.tasks.FullTuleapLister",
+        kwargs=kwargs,
     )
     assert res
     res.wait()
@@ -38,9 +39,13 @@ def test_full_listing_params(
     lister.from_configfile.return_value = lister
     lister.run.return_value = ListerStats(pages=10, origins=500)
 
-    kwargs = dict(url="https://tuleap.net", instance="tuleap.net",)
+    kwargs = dict(
+        url="https://tuleap.net",
+        instance="tuleap.net",
+    )
     res = swh_scheduler_celery_app.send_task(
-        "swh.lister.tuleap.tasks.FullTuleapLister", kwargs=kwargs,
+        "swh.lister.tuleap.tasks.FullTuleapLister",
+        kwargs=kwargs,
     )
     assert res
     res.wait()

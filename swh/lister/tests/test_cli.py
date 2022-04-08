@@ -8,15 +8,24 @@ import pytest
 from swh.lister.cli import SUPPORTED_LISTERS, get_lister
 
 lister_args = {
-    "cgit": {"url": "https://git.eclipse.org/c/",},
+    "cgit": {
+        "url": "https://git.eclipse.org/c/",
+    },
     "phabricator": {
         "instance": "softwareheritage",
         "url": "https://forge.softwareheritage.org/api/diffusion.repository.search",
         "api_token": "bogus",
     },
-    "gitea": {"url": "https://try.gitea.io/api/v1/",},
-    "tuleap": {"url": "https://tuleap.net",},
-    "gitlab": {"url": "https://gitlab.ow2.org/api/v4", "instance": "ow2",},
+    "gitea": {
+        "url": "https://try.gitea.io/api/v1/",
+    },
+    "tuleap": {
+        "url": "https://tuleap.net",
+    },
+    "gitlab": {
+        "url": "https://gitlab.ow2.org/api/v4",
+        "instance": "ow2",
+    },
     "opam": {"url": "https://opam.ocaml.org", "instance": "opam"},
     "maven": {
         "url": "https://repo1.maven.org/maven2/",
@@ -34,9 +43,7 @@ def test_get_lister_wrong_input():
 
 
 def test_get_lister(swh_scheduler_config):
-    """Instantiating a supported lister should be ok
-
-    """
+    """Instantiating a supported lister should be ok"""
     # Drop launchpad lister from the lister to check, its test setup is more involved
     # than the other listers and it's not currently done here
     for lister_name in SUPPORTED_LISTERS:

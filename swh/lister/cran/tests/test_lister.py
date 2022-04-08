@@ -20,7 +20,12 @@ from swh.lister.cran.lister import (
 def test_cran_compute_origin_urls():
     pack = "something"
     vers = "0.0.1"
-    origin_url, artifact_url = compute_origin_urls({"Package": pack, "Version": vers,})
+    origin_url, artifact_url = compute_origin_urls(
+        {
+            "Package": pack,
+            "Version": vers,
+        }
+    )
 
     assert origin_url == f"{CRAN_MIRROR}/package={pack}"
     assert artifact_url == f"{CRAN_MIRROR}/src/contrib/{pack}_{vers}.tar.gz"

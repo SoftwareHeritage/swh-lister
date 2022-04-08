@@ -51,12 +51,18 @@ class TuleapLister(StatelessLister[RepoPage]):
         credentials: CredentialsType = None,
     ):
         super().__init__(
-            scheduler=scheduler, credentials=credentials, url=url, instance=instance,
+            scheduler=scheduler,
+            credentials=credentials,
+            url=url,
+            instance=instance,
         )
 
         self.session = requests.Session()
         self.session.headers.update(
-            {"Accept": "application/json", "User-Agent": USER_AGENT,}
+            {
+                "Accept": "application/json",
+                "User-Agent": USER_AGENT,
+            }
         )
 
     @throttling_retry(before_sleep=before_sleep_log(logger, logging.WARNING))
@@ -133,9 +139,7 @@ class TuleapLister(StatelessLister[RepoPage]):
                 yield self.results_simplified(url_api, "git", repo)
 
     def get_origins_from_page(self, page: RepoPage) -> Iterator[ListedOrigin]:
-        """Convert a page of Tuleap repositories into a list of ListedOrigins.
-
-        """
+        """Convert a page of Tuleap repositories into a list of ListedOrigins."""
         assert self.lister_obj.id is not None
 
         yield ListedOrigin(

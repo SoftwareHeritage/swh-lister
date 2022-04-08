@@ -23,7 +23,8 @@ def test_full_listing(lister, swh_scheduler_celery_app, swh_scheduler_celery_wor
 
     kwargs = dict(url="https://try.gitea.io/api/v1")
     res = swh_scheduler_celery_app.send_task(
-        "swh.lister.gitea.tasks.FullGiteaRelister", kwargs=kwargs,
+        "swh.lister.gitea.tasks.FullGiteaRelister",
+        kwargs=kwargs,
     )
     assert res
     res.wait()
@@ -49,7 +50,8 @@ def test_full_listing_params(
         page_size=50,
     )
     res = swh_scheduler_celery_app.send_task(
-        "swh.lister.gitea.tasks.FullGiteaRelister", kwargs=kwargs,
+        "swh.lister.gitea.tasks.FullGiteaRelister",
+        kwargs=kwargs,
     )
     assert res
     res.wait()

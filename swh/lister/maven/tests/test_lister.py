@@ -84,7 +84,12 @@ def maven_pom_3(datadir) -> str:
 
 
 def test_maven_full_listing(
-    swh_scheduler, requests_mock, mocker, maven_index, maven_pom_1, maven_pom_2,
+    swh_scheduler,
+    requests_mock,
+    mocker,
+    maven_index,
+    maven_pom_1,
+    maven_pom_2,
 ):
     """Covers full listing of multiple pages, checking page results and listed
     origins, statelessness."""
