@@ -148,10 +148,12 @@ class MavenLister(Lister[MavenListerState, RepoPage]):
         # ]
 
         # Download the main text index file.
-        logger.info("Downloading text index from %s.", self.INDEX_URL)
+        logger.info("Downloading computed index from %s.", self.INDEX_URL)
         assert self.INDEX_URL is not None
         response = requests.get(self.INDEX_URL, stream=True)
-        response.raise_for_status()
+        if response.status_code != 200:
+            logger.error("Index %s not found, stopping", self.INDEX_URL)
+            response.raise_for_status()
 
         # Prepare regexes to parse index exports.
 
