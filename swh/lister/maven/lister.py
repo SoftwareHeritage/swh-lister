@@ -258,9 +258,9 @@ class MavenLister(Lister[MavenListerState, RepoPage]):
 
         logger.info("Fetching poms..")
         for pom in out_pom:
-            text = self.page_request(pom, {})
             try:
-                project = xmltodict.parse(text.content.decode())
+                response = self.page_request(pom, {})
+                project = xmltodict.parse(response.content.decode())
                 if "scm" in project["project"]:
                     if "connection" in project["project"]["scm"]:
                         scm = project["project"]["scm"]["connection"]
@@ -278,6 +278,11 @@ class MavenLister(Lister[MavenListerState, RepoPage]):
                         logger.debug("No scm.connection in pom %s", pom)
                 else:
                     logger.debug("No scm in pom %s", pom)
+            except requests.HTTPError:
+                logger.warning(
+                    "POM info page could not be fetched, skipping project '%s'",
+                    pom,
+                )
             except xmltodict.expat.ExpatError as error:
                 logger.info("Could not parse POM %s XML: %s. Next.", pom, error)
 

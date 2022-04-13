@@ -291,35 +291,37 @@ def test_maven_incremental_listing(
 
 
 @pytest.mark.parametrize("http_code", [400, 404, 500, 502])
-def test_maven_list_http_error(
+def test_maven_list_http_error_on_index_read(
     swh_scheduler, requests_mock, mocker, maven_index, http_code
 ):
-    """Test handling of some common HTTP errors:
-    - 400: Bad request.
-    - 404: Resource no found.
-    - 500: Internal server error.
-    - 502: Bad gateway ou proxy Error.
-    """
+    """should stop listing if the lister fails to retrieve the main index url."""
+
+    lister = MavenLister(scheduler=swh_scheduler, url=MVN_URL, index_url=INDEX_URL)
+    requests_mock.get(INDEX_URL, status_code=http_code)
+    with pytest.raises(requests.HTTPError):  # listing cannot continues so stop
+        lister.run()
+
+    scheduler_origins = swh_scheduler.get_listed_origins(lister.lister_obj.id).results
+    assert len(scheduler_origins) == 0
+
+
+@pytest.mark.parametrize("http_code", [400, 404, 500, 502])
+def test_maven_list_http_error_artifacts(
+    swh_scheduler, requests_mock, mocker, maven_index, http_code, maven_pom_2
+):
+    """should continue listing when failing to retrieve artifacts."""
+    # Test failure of artefacts retrieval.
+    requests_mock.get(INDEX_URL, text=maven_index)
+    requests_mock.get(URL_POM_1, status_code=http_code)
+    requests_mock.get(URL_POM_2, text=maven_pom_2)
 
     lister = MavenLister(scheduler=swh_scheduler, url=MVN_URL, index_url=INDEX_URL)
 
-    # Test failure of index retrieval.
-
-    requests_mock.get(INDEX_URL, status_code=http_code)
-
-    with pytest.raises(requests.HTTPError):
-        lister.run()
-
-    # Test failure of artefacts retrieval.
-
-    requests_mock.get(INDEX_URL, text=maven_index)
-    requests_mock.get(URL_POM_1, status_code=http_code)
-
-    with pytest.raises(requests.HTTPError):
-        lister.run()
+    # on artifacts though, that raises but continue listing
+    lister.run()
 
     # If the maven_index step succeeded but not the get_pom step,
     # then we get only the 2 maven-jar origins (and not the 2 additional
     # src origins).
     scheduler_origins = swh_scheduler.get_listed_origins(lister.lister_obj.id).results
-    assert len(scheduler_origins) == 2
+    assert len(scheduler_origins) == 3
