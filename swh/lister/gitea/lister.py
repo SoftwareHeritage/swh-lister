@@ -47,7 +47,10 @@ class GiteaLister(StatelessLister[RepoListPage]):
         credentials: CredentialsType = None,
     ):
         super().__init__(
-            scheduler=scheduler, credentials=credentials, url=url, instance=instance,
+            scheduler=scheduler,
+            credentials=credentials,
+            url=url,
+            instance=instance,
         )
 
         self.query_params = {
@@ -59,7 +62,10 @@ class GiteaLister(StatelessLister[RepoListPage]):
 
         self.session = requests.Session()
         self.session.headers.update(
-            {"Accept": "application/json", "User-Agent": USER_AGENT,}
+            {
+                "Accept": "application/json",
+                "User-Agent": USER_AGENT,
+            }
         )
 
         if api_token is None:
@@ -122,9 +128,7 @@ class GiteaLister(StatelessLister[RepoListPage]):
             response = self.page_request(url, {})
 
     def get_origins_from_page(self, page: RepoListPage) -> Iterator[ListedOrigin]:
-        """Convert a page of Gitea repositories into a list of ListedOrigins.
-
-        """
+        """Convert a page of Gitea repositories into a list of ListedOrigins."""
         assert self.lister_obj.id is not None
 
         for repo in page:

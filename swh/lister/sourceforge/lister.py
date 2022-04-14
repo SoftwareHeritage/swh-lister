@@ -55,8 +55,7 @@ LastModifiedT = datetime.date
 
 @dataclass
 class SourceForgeListerState:
-    """Current state of the SourceForge lister in incremental runs
-    """
+    """Current state of the SourceForge lister in incremental runs"""
 
     """If the subsitemap does not exist, we assume a full run of this subsitemap
     is needed. If the date is the same, we skip the subsitemap, otherwise we
@@ -105,9 +104,7 @@ ProjectsLastModifiedCache = Dict[Tuple[str, str], LastModifiedT]
 
 
 class SourceForgeLister(Lister[SourceForgeListerState, SourceForgeListerPage]):
-    """List origins from the "SourceForge" forge.
-
-    """
+    """List origins from the "SourceForge" forge."""
 
     # Part of the lister API, that identifies this lister
     LISTER_NAME = "sourceforge"
@@ -386,7 +383,7 @@ class SourceForgeLister(Lister[SourceForgeListerState, SourceForgeListerPage]):
                     bs = BeautifulSoup(response.text, features="html.parser")
                     cvs_base_url = "rsync://a.cvs.sourceforge.net/cvsroot"
                     for text in [b.text for b in bs.find_all("b")]:
-                        match = re.search(fr".*/cvsroot/{project} co -P (.+)", text)
+                        match = re.search(rf".*/cvsroot/{project} co -P (.+)", text)
                         if match is not None:
                             module = match.group(1)
                             url = f"{cvs_base_url}/{project}/{module}"

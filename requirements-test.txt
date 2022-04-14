@@ -1,4 +1,4 @@
-pytest < 7.0.0  # v7.0.0 removed _pytest.tmpdir.TempdirFactory, which is used by some of the pytest plugins we use
+pytest
 pytest-mock
 requests_mock
 types-click

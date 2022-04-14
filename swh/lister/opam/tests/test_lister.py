@@ -17,9 +17,7 @@ module_name = "swh.lister.opam.lister"
 
 @pytest.fixture
 def mock_opam(mocker):
-    """Fixture to bypass the actual opam calls within the test context.
-
-    """
+    """Fixture to bypass the actual opam calls within the test context."""
     # inhibits the real `subprocess.call` which prepares the required internal opam
     # state
     mock_init = mocker.patch(f"{module_name}.call", return_value=None)
@@ -31,9 +29,7 @@ def mock_opam(mocker):
 
 
 def test_mock_init_repository_init(mock_opam, tmp_path, datadir):
-    """Initializing opam root directory with an instance should be ok
-
-    """
+    """Initializing opam root directory with an instance should be ok"""
     mock_init, mock_popen = mock_opam
 
     instance = "fake"
@@ -48,9 +44,7 @@ def test_mock_init_repository_init(mock_opam, tmp_path, datadir):
 
 
 def test_mock_init_repository_update(mock_opam, tmp_path, datadir):
-    """Updating opam root directory with another instance should be ok
-
-    """
+    """Updating opam root directory with another instance should be ok"""
     mock_init, mock_popen = mock_opam
 
     instance = "fake_opam_repo"
@@ -74,7 +68,10 @@ def test_lister_opam_optional_instance(swh_scheduler):
     netloc = "opam.ocaml.org"
     instance_url = f"https://{netloc}"
 
-    lister = OpamLister(swh_scheduler, url=instance_url,)
+    lister = OpamLister(
+        swh_scheduler,
+        url=instance_url,
+    )
     assert lister.instance == netloc
     assert lister.opam_root == "/tmp/opam/"
 
@@ -85,7 +82,10 @@ def test_urls(swh_scheduler, mock_opam, tmp_path):
     tmp_folder = mkdtemp(dir=tmp_path, prefix="swh_opam_lister")
 
     lister = OpamLister(
-        swh_scheduler, url=instance_url, instance="opam", opam_root=tmp_folder,
+        swh_scheduler,
+        url=instance_url,
+        instance="opam",
+        opam_root=tmp_folder,
     )
     assert lister.instance == "opam"
     assert lister.opam_root == tmp_folder

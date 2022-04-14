@@ -54,16 +54,12 @@ def _if_rate_limited(retry_state) -> bool:
 
 
 def pypi_url(package_name: str) -> str:
-    """Build pypi url out of a package name.
-
-    """
+    """Build pypi url out of a package name."""
     return PyPILister.PACKAGE_URL.format(package_name=package_name)
 
 
 class PyPILister(Lister[PyPIListerState, PackageListPage]):
-    """List origins from PyPI.
-
-    """
+    """List origins from PyPI."""
 
     LISTER_NAME = "pypi"
     INSTANCE = "pypi"  # As of today only the main pypi.org is used
@@ -168,7 +164,7 @@ class PyPILister(Lister[PyPIListerState, PackageListPage]):
 
     def finalize(self):
         """Finalize the visit state by updating with the new last_serial if updates
-           actually happened.
+        actually happened.
 
         """
         self.updated = (

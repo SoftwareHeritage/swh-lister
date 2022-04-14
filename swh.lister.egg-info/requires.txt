@@ -10,7 +10,7 @@ swh.core[db]>=0.9
 swh.scheduler>=0.8
 
 [testing]
-pytest<7.0.0
+pytest
 pytest-mock
 requests_mock
 types-click

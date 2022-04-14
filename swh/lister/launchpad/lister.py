@@ -117,7 +117,8 @@ class LaunchpadLister(Lister[LaunchpadListerState, LaunchpadPageType]):
         }
 
         return get_vcs_fns[vcs_type](
-            order_by="most neglected first", modified_since_date=date_last_modified,
+            order_by="most neglected first",
+            modified_since_date=date_last_modified,
         )
 
     def get_pages(self) -> Iterator[LaunchpadPageType]:

@@ -80,7 +80,11 @@ def test_lister_cgit_run_populates_last_update(requests_mock_datadir, swh_schedu
 
     urls_without_date = [
         f"https://git.tizen.org/cgit/{suffix_url}"
-        for suffix_url in ["All-Projects", "All-Users", "Lock-Projects",]
+        for suffix_url in [
+            "All-Projects",
+            "All-Users",
+            "Lock-Projects",
+        ]
     ]
 
     lister_cgit = CGitLister(swh_scheduler, url=url)
@@ -145,7 +149,9 @@ def test_lister_cgit_date_parsing(date_str, expected_date):
 
 
 requests_mock_datadir_missing_url = requests_mock_datadir_factory(
-    ignore_urls=["https://git.tizen/cgit/adaptation/ap_samsung/audio-hal-e4x12",]
+    ignore_urls=[
+        "https://git.tizen/cgit/adaptation/ap_samsung/audio-hal-e4x12",
+    ]
 )
 
 
@@ -208,10 +214,12 @@ def test_lister_cgit_from_configfile(swh_scheduler_config, mocker):
 def test_lister_cgit_with_base_git_url(
     url, base_git_url, expected_nb_origins, requests_mock_datadir, swh_scheduler
 ):
-    """With base git url provided, listed urls should be the computed origin urls
-
-    """
-    lister_cgit = CGitLister(swh_scheduler, url=url, base_git_url=base_git_url,)
+    """With base git url provided, listed urls should be the computed origin urls"""
+    lister_cgit = CGitLister(
+        swh_scheduler,
+        url=url,
+        base_git_url=base_git_url,
+    )
 
     stats = lister_cgit.run()
 

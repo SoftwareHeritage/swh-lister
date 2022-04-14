@@ -155,9 +155,7 @@ class BitbucketLister(Lister[BitbucketListerState, List[Dict[str, Any]]]):
     def get_origins_from_page(
         self, page: List[Dict[str, Any]]
     ) -> Iterator[ListedOrigin]:
-        """Convert a page of Bitbucket repositories into a list of ListedOrigins.
-
-        """
+        """Convert a page of Bitbucket repositories into a list of ListedOrigins."""
         assert self.lister_obj.id is not None
 
         for repo in page:

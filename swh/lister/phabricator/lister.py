@@ -112,7 +112,9 @@ class PhabricatorLister(StatelessLister[PageType]):
 
             if response_data.get("result") is None:
                 logger.warning(
-                    "Got unexpected response on %s: %s", response.url, response_data,
+                    "Got unexpected response on %s: %s",
+                    response.url,
+                    response_data,
                 )
                 break
 

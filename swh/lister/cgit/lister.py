@@ -67,7 +67,10 @@ class CGitLister(StatelessLister[Repositories]):
 
         """
         super().__init__(
-            scheduler=scheduler, url=url, instance=instance, credentials=credentials,
+            scheduler=scheduler,
+            url=url,
+            instance=instance,
+            credentials=credentials,
         )
 
         self.session = requests.Session()
@@ -85,8 +88,8 @@ class CGitLister(StatelessLister[Repositories]):
 
     def get_pages(self) -> Iterator[Repositories]:
         """Generate git 'project' URLs found on the current CGit server
-            The last_update date is retrieved on the list of repo page to avoid
-            to compute it on the repository details which only give a date per branch
+        The last_update date is retrieved on the list of repo page to avoid
+        to compute it on the repository details which only give a date per branch
         """
         next_page: Optional[str] = self.url
         while next_page:
@@ -206,7 +209,9 @@ def _parse_last_updated_date(repository: Dict[str, Any]) -> Optional[datetime]:
 
     if not parsed_date:
         logger.warning(
-            "Could not parse %s last_updated date: %s", repository["url"], date,
+            "Could not parse %s last_updated date: %s",
+            repository["url"],
+            date,
         )
 
     return parsed_date

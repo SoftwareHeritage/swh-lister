@@ -26,9 +26,7 @@ NewForgeListerPage = List[Dict[str, Any]]
 
 @dataclass
 class NewForgeListerState:
-    """The NewForgeLister instance state. This is used for incremental listing.
-
-    """
+    """The NewForgeLister instance state. This is used for incremental listing."""
 
     current: str = ""
     """Id of the last origin listed on an incremental pass"""
@@ -36,9 +34,7 @@ class NewForgeListerState:
 
 # If there is no need to keep state, subclass StatelessLister[NewForgeListerPage]
 class NewForgeLister(Lister[NewForgeListerState, NewForgeListerPage]):
-    """List origins from the "NewForge" forge.
-
-    """
+    """List origins from the "NewForge" forge."""
 
     # Part of the lister API, that identifies this lister
     LISTER_NAME = ""
@@ -63,7 +59,10 @@ class NewForgeLister(Lister[NewForgeListerState, NewForgeListerPage]):
         credentials: CredentialsType = None,
     ):
         super().__init__(
-            scheduler=scheduler, credentials=credentials, url=url, instance=instance,
+            scheduler=scheduler,
+            credentials=credentials,
+            url=url,
+            instance=instance,
         )
 
         self.session = requests.Session()

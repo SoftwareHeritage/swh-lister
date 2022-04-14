@@ -21,7 +21,19 @@ from swh.lister.utils import (
         (14, 5, [(0, 4), (5, 9), (10, 14)]),
         (19, 10, [(0, 9), (10, 19)]),
         (20, 3, [(0, 2), (3, 5), (6, 8), (9, 11), (12, 14), (15, 17), (18, 20)]),
-        (21, 3, [(0, 2), (3, 5), (6, 8), (9, 11), (12, 14), (15, 17), (18, 21),],),
+        (
+            21,
+            3,
+            [
+                (0, 2),
+                (3, 5),
+                (6, 8),
+                (9, 11),
+                (12, 14),
+                (15, 17),
+                (18, 21),
+            ],
+        ),
     ],
 )
 def test_split_range(total_pages, nb_pages, expected_ranges):
@@ -72,7 +84,8 @@ def test_throttling_retry(requests_mock, mocker):
 
 def test_throttling_retry_max_attemps(requests_mock, mocker):
     requests_mock.get(
-        TEST_URL, [{"status_code": codes.too_many_requests}] * (MAX_NUMBER_ATTEMPTS),
+        TEST_URL,
+        [{"status_code": codes.too_many_requests}] * (MAX_NUMBER_ATTEMPTS),
     )
 
     mock_sleep = mocker.patch.object(make_request.retry, "sleep")
@@ -85,7 +98,7 @@ def test_throttling_retry_max_attemps(requests_mock, mocker):
     assert_sleep_calls(
         mocker,
         mock_sleep,
-        [float(WAIT_EXP_BASE ** i) for i in range(MAX_NUMBER_ATTEMPTS - 1)],
+        [float(WAIT_EXP_BASE**i) for i in range(MAX_NUMBER_ATTEMPTS - 1)],
     )
 
 

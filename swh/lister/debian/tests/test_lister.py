@@ -87,7 +87,9 @@ def _init_test(
                 requests_mock.get(idx_url, status_code=404)
             else:
                 requests_mock.get(
-                    idx_url, text=sources, headers={"Last-Modified": last_modified},
+                    idx_url,
+                    text=sources,
+                    headers={"Last-Modified": last_modified},
                 )
 
         for idx_url, _ in lister.debian_index_urls(suite, _components[1]):
@@ -186,7 +188,11 @@ def test_lister_debian_all_suites(
 
 @pytest.mark.parametrize(
     "suites_params",
-    [[_suites[:1]], [_suites[:1], _suites[:2]], [_suites[:1], _suites[:2], _suites],],
+    [
+        [_suites[:1]],
+        [_suites[:1], _suites[:2]],
+        [_suites[:1], _suites[:2], _suites],
+    ],
 )
 def test_lister_debian_updated_packages(
     swh_scheduler: SchedulerInterface,

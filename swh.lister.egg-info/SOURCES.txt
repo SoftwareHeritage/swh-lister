@@ -1,3 +1,4 @@
+.git-blame-ignore-revs
 .gitignore
 .pre-commit-config.yaml
 ACKNOWLEDGEMENTS
@@ -95,6 +96,14 @@ swh/lister/cran/tests/__init__.py
 swh/lister/cran/tests/test_lister.py
 swh/lister/cran/tests/test_tasks.py
 swh/lister/cran/tests/data/list-r-packages.json
+swh/lister/crates/__init__.py
+swh/lister/crates/lister.py
+swh/lister/crates/tasks.py
+swh/lister/crates/tests/__init__.py
+swh/lister/crates/tests/test_lister.py
+swh/lister/crates/tests/test_tasks.py
+swh/lister/crates/tests/data/fake-crates-repository.tar.gz
+swh/lister/crates/tests/data/fake_crates_repository_init.sh
 swh/lister/debian/__init__.py
 swh/lister/debian/lister.py
 swh/lister/debian/tasks.py
