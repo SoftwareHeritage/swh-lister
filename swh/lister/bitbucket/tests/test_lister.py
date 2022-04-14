@@ -51,7 +51,10 @@ def test_bitbucket_incremental_lister(
 
     requests_mock.get(
         BitbucketLister.API_URL,
-        [{"json": bb_api_repositories_page1}, {"json": bb_api_repositories_page2},],
+        [
+            {"json": bb_api_repositories_page1},
+            {"json": bb_api_repositories_page2},
+        ],
     )
 
     lister = BitbucketLister(scheduler=swh_scheduler, page_size=10)

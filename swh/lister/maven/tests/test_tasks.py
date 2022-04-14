@@ -35,7 +35,8 @@ def test_task_lister_maven(
         url="https://repo1.maven.org/maven2/", index_url="http://indexes/export.fld"
     )
     res = swh_scheduler_celery_app.send_task(
-        f"swh.lister.maven.tasks.{task_name}", kwargs=kwargs,
+        f"swh.lister.maven.tasks.{task_name}",
+        kwargs=kwargs,
     )
     assert res
     res.wait()

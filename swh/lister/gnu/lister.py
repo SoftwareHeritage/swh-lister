@@ -28,7 +28,9 @@ class GNULister(StatelessLister[GNUPageType]):
     GNU_FTP_URL = "https://ftp.gnu.org"
 
     def __init__(
-        self, scheduler: SchedulerInterface, credentials: CredentialsType = None,
+        self,
+        scheduler: SchedulerInterface,
+        credentials: CredentialsType = None,
     ):
         super().__init__(
             scheduler=scheduler,

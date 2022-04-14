@@ -29,16 +29,16 @@ def _match_request(request):
 
 
 def test_lister_gitlab(datadir, swh_scheduler, requests_mock):
-    """Gitlab lister supports full listing
-
-    """
+    """Gitlab lister supports full listing"""
     instance = "gitlab.com"
     lister = GitLabLister(swh_scheduler, url=api_url(instance), instance=instance)
 
     response = gitlab_page_response(datadir, instance, 1)
 
     requests_mock.get(
-        lister.page_url(), [{"json": response}], additional_matcher=_match_request,
+        lister.page_url(),
+        [{"json": response}],
+        additional_matcher=_match_request,
     )
 
     listed_result = lister.run()
@@ -57,9 +57,7 @@ def test_lister_gitlab(datadir, swh_scheduler, requests_mock):
 
 
 def test_lister_gitlab_heptapod(datadir, swh_scheduler, requests_mock):
-    """Heptapod lister happily lists hg, hg_git as hg and git origins
-
-    """
+    """Heptapod lister happily lists hg, hg_git as hg and git origins"""
     name = "heptapod"
     instance = "foss.heptapod.net"
     lister = GitLabLister(
@@ -70,7 +68,9 @@ def test_lister_gitlab_heptapod(datadir, swh_scheduler, requests_mock):
     response = gitlab_page_response(datadir, instance, 1)
 
     requests_mock.get(
-        lister.page_url(), [{"json": response}], additional_matcher=_match_request,
+        lister.page_url(),
+        [{"json": response}],
+        additional_matcher=_match_request,
     )
 
     listed_result = lister.run()
@@ -99,9 +99,7 @@ def gitlab_page_response(datadir, instance: str, id_after: int) -> List[Dict]:
 
 
 def test_lister_gitlab_with_pages(swh_scheduler, requests_mock, datadir):
-    """Gitlab lister supports pagination
-
-    """
+    """Gitlab lister supports pagination"""
     instance = "gite.lirmm.fr"
     lister = GitLabLister(swh_scheduler, url=api_url(instance))
 
@@ -115,7 +113,9 @@ def test_lister_gitlab_with_pages(swh_scheduler, requests_mock, datadir):
     )
 
     requests_mock.get(
-        lister.page_url(2), [{"json": response2}], additional_matcher=_match_request,
+        lister.page_url(2),
+        [{"json": response2}],
+        additional_matcher=_match_request,
     )
 
     listed_result = lister.run()
@@ -135,9 +135,7 @@ def test_lister_gitlab_with_pages(swh_scheduler, requests_mock, datadir):
 
 
 def test_lister_gitlab_incremental(swh_scheduler, requests_mock, datadir):
-    """Gitlab lister supports incremental visits
-
-    """
+    """Gitlab lister supports incremental visits"""
     instance = "gite.lirmm.fr"
     url = api_url(instance)
     lister = GitLabLister(swh_scheduler, url=url, instance=instance, incremental=True)
@@ -155,7 +153,9 @@ def test_lister_gitlab_incremental(swh_scheduler, requests_mock, datadir):
         additional_matcher=_match_request,
     )
     requests_mock.get(
-        url_page2, [{"json": response2}], additional_matcher=_match_request,
+        url_page2,
+        [{"json": response2}],
+        additional_matcher=_match_request,
     )
 
     listed_result = lister.run()
@@ -173,7 +173,9 @@ def test_lister_gitlab_incremental(swh_scheduler, requests_mock, datadir):
         additional_matcher=_match_request,
     )
     requests_mock.get(
-        url_page3, [{"json": response3}], additional_matcher=_match_request,
+        url_page3,
+        [{"json": response3}],
+        additional_matcher=_match_request,
     )
 
     listed_result2 = lister2.run()
@@ -197,9 +199,7 @@ def test_lister_gitlab_incremental(swh_scheduler, requests_mock, datadir):
 
 
 def test_lister_gitlab_rate_limit(swh_scheduler, requests_mock, datadir, mocker):
-    """Gitlab lister supports rate-limit
-
-    """
+    """Gitlab lister supports rate-limit"""
     instance = "gite.lirmm.fr"
     url = api_url(instance)
     lister = GitLabLister(swh_scheduler, url=url, instance=instance)
@@ -241,9 +241,7 @@ def test_lister_gitlab_rate_limit(swh_scheduler, requests_mock, datadir, mocker)
 def test_lister_gitlab_http_errors(
     swh_scheduler, requests_mock, datadir, mocker, status_code
 ):
-    """Gitlab lister should retry requests when encountering HTTP 50x errors
-
-    """
+    """Gitlab lister should retry requests when encountering HTTP 50x errors"""
     instance = "gite.lirmm.fr"
     url = api_url(instance)
     lister = GitLabLister(swh_scheduler, url=url, instance=instance)
@@ -281,9 +279,7 @@ def test_lister_gitlab_http_errors(
 
 
 def test_lister_gitlab_http_error_500(swh_scheduler, requests_mock, datadir):
-    """Gitlab lister should skip buggy URL and move to next page.
-
-    """
+    """Gitlab lister should skip buggy URL and move to next page."""
     instance = "gite.lirmm.fr"
     url = api_url(instance)
     lister = GitLabLister(swh_scheduler, url=url, instance=instance)
@@ -300,11 +296,17 @@ def test_lister_gitlab_http_error_500(swh_scheduler, requests_mock, datadir):
         additional_matcher=_match_request,
     )
     requests_mock.get(
-        url_page2, [{"status_code": 500},], additional_matcher=_match_request,
+        url_page2,
+        [
+            {"status_code": 500},
+        ],
+        additional_matcher=_match_request,
     )
 
     requests_mock.get(
-        url_page3, [{"json": response3}], additional_matcher=_match_request,
+        url_page3,
+        [{"json": response3}],
+        additional_matcher=_match_request,
     )
 
     listed_result = lister.run()
@@ -314,9 +316,7 @@ def test_lister_gitlab_http_error_500(swh_scheduler, requests_mock, datadir):
 
 
 def test_lister_gitlab_credentials(swh_scheduler):
-    """Gitlab lister supports credentials configuration
-
-    """
+    """Gitlab lister supports credentials configuration"""
     instance = "gitlab"
     credentials = {
         "gitlab": {instance: [{"username": "user", "password": "api-token"}]}
@@ -328,7 +328,13 @@ def test_lister_gitlab_credentials(swh_scheduler):
     assert lister.session.headers["Authorization"] == "Bearer api-token"
 
 
-@pytest.mark.parametrize("url", [api_url("gitlab").rstrip("/"), api_url("gitlab"),])
+@pytest.mark.parametrize(
+    "url",
+    [
+        api_url("gitlab").rstrip("/"),
+        api_url("gitlab"),
+    ],
+)
 def test_lister_gitlab_url_computation(url, swh_scheduler):
     lister = GitLabLister(scheduler=swh_scheduler, url=url)
     assert not lister.url.endswith("/")

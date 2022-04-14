@@ -25,7 +25,11 @@ def test_incremental_listing(
 
     res = swh_scheduler_celery_app.send_task(
         "swh.lister.bitbucket.tasks.IncrementalBitBucketLister",
-        kwargs=dict(page_size=100, username="username", password="password",),
+        kwargs=dict(
+            page_size=100,
+            username="username",
+            password="password",
+        ),
     )
     assert res
     res.wait()
@@ -41,7 +45,11 @@ def test_full_listing(lister, swh_scheduler_celery_app, swh_scheduler_celery_wor
 
     res = swh_scheduler_celery_app.send_task(
         "swh.lister.bitbucket.tasks.FullBitBucketRelister",
-        kwargs=dict(page_size=100, username="username", password="password",),
+        kwargs=dict(
+            page_size=100,
+            username="username",
+            password="password",
+        ),
     )
     assert res
     res.wait()

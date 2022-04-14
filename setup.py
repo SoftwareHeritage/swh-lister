@@ -58,6 +58,7 @@ setup(
         lister.bitbucket=swh.lister.bitbucket:register
         lister.cgit=swh.lister.cgit:register
         lister.cran=swh.lister.cran:register
+        lister.crates=swh.lister.crates:register
         lister.debian=swh.lister.debian:register
         lister.gitea=swh.lister.gitea:register
         lister.github=swh.lister.github:register

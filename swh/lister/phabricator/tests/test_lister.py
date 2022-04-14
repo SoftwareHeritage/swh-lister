@@ -115,7 +115,9 @@ def test_lister(
 
 
 def test_lister_request_error(
-    swh_scheduler, requests_mock, phabricator_repositories_page1,
+    swh_scheduler,
+    requests_mock,
+    phabricator_repositories_page1,
 ):
     FORGE_BASE_URL = "https://forge.softwareheritage.org"
 
