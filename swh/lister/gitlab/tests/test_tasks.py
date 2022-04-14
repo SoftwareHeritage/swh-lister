@@ -34,7 +34,8 @@ def test_task_lister_gitlab(
 
     kwargs = dict(url="https://gitweb.torproject.org/")
     res = swh_scheduler_celery_app.send_task(
-        f"swh.lister.gitlab.tasks.{task_name}", kwargs=kwargs,
+        f"swh.lister.gitlab.tasks.{task_name}",
+        kwargs=kwargs,
     )
     assert res
     res.wait()

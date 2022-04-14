@@ -154,7 +154,9 @@ class InstantiableStatelessLister(pattern.StatelessLister[PageType]):
 
 def test_stateless_instantiation(swh_scheduler):
     lister = InstantiableStatelessLister(
-        scheduler=swh_scheduler, url="https://example.com", instance="example.com",
+        scheduler=swh_scheduler,
+        url="https://example.com",
+        instance="example.com",
     )
 
     # check the lister was registered in the scheduler backend

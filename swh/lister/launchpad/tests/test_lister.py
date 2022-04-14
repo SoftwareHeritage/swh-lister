@@ -192,9 +192,16 @@ def test_launchpad_incremental_lister(
 
 
 def test_launchpad_lister_invalid_url_filtering(
-    swh_scheduler, mocker,
+    swh_scheduler,
+    mocker,
 ):
-    invalid_origin = [_Repo({"git_https_url": "tag:launchpad.net:2008:redacted",})]
+    invalid_origin = [
+        _Repo(
+            {
+                "git_https_url": "tag:launchpad.net:2008:redacted",
+            }
+        )
+    ]
     _mock_launchpad(mocker, invalid_origin)
     lister = LaunchpadLister(scheduler=swh_scheduler)
     stats = lister.run()
@@ -205,7 +212,8 @@ def test_launchpad_lister_invalid_url_filtering(
 
 
 def test_launchpad_lister_duplicated_origin(
-    swh_scheduler, mocker,
+    swh_scheduler,
+    mocker,
 ):
     origin = _Repo(
         {

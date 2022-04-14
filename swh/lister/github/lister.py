@@ -138,7 +138,7 @@ class GitHubLister(Lister[GitHubListerState, List[Dict[str, Any]]]):
       first_id: the id of the first repo to list
       last_id: stop listing after seeing a repo with an id higher than this value.
 
-    """  # noqa: E501
+    """  # noqa: B950
 
     LISTER_NAME = "github"
 

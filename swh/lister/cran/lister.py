@@ -132,7 +132,8 @@ def parse_packaged_date(package_info: Dict[str, str]) -> Optional[datetime]:
         ):
             try:
                 packaged_at = datetime.strptime(
-                    packaged_at_str.split(";")[0], date_format,
+                    packaged_at_str.split(";")[0],
+                    date_format,
                 ).replace(tzinfo=timezone.utc)
                 break
             except Exception:

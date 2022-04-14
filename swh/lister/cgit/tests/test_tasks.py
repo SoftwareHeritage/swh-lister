@@ -25,7 +25,8 @@ def test_cgit_lister_task(
     kwargs = dict(url="https://git.kernel.org/", instance="kernel", base_git_url=None)
 
     res = swh_scheduler_celery_app.send_task(
-        "swh.lister.cgit.tasks.CGitListerTask", kwargs=kwargs,
+        "swh.lister.cgit.tasks.CGitListerTask",
+        kwargs=kwargs,
     )
     assert res
     res.wait()

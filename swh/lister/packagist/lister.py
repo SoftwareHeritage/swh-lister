@@ -51,7 +51,9 @@ class PackagistLister(Lister[PackagistListerState, PackagistPageType]):
     PACKAGIST_REPO_BASE_URL = "https://repo.packagist.org/p"
 
     def __init__(
-        self, scheduler: SchedulerInterface, credentials: CredentialsType = None,
+        self,
+        scheduler: SchedulerInterface,
+        credentials: CredentialsType = None,
     ):
         super().__init__(
             scheduler=scheduler,

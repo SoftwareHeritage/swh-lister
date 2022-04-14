@@ -87,12 +87,18 @@ class MavenLister(Lister[MavenListerState, RepoPage]):
             instance = parse_url(url).host
 
         super().__init__(
-            scheduler=scheduler, credentials=credentials, url=url, instance=instance,
+            scheduler=scheduler,
+            credentials=credentials,
+            url=url,
+            instance=instance,
         )
 
         self.session = requests.Session()
         self.session.headers.update(
-            {"Accept": "application/json", "User-Agent": USER_AGENT,}
+            {
+                "Accept": "application/json",
+                "User-Agent": USER_AGENT,
+            }
         )
 
     def state_from_dict(self, d: Dict[str, Any]) -> MavenListerState:
@@ -119,7 +125,7 @@ class MavenLister(Lister[MavenListerState, RepoPage]):
         return response
 
     def get_pages(self) -> Iterator[RepoPage]:
-        """ Retrieve and parse exported maven indexes to
+        """Retrieve and parse exported maven indexes to
         identify all pom files and src archives.
         """
 
@@ -142,10 +148,12 @@ class MavenLister(Lister[MavenListerState, RepoPage]):
         # ]
 
         # Download the main text index file.
-        logger.info("Downloading text index from %s.", self.INDEX_URL)
+        logger.info("Downloading computed index from %s.", self.INDEX_URL)
         assert self.INDEX_URL is not None
         response = requests.get(self.INDEX_URL, stream=True)
-        response.raise_for_status()
+        if response.status_code != 200:
+            logger.error("Index %s not found, stopping", self.INDEX_URL)
+            response.raise_for_status()
 
         # Prepare regexes to parse index exports.
 
@@ -213,7 +221,10 @@ class MavenLister(Lister[MavenListerState, RepoPage]):
                         ):
                             continue
                         url_path = f"{path}/{aid}/{version}/{aid}-{version}.{ext}"
-                        url_pom = urljoin(self.BASE_URL, url_path,)
+                        url_pom = urljoin(
+                            self.BASE_URL,
+                            url_path,
+                        )
                         out_pom[url_pom] = doc_id
                     elif (
                         classifier.lower() == "sources" or ("src" in classifier)
@@ -247,9 +258,9 @@ class MavenLister(Lister[MavenListerState, RepoPage]):
 
         logger.info("Fetching poms..")
         for pom in out_pom:
-            text = self.page_request(pom, {})
             try:
-                project = xmltodict.parse(text.content.decode())
+                response = self.page_request(pom, {})
+                project = xmltodict.parse(response.content.decode())
                 if "scm" in project["project"]:
                     if "connection" in project["project"]["scm"]:
                         scm = project["project"]["scm"]["connection"]
@@ -267,13 +278,16 @@ class MavenLister(Lister[MavenListerState, RepoPage]):
                         logger.debug("No scm.connection in pom %s", pom)
                 else:
                     logger.debug("No scm in pom %s", pom)
+            except requests.HTTPError:
+                logger.warning(
+                    "POM info page could not be fetched, skipping project '%s'",
+                    pom,
+                )
             except xmltodict.expat.ExpatError as error:
                 logger.info("Could not parse POM %s XML: %s. Next.", pom, error)
 
     def get_origins_from_page(self, page: RepoPage) -> Iterator[ListedOrigin]:
-        """Convert a page of Maven repositories into a list of ListedOrigins.
-
-        """
+        """Convert a page of Maven repositories into a list of ListedOrigins."""
         assert self.lister_obj.id is not None
         scm_types_ok = ("git", "svn", "hg", "cvs", "bzr")
         if page["type"] == "scm":
@@ -288,13 +302,17 @@ class MavenLister(Lister[MavenListerState, RepoPage]):
                 if scm_type in scm_types_ok:
                     scm_url = m_scm.group("url")
                     origin = ListedOrigin(
-                        lister_id=self.lister_obj.id, url=scm_url, visit_type=scm_type,
+                        lister_id=self.lister_obj.id,
+                        url=scm_url,
+                        visit_type=scm_type,
                     )
                     yield origin
             else:
                 if page["url"].endswith(".git"):
                     origin = ListedOrigin(
-                        lister_id=self.lister_obj.id, url=page["url"], visit_type="git",
+                        lister_id=self.lister_obj.id,
+                        url=page["url"],
+                        visit_type="git",
                     )
                     yield origin
         else:
