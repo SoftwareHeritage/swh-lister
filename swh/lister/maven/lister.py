@@ -261,11 +261,14 @@ class MavenLister(Lister[MavenListerState, RepoPage]):
             try:
                 response = self.page_request(pom, {})
                 project = xmltodict.parse(response.content.decode())
-                if "scm" in project["project"]:
-                    if "connection" in project["project"]["scm"]:
-                        scm = project["project"]["scm"]["connection"]
-                        gid = project["project"]["groupId"]
-                        aid = project["project"]["artifactId"]
+                project_d = project.get("project", {})
+                scm_d = project_d.get("scm")
+                if scm_d is not None:
+                    connection = scm_d.get("connection")
+                    if connection is not None:
+                        scm = connection
+                        gid = project_d["groupId"]
+                        aid = project_d["artifactId"]
                         artifact_metadata_d = {
                             "type": "scm",
                             "doc": out_pom[pom],
