@@ -1,3 +1,13 @@
+swh-lister (2.8.1-1~swh1) unstable-swh; urgency=medium
+
+  * New upstream release 2.8.1     - (tagged by Antoine R. Dumont
+    (@ardumont) <ardumont@softwareheritage.org> on 2022-04-14 15:56:17
+    +0200)
+  * Upstream changes:     - v2.8.1     - maven: Fix argument of type
+    'NoneType' is not iterable
+
+ -- Software Heritage autobuilder (on jenkins-debian1) <jenkins@jenkins-debian1.internal.softwareheritage.org>  Thu, 14 Apr 2022 14:01:42 +0000
+
 swh-lister (2.8.0-1~swh2) unstable-swh; urgency=medium
 
   * Bump new release (fix build dep)
