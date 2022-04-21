@@ -41,8 +41,13 @@
     <changefreq>daily</changefreq>
 </url>
 <url>
-    <loc>https://sourceforge.net/p/bzr-repo/</loc>
-    <lastmod>2021-01-27</lastmod>
+    <loc>https://sourceforge.net/p/t12eksandbox/</loc>
+    <lastmod>2011-02-09</lastmod>
+    <changefreq>daily</changefreq>
+</url>
+<url>
+    <loc>https://sourceforge.net/p/ocaml-lpd/</loc>
+    <lastmod>2011-04-17</lastmod>
     <changefreq>daily</changefreq>
 </url>
 </urlset>

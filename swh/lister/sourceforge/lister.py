@@ -1,7 +1,8 @@
-# Copyright (C) 2021  The Software Heritage developers
+# Copyright (C) 2021-2022  The Software Heritage developers
 # See the AUTHORS file at the top-level directory of this distribution
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
+
 from dataclasses import dataclass, field
 import datetime
 from enum import Enum
@@ -12,6 +13,7 @@ from xml.etree import ElementTree
 
 from bs4 import BeautifulSoup
 import iso8601
+import lxml
 import requests
 from tenacity.before_sleep import before_sleep_log
 
@@ -172,7 +174,7 @@ class SourceForgeLister(Lister[SourceForgeListerState, SourceForgeListerPage]):
             r".*\.code\.sf\.net/(?P<namespace>[^/]+)/(?P<project>.+)/.*"
         )
         bzr_url_match = re.compile(
-            r"http://(?P<project>[^/]+).bzr.sourceforge.net/bzrroot/([^/]+)"
+            r"http://(?P<project>[^/]+).bzr.sourceforge.net/bzr/([^/]+)"
         )
         cvs_url_match = re.compile(
             r"rsync://a.cvs.sourceforge.net/cvsroot/(?P<project>.+)/([^/]+)"
@@ -410,7 +412,37 @@ class SourceForgeLister(Lister[SourceForgeListerState, SourceForgeListerPage]):
                 # SourceForge has removed support for bzr and only keeps legacy projects
                 # around at a separate (also not https) URL. Bzr projects are very rare
                 # and a lot of them are 404 now.
-                url = f"http://{project}.bzr.sourceforge.net/bzrroot/{project}"
+                url = f"http://{project}.bzr.sourceforge.net/bzr/{project}"
+                try:
+                    response = self.page_request(url, params={})
+                    if "To get this branch, use:" not in response.text:
+                        # If a bzr project has multiple branches, we need to extract their
+                        # names from the repository landing page and create one listed origin
+                        # per branch
+                        parser = lxml.etree.HTMLParser()
+                        tree = lxml.etree.fromstring(response.text, parser)
+
+                        # Get all tds with class 'autcell'
+                        tds = tree.xpath(".//td[contains(@class, 'autcell')]")
+                        for td in tds:
+                            branch = td.findtext("a")
+                            # If the td's parent contains <img alt="Branch"/> and
+                            # it has non-empty text:
+                            if td.xpath("..//img[@alt='Branch']") and branch:
+                                hits.append(
+                                    SourceForgeListerEntry(
+                                        vcs=VcsNames(tool_name),
+                                        url=f"{url}/{branch}",
+                                        last_modified=last_modified,
+                                    )
+                                )
+                        continue
+                except requests.HTTPError:
+                    logger.warning(
+                        "Bazaar repository page could not be fetched, skipping project '%s'",
+                        project,
+                    )
+                    continue
             entry = SourceForgeListerEntry(
                 vcs=VcsNames(tool_name), url=url, last_modified=last_modified
             )
