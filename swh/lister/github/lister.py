@@ -75,18 +75,10 @@ class RateLimited(Exception):
         retry_if_result(lambda r: r.status_code == 502),
     ),
 )
-def github_request(
-    url: str, token: Optional[str] = None, session: Optional[requests.Session] = None
-) -> requests.Response:
-    session = init_session(session)
+def github_request(url: str, session: requests.Session) -> requests.Response:
+    response = session.get(url)
 
-    headers = {}
-    if token:
-        headers["Authorization"] = f"token {token}"
-
-    response = session.get(url, headers=headers)
-
-    anonymous = token is None and "Authorization" not in session.headers
+    anonymous = "Authorization" not in session.headers
 
     if (
         # GitHub returns inconsistent status codes between unauthenticated
