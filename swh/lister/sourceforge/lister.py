@@ -386,14 +386,15 @@ class SourceForgeLister(Lister[SourceForgeListerState, SourceForgeListerPage]):
                         match = re.search(rf".*/cvsroot/{project} co -P (.+)", text)
                         if match is not None:
                             module = match.group(1)
-                            url = f"{cvs_base_url}/{project}/{module}"
-                            hits.append(
-                                SourceForgeListerEntry(
-                                    vcs=VcsNames(tool_name),
-                                    url=url,
-                                    last_modified=last_modified,
+                            if module != "Attic":
+                                url = f"{cvs_base_url}/{project}/{module}"
+                                hits.append(
+                                    SourceForgeListerEntry(
+                                        vcs=VcsNames(tool_name),
+                                        url=url,
+                                        last_modified=last_modified,
+                                    )
                                 )
-                            )
                     continue
             url = CLONE_URL_FORMAT.format(
                 vcs=tool_name,
