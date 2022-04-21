@@ -270,7 +270,7 @@ def test_anonymous_ratelimit(swh_scheduler, caplog, requests_ratelimited) -> Non
     caplog.set_level(logging.DEBUG, "swh.lister.github.lister")
 
     lister = GitHubLister(scheduler=swh_scheduler)
-    assert lister.anonymous
+    assert lister.github_session.anonymous
     assert "using anonymous mode" in caplog.records[-1].message
     caplog.clear()
 
@@ -315,9 +315,9 @@ def test_authenticated_credentials(
     caplog.set_level(logging.DEBUG, "swh.lister.github.lister")
 
     lister = GitHubLister(scheduler=swh_scheduler, credentials=lister_credentials)
-    assert lister.token_index == 0
+    assert lister.github_session.token_index == 0
     assert sorted(lister.credentials, key=lambda t: t["username"]) == github_credentials
-    assert lister.session.headers["Authorization"] in [
+    assert lister.github_session.session.headers["Authorization"] in [
         "token %s" % t for t in all_tokens
     ]
 
