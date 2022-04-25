@@ -1,0 +1,292 @@
+{
+  "shortname": "t12eksandbox",
+  "name": "t12ek sandbox",
+  "_id": "5304cd2634309d109fc1dec5",
+  "url": "https://sourceforge.net/p/t12eksandbox/",
+  "private": false,
+  "short_description": "Sandboxes are for playing in... Note: this is an SF.net staff's test project. Don't expect to find real files here. Update test!\r\nLine 2!\r\nupdate 2012-06-05",
+  "creation_date": "2009-07-14",
+  "summary": "",
+  "external_homepage": "http://t12eksandbox.sourceforge.net",
+  "video_url": "",
+  "socialnetworks": [],
+  "status": "active",
+  "moved_to_url": "",
+  "preferred_support_tool": "_url",
+  "preferred_support_url": "http://sourceforge.net/tracker/?func=add&group_id=269579&atid=1146768",
+  "developers": [
+    {
+      "username": "sillygoose",
+      "name": "sillygoose",
+      "url": "https://sourceforge.net/u/sillygoose/"
+    },
+    {
+      "username": "thimsmith",
+      "name": "Tim Siegel",
+      "url": "https://sourceforge.net/u/thimsmith/"
+    }
+  ],
+  "tools": [
+    {
+      "name": "reviews",
+      "mount_point": "reviews",
+      "url": "/p/t12eksandbox/reviews/",
+      "icons": {
+        "24": "images/sftheme/24x24/blog_24.png",
+        "32": "images/sftheme/32x32/blog_32.png",
+        "48": "images/sftheme/48x48/blog_48.png"
+      },
+      "installable": false,
+      "tool_label": "Reviews",
+      "mount_label": "Reviews"
+    },
+    {
+      "name": "summary",
+      "mount_point": "summary",
+      "url": "/p/t12eksandbox/summary/",
+      "icons": {
+        "24": "images/sftheme/24x24/blog_24.png",
+        "32": "images/sftheme/32x32/blog_32.png",
+        "48": "images/sftheme/48x48/blog_48.png"
+      },
+      "installable": false,
+      "tool_label": "Summary",
+      "mount_label": "Summary",
+      "sourceforge_group_id": 269579
+    },
+    {
+      "name": "mailman",
+      "mount_point": "mailman",
+      "url": "/p/t12eksandbox/mailman/",
+      "icons": {
+        "24": "images/forums_24.png",
+        "32": "images/forums_32.png",
+        "48": "images/forums_48.png"
+      },
+      "installable": false,
+      "tool_label": "Mailing Lists",
+      "mount_label": "Mailing Lists"
+    },
+    {
+      "name": "support",
+      "mount_point": "support",
+      "url": "/p/t12eksandbox/support/",
+      "icons": {
+        "24": "images/sftheme/24x24/blog_24.png",
+        "32": "images/sftheme/32x32/blog_32.png",
+        "48": "images/sftheme/48x48/blog_48.png"
+      },
+      "installable": false,
+      "tool_label": "Support",
+      "mount_label": "Support"
+    },
+    {
+      "name": "files-sf",
+      "mount_point": "files",
+      "url": "/p/t12eksandbox/files/",
+      "icons": {
+        "24": "images/downloads_24.png",
+        "32": "images/downloads_32.png",
+        "48": "images/downloads_48.png"
+      },
+      "installable": false,
+      "tool_label": "Files",
+      "mount_label": "Files"
+    },
+    {
+      "name": "wiki",
+      "mount_point": "wiki",
+      "url": "/p/t12eksandbox/wiki/",
+      "icons": {
+        "24": "images/wiki_24.png",
+        "32": "images/wiki_32.png",
+        "48": "images/wiki_48.png"
+      },
+      "installable": true,
+      "tool_label": "Wiki",
+      "mount_label": "Wiki"
+    },
+    {
+      "name": "blog",
+      "mount_point": "news",
+      "url": "/p/t12eksandbox/news/",
+      "icons": {
+        "24": "images/blog_24.png",
+        "32": "images/blog_32.png",
+        "48": "images/blog_48.png"
+      },
+      "installable": true,
+      "tool_label": "Blog",
+      "mount_label": "News"
+    },
+    {
+      "name": "bzr",
+      "mount_point": "bazaar",
+      "url": "/p/t12eksandbox/bazaar/",
+      "icons": {
+        "24": "images/code_24.png",
+        "32": "images/code_32.png",
+        "48": "images/code_48.png"
+      },
+      "installable": false,
+      "tool_label": "BZR",
+      "mount_label": "Bazaar"
+    },
+    {
+      "name": "discussion",
+      "mount_point": "discussion",
+      "url": "/p/t12eksandbox/discussion/",
+      "icons": {
+        "24": "images/forums_24.png",
+        "32": "images/forums_32.png",
+        "48": "images/forums_48.png"
+      },
+      "installable": true,
+      "tool_label": "Discussion",
+      "mount_label": "Discussion"
+    },
+    {
+      "name": "tickets",
+      "mount_point": "support-requests",
+      "url": "/p/t12eksandbox/support-requests/",
+      "icons": {
+        "24": "images/tickets_24.png",
+        "32": "images/tickets_32.png",
+        "48": "images/tickets_48.png"
+      },
+      "installable": true,
+      "tool_label": "Tickets",
+      "mount_label": "Support Requests"
+    },
+    {
+      "name": "tickets",
+      "mount_point": "feature-requests",
+      "url": "/p/t12eksandbox/feature-requests/",
+      "icons": {
+        "24": "images/tickets_24.png",
+        "32": "images/tickets_32.png",
+        "48": "images/tickets_48.png"
+      },
+      "installable": true,
+      "tool_label": "Tickets",
+      "mount_label": "Feature Requests"
+    },
+    {
+      "name": "link",
+      "mount_point": "donate",
+      "url": "/p/t12eksandbox/donate/",
+      "icons": {
+        "24": "images/ext_24.png",
+        "32": "images/ext_32.png",
+        "48": "images/ext_48.png"
+      },
+      "installable": true,
+      "tool_label": "External Link",
+      "mount_label": "Donate"
+    },
+    {
+      "name": "tickets",
+      "mount_point": "patches",
+      "url": "/p/t12eksandbox/patches/",
+      "icons": {
+        "24": "images/tickets_24.png",
+        "32": "images/tickets_32.png",
+        "48": "images/tickets_48.png"
+      },
+      "installable": true,
+      "tool_label": "Tickets",
+      "mount_label": "Patches"
+    },
+    {
+      "name": "tickets",
+      "mount_point": "bugs",
+      "url": "/p/t12eksandbox/bugs/",
+      "icons": {
+        "24": "images/tickets_24.png",
+        "32": "images/tickets_32.png",
+        "48": "images/tickets_48.png"
+      },
+      "installable": true,
+      "tool_label": "Tickets",
+      "mount_label": "Bugs"
+    },
+    {
+      "name": "activity",
+      "mount_point": "activity",
+      "url": "/p/t12eksandbox/activity/",
+      "icons": {
+        "24": "images/admin_24.png",
+        "32": "images/admin_32.png",
+        "48": "images/admin_48.png"
+      },
+      "installable": false,
+      "tool_label": "Tool",
+      "mount_label": "Activity"
+    }
+  ],
+  "labels": [],
+  "categories": {
+    "audience": [],
+    "developmentstatus": [
+      {
+        "id": 10,
+        "shortname": "beta",
+        "fullname": "4 - Beta",
+        "fullpath": "Development Status :: 4 - Beta"
+      },
+      {
+        "id": 7,
+        "shortname": "planning",
+        "fullname": "1 - Planning",
+        "fullpath": "Development Status :: 1 - Planning"
+      }
+    ],
+    "environment": [],
+    "language": [],
+    "license": [
+      {
+        "id": 196,
+        "shortname": "other",
+        "fullname": "Other License",
+        "fullpath": "License :: Other License"
+      }
+    ],
+    "translation": [],
+    "os": [],
+    "database": [
+      {
+        "id": 524,
+        "shortname": "db_net_mysql",
+        "fullname": "MySQL",
+        "fullpath": "Database Environment :: Network-based DBMS :: MySQL"
+      }
+    ],
+    "topic": [
+      {
+        "id": 575,
+        "shortname": "testing",
+        "fullname": "Testing",
+        "fullpath": "Topic :: Software Development :: Testing"
+      },
+      {
+        "id": 97,
+        "shortname": "scientific",
+        "fullname": "Scientific/Engineering",
+        "fullpath": "Topic :: Scientific/Engineering"
+      }
+    ]
+  },
+  "icon_url": null,
+  "screenshots": [
+    {
+      "url": "https://sourceforge.net/p/t12eksandbox/screenshot/224498.jpg",
+      "thumbnail_url": "https://sourceforge.net/p/t12eksandbox/screenshot/224498.jpg/thumb",
+      "caption": "aimage2"
+    },
+    {
+      "url": "https://sourceforge.net/p/t12eksandbox/screenshot/224496.jpg",
+      "thumbnail_url": "https://sourceforge.net/p/t12eksandbox/screenshot/224496.jpg/thumb",
+      "caption": "3Kimage3"
+    }
+  ]
+}
