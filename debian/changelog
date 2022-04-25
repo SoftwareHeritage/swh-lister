@@ -1,3 +1,14 @@
+swh-lister (2.8.2-1~swh1) unstable-swh; urgency=medium
+
+  * New upstream release 2.8.2     - (tagged by Antoine R. Dumont
+    (@ardumont) <ardumont@softwareheritage.org> on 2022-04-25 12:34:14
+    +0200)
+  * Upstream changes:     - v2.8.2     - sourceforge: Fix listing of bzr
+    projects     - sourceforge: Do not consider Attic as a valid CVS
+    module
+
+ -- Software Heritage autobuilder (on jenkins-debian1) <jenkins@jenkins-debian1.internal.softwareheritage.org>  Mon, 25 Apr 2022 10:39:18 +0000
+
 swh-lister (2.8.1-1~swh1) unstable-swh; urgency=medium
 
   * New upstream release 2.8.1     - (tagged by Antoine R. Dumont
