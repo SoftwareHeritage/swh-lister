@@ -5,12 +5,13 @@
 
 import datetime
 import logging
+import time
 from typing import Any, Dict, Iterator, List, Optional, Union
 
 import pytest
 import requests_mock
 
-from swh.lister.github.lister import GitHubLister, time
+from swh.lister.github.lister import GitHubLister
 from swh.lister.pattern import CredentialsType, ListerStats
 from swh.scheduler.interface import SchedulerInterface
 from swh.scheduler.model import Lister
@@ -267,7 +268,7 @@ def requests_ratelimited(
 
 
 def test_anonymous_ratelimit(swh_scheduler, caplog, requests_ratelimited) -> None:
-    caplog.set_level(logging.DEBUG, "swh.lister.github.lister")
+    caplog.set_level(logging.DEBUG, "swh.lister.github.utils")
 
     lister = GitHubLister(scheduler=swh_scheduler)
     assert lister.github_session.anonymous
@@ -357,7 +358,7 @@ def test_ratelimit_once_recovery(
     lister_credentials,
 ):
     """Check that the lister recovers from hitting the rate-limit once"""
-    caplog.set_level(logging.DEBUG, "swh.lister.github.lister")
+    caplog.set_level(logging.DEBUG, "swh.lister.github.utils")
 
     lister = GitHubLister(scheduler=swh_scheduler, credentials=lister_credentials)
 
@@ -395,7 +396,7 @@ def test_ratelimit_reset_sleep(
 ):
     """Check that the lister properly handles rate-limiting when providing it with
     authentication tokens"""
-    caplog.set_level(logging.DEBUG, "swh.lister.github.lister")
+    caplog.set_level(logging.DEBUG, "swh.lister.github.utils")
 
     lister = GitHubLister(scheduler=swh_scheduler, credentials=lister_credentials)
 
