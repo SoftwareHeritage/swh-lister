@@ -17,8 +17,6 @@ from tenacity import (
     wait_exponential,
 )
 
-from .. import USER_AGENT
-
 logger = logging.getLogger(__name__)
 
 
@@ -52,7 +50,9 @@ class GitHubSession:
     """Manages a :class:`requests.Session` with (optionally) multiple credentials,
     and cycles through them when reaching rate-limits."""
 
-    def __init__(self, credentials: Optional[List[Dict[str, str]]] = None) -> None:
+    def __init__(
+        self, user_agent: str, credentials: Optional[List[Dict[str, str]]] = None
+    ) -> None:
         """Initialize a requests session with the proper headers for requests to
         GitHub."""
         self.credentials = credentials
@@ -62,7 +62,7 @@ class GitHubSession:
         self.session = requests.Session()
 
         self.session.headers.update(
-            {"Accept": "application/vnd.github.v3+json", "User-Agent": USER_AGENT}
+            {"Accept": "application/vnd.github.v3+json", "User-Agent": user_agent}
         )
 
         self.anonymous = not self.credentials

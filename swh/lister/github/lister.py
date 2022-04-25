@@ -14,6 +14,7 @@ import iso8601
 from swh.scheduler.interface import SchedulerInterface
 from swh.scheduler.model import ListedOrigin
 
+from .. import USER_AGENT
 from ..pattern import CredentialsType, Lister
 from .utils import GitHubSession, MissingRateLimitReset
 
@@ -85,7 +86,9 @@ class GitHubLister(Lister[GitHubListerState, List[Dict[str, Any]]]):
 
         self.relisting = self.first_id is not None or self.last_id is not None
 
-        self.github_session = GitHubSession(credentials=self.credentials)
+        self.github_session = GitHubSession(
+            credentials=self.credentials, user_agent=USER_AGENT
+        )
 
     def state_from_dict(self, d: Dict[str, Any]) -> GitHubListerState:
         return GitHubListerState(**d)
