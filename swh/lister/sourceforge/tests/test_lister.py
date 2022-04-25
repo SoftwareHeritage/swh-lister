@@ -35,6 +35,8 @@ TEST_PROJECTS = {
     "mramm": "p",
     "os3dmodels": "p",
     "random-mercurial": "p",
+    "t12eksandbox": "p",
+    "ocaml-lpd": "p",
 }
 
 URLS_MATCHER = {
@@ -67,6 +69,10 @@ def get_cvs_info_page(datadir):
     return Path(datadir, "aaron.html").read_text()
 
 
+def get_bzr_repo_page(datadir, repo_name):
+    return Path(datadir, f"{repo_name}.html").read_text()
+
+
 def _check_request_headers(request):
     return request.headers.get("User-Agent") == USER_AGENT
 
@@ -85,7 +91,14 @@ def _check_listed_origins(lister, swh_scheduler):
         "https://git.code.sf.net/p/mojunk/git2": ("git", "2017-12-31"),
         "https://svn.code.sf.net/p/mojunk/svn": ("svn", "2017-12-31"),
         "http://hg.code.sf.net/p/random-mercurial/hg": ("hg", "2019-05-02"),
-        "http://bzr-repo.bzr.sourceforge.net/bzrroot/bzr-repo": ("bzr", "2021-01-27"),
+        "http://t12eksandbox.bzr.sourceforge.net/bzr/t12eksandbox": (
+            "bzr",
+            "2011-02-09",
+        ),
+        "http://ocaml-lpd.bzr.sourceforge.net/bzr/ocaml-lpd/trunk": (
+            "bzr",
+            "2011-04-17",
+        ),
         "rsync://a.cvs.sourceforge.net/cvsroot/aaron/aaron": ("cvs", "2013-03-07"),
         "rsync://a.cvs.sourceforge.net/cvsroot/aaron/www": ("cvs", "2013-03-07"),
     }
@@ -126,6 +139,16 @@ def test_sourceforge_lister_full(swh_scheduler, requests_mock, datadir):
         text=get_cvs_info_page(datadir),
         additional_matcher=_check_request_headers,
     )
+    requests_mock.get(
+        re.compile("http://t12eksandbox.bzr.sourceforge.net/bzr/t12eksandbox"),
+        text=get_bzr_repo_page(datadir, "t12eksandbox"),
+        additional_matcher=_check_request_headers,
+    )
+    requests_mock.get(
+        re.compile("http://ocaml-lpd.bzr.sourceforge.net/bzr/ocaml-lpd"),
+        text=get_bzr_repo_page(datadir, "ocaml-lpd"),
+        additional_matcher=_check_request_headers,
+    )
 
     stats = lister.run()
     # - os3dmodels (2 repos),
@@ -133,10 +156,11 @@ def test_sourceforge_lister_full(swh_scheduler, requests_mock, datadir):
     # - mojunk (3 repos),
     # - backapps/website (1 repo),
     # - random-mercurial (1 repo).
-    # - bzr-repo (1 repo).
+    # - t12eksandbox (1 repo).
+    # - ocaml-lpd (1 repo).
     # adobe and backapps itself have no repos.
-    assert stats.pages == 7
-    assert stats.origins == 13
+    assert stats.pages == 8
+    assert stats.origins == 14
     expected_state = {
         "subsitemap_last_modified": {
             "https://sourceforge.net/allura_sitemap/sitemap-0.xml": "2021-03-18",
@@ -193,6 +217,18 @@ def test_sourceforge_lister_incremental(swh_scheduler, requests_mock, datadir, m
     requests_mock.get(
         re.compile("http://aaron.cvs.sourceforge.net/"),
         text=get_cvs_info_page(datadir),
+        additional_matcher=_check_request_headers,
+    )
+
+    requests_mock.get(
+        re.compile("http://t12eksandbox.bzr.sourceforge.net/bzr/t12eksandbox"),
+        text=get_bzr_repo_page(datadir, "t12eksandbox"),
+        additional_matcher=_check_request_headers,
+    )
+
+    requests_mock.get(
+        re.compile("http://ocaml-lpd.bzr.sourceforge.net/bzr/ocaml-lpd"),
+        text=get_bzr_repo_page(datadir, "ocaml-lpd"),
         additional_matcher=_check_request_headers,
     )
 
@@ -263,8 +299,14 @@ def test_sourceforge_lister_incremental(swh_scheduler, requests_mock, datadir, m
         ListedOrigin(
             lister_id=lister.lister_obj.id,
             visit_type="bzr",
-            url="http://bzr-repo.bzr.sourceforge.net/bzrroot/bzr-repo",
-            last_update=iso8601.parse_date("2021-01-27"),
+            url="http://t12eksandbox.bzr.sourceforge.net/bzr/t12eksandbox",
+            last_update=iso8601.parse_date("2011-02-09"),
+        ),
+        ListedOrigin(
+            lister_id=lister.lister_obj.id,
+            visit_type="bzr",
+            url="http://ocaml-lpd.bzr.sourceforge.net/bzr/ocaml-lpd/trunk",
+            last_update=iso8601.parse_date("2011-04-17"),
         ),
         ListedOrigin(
             lister_id=lister.lister_obj.id,
@@ -359,16 +401,29 @@ def test_sourceforge_lister_retry(swh_scheduler, requests_mock, mocker, datadir)
         additional_matcher=_check_request_headers,
     )
 
+    requests_mock.get(
+        re.compile("http://t12eksandbox.bzr.sourceforge.net/bzr/t12eksandbox"),
+        text=get_bzr_repo_page(datadir, "t12eksandbox"),
+        additional_matcher=_check_request_headers,
+    )
+
+    requests_mock.get(
+        re.compile("http://ocaml-lpd.bzr.sourceforge.net/bzr/ocaml-lpd"),
+        text=get_bzr_repo_page(datadir, "ocaml-lpd"),
+        additional_matcher=_check_request_headers,
+    )
+
     stats = lister.run()
     # - os3dmodels (2 repos),
     # - mramm (3 repos),
     # - mojunk (3 repos),
     # - backapps/website (1 repo),
     # - random-mercurial (1 repo).
-    # - bzr-repo (1 repo).
+    # - t12eksandbox (1 repo).
+    # - ocaml-lpd (1 repo).
     # adobe and backapps itself have no repos.
-    assert stats.pages == 7
-    assert stats.origins == 13
+    assert stats.pages == 8
+    assert stats.origins == 14
 
     _check_listed_origins(lister, swh_scheduler)
 
@@ -426,6 +481,16 @@ def test_sourceforge_lister_project_error(
         json=functools.partial(get_project_json, datadir),
         additional_matcher=_check_request_headers,
     )
+    requests_mock.get(
+        re.compile("http://t12eksandbox.bzr.sourceforge.net/bzr/t12eksandbox"),
+        text=get_bzr_repo_page(datadir, "t12eksandbox"),
+        additional_matcher=_check_request_headers,
+    )
+    requests_mock.get(
+        re.compile("http://ocaml-lpd.bzr.sourceforge.net/bzr/ocaml-lpd"),
+        text=get_bzr_repo_page(datadir, "ocaml-lpd"),
+        additional_matcher=_check_request_headers,
+    )
     # Make all `mramm` requests fail
     # `mramm` is in subsitemap 0, which ensures we keep listing after an error.
     requests_mock.get(
@@ -442,11 +507,12 @@ def test_sourceforge_lister_project_error(
     # - mojunk (3 repos),
     # - backapps/website (1 repo),
     # - random-mercurial (1 repo).
-    # - bzr-repo (1 repo).
+    # - t12eksandbox (1 repo).
+    # - ocaml-lpd (1 repo).
     # adobe and backapps itself have no repos.
     # Did *not* list mramm
-    assert stats.pages == 5
-    assert stats.origins == 8
+    assert stats.pages == 6
+    assert stats.origins == 9
 
     scheduler_origins = swh_scheduler.get_listed_origins(lister.lister_obj.id).results
     res = {o.url: (o.visit_type, str(o.last_update.date())) for o in scheduler_origins}
@@ -459,5 +525,12 @@ def test_sourceforge_lister_project_error(
         "https://git.code.sf.net/p/mojunk/git2": ("git", "2017-12-31"),
         "https://svn.code.sf.net/p/mojunk/svn": ("svn", "2017-12-31"),
         "http://hg.code.sf.net/p/random-mercurial/hg": ("hg", "2019-05-02"),
-        "http://bzr-repo.bzr.sourceforge.net/bzrroot/bzr-repo": ("bzr", "2021-01-27"),
+        "http://t12eksandbox.bzr.sourceforge.net/bzr/t12eksandbox": (
+            "bzr",
+            "2011-02-09",
+        ),
+        "http://ocaml-lpd.bzr.sourceforge.net/bzr/ocaml-lpd/trunk": (
+            "bzr",
+            "2011-04-17",
+        ),
     }

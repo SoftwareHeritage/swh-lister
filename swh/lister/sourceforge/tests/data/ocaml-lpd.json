@@ -1,0 +1,201 @@
+{
+  "shortname": "ocaml-lpd",
+  "name": "Lpd OCaml library",
+  "_id": "50c63c70e88f3d0bf07d4c6d",
+  "url": "https://sourceforge.net/p/ocaml-lpd/",
+  "private": false,
+  "short_description": "OCaml Lpd is a Line Printer Daemon (LPD) server library written in OCaml. This project moved to OCamlForge https://forge.ocamlcore.org/projects/lpd/",
+  "creation_date": "2005-02-23",
+  "summary": "",
+  "external_homepage": "http://lpd.forge.ocamlcore.org/",
+  "video_url": "",
+  "socialnetworks": [],
+  "status": "moved",
+  "moved_to_url": "https://forge.ocamlcore.org/projects/lpd/",
+  "preferred_support_tool": "",
+  "preferred_support_url": "",
+  "developers": [
+    {
+      "username": "chris_77",
+      "name": "ChriS",
+      "url": "https://sourceforge.net/u/chris_77/"
+    }
+  ],
+  "tools": [
+    {
+      "name": "files-sf",
+      "mount_point": "files",
+      "url": "/p/ocaml-lpd/files/",
+      "icons": {
+        "24": "images/downloads_24.png",
+        "32": "images/downloads_32.png",
+        "48": "images/downloads_48.png"
+      },
+      "installable": false,
+      "tool_label": "Files",
+      "mount_label": "Files"
+    },
+    {
+      "name": "mailman",
+      "mount_point": "mailman",
+      "url": "/p/ocaml-lpd/mailman/",
+      "icons": {
+        "24": "images/forums_24.png",
+        "32": "images/forums_32.png",
+        "48": "images/forums_48.png"
+      },
+      "installable": false,
+      "tool_label": "Mailing Lists",
+      "mount_label": "Mailing Lists"
+    },
+    {
+      "name": "bzr",
+      "mount_point": "code",
+      "url": "/p/ocaml-lpd/code/",
+      "icons": {
+        "24": "images/code_24.png",
+        "32": "images/code_32.png",
+        "48": "images/code_48.png"
+      },
+      "installable": false,
+      "tool_label": "BZR",
+      "mount_label": "Code"
+    },
+    {
+      "name": "summary",
+      "mount_point": "summary",
+      "url": "/p/ocaml-lpd/summary/",
+      "icons": {
+        "24": "images/sftheme/24x24/blog_24.png",
+        "32": "images/sftheme/32x32/blog_32.png",
+        "48": "images/sftheme/48x48/blog_48.png"
+      },
+      "installable": false,
+      "tool_label": "Summary",
+      "mount_label": "Summary",
+      "sourceforge_group_id": 132212
+    },
+    {
+      "name": "wiki",
+      "mount_point": "wiki",
+      "url": "/p/ocaml-lpd/wiki/",
+      "icons": {
+        "24": "images/wiki_24.png",
+        "32": "images/wiki_32.png",
+        "48": "images/wiki_48.png"
+      },
+      "installable": true,
+      "tool_label": "Wiki",
+      "mount_label": "Wiki"
+    },
+    {
+      "name": "reviews",
+      "mount_point": "reviews",
+      "url": "/p/ocaml-lpd/reviews/",
+      "icons": {
+        "24": "images/sftheme/24x24/blog_24.png",
+        "32": "images/sftheme/32x32/blog_32.png",
+        "48": "images/sftheme/48x48/blog_48.png"
+      },
+      "installable": false,
+      "tool_label": "Reviews",
+      "mount_label": "Reviews"
+    },
+    {
+      "name": "support",
+      "mount_point": "support",
+      "url": "/p/ocaml-lpd/support/",
+      "icons": {
+        "24": "images/sftheme/24x24/blog_24.png",
+        "32": "images/sftheme/32x32/blog_32.png",
+        "48": "images/sftheme/48x48/blog_48.png"
+      },
+      "installable": false,
+      "tool_label": "Support",
+      "mount_label": "Support"
+    },
+    {
+      "name": "activity",
+      "mount_point": "activity",
+      "url": "/p/ocaml-lpd/activity/",
+      "icons": {
+        "24": "images/admin_24.png",
+        "32": "images/admin_32.png",
+        "48": "images/admin_48.png"
+      },
+      "installable": false,
+      "tool_label": "Tool",
+      "mount_label": "Activity"
+    }
+  ],
+  "labels": [],
+  "categories": {
+    "audience": [
+      {
+        "id": 3,
+        "shortname": "developers",
+        "fullname": "Developers",
+        "fullpath": "Intended Audience :: by End-User Class :: Developers"
+      }
+    ],
+    "developmentstatus": [
+      {
+        "id": 11,
+        "shortname": "production",
+        "fullname": "5 - Production/Stable",
+        "fullpath": "Development Status :: 5 - Production/Stable"
+      }
+    ],
+    "environment": [
+      {
+        "id": 238,
+        "shortname": "daemon",
+        "fullname": "Non-interactive (Daemon)",
+        "fullpath": "User Interface :: Non-interactive (Daemon)"
+      }
+    ],
+    "language": [
+      {
+        "id": 454,
+        "shortname": "ocaml",
+        "fullname": "OCaml (Objective Caml)",
+        "fullpath": "Programming Language :: OCaml (Objective Caml)"
+      }
+    ],
+    "license": [
+      {
+        "id": 16,
+        "shortname": "lgpl",
+        "fullname": "GNU Library or Lesser General Public License version 2.0 (LGPLv2)",
+        "fullpath": "License :: OSI-Approved Open Source :: GNU Library or Lesser General Public License version 2.0 (LGPLv2)"
+      }
+    ],
+    "translation": [
+      {
+        "id": 275,
+        "shortname": "english",
+        "fullname": "English",
+        "fullpath": "Translations :: English"
+      }
+    ],
+    "os": [
+      {
+        "id": 436,
+        "shortname": "os_portable",
+        "fullname": "OS Portable (Source code to work with many OS platforms)",
+        "fullpath": "Operating System :: Grouping and Descriptive Categories :: OS Portable (Source code to work with many OS platforms)"
+      }
+    ],
+    "database": [],
+    "topic": [
+      {
+        "id": 154,
+        "shortname": "printing",
+        "fullname": "Printing",
+        "fullpath": "Topic :: Printing"
+      }
+    ]
+  },
+  "icon_url": null,
+  "screenshots": []
+}
