@@ -1,4 +1,4 @@
-# Copyright (C) 2021 The Software Heritage developers
+# Copyright (C) 2021-2022 The Software Heritage developers
 # See the AUTHORS file at the top-level directory of this distribution
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
@@ -12,7 +12,6 @@ from urllib.parse import urljoin
 
 import requests
 from tenacity.before_sleep import before_sleep_log
-from urllib3.util import parse_url
 import xmltodict
 
 from swh.lister.utils import throttling_retry
@@ -82,9 +81,6 @@ class MavenLister(Lister[MavenListerState, RepoPage]):
         self.BASE_URL = url
         self.INDEX_URL = index_url
         self.incremental = incremental
-
-        if instance is None:
-            instance = parse_url(url).host
 
         super().__init__(
             scheduler=scheduler,
