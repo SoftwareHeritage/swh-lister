@@ -1,3 +1,14 @@
+swh-lister (2.9.0-1~swh1) unstable-swh; urgency=medium
+
+  * New upstream release 2.9.0     - (tagged by Valentin Lorentz
+    <vlorentz@softwareheritage.org> on 2022-04-26 11:28:55 +0200)
+  * Upstream changes:     - v2.9.0     - * github: Remove dead code     -
+    * github: Refactor rate-limiting out of the GitHubLister class     -
+    * maven: Remove duplicated code related to setting instance from
+    netloc
+
+ -- Software Heritage autobuilder (on jenkins-debian1) <jenkins@jenkins-debian1.internal.softwareheritage.org>  Tue, 26 Apr 2022 09:34:54 +0000
+
 swh-lister (2.8.2-1~swh1) unstable-swh; urgency=medium
 
   * New upstream release 2.8.2     - (tagged by Antoine R. Dumont
