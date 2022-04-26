@@ -1,8 +1,13 @@
-swh-lister (2.8.2-1~swh1~bpo10+1) buster-swh; urgency=medium
+swh-lister (2.9.0-1~swh1) unstable-swh; urgency=medium
 
-  * Rebuild for buster-swh
+  * New upstream release 2.9.0     - (tagged by Valentin Lorentz
+    <vlorentz@softwareheritage.org> on 2022-04-26 11:28:55 +0200)
+  * Upstream changes:     - v2.9.0     - * github: Remove dead code     -
+    * github: Refactor rate-limiting out of the GitHubLister class     -
+    * maven: Remove duplicated code related to setting instance from
+    netloc
 
- -- Software Heritage autobuilder (on jenkins-debian1) <jenkins@jenkins-debian1.internal.softwareheritage.org>  Mon, 25 Apr 2022 10:43:07 +0000
+ -- Software Heritage autobuilder (on jenkins-debian1) <jenkins@jenkins-debian1.internal.softwareheritage.org>  Tue, 26 Apr 2022 09:34:54 +0000
 
 swh-lister (2.8.2-1~swh1) unstable-swh; urgency=medium
 
