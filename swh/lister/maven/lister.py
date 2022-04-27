@@ -97,6 +97,8 @@ class MavenLister(Lister[MavenListerState, RepoPage]):
             }
         )
 
+        self.jar_origins: Dict[str, ListedOrigin] = {}
+
     def state_from_dict(self, d: Dict[str, Any]) -> MavenListerState:
         return MavenListerState(**d)
 
@@ -185,22 +187,10 @@ class MavenLister(Lister[MavenListerState, RepoPage]):
             m_doc = re_doc.match(line)
             if m_doc is not None:
                 doc_id = int(m_doc.group("doc"))
-                if (
-                    self.incremental
-                    and self.state
-                    and self.state.last_seen_doc
-                    and self.state.last_seen_doc >= doc_id
-                ):
-                    # jar_src["doc"] contains the id of the current document, whatever
-                    # its type (scm or jar).
-                    jar_src["doc"] = None
-                else:
-                    jar_src["doc"] = doc_id
+                # jar_src["doc"] contains the id of the current document, whatever
+                # its type (scm or jar).
+                jar_src["doc"] = doc_id
             else:
-                # If incremental mode, we don't record any line that is
-                # before our last recorded doc id.
-                if self.incremental and jar_src["doc"] is None:
-                    continue
                 m_val = re_val.match(line)
                 if m_val is not None:
                     (gid, aid, version, classifier, ext) = m_val.groups()
@@ -315,35 +305,61 @@ class MavenLister(Lister[MavenListerState, RepoPage]):
                     )
                     yield origin
         else:
-            # Origin is a source archive:
+            # Origin is gathering source archives:
             last_update_dt = None
             last_update_iso = ""
             last_update_seconds = str(page["time"])[:-3]
             try:
                 last_update_dt = datetime.fromtimestamp(int(last_update_seconds))
-                last_update_dt_tz = last_update_dt.astimezone(timezone.utc)
+                last_update_dt = last_update_dt.astimezone(timezone.utc)
             except OverflowError:
                 logger.warning("- Failed to convert datetime %s.", last_update_seconds)
             if last_update_dt:
-                last_update_iso = last_update_dt_tz.isoformat()
-            origin = ListedOrigin(
-                lister_id=self.lister_obj.id,
-                url=page["url"],
-                visit_type=page["type"],
-                last_update=last_update_dt_tz,
-                extra_loader_arguments={
-                    "artifacts": [
-                        {
-                            "time": last_update_iso,
-                            "gid": page["gid"],
-                            "aid": page["aid"],
-                            "version": page["version"],
-                            "base_url": self.BASE_URL,
-                        }
-                    ]
-                },
-            )
-            yield origin
+                last_update_iso = last_update_dt.isoformat()
+
+            # Origin URL will target page holding sources for all versions of
+            # an artifactId (package name) inside a groupId (namespace)
+            path = "/".join(page["gid"].split("."))
+            origin_url = urljoin(self.BASE_URL, f"{path}/{page['aid']}")
+
+            artifact = {
+                **{k: v for k, v in page.items() if k != "doc"},
+                "time": last_update_iso,
+                "base_url": self.BASE_URL,
+            }
+
+            if origin_url not in self.jar_origins:
+                # Create ListedOrigin instance if we did not see that origin yet
+                jar_origin = ListedOrigin(
+                    lister_id=self.lister_obj.id,
+                    url=origin_url,
+                    visit_type=page["type"],
+                    last_update=last_update_dt,
+                    extra_loader_arguments={"artifacts": [artifact]},
+                )
+                self.jar_origins[origin_url] = jar_origin
+            else:
+                # Update list of source artifacts for that origin otherwise
+                jar_origin = self.jar_origins[origin_url]
+                artifacts = jar_origin.extra_loader_arguments["artifacts"]
+                if artifact not in artifacts:
+                    artifacts.append(artifact)
+
+            if (
+                jar_origin.last_update
+                and last_update_dt
+                and last_update_dt > jar_origin.last_update
+            ):
+                jar_origin.last_update = last_update_dt
+
+            if not self.incremental or (
+                self.state and page["doc"] > self.state.last_seen_doc
+            ):
+                # Yield origin with updated source artifacts, multiple instances of
+                # ListedOrigin for the same origin URL but with different artifacts
+                # list will be sent to the scheduler but it will deduplicate them and
+                # take the latest one to upsert in database
+                yield jar_origin
 
     def commit_page(self, page: RepoPage) -> None:
         """Update currently stored state using the latest listed doc.
