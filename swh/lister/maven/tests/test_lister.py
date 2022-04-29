@@ -67,6 +67,11 @@ def maven_pom_1(datadir) -> str:
 
 
 @pytest.fixture
+def maven_index_null_mtime(datadir) -> str:
+    return Path(datadir, "http_indexes", "export_null_mtime.fld").read_text()
+
+
+@pytest.fixture
 def maven_pom_1_malformed(datadir) -> str:
     return Path(datadir, "https_maven.org", "sprova4j-0.1.0.malformed.pom").read_text()
 
@@ -290,3 +295,25 @@ def test_maven_list_http_error_artifacts(
     # then we get only one maven-jar origin and one git origin.
     scheduler_origins = swh_scheduler.get_listed_origins(lister.lister_obj.id).results
     assert len(scheduler_origins) == 3
+
+
+def test_maven_lister_null_mtime(swh_scheduler, requests_mock, maven_index_null_mtime):
+
+    requests_mock.get(INDEX_URL, text=maven_index_null_mtime)
+
+    # Run the lister.
+    lister = MavenLister(
+        scheduler=swh_scheduler,
+        url=MVN_URL,
+        instance="maven.org",
+        index_url=INDEX_URL,
+        incremental=False,
+    )
+
+    stats = lister.run()
+
+    # Start test checks.
+    assert stats.pages == 1
+    scheduler_origins = swh_scheduler.get_listed_origins(lister.lister_obj.id).results
+    assert len(scheduler_origins) == 1
+    assert scheduler_origins[0].last_update is None

@@ -304,11 +304,11 @@ class MavenLister(Lister[MavenListerState, RepoPage]):
             # Origin is gathering source archives:
             last_update_dt = None
             last_update_iso = ""
-            last_update_seconds = str(page["time"])[:-3]
             try:
+                last_update_seconds = str(page["time"])[:-3]
                 last_update_dt = datetime.fromtimestamp(int(last_update_seconds))
                 last_update_dt = last_update_dt.astimezone(timezone.utc)
-            except OverflowError:
+            except (OverflowError, ValueError):
                 logger.warning("- Failed to convert datetime %s.", last_update_seconds)
             if last_update_dt:
                 last_update_iso = last_update_dt.isoformat()
