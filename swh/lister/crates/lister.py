@@ -8,6 +8,7 @@ import logging
 from pathlib import Path
 import subprocess
 from typing import Any, Dict, Iterator, List
+from urllib.parse import urlparse
 
 import iso8601
 
@@ -32,7 +33,7 @@ class CratesLister(StatelessLister[CratesListerPage]):
     # Part of the lister API, that identifies this lister
     LISTER_NAME = "crates"
     # (Optional) CVS type of the origins listed by this lister, if constant
-    VISIT_TYPE = "rust-crate"
+    VISIT_TYPE = "crates"
 
     INSTANCE = "crates"
     INDEX_REPOSITORY_URL = "https://github.com/rust-lang/crates.io-index.git"
@@ -40,6 +41,7 @@ class CratesLister(StatelessLister[CratesListerPage]):
     CRATE_FILE_URL_PATTERN = (
         "https://static.crates.io/crates/{crate}/{crate}-{version}.crate"
     )
+    CRATE_API_URL_PATTERN = "https://crates.io/api/v1/crates/{crate}"
 
     def __init__(
         self,
@@ -131,15 +133,30 @@ class CratesLister(StatelessLister[CratesListerPage]):
 
         assert self.lister_obj.id is not None
 
+        url = self.CRATE_API_URL_PATTERN.format(crate=page[0]["name"])
+        last_update = page[0]["last_update"]
+        artifacts = []
+
         for version in page:
-            yield ListedOrigin(
-                lister_id=self.lister_obj.id,
-                visit_type=self.VISIT_TYPE,
-                url=version["crate_file"],
-                last_update=version["last_update"],
-                extra_loader_arguments={
-                    "name": version["name"],
-                    "version": version["version"],
-                    "checksum": version["checksum"],
+            filename = urlparse(version["crate_file"]).path.split("/")[-1]
+            # Build an artifact entry following original-artifacts-json specification
+            # https://docs.softwareheritage.org/devel/swh-storage/extrinsic-metadata-specification.html#original-artifacts-json  # noqa: B950
+            artifact = {
+                "filename": f"{filename}",
+                "checksums": {
+                    "sha256": f"{version['checksum']}",
                 },
-            )
+                "url": version["crate_file"],
+                "version": version["version"],
+            }
+            artifacts.append(artifact)
+
+        yield ListedOrigin(
+            lister_id=self.lister_obj.id,
+            visit_type=self.VISIT_TYPE,
+            url=url,
+            last_update=last_update,
+            extra_loader_arguments={
+                "artifacts": artifacts,
+            },
+        )

@@ -167,8 +167,9 @@ swh/lister/maven/tasks.py
 swh/lister/maven/tests/__init__.py
 swh/lister/maven/tests/test_lister.py
 swh/lister/maven/tests/test_tasks.py
-swh/lister/maven/tests/data/http_indexes/export.fld
-swh/lister/maven/tests/data/http_indexes/export_incr.fld
+swh/lister/maven/tests/data/http_indexes/export_full.fld
+swh/lister/maven/tests/data/http_indexes/export_incr_first.fld
+swh/lister/maven/tests/data/http_indexes/export_null_mtime.fld
 swh/lister/maven/tests/data/https_maven.org/arangodb-graphql-1.2.pom
 swh/lister/maven/tests/data/https_maven.org/sprova4j-0.1.0.malformed.pom
 swh/lister/maven/tests/data/https_maven.org/sprova4j-0.1.0.pom
