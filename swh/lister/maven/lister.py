@@ -252,14 +252,10 @@ class MavenLister(Lister[MavenListerState, RepoPage]):
                 if scm_d is not None:
                     connection = scm_d.get("connection")
                     if connection is not None:
-                        scm = connection
-                        gid = project_d["groupId"]
-                        aid = project_d["artifactId"]
                         artifact_metadata_d = {
                             "type": "scm",
                             "doc": out_pom[pom],
-                            "url": scm,
-                            "project": f"{gid}.{aid}",
+                            "url": connection,
                         }
                         logger.debug("* Yielding pom %s: %s", pom, artifact_metadata_d)
                         yield artifact_metadata_d
