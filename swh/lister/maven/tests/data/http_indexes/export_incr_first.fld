@@ -1,0 +1,42 @@
+doc 0
+  field 0
+    name u
+    type string
+    value al.aldi|sprova4j|0.1.0|sources|jar
+  field 1
+    name m
+    type string
+    value 1633786348254
+  field 2
+    name i
+    type string
+    value jar|1626109619335|14316|2|2|0|jar
+  field 10
+    name n
+    type string
+    value sprova4j
+  field 11
+    name d
+    type string
+    value Java client for Sprova Test Management
+doc 1
+  field 0
+    name u
+    type string
+    value al.aldi|sprova4j|0.1.0|NA|pom
+  field 1
+    name m
+    type string
+    value 1633786348271
+  field 2
+    name i
+    type string
+    value jar|1626109636636|-1|1|0|0|pom
+  field 10
+    name n
+    type string
+    value sprova4j
+  field 11
+    name d
+    type string
+    value Java client for Sprova Test Management
