@@ -1,3 +1,16 @@
+swh-lister (2.9.1-1~swh1) unstable-swh; urgency=medium
+
+  * New upstream release 2.9.1     - (tagged by Antoine R. Dumont
+    (@ardumont) <ardumont@softwareheritage.org> on 2022-04-29 14:45:18
+    +0200)
+  * Upstream changes:     - v2.9.1     - crates: Create one origin per
+    package instead of per version     - maven: Handle null mtime value
+    in index for jar archive     - maven: Remove extraction of groupId
+    and artifactId from pom files     - maven: Create one origin per
+    package instead of one per package version     - Bump mypy to v0.942
+
+ -- Software Heritage autobuilder (on jenkins-debian1) <jenkins@jenkins-debian1.internal.softwareheritage.org>  Fri, 29 Apr 2022 12:50:29 +0000
+
 swh-lister (2.9.0-1~swh1) unstable-swh; urgency=medium
 
   * New upstream release 2.9.0     - (tagged by Valentin Lorentz
