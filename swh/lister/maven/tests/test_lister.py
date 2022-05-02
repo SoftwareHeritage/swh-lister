@@ -52,48 +52,48 @@ LIST_SRC_DATA = (
 
 
 @pytest.fixture
-def maven_index_full(datadir) -> str:
-    return Path(datadir, "http_indexes", "export_full.fld").read_text()
+def maven_index_full(datadir) -> bytes:
+    return Path(datadir, "http_indexes", "export_full.fld").read_bytes()
 
 
 @pytest.fixture
-def maven_index_incr_first(datadir) -> str:
-    return Path(datadir, "http_indexes", "export_incr_first.fld").read_text()
+def maven_index_incr_first(datadir) -> bytes:
+    return Path(datadir, "http_indexes", "export_incr_first.fld").read_bytes()
 
 
 @pytest.fixture
-def maven_pom_1(datadir) -> str:
-    return Path(datadir, "https_maven.org", "sprova4j-0.1.0.pom").read_text()
+def maven_pom_1(datadir) -> bytes:
+    return Path(datadir, "https_maven.org", "sprova4j-0.1.0.pom").read_bytes()
 
 
 @pytest.fixture
-def maven_index_null_mtime(datadir) -> str:
-    return Path(datadir, "http_indexes", "export_null_mtime.fld").read_text()
+def maven_index_null_mtime(datadir) -> bytes:
+    return Path(datadir, "http_indexes", "export_null_mtime.fld").read_bytes()
 
 
 @pytest.fixture
-def maven_pom_1_malformed(datadir) -> str:
-    return Path(datadir, "https_maven.org", "sprova4j-0.1.0.malformed.pom").read_text()
+def maven_pom_1_malformed(datadir) -> bytes:
+    return Path(datadir, "https_maven.org", "sprova4j-0.1.0.malformed.pom").read_bytes()
 
 
 @pytest.fixture
-def maven_pom_2(datadir) -> str:
-    return Path(datadir, "https_maven.org", "sprova4j-0.1.1.pom").read_text()
+def maven_pom_2(datadir) -> bytes:
+    return Path(datadir, "https_maven.org", "sprova4j-0.1.1.pom").read_bytes()
 
 
 @pytest.fixture
-def maven_pom_3(datadir) -> str:
-    return Path(datadir, "https_maven.org", "arangodb-graphql-1.2.pom").read_text()
+def maven_pom_3(datadir) -> bytes:
+    return Path(datadir, "https_maven.org", "arangodb-graphql-1.2.pom").read_bytes()
 
 
 @pytest.fixture(autouse=True)
 def network_requests_mock(
     requests_mock, maven_index_full, maven_pom_1, maven_pom_2, maven_pom_3
 ):
-    requests_mock.get(INDEX_URL, text=maven_index_full)
-    requests_mock.get(URL_POM_1, text=maven_pom_1)
-    requests_mock.get(URL_POM_2, text=maven_pom_2)
-    requests_mock.get(URL_POM_3, text=maven_pom_3)
+    requests_mock.get(INDEX_URL, content=maven_index_full)
+    requests_mock.get(URL_POM_1, content=maven_pom_1)
+    requests_mock.get(URL_POM_2, content=maven_pom_2)
+    requests_mock.get(URL_POM_3, content=maven_pom_3)
 
 
 def test_maven_full_listing(swh_scheduler):
@@ -151,7 +151,7 @@ def test_maven_full_listing_malformed(
     )
 
     # Set up test.
-    requests_mock.get(URL_POM_1, text=maven_pom_1_malformed)
+    requests_mock.get(URL_POM_1, content=maven_pom_1_malformed)
 
     # Then run the lister.
     stats = lister.run()
@@ -197,7 +197,7 @@ def test_maven_incremental_listing(
     )
 
     # Set up test.
-    requests_mock.get(INDEX_URL, text=maven_index_incr_first)
+    requests_mock.get(INDEX_URL, content=maven_index_incr_first)
 
     # Then run the lister.
     stats = lister.run()
@@ -235,7 +235,7 @@ def test_maven_incremental_listing(
     assert scheduler_state.last_seen_pom == 1
 
     # Set up test.
-    requests_mock.get(INDEX_URL, text=maven_index_full)
+    requests_mock.get(INDEX_URL, content=maven_index_full)
 
     # Then run the lister.
     stats = lister.run()
@@ -299,7 +299,7 @@ def test_maven_list_http_error_artifacts(
 
 def test_maven_lister_null_mtime(swh_scheduler, requests_mock, maven_index_null_mtime):
 
-    requests_mock.get(INDEX_URL, text=maven_index_null_mtime)
+    requests_mock.get(INDEX_URL, content=maven_index_null_mtime)
 
     # Run the lister.
     lister = MavenLister(
@@ -317,3 +317,18 @@ def test_maven_lister_null_mtime(swh_scheduler, requests_mock, maven_index_null_
     scheduler_origins = swh_scheduler.get_listed_origins(lister.lister_obj.id).results
     assert len(scheduler_origins) == 1
     assert scheduler_origins[0].last_update is None
+
+
+def test_maven_list_pom_bad_encoding(swh_scheduler, requests_mock, maven_pom_1):
+    """should continue listing when failing to decode pom file."""
+    # Test failure of pom parsing by reencoding a UTF-8 pom file to a not expected one
+    requests_mock.get(URL_POM_1, content=maven_pom_1.decode("utf-8").encode("utf-32"))
+
+    lister = MavenLister(scheduler=swh_scheduler, url=MVN_URL, index_url=INDEX_URL)
+
+    lister.run()
+
+    # If the maven_index_full step succeeded but not the pom parsing step,
+    # then we get only one maven-jar origin and one git origin.
+    scheduler_origins = swh_scheduler.get_listed_origins(lister.lister_obj.id).results
+    assert len(scheduler_origins) == 3
