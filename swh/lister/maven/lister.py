@@ -246,7 +246,7 @@ class MavenLister(Lister[MavenListerState, RepoPage]):
         for pom in out_pom:
             try:
                 response = self.page_request(pom, {})
-                project = xmltodict.parse(response.content.decode())
+                project = xmltodict.parse(response.content)
                 project_d = project.get("project", {})
                 scm_d = project_d.get("scm")
                 if scm_d is not None:
