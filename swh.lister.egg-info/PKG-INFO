@@ -1,16 +1,14 @@
 Metadata-Version: 2.1
 Name: swh.lister
-Version: 2.9.2
+Version: 2.9.3
 Summary: Software Heritage lister
 Home-page: https://forge.softwareheritage.org/diffusion/DLSGH/
 Author: Software Heritage developers
 Author-email: swh-devel@inria.fr
-License: UNKNOWN
 Project-URL: Bug Reports, https://forge.softwareheritage.org/maniphest
 Project-URL: Funding, https://www.softwareheritage.org/donate
 Project-URL: Source, https://forge.softwareheritage.org/source/swh-lister
 Project-URL: Documentation, https://docs.softwareheritage.org/devel/swh-lister/
-Platform: UNKNOWN
 Classifier: Programming Language :: Python :: 3
 Classifier: Intended Audience :: Developers
 Classifier: License :: OSI Approved :: GNU General Public License v3 (GPLv3)
@@ -123,5 +121,3 @@ PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
 See top-level LICENSE file for the full text of the GNU General Public License
 along with this program.
-
-
