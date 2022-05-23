@@ -14,6 +14,7 @@ import requests
 from tenacity.before_sleep import before_sleep_log
 import xmltodict
 
+from swh.core.github.utils import GitHubSession
 from swh.lister.utils import throttling_retry
 from swh.scheduler.interface import SchedulerInterface
 from swh.scheduler.model import ListedOrigin
@@ -24,6 +25,8 @@ from ..pattern import CredentialsType, Lister
 logger = logging.getLogger(__name__)
 
 RepoPage = Dict[str, Any]
+
+SUPPORTED_SCM_TYPES = ("git", "svn", "hg", "cvs", "bzr")
 
 
 @dataclass
@@ -98,6 +101,9 @@ class MavenLister(Lister[MavenListerState, RepoPage]):
         )
 
         self.jar_origins: Dict[str, ListedOrigin] = {}
+        self.github_session = GitHubSession(
+            credentials=self.credentials, user_agent=USER_AGENT
+        )
 
     def state_from_dict(self, d: Dict[str, Any]) -> MavenListerState:
         return MavenListerState(**d)
@@ -271,35 +277,63 @@ class MavenLister(Lister[MavenListerState, RepoPage]):
             except xmltodict.expat.ExpatError as error:
                 logger.info("Could not parse POM %s XML: %s. Next.", pom, error)
 
-    def get_origins_from_page(self, page: RepoPage) -> Iterator[ListedOrigin]:
-        """Convert a page of Maven repositories into a list of ListedOrigins."""
+    def get_scm(self, page: RepoPage) -> Optional[ListedOrigin]:
+        """Retrieve scm origin out of the page information. Only called when type of the
+        page is scm.
+
+        Try and detect an scm/vcs repository. Note that official format is in the form:
+        scm:{type}:git://example.org/{user}/{repo}.git but some projects directly put
+        the repo url (without the "scm:type"), so we have to check against the content
+        to extract the type and url properly.
+
+        Raises
+            AssertionError when the type of the page is not 'scm'
+
+        Returns
+            ListedOrigin with proper canonical scm url (for github) if any is found,
+            None otherwise.
+
+        """
+
+        assert page["type"] == "scm"
+        visit_type: Optional[str] = None
+        url: Optional[str] = None
+        m_scm = re.match(r"^scm:(?P<type>[^:]+):(?P<url>.*)$", page["url"])
+        if m_scm is None:
+            return None
+
+        scm_type = m_scm.group("type")
+        if scm_type and scm_type in SUPPORTED_SCM_TYPES:
+            url = m_scm.group("url")
+            visit_type = scm_type
+        elif page["url"].endswith(".git"):
+            url = page["url"].lstrip("scm:")
+            visit_type = "git"
+        else:
+            return None
+
+        if url and visit_type == "git":
+            # Non-github urls will be returned as is, github ones will be canonical ones
+            url = self.github_session.get_canonical_url(url)
+
+        if not url:
+            return None
+
+        assert visit_type is not None
         assert self.lister_obj.id is not None
-        scm_types_ok = ("git", "svn", "hg", "cvs", "bzr")
+        return ListedOrigin(
+            lister_id=self.lister_obj.id,
+            url=url,
+            visit_type=visit_type,
+        )
+
+    def get_origins_from_page(self, page: RepoPage) -> Iterator[ListedOrigin]:
+
+        """Convert a page of Maven repositories into a list of ListedOrigins."""
         if page["type"] == "scm":
-            # If origin is a scm url: detect scm type and yield.
-            # Note that the official format is:
-            # scm:git:git://github.com/openengsb/openengsb-framework.git
-            # but many, many projects directly put the repo url, so we have to
-            # detect the content to match it properly.
-            m_scm = re.match(r"^scm:(?P<type>[^:]+):(?P<url>.*)$", page["url"])
-            if m_scm is not None:
-                scm_type = m_scm.group("type")
-                if scm_type in scm_types_ok:
-                    scm_url = m_scm.group("url")
-                    origin = ListedOrigin(
-                        lister_id=self.lister_obj.id,
-                        url=scm_url,
-                        visit_type=scm_type,
-                    )
-                    yield origin
-            else:
-                if page["url"].endswith(".git"):
-                    origin = ListedOrigin(
-                        lister_id=self.lister_obj.id,
-                        url=page["url"],
-                        visit_type="git",
-                    )
-                    yield origin
+            listed_origin = self.get_scm(page)
+            if listed_origin:
+                yield listed_origin
         else:
             # Origin is gathering source archives:
             last_update_dt = None
@@ -326,6 +360,7 @@ class MavenLister(Lister[MavenListerState, RepoPage]):
 
             if origin_url not in self.jar_origins:
                 # Create ListedOrigin instance if we did not see that origin yet
+                assert self.lister_obj.id is not None
                 jar_origin = ListedOrigin(
                     lister_id=self.lister_obj.id,
                     url=origin_url,

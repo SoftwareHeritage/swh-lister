@@ -18,12 +18,17 @@ URL_POM_1 = MVN_URL + "al/aldi/sprova4j/0.1.0/sprova4j-0.1.0.pom"
 URL_POM_2 = MVN_URL + "al/aldi/sprova4j/0.1.1/sprova4j-0.1.1.pom"
 URL_POM_3 = MVN_URL + "com/arangodb/arangodb-graphql/1.2/arangodb-graphql-1.2.pom"
 
-LIST_GIT = (
-    "git://github.com/aldialimucaj/sprova4j.git",
-    "https://github.com/aldialimucaj/sprova4j.git",
-)
 
-LIST_GIT_INCR = ("git://github.com/ArangoDB-Community/arangodb-graphql-java.git",)
+USER_REPO0 = "aldialimucaj/sprova4j"
+GIT_REPO_URL0_HTTPS = f"https://github.com/{USER_REPO0}"
+GIT_REPO_URL0_API = f"https://api.github.com/repos/{USER_REPO0}"
+LIST_GIT = (GIT_REPO_URL0_HTTPS,)
+
+USER_REPO1 = "ArangoDB-Community/arangodb-graphql-java"
+GIT_REPO_URL1_HTTPS = f"https://github.com/{USER_REPO1}"
+GIT_REPO_URL1_GIT = f"git://github.com/{USER_REPO1}.git"
+GIT_REPO_URL1_API = f"https://api.github.com/repos/{USER_REPO1}"
+LIST_GIT_INCR = (GIT_REPO_URL1_HTTPS,)
 
 LIST_SRC = (MVN_URL + "al/aldi/sprova4j",)
 
@@ -86,6 +91,20 @@ def maven_pom_3(datadir) -> bytes:
     return Path(datadir, "https_maven.org", "arangodb-graphql-1.2.pom").read_bytes()
 
 
+@pytest.fixture
+def requests_mock(requests_mock):
+    """If github api calls for the configured scm repository, returns its canonical url."""
+    for url_api, url_html in [
+        (GIT_REPO_URL0_API, GIT_REPO_URL0_HTTPS),
+        (GIT_REPO_URL1_API, GIT_REPO_URL1_HTTPS),
+    ]:
+        requests_mock.get(
+            url_api,
+            json={"html_url": url_html},
+        )
+    yield requests_mock
+
+
 @pytest.fixture(autouse=True)
 def network_requests_mock(
     requests_mock, maven_index_full, maven_pom_1, maven_pom_2, maven_pom_3
@@ -118,7 +137,7 @@ def test_maven_full_listing(swh_scheduler):
     origin_urls = [origin.url for origin in scheduler_origins]
 
     # 3 git origins + 1 maven origin with 2 releases (one per jar)
-    assert len(origin_urls) == 4
+    assert len(origin_urls) == 3
     assert sorted(origin_urls) == sorted(LIST_GIT + LIST_GIT_INCR + LIST_SRC)
 
     for origin in scheduler_origins:
@@ -164,7 +183,7 @@ def test_maven_full_listing_malformed(
 
     # 2 git origins + 1 maven origin with 2 releases (one per jar)
     assert len(origin_urls) == 3
-    assert sorted(origin_urls) == sorted((LIST_GIT[1],) + LIST_GIT_INCR + LIST_SRC)
+    assert sorted(origin_urls) == sorted(LIST_GIT + LIST_GIT_INCR + LIST_SRC)
 
     for origin in scheduler_origins:
         if origin.visit_type == "maven":
@@ -212,7 +231,7 @@ def test_maven_incremental_listing(
 
     # 1 git origins + 1 maven origin with 1 release (one per jar)
     assert len(origin_urls) == 2
-    assert sorted(origin_urls) == sorted((LIST_GIT[0],) + LIST_SRC)
+    assert sorted(origin_urls) == sorted(LIST_GIT + LIST_SRC)
 
     for origin in scheduler_origins:
         if origin.visit_type == "maven":
@@ -294,7 +313,7 @@ def test_maven_list_http_error_artifacts(
     # If the maven_index_full step succeeded but not the get_pom step,
     # then we get only one maven-jar origin and one git origin.
     scheduler_origins = swh_scheduler.get_listed_origins(lister.lister_obj.id).results
-    assert len(scheduler_origins) == 3
+    assert len(scheduler_origins) == 2
 
 
 def test_maven_lister_null_mtime(swh_scheduler, requests_mock, maven_index_null_mtime):
@@ -331,4 +350,4 @@ def test_maven_list_pom_bad_encoding(swh_scheduler, requests_mock, maven_pom_1):
     # If the maven_index_full step succeeded but not the pom parsing step,
     # then we get only one maven-jar origin and one git origin.
     scheduler_origins = swh_scheduler.get_listed_origins(lister.lister_obj.id).results
-    assert len(scheduler_origins) == 3
+    assert len(scheduler_origins) == 2

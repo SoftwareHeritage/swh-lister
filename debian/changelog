@@ -1,8 +1,13 @@
-swh-lister (2.9.2-1~swh1~bpo10+1) buster-swh; urgency=medium
+swh-lister (2.9.3-1~swh1) unstable-swh; urgency=medium
 
-  * Rebuild for buster-swh
+  * New upstream release 2.9.3     - (tagged by Antoine R. Dumont
+    (@ardumont) <ardumont@softwareheritage.org> on 2022-05-23 15:39:15
+    +0200)
+  * Upstream changes:     - v2.9.3     - Adapt maven lister to list
+    canonical gh urls if any     - Use swh.core.github.pytest_plugin in
+    github tests
 
- -- Software Heritage autobuilder (on jenkins-debian1) <jenkins@jenkins-debian1.internal.softwareheritage.org>  Tue, 10 May 2022 08:31:14 +0000
+ -- Software Heritage autobuilder (on jenkins-debian1) <jenkins@jenkins-debian1.internal.softwareheritage.org>  Mon, 23 May 2022 13:47:34 +0000
 
 swh-lister (2.9.2-1~swh1) unstable-swh; urgency=medium
 

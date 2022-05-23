@@ -1,16 +1,16 @@
-# Copyright (C) 2020 The Software Heritage developers
+# Copyright (C) 2020-2022 The Software Heritage developers
 # See the AUTHORS file at the top-level directory of this distribution
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
 
 import datetime
 import logging
-import time
-from typing import Any, Dict, Iterator, List, Optional, Union
+from typing import Any, Dict, Iterator, List
 
 import pytest
 import requests_mock
 
+from swh.core.github.pytest_plugin import github_response_callback
 from swh.lister.github.lister import GitHubLister
 from swh.lister.pattern import CredentialsType, ListerStats
 from swh.scheduler.interface import SchedulerInterface
@@ -18,51 +18,6 @@ from swh.scheduler.model import Lister
 
 NUM_PAGES = 10
 ORIGIN_COUNT = GitHubLister.PAGE_SIZE * NUM_PAGES
-
-
-def github_repo(i: int) -> Dict[str, Union[int, str]]:
-    """Basic repository information returned by the GitHub API"""
-
-    repo: Dict[str, Union[int, str]] = {
-        "id": i,
-        "html_url": f"https://github.com/origin/{i}",
-    }
-
-    # Set the pushed_at date on one of the origins
-    if i == 4321:
-        repo["pushed_at"] = "2018-11-08T13:16:24Z"
-
-    return repo
-
-
-def github_response_callback(
-    request: requests_mock.request._RequestObjectProxy,
-    context: requests_mock.response._Context,
-) -> List[Dict[str, Union[str, int]]]:
-    """Return minimal GitHub API responses for the common case where the loader
-    hasn't been rate-limited"""
-    # Check request headers
-    assert request.headers["Accept"] == "application/vnd.github.v3+json"
-    assert "Software Heritage Lister" in request.headers["User-Agent"]
-
-    # Check request parameters: per_page == 1000, since = last_repo_id
-    assert "per_page" in request.qs
-    assert request.qs["per_page"] == [str(GitHubLister.PAGE_SIZE)]
-    assert "since" in request.qs
-
-    since = int(request.qs["since"][0])
-
-    next_page = since + GitHubLister.PAGE_SIZE
-    if next_page < ORIGIN_COUNT:
-        # the first id for the next page is within our origin count; add a Link
-        # header to the response
-        next_url = (
-            GitHubLister.API_URL
-            + f"?per_page={GitHubLister.PAGE_SIZE}&since={next_page}"
-        )
-        context.headers["Link"] = f"<{next_url}>; rel=next"
-
-    return [github_repo(i) for i in range(since + 1, min(next_page, ORIGIN_COUNT) + 1)]
 
 
 @pytest.fixture()
@@ -182,93 +137,8 @@ def test_relister(swh_scheduler, caplog, requests_mocker) -> None:
     assert lister_data.current_state == {"last_seen_id": 123}
 
 
-def github_ratelimit_callback(
-    request: requests_mock.request._RequestObjectProxy,
-    context: requests_mock.response._Context,
-    ratelimit_reset: Optional[int],
-) -> Dict[str, str]:
-    """Return a rate-limited GitHub API response."""
-    # Check request headers
-    assert request.headers["Accept"] == "application/vnd.github.v3+json"
-    assert "Software Heritage Lister" in request.headers["User-Agent"]
-    if "Authorization" in request.headers:
-        context.status_code = 429
-    else:
-        context.status_code = 403
-
-    if ratelimit_reset is not None:
-        context.headers["X-Ratelimit-Reset"] = str(ratelimit_reset)
-
-    return {
-        "message": "API rate limit exceeded for <IP>.",
-        "documentation_url": "https://developer.github.com/v3/#rate-limiting",
-    }
-
-
-@pytest.fixture()
-def num_before_ratelimit() -> int:
-    """Number of successful requests before the ratelimit hits"""
-    return 0
-
-
-@pytest.fixture()
-def num_ratelimit() -> Optional[int]:
-    """Number of rate-limited requests; None means infinity"""
-    return None
-
-
-@pytest.fixture()
-def ratelimit_reset() -> Optional[int]:
-    """Value of the X-Ratelimit-Reset header on ratelimited responses"""
-    return None
-
-
-@pytest.fixture()
-def requests_ratelimited(
-    num_before_ratelimit: int,
-    num_ratelimit: Optional[int],
-    ratelimit_reset: Optional[int],
-) -> Iterator[requests_mock.Mocker]:
-    """Mock requests to the GitHub API, returning a rate-limiting status code
-    after `num_before_ratelimit` requests.
-
-    GitHub does inconsistent rate-limiting:
-      - Anonymous requests return a 403 status code
-      - Authenticated requests return a 429 status code, with an
-        X-Ratelimit-Reset header.
-
-    This fixture takes multiple arguments (which can be overridden with a
-    :func:`pytest.mark.parametrize` parameter):
-     - num_before_ratelimit: the global number of requests until the
-       ratelimit triggers
-     - num_ratelimit: the number of requests that return a
-       rate-limited response.
-     - ratelimit_reset: the timestamp returned in X-Ratelimit-Reset if the
-       request is authenticated.
-
-    The default values set in the previous fixtures make all requests return a rate
-    limit response.
-    """
-    current_request = 0
-
-    def response_callback(request, context):
-        nonlocal current_request
-        current_request += 1
-        if num_before_ratelimit < current_request and (
-            num_ratelimit is None
-            or current_request < num_before_ratelimit + num_ratelimit + 1
-        ):
-            return github_ratelimit_callback(request, context, ratelimit_reset)
-        else:
-            return github_response_callback(request, context)
-
-    with requests_mock.Mocker() as mock:
-        mock.get(GitHubLister.API_URL, json=response_callback)
-        yield mock
-
-
 def test_anonymous_ratelimit(swh_scheduler, caplog, requests_ratelimited) -> None:
-    caplog.set_level(logging.DEBUG, "swh.lister.github.utils")
+    caplog.set_level(logging.DEBUG, "swh.core.github.utils")
 
     lister = GitHubLister(scheduler=swh_scheduler)
     assert lister.github_session.anonymous
@@ -281,26 +151,6 @@ def test_anonymous_ratelimit(swh_scheduler, caplog, requests_ratelimited) -> Non
     last_log = caplog.records[-1]
     assert last_log.levelname == "WARNING"
     assert "No X-Ratelimit-Reset value found in responses" in last_log.message
-
-
-@pytest.fixture
-def github_credentials() -> List[Dict[str, str]]:
-    """Return a static list of GitHub credentials"""
-    return sorted(
-        [{"username": f"swh{i:d}", "token": f"token-{i:d}"} for i in range(3)]
-        + [
-            {"username": f"swh-legacy{i:d}", "password": f"token-legacy-{i:d}"}
-            for i in range(3)
-        ],
-        key=lambda c: c["username"],
-    )
-
-
-@pytest.fixture
-def all_tokens(github_credentials) -> List[str]:
-    """Return the list of tokens matching the static credential"""
-
-    return [t.get("token", t.get("password")) for t in github_credentials]
 
 
 @pytest.fixture
@@ -323,29 +173,6 @@ def test_authenticated_credentials(
     ]
 
 
-def fake_time_sleep(duration: float, sleep_calls: Optional[List[float]] = None):
-    """Record calls to time.sleep in the sleep_calls list"""
-    if duration < 0:
-        raise ValueError("Can't sleep for a negative amount of time!")
-    if sleep_calls is not None:
-        sleep_calls.append(duration)
-
-
-def fake_time_time():
-    """Return 0 when running time.time()"""
-    return 0
-
-
-@pytest.fixture
-def monkeypatch_sleep_calls(monkeypatch) -> Iterator[List[float]]:
-    """Monkeypatch `time.time` and `time.sleep`. Returns a list cumulating the arguments
-    passed to time.sleep()."""
-    sleeps: List[float] = []
-    monkeypatch.setattr(time, "sleep", lambda d: fake_time_sleep(d, sleeps))
-    monkeypatch.setattr(time, "time", fake_time_time)
-    yield sleeps
-
-
 @pytest.mark.parametrize(
     "num_ratelimit", [1]
 )  # return a single rate-limit response, then continue
@@ -358,7 +185,7 @@ def test_ratelimit_once_recovery(
     lister_credentials,
 ):
     """Check that the lister recovers from hitting the rate-limit once"""
-    caplog.set_level(logging.DEBUG, "swh.lister.github.utils")
+    caplog.set_level(logging.DEBUG, "swh.core.github.utils")
 
     lister = GitHubLister(scheduler=swh_scheduler, credentials=lister_credentials)
 
@@ -396,7 +223,7 @@ def test_ratelimit_reset_sleep(
 ):
     """Check that the lister properly handles rate-limiting when providing it with
     authentication tokens"""
-    caplog.set_level(logging.DEBUG, "swh.lister.github.utils")
+    caplog.set_level(logging.DEBUG, "swh.core.github.utils")
 
     lister = GitHubLister(scheduler=swh_scheduler, credentials=lister_credentials)
 
