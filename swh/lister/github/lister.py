@@ -11,12 +11,12 @@ from urllib.parse import parse_qs, urlparse
 
 import iso8601
 
+from swh.core.github.utils import GitHubSession, MissingRateLimitReset
 from swh.scheduler.interface import SchedulerInterface
 from swh.scheduler.model import ListedOrigin
 
 from .. import USER_AGENT
 from ..pattern import CredentialsType, Lister
-from .utils import GitHubSession, MissingRateLimitReset
 
 logger = logging.getLogger(__name__)
 

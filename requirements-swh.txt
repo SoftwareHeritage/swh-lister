@@ -1,2 +1,2 @@
-swh.core[db] >= 0.9
+swh.core[db,github] >= 2.8
 swh.scheduler >= 0.8
