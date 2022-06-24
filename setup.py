@@ -56,6 +56,7 @@ setup(
         lister=swh.lister.cli
         [swh.workers]
         lister.arch=swh.lister.arch:register
+        lister.aur=swh.lister.aur:register
         lister.bitbucket=swh.lister.bitbucket:register
         lister.cgit=swh.lister.cgit:register
         lister.cran=swh.lister.cran:register
