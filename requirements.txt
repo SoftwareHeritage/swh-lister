@@ -7,3 +7,4 @@ launchpadlib
 tenacity >= 6.2
 xmltodict
 lxml
+dulwich
