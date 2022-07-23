@@ -24,6 +24,7 @@ following Python modules:
 - `swh.lister.phabricator`
 - `swh.lister.pypi`
 - `swh.lister.tuleap`
+- `swh.lister.gogs`
 
 Dependencies
 ------------

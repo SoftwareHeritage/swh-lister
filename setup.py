@@ -74,6 +74,7 @@ setup(
         lister.sourceforge=swh.lister.sourceforge:register
         lister.tuleap=swh.lister.tuleap:register
         lister.maven=swh.lister.maven:register
+        lister.gogs=swh.lister.gogs:register
     """,
     classifiers=[
         "Programming Language :: Python :: 3",
