@@ -10,9 +10,10 @@ import re
 from typing import Any, Dict, Iterator, Optional
 from urllib.parse import urljoin
 
+from bs4 import BeautifulSoup
+import lxml
 import requests
 from tenacity.before_sleep import before_sleep_log
-import xmltodict
 
 from swh.core.github.utils import GitHubSession
 from swh.lister.utils import throttling_retry
@@ -252,16 +253,18 @@ class MavenLister(Lister[MavenListerState, RepoPage]):
         for pom in out_pom:
             try:
                 response = self.page_request(pom, {})
-                project = xmltodict.parse(response.content)
-                project_d = project.get("project", {})
-                scm_d = project_d.get("scm")
-                if scm_d is not None:
-                    connection = scm_d.get("connection")
+                parsed_pom = BeautifulSoup(response.content, "xml")
+                project = parsed_pom.find("project")
+                if project is None:
+                    continue
+                scm = project.find("scm")
+                if scm is not None:
+                    connection = scm.find("connection")
                     if connection is not None:
                         artifact_metadata_d = {
                             "type": "scm",
                             "doc": out_pom[pom],
-                            "url": connection,
+                            "url": connection.text,
                         }
                         logger.debug("* Yielding pom %s: %s", pom, artifact_metadata_d)
                         yield artifact_metadata_d
@@ -274,8 +277,8 @@ class MavenLister(Lister[MavenListerState, RepoPage]):
                     "POM info page could not be fetched, skipping project '%s'",
                     pom,
                 )
-            except xmltodict.expat.ExpatError as error:
-                logger.info("Could not parse POM %s XML: %s. Next.", pom, error)
+            except lxml.etree.Error as error:
+                logger.info("Could not parse POM %s XML: %s.", pom, error)
 
     def get_scm(self, page: RepoPage) -> Optional[ListedOrigin]:
         """Retrieve scm origin out of the page information. Only called when type of the
