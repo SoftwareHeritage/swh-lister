@@ -61,7 +61,7 @@ The origin url corresponds to the http api url for a package, for example
 Additionally we add some data set to "extra_loader_arguments":
 
 * **artifacts**: Represent data about the Crates to download, following
-    :ref:`original-artifacts-json specification <original-artifacts-json>`
+    :ref:`original-artifacts-json specification <extrinsic-metadata-original-artifacts-json>`
 * **crates_metadata**: To store all other interesting attributes that do not belongs
     to artifacts. For now it mainly indicate when a version is `yanked`_.
 
