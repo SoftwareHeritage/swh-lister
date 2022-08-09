@@ -3,10 +3,11 @@
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
 
+from dataclasses import asdict, dataclass
 import logging
 import random
 from typing import Any, Dict, Iterator, List, Optional
-from urllib.parse import urljoin
+from urllib.parse import parse_qs, urljoin, urlparse
 
 import iso8601
 import requests
@@ -17,15 +18,36 @@ from swh.scheduler.interface import SchedulerInterface
 from swh.scheduler.model import ListedOrigin
 
 from .. import USER_AGENT
-from ..pattern import CredentialsType, StatelessLister
+from ..pattern import CredentialsType, Lister
 
 logger = logging.getLogger(__name__)
 
-# Aliasing page results returned by `GogsLister.get_pages` method
-GogsListerPage = List[Dict[str, Any]]
+Repo = Dict[str, Any]
 
 
-class GogsLister(StatelessLister[GogsListerPage]):
+@dataclass
+class GogsListerPage:
+    repos: Optional[List[Repo]] = None
+    next_link: Optional[str] = None
+
+
+@dataclass
+class GogsListerState:
+    last_seen_next_link: Optional[str] = None
+    """Last link header (could be already visited) during an incremental pass."""
+    last_seen_repo_id: Optional[int] = None
+    """Last repo id seen during an incremental pass."""
+
+
+def _parse_page_id(url: Optional[str]) -> int:
+    """Parse the page id from a Gogs page url."""
+    if url is None:
+        return 0
+
+    return int(parse_qs(urlparse(url).query)["page"][0])
+
+
+class GogsLister(Lister[GogsListerState, GogsListerPage]):
 
     """List origins from the Gogs
 
@@ -61,7 +83,6 @@ class GogsLister(StatelessLister[GogsListerPage]):
 
         self.query_params = {
             "limit": page_size,
-            "page": 1,
         }
 
         self.api_token = api_token
@@ -88,6 +109,12 @@ class GogsLister(StatelessLister[GogsListerPage]):
             }
         )
 
+    def state_from_dict(self, d: Dict[str, Any]) -> GogsListerState:
+        return GogsListerState(**d)
+
+    def state_to_dict(self, state: GogsListerState) -> Dict[str, Any]:
+        return asdict(state)
+
     @throttling_retry(before_sleep=before_sleep_log(logger, logging.WARNING))
     def page_request(self, url, params) -> requests.Response:
 
@@ -107,38 +134,70 @@ class GogsLister(StatelessLister[GogsListerPage]):
         return response
 
     @classmethod
-    def results_simplified(cls, body: Dict[str, GogsListerPage]) -> GogsListerPage:
+    def extract_repos(cls, body: Dict[str, Any]) -> List[Repo]:
         fields_filter = ["id", "clone_url", "updated_at"]
         return [{k: r[k] for k in fields_filter} for r in body["data"]]
 
     def get_pages(self) -> Iterator[GogsListerPage]:
+        page_id = 1
+        if self.state.last_seen_next_link is not None:
+            page_id = _parse_page_id(self.state.last_seen_next_link)
+
         # base with trailing slash, path without leading slash for urljoin
-        url = urljoin(self.url, self.REPO_LIST_PATH)
-        response = self.page_request(url, self.query_params)
+        next_link: Optional[str] = urljoin(self.url, self.REPO_LIST_PATH)
+        response = self.page_request(next_link, {**self.query_params, "page": page_id})
 
-        while True:
-            page_results = self.results_simplified(response.json())
-
-            yield page_results
+        while next_link is not None:
+            repos = self.extract_repos(response.json())
 
             assert len(response.links) > 0, "API changed: no Link header found"
             if "next" in response.links:
-                url = response.links["next"]["url"]
+                next_link = response.links["next"]["url"]
             else:
-                break
+                next_link = None  # Happens for the last page
 
-            response = self.page_request(url, {})
+            yield GogsListerPage(repos=repos, next_link=next_link)
+
+            if next_link is not None:
+                response = self.page_request(next_link, {})
 
     def get_origins_from_page(self, page: GogsListerPage) -> Iterator[ListedOrigin]:
         """Convert a page of Gogs repositories into a list of ListedOrigins"""
         assert self.lister_obj.id is not None
+        assert page.repos is not None
 
-        for repo in page:
-            last_update = iso8601.parse_date(repo["updated_at"])
+        for r in page.repos:
+            last_update = iso8601.parse_date(r["updated_at"])
 
             yield ListedOrigin(
                 lister_id=self.lister_obj.id,
                 visit_type=self.VISIT_TYPE,
-                url=repo["clone_url"],
+                url=r["clone_url"],
                 last_update=last_update,
             )
+
+    def commit_page(self, page: GogsListerPage) -> None:
+        last_seen_next_link = page.next_link
+
+        page_id = _parse_page_id(last_seen_next_link)
+        state_page_id = _parse_page_id(self.state.last_seen_next_link)
+
+        if page_id > state_page_id:
+            self.state.last_seen_next_link = last_seen_next_link
+
+        if (page.repos is not None) and len(page.repos) > 0:
+            self.state.last_seen_repo_id = page.repos[-1]["id"]
+
+    def finalize(self) -> None:
+        scheduler_state = self.get_state_from_scheduler()
+
+        state_page_id = _parse_page_id(self.state.last_seen_next_link)
+        scheduler_page_id = _parse_page_id(scheduler_state.last_seen_next_link)
+
+        state_last_repo_id = self.state.last_seen_repo_id or 0
+        scheduler_last_repo_id = scheduler_state.last_seen_repo_id or 0
+
+        if (state_page_id >= scheduler_page_id) and (
+            state_last_repo_id > scheduler_last_repo_id
+        ):
+            self.updated = True  # Marked updated only if it finds new repos
