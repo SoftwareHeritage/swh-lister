@@ -4,6 +4,7 @@
 # See top-level LICENSE file for more information
 
 from dataclasses import asdict, dataclass
+from datetime import datetime, timezone
 import logging
 import random
 from typing import Any, Dict, Iterator, Optional, Tuple
@@ -31,9 +32,8 @@ VCS_MAPPING = {"hg_git": "hg"}
 class GitLabListerState:
     """State of the GitLabLister"""
 
-    last_seen_next_link: Optional[str] = None
-    """Last link header (not visited yet) during an incremental pass
-
+    last_listing_date: Optional[str] = None
+    """Last date when listing started during an incremental pass
     """
 
 
@@ -117,6 +117,7 @@ class GitLabLister(Lister[GitLabListerState, PageResult]):
         self.incremental = incremental
         self.last_page: Optional[str] = None
         self.per_page = 100
+        self.listing_date = datetime.now(timezone.utc).isoformat()
 
         self.session = requests.Session()
         self.session.headers.update(
@@ -133,7 +134,7 @@ class GitLabLister(Lister[GitLabListerState, PageResult]):
                 self.session.headers["Authorization"] = f"Bearer {api_token}"
 
     def state_from_dict(self, d: Dict[str, Any]) -> GitLabListerState:
-        return GitLabListerState(**d)
+        return GitLabListerState(last_listing_date=d.get("last_listing_date"))
 
     def state_to_dict(self, state: GitLabListerState) -> Dict[str, Any]:
         return asdict(state)
@@ -188,14 +189,12 @@ class GitLabLister(Lister[GitLabListerState, PageResult]):
         }
         if id_after is not None:
             parameters["id_after"] = str(id_after)
+        if self.incremental and self.state and self.state.last_listing_date:
+            parameters["last_activity_after"] = self.state.last_listing_date
         return f"{self.url}/projects?{urlencode(parameters)}"
 
     def get_pages(self) -> Iterator[PageResult]:
-        next_page: Optional[str]
-        if self.incremental and self.state and self.state.last_seen_next_link:
-            next_page = self.state.last_seen_next_link
-        else:
-            next_page = self.page_url()
+        next_page = self.page_url()
 
         while next_page:
             self.last_page = next_page
@@ -217,49 +216,12 @@ class GitLabLister(Lister[GitLabListerState, PageResult]):
                 last_update=iso8601.parse_date(repo["last_activity_at"]),
             )
 
-    def commit_page(self, page_result: PageResult) -> None:
-        """Update currently stored state using the latest listed "next" page if relevant.
-
-        Relevancy is determined by the next_page link whose 'page' id must be strictly
-        superior to the currently stored one.
-
-        Note: this is a noop for full listing mode
-
-        """
-        if self.incremental:
-            # link: https://${project-api}/?...&page=2x...
-            next_page = page_result.next_page
-            if not next_page and self.last_page:
-                next_page = self.last_page
-
-            if next_page:
-                id_after = _parse_id_after(next_page)
-                previous_next_page = self.state.last_seen_next_link
-                previous_id_after = _parse_id_after(previous_next_page)
-
-                if previous_next_page is None or (
-                    previous_id_after and id_after and previous_id_after < id_after
-                ):
-                    self.state.last_seen_next_link = next_page
-
     def finalize(self) -> None:
         """finalize the lister state when relevant (see `fn:commit_page` for details)
 
         Note: this is a noop for full listing mode
 
         """
-        next_page = self.state.last_seen_next_link
-        if self.incremental and next_page:
-            # link: https://${project-api}/?...&page=2x...
-            next_id_after = _parse_id_after(next_page)
-            scheduler_state = self.get_state_from_scheduler()
-            previous_next_id_after = _parse_id_after(
-                scheduler_state.last_seen_next_link
-            )
-
-            if (not previous_next_id_after and next_id_after) or (
-                previous_next_id_after
-                and next_id_after
-                and previous_next_id_after < next_id_after
-            ):
-                self.updated = True
+        if self.incremental:
+            self.state.last_listing_date = self.listing_date
+            self.updated = True

@@ -1,4 +1,4 @@
-# Copyright (C) 2017-2021 The Software Heritage developers
+# Copyright (C) 2017-2022 The Software Heritage developers
 # See the AUTHORS file at the top-level directory of this distribution
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
@@ -7,6 +7,7 @@ import json
 import logging
 from pathlib import Path
 from typing import Dict, List
+from urllib.parse import quote
 
 import pytest
 from requests.status_codes import codes
@@ -92,9 +93,9 @@ def test_lister_gitlab_heptapod(datadir, swh_scheduler, requests_mock):
         assert listed_origin.last_update is not None
 
 
-def gitlab_page_response(datadir, instance: str, id_after: int) -> List[Dict]:
+def gitlab_page_response(datadir, instance: str, page_num: int) -> List[Dict]:
     """Return list of repositories (out of test dataset)"""
-    datapath = Path(datadir, f"https_{instance}", f"api_response_page{id_after}.json")
+    datapath = Path(datadir, f"https_{instance}", f"api_response_page{page_num}.json")
     return json.loads(datapath.read_text()) if datapath.exists else []
 
 
@@ -142,9 +143,9 @@ def test_lister_gitlab_incremental(swh_scheduler, requests_mock, datadir):
 
     url_page1 = lister.page_url()
     response1 = gitlab_page_response(datadir, instance, 1)
-    url_page2 = lister.page_url(2)
+    url_page2 = lister.page_url(response1[-1]["id"])
     response2 = gitlab_page_response(datadir, instance, 2)
-    url_page3 = lister.page_url(3)
+    url_page3 = lister.page_url(response2[-1]["id"])
     response3 = gitlab_page_response(datadir, instance, 3)
 
     requests_mock.get(
@@ -162,11 +163,25 @@ def test_lister_gitlab_incremental(swh_scheduler, requests_mock, datadir):
 
     expected_nb_origins = len(response1) + len(response2)
     assert listed_result == ListerStats(pages=2, origins=expected_nb_origins)
-    assert lister.state.last_seen_next_link == url_page2
+    assert lister.state.last_listing_date == lister.listing_date
 
     lister2 = GitLabLister(swh_scheduler, url=url, instance=instance, incremental=True)
 
-    # Lister will start back at the last stop
+    url_page2 = lister2.page_url()
+    response2 = gitlab_page_response(datadir, instance, 2)
+    url_page3 = lister2.page_url(response2[-1]["id"])
+    response3 = gitlab_page_response(datadir, instance, 3)
+
+    # in a real world scenario, incremental lister will list repositories whose
+    # have been modified since last listing date
+
+    last_activity_param = (
+        f"last_activity_after={quote(lister2.state.last_listing_date)}"
+    )
+
+    assert last_activity_param in url_page2
+    assert last_activity_param in url_page3
+
     requests_mock.get(
         url_page2,
         [{"json": response2, "headers": {"Link": f"<{url_page3}>; rel=next"}}],
@@ -183,7 +198,7 @@ def test_lister_gitlab_incremental(swh_scheduler, requests_mock, datadir):
     assert listed_result2 == ListerStats(
         pages=2, origins=len(response2) + len(response3)
     )
-    assert lister2.state.last_seen_next_link == url_page3
+    assert lister2.state.last_listing_date == lister2.listing_date
 
     assert lister.lister_obj.id == lister2.lister_obj.id
     scheduler_origins = lister2.scheduler.get_listed_origins(
