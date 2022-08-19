@@ -103,7 +103,7 @@ The origin url corresponds to:
 Additionally we add some data set to "extra_loader_arguments":
 
 * **artifacts**: Represent data about the Arch Linux package archive to download,
-  following :ref:`original-artifacts-json specification <original-artifacts-json>`
+  following :ref:`original-artifacts-json specification <extrinsic-metadata-original-artifacts-json>`
 * **arch_metadata**: To store all other interesting attributes that do not belongs to artifacts.
 
 Origin data example Arch Linux official::
