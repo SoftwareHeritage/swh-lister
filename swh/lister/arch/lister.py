@@ -437,12 +437,33 @@ class ArchLister(StatelessLister[ArchListerPage]):
         """Iterate on all arch pages and yield ListedOrigin instances."""
         assert self.lister_obj.id is not None
         for origin in page:
+            artifacts = []
+            arch_metadata = []
+            for version in origin["versions"]:
+                artifacts.append(
+                    {
+                        "version": version["version"],
+                        "filename": version["filename"],
+                        "url": version["url"],
+                        "length": version["length"],
+                    }
+                )
+                arch_metadata.append(
+                    {
+                        "version": version["version"],
+                        "name": version["name"],
+                        "arch": version["arch"],
+                        "repo": version["repo"],
+                        "last_modified": version["last_modified"],
+                    }
+                )
             yield ListedOrigin(
                 lister_id=self.lister_obj.id,
                 visit_type=self.VISIT_TYPE,
                 url=origin["url"],
                 last_update=origin["last_modified"],
                 extra_loader_arguments={
-                    "artifacts": origin["versions"],
+                    "artifacts": artifacts,
+                    "arch_metadata": arch_metadata,
                 },
             )
