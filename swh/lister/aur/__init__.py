@@ -70,7 +70,7 @@ The origin url corresponds to the git url of a package, for example ``https://au
 Additionally we add some data set to "extra_loader_arguments":
 
 * **artifacts**: Represent data about the Aur package snapshot to download,
-  following :ref:`original-artifacts-json specification <original-artifacts-json>`
+  following :ref:`original-artifacts-json specification <extrinsic-metadata-original-artifacts-json>`
 * **aur_metadata**: To store all other interesting attributes that do not belongs to artifacts.
 
 Origin data example::
