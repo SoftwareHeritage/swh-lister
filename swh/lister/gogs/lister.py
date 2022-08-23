@@ -96,7 +96,8 @@ class GogsLister(Lister[GogsListerState, GogsListerPage]):
                     "Using authentication credentials from user %s", username or "???"
                 )
             else:
-                raise ValueError("No credentials or API token provided")
+                # Raises an error on Gogs, or a warning on Gitea
+                self.on_anonymous_mode()
 
         self.max_page_limit = 2
 
@@ -105,9 +106,14 @@ class GogsLister(Lister[GogsListerState, GogsListerPage]):
             {
                 "Accept": "application/json",
                 "User-Agent": USER_AGENT,
-                "Authorization": f"token {self.api_token}",
             }
         )
+
+        if self.api_token:
+            self.session.headers["Authorization"] = f"token {self.api_token}"
+
+    def on_anonymous_mode(self):
+        raise ValueError("No credentials or API token provided")
 
     def state_from_dict(self, d: Dict[str, Any]) -> GogsListerState:
         return GogsListerState(**d)
