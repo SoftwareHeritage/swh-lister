@@ -3,6 +3,7 @@
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
 
+from dataclasses import dataclass
 from datetime import datetime
 import json
 import logging
@@ -17,14 +18,22 @@ from swh.scheduler.interface import SchedulerInterface
 from swh.scheduler.model import ListedOrigin
 
 from .. import USER_AGENT
-from ..pattern import CredentialsType, StatelessLister
+from ..pattern import CredentialsType, Lister
 
 logger = logging.getLogger(__name__)
+
+
+@dataclass
+class GolangStateType:
+    last_seen: Optional[datetime] = None
+    """Last timestamp of a package version we have saved.
+    Used as a starting point for an incremental listing."""
+
 
 GolangPageType = List[Dict[str, Any]]
 
 
-class GolangLister(StatelessLister[GolangPageType]):
+class GolangLister(Lister[GolangStateType, GolangPageType]):
     """
     List all Golang modules and send associated origins to scheduler.
 
@@ -38,7 +47,10 @@ class GolangLister(StatelessLister[GolangPageType]):
     LISTER_NAME = "Golang"
 
     def __init__(
-        self, scheduler: SchedulerInterface, credentials: CredentialsType = None,
+        self,
+        scheduler: SchedulerInterface,
+        incremental: bool = False,
+        credentials: CredentialsType = None,
     ):
         super().__init__(
             scheduler=scheduler,
@@ -51,6 +63,29 @@ class GolangLister(StatelessLister[GolangPageType]):
         self.session.headers.update(
             {"Accept": "application/json", "User-Agent": USER_AGENT}
         )
+        self.incremental = incremental
+
+    def state_from_dict(self, d: Dict[str, Any]) -> GolangStateType:
+        as_string = d.get("last_seen")
+        last_seen = iso8601.parse_date(as_string) if as_string is not None else None
+        return GolangStateType(last_seen=last_seen)
+
+    def state_to_dict(self, state: GolangStateType) -> Dict[str, Any]:
+        return {
+            "last_seen": state.last_seen.isoformat()
+            if state.last_seen is not None
+            else None
+        }
+
+    def finalize(self):
+        if self.incremental and self.state.last_seen is not None:
+            scheduler_state = self.get_state_from_scheduler()
+
+            if (
+                scheduler_state.last_seen is None
+                or self.state.last_seen > scheduler_state.last_seen
+            ):
+                self.updated = True
 
     @throttling_retry(
         retry=retry_policy_generic,
@@ -108,17 +143,25 @@ class GolangLister(StatelessLister[GolangPageType]):
         return page, since
 
     def get_pages(self) -> Iterator[GolangPageType]:
-        page, since = self.get_single_page()
-        last_since = since
+        since = None
+        if self.incremental:
+            since = self.state.last_seen
+        page, since = self.get_single_page(since=since)
+        if since == self.state.last_seen:
+            # The index returns packages whose timestamp are greater or
+            # equal to the date provided as parameter, which will create
+            # an infinite loop if not stopped here.
+            return [], since
+        if since is not None:
+            self.state.last_seen = since
+
         while page:
             yield page
             page, since = self.get_single_page(since=since)
-            if last_since == since:
-                # The index returns packages whose timestamp are greater or
-                # equal to the date provided as parameter, which will create
-                # an infinite loop if not stopped here.
-                return []
-            last_since = since
+            if since == self.state.last_seen:
+                return [], since
+            if since is not None:
+                self.state.last_seen = since
 
     def get_origins_from_page(self, page: GolangPageType) -> Iterator[ListedOrigin]:
         """

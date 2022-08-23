@@ -13,6 +13,13 @@ def list_golang(**lister_args):
     return GolangLister.from_configfile(**lister_args).run().dict()
 
 
+@shared_task(name=__name__ + ".IncrementalGolangLister")
+def list_golang_incremental(**lister_args):
+    """Incremental update of Golang packages"""
+    lister = GolangLister.from_configfile(incremental=True, **lister_args)
+    return lister.run().dict()
+
+
 @shared_task(name=__name__ + ".ping")
 def _ping():
     return "OK"

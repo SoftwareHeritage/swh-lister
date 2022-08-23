@@ -3,11 +3,12 @@
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
 
+import datetime
 from pathlib import Path
 
 import iso8601
 
-from swh.lister.golang.lister import GolangLister
+from swh.lister.golang.lister import GolangLister, GolangStateType
 from swh.lister.tests.test_utils import assert_sleep_calls
 from swh.lister.utils import WAIT_EXP_BASE
 
@@ -88,3 +89,105 @@ def test_golang_lister(swh_scheduler, mocker, requests_mock, datadir):
 
     assert stats.pages == 3
     assert stats.origins == 18
+
+
+def test_golang_lister_incremental(swh_scheduler, requests_mock, datadir, mocker):
+    # first listing, should return one origin per package
+    lister = GolangLister(scheduler=swh_scheduler, incremental=True)
+    mock = mocker.spy(lister, "get_single_page")
+
+    responses = [
+        {"text": Path(datadir, "page-1.txt").read_text(), "status_code": 200},
+    ]
+    requests_mock.get(GolangLister.GOLANG_MODULES_INDEX_URL, responses)
+
+    stats = lister.run()
+
+    page1_last_timestamp = datetime.datetime(
+        2019, 4, 11, 18, 47, 29, 390564, tzinfo=datetime.timezone.utc
+    )
+    page2_last_timestamp = datetime.datetime(
+        2019, 4, 15, 13, 54, 35, 250835, tzinfo=datetime.timezone.utc
+    )
+    page3_last_timestamp = datetime.datetime(
+        2019, 4, 18, 2, 7, 41, 336899, tzinfo=datetime.timezone.utc
+    )
+    mock.assert_has_calls(
+        [
+            # First call has no state
+            mocker.call(since=None),
+            # Second call is the last timestamp in the listed page
+            mocker.call(since=page1_last_timestamp),
+        ]
+    )
+
+    assert lister.get_state_from_scheduler() == GolangStateType(
+        last_seen=page1_last_timestamp
+    )
+
+    assert stats.pages == 1
+    assert stats.origins == 5
+
+    # Incremental should list nothing
+    lister = GolangLister(scheduler=swh_scheduler, incremental=True)
+    mock = mocker.spy(lister, "get_single_page")
+    stats = lister.run()
+    mock.assert_has_calls([mocker.call(since=page1_last_timestamp)])
+    assert stats.pages == 0
+    assert stats.origins == 0
+
+    # Add more responses
+    responses = [
+        {"text": Path(datadir, "page-2.txt").read_text(), "status_code": 200},
+    ]
+
+    requests_mock.get(GolangLister.GOLANG_MODULES_INDEX_URL, responses)
+
+    # Incremental should list new page
+    lister = GolangLister(scheduler=swh_scheduler, incremental=True)
+    mock = mocker.spy(lister, "get_single_page")
+    stats = lister.run()
+    mock.assert_has_calls(
+        [
+            mocker.call(since=page1_last_timestamp),
+            mocker.call(since=page2_last_timestamp),
+        ]
+    )
+    assert stats.pages == 1
+    assert stats.origins == 4
+
+    # Incremental should list nothing again
+    lister = GolangLister(scheduler=swh_scheduler, incremental=True)
+    mock = mocker.spy(lister, "get_single_page")
+    stats = lister.run()
+    assert stats.pages == 0
+    assert stats.origins == 0
+    mock.assert_has_calls([mocker.call(since=page2_last_timestamp)])
+
+    # Add yet more responses
+    responses = [
+        {"text": Path(datadir, "page-3.txt").read_text(), "status_code": 200},
+    ]
+
+    requests_mock.get(GolangLister.GOLANG_MODULES_INDEX_URL, responses)
+
+    # Incremental should list new page again
+    lister = GolangLister(scheduler=swh_scheduler, incremental=True)
+    mock = mocker.spy(lister, "get_single_page")
+    stats = lister.run()
+    assert stats.pages == 1
+    assert stats.origins == 9
+    mock.assert_has_calls(
+        [
+            mocker.call(since=page2_last_timestamp),
+            mocker.call(since=page3_last_timestamp),
+        ]
+    )
+
+    # Incremental should list nothing one last time
+    lister = GolangLister(scheduler=swh_scheduler, incremental=True)
+    mock = mocker.spy(lister, "get_single_page")
+    stats = lister.run()
+    assert stats.pages == 0
+    assert stats.origins == 0
+    mock.assert_has_calls([mocker.call(since=page3_last_timestamp)])
