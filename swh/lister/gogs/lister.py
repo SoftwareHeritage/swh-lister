@@ -92,9 +92,7 @@ class GogsLister(Lister[GogsListerState, GogsListerPage]):
                 cred = random.choice(self.credentials)
                 username = cred.get("username")
                 self.api_token = cred["password"]
-                logger.warning(
-                    "Using authentication credentials from user %s", username or "???"
-                )
+                logger.info("Using authentication credentials from user %s", username)
             else:
                 # Raises an error on Gogs, or a warning on Gitea
                 self.on_anonymous_mode()
