@@ -175,8 +175,8 @@ class ArchLister(StatelessLister[ArchListerPage]):
                 m = arch_rex.match(filename)
                 if m is None:
                     logger.error(
-                        "Can not find a match for architecture in %(filename)s"
-                        % dict(filename=filename)
+                        "Can not find a match for architecture in %(filename)s",
+                        dict(filename=filename),
                     )
                 else:
                     arch = m.group("arch")
@@ -191,7 +191,8 @@ class ArchLister(StatelessLister[ArchListerPage]):
                 if s is None:
                     logger.error(
                         "Can not find a match for 'last_modified' and/or "
-                        "'size' in '%(raw_text)s'" % dict(raw_text=raw_text)
+                        "'size' in '%(raw_text)s'",
+                        dict(raw_text=raw_text),
                     )
                 else:
                     assert s.groups()
@@ -358,14 +359,14 @@ class ArchLister(StatelessLister[ArchListerPage]):
                     logger.debug(
                         "Processing %(instance)s source packages info from "
                         "%(flavour)s %(arch)s %(repo)s repository, "
-                        "(%(qty)s packages)."
-                        % dict(
+                        "(%(qty)s packages).",
+                        dict(
                             instance=self.instance,
                             flavour=name,
                             arch=arch,
                             repo=repo,
                             qty=len(packages_desc),
-                        )
+                        ),
                     )
 
                     for package_desc in packages_desc:
