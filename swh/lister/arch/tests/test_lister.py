@@ -1373,28 +1373,22 @@ def test_arch_lister(datadir, requests_mock_datadir, swh_scheduler):
     assert res.pages == 9
     assert res.origins == 12
 
-    expected_origins_sorted = sorted(expected_origins, key=lambda x: x.get("url"))
-    scheduler_origins_sorted = sorted(
-        swh_scheduler.get_listed_origins(lister.lister_obj.id).results,
-        key=lambda x: x.url,
-    )
-
-    assert len(scheduler_origins_sorted) == len(expected_origins_sorted)
+    scheduler_origins = swh_scheduler.get_listed_origins(lister.lister_obj.id).results
 
     assert [
         (
             scheduled.visit_type,
             scheduled.url,
-            scheduled.extra_loader_arguments.get("artifacts"),
-            scheduled.extra_loader_arguments.get("arch_metadata"),
+            scheduled.extra_loader_arguments["artifacts"],
+            scheduled.extra_loader_arguments["arch_metadata"],
         )
-        for scheduled in scheduler_origins_sorted
+        for scheduled in sorted(scheduler_origins, key=lambda scheduled: scheduled.url)
     ] == [
         (
             "arch",
-            expected.get("url"),
-            expected.get("extra_loader_arguments").get("artifacts"),
-            expected.get("extra_loader_arguments").get("arch_metadata"),
+            expected["url"],
+            expected["extra_loader_arguments"]["artifacts"],
+            expected["extra_loader_arguments"]["arch_metadata"],
         )
-        for expected in expected_origins_sorted
+        for expected in sorted(expected_origins, key=lambda expected: expected["url"])
     ]

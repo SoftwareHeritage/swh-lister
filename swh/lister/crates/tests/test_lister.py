@@ -137,20 +137,22 @@ def test_crates_lister(datadir, tmp_path, swh_scheduler):
     assert res.pages == 3
     assert res.origins == 3
 
-    expected_origins_sorted = sorted(expected_origins, key=lambda x: x.get("url"))
-    scheduler_origins_sorted = sorted(
-        swh_scheduler.get_listed_origins(lister.lister_obj.id).results,
-        key=lambda x: x.url,
-    )
-
-    for scheduled, expected in zip(scheduler_origins_sorted, expected_origins_sorted):
-        assert scheduled.visit_type == "crates"
-        assert scheduled.url == expected.get("url")
-        assert scheduled.extra_loader_arguments.get("artifacts") == expected.get(
-            "artifacts"
+    scheduler_origins = swh_scheduler.get_listed_origins(lister.lister_obj.id).results
+    assert [
+        (
+            scheduled.visit_type,
+            scheduled.url,
+            scheduled.extra_loader_arguments["artifacts"],
         )
-
-    assert len(scheduler_origins_sorted) == len(expected_origins_sorted)
+        for scheduled in sorted(scheduler_origins, key=lambda scheduled: scheduled.url)
+    ] == [
+        (
+            "crates",
+            expected["url"],
+            expected["artifacts"],
+        )
+        for expected in sorted(expected_origins, key=lambda expected: expected["url"])
+    ]
 
 
 def test_crates_lister_incremental(datadir, tmp_path, swh_scheduler):
@@ -176,22 +178,24 @@ def test_crates_lister_incremental(datadir, tmp_path, swh_scheduler):
     assert res.pages == 2
     assert res.origins == 2
 
-    expected_origins_sorted = sorted(
-        expected_origins_incremental, key=lambda x: x.get("url")
-    )
-    scheduler_origins_sorted = sorted(
-        swh_scheduler.get_listed_origins(lister.lister_obj.id).results,
-        key=lambda x: x.url,
-    )
-
-    for scheduled, expected in zip(scheduler_origins_sorted, expected_origins_sorted):
-        assert scheduled.visit_type == "crates"
-        assert scheduled.url == expected.get("url")
-        assert scheduled.extra_loader_arguments.get("artifacts") == expected.get(
-            "artifacts"
+    scheduler_origins = swh_scheduler.get_listed_origins(lister.lister_obj.id).results
+    assert [
+        (
+            scheduled.visit_type,
+            scheduled.url,
+            scheduled.extra_loader_arguments["artifacts"],
         )
-
-    assert len(scheduler_origins_sorted) == len(expected_origins_sorted)
+        for scheduled in sorted(scheduler_origins, key=lambda scheduled: scheduled.url)
+    ] == [
+        (
+            "crates",
+            expected["url"],
+            expected["artifacts"],
+        )
+        for expected in sorted(
+            expected_origins_incremental, key=lambda expected: expected["url"]
+        )
+    ]
 
 
 def test_crates_lister_incremental_nothing_new(datadir, tmp_path, swh_scheduler):

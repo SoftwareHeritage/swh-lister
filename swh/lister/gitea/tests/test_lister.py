@@ -51,14 +51,7 @@ def check_listed_origins(lister_urls: List[str], scheduler_origins: List[ListedO
     """Asserts that the two collections have the same origin URLs.
 
     Does not test last_update."""
-
-    sorted_lister_urls = list(sorted(lister_urls))
-    sorted_scheduler_origins = list(sorted(scheduler_origins))
-
-    assert len(sorted_lister_urls) == len(sorted_scheduler_origins)
-
-    for l_url, s_origin in zip(sorted_lister_urls, sorted_scheduler_origins):
-        assert l_url == s_origin.url
+    assert set(lister_urls) == {origin.url for origin in scheduler_origins}
 
 
 def test_gitea_full_listing(

@@ -29,15 +29,9 @@ def bb_api_repositories_page2(datadir):
 def _check_listed_origins(lister_origins, scheduler_origins):
     """Asserts that the two collections have the same origins from the point of view of
     the lister"""
-
-    sorted_lister_origins = list(sorted(lister_origins))
-    sorted_scheduler_origins = list(sorted(scheduler_origins))
-
-    assert len(sorted_lister_origins) == len(sorted_scheduler_origins)
-
-    for lo, so in zip(sorted_lister_origins, sorted_scheduler_origins):
-        assert lo.url == so.url
-        assert lo.last_update == so.last_update
+    assert {(lo.url, lo.last_update) for lo in lister_origins} == {
+        (so.url, so.last_update) for so in scheduler_origins
+    }
 
 
 def test_bitbucket_incremental_lister(

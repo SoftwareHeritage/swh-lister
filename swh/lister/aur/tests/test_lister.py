@@ -99,28 +99,22 @@ def test_aur_lister(datadir, requests_mock_datadir, swh_scheduler):
     assert res.pages == 4
     assert res.origins == 4
 
-    scheduler_origins_sorted = sorted(
-        swh_scheduler.get_listed_origins(lister.lister_obj.id).results,
-        key=lambda x: x.url,
-    )
-    expected_origins_sorted = sorted(expected_origins, key=lambda x: x.get("url"))
-
-    assert len(scheduler_origins_sorted) == len(expected_origins_sorted)
+    scheduler_origins = swh_scheduler.get_listed_origins(lister.lister_obj.id).results
 
     assert [
         (
             scheduled.visit_type,
             scheduled.url,
-            scheduled.extra_loader_arguments.get("artifacts"),
+            scheduled.extra_loader_arguments["artifacts"],
         )
-        for scheduled in scheduler_origins_sorted
+        for scheduled in sorted(scheduler_origins, key=lambda scheduled: scheduled.url)
     ] == [
         (
             "aur",
-            expected.get("url"),
-            expected.get("extra_loader_arguments").get("artifacts"),
+            expected["url"],
+            expected["extra_loader_arguments"]["artifacts"],
         )
-        for expected in expected_origins_sorted
+        for expected in sorted(expected_origins, key=lambda expected: expected["url"])
     ]
 
 
