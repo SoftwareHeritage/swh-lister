@@ -70,10 +70,9 @@ class AurLister(StatelessLister[AurListerPage]):
         """
         url = self.DEFAULT_PACKAGES_INDEX_URL.format(base_url=self.url)
         filename = url.split("/")[-1]
-        destination = Path(self.DESTINATION_PATH, filename)
+        destination = self.DESTINATION_PATH / filename
 
-        if not Path(self.DESTINATION_PATH).exists():
-            Path(self.DESTINATION_PATH).mkdir()
+        self.DESTINATION_PATH.mkdir(exist_ok=True)
 
         response = requests.get(url, stream=True)
         destination.write_bytes(response.raw.read())
