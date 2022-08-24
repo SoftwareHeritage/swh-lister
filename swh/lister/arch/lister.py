@@ -328,111 +328,114 @@ class ArchLister(StatelessLister[ArchListerPage]):
         for name, flavour in self.flavours.items():
             for arch in flavour["archs"]:
                 for repo in flavour["repos"]:
-                    page = []
-                    if name == "official":
-                        prefix = urljoin(flavour["base_archive_url"], "/repos/last/")
-                        filename = f"{repo}.files.tar.gz"
-                        archive_url = urljoin(prefix, f"{repo}/os/{arch}/{filename}")
-                        destination_path = Path(self.DESTINATION_PATH, arch, filename)
-                        base_url = flavour["base_archive_url"]
-                        dl_url_fmt = self.ARCH_PACKAGE_DOWNLOAD_URL_PATTERN
-                        base_info_url = flavour["base_info_url"]
-                        info_url_fmt = self.ARCH_PACKAGE_URL_PATTERN
-                    elif name == "arm":
-                        filename = f"{repo}.files.tar.gz"
-                        archive_url = urljoin(
-                            flavour["base_mirror_url"], f"{arch}/{repo}/{filename}"
-                        )
-                        destination_path = Path(self.DESTINATION_PATH, arch, filename)
-                        base_url = flavour["base_mirror_url"]
-                        dl_url_fmt = self.ARM_PACKAGE_DOWNLOAD_URL_PATTERN
-                        base_info_url = flavour["base_info_url"]
-                        info_url_fmt = self.ARM_PACKAGE_URL_PATTERN
+                    yield self._get_repo_page(name, flavour, arch, repo)
 
-                    archive = self.get_repo_archive(
-                        url=archive_url, destination_path=destination_path
-                    )
+    def _get_repo_page(
+        self, name: str, flavour: Dict[str, Any], arch: str, repo: str
+    ) -> ArchListerPage:
+        page = []
+        if name == "official":
+            prefix = urljoin(flavour["base_archive_url"], "/repos/last/")
+            filename = f"{repo}.files.tar.gz"
+            archive_url = urljoin(prefix, f"{repo}/os/{arch}/{filename}")
+            destination_path = Path(self.DESTINATION_PATH, arch, filename)
+            base_url = flavour["base_archive_url"]
+            dl_url_fmt = self.ARCH_PACKAGE_DOWNLOAD_URL_PATTERN
+            base_info_url = flavour["base_info_url"]
+            info_url_fmt = self.ARCH_PACKAGE_URL_PATTERN
+        elif name == "arm":
+            filename = f"{repo}.files.tar.gz"
+            archive_url = urljoin(
+                flavour["base_mirror_url"], f"{arch}/{repo}/{filename}"
+            )
+            destination_path = Path(self.DESTINATION_PATH, arch, filename)
+            base_url = flavour["base_mirror_url"]
+            dl_url_fmt = self.ARM_PACKAGE_DOWNLOAD_URL_PATTERN
+            base_info_url = flavour["base_info_url"]
+            info_url_fmt = self.ARM_PACKAGE_URL_PATTERN
 
-                    assert archive
+        archive = self.get_repo_archive(
+            url=archive_url, destination_path=destination_path
+        )
 
-                    packages_desc = list(archive.glob("**/desc"))
-                    logger.debug(
-                        "Processing %(instance)s source packages info from "
-                        "%(flavour)s %(arch)s %(repo)s repository, "
-                        "(%(qty)s packages).",
-                        dict(
-                            instance=self.instance,
-                            flavour=name,
-                            arch=arch,
-                            repo=repo,
-                            qty=len(packages_desc),
+        assert archive
+
+        packages_desc = list(archive.glob("**/desc"))
+        logger.debug(
+            "Processing %(instance)s source packages info from "
+            "%(flavour)s %(arch)s %(repo)s repository, "
+            "(%(qty)s packages).",
+            dict(
+                instance=self.instance,
+                flavour=name,
+                arch=arch,
+                repo=repo,
+                qty=len(packages_desc),
+            ),
+        )
+
+        for package_desc in packages_desc:
+            data = self.parse_desc_file(
+                path=package_desc,
+                repo=repo,
+                base_url=base_url,
+                dl_url_fmt=dl_url_fmt,
+            )
+
+            assert data["builddate"]
+            last_modified = datetime.datetime.fromtimestamp(
+                float(data["builddate"]), tz=datetime.timezone.utc
+            )
+
+            assert data["name"]
+            assert data["filename"]
+            assert data["arch"]
+            url = info_url_fmt.format(
+                base_url=base_info_url,
+                pkgname=data["name"],
+                filename=data["filename"],
+                repo=repo,
+                arch=data["arch"],
+            )
+
+            assert data["version"]
+            if name == "official":
+                # find all versions of a package scrapping archive
+                versions = self.scrap_package_versions(
+                    name=data["name"], repo=repo, base_url=base_url
+                )
+            elif name == "arm":
+                # There is no way to get related versions of a package,
+                # but 'data' represents the latest released version,
+                # use it in this case
+                assert data["builddate"]
+                assert data["csize"]
+                assert data["url"]
+                versions = [
+                    dict(
+                        name=data["name"],
+                        version=data["version"],
+                        repo=repo,
+                        arch=data["arch"],
+                        filename=data["filename"],
+                        url=data["url"],
+                        last_modified=last_modified.replace(tzinfo=None).isoformat(
+                            timespec="seconds"
                         ),
+                        length=int(data["csize"]),
                     )
+                ]
 
-                    for package_desc in packages_desc:
-                        data = self.parse_desc_file(
-                            path=package_desc,
-                            repo=repo,
-                            base_url=base_url,
-                            dl_url_fmt=dl_url_fmt,
-                        )
-
-                        assert data["builddate"]
-                        last_modified = datetime.datetime.fromtimestamp(
-                            float(data["builddate"]), tz=datetime.timezone.utc
-                        )
-
-                        assert data["name"]
-                        assert data["filename"]
-                        assert data["arch"]
-                        url = info_url_fmt.format(
-                            base_url=base_info_url,
-                            pkgname=data["name"],
-                            filename=data["filename"],
-                            repo=repo,
-                            arch=data["arch"],
-                        )
-
-                        assert data["version"]
-                        if name == "official":
-                            # find all versions of a package scrapping archive
-                            versions = self.scrap_package_versions(
-                                name=data["name"],
-                                repo=repo,
-                                base_url=base_url,
-                            )
-                        elif name == "arm":
-                            # There is no way to get related versions of a package,
-                            # but 'data' represents the latest released version,
-                            # use it in this case
-                            assert data["builddate"]
-                            assert data["csize"]
-                            assert data["url"]
-                            versions = [
-                                dict(
-                                    name=data["name"],
-                                    version=data["version"],
-                                    repo=repo,
-                                    arch=data["arch"],
-                                    filename=data["filename"],
-                                    url=data["url"],
-                                    last_modified=last_modified.replace(
-                                        tzinfo=None
-                                    ).isoformat(timespec="seconds"),
-                                    length=int(data["csize"]),
-                                )
-                            ]
-
-                        package = {
-                            "name": data["name"],
-                            "version": data["version"],
-                            "last_modified": last_modified,
-                            "url": url,
-                            "versions": versions,
-                            "data": data,
-                        }
-                        page.append(package)
-                    yield page
+            package = {
+                "name": data["name"],
+                "version": data["version"],
+                "last_modified": last_modified,
+                "url": url,
+                "versions": versions,
+                "data": data,
+            }
+            page.append(package)
+        return page
 
     def get_origins_from_page(self, page: ArchListerPage) -> Iterator[ListedOrigin]:
         """Iterate on all arch pages and yield ListedOrigin instances."""
