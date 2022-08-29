@@ -30,7 +30,7 @@ def test_bower_lister(datadir, requests_mock_datadir, swh_scheduler):
         for scheduled in scheduler_origins
     } == {
         (
-            "bower",
+            "git",
             expected["url"],
         )
         for expected in expected_origins

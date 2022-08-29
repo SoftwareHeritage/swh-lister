@@ -25,7 +25,7 @@ class BowerLister(StatelessLister[BowerListerPage]):
     """List Bower (Javascript package manager) origins."""
 
     LISTER_NAME = "bower"
-    VISIT_TYPE = "bower"
+    VISIT_TYPE = "git"  # Bower origins url are Git repositories
     INSTANCE = "bower"
 
     API_URL = "https://registry.bower.io/packages"
