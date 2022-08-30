@@ -1,0 +1,19 @@
+{
+  "sources": [
+    {"type": "git", "git_url": "", "git_ref": ""},
+    {"type": false},
+    {"type": "no-origin"},
+    {"type": "url", "urls": []},
+    {
+      "type": "url",
+      "urls": ["https://crates.io/api/v1/0.1.5/no-extension-and-head-404-so-skipped"],
+      "integrity": "sha256-HW6jxFlbljY8E5Q0l9s0r0Rg+0dKlcQ/REatNBuMl4U="
+    },
+    {
+      "type": "url",
+      "urls": [ "https://example.org/another-file-no-integrity-so-skipped.txt" ]
+    }
+  ],
+  "version":"1",
+  "revision":"ab59155c5a38dda7efaceb47c7528578fcf0def4"
+}

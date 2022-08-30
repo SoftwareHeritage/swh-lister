@@ -29,6 +29,28 @@ LISTERS = {
 
 SUPPORTED_LISTERS = list(LISTERS)
 
+TARBALL_EXTENSIONS = [
+    "crate",
+    "gem",
+    "jar",
+    "zip",
+    "tar",
+    "gz",
+    "tgz",
+    "tbz",
+    "bz2",
+    "bzip2",
+    "lzma",
+    "lz",
+    "txz",
+    "xz",
+    "z",
+    "Z",
+    "7z",
+    "zst",
+]
+"""Tarball recognition pattern"""
+
 
 def get_lister(lister_name, db_url=None, **conf):
     """Instantiate a lister given its name.
