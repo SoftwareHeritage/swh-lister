@@ -15,25 +15,73 @@ from swh.lister.utils import WAIT_EXP_BASE
 # https://pkg.go.dev prefix omitted
 expected_listed = [
     ("collectd.org", "2019-04-11T18:47:25.450546+00:00"),
-    ("github.com/blang/semver", "2019-04-15T13:54:39.107258+00:00",),
-    ("github.com/bmizerany/pat", "2019-04-11T18:47:29.390564+00:00",),
-    ("github.com/djherbis/buffer", "2019-04-11T18:47:29.974874+00:00",),
-    ("github.com/djherbis/nio", "2019-04-11T18:47:32.283312+00:00",),
-    ("github.com/gobuffalo/buffalo-plugins", "2019-04-15T13:54:34.222985+00:00",),
-    ("github.com/gobuffalo/buffalo-pop", "2019-04-15T13:54:39.135792+00:00",),
-    ("github.com/gobuffalo/clara", "2019-04-15T13:54:40.651916+00:00",),
-    ("github.com/gobuffalo/genny", "2019-04-15T13:54:37.841547+00:00",),
-    ("github.com/gobuffalo/packr", "2019-04-15T13:54:35.688900+00:00",),
-    ("github.com/markbates/refresh", "2019-04-15T13:54:35.250835+00:00",),
-    ("github.com/mitchellh/go-homedir", "2019-04-15T13:54:35.678214+00:00",),
-    ("github.com/nats-io/nuid", "2019-04-11T18:47:28.102348+00:00",),
-    ("github.com/oklog/ulid", "2019-04-11T18:47:23.234198+00:00",),
-    ("github.com/pkg/errors", "2019-04-18T02:07:41.336899+00:00",),
-    ("golang.org/x/sys", "2019-04-15T13:54:37.555525+00:00",),
+    (
+        "github.com/blang/semver",
+        "2019-04-15T13:54:39.107258+00:00",
+    ),
+    (
+        "github.com/bmizerany/pat",
+        "2019-04-11T18:47:29.390564+00:00",
+    ),
+    (
+        "github.com/djherbis/buffer",
+        "2019-04-11T18:47:29.974874+00:00",
+    ),
+    (
+        "github.com/djherbis/nio",
+        "2019-04-11T18:47:32.283312+00:00",
+    ),
+    (
+        "github.com/gobuffalo/buffalo-plugins",
+        "2019-04-15T13:54:34.222985+00:00",
+    ),
+    (
+        "github.com/gobuffalo/buffalo-pop",
+        "2019-04-15T13:54:39.135792+00:00",
+    ),
+    (
+        "github.com/gobuffalo/clara",
+        "2019-04-15T13:54:40.651916+00:00",
+    ),
+    (
+        "github.com/gobuffalo/genny",
+        "2019-04-15T13:54:37.841547+00:00",
+    ),
+    (
+        "github.com/gobuffalo/packr",
+        "2019-04-15T13:54:35.688900+00:00",
+    ),
+    (
+        "github.com/markbates/refresh",
+        "2019-04-15T13:54:35.250835+00:00",
+    ),
+    (
+        "github.com/mitchellh/go-homedir",
+        "2019-04-15T13:54:35.678214+00:00",
+    ),
+    (
+        "github.com/nats-io/nuid",
+        "2019-04-11T18:47:28.102348+00:00",
+    ),
+    (
+        "github.com/oklog/ulid",
+        "2019-04-11T18:47:23.234198+00:00",
+    ),
+    (
+        "github.com/pkg/errors",
+        "2019-04-18T02:07:41.336899+00:00",
+    ),
+    (
+        "golang.org/x/sys",
+        "2019-04-15T13:54:37.555525+00:00",
+    ),
     ("golang.org/x/text", "2019-04-10T19:08:52.997264+00:00"),
     # only one x/tools listed even though there are two version, and only the
     # latest one's timestamp is used.
-    ("golang.org/x/tools", "2019-04-15T13:54:41.905064+00:00",),
+    (
+        "golang.org/x/tools",
+        "2019-04-15T13:54:41.905064+00:00",
+    ),
 ]
 
 
