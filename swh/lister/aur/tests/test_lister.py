@@ -116,8 +116,11 @@ def test_aur_lister(datadir, swh_scheduler, requests_mock):
     res = lister.run()
 
     assert res.pages == 4
-    assert res.origins == 4
+    assert res.origins == 8
     scheduler_origins = swh_scheduler.get_listed_origins(lister.lister_obj.id).results
+
+    aur_origins = [origin for origin in scheduler_origins if origin.visit_type == "aur"]
+    git_origins = [origin for origin in scheduler_origins if origin.visit_type == "git"]
 
     assert [
         (
@@ -125,7 +128,7 @@ def test_aur_lister(datadir, swh_scheduler, requests_mock):
             scheduled.url,
             scheduled.extra_loader_arguments["artifacts"],
         )
-        for scheduled in sorted(scheduler_origins, key=lambda scheduled: scheduled.url)
+        for scheduled in sorted(aur_origins, key=lambda scheduled: scheduled.url)
     ] == [
         (
             "aur",
@@ -134,3 +137,7 @@ def test_aur_lister(datadir, swh_scheduler, requests_mock):
         )
         for expected in sorted(expected_origins, key=lambda expected: expected["url"])
     ]
+
+    assert {origin.url for origin in git_origins} == {
+        origin["git_url"] for origin in expected_origins
+    }

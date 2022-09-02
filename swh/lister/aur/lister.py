@@ -145,3 +145,10 @@ class AurLister(StatelessLister[AurListerPage]):
                 "aur_metadata": aur_metadata,
             },
         )
+
+        yield ListedOrigin(
+            lister_id=self.lister_obj.id,
+            visit_type="git",
+            url=origin["git_url"],
+            last_update=last_update,
+        )
