@@ -28,9 +28,10 @@ class PubDevLister(StatelessLister[PubDevListerPage]):
     VISIT_TYPE = "pubdev"
     INSTANCE = "pubdev"
 
-    BASE_URL = "https://pub.dev/api/"
-    PACKAGE_NAMES_URL_PATTERN = "{base_url}package-names"
-    PACKAGE_INFO_URL_PATTERN = "{base_url}packages/{pkgname}"
+    BASE_URL = "https://pub.dev/"
+    PACKAGE_NAMES_URL_PATTERN = "{base_url}api/package-names"
+    PACKAGE_INFO_URL_PATTERN = "{base_url}api/packages/{pkgname}"
+    ORIGIN_URL_PATTERN = "{base_url}packages/{pkgname}"
 
     def __init__(
         self,
@@ -89,12 +90,12 @@ class PubDevLister(StatelessLister[PubDevListerPage]):
         assert self.lister_obj.id is not None
 
         for pkgname in page:
-            url = self.PACKAGE_INFO_URL_PATTERN.format(
+            origin_url = self.ORIGIN_URL_PATTERN.format(
                 base_url=self.url, pkgname=pkgname
             )
             yield ListedOrigin(
                 lister_id=self.lister_obj.id,
                 visit_type=self.VISIT_TYPE,
-                url=url,
+                url=origin_url,
                 last_update=None,
             )

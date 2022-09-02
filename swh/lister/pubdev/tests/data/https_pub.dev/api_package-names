@@ -1,1 +1,7 @@
-{"packages":["Autolinker","pdf"],"nextUrl":null}
+{
+  "packages": [
+    "Autolinker",
+    "Babylon"
+  ],
+  "nextUrl": null
+}
