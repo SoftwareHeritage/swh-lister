@@ -12,7 +12,8 @@ from swh.lister.aur.lister import AurLister
 expected_origins = [
     {
         "visit_type": "aur",
-        "url": "https://aur.archlinux.org/hg-evolve.git",
+        "url": "https://aur.archlinux.org/packages/hg-evolve",
+        "git_url": "https://aur.archlinux.org/hg-evolve.git",
         "extra_loader_arguments": {
             "artifacts": [
                 {
@@ -33,7 +34,8 @@ expected_origins = [
     },
     {
         "visit_type": "aur",
-        "url": "https://aur.archlinux.org/ibus-git.git",
+        "url": "https://aur.archlinux.org/packages/ibus-git",
+        "git_url": "https://aur.archlinux.org/ibus-git.git",
         "extra_loader_arguments": {
             "artifacts": [
                 {
@@ -54,7 +56,8 @@ expected_origins = [
     },
     {
         "visit_type": "aur",
-        "url": "https://aur.archlinux.org/libervia-web-hg.git",
+        "url": "https://aur.archlinux.org/packages/libervia-web-hg",
+        "git_url": "https://aur.archlinux.org/libervia-web-hg.git",
         "extra_loader_arguments": {
             "artifacts": [
                 {
@@ -75,7 +78,8 @@ expected_origins = [
     },
     {
         "visit_type": "aur",
-        "url": "https://aur.archlinux.org/tealdeer-git.git",
+        "url": "https://aur.archlinux.org/packages/tealdeer-git",
+        "git_url": "https://aur.archlinux.org/tealdeer-git.git",
         "extra_loader_arguments": {
             "artifacts": [
                 {

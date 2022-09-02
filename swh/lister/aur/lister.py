@@ -43,6 +43,7 @@ class AurLister(StatelessLister[AurListerPage]):
     DEFAULT_PACKAGES_INDEX_URL = "{base_url}/packages-meta-v1.json.gz"
     PACKAGE_VCS_URL_PATTERN = "{base_url}/{pkgname}.git"
     PACKAGE_SNAPSHOT_URL_PATTERN = "{base_url}/cgit/aur.git/snapshot/{pkgname}.tar.gz"
+    ORIGIN_URL_PATTERN = "{base_url}/packages/{pkgname}"
 
     def __init__(
         self,
@@ -92,7 +93,10 @@ class AurLister(StatelessLister[AurListerPage]):
                 yield {
                     "pkgname": pkgname,
                     "version": version,
-                    "url": self.PACKAGE_VCS_URL_PATTERN.format(
+                    "url": self.ORIGIN_URL_PATTERN.format(
+                        base_url=self.BASE_URL, pkgname=pkgname
+                    ),
+                    "git_url": self.PACKAGE_VCS_URL_PATTERN.format(
                         base_url=self.BASE_URL, pkgname=pkgname
                     ),
                     "snapshot_url": self.PACKAGE_SNAPSHOT_URL_PATTERN.format(
@@ -112,7 +116,6 @@ class AurLister(StatelessLister[AurListerPage]):
         """
         assert self.lister_obj.id is not None
 
-        url = origin["url"]
         last_update = datetime.datetime.fromisoformat(origin["last_modified"])
         filename = origin["snapshot_url"].split("/")[-1]
 
@@ -135,7 +138,7 @@ class AurLister(StatelessLister[AurListerPage]):
         yield ListedOrigin(
             lister_id=self.lister_obj.id,
             visit_type=self.VISIT_TYPE,
-            url=url,
+            url=origin["url"],
             last_update=last_update,
             extra_loader_arguments={
                 "artifacts": artifacts,
