@@ -2,6 +2,11 @@
 # See the AUTHORS file at the top-level directory of this distribution
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
+
+import gzip
+import json
+import os
+
 from swh.lister.aur.lister import AurLister
 
 expected_origins = [
@@ -92,13 +97,22 @@ expected_origins = [
 ]
 
 
-def test_aur_lister(datadir, requests_mock_datadir, swh_scheduler):
+def test_aur_lister(datadir, swh_scheduler, requests_mock):
+
     lister = AurLister(scheduler=swh_scheduler)
+
+    packages_index_filename = "packages-meta-v1.json.gz"
+
+    # simulate requests behavior: gzip and deflate transfer-encodings are automatically decoded
+    with gzip.open(os.path.join(datadir, packages_index_filename), "rb") as f:
+        requests_mock.get(
+            f"{lister.BASE_URL}/{packages_index_filename}", json=json.loads(f.read())
+        )
+
     res = lister.run()
 
     assert res.pages == 4
     assert res.origins == 4
-
     scheduler_origins = swh_scheduler.get_listed_origins(lister.lister_obj.id).results
 
     assert [
@@ -116,10 +130,3 @@ def test_aur_lister(datadir, requests_mock_datadir, swh_scheduler):
         )
         for expected in sorted(expected_origins, key=lambda expected: expected["url"])
     ]
-
-
-def test_aur_lister_directory_cleanup(datadir, requests_mock_datadir, swh_scheduler):
-    lister = AurLister(scheduler=swh_scheduler)
-    lister.run()
-    # Repository directory should not exists after the lister runs
-    assert not lister.DESTINATION_PATH.exists()

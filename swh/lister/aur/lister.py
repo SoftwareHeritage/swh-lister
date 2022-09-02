@@ -2,13 +2,10 @@
 # See the AUTHORS file at the top-level directory of this distribution
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
+
 import datetime
-import gzip
-import json
 import logging
-from pathlib import Path
-import shutil
-from typing import Any, Dict, Iterator, Optional
+from typing import Any, Dict, Iterator, List, Optional
 
 import requests
 
@@ -47,8 +44,6 @@ class AurLister(StatelessLister[AurListerPage]):
     PACKAGE_VCS_URL_PATTERN = "{base_url}/{pkgname}.git"
     PACKAGE_SNAPSHOT_URL_PATTERN = "{base_url}/cgit/aur.git/snapshot/{pkgname}.tar.gz"
 
-    DESTINATION_PATH = Path("/tmp/aur_archive")
-
     def __init__(
         self,
         scheduler: SchedulerInterface,
@@ -61,7 +56,7 @@ class AurLister(StatelessLister[AurListerPage]):
             url=self.BASE_URL,
         )
 
-    def download_index_archive(self) -> Path:
+    def download_packages_index(self) -> List[Dict[str, Any]]:
         """Build an url based on self.DEFAULT_PACKAGES_INDEX_URL format string,
         and download the archive to self.DESTINATION_PATH
 
@@ -69,16 +64,7 @@ class AurLister(StatelessLister[AurListerPage]):
             a directory Path where the archive has been downloaded to.
         """
         url = self.DEFAULT_PACKAGES_INDEX_URL.format(base_url=self.url)
-        filename = url.split("/")[-1]
-        destination = self.DESTINATION_PATH / filename
-
-        self.DESTINATION_PATH.mkdir(exist_ok=True)
-
-        response = requests.get(url, stream=True)
-        destination.write_bytes(response.raw.read())
-        assert destination.exists()
-
-        return destination
+        return requests.get(url).json()
 
     def get_pages(self) -> Iterator[AurListerPage]:
         """Yield an iterator which returns 'page'
@@ -88,27 +74,21 @@ class AurLister(StatelessLister[AurListerPage]):
         a canonical 'snapshot_url' from which a tar.gz archive of the package can
         be downloaded.
         """
-        index = self.download_index_archive()
+        packages = self.download_packages_index()
 
-        with gzip.open(index, "rb") as f:
-            assert f.readable()
-            file_content = f.read()
-            packages = json.loads(file_content)
+        logger.debug("Found %s AUR packages in aur_index", len(packages))
 
-        assert packages
-
-        counter: int = 0
         for package in packages:
             # Exclude lines where Name differs from PackageBase as they represents
             # split package and they don't have resolvable snapshots url
             if package["Name"] == package["PackageBase"]:
+                logger.debug("Processing AUR package %s", package["Name"])
                 pkgname = package["PackageBase"]
                 version = package["Version"]
                 project_url = package["URL"]
                 last_modified = datetime.datetime.fromtimestamp(
                     float(package["LastModified"]), tz=datetime.timezone.utc
                 ).isoformat()
-                counter += 1
                 yield {
                     "pkgname": pkgname,
                     "version": version,
@@ -121,7 +101,6 @@ class AurLister(StatelessLister[AurListerPage]):
                     "project_url": project_url,
                     "last_modified": last_modified,
                 }
-        logger.debug("Found %s AUR packages in aur_index", counter)
 
     def get_origins_from_page(self, origin: AurListerPage) -> Iterator[ListedOrigin]:
         """Iterate on all pages and yield ListedOrigin instances.
@@ -163,11 +142,3 @@ class AurLister(StatelessLister[AurListerPage]):
                 "aur_metadata": aur_metadata,
             },
         )
-
-    def finalize(self) -> None:
-        # Cleanup by removing the repository directory
-        if self.DESTINATION_PATH.exists():
-            shutil.rmtree(self.DESTINATION_PATH)
-            logger.debug(
-                "Successfully removed %s directory", str(self.DESTINATION_PATH)
-            )
