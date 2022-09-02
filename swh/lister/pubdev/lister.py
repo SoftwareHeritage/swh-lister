@@ -5,7 +5,9 @@
 import logging
 from typing import Any, Dict, Iterator, List, Optional
 
+import iso8601
 import requests
+from requests.exceptions import HTTPError
 from tenacity.before_sleep import before_sleep_log
 
 from swh.lister.utils import throttling_retry
@@ -90,6 +92,22 @@ class PubDevLister(StatelessLister[PubDevListerPage]):
         assert self.lister_obj.id is not None
 
         for pkgname in page:
+            package_info_url = self.PACKAGE_INFO_URL_PATTERN.format(
+                base_url=self.url, pkgname=pkgname
+            )
+            try:
+                response = self.page_request(url=package_info_url, params={})
+            except HTTPError:
+                logger.warning(
+                    "Failed to fetch metadata for package %s, skipping it from listing.",
+                    pkgname,
+                )
+                continue
+            package_metadata = response.json()
+            package_versions = package_metadata["versions"]
+            last_published = max(
+                package_version["published"] for package_version in package_versions
+            )
             origin_url = self.ORIGIN_URL_PATTERN.format(
                 base_url=self.url, pkgname=pkgname
             )
@@ -97,5 +115,5 @@ class PubDevLister(StatelessLister[PubDevListerPage]):
                 lister_id=self.lister_obj.id,
                 visit_type=self.VISIT_TYPE,
                 url=origin_url,
-                last_update=None,
+                last_update=iso8601.parse_date(last_published),
             )

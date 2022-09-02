@@ -1,0 +1,44 @@
+{
+  "name": "Autolinker",
+  "latest": {
+    "version": "0.1.1",
+    "pubspec": {
+      "version": "0.1.1",
+      "homepage": "https://github.com/hackcave",
+      "description": "Port of Autolinker.js to dart",
+      "name": "Autolinker",
+      "author": "hackcave <hackers@hackcave.org>"
+    },
+    "archive_url": "https://pub.dartlang.org/packages/Autolinker/versions/0.1.1.tar.gz",
+    "archive_sha256": "0a5209a2d5a292a26fc65d7edb430163f209a7c7c24ba4f301676f1afd79fa3f",
+    "published": "2014-12-24T22:34:02.534090Z"
+  },
+  "versions": [
+    {
+      "version": "0.1.0",
+      "pubspec": {
+        "version": "0.1.0",
+        "homepage": "https://github.com/hackcave",
+        "description": "Port of Autolinker.js to dart",
+        "name": "Autolinker",
+        "author": "hackcave <hackers@hackcave.org>"
+      },
+      "archive_url": "https://pub.dartlang.org/packages/Autolinker/versions/0.1.0.tar.gz",
+      "archive_sha256": "717b30e27311c775293d4795ce33d15cedb5e5d21fa140f2cb46b30f3e969041",
+      "published": "2014-12-24T21:16:03.118270Z"
+    },
+    {
+      "version": "0.1.1",
+      "pubspec": {
+        "version": "0.1.1",
+        "homepage": "https://github.com/hackcave",
+        "description": "Port of Autolinker.js to dart",
+        "name": "Autolinker",
+        "author": "hackcave <hackers@hackcave.org>"
+      },
+      "archive_url": "https://pub.dartlang.org/packages/Autolinker/versions/0.1.1.tar.gz",
+      "archive_sha256": "0a5209a2d5a292a26fc65d7edb430163f209a7c7c24ba4f301676f1afd79fa3f",
+      "published": "2014-12-24T22:34:02.534090Z"
+    }
+  ]
+}

@@ -25,3 +25,17 @@ def test_pubdev_lister(datadir, requests_mock_datadir, swh_scheduler):
     for origin in scheduler_origins:
         assert origin.visit_type == "pubdev"
         assert origin.url in expected_origins
+        assert origin.last_update is not None
+
+
+def test_pubdev_lister_skip_package(
+    datadir, requests_mock_datadir, swh_scheduler, requests_mock
+):
+
+    requests_mock.get("https://pub.dev/api/packages/Autolinker", status_code=404)
+
+    lister = PubDevLister(scheduler=swh_scheduler)
+    res = lister.run()
+
+    assert res.pages == 1
+    assert res.origins == 1
