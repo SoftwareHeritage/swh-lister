@@ -14,8 +14,14 @@ from swh.lister.utils import throttling_retry
 from swh.scheduler.interface import SchedulerInterface
 from swh.scheduler.model import ListedOrigin
 
-from .. import USER_AGENT
+from .. import __version__
 from ..pattern import CredentialsType, StatelessLister
+
+# https://github.com/dart-lang/pub/blob/master/doc/repository-spec-v2.md#metadata-headers
+USER_AGENT = (
+    f"Software Heritage PubDev Lister v{__version__} "
+    "(+https://www.softwareheritage.org/contact)"
+)
 
 logger = logging.getLogger(__name__)
 

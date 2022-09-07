@@ -3,7 +3,7 @@
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
 
-from swh.lister.pubdev.lister import PubDevLister
+from swh.lister.pubdev.lister import USER_AGENT, PubDevLister
 
 expected_origins = {
     "https://pub.dev/packages/Autolinker",
@@ -28,11 +28,19 @@ def test_pubdev_lister(datadir, requests_mock_datadir, swh_scheduler):
         assert origin.last_update is not None
 
 
+def _match_request(request):
+    return request.headers.get("User-Agent") == USER_AGENT
+
+
 def test_pubdev_lister_skip_package(
     datadir, requests_mock_datadir, swh_scheduler, requests_mock
 ):
 
-    requests_mock.get("https://pub.dev/api/packages/Autolinker", status_code=404)
+    requests_mock.get(
+        "https://pub.dev/api/packages/Autolinker",
+        status_code=404,
+        additional_matcher=_match_request,
+    )
 
     lister = PubDevLister(scheduler=swh_scheduler)
     res = lister.run()
