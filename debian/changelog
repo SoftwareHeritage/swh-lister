@@ -1,3 +1,16 @@
+swh-lister (3.0.0-1~swh1) unstable-swh; urgency=medium
+
+  * New upstream release 3.0.0     - (tagged by Antoine R. Dumont
+    (@ardumont) <ardumont@softwareheritage.org> on 2022-09-08 11:19:49
+    +0200)
+  * Upstream changes:     - v3.0.0     - Add new lister pubdev (Dart,
+    Flutter)     - Add new lister Arch User Repository (AUR)     - Add
+    new lister Golang     - Add new lister Bower     - Add new lister
+    Gogs     - maven: Use BeautifulSoup instead of xmltodict for parsing
+    pom files     - crates.lister: Implement incremental mode
+
+ -- Software Heritage autobuilder (on jenkins-debian1) <jenkins@jenkins-debian1.internal.softwareheritage.org>  Thu, 08 Sep 2022 09:27:56 +0000
+
 swh-lister (2.9.3-1~swh1) unstable-swh; urgency=medium
 
   * New upstream release 2.9.3     - (tagged by Antoine R. Dumont
