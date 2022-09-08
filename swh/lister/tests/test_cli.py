@@ -31,6 +31,10 @@ lister_args = {
         "url": "https://repo1.maven.org/maven2/",
         "index_url": "http://indexes/export.fld",
     },
+    "gogs": {
+        "url": "https://try.gogs.io/",
+        "api_token": "secret",
+    },
 }
 
 

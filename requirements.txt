@@ -5,5 +5,5 @@ iso8601
 beautifulsoup4
 launchpadlib
 tenacity >= 6.2
-xmltodict
 lxml
+dulwich

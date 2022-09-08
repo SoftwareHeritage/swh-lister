@@ -5,8 +5,8 @@ iso8601
 beautifulsoup4
 launchpadlib
 tenacity>=6.2
-xmltodict
 lxml
+dulwich
 swh.core[db,github]>=2.8
 swh.scheduler>=0.8
 

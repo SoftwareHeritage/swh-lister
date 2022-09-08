@@ -1,0 +1,14 @@
+[
+  {
+    "name": "font-awesome",
+    "url": "https://github.com/FortAwesome/Font-Awesome.git"
+  },
+  {
+    "name": "redux",
+    "url": "https://github.com/reactjs/redux.git"
+  },
+  {
+    "name": "vue",
+    "url": "https://github.com/vuejs/vue.git"
+  }
+]

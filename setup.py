@@ -55,7 +55,10 @@ setup(
         [swh.cli.subcommands]
         lister=swh.lister.cli
         [swh.workers]
+        lister.arch=swh.lister.arch:register
+        lister.aur=swh.lister.aur:register
         lister.bitbucket=swh.lister.bitbucket:register
+        lister.bower=swh.lister.bower:register
         lister.cgit=swh.lister.cgit:register
         lister.cran=swh.lister.cran:register
         lister.crates=swh.lister.crates:register
@@ -64,15 +67,18 @@ setup(
         lister.github=swh.lister.github:register
         lister.gitlab=swh.lister.gitlab:register
         lister.gnu=swh.lister.gnu:register
+        lister.golang=swh.lister.golang:register
         lister.launchpad=swh.lister.launchpad:register
         lister.npm=swh.lister.npm:register
         lister.opam=swh.lister.opam:register
         lister.packagist=swh.lister.packagist:register
         lister.phabricator=swh.lister.phabricator:register
+        lister.pubdev=swh.lister.pubdev:register
         lister.pypi=swh.lister.pypi:register
         lister.sourceforge=swh.lister.sourceforge:register
         lister.tuleap=swh.lister.tuleap:register
         lister.maven=swh.lister.maven:register
+        lister.gogs=swh.lister.gogs:register
     """,
     classifiers=[
         "Programming Language :: Python :: 3",
