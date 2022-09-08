@@ -30,6 +30,10 @@ GIT_REPO_URL1_GIT = f"git://github.com/{USER_REPO1}.git"
 GIT_REPO_URL1_API = f"https://api.github.com/repos/{USER_REPO1}"
 LIST_GIT_INCR = (GIT_REPO_URL1_HTTPS,)
 
+USER_REPO2 = "webx/citrus"
+GIT_REPO_URL2_HTTPS = f"https://github.com/{USER_REPO2}"
+GIT_REPO_URL2_API = f"https://api.github.com/repos/{USER_REPO2}"
+
 LIST_SRC = (MVN_URL + "al/aldi/sprova4j",)
 
 LIST_SRC_DATA = (
@@ -92,11 +96,17 @@ def maven_pom_3(datadir) -> bytes:
 
 
 @pytest.fixture
+def maven_pom_multi_byte_encoding(datadir) -> bytes:
+    return Path(datadir, "https_maven.org", "citrus-parent-3.0.7.pom").read_bytes()
+
+
+@pytest.fixture
 def requests_mock(requests_mock):
     """If github api calls for the configured scm repository, returns its canonical url."""
     for url_api, url_html in [
         (GIT_REPO_URL0_API, GIT_REPO_URL0_HTTPS),
         (GIT_REPO_URL1_API, GIT_REPO_URL1_HTTPS),
+        (GIT_REPO_URL2_API, GIT_REPO_URL2_HTTPS),
     ]:
         requests_mock.get(
             url_api,
@@ -351,3 +361,19 @@ def test_maven_list_pom_bad_encoding(swh_scheduler, requests_mock, maven_pom_1):
     # then we get only one maven-jar origin and one git origin.
     scheduler_origins = swh_scheduler.get_listed_origins(lister.lister_obj.id).results
     assert len(scheduler_origins) == 2
+
+
+def test_maven_list_pom_multi_byte_encoding(
+    swh_scheduler, requests_mock, maven_pom_multi_byte_encoding
+):
+    """should parse POM file with multi-byte encoding."""
+
+    # replace pom file with a multi-byte encoding one
+    requests_mock.get(URL_POM_1, content=maven_pom_multi_byte_encoding)
+
+    lister = MavenLister(scheduler=swh_scheduler, url=MVN_URL, index_url=INDEX_URL)
+
+    lister.run()
+
+    scheduler_origins = swh_scheduler.get_listed_origins(lister.lister_obj.id).results
+    assert len(scheduler_origins) == 3

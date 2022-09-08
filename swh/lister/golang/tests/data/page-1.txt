@@ -1,0 +1,5 @@
+{"Path":"golang.org/x/text","Version":"v0.3.0","Timestamp":"2019-04-10T19:08:52.997264Z"}
+{"Path":"github.com/oklog/ulid","Version":"v1.3.1","Timestamp":"2019-04-11T18:47:23.234198Z"}
+{"Path":"collectd.org","Version":"v0.3.0","Timestamp":"2019-04-11T18:47:25.450546Z"}
+{"Path":"github.com/nats-io/nuid","Version":"v1.0.1","Timestamp":"2019-04-11T18:47:28.102348Z"}
+{"Path":"github.com/bmizerany/pat","Version":"v0.0.0-20170815010413-6226ea591a40","Timestamp":"2019-04-11T18:47:29.390564Z"}
