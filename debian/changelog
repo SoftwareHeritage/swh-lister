@@ -1,3 +1,9 @@
+swh-lister (3.0.0-1~swh2) unstable-swh; urgency=medium
+
+  * Fix build dependencies and bump new release
+
+ -- Antoine R. Dumont (@ardumont) <ardumont@softwareheritage.org>  Thu, 08 Sep 2022 11:57:38 +0200
+
 swh-lister (3.0.0-1~swh1) unstable-swh; urgency=medium
 
   * New upstream release 3.0.0     - (tagged by Antoine R. Dumont
