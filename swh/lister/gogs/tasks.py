@@ -1,0 +1,28 @@
+# Copyright (C) 2022 the Software Heritage developers
+# License: GNU General Public License version 3, or any later version
+# See top-level LICENSE file for more information
+
+from typing import Dict, Optional
+
+from celery import shared_task
+
+from .lister import GogsLister
+
+
+@shared_task(name=__name__ + ".FullGogsRelister")
+def list_gogs_full(
+    url: str,
+    instance: Optional[str] = None,
+    api_token: Optional[str] = None,
+    page_size: Optional[int] = None,
+) -> Dict[str, int]:
+    """Full update of a Gogs instance"""
+    lister = GogsLister.from_configfile(
+        url=url, instance=instance, api_token=api_token, page_size=page_size
+    )
+    return lister.run().dict()
+
+
+@shared_task(name=__name__ + ".ping")
+def _ping() -> str:
+    return "OK"

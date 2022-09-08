@@ -1,0 +1,10 @@
+{"Path":"github.com/mitchellh/go-homedir","Version":"v1.1.0","Timestamp":"2019-04-15T13:54:35.678214Z"}
+{"Path":"github.com/gobuffalo/packr","Version":"v1.22.0","Timestamp":"2019-04-15T13:54:35.6889Z"}
+{"Path":"golang.org/x/sys","Version":"v0.0.0-20190220154126-629670e5acc5","Timestamp":"2019-04-15T13:54:37.555525Z"}
+{"Path":"github.com/gobuffalo/genny","Version":"v0.0.0-20190104222617-a71664fc38e7","Timestamp":"2019-04-15T13:54:37.841547Z"}
+{"Path":"github.com/blang/semver","Version":"v3.5.1+incompatible","Timestamp":"2019-04-15T13:54:39.107258Z"}
+{"Path":"github.com/gobuffalo/buffalo-pop","Version":"v1.3.0","Timestamp":"2019-04-15T13:54:39.135792Z"}
+{"Path":"golang.org/x/tools","Version":"v0.0.0-20190131142011-8dbcc66f33bb","Timestamp":"2019-04-15T13:54:39.250757Z"}
+{"Path":"github.com/gobuffalo/clara","Version":"v0.4.1","Timestamp":"2019-04-15T13:54:40.651916Z"}
+{"Path":"golang.org/x/tools","Version":"v0.0.0-20181213190329-bbccd8cae4a9","Timestamp":"2019-04-15T13:54:41.905064Z"}
+{"Path":"github.com/pkg/errors","Version":"v0.0.0-20161002052512-839d9e913e06","Timestamp":"2019-04-18T02:07:41.336899Z"}

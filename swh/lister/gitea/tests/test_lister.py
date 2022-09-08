@@ -10,33 +10,40 @@ from typing import Dict, List, Tuple
 import pytest
 import requests
 
-from swh.lister.gitea.lister import GiteaLister, RepoListPage
+from swh.lister.gitea.lister import GiteaLister
+from swh.lister.gogs.lister import GogsListerPage
 from swh.scheduler.model import ListedOrigin
 
 TRYGITEA_URL = "https://try.gitea.io/api/v1/"
-TRYGITEA_P1_URL = TRYGITEA_URL + "repos/search?sort=id&order=asc&limit=3&page=1"
-TRYGITEA_P2_URL = TRYGITEA_URL + "repos/search?sort=id&order=asc&limit=3&page=2"
+TRYGITEA_P1_URL = TRYGITEA_URL + "repos/search?limit=3&page=1"
+TRYGITEA_P2_URL = TRYGITEA_URL + "repos/search?limit=3&page=2"
 
 
 @pytest.fixture
-def trygitea_p1(datadir) -> Tuple[str, Dict[str, str], RepoListPage, List[str]]:
+def trygitea_p1(datadir) -> Tuple[str, Dict[str, str], GogsListerPage, List[str]]:
     text = Path(datadir, "https_try.gitea.io", "repos_page1").read_text()
     headers = {
         "Link": '<{p2}>; rel="next",<{p2}>; rel="last"'.format(p2=TRYGITEA_P2_URL)
     }
-    page_result = GiteaLister.results_simplified(json.loads(text))
-    origin_urls = [r["clone_url"] for r in page_result]
+    page_data = json.loads(text)
+    page_result = GogsListerPage(
+        repos=GiteaLister.extract_repos(page_data), next_link=TRYGITEA_P2_URL
+    )
+    origin_urls = [r["clone_url"] for r in page_data["data"]]
     return text, headers, page_result, origin_urls
 
 
 @pytest.fixture
-def trygitea_p2(datadir) -> Tuple[str, Dict[str, str], RepoListPage, List[str]]:
+def trygitea_p2(datadir) -> Tuple[str, Dict[str, str], GogsListerPage, List[str]]:
     text = Path(datadir, "https_try.gitea.io", "repos_page2").read_text()
     headers = {
         "Link": '<{p1}>; rel="prev",<{p1}>; rel="first"'.format(p1=TRYGITEA_P1_URL)
     }
-    page_result = GiteaLister.results_simplified(json.loads(text))
-    origin_urls = [r["clone_url"] for r in page_result]
+    page_data = json.loads(text)
+    page_result = GogsListerPage(
+        repos=GiteaLister.extract_repos(page_data), next_link=None
+    )
+    origin_urls = [r["clone_url"] for r in page_data["data"]]
     return text, headers, page_result, origin_urls
 
 
@@ -44,14 +51,7 @@ def check_listed_origins(lister_urls: List[str], scheduler_origins: List[ListedO
     """Asserts that the two collections have the same origin URLs.
 
     Does not test last_update."""
-
-    sorted_lister_urls = list(sorted(lister_urls))
-    sorted_scheduler_origins = list(sorted(scheduler_origins))
-
-    assert len(sorted_lister_urls) == len(sorted_scheduler_origins)
-
-    for l_url, s_origin in zip(sorted_lister_urls, sorted_scheduler_origins):
-        assert l_url == s_origin.url
+    assert set(lister_urls) == {origin.url for origin in scheduler_origins}
 
 
 def test_gitea_full_listing(
@@ -93,7 +93,9 @@ def test_gitea_full_listing(
 
     check_listed_origins(p1_origin_urls + p2_origin_urls, scheduler_origins)
 
-    assert lister.get_state_from_scheduler() is None
+    lister_state = lister.get_state_from_scheduler()
+    assert lister_state.last_seen_next_link == TRYGITEA_P2_URL
+    assert lister_state.last_seen_repo_id == p2_result.repos[-1]["id"]
 
 
 def test_gitea_auth_instance(swh_scheduler, requests_mock, trygitea_p1):

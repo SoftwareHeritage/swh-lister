@@ -1,0 +1,51 @@
+{
+  "name": "Babylon",
+  "latest": {
+    "version": "0.0.3",
+    "pubspec": {
+      "version": "0.0.3",
+      "name": "Babylon",
+      "dependencies": {
+        "js": ">=0.6.0",
+        "browser": ">=0.10.0+2"
+      },
+      "author": "Cedric Krause <cedric@cedware.com>",
+      "description": "A starting point for Dart libraries or applications.",
+      "homepage": "https://www.cedware.com",
+      "environment": {
+        "sdk": ">=1.0.0 <2.0.0"
+      },
+      "dev_dependencies": {
+        "test": ">=0.12.0 <0.13.0"
+      }
+    },
+    "archive_url": "https://pub.dartlang.org/packages/Babylon/versions/0.0.3.tar.gz",
+    "archive_sha256": "a18166c8082d795f22c38270b7fed0c306d5cb59fe390ce3a34c300770c4a8b3",
+    "published": "2016-06-01T19:15:38.052Z"
+  },
+  "versions": [
+    {
+      "version": "0.0.3",
+      "pubspec": {
+        "version": "0.0.3",
+        "name": "Babylon",
+        "dependencies": {
+          "js": ">=0.6.0",
+          "browser": ">=0.10.0+2"
+        },
+        "author": "Cedric Krause <cedric@cedware.com>",
+        "description": "A starting point for Dart libraries or applications.",
+        "homepage": "https://www.cedware.com",
+        "environment": {
+          "sdk": ">=1.0.0 <2.0.0"
+        },
+        "dev_dependencies": {
+          "test": ">=0.12.0 <0.13.0"
+        }
+      },
+      "archive_url": "https://pub.dartlang.org/packages/Babylon/versions/0.0.3.tar.gz",
+      "archive_sha256": "a18166c8082d795f22c38270b7fed0c306d5cb59fe390ce3a34c300770c4a8b3",
+      "published": "2016-06-01T19:15:38.052Z"
+    }
+  ]
+}
