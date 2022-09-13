@@ -135,7 +135,7 @@ class ArchLister(StatelessLister[ArchListerPage]):
     @throttling_retry(before_sleep=before_sleep_log(logger, logging.WARNING))
     def request_get(self, url: str, params: Dict[str, Any]) -> requests.Response:
 
-        logger.info("Fetching URL %s with params %s", url, params)
+        logger.debug("Fetching URL %s with params %s", url, params)
 
         response = self.session.get(url, params=params)
         if response.status_code != 200:
