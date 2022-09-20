@@ -44,7 +44,7 @@ class GolangLister(Lister[GolangStateType, GolangPageType]):
     GOLANG_MODULES_INDEX_URL = "https://index.golang.org/index"
     # `limit` seems to be... limited to 2000.
     GOLANG_MODULES_INDEX_LIMIT = 2000
-    LISTER_NAME = "Golang"
+    LISTER_NAME = "golang"
 
     def __init__(
         self,
@@ -55,7 +55,7 @@ class GolangLister(Lister[GolangStateType, GolangPageType]):
         super().__init__(
             scheduler=scheduler,
             url=self.GOLANG_MODULES_INDEX_URL,
-            instance="Golang",
+            instance=self.LISTER_NAME,
             credentials=credentials,
         )
 
