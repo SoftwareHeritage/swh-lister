@@ -186,7 +186,7 @@ def test_gogs_list_http_error(
     lister = GogsLister(scheduler=swh_scheduler, url=TRY_GOGS_URL, api_token="secret")
 
     p1_text, p1_headers, _, p1_origin_urls = trygogs_p1
-    p3_text, p3_headers, _, _ = trygogs_p3_last
+    p3_text, p3_headers, _, p3_origin_urls = trygogs_p3_last
 
     base_url = TRY_GOGS_URL + lister.REPO_LIST_PATH
     requests_mock.get(
@@ -198,13 +198,21 @@ def test_gogs_list_http_error(
         ],
     )
 
-    with pytest.raises(HTTPError):
+    # pages with fatal repositories should be skipped (no error raised)
+    # See T4423 for more details
+    if http_code == 500:
         lister.run()
+    else:
+        with pytest.raises(HTTPError):
+            lister.run()
 
+    # Both P1 and P3 origins should be listed in case of 500 error
+    # While in other cases, only P1 origins should be listed
     scheduler_origins = swh_scheduler.get_listed_origins(lister.lister_obj.id).results
     check_listed_origins(
-        p1_origin_urls, scheduler_origins
-    )  # Only the first page is listed
+        (p1_origin_urls + p3_origin_urls) if http_code == 500 else p1_origin_urls,
+        scheduler_origins,
+    )
 
 
 def test_gogs_incremental_lister(
