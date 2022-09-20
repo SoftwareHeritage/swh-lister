@@ -265,3 +265,16 @@ def test_lister_cgit_get_pages_with_pages_and_retry(
         # we should have 16 repos (listed on 3 pages)
         assert len(repos) == 3
         assert len(flattened_repos) == 16
+
+
+def test_lister_cgit_summary_not_default(requests_mock_datadir, swh_scheduler):
+    """cgit lister returns git url when the default repository tab is not the summary"""
+
+    url = "https://git.acdw.net/cgit"
+
+    lister_cgit = CGitLister(swh_scheduler, url=url)
+
+    stats = lister_cgit.run()
+
+    expected_nb_origins = 1
+    assert stats == ListerStats(pages=1, origins=expected_nb_origins)

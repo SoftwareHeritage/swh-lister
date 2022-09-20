@@ -9,6 +9,7 @@ from typing import Dict, List, Tuple
 
 import pytest
 import requests
+from requests import HTTPError
 
 from swh.lister.gitea.lister import GiteaLister
 from swh.lister.gogs.lister import GogsListerPage
@@ -138,16 +139,38 @@ def test_gitea_auth_instance(swh_scheduler, requests_mock, trygitea_p1):
 
 
 @pytest.mark.parametrize("http_code", [400, 500, 502])
-def test_gitea_list_http_error(swh_scheduler, requests_mock, http_code):
+def test_gitea_list_http_error(
+    swh_scheduler, requests_mock, http_code, trygitea_p1, trygitea_p2
+):
     """Test handling of some HTTP errors commonly encountered"""
 
     lister = GiteaLister(scheduler=swh_scheduler, url=TRYGITEA_URL, page_size=3)
 
+    p1_text, p1_headers, _, p1_origin_urls = trygitea_p1
+    p3_text, p3_headers, _, p3_origin_urls = trygitea_p2
+
     base_url = TRYGITEA_URL + lister.REPO_LIST_PATH
-    requests_mock.get(base_url, status_code=http_code)
+    requests_mock.get(
+        base_url,
+        [
+            {"text": p1_text, "headers": p1_headers, "status_code": 200},
+            {"status_code": http_code},
+            {"text": p3_text, "headers": p3_headers, "status_code": 200},
+        ],
+    )
 
-    with pytest.raises(requests.HTTPError):
+    # pages with fatal repositories should be skipped (no error raised)
+    # See T4423 for more details
+    if http_code == 500:
         lister.run()
+    else:
+        with pytest.raises(HTTPError):
+            lister.run()
 
+    # Both P1 and P3 origins should be listed in case of 500 error
+    # While in other cases, only P1 origins should be listed
     scheduler_origins = swh_scheduler.get_listed_origins(lister.lister_obj.id).results
-    assert len(scheduler_origins) == 0
+    check_listed_origins(
+        (p1_origin_urls + p3_origin_urls) if http_code == 500 else p1_origin_urls,
+        scheduler_origins,
+    )
