@@ -169,6 +169,22 @@ class CGitLister(StatelessLister[Repositories]):
             )
             return None
 
+        # check if we are on the summary tab, if not, go to this tab
+        tab = bs.find("table", {"class": "tabs"})
+        if tab:
+            summary_a = tab.find("a", string="summary")
+            if summary_a:
+                summary_url = urljoin(repository_url, summary_a["href"]).strip("/")
+
+                if summary_url != repository_url:
+                    logger.debug(
+                        "%s : Active tab is not the summary, trying to load the summary page",
+                        repository_url,
+                    )
+                    return self._get_origin_from_repository_url(summary_url)
+            else:
+                logger.debug("No summary tab found on %s", repository_url)
+
         # origin urls are listed on the repository page
         # TODO check if forcing https is better or not ?
         # <link rel='vcs-git' href='git://...' title='...'/>
@@ -177,6 +193,7 @@ class CGitLister(StatelessLister[Repositories]):
         urls = [x["href"] for x in bs.find_all("a", {"rel": "vcs-git"})]
 
         if not urls:
+            logger.debug("No git urls found on %s", repository_url)
             return None
 
         # look for the http/https url, if any, and use it as origin_url
