@@ -63,7 +63,7 @@ class PubDevLister(StatelessLister[PubDevListerPage]):
     @throttling_retry(before_sleep=before_sleep_log(logger, logging.WARNING))
     def page_request(self, url: str, params: Dict[str, Any]) -> requests.Response:
 
-        logger.info("Fetching URL %s with params %s", url, params)
+        logger.debug("Fetching URL %s with params %s", url, params)
 
         response = self.session.get(url, params=params)
         if response.status_code != 200:
