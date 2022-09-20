@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+<title>sfeed - My sfeed scripts
+</title>
+<meta name='generator' content='cgit 1.4.1-21-gabe81'/>
+<meta name='robots' content='index, nofollow'/>
+<link rel='stylesheet' type='text/css' href='/cgit.css'/>
+<link rel='alternate' title='Atom feed' href='https://git.acdw.net/sfeed/atom/?h=main' type='application/atom+xml'/>
+<link rel='vcs-git' href='https://git.acdw.net/sfeed' title='sfeed Git repository'/>
+</head>
+<body>
+<div id='cgit'><table id='header'>
+<tr>
+<td class='logo' rowspan='2'><a href='/'><img src='/avatar.png' alt='cgit logo'/></a></td>
+<td class='main'><a href='/'>index</a> : <a title='sfeed' href='/sfeed/'>sfeed</a></td><td class='form'><form method='get'>
+<select name='h' onchange='this.form.submit();'>
+<option value='7e389913489916166a0c9f590a1afb1737adcbf2'>this commit</option>
+<optgroup label='branches'><option value='main' selected='selected'>main</option>
+</optgroup></select> <input type='submit' value='switch'/></form></td></tr>
+<tr><td class='sub'>My sfeed scripts
+</td><td class='sub right'>Case Duckworth</td></tr></table>
+<table class='tabs'><tr><td>
+<a href='/sfeed/'>about</a> <a class='active' href='/sfeed/summary/'>summary</a> <a href='/sfeed/refs/'>refs</a> <a href='/sfeed/log/'>log</a> <a href='/sfeed/tree/'>tree</a> <a href='/sfeed/commit/'>commit</a> <a href='/sfeed/diff/'>diff</a> <a href='/sfeed/stats/'>stats</a></td><td class='form'><form class='right' method='get' action='/sfeed/log/'>
+<select name='qt'>
+<option value='grep'>log msg</option>
+<option value='author'>author</option>
+<option value='committer'>committer</option>
+<option value='range'>range</option>
+</select>
+<input class='txt' type='search' size='10' name='q' value=''/>
+<input type='submit' value='search'/>
+</form>
+</td></tr></table>
+<div class='content'><table summary='repository info' class='list nowrap'><tr class='nohover'><th class='left'>Branch</th><th class='left'>Commit message</th><th class='left'>Author</th><th class='left' colspan='2'>Age</th></tr>
+<tr><td><a href='/sfeed/log/'>main</a></td><td><a href='/sfeed/commit/'>Add APOD</a></td><td>Case Duckworth</td><td colspan='2'><span class='age-mins' title='2022-09-19 14:28:30 -0500'>38 min.</span></td></tr>
+<tr class='nohover'><td colspan='3'>&nbsp;</td></tr><tr class='nohover'><td colspan='3'>&nbsp;</td></tr><tr class='nohover'><th class='left'>Age</th><th class='left'>Commit message</th><th class='left'>Author</th></tr>
+<tr><td><span class='age-mins' title='2022-09-19 14:28:30 -0500'>38 min.</span></td><td><a href='/sfeed/commit/?id=7e389913489916166a0c9f590a1afb1737adcbf2'>Add APOD</a><span class='decoration'> <a class='deco' href='/sfeed/commit/?id=7e389913489916166a0c9f590a1afb1737adcbf2'>HEAD</a> <a class='branch-deco' href='/sfeed/log/'>main</a></span></td><td>Case Duckworth</td></tr>
+<tr><td><span class='age-days' title='2022-09-15 14:42:28 -0500'>4 days</span></td><td><a href='/sfeed/commit/?id=da8103330e7ec902994d72c6b1a3ec5fbad5c9d3'>Change fresh item colors</a></td><td>Case Duckworth</td></tr>
+<tr><td><span class='age-days' title='2022-09-15 14:38:35 -0500'>4 days</span></td><td><a href='/sfeed/commit/?id=4bea5f02d3b13cac53ddaa60d8202083fbe80aeb'>Indentation</a></td><td>Case Duckworth</td></tr>
+<tr><td><span class='age-days' title='2022-09-14 09:53:56 -0500'>5 days</span></td><td><a href='/sfeed/commit/?id=d5348fa3f2080bfd0fa217f2311d61aa99e34860'>Add Tab Completion</a></td><td>Case Duckworth</td></tr>
+<tr><td><span class='age-days' title='2022-09-14 08:51:36 -0500'>5 days</span></td><td><a href='/sfeed/commit/?id=c3e8226c62e107d9db6dda4d669b3676cfc6cde7'>Add Lonnie Johnson</a></td><td>Case Duckworth</td></tr>
+<tr><td><span class='age-days' title='2022-09-12 17:39:32 -0500'>7 days</span></td><td><a href='/sfeed/commit/?id=3debe199e3dbd5020da1768d297777423652e6fd'>Add miniature calendar; metafilter</a></td><td>Case Duckworth</td></tr>
+<tr><td><span class='age-days' title='2022-09-10 23:20:29 -0500'>9 days</span></td><td><a href='/sfeed/commit/?id=7eed94e4c96f9fbd4a03dd1dc11a67514d64b404'>Add active listening</a></td><td>Case Duckworth</td></tr>
+<tr><td><span class='age-days' title='2022-09-09 20:01:46 -0500'>10 days</span></td><td><a href='/sfeed/commit/?id=c6056e5676b3e9970dbe1fc681d3f5ea447734fc'>Add tilde.town blog</a></td><td>Case Duckworth</td></tr>
+<tr><td><span class='age-days' title='2022-09-07 23:57:26 -0500'>12 days</span></td><td><a href='/sfeed/commit/?id=06c33ee36f71f7f92ab7c918f02efd262b83d276'>Add zserge</a></td><td>Case Duckworth</td></tr>
+<tr><td><span class='age-days' title='2022-09-07 23:56:50 -0500'>12 days</span></td><td><a href='/sfeed/commit/?id=0cd234e1faeefa14cb44206a3f8776190d35b2e9'>Remove duplicate</a></td><td>Case Duckworth</td></tr>
+<tr class='nohover'><td colspan='3'><a href='/sfeed/log/'>[...]</a></td></tr>
+<tr class='nohover'><td colspan='3'>&nbsp;</td></tr><tr class='nohover'><th class='left' colspan='3'>Clone</th></tr>
+<tr><td colspan='3'><a rel='vcs-git' href='https://git.acdw.net/sfeed' title='sfeed Git repository'>https://git.acdw.net/sfeed</a></td></tr>
+</table></div> <!-- class=content -->
+<div class="footer">
+&copy; 2022 C. Duckworth.
+generated by
+<a href="/cgit" >cgit</a>.
+comments, issues, and patches welcome at
+&lt;
+<a href="mailto:git@acdw.net" >git <em>at</em> acdw <em>dot</em> net</a>
+&gt;.
+</div>
+</div> <!-- id=cgit -->
+</body>
+</html>
