@@ -2,12 +2,11 @@
 # See the AUTHORS file at the top-level directory of this distribution
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
-
 from dataclasses import asdict, dataclass
 import logging
 import random
-from typing import Any, Dict, Iterator, List, Optional
-from urllib.parse import parse_qs, urljoin, urlparse
+from typing import Any, Dict, Iterator, List, Optional, Tuple
+from urllib.parse import parse_qs, parse_qsl, urlencode, urljoin, urlparse
 
 import iso8601
 import requests
@@ -97,8 +96,6 @@ class GogsLister(Lister[GogsListerState, GogsListerPage]):
                 # Raises an error on Gogs, or a warning on Gitea
                 self.on_anonymous_mode()
 
-        self.max_page_limit = 2
-
         self.session = requests.Session()
         self.session.headers.update(
             {
@@ -120,7 +117,9 @@ class GogsLister(Lister[GogsListerState, GogsListerPage]):
         return asdict(state)
 
     @throttling_retry(before_sleep=before_sleep_log(logger, logging.WARNING))
-    def page_request(self, url, params) -> requests.Response:
+    def page_request(
+        self, url: str, params: Dict[str, Any]
+    ) -> Tuple[Dict[str, Any], Dict[str, Any]]:
 
         logger.debug("Fetching URL %s with params %s", url, params)
 
@@ -133,9 +132,20 @@ class GogsLister(Lister[GogsListerState, GogsListerPage]):
                 response.url,
                 response.content,
             )
-        response.raise_for_status()
+        if (
+            response.status_code == 500
+        ):  # Temporary hack for skipping fatal repos (T4423)
+            url_parts = urlparse(url)
+            query: Dict[str, Any] = dict(parse_qsl(url_parts.query))
+            query.update({"page": _parse_page_id(url) + 1})
+            next_page_link = url_parts._replace(query=urlencode(query)).geturl()
+            body: Dict[str, Any] = {"data": []}
+            links = {"next": {"url": next_page_link}}
+            return body, links
+        else:
+            response.raise_for_status()
 
-        return response
+        return response.json(), response.links
 
     @classmethod
     def extract_repos(cls, body: Dict[str, Any]) -> List[Repo]:
@@ -149,21 +159,24 @@ class GogsLister(Lister[GogsListerState, GogsListerPage]):
 
         # base with trailing slash, path without leading slash for urljoin
         next_link: Optional[str] = urljoin(self.url, self.REPO_LIST_PATH)
-        response = self.page_request(next_link, {**self.query_params, "page": page_id})
+
+        body, links = self.page_request(
+            next_link, {**self.query_params, "page": page_id}
+        )
 
         while next_link is not None:
-            repos = self.extract_repos(response.json())
+            repos = self.extract_repos(body)
 
-            assert len(response.links) > 0, "API changed: no Link header found"
-            if "next" in response.links:
-                next_link = response.links["next"]["url"]
+            assert len(links) > 0, "API changed: no Link header found"
+            if "next" in links:
+                next_link = links["next"]["url"]
             else:
                 next_link = None  # Happens for the last page
 
             yield GogsListerPage(repos=repos, next_link=next_link)
 
             if next_link is not None:
-                response = self.page_request(next_link, {})
+                body, links = self.page_request(next_link, {})
 
     def get_origins_from_page(self, page: GogsListerPage) -> Iterator[ListedOrigin]:
         """Convert a page of Gogs repositories into a list of ListedOrigins"""

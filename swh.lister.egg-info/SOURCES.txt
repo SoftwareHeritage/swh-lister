@@ -99,6 +99,12 @@ swh/lister/cgit/tests/__init__.py
 swh/lister/cgit/tests/repo_list.txt
 swh/lister/cgit/tests/test_lister.py
 swh/lister/cgit/tests/test_tasks.py
+swh/lister/cgit/tests/data/https_git.acdw.net/Readme.md
+swh/lister/cgit/tests/data/https_git.acdw.net/cgit
+swh/lister/cgit/tests/data/https_git.acdw.net/foo
+swh/lister/cgit/tests/data/https_git.acdw.net/foo_summary
+swh/lister/cgit/tests/data/https_git.acdw.net/sfeed
+swh/lister/cgit/tests/data/https_git.acdw.net/sfeed_summary
 swh/lister/cgit/tests/data/https_git.baserock.org/cgit
 swh/lister/cgit/tests/data/https_git.eclipse.org/c
 swh/lister/cgit/tests/data/https_git.savannah.gnu.org/README
