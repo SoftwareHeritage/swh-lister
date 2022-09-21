@@ -15,7 +15,7 @@ from tenacity.before_sleep import before_sleep_log
 
 from swh.lister import USER_AGENT
 from swh.lister.pattern import CredentialsType, StatelessLister
-from swh.lister.utils import throttling_retry
+from swh.lister.utils import http_retry
 from swh.scheduler.interface import SchedulerInterface
 from swh.scheduler.model import ListedOrigin
 
@@ -79,7 +79,7 @@ class CGitLister(StatelessLister[Repositories]):
         )
         self.base_git_url = base_git_url
 
-    @throttling_retry(before_sleep=before_sleep_log(logger, logging.DEBUG))
+    @http_retry(before_sleep=before_sleep_log(logger, logging.DEBUG))
     def _get_and_parse(self, url: str) -> BeautifulSoup:
         """Get the given url and parse the retrieved HTML using BeautifulSoup"""
         response = self.session.get(url)

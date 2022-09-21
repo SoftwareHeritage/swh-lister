@@ -13,7 +13,7 @@ import iso8601
 import requests
 from tenacity import before_sleep_log
 
-from swh.lister.utils import retry_policy_generic, throttling_retry
+from swh.lister.utils import http_retry
 from swh.scheduler.interface import SchedulerInterface
 from swh.scheduler.model import ListedOrigin
 
@@ -87,8 +87,7 @@ class GolangLister(Lister[GolangStateType, GolangPageType]):
             ):
                 self.updated = True
 
-    @throttling_retry(
-        retry=retry_policy_generic,
+    @http_retry(
         before_sleep=before_sleep_log(logger, logging.WARNING),
     )
     def api_request(self, url: str) -> List[str]:

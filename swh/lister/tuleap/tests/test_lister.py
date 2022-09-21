@@ -92,6 +92,11 @@ def tuleap_repo_3(datadir) -> Tuple[str, Dict[str, str], List[RepoPage], List[st
     return text, headers, page_results, origin_urls
 
 
+@pytest.fixture(autouse=True)
+def retry_sleep_mock(mocker):
+    mocker.patch.object(TuleapLister.page_request.retry, "sleep")
+
+
 def check_listed_origins(lister_urls: List[str], scheduler_origins: List[ListedOrigin]):
     """Asserts that the two collections have the same origin URLs.
 

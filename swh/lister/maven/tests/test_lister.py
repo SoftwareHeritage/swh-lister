@@ -125,6 +125,11 @@ def network_requests_mock(
     requests_mock.get(URL_POM_3, content=maven_pom_3)
 
 
+@pytest.fixture(autouse=True)
+def retry_sleep_mock(mocker):
+    mocker.patch.object(MavenLister.page_request.retry, "sleep")
+
+
 def test_maven_full_listing(swh_scheduler):
     """Covers full listing of multiple pages, checking page results and listed
     origins, statelessness."""

@@ -11,7 +11,7 @@ from urllib.parse import urljoin
 import requests
 from tenacity.before_sleep import before_sleep_log
 
-from swh.lister.utils import throttling_retry
+from swh.lister.utils import http_retry
 from swh.scheduler.interface import SchedulerInterface
 from swh.scheduler.model import ListedOrigin
 
@@ -77,11 +77,11 @@ class NewForgeLister(Lister[NewForgeListerState, NewForgeListerPage]):
     def state_to_dict(self, state: NewForgeListerState) -> Dict[str, Any]:
         return asdict(state)
 
-    @throttling_retry(before_sleep=before_sleep_log(logger, logging.WARNING))
+    @http_retry(before_sleep=before_sleep_log(logger, logging.WARNING))
     def page_request(self, url, params) -> requests.Response:
         # Do the network resource request under a retrying decorator
         # to handle rate limiting and transient errors up to a limit.
-        # `throttling_retry` by default use the `requests` library to check
+        # `http_retry` by default use the `requests` library to check
         # only for rate-limit and a base-10 exponential waiting strategy.
         # This can be customized by passed waiting, retrying and logging strategies
         # as functions. See the `tenacity` library documentation.

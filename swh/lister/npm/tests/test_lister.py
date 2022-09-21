@@ -35,6 +35,11 @@ def npm_incremental_listing_page2(datadir):
     return json.loads(Path(datadir, "npm_incremental_page2.json").read_text())
 
 
+@pytest.fixture(autouse=True)
+def retry_sleep_mock(mocker):
+    mocker.patch.object(NpmLister.page_request.retry, "sleep")
+
+
 def _check_listed_npm_packages(lister, packages, scheduler_origins):
     for package in packages:
         package_name = package["doc"]["name"]

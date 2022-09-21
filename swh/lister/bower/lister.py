@@ -8,7 +8,7 @@ from typing import Any, Dict, Iterator, List, Optional
 import requests
 from tenacity.before_sleep import before_sleep_log
 
-from swh.lister.utils import throttling_retry
+from swh.lister.utils import http_retry
 from swh.scheduler.interface import SchedulerInterface
 from swh.scheduler.model import ListedOrigin
 
@@ -49,7 +49,7 @@ class BowerLister(StatelessLister[BowerListerPage]):
             }
         )
 
-    @throttling_retry(before_sleep=before_sleep_log(logger, logging.WARNING))
+    @http_retry(before_sleep=before_sleep_log(logger, logging.WARNING))
     def page_request(self, url: str, params: Dict[str, Any]) -> requests.Response:
 
         logger.info("Fetching URL %s with params %s", url, params)

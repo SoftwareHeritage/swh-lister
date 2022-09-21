@@ -12,7 +12,7 @@ from tenacity.before_sleep import before_sleep_log
 
 from swh.lister import USER_AGENT
 from swh.lister.pattern import CredentialsType, Lister
-from swh.lister.utils import throttling_retry
+from swh.lister.utils import http_retry
 from swh.scheduler.interface import SchedulerInterface
 from swh.scheduler.model import ListedOrigin
 
@@ -95,7 +95,7 @@ class NpmLister(Lister[NpmListerState, List[Dict[str, Any]]]):
             params["startkey"] = last_package_id
         return params
 
-    @throttling_retry(before_sleep=before_sleep_log(logger, logging.WARNING))
+    @http_retry(before_sleep=before_sleep_log(logger, logging.WARNING))
     def page_request(self, last_package_id: str) -> requests.Response:
         params = self.request_params(last_package_id)
         logger.debug("Fetching URL %s with params %s", self.url, params)

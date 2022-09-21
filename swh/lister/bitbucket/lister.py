@@ -14,7 +14,7 @@ import iso8601
 import requests
 from tenacity.before_sleep import before_sleep_log
 
-from swh.lister.utils import throttling_retry
+from swh.lister.utils import http_retry
 from swh.scheduler.interface import SchedulerInterface
 from swh.scheduler.model import ListedOrigin
 
@@ -107,7 +107,7 @@ class BitbucketLister(Lister[BitbucketListerState, List[Dict[str, Any]]]):
         if username is not None and password is not None:
             self.session.auth = (username, password)
 
-    @throttling_retry(before_sleep=before_sleep_log(logger, logging.DEBUG))
+    @http_retry(before_sleep=before_sleep_log(logger, logging.DEBUG))
     def page_request(self, last_repo_cdate: str) -> requests.Response:
 
         self.url_params["after"] = last_repo_cdate

@@ -177,7 +177,7 @@ def test_gogs_auth_instance(
     assert stats.origins == 6
 
 
-@pytest.mark.parametrize("http_code", [400, 500, 502])
+@pytest.mark.parametrize("http_code", [400, 500])
 def test_gogs_list_http_error(
     swh_scheduler, requests_mock, http_code, trygogs_p1, trygogs_p3_last
 ):

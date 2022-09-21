@@ -17,7 +17,7 @@ from tenacity.before_sleep import before_sleep_log
 
 from swh.lister import USER_AGENT
 from swh.lister.pattern import CredentialsType, Lister
-from swh.lister.utils import is_retryable_exception, throttling_retry
+from swh.lister.utils import http_retry, is_retryable_exception
 from swh.scheduler.model import ListedOrigin
 
 logger = logging.getLogger(__name__)
@@ -138,7 +138,7 @@ class GitLabLister(Lister[GitLabListerState, PageResult]):
     def state_to_dict(self, state: GitLabListerState) -> Dict[str, Any]:
         return asdict(state)
 
-    @throttling_retry(
+    @http_retry(
         retry=_if_rate_limited, before_sleep=before_sleep_log(logger, logging.WARNING)
     )
     def get_page_result(self, url: str) -> PageResult:
