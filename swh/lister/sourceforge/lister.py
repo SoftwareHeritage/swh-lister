@@ -15,14 +15,11 @@ from bs4 import BeautifulSoup
 import iso8601
 import lxml
 import requests
-from tenacity.before_sleep import before_sleep_log
 
 from swh.core.api.classes import stream_results
-from swh.lister.utils import http_retry
 from swh.scheduler.interface import SchedulerInterface
 from swh.scheduler.model import ListedOrigin
 
-from .. import USER_AGENT
 from ..pattern import CredentialsType, Lister
 
 logger = logging.getLogger(__name__)
@@ -127,11 +124,8 @@ class SourceForgeLister(Lister[SourceForgeListerState, SourceForgeListerPage]):
         # Will hold the currently saved "last modified" dates to compare against our
         # requests.
         self._project_last_modified: Optional[ProjectsLastModifiedCache] = None
-        self.session = requests.Session()
-        # Declare the USER_AGENT is more sysadm-friendly for the forge we list
-        self.session.headers.update(
-            {"Accept": "application/json", "User-Agent": USER_AGENT}
-        )
+
+        self.session.headers.update({"Accept": "application/json"})
         self.incremental = incremental
 
     def state_from_dict(self, d: Dict[str, Dict[str, Any]]) -> SourceForgeListerState:
@@ -208,26 +202,6 @@ class SourceForgeLister(Lister[SourceForgeListerState, SourceForgeListerPage]):
         self._project_last_modified = listed_origins
         return listed_origins
 
-    @http_retry(
-        before_sleep=before_sleep_log(logger, logging.WARNING),
-    )
-    def page_request(self, url, params) -> requests.Response:
-        # Log listed URL to ease debugging
-        logger.debug("Fetching URL %s with params %s", url, params)
-        response = self.session.get(url, params=params)
-
-        if response.status_code != 200:
-            # Log response content to ease debugging
-            logger.warning(
-                "Unexpected HTTP status code %s for URL %s",
-                response.status_code,
-                response.url,
-            )
-        # The lister must fail on blocking errors
-        response.raise_for_status()
-
-        return response
-
     def get_pages(self) -> Iterator[SourceForgeListerPage]:
         """
         SourceForge has a main XML sitemap that lists its sharded sitemaps for all
@@ -240,7 +214,7 @@ class SourceForgeLister(Lister[SourceForgeListerState, SourceForgeListerPage]):
         Lastly we use the information of which VCS are used to build the predictable
         clone URL for any given VCS.
         """
-        sitemap_contents = self.page_request(MAIN_SITEMAP_URL, {}).text
+        sitemap_contents = self.http_request(MAIN_SITEMAP_URL).text
         tree = ElementTree.fromstring(sitemap_contents)
 
         for subsitemap in tree.iterfind(f"{SITEMAP_XML_NAMESPACE}sitemap"):
@@ -259,7 +233,7 @@ class SourceForgeLister(Lister[SourceForgeListerState, SourceForgeListerPage]):
                     continue
 
             self.state.subsitemap_last_modified[sub_url] = last_modified
-            subsitemap_contents = self.page_request(sub_url, {}).text
+            subsitemap_contents = self.http_request(sub_url).text
             subtree = ElementTree.fromstring(subsitemap_contents)
 
             yield from self._get_pages_from_subsitemap(subtree)
@@ -351,9 +325,9 @@ class SourceForgeLister(Lister[SourceForgeListerState, SourceForgeListerPage]):
                 logger.debug(msg, namespace, project)
 
         try:
-            res = self.page_request(endpoint, {}).json()
+            res = self.http_request(endpoint).json()
         except requests.HTTPError:
-            # We've already logged in `page_request`
+            # We've already logged in `http_request`
             return []
 
         tools = res.get("tools")
@@ -373,7 +347,7 @@ class SourceForgeLister(Lister[SourceForgeListerState, SourceForgeListerPage]):
                 # and multiple origin URLs can be produced for a same project.
                 cvs_info_url = f"http://{project}.cvs.sourceforge.net"
                 try:
-                    response = self.page_request(cvs_info_url, params={})
+                    response = self.http_request(cvs_info_url)
                 except requests.HTTPError:
                     logger.warning(
                         "CVS info page could not be fetched, skipping project '%s'",
@@ -413,7 +387,7 @@ class SourceForgeLister(Lister[SourceForgeListerState, SourceForgeListerPage]):
                 # and a lot of them are 404 now.
                 url = f"http://{project}.bzr.sourceforge.net/bzr/{project}"
                 try:
-                    response = self.page_request(url, params={})
+                    response = self.http_request(url)
                     if "To get this branch, use:" not in response.text:
                         # If a bzr project has multiple branches, we need to extract their
                         # names from the repository landing page and create one listed origin

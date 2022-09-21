@@ -13,10 +13,8 @@ from urllib.parse import urljoin
 from bs4 import BeautifulSoup
 import lxml
 import requests
-from tenacity.before_sleep import before_sleep_log
 
 from swh.core.github.utils import GitHubSession
-from swh.lister.utils import http_retry
 from swh.scheduler.interface import SchedulerInterface
 from swh.scheduler.model import ListedOrigin
 
@@ -93,13 +91,7 @@ class MavenLister(Lister[MavenListerState, RepoPage]):
             instance=instance,
         )
 
-        self.session = requests.Session()
-        self.session.headers.update(
-            {
-                "Accept": "application/json",
-                "User-Agent": USER_AGENT,
-            }
-        )
+        self.session.headers.update({"Accept": "application/json"})
 
         self.jar_origins: Dict[str, ListedOrigin] = {}
         self.github_session = GitHubSession(
@@ -111,23 +103,6 @@ class MavenLister(Lister[MavenListerState, RepoPage]):
 
     def state_to_dict(self, state: MavenListerState) -> Dict[str, Any]:
         return asdict(state)
-
-    @http_retry(before_sleep=before_sleep_log(logger, logging.WARNING))
-    def page_request(self, url: str, params: Dict[str, Any]) -> requests.Response:
-
-        logger.info("Fetching URL %s with params %s", url, params)
-
-        response = self.session.get(url, params=params)
-        if response.status_code != 200:
-            logger.warning(
-                "Unexpected HTTP status code %s on %s: %s",
-                response.status_code,
-                response.url,
-                response.content,
-            )
-        response.raise_for_status()
-
-        return response
 
     def get_pages(self) -> Iterator[RepoPage]:
         """Retrieve and parse exported maven indexes to
@@ -155,10 +130,11 @@ class MavenLister(Lister[MavenListerState, RepoPage]):
         # Download the main text index file.
         logger.info("Downloading computed index from %s.", self.INDEX_URL)
         assert self.INDEX_URL is not None
-        response = requests.get(self.INDEX_URL, stream=True)
-        if response.status_code != 200:
+        try:
+            response = self.http_request(self.INDEX_URL, stream=True)
+        except requests.HTTPError:
             logger.error("Index %s not found, stopping", self.INDEX_URL)
-            response.raise_for_status()
+            raise
 
         # Prepare regexes to parse index exports.
 
@@ -250,9 +226,9 @@ class MavenLister(Lister[MavenListerState, RepoPage]):
         # Now fetch pom files and scan them for scm info.
 
         logger.info("Fetching poms..")
-        for pom in out_pom:
+        for pom_url in out_pom:
             try:
-                response = self.page_request(pom, {})
+                response = self.http_request(pom_url)
                 parsed_pom = BeautifulSoup(response.content, "xml")
                 project = parsed_pom.find("project")
                 if project is None:
@@ -263,22 +239,24 @@ class MavenLister(Lister[MavenListerState, RepoPage]):
                     if connection is not None:
                         artifact_metadata_d = {
                             "type": "scm",
-                            "doc": out_pom[pom],
+                            "doc": out_pom[pom_url],
                             "url": connection.text,
                         }
-                        logger.debug("* Yielding pom %s: %s", pom, artifact_metadata_d)
+                        logger.debug(
+                            "* Yielding pom %s: %s", pom_url, artifact_metadata_d
+                        )
                         yield artifact_metadata_d
                     else:
-                        logger.debug("No scm.connection in pom %s", pom)
+                        logger.debug("No scm.connection in pom %s", pom_url)
                 else:
-                    logger.debug("No scm in pom %s", pom)
+                    logger.debug("No scm in pom %s", pom_url)
             except requests.HTTPError:
                 logger.warning(
                     "POM info page could not be fetched, skipping project '%s'",
-                    pom,
+                    pom_url,
                 )
             except lxml.etree.Error as error:
-                logger.info("Could not parse POM %s XML: %s.", pom, error)
+                logger.info("Could not parse POM %s XML: %s.", pom_url, error)
 
     def get_scm(self, page: RepoPage) -> Optional[ListedOrigin]:
         """Retrieve scm origin out of the page information. Only called when type of the

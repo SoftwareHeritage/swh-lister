@@ -127,7 +127,7 @@ def network_requests_mock(
 
 @pytest.fixture(autouse=True)
 def retry_sleep_mock(mocker):
-    mocker.patch.object(MavenLister.page_request.retry, "sleep")
+    mocker.patch.object(MavenLister.http_request.retry, "sleep")
 
 
 def test_maven_full_listing(swh_scheduler):

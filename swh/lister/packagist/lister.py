@@ -1,4 +1,4 @@
-# Copyright (C) 2019-2021  The Software Heritage developers
+# Copyright (C) 2019-2022  The Software Heritage developers
 # See the AUTHORS file at the top-level directory of this distribution
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
@@ -14,7 +14,6 @@ import requests
 from swh.scheduler.interface import SchedulerInterface
 from swh.scheduler.model import ListedOrigin
 
-from .. import USER_AGENT
 from ..pattern import CredentialsType, Lister
 
 logger = logging.getLogger(__name__)
@@ -62,10 +61,7 @@ class PackagistLister(Lister[PackagistListerState, PackagistPageType]):
             credentials=credentials,
         )
 
-        self.session = requests.Session()
-        self.session.headers.update(
-            {"Accept": "application/json", "User-Agent": USER_AGENT}
-        )
+        self.session.headers.update({"Accept": "application/json"})
         self.listing_date = datetime.now().astimezone(tz=timezone.utc)
 
     def state_from_dict(self, d: Dict[str, Any]) -> PackagistListerState:
@@ -82,20 +78,7 @@ class PackagistLister(Lister[PackagistListerState, PackagistPageType]):
         return d
 
     def api_request(self, url: str) -> Any:
-        logger.debug("Fetching URL %s", url)
-
-        response = self.session.get(url)
-
-        if response.status_code not in (200, 304):
-            logger.warning(
-                "Unexpected HTTP status code %s on %s: %s",
-                response.status_code,
-                response.url,
-                response.content,
-            )
-
-        response.raise_for_status()
-
+        response = self.http_request(url)
         # response is empty when status code is 304
         return response.json() if response.status_code == 200 else {}
 
@@ -134,7 +117,7 @@ class PackagistLister(Lister[PackagistListerState, PackagistPageType]):
                     # missing package metadata in response
                     continue
                 versions_info = metadata["packages"][package_name].values()
-            except requests.exceptions.HTTPError:
+            except requests.HTTPError:
                 # error when getting package metadata (usually 404 when a
                 # package has been removed), skip it and process next package
                 continue

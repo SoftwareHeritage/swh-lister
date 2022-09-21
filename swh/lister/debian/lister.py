@@ -1,8 +1,7 @@
-# Copyright (C) 2017-2021 The Software Heritage developers
+# Copyright (C) 2017-2022 The Software Heritage developers
 # See the AUTHORS file at the top-level directory of this distribution
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
-
 
 import bz2
 from collections import defaultdict
@@ -17,12 +16,11 @@ from typing import Any, Callable, Dict, Iterator, List, Optional, Set, Tuple
 from urllib.parse import urljoin
 
 from debian.deb822 import Sources
-import requests
+from requests.exceptions import HTTPError
 
 from swh.scheduler.interface import SchedulerInterface
 from swh.scheduler.model import ListedOrigin
 
-from .. import USER_AGENT
 from ..pattern import CredentialsType, Lister
 
 logger = logging.getLogger(__name__)
@@ -95,9 +93,6 @@ class DebianLister(Lister[DebianListerState, DebianPageType]):
         self.suites = suites
         self.components = components
 
-        self.session = requests.Session()
-        self.session.headers.update({"User-Agent": USER_AGENT})
-
         # will hold all listed origins info
         self.listed_origins: Dict[DebianOrigin, ListedOrigin] = {}
         # will contain origin urls that have already been listed
@@ -132,9 +127,11 @@ class DebianLister(Lister[DebianListerState, DebianPageType]):
     def page_request(self, suite: Suite, component: Component) -> DebianPageType:
         """Return parsed package Sources file for a given debian suite and component."""
         for url, compression in self.debian_index_urls(suite, component):
-            response = requests.get(url, stream=True)
-            logging.debug("Fetched URL: %s, status code: %s", url, response.status_code)
-            if response.status_code == 200:
+            try:
+                response = self.http_request(url, stream=True)
+            except HTTPError:
+                pass
+            else:
                 last_modified = response.headers.get("Last-Modified")
                 self.last_sources_update = (
                     parsedate_to_datetime(last_modified) if last_modified else None

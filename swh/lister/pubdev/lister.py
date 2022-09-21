@@ -2,15 +2,13 @@
 # See the AUTHORS file at the top-level directory of this distribution
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
+
 import logging
-from typing import Any, Dict, Iterator, List, Optional
+from typing import Iterator, List, Optional
 
 import iso8601
-import requests
 from requests.exceptions import HTTPError
-from tenacity.before_sleep import before_sleep_log
 
-from swh.lister.utils import http_retry
 from swh.scheduler.interface import SchedulerInterface
 from swh.scheduler.model import ListedOrigin
 
@@ -52,30 +50,13 @@ class PubDevLister(StatelessLister[PubDevListerPage]):
             instance=self.INSTANCE,
             url=self.BASE_URL,
         )
-        self.session = requests.Session()
+
         self.session.headers.update(
             {
                 "Accept": "application/json",
                 "User-Agent": USER_AGENT,
             }
         )
-
-    @http_retry(before_sleep=before_sleep_log(logger, logging.WARNING))
-    def page_request(self, url: str, params: Dict[str, Any]) -> requests.Response:
-
-        logger.debug("Fetching URL %s with params %s", url, params)
-
-        response = self.session.get(url, params=params)
-        if response.status_code != 200:
-            logger.warning(
-                "Unexpected HTTP status code %s on %s: %s",
-                response.status_code,
-                response.url,
-                response.content,
-            )
-        response.raise_for_status()
-
-        return response
 
     def get_pages(self) -> Iterator[PubDevListerPage]:
         """Yield an iterator which returns 'page'
@@ -88,8 +69,8 @@ class PubDevLister(StatelessLister[PubDevListerPage]):
 
         There is only one page that list all origins url based on "{base_url}packages/{pkgname}"
         """
-        response = self.page_request(
-            url=self.PACKAGE_NAMES_URL_PATTERN.format(base_url=self.url), params={}
+        response = self.http_request(
+            url=self.PACKAGE_NAMES_URL_PATTERN.format(base_url=self.url)
         )
         yield response.json()["packages"]
 
@@ -102,7 +83,7 @@ class PubDevLister(StatelessLister[PubDevListerPage]):
                 base_url=self.url, pkgname=pkgname
             )
             try:
-                response = self.page_request(url=package_info_url, params={})
+                response = self.http_request(url=package_info_url)
             except HTTPError:
                 logger.warning(
                     "Failed to fetch metadata for package %s, skipping it from listing.",

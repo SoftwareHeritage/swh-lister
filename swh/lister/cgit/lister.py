@@ -1,4 +1,4 @@
-# Copyright (C) 2019-2021 The Software Heritage developers
+# Copyright (C) 2019-2022 The Software Heritage developers
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
 
@@ -9,13 +9,9 @@ from typing import Any, Dict, Iterator, List, Optional
 from urllib.parse import urljoin, urlparse
 
 from bs4 import BeautifulSoup
-import requests
 from requests.exceptions import HTTPError
-from tenacity.before_sleep import before_sleep_log
 
-from swh.lister import USER_AGENT
 from swh.lister.pattern import CredentialsType, StatelessLister
-from swh.lister.utils import http_retry
 from swh.scheduler.interface import SchedulerInterface
 from swh.scheduler.model import ListedOrigin
 
@@ -73,17 +69,12 @@ class CGitLister(StatelessLister[Repositories]):
             credentials=credentials,
         )
 
-        self.session = requests.Session()
-        self.session.headers.update(
-            {"Accept": "application/html", "User-Agent": USER_AGENT}
-        )
+        self.session.headers.update({"Accept": "application/html"})
         self.base_git_url = base_git_url
 
-    @http_retry(before_sleep=before_sleep_log(logger, logging.DEBUG))
     def _get_and_parse(self, url: str) -> BeautifulSoup:
         """Get the given url and parse the retrieved HTML using BeautifulSoup"""
-        response = self.session.get(url)
-        response.raise_for_status()
+        response = self.http_request(url)
         return BeautifulSoup(response.text, features="html.parser")
 
     def get_pages(self) -> Iterator[Repositories]:

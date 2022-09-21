@@ -10,14 +10,10 @@ import logging
 from typing import Any, Dict, Iterator, List, Optional, Tuple
 
 import iso8601
-import requests
-from tenacity import before_sleep_log
 
-from swh.lister.utils import http_retry
 from swh.scheduler.interface import SchedulerInterface
 from swh.scheduler.model import ListedOrigin
 
-from .. import USER_AGENT
 from ..pattern import CredentialsType, Lister
 
 logger = logging.getLogger(__name__)
@@ -59,10 +55,7 @@ class GolangLister(Lister[GolangStateType, GolangPageType]):
             credentials=credentials,
         )
 
-        self.session = requests.Session()
-        self.session.headers.update(
-            {"Accept": "application/json", "User-Agent": USER_AGENT}
-        )
+        self.session.headers.update({"Accept": "application/json"})
         self.incremental = incremental
 
     def state_from_dict(self, d: Dict[str, Any]) -> GolangStateType:
@@ -87,24 +80,8 @@ class GolangLister(Lister[GolangStateType, GolangPageType]):
             ):
                 self.updated = True
 
-    @http_retry(
-        before_sleep=before_sleep_log(logger, logging.WARNING),
-    )
     def api_request(self, url: str) -> List[str]:
-        logger.debug("Fetching URL %s", url)
-
-        response = self.session.get(url)
-
-        if response.status_code not in (200, 304):
-            # Log response content to ease debugging
-            logger.warning(
-                "Unexpected HTTP status code %s for URL %s",
-                response.status_code,
-                response.url,
-            )
-
-        response.raise_for_status()
-
+        response = self.http_request(url)
         return response.text.split()
 
     def get_single_page(

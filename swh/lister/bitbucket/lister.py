@@ -1,4 +1,4 @@
-# Copyright (C) 2017-2021 The Software Heritage developers
+# Copyright (C) 2017-2022 The Software Heritage developers
 # See the AUTHORS file at the top-level directory of this distribution
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
@@ -11,14 +11,10 @@ from typing import Any, Dict, Iterator, List, Optional
 from urllib import parse
 
 import iso8601
-import requests
-from tenacity.before_sleep import before_sleep_log
 
-from swh.lister.utils import http_retry
 from swh.scheduler.interface import SchedulerInterface
 from swh.scheduler.model import ListedOrigin
 
-from .. import USER_AGENT
 from ..pattern import CredentialsType, Lister
 
 logger = logging.getLogger(__name__)
@@ -77,10 +73,7 @@ class BitbucketLister(Lister[BitbucketListerState, List[Dict[str, Any]]]):
             ),
         }
 
-        self.session = requests.Session()
-        self.session.headers.update(
-            {"Accept": "application/json", "User-Agent": USER_AGENT}
-        )
+        self.session.headers.update({"Accept": "application/json"})
 
         if len(self.credentials) > 0:
             cred = random.choice(self.credentials)
@@ -107,25 +100,6 @@ class BitbucketLister(Lister[BitbucketListerState, List[Dict[str, Any]]]):
         if username is not None and password is not None:
             self.session.auth = (username, password)
 
-    @http_retry(before_sleep=before_sleep_log(logger, logging.DEBUG))
-    def page_request(self, last_repo_cdate: str) -> requests.Response:
-
-        self.url_params["after"] = last_repo_cdate
-        logger.debug("Fetching URL %s with params %s", self.url, self.url_params)
-
-        response = self.session.get(self.url, params=self.url_params)
-
-        if response.status_code != 200:
-            logger.warning(
-                "Unexpected HTTP status code %s on %s: %s",
-                response.status_code,
-                response.url,
-                response.content,
-            )
-        response.raise_for_status()
-
-        return response
-
     def get_pages(self) -> Iterator[List[Dict[str, Any]]]:
 
         last_repo_cdate: str = "1970-01-01"
@@ -137,7 +111,8 @@ class BitbucketLister(Lister[BitbucketListerState, List[Dict[str, Any]]]):
             last_repo_cdate = self.state.last_repo_cdate.isoformat()
 
         while True:
-            body = self.page_request(last_repo_cdate).json()
+            self.url_params["after"] = last_repo_cdate
+            body = self.http_request(self.url, params=self.url_params).json()
 
             yield body["values"]
 

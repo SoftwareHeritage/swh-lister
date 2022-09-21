@@ -2,17 +2,13 @@
 # See the AUTHORS file at the top-level directory of this distribution
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
+
 import logging
-from typing import Any, Dict, Iterator, List, Optional
+from typing import Dict, Iterator, List, Optional
 
-import requests
-from tenacity.before_sleep import before_sleep_log
-
-from swh.lister.utils import http_retry
 from swh.scheduler.interface import SchedulerInterface
 from swh.scheduler.model import ListedOrigin
 
-from .. import USER_AGENT
 from ..pattern import CredentialsType, StatelessLister
 
 logger = logging.getLogger(__name__)
@@ -41,30 +37,7 @@ class BowerLister(StatelessLister[BowerListerPage]):
             instance=self.INSTANCE,
             url=self.API_URL,
         )
-        self.session = requests.Session()
-        self.session.headers.update(
-            {
-                "Accept": "application/json",
-                "User-Agent": USER_AGENT,
-            }
-        )
-
-    @http_retry(before_sleep=before_sleep_log(logger, logging.WARNING))
-    def page_request(self, url: str, params: Dict[str, Any]) -> requests.Response:
-
-        logger.info("Fetching URL %s with params %s", url, params)
-
-        response = self.session.get(url, params=params)
-        if response.status_code != 200:
-            logger.warning(
-                "Unexpected HTTP status code %s on %s: %s",
-                response.status_code,
-                response.url,
-                response.content,
-            )
-        response.raise_for_status()
-
-        return response
+        self.session.headers.update({"Accept": "application/json"})
 
     def get_pages(self) -> Iterator[BowerListerPage]:
         """Yield an iterator which returns 'page'
@@ -75,7 +48,7 @@ class BowerLister(StatelessLister[BowerListerPage]):
 
         There is only one page that list all origins urls.
         """
-        response = self.page_request(url=self.url, params={})
+        response = self.http_request(self.url)
         yield response.json()
 
     def get_origins_from_page(self, page: BowerListerPage) -> Iterator[ListedOrigin]:
