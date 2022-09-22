@@ -15,9 +15,10 @@ try:
 except pkg_resources.DistributionNotFound:
     __version__ = "devel"
 
-USER_AGENT_TEMPLATE = "Software Heritage Lister (%s)"
-USER_AGENT = USER_AGENT_TEMPLATE % __version__
-
+USER_AGENT_TEMPLATE = (
+    f"Software Heritage %s lister v{__version__}"
+    " (+https://www.softwareheritage.org/contact)"
+)
 
 LISTERS = {
     entry_point.name.split(".", 1)[1]: entry_point

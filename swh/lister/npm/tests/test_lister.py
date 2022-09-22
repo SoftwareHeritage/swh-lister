@@ -11,7 +11,7 @@ import iso8601
 import pytest
 from requests.exceptions import HTTPError
 
-from swh.lister import USER_AGENT
+from swh.lister import USER_AGENT_TEMPLATE
 from swh.lister.npm.lister import NpmLister, NpmListerState
 
 
@@ -53,7 +53,9 @@ def _check_listed_npm_packages(lister, packages, scheduler_origins):
 
 
 def _match_request(request):
-    return request.headers.get("User-Agent") == USER_AGENT
+    return (
+        request.headers.get("User-Agent") == USER_AGENT_TEMPLATE % NpmLister.LISTER_NAME
+    )
 
 
 def _url_params(page_size, **kwargs):

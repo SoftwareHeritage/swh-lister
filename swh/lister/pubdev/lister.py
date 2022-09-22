@@ -12,14 +12,7 @@ from requests.exceptions import HTTPError
 from swh.scheduler.interface import SchedulerInterface
 from swh.scheduler.model import ListedOrigin
 
-from .. import __version__
 from ..pattern import CredentialsType, StatelessLister
-
-# https://github.com/dart-lang/pub/blob/master/doc/repository-spec-v2.md#metadata-headers
-USER_AGENT = (
-    f"Software Heritage PubDev Lister v{__version__} "
-    "(+https://www.softwareheritage.org/contact)"
-)
 
 logger = logging.getLogger(__name__)
 
@@ -51,12 +44,7 @@ class PubDevLister(StatelessLister[PubDevListerPage]):
             url=self.BASE_URL,
         )
 
-        self.session.headers.update(
-            {
-                "Accept": "application/json",
-                "User-Agent": USER_AGENT,
-            }
-        )
+        self.session.headers.update({"Accept": "application/json"})
 
     def get_pages(self) -> Iterator[PubDevListerPage]:
         """Yield an iterator which returns 'page'

@@ -13,7 +13,7 @@ from iso8601 import iso8601
 import pytest
 from requests.exceptions import HTTPError
 
-from swh.lister import USER_AGENT
+from swh.lister import USER_AGENT_TEMPLATE
 from swh.lister.sourceforge.lister import (
     MAIN_SITEMAP_URL,
     PROJECT_API_URL_FORMAT,
@@ -75,7 +75,10 @@ def get_bzr_repo_page(datadir, repo_name):
 
 
 def _check_request_headers(request):
-    return request.headers.get("User-Agent") == USER_AGENT
+    return (
+        request.headers.get("User-Agent")
+        == USER_AGENT_TEMPLATE % SourceForgeLister.LISTER_NAME
+    )
 
 
 def _check_listed_origins(lister, swh_scheduler):

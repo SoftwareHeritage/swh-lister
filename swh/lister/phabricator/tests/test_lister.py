@@ -9,7 +9,7 @@ from pathlib import Path
 import pytest
 from requests.exceptions import HTTPError
 
-from swh.lister import USER_AGENT
+from swh.lister import USER_AGENT_TEMPLATE
 from swh.lister.phabricator.lister import PhabricatorLister, get_repo_url
 
 
@@ -94,7 +94,8 @@ def test_lister(
 
     def match_request(request):
         return (
-            request.headers.get("User-Agent") == USER_AGENT
+            request.headers.get("User-Agent")
+            == USER_AGENT_TEMPLATE % PhabricatorLister.LISTER_NAME
             and f"api.token={API_TOKEN}" in request.body
         )
 

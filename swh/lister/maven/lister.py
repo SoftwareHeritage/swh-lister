@@ -18,7 +18,6 @@ from swh.core.github.utils import GitHubSession
 from swh.scheduler.interface import SchedulerInterface
 from swh.scheduler.model import ListedOrigin
 
-from .. import USER_AGENT
 from ..pattern import CredentialsType, Lister
 
 logger = logging.getLogger(__name__)
@@ -95,7 +94,8 @@ class MavenLister(Lister[MavenListerState, RepoPage]):
 
         self.jar_origins: Dict[str, ListedOrigin] = {}
         self.github_session = GitHubSession(
-            credentials=self.credentials, user_agent=USER_AGENT
+            credentials=self.credentials,
+            user_agent=str(self.session.headers["User-Agent"]),
         )
 
     def state_from_dict(self, d: Dict[str, Any]) -> MavenListerState:

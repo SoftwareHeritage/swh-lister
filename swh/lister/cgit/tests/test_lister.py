@@ -69,7 +69,7 @@ def test_lister_cgit_run_with_page(requests_mock_datadir, swh_scheduler):
     for request in requests_mock_datadir.request_history:
         assert "User-Agent" in request.headers
         user_agent = request.headers["User-Agent"]
-        assert "Software Heritage Lister" in user_agent
+        assert "Software Heritage cgit lister" in user_agent
         assert __version__ in user_agent
 
 

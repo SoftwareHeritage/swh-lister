@@ -18,7 +18,7 @@ from swh.core.utils import grouper
 from swh.scheduler import get_scheduler, model
 from swh.scheduler.interface import SchedulerInterface
 
-from . import USER_AGENT
+from . import USER_AGENT_TEMPLATE
 from .utils import http_retry
 
 logger = logging.getLogger(__name__)
@@ -124,7 +124,9 @@ class Lister(Generic[StateType, PageType]):
 
         self.session = requests.Session()
         # Declare the USER_AGENT is more sysadm-friendly for the forge we list
-        self.session.headers.update({"User-Agent": USER_AGENT})
+        self.session.headers.update(
+            {"User-Agent": USER_AGENT_TEMPLATE % self.LISTER_NAME}
+        )
 
     @http_retry(before_sleep=before_sleep_log(logger, logging.WARNING))
     def http_request(self, url: str, method="GET", **kwargs) -> requests.Response:
