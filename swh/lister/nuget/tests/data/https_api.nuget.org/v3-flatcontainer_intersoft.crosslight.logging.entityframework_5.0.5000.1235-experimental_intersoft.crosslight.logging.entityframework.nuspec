@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd">
+  <metadata>
+    <id>Intersoft.Crosslight.Logging.EntityFramework</id>
+    <version>5.0.5000.1235-experimental</version>
+    <title>Intersoft Crosslight Logging EntityFramework</title>
+    <authors>Intersoft Solutions</authors>
+    <owners>Intersoft Solutions</owners>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <licenseUrl>http://www.intersoftsolutions.com/Products/Licensing</licenseUrl>
+    <projectUrl>http://www.intersoftsolutions.com/Crosslight</projectUrl>
+    <iconUrl>http://www.intersoftsolutions.com/assets/images/default/logo-crosslight-medium.png</iconUrl>
+    <description>Provides server logging functionality that use Entity Framework for the storage.</description>
+    <releaseNotes></releaseNotes>
+    <copyright>Copyright © 2016 Intersoft Solutions</copyright>
+    <tags>Intersoft Crosslight Logging Entity Framework EF PCL Portable Class Library Log</tags>
+    <dependencies>
+      <dependency id="Intersoft.Crosslight" version="5.0.5000.1235-experimental" />
+      <dependency id="Intersoft.Crosslight.Logging" version="5.0.5000.1235-experimental" />
+      <dependency id="EntityFramework" version="6.0.2" />
+    </dependencies>
+  </metadata>
+</package>

@@ -73,6 +73,7 @@ setup(
         lister.hackage=swh.lister.hackage:register
         lister.launchpad=swh.lister.launchpad:register
         lister.npm=swh.lister.npm:register
+        lister.nuget=swh.lister.nuget:register
         lister.opam=swh.lister.opam:register
         lister.packagist=swh.lister.packagist:register
         lister.phabricator=swh.lister.phabricator:register
