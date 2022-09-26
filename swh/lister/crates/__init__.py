@@ -111,15 +111,15 @@ Testing with Docker
 
 Change directory to swh/docker then launch the docker environment:
 
-   docker-compose up -d
+   docker compose up -d
 
-Then connect to the lister:
+Then schedule a crates listing task::
 
-   docker exec -it docker_swh-lister_1 bash
+   docker compose exec swh-scheduler swh scheduler task add -p oneshot list-crates
 
-And run the lister (The output of this listing results in “oneshot” tasks in the scheduler):
+You can follow lister execution by displaying logs of swh-lister service::
 
-   swh lister run -l crates
+   docker compose logs -f swh-lister
 
 .. _Crates.io: https://crates.io
 .. _packages: https://doc.rust-lang.org/book/ch07-01-packages-and-crates.html

@@ -197,15 +197,15 @@ Testing with Docker
 
 Change directory to swh/docker then launch the docker environment::
 
-   docker-compose up -d
+   docker compose up -d
 
-Then connect to the lister::
+Then schedule an arch listing task::
 
-   docker exec -it docker_swh-lister_1 bash
+   docker compose exec swh-scheduler swh scheduler task add -p oneshot list-arch
 
-And run the lister (The output of this listing results in “oneshot” tasks in the scheduler)::
+You can follow lister execution by displaying logs of swh-lister service::
 
-   swh lister run -l arch
+   docker compose logs -f swh-lister
 
 .. _archlinux.org: https://archlinux.org/packages/
 .. _archlinuxarm.org: https://archlinuxarm.org/packages/
