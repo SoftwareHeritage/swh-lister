@@ -77,6 +77,7 @@ setup(
         lister.packagist=swh.lister.packagist:register
         lister.phabricator=swh.lister.phabricator:register
         lister.pubdev=swh.lister.pubdev:register
+        lister.puppet=swh.lister.puppet:register
         lister.pypi=swh.lister.pypi:register
         lister.sourceforge=swh.lister.sourceforge:register
         lister.tuleap=swh.lister.tuleap:register
