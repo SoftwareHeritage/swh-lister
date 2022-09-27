@@ -16,9 +16,9 @@ As of September 2022 `cpan.org`_ list 43675 package names.
 Origins retrieving strategy
 ---------------------------
 
-To get a list of all package names we call a first `http api endpoint`_ that
-retrieve results and a ``_scroll_id`` that will be used to scroll pages through
-`search`_ endpoint.
+To get a list of all package names and their associated release artifacts we call
+a first `http api endpoint`_ that retrieve results and a ``_scroll_id`` that will
+be used to scroll pages through `search`_ endpoint.
 
 Page listing
 ------------
@@ -57,7 +57,7 @@ You can follow lister execution by displaying logs of swh-lister service::
 
 .. _cpan.org: https://cpan.org/
 .. _metacpan.org: https://metacpan.org/
-.. _http api endpoint: https://explorer.metacpan.org/?url=/distribution/
+.. _http api endpoint: https://explorer.metacpan.org/?url=/release/
 .. _search: https://github.com/metacpan/metacpan-api/blob/master/docs/API-docs.md#search-without-constraints  # noqa: B950
 
 
