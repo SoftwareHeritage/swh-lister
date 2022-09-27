@@ -1,0 +1,52 @@
+{
+   "_shards" : {
+      "successful" : 3,
+      "failed" : 0,
+      "total" : 3
+   },
+   "_scroll_id" : "cXVlcnlUaGVuRmV0Y2g7Mzs5NTU1MTQ1NTk6eXptdmszQUNUam1XbVJjRjRkRk9Udzs5NTQ5NjQ5NjI6ZHZIZWxCb3BUZi1Cb3NwRDB5NmRQUTs5NTU1MTQ1NjA6eXptdmszQUNUam1XbVJjRjRkRk9UdzswOw==",
+   "took" : 61,
+   "hits" : {
+      "max_score" : 1.0,
+      "hits" : [
+         {
+            "_score" : 1.0,
+            "_index" : "cpan_v1_01",
+            "_id" : "openerserver_perl-master",
+            "fields" : {
+               "name" : "openerserver_perl-master"
+            },
+            "_type" : "distribution"
+         },
+         {
+            "_score" : 1.0,
+            "_type" : "distribution",
+            "fields" : {
+               "name" : "Getopt_Auto"
+            },
+            "_id" : "Getopt_Auto",
+            "_index" : "cpan_v1_01"
+         },
+         {
+            "_id" : "App-Booklist",
+            "_index" : "cpan_v1_01",
+            "_type" : "distribution",
+            "fields" : {
+               "name" : "App-Booklist"
+            },
+            "_score" : 1.0
+         },
+         {
+            "fields" : {
+               "name" : "EuclideanRhythm"
+            },
+            "_type" : "distribution",
+            "_index" : "cpan_v1_01",
+            "_id" : "EuclideanRhythm",
+            "_score" : 1.0
+         }
+      ],
+      "total" : 43675
+   },
+   "timed_out" : false
+}

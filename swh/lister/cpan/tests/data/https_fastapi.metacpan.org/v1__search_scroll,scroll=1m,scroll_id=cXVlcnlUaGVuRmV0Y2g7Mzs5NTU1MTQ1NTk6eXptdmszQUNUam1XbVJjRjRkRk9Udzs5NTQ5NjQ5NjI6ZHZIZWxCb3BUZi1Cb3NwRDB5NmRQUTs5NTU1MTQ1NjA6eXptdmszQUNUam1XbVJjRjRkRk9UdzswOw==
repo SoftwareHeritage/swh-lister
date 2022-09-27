@@ -1,0 +1,50 @@
+{
+   "_shards" : {
+      "successful" : 3,
+      "total" : 3,
+      "failed" : 0
+   },
+   "timed_out" : false,
+   "hits" : {
+      "max_score" : 1.0,
+      "hits" : [
+         {
+            "_type" : "distribution",
+            "fields" : {
+               "name" : [
+                  "EventSource-Server"
+               ]
+            },
+            "_id" : "EventSource-Server",
+            "_index" : "cpan_v1_01",
+            "_score" : 1.0
+         },
+         {
+            "_score" : 1.0,
+            "_index" : "cpan_v1_01",
+            "_id" : "Interchange6",
+            "fields" : {
+               "name" : [
+                  "Interchange6"
+               ]
+            },
+            "_type" : "distribution"
+         },
+         {
+            "_score" : 1.0,
+            "_index" : "cpan_v1_01",
+            "_id" : "Internals-CountObjects",
+            "fields" : {
+               "name" : [
+                  "Internals-CountObjects"
+               ]
+            },
+            "_type" : "distribution"
+         }
+      ],
+      "total" : 43675
+   },
+   "took" : 72,
+   "_scroll_id" : "cXVlcnlUaGVuRmV0Y2g7Mzs5NTU1MTQ1NTk6eXptdmszQUNUam1XbVJjRjRkRk9Udzs5NTQ5NjQ5NjI6ZHZIZWxCb3BUZi1Cb3NwRDB5NmRQUTs5NTU1MTQ1NjA6eXptdmszQUNUam1XbVJjRjRkRk9UdzswOw==",
+   "terminated_early" : true
+}

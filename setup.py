@@ -61,6 +61,7 @@ setup(
         lister.bower=swh.lister.bower:register
         lister.cgit=swh.lister.cgit:register
         lister.conda=swh.lister.conda:register
+        lister.cpan=swh.lister.cpan:register
         lister.cran=swh.lister.cran:register
         lister.crates=swh.lister.crates:register
         lister.debian=swh.lister.debian:register
