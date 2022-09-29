@@ -13,7 +13,7 @@ def test_conda_lister_free_channel(datadir, requests_mock_datadir, swh_scheduler
     res = lister.run()
 
     assert res.pages == 3
-    assert res.origins == 14
+    assert res.origins == 11
 
 
 def test_conda_lister_conda_forge_channel(

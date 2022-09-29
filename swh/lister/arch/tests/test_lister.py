@@ -2,6 +2,7 @@
 # See the AUTHORS file at the top-level directory of this distribution
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
+
 from swh.lister.arch.lister import ArchLister
 
 expected_origins = [
@@ -1371,7 +1372,7 @@ def test_arch_lister(datadir, requests_mock_datadir, swh_scheduler):
     res = lister.run()
 
     assert res.pages == 9
-    assert res.origins == 12
+    assert res.origins == 11
 
     scheduler_origins = swh_scheduler.get_listed_origins(lister.lister_obj.id).results
 
