@@ -453,6 +453,14 @@ class ArchLister(StatelessLister[ArchListerPage]):
                         "length": version["length"],
                     }
                 )
+                if version["version"] == origin["version"]:
+                    artifacts[-1]["checksums"] = {
+                        "md5": origin["data"]["md5sum"],
+                        "sha256": origin["data"]["sha256sum"],
+                    }
+                else:
+                    artifacts[-1]["checksums"] = {"length": version["length"]}
+
                 arch_metadata.append(
                     {
                         "version": version["version"],

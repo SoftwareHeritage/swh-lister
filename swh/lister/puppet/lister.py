@@ -80,6 +80,18 @@ class PuppetLister(StatelessLister[PuppetListerPage]):
             for release in entry["releases"]:
                 # Build an artifact entry following original-artifacts-json specification
                 # https://docs.softwareheritage.org/devel/swh-storage/extrinsic-metadata-specification.html#original-artifacts-json  # noqa: B950
+                checksums = {}
+
+                if release["version"] == entry["current_release"]["version"]:
+                    # checksums are only available for current release
+                    for checksum in ("md5", "sha256"):
+                        checksums[checksum] = entry["current_release"][
+                            f"file_{checksum}"
+                        ]
+                else:
+                    # use file length as basic content check instead
+                    checksums["length"] = release["file_size"]
+
                 artifacts[release["version"]] = {
                     "filename": release["file_uri"].split("/")[-1],
                     "url": urljoin(self.BASE_URL, release["file_uri"]),
@@ -87,6 +99,7 @@ class PuppetLister(StatelessLister[PuppetListerPage]):
                     "last_update": datetime.strptime(
                         release["created_at"], dt_parse_pattern
                     ).isoformat(),
+                    "checksums": checksums,
                 }
 
             yield ListedOrigin(

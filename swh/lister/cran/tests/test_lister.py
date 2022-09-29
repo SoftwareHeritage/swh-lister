@@ -109,6 +109,7 @@ def test_cran_lister_cran(datadir, swh_scheduler, mocker):
                     "url": artifact_url,
                     "version": package_info["Version"],
                     "package": package_info["Package"],
+                    "checksums": {"md5": package_info["MD5sum"]},
                 }
             ]
         }
