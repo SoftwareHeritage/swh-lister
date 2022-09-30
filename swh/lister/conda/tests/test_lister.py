@@ -35,43 +35,43 @@ def test_conda_lister_conda_forge_channel(
     expected_origins = [
         {
             "url": "https://anaconda.org/conda-forge/21cmfast",
-            "artifacts": {
-                "linux-64/3.0.2-py36h1af98f8_1": {
+            "artifacts": [
+                {
                     "url": "https://conda.anaconda.org/conda-forge/linux-64/21cmfast-3.0.2-py36h1af98f8_1.tar.bz2",  # noqa: B950
                     "date": "2020-11-11T16:04:49.658000+00:00",
-                    "version": "3.0.2",
+                    "version": "linux-64/3.0.2-py36h1af98f8_1",
                     "filename": "21cmfast-3.0.2-py36h1af98f8_1.tar.bz2",
                     "checksums": {
                         "md5": "d65ab674acf3b7294ebacaec05fc5b54",
                         "sha256": "1154fceeb5c4ee9bb97d245713ac21eb1910237c724d2b7103747215663273c2",  # noqa: B950
                     },
                 }
-            },
+            ],
         },
         {
             "url": "https://anaconda.org/conda-forge/lifetimes",
-            "artifacts": {
-                "linux-64/0.11.1-py36h9f0ad1d_1": {
+            "artifacts": [
+                {
                     "url": "https://conda.anaconda.org/conda-forge/linux-64/lifetimes-0.11.1-py36h9f0ad1d_1.tar.bz2",  # noqa: B950
                     "date": "2020-07-06T12:19:36.425000+00:00",
-                    "version": "0.11.1",
+                    "version": "linux-64/0.11.1-py36h9f0ad1d_1",
                     "filename": "lifetimes-0.11.1-py36h9f0ad1d_1.tar.bz2",
                     "checksums": {
                         "md5": "faa398f7ba0d60ce44aa6eeded490cee",
                         "sha256": "f82a352dfae8abceeeaa538b220fd9c5e4aa4e59092a6a6cea70b9ec0581ea03",  # noqa: B950
                     },
                 },
-                "linux-64/0.11.1-py36hc560c46_1": {
+                {
                     "url": "https://conda.anaconda.org/conda-forge/linux-64/lifetimes-0.11.1-py36hc560c46_1.tar.bz2",  # noqa: B950
                     "date": "2020-07-06T12:19:37.032000+00:00",
-                    "version": "0.11.1",
+                    "version": "linux-64/0.11.1-py36hc560c46_1",
                     "filename": "lifetimes-0.11.1-py36hc560c46_1.tar.bz2",
                     "checksums": {
                         "md5": "c53a689a4c5948e84211bdfc23e3fe68",
                         "sha256": "76146c2ebd6e3b65928bde53a2585287759d77beba785c0eeb889ee565c0035d",  # noqa: B950
                     },
                 },
-            },
+            ],
         },
     ]
 

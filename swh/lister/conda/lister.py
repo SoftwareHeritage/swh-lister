@@ -61,7 +61,9 @@ class CondaLister(StatelessLister[CondaListerPage]):
                 url=self.url, channel=self.channel, arch=arch
             )
             response = self.http_request(url=repodata_url)
-            packages = json.loads(bz2.decompress(response.content))["packages"]
+            packages: Dict[str, Any] = json.loads(bz2.decompress(response.content))[
+                "packages"
+            ]
             yield (arch, packages)
 
     def get_origins_from_page(self, page: CondaListerPage) -> Iterator[ListedOrigin]:
@@ -70,7 +72,11 @@ class CondaLister(StatelessLister[CondaListerPage]):
         arch, packages = page
 
         for filename, package_metadata in packages.items():
-            artifact = {
+            version_key = (
+                f"{arch}/{package_metadata['version']}-{package_metadata['build']}"
+            )
+
+            artifact: Dict[str, Any] = {
                 "filename": filename,
                 "url": self.ARCHIVE_URL_PATTERN.format(
                     url=self.url,
@@ -78,7 +84,7 @@ class CondaLister(StatelessLister[CondaListerPage]):
                     filename=filename,
                     arch=arch,
                 ),
-                "version": package_metadata["version"],
+                "version": version_key,
                 "checksums": {},
             }
 
@@ -86,9 +92,6 @@ class CondaLister(StatelessLister[CondaListerPage]):
                 if checksum in package_metadata:
                     artifact["checksums"][checksum] = package_metadata[checksum]
 
-            version_key = (
-                f"{arch}/{package_metadata['version']}-{package_metadata['build']}"
-            )
             self.packages[package_metadata["name"]][version_key] = artifact
 
             package_date = None
@@ -113,6 +116,8 @@ class CondaLister(StatelessLister[CondaListerPage]):
                 ),
                 last_update=last_update,
                 extra_loader_arguments={
-                    "artifacts": self.packages[package_metadata["name"]],
+                    "artifacts": [
+                        v for k, v in self.packages[package_metadata["name"]].items()
+                    ],
                 },
             )
