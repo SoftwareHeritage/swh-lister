@@ -35,6 +35,10 @@ lister_args = {
         "url": "https://try.gogs.io/",
         "api_token": "secret",
     },
+    "nixguix": {
+        "url": "https://guix.gnu.org/sources.json",
+        "origin_upstream": "https://git.savannah.gnu.org/cgit/guix.git/",
+    },
 }
 
 

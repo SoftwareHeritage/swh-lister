@@ -72,6 +72,7 @@ setup(
         lister.golang=swh.lister.golang:register
         lister.hackage=swh.lister.hackage:register
         lister.launchpad=swh.lister.launchpad:register
+        lister.nixguix=swh.lister.nixguix:register
         lister.npm=swh.lister.npm:register
         lister.nuget=swh.lister.nuget:register
         lister.opam=swh.lister.opam:register

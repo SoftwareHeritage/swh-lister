@@ -8,5 +8,5 @@ def register():
 
     return {
         "lister": NixGuixLister,
-        "task_modules": ["%s.tasks" % __name__],
+        "task_modules": [f"{__name__}.tasks"],
     }
