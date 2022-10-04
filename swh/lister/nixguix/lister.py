@@ -293,6 +293,21 @@ class NixGuixLister(StatelessLister[PageResult]):
             else None
         )
 
+    def build_artifact(
+        self, artifact_url: str, artifact_type: str, artifact_ref: Optional[str] = None
+    ) -> Optional[Tuple[ArtifactType, VCS]]:
+        """Build a canonicalized vcs artifact when possible."""
+        origin = (
+            self.github_session.get_canonical_url(artifact_url)
+            if self.github_session
+            else artifact_url
+        )
+        if not origin:
+            return None
+        return ArtifactType.VCS, VCS(
+            origin=origin, type=artifact_type, ref=artifact_ref
+        )
+
     def get_pages(self) -> Iterator[PageResult]:
         """Yield one page per "typed" origin referenced in manifest."""
         # fetch and parse the manifest...
@@ -321,16 +336,12 @@ class NixGuixLister(StatelessLister[PageResult]):
             if artifact_type in VCS_SUPPORTED:
                 plain_url = artifact[VCS_KEYS_MAPPING[artifact_type]["url"]]
                 plain_ref = artifact[VCS_KEYS_MAPPING[artifact_type]["ref"]]
-                artifact_url = (
-                    self.github_session.get_canonical_url(plain_url)
-                    if self.github_session
-                    else plain_url
+                built_artifact = self.build_artifact(
+                    plain_url, artifact_type, plain_ref
                 )
-                if not artifact_url:
+                if not built_artifact:
                     continue
-                yield ArtifactType.VCS, VCS(
-                    origin=artifact_url, type=artifact_type, ref=plain_ref
-                )
+                yield built_artifact
             elif artifact_type == "url":
                 # It's either a tarball or a file
                 origin_urls = artifact.get("urls")
@@ -354,6 +365,13 @@ class NixGuixLister(StatelessLister[PageResult]):
 
                 origin, *fallback_urls = urls
 
+                if origin.endswith(".git"):
+                    built_artifact = self.build_artifact(origin, "git")
+                    if not built_artifact:
+                        continue
+                    yield built_artifact
+                    continue
+
                 integrity = artifact.get("integrity")
                 if integrity is None:
                     logger.warning("Skipping url <%s>: missing integrity field", origin)
@@ -367,17 +385,12 @@ class NixGuixLister(StatelessLister[PageResult]):
                     )
                     urlparsed = urlparse(origin)
                     artifact_type = urlparsed.scheme
+
                     if artifact_type in VCS_SUPPORTED:
-                        artifact_url = (
-                            self.github_session.get_canonical_url(origin)
-                            if self.github_session
-                            else origin
-                        )
-                        if not artifact_url:
+                        built_artifact = self.build_artifact(origin, artifact_type)
+                        if not built_artifact:
                             continue
-                        yield ArtifactType.VCS, VCS(
-                            origin=artifact_url, type=artifact_type
-                        )
+                        yield built_artifact
                     else:
                         logger.warning(
                             "Skipping url <%s>: undetected remote artifact type", origin

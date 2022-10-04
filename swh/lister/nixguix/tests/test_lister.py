@@ -169,6 +169,10 @@ def test_lister_nixguix_ok(datadir, swh_scheduler, requests_mock):
         url,
         [{"json": response}],
     )
+    requests_mock.get(
+        "https://api.github.com/repos/trie/trie",
+        [{"json": {"html_url": "https://github.com/trie/trie.git"}}],
+    )
 
     expected_visit_types = defaultdict(int)
     # origin upstream is added as origin
@@ -186,7 +190,9 @@ def test_lister_nixguix_ok(datadir, swh_scheduler, requests_mock):
             expected_visit_types[artifact_type] += 1
         elif artifact_type == "url":
             url = artifact["urls"][0]
-            if url.endswith(".c") or url.endswith(".txt"):
+            if url.endswith(".git"):
+                expected_visit_types["git"] += 1
+            elif url.endswith(".c") or url.endswith(".txt"):
                 expected_visit_types["content"] += 1
             elif url.startswith("svn"):  # mistyped artifact rendered as vcs nonetheless
                 expected_visit_types["svn"] += 1
