@@ -43,10 +43,31 @@ class ArtifactNatureUndetected(ValueError):
 
 
 class ArtifactNatureMistyped(ValueError):
-    """Raised when a remote artifact's neither a tarball nor a file. It's probably a
-    misconfiguration in the manifest that badly typed a vcs repository."""
+    """Raised when a remote artifact's neither a tarball nor a file.
+
+    Error of this type are' probably a misconfiguration in the manifest generation that
+    badly typed a vcs repository.
+
+    """
 
     pass
+
+
+class ChecksumsComputation(Enum):
+    """The possible artifact types listed out of the manifest."""
+
+    STANDARD = "standard"
+    """Standard checksums (e.g. sha1, sha256, ...) on the tarball or file."""
+    NAR = "nar"
+    """The hash is computed over the NAR archive dump of the output (e.g. uncompressed
+    directory.)"""
+
+
+MAPPING_CHECKSUMS_COMPUTATION = {
+    "flat": ChecksumsComputation.STANDARD,
+    "recursive": ChecksumsComputation.NAR,
+}
+"""Mapping between the outputHashMode from the manifest and how to compute checksums."""
 
 
 @dataclass
@@ -61,6 +82,8 @@ class Artifact:
     """List of urls to retrieve tarball artifact if canonical url no longer works."""
     checksums: Dict[str, str]
     """Integrity hash converted into a checksum dict."""
+    checksums_computation: ChecksumsComputation
+    """Checksums computation mode to provide to loaders (e.g. nar, standard, ...)"""
 
 
 @dataclass
@@ -297,7 +320,7 @@ class NixGuixLister(StatelessLister[PageResult]):
                 for url in origin_urls:
                     urlparsed = urlparse(url)
                     if urlparsed.scheme == "":
-                        logger.warning("Missing scheme for <%s>, fallback to http", url)
+                        logger.warning("Missing scheme for <%s>: fallback to http", url)
                         fixed_url = f"http://{url}"
                     else:
                         fixed_url = url
@@ -349,11 +372,23 @@ class NixGuixLister(StatelessLister[PageResult]):
                     chksum_algo: base64.decodebytes(chksum_b64.encode()).hex()
                 }
 
+                # The 'outputHashMode' attribute determines how the hash is computed. It
+                # must be one of the following two values:
+                # - "flat": (default) The output must be a non-executable regular file.
+                #     If it isn’t, the build fails. The hash is simply computed over the
+                #     contents of that file (so it’s equal to what Unix commands like
+                #     `sha256sum` or `sha1sum` produce).
+                # - "recursive": The hash is computed over the NAR archive dump of the
+                #       output (i.e., the result of `nix-store --dump`). In this case,
+                #       the output can be anything, including a directory tree.
+                outputHashMode = artifact.get("outputHashMode", "flat")
+
                 logger.debug("%s: %s", "dir" if is_tar else "cnt", origin)
                 yield ArtifactType.ARTIFACT, Artifact(
                     origin=origin,
                     fallback_urls=fallback_urls,
                     checksums=checksums,
+                    checksums_computation=MAPPING_CHECKSUMS_COMPUTATION[outputHashMode],
                     visit_type="directory" if is_tar else "content",
                 )
             else:
@@ -382,6 +417,7 @@ class NixGuixLister(StatelessLister[PageResult]):
             visit_type=artifact.visit_type,
             extra_loader_arguments={
                 "checksums": artifact.checksums,
+                "checksums_computation": artifact.checksums_computation.value,
                 "fallback_urls": artifact.fallback_urls,
             },
         )
