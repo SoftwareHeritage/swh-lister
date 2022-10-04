@@ -50,18 +50,6 @@ class ArtifactNatureMistyped(ValueError):
 
 
 @dataclass
-class OriginUpstream:
-    """Upstream origin (e.g. NixOS/nixpkgs, Guix/Guix)."""
-
-    origin: str
-    """Canonical url of the repository"""
-    version: int
-    """Version of the repository (dismissed?)"""
-    revision: str
-    """Revision of the repository (dismissed?)"""
-
-
-@dataclass
 class Artifact:
     """Metadata information on Remote Artifact with url (tarball or file)."""
 
@@ -91,11 +79,10 @@ class ArtifactType(Enum):
     """The possible artifact types listed out of the manifest."""
 
     ARTIFACT = "artifact"
-    ORIGIN = "origin"
     VCS = "vcs"
 
 
-PageResult = Tuple[ArtifactType, Union[Artifact, VCS, OriginUpstream]]
+PageResult = Tuple[ArtifactType, Union[Artifact, VCS]]
 
 
 VCS_SUPPORTED = ("git", "svn", "hg")
@@ -265,13 +252,7 @@ class NixGuixLister(StatelessLister[PageResult]):
 
         # ... if any
         raw_data = response.json()
-        version = raw_data["version"]
-        revision = raw_data["revision"]
-        yield ArtifactType.ORIGIN, OriginUpstream(
-            self.origin_upstream,
-            version,
-            revision,
-        )
+        yield ArtifactType.VCS, VCS(origin=self.origin_upstream, type="git")
 
         # grep '"type"' guix-sources.json | sort | uniq
         #       "type": false                             <<<<<<<<< noise
@@ -311,8 +292,6 @@ class NixGuixLister(StatelessLister[PageResult]):
                     continue
 
                 assert urls is not None
-
-                # Deal with misplaced origins
 
                 # FIXME: T3294: Fix missing scheme in urls
                 origin, *fallback_urls = urls
@@ -383,17 +362,6 @@ class NixGuixLister(StatelessLister[PageResult]):
             lister_id=self.lister_obj.id,
             url=artifact.origin,
             visit_type=artifact.type,
-        )
-
-    def origin_to_listed_origin(
-        self, origin_upstream: OriginUpstream
-    ) -> Iterator[ListedOrigin]:
-        """Given an upstream origin, yield a ListedOrigin."""
-        assert self.lister_obj.id is not None
-        yield ListedOrigin(
-            lister_id=self.lister_obj.id,
-            url=origin_upstream.origin,
-            visit_type="git",  # both nixpkgs and guix are git origins so far
         )
 
     def artifact_to_listed_origin(self, artifact: Artifact) -> Iterator[ListedOrigin]:
