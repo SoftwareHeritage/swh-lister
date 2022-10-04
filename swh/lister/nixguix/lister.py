@@ -264,7 +264,10 @@ class NixGuixLister(StatelessLister[PageResult]):
         # grep '"type"' nixpkgs-sources-unstable.json | sort | uniq
         #  "type": "url",
 
-        for artifact in raw_data["sources"]:
+        sources = raw_data["sources"]
+        random.shuffle(sources)
+
+        for artifact in sources:
             artifact_type = artifact["type"]
             if artifact_type in VCS_SUPPORTED:
                 plain_url = artifact[VCS_KEYS_MAPPING[artifact_type]["url"]]
