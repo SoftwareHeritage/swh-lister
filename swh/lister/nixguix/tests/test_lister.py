@@ -11,6 +11,7 @@ from typing import Dict, List
 
 import pytest
 import requests
+from requests.exceptions import ConnectionError, InvalidSchema, SSLError
 
 from swh.lister import TARBALL_EXTENSIONS
 from swh.lister.nixguix.lister import (
@@ -229,16 +230,21 @@ def test_lister_nixguix_mostly_noop(datadir, swh_scheduler, requests_mock):
         "https://crates.io/api/v1/0.1.5/no-extension-and-head-404-so-skipped",
         status_code=404,
     )
-    # Will raise for that origin, this will get ignored as we cannot determine anything
+    # Invalid schema for that origin (and no extension), so skip origin
     # from its name
     requests_mock.head(
         "ftp://ftp.ourproject.org/file-with-no-extension",
-        exc=requests.exceptions.InvalidSchema,
+        exc=InvalidSchema,
     )
-    # Cannot communicate with an expired cert so skip
+    # Cannot communicate with an expired cert, so skip origin
     requests_mock.head(
         "https://code.9front.org/hg/plan9front",
-        exc=requests.exceptions.SSLError,
+        exc=SSLError,
+    )
+    # Cannot connect to the site, so skip origin
+    requests_mock.head(
+        "https://git-tails.immerda.ch/onioncircuits",
+        exc=ConnectionError,
     )
 
     listed_result = lister.run()

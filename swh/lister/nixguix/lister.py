@@ -25,7 +25,7 @@ from typing import Any, Dict, Iterator, List, Optional, Tuple, Union
 from urllib.parse import urlparse
 
 import requests
-from requests.exceptions import InvalidSchema, SSLError
+from requests.exceptions import ConnectionError, InvalidSchema, SSLError
 
 from swh.core.github.utils import GitHubSession
 from swh.core.tarball import MIMETYPE_TO_ARCHIVE_FORMAT
@@ -143,7 +143,7 @@ def is_tarball(urls: List[str], request: Optional[Any] = None) -> Tuple[bool, st
 
         try:
             response = request.head(url)
-        except (InvalidSchema, SSLError):
+        except (InvalidSchema, SSLError, ConnectionError):
             raise ArtifactNatureUndetected(
                 f"Cannot determine artifact type from url <{url}>"
             )
