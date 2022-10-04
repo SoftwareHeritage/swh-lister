@@ -146,7 +146,7 @@ def test_is_tarball_complex_with_content_type_result(
         assert origin == url
 
 
-def test_lister_nixguix(datadir, swh_scheduler, requests_mock):
+def test_lister_nixguix_ok(datadir, swh_scheduler, requests_mock):
     """NixGuixLister should list all origins per visit type"""
     url = "https://nix-community.github.io/nixpkgs-swh/sources-unstable.json"
     origin_upstream = "https://github.com/NixOS/nixpkgs"

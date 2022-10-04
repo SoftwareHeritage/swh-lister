@@ -129,8 +129,7 @@ def is_tarball(urls: List[str], request: Optional[Any] = None) -> Tuple[bool, st
     url = urls[index]
 
     try:
-        is_tar = _is_tarball(url)
-        return is_tar, urls[0]
+        return _is_tarball(url), urls[0]
     except IndexError:
         if request is None:
             raise ArtifactNatureUndetected(
@@ -285,15 +284,25 @@ class NixGuixLister(StatelessLister[PageResult]):
                 )
             elif artifact_type == "url":
                 # It's either a tarball or a file
-                urls = artifact.get("urls")
-                if not urls:
+                origin_urls = artifact.get("urls")
+                if not origin_urls:
                     # Nothing to fetch
                     logger.warning("Skipping url <%s>: empty artifact", artifact)
                     continue
 
-                assert urls is not None
+                assert origin_urls is not None
 
-                # FIXME: T3294: Fix missing scheme in urls
+                # Deal with urls with empty scheme (basic fallback to http)
+                urls = []
+                for url in origin_urls:
+                    urlparsed = urlparse(url)
+                    if urlparsed.scheme == "":
+                        logger.warning("Missing scheme for <%s>, fallback to http", url)
+                        fixed_url = f"http://{url}"
+                    else:
+                        fixed_url = url
+                    urls.append(fixed_url)
+
                 origin, *fallback_urls = urls
 
                 integrity = artifact.get("integrity")

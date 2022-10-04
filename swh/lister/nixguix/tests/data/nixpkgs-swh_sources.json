@@ -32,6 +32,13 @@
     {
       "type": "url",
       "urls": [
+        "www.roudoudou.com/export/cpc/rasm/rasm_v0117_src.zip"
+      ],
+      "integrity": "sha256-wAEswtkl3ulAw3zq4perrGS6Wlww5XXnQYsEAoYT9fI="
+    },
+    {
+      "type": "url",
+      "urls": [
         "http://downloads.sourceforge.net/project/nmon/lmon16n.c",
         "http://ufpr.dl.sourceforge.net/project/nmon/lmon16n.c",
         "http://netassist.dl.sourceforge.net/project/nmon/lmon16n.c"
