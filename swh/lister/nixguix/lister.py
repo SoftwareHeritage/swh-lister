@@ -22,7 +22,7 @@ import logging
 from pathlib import Path
 import random
 from typing import Any, Dict, Iterator, List, Optional, Tuple, Union
-from urllib.parse import urlparse
+from urllib.parse import parse_qsl, urlparse
 
 import requests
 from requests.exceptions import ConnectionError, InvalidSchema, SSLError
@@ -43,10 +43,20 @@ class ArtifactNatureUndetected(ValueError):
 
 
 class ArtifactNatureMistyped(ValueError):
-    """Raised when a remote artifact's neither a tarball nor a file.
+    """Raised when a remote artifact is neither a tarball nor a file.
 
     Error of this type are' probably a misconfiguration in the manifest generation that
     badly typed a vcs repository.
+
+    """
+
+    pass
+
+
+class ArtifactWithoutExtension(ValueError):
+    """Raised when an artifact nature cannot be determined by its name.
+
+    This exception is solely for internal use of the :meth:`is_tarball` method.
 
     """
 
@@ -140,20 +150,36 @@ def is_tarball(urls: List[str], request: Optional[Any] = None) -> Tuple[bool, st
         """Determine out of an extension whether url is a tarball.
 
         Raises:
-            IndexError in case no extension is available
+            ArtifactWithoutExtension in case no extension is available
 
         """
         urlparsed = urlparse(url)
         if urlparsed.scheme not in ("http", "https", "ftp"):
             raise ArtifactNatureMistyped(f"Mistyped artifact '{url}'")
-        return Path(urlparsed.path).suffixes[-1].lstrip(".") in TARBALL_EXTENSIONS
+
+        errors = []
+        query_params = dict(parse_qsl(urlparsed.query))
+        for path in [query_params.get(key) for key in ["f", "file", "url", "name"]] + [
+            urlparsed.path
+        ]:
+            if not path:
+                continue
+            try:
+                file_ = Path(path).suffixes[-1]
+                break
+            except IndexError as e:
+                errors.append(ArtifactWithoutExtension(e))
+
+        if errors:
+            raise errors[-1]
+        return file_.lstrip(".") in TARBALL_EXTENSIONS
 
     index = random.randrange(len(urls))
     url = urls[index]
 
     try:
         return _is_tarball(url), urls[0]
-    except IndexError:
+    except ArtifactWithoutExtension:
         if request is None:
             raise ArtifactNatureUndetected(
                 f"Cannot determine artifact type from url <{url}>"
@@ -181,7 +207,7 @@ def is_tarball(urls: List[str], request: Optional[Any] = None) -> Tuple[bool, st
                 # FIXME: location is also returned as it's considered the true origin,
                 # true enough?
                 return _is_tarball(location), location
-            except IndexError:
+            except ArtifactWithoutExtension:
                 logger.warning(
                     "Still cannot detect extension through location <%s>...",
                     url,

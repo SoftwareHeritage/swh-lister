@@ -38,11 +38,23 @@ def page_response(datadir, instance: str) -> List[Dict]:
     + [[f"one.{ext}?foo=bar"] for ext in TARBALL_EXTENSIONS],
 )
 def test_is_tarball_simple(tarballs):
-    """Simple check on tarball should  discriminate betwenn tarball and file"""
+    """Simple check on tarball should  discriminate between tarball and file"""
     urls = [f"https://example.org/{tarball}" for tarball in tarballs]
     is_tar, origin = is_tarball(urls)
     assert is_tar is True
     assert origin == urls[0]
+
+
+@pytest.mark.parametrize(
+    "query_param",
+    ["file", "f", "url", "name"],
+)
+def test_is_tarball_not_so_simple(query_param):
+    """More involved check on tarball should discriminate between tarball and file"""
+    url = f"https://example.org/download.php?foo=bar&{query_param}=one.tar.gz"
+    is_tar, origin = is_tarball([url])
+    assert is_tar is True
+    assert origin == url
 
 
 @pytest.mark.parametrize(
