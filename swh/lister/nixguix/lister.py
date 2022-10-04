@@ -41,6 +41,13 @@ class ArtifactNatureUndetected(ValueError):
     pass
 
 
+class ArtifactNatureMistyped(ValueError):
+    """Raised when a remote artifact's neither a tarball nor a file. It's probably a
+    misconfiguration in the manifest that badly typed a vcs repository."""
+
+    pass
+
+
 @dataclass
 class OriginUpstream:
     """Upstream origin (e.g. NixOS/nixpkgs, Guix/Guix)."""
@@ -73,10 +80,10 @@ class VCS:
 
     origin: str
     """Origin url of the vcs"""
-    ref: Optional[str]
-    """Reference either a svn commit id, a git commit, ..."""
     type: str
     """Type of (d)vcs, e.g. svn, git, hg, ..."""
+    ref: Optional[str] = None
+    """Reference either a svn commit id, a git commit, ..."""
 
 
 class ArtifactType(Enum):
@@ -109,6 +116,8 @@ def is_tarball(urls: List[str], request: Optional[Any] = None) -> Tuple[bool, st
     Raises:
         ArtifactNatureUndetected when the artifact's nature cannot be detected out
             of its url
+        ArtifactNatureMistyped when the artifact is not a tarball nor a file. It's up to
+            the caller to do what's right with it.
 
     Returns: A tuple (bool, url). The boolean represents whether the url is an archive
         or not. The second parameter is the actual url once the head request is issued
@@ -123,27 +132,37 @@ def is_tarball(urls: List[str], request: Optional[Any] = None) -> Tuple[bool, st
             IndexError in case no extension is available
 
         """
-        return Path(urlparse(url).path).suffixes[-1].lstrip(".") in TARBALL_EXTENSIONS
+        urlparsed = urlparse(url)
+        if urlparsed.scheme not in ("http", "https", "ftp"):
+            raise ArtifactNatureMistyped(f"Mistyped artifact '{url}'")
+        return Path(urlparsed.path).suffixes[-1].lstrip(".") in TARBALL_EXTENSIONS
 
     index = random.randrange(len(urls))
     url = urls[index]
+
     try:
         is_tar = _is_tarball(url)
         return is_tar, urls[0]
     except IndexError:
         if request is None:
             raise ArtifactNatureUndetected(
-                "Cannot determine artifact type from url %s", url
+                f"Cannot determine artifact type from url <{url}>"
             )
         logger.warning(
-            "Cannot detect extension for '%s'. Fallback to http head query",
+            "Cannot detect extension for <%s>. Fallback to http head query",
             url,
         )
-        response = request.head(url)
+
+        try:
+            response = request.head(url)
+        except requests.exceptions.InvalidSchema:
+            raise ArtifactNatureUndetected(
+                f"Cannot determine artifact type from url <{url}>"
+            )
 
         if not response.ok or response.status_code == 404:
             raise ArtifactNatureUndetected(
-                "Cannot determine artifact type from url %s", url
+                f"Cannot determine artifact type from url <{url}>"
             )
         location = response.headers.get("Location")
         if location:  # It's not always present
@@ -154,7 +173,7 @@ def is_tarball(urls: List[str], request: Optional[Any] = None) -> Tuple[bool, st
                 return _is_tarball(location), location
             except IndexError:
                 logger.warning(
-                    "Still cannot detect extension through location '%s'...",
+                    "Still cannot detect extension through location <%s>...",
                     url,
                 )
 
@@ -166,7 +185,7 @@ def is_tarball(urls: List[str], request: Optional[Any] = None) -> Tuple[bool, st
             return content_type in POSSIBLE_TARBALL_MIMETYPES, urls[0]
 
         raise ArtifactNatureUndetected(
-            "Cannot determine artifact type from url %s", url
+            f"Cannot determine artifact type from url <{url}>"
         )
 
 
@@ -287,23 +306,48 @@ class NixGuixLister(StatelessLister[PageResult]):
                 urls = artifact.get("urls")
                 if not urls:
                     # Nothing to fetch
-                    logger.warning("Skipping url '%s': empty artifact", artifact)
+                    logger.warning("Skipping url <%s>: empty artifact", artifact)
                     continue
 
                 assert urls is not None
+
+                # Deal with misplaced origins
+
                 # FIXME: T3294: Fix missing scheme in urls
                 origin, *fallback_urls = urls
 
                 integrity = artifact.get("integrity")
                 if integrity is None:
-                    logger.warning("Skipping url '%s': missing integrity field", origin)
+                    logger.warning("Skipping url <%s>: missing integrity field", origin)
                     continue
 
                 try:
                     is_tar, origin = is_tarball(urls, self.session)
+                except ArtifactNatureMistyped:
+                    logger.warning(
+                        "Mistyped url <%s>: trying to deal with it properly", origin
+                    )
+                    urlparsed = urlparse(origin)
+                    artifact_type = urlparsed.scheme
+                    if artifact_type in VCS_SUPPORTED:
+                        artifact_url = (
+                            self.github_session.get_canonical_url(origin)
+                            if self.github_session
+                            else origin
+                        )
+                        if not artifact_url:
+                            continue
+                        yield ArtifactType.VCS, VCS(
+                            origin=artifact_url, type=artifact_type
+                        )
+                    else:
+                        logger.warning(
+                            "Skipping url <%s>: undetected remote artifact type", origin
+                        )
+                    continue
                 except ArtifactNatureUndetected:
                     logger.warning(
-                        "Skipping url '%s': undetected remote artifact type", origin
+                        "Skipping url <%s>: undetected remote artifact type", origin
                     )
                     continue
 
@@ -325,7 +369,7 @@ class NixGuixLister(StatelessLister[PageResult]):
                 )
             else:
                 logger.warning(
-                    "Skipping artifact '%s': unsupported type %s",
+                    "Skipping artifact <%s>: unsupported type %s",
                     artifact,
                     artifact_type,
                 )

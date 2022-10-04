@@ -25,6 +25,13 @@
     {
       "type": "url",
       "urls": [
+        "ftp://ftp.ourproject.org/pub/ytalk/ytalk-3.3.0.tar.gz"
+      ],
+      "integrity": "sha256-bss09x9yOnuW+Q5BHHjf8nNcCNxCKMdl9/2/jKSFcrQ="
+    },
+    {
+      "type": "url",
+      "urls": [
         "http://downloads.sourceforge.net/project/nmon/lmon16n.c",
         "http://ufpr.dl.sourceforge.net/project/nmon/lmon16n.c",
         "http://netassist.dl.sourceforge.net/project/nmon/lmon16n.c"
@@ -45,6 +52,11 @@
       "type": "svn",
       "svn_url": "https://code.call-cc.org/svn/chicken-eggs/release/5/iset/tags/2.2",
       "svn_revision": 39057
+    },
+    {
+      "type": "url",
+      "urls": ["svn://svn.code.sf.net/p/acme-crossass/code-0/trunk"],
+      "integrity": "sha256-VifIQ+UEVMKJ+cNS+Xxusazinr5Cgu1lmGuhqj/5Mpk="
     }
   ],
   "version": "1",

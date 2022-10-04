@@ -12,6 +12,18 @@
     {
       "type": "url",
       "urls": [ "https://example.org/another-file-no-integrity-so-skipped.txt" ]
+    },
+    {
+      "type": "url",
+      "urls": [
+        "ftp://ftp.ourproject.org/file-with-no-extension"
+      ],
+      "integrity": "sha256-bss09x9yOnuW+Q5BHHjf8nNcCNxCKMdl9/2/jKSFcrQ="
+    },
+    {
+      "type": "url",
+      "urls": [ "unknown://example.org/wrong-scheme-so-skipped.txt" ],
+      "integrity": "sha256-wAEswtkl3ulAw3zq4perrGS6Wlww5XXnQYsEAoYT9fI="
     }
   ],
   "version":"1",

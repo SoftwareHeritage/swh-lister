@@ -15,6 +15,7 @@ import requests
 from swh.lister import TARBALL_EXTENSIONS
 from swh.lister.nixguix.lister import (
     POSSIBLE_TARBALL_MIMETYPES,
+    ArtifactNatureMistyped,
     ArtifactNatureUndetected,
     NixGuixLister,
     is_tarball,
@@ -31,19 +32,20 @@ def page_response(datadir, instance: str) -> List[Dict]:
 
 
 @pytest.mark.parametrize(
-    "urls",
+    "tarballs",
     [[f"one.{ext}", f"two.{ext}"] for ext in TARBALL_EXTENSIONS]
     + [[f"one.{ext}?foo=bar"] for ext in TARBALL_EXTENSIONS],
 )
-def test_is_tarball_simple(urls):
+def test_is_tarball_simple(tarballs):
     """Simple check on tarball should  discriminate betwenn tarball and file"""
+    urls = [f"https://example.org/{tarball}" for tarball in tarballs]
     is_tar, origin = is_tarball(urls)
     assert is_tar is True
     assert origin == urls[0]
 
 
 @pytest.mark.parametrize(
-    "urls",
+    "files",
     [
         ["abc.lisp"],
         ["one.abc", "two.bcd"],
@@ -52,8 +54,9 @@ def test_is_tarball_simple(urls):
         ["config.nix", "flakes.nix"],
     ],
 )
-def test_is_tarball_simple_not_tarball(urls):
+def test_is_tarball_simple_not_tarball(files):
     """Simple check on tarball should discriminate betwenn tarball and file"""
+    urls = [f"http://example.org/{file}" for file in files]
     is_tar, origin = is_tarball(urls)
     assert is_tar is False
     assert origin == urls[0]
@@ -65,7 +68,7 @@ def test_is_tarball_complex_with_no_result(requests_mock):
     url = "https://example.org/crates/package/download"
     urls = [url]
     with pytest.raises(ArtifactNatureUndetected):
-        is_tarball(url)  # no request parameter, this cannot fallback, raises
+        is_tarball(urls)  # no request parameter, this cannot fallback, raises
 
     with pytest.raises(ArtifactNatureUndetected):
         requests_mock.head(
@@ -82,6 +85,16 @@ def test_is_tarball_complex_with_no_result(requests_mock):
 
     with pytest.raises(ArtifactNatureUndetected):
         fallback_url = "https://example.org/mirror/crates/package/download"
+        requests_mock.head(
+            url, headers={"location": fallback_url}  # still no extension, cannot detect
+        )
+        is_tarball(urls, requests)
+
+    with pytest.raises(ArtifactNatureMistyped):
+        is_tarball(["foo://example.org/unsupported-scheme"])
+
+    with pytest.raises(ArtifactNatureMistyped):
+        fallback_url = "foo://example.org/unsupported-scheme"
         requests_mock.head(
             url, headers={"location": fallback_url}  # still no extension, cannot detect
         )
@@ -162,6 +175,8 @@ def test_lister_nixguix(datadir, swh_scheduler, requests_mock):
             url = artifact["urls"][0]
             if url.endswith(".c") or url.endswith(".txt"):
                 expected_visit_types["content"] += 1
+            elif url.startswith("svn"):  # mistyped artifact rendered as vcs nonetheless
+                expected_visit_types["svn"] += 1
             else:
                 expected_visit_types["directory"] += 1
 
@@ -213,6 +228,12 @@ def test_lister_nixguix_mostly_noop(datadir, swh_scheduler, requests_mock):
     requests_mock.head(
         "https://crates.io/api/v1/0.1.5/no-extension-and-head-404-so-skipped",
         status_code=404,
+    )
+    # Will raise for that origin, this will get ignored as we cannot determine anything
+    # from its name
+    requests_mock.head(
+        "ftp://ftp.ourproject.org/file-with-no-extension",
+        exc=requests.exceptions.InvalidSchema,
     )
 
     listed_result = lister.run()
