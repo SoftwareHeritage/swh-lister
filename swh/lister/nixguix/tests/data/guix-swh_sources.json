@@ -24,6 +24,11 @@
       "type": "url",
       "urls": [ "unknown://example.org/wrong-scheme-so-skipped.txt" ],
       "integrity": "sha256-wAEswtkl3ulAw3zq4perrGS6Wlww5XXnQYsEAoYT9fI="
+    },
+    {
+      "type": "url",
+      "urls": [ "https://code.9front.org/hg/plan9front" ],
+      "integrity": "sha256-wAEswtkl3ulAw3zq4perrGS6Wlww5XXnQYsEAoYT9fI="
     }
   ],
   "version":"1",

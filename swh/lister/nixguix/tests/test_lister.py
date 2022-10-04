@@ -235,6 +235,11 @@ def test_lister_nixguix_mostly_noop(datadir, swh_scheduler, requests_mock):
         "ftp://ftp.ourproject.org/file-with-no-extension",
         exc=requests.exceptions.InvalidSchema,
     )
+    # Cannot communicate with an expired cert so skip
+    requests_mock.head(
+        "https://code.9front.org/hg/plan9front",
+        exc=requests.exceptions.SSLError,
+    )
 
     listed_result = lister.run()
     # only the origin upstream is listed, every other entries are unsupported or incomplete
