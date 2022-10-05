@@ -25,10 +25,21 @@ from swh.lister.pattern import ListerStats
 
 logger = logging.getLogger(__name__)
 
+SOURCES = {
+    "guix": {
+        "repo": "https://git.savannah.gnu.org/cgit/guix.git/",
+        "manifest": "https://guix.gnu.org/sources.json",
+    },
+    "nixpkgs": {
+        "repo": "https://github.com/NixOS/nixpkgs",
+        "manifest": "https://nix-community.github.io/nixpkgs-swh/sources-unstable.json",
+    },
+}
 
-def page_response(datadir, instance: str) -> List[Dict]:
+
+def page_response(datadir, instance: str = "success") -> List[Dict]:
     """Return list of repositories (out of test dataset)"""
-    datapath = Path(datadir, f"{instance}-swh_sources.json")
+    datapath = Path(datadir, f"sources-{instance}.json")
     return json.loads(datapath.read_text()) if datapath.exists else []
 
 
@@ -160,11 +171,11 @@ def test_is_tarball_complex_with_content_type_result(
 
 def test_lister_nixguix_ok(datadir, swh_scheduler, requests_mock):
     """NixGuixLister should list all origins per visit type"""
-    url = "https://nix-community.github.io/nixpkgs-swh/sources-unstable.json"
-    origin_upstream = "https://github.com/NixOS/nixpkgs"
+    url = SOURCES["guix"]["manifest"]
+    origin_upstream = SOURCES["guix"]["repo"]
     lister = NixGuixLister(swh_scheduler, url=url, origin_upstream=origin_upstream)
 
-    response = page_response(datadir, "nixpkgs")
+    response = page_response(datadir, "success")
     requests_mock.get(
         url,
         [{"json": response}],
@@ -236,11 +247,11 @@ def test_lister_nixguix_ok(datadir, swh_scheduler, requests_mock):
 
 def test_lister_nixguix_mostly_noop(datadir, swh_scheduler, requests_mock):
     """NixGuixLister should ignore unsupported or incomplete origins"""
-    url = "https://guix.gnu.org/sources.json"
-    origin_upstream = "https://git.savannah.gnu.org/git/guix.git"
+    url = SOURCES["nixpkgs"]["manifest"]
+    origin_upstream = SOURCES["nixpkgs"]["repo"]
     lister = NixGuixLister(swh_scheduler, url=url, origin_upstream=origin_upstream)
 
-    response = page_response(datadir, "guix")
+    response = page_response(datadir, "failure")
 
     requests_mock.get(
         url,
@@ -282,8 +293,8 @@ def test_lister_nixguix_mostly_noop(datadir, swh_scheduler, requests_mock):
 
 
 def test_lister_nixguix_fail(datadir, swh_scheduler, requests_mock):
-    url = "https://nix-community.github.io/nixpkgs-swh/sources-unstable.json"
-    origin_upstream = "https://github.com/NixOS/nixpkgs"
+    url = SOURCES["nixpkgs"]["manifest"]
+    origin_upstream = SOURCES["nixpkgs"]["repo"]
     lister = NixGuixLister(swh_scheduler, url=url, origin_upstream=origin_upstream)
 
     requests_mock.get(
