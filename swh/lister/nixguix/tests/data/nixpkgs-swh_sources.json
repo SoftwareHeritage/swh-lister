@@ -80,6 +80,16 @@
       "svn_revision": 39057
     },
     {
+      "outputHash": "sha256-LxVcYj2WKHbhNu5x/DFkxQPOYrVkNvwiE/qcODq52Lc=",
+      "outputHashAlgo": null,
+      "outputHashMode": "recursive",
+      "type": "url",
+      "urls": [
+        "https://github.com/julian-klode/triehash/archive/debian/0.3-3.tar.gz"
+      ],
+      "inferredFetcher": "fetchzip"
+    },
+    {
       "type": "url",
       "urls": [
         "http://git.marmaro.de/?p=mmh;a=snapshot;h=431604647f89d5aac7b199a7883e98e56e4ccf9e;sf=tgz"

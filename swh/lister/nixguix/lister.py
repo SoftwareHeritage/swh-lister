@@ -16,6 +16,7 @@ Artifacts can be of types:
 """
 
 import base64
+import binascii
 from dataclasses import dataclass
 from enum import Enum
 import logging
@@ -362,10 +363,19 @@ class NixGuixLister(StatelessLister[PageResult]):
                     yield built_artifact
                     continue
 
+                outputHash = artifact.get("outputHash")
                 integrity = artifact.get("integrity")
-                if integrity is None:
-                    logger.warning("Skipping url <%s>: missing integrity field", origin)
+                if integrity is None and outputHash is None:
+                    logger.warning(
+                        "Skipping url <%s>: missing integrity and outputHash field",
+                        origin,
+                    )
                     continue
+
+                # Falls back to outputHash field if integrity is missing
+                if integrity is None and outputHash:
+                    # We'll deal with outputHash as integrity field
+                    integrity = outputHash
 
                 try:
                     is_tar, origin = is_tarball(urls, self.session)
@@ -396,10 +406,18 @@ class NixGuixLister(StatelessLister[PageResult]):
                 # convert into a dict of checksums. This only parses the
                 # `hash-expression` (hash-<b64-encoded-checksum>) as defined in
                 # https://w3c.github.io/webappsec-subresource-integrity/#the-integrity-attribute
-                chksum_algo, chksum_b64 = integrity.split("-")
-                checksums: Dict[str, str] = {
-                    chksum_algo: base64.decodebytes(chksum_b64.encode()).hex()
-                }
+                try:
+                    chksum_algo, chksum_b64 = integrity.split("-")
+                    checksums: Dict[str, str] = {
+                        chksum_algo: base64.decodebytes(chksum_b64.encode()).hex()
+                    }
+                except binascii.Error:
+                    logger.exception(
+                        "Skipping url: <%s>: integrity computation failure for <%s>",
+                        url,
+                        artifact,
+                    )
+                    continue
 
                 # The 'outputHashMode' attribute determines how the hash is computed. It
                 # must be one of the following two values:
