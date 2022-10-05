@@ -47,7 +47,7 @@ def test_is_tarball_simple(tarballs):
 
 @pytest.mark.parametrize(
     "query_param",
-    ["file", "f", "url", "name"],
+    ["file", "f", "url", "name", "anykeyreally"],
 )
 def test_is_tarball_not_so_simple(query_param):
     """More involved check on tarball should discriminate between tarball and file"""

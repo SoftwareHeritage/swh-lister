@@ -157,22 +157,12 @@ def is_tarball(urls: List[str], request: Optional[Any] = None) -> Tuple[bool, st
         if urlparsed.scheme not in ("http", "https", "ftp"):
             raise ArtifactNatureMistyped(f"Mistyped artifact '{url}'")
 
-        errors = []
-        query_params = dict(parse_qsl(urlparsed.query))
-        for path in [query_params.get(key) for key in ["f", "file", "url", "name"]] + [
-            urlparsed.path
-        ]:
-            if not path:
-                continue
-            try:
-                file_ = Path(path).suffixes[-1]
-                break
-            except IndexError as e:
-                errors.append(ArtifactWithoutExtension(e))
-
-        if errors:
-            raise errors[-1]
-        return file_.lstrip(".") in TARBALL_EXTENSIONS
+        paths = [
+            Path(p) for (_, p) in [("_", urlparsed.path)] + parse_qsl(urlparsed.query)
+        ]
+        if not any(path.suffix != "" for path in paths):
+            raise ArtifactWithoutExtension
+        return any(path.suffix.endswith(tuple(TARBALL_EXTENSIONS)) for path in paths)
 
     index = random.randrange(len(urls))
     url = urls[index]
