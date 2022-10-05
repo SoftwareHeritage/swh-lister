@@ -121,7 +121,7 @@ PageResult = Tuple[ArtifactType, Union[Artifact, VCS]]
 VCS_SUPPORTED = ("git", "svn", "hg")
 
 # Rough approximation of what we can find of mimetypes for tarballs "out there"
-POSSIBLE_TARBALL_MIMETYPES = set(MIMETYPE_TO_ARCHIVE_FORMAT.keys())
+POSSIBLE_TARBALL_MIMETYPES = tuple(MIMETYPE_TO_ARCHIVE_FORMAT.keys())
 
 
 def is_tarball(urls: List[str], request: Optional[Any] = None) -> Tuple[bool, str]:
@@ -218,7 +218,7 @@ def is_tarball(urls: List[str], request: Optional[Any] = None) -> Tuple[bool, st
             logger.debug("Content-Type: %s", content_type)
             if content_type == "application/json":
                 return False, urls[0]
-            return content_type in POSSIBLE_TARBALL_MIMETYPES, urls[0]
+            return content_type.startswith(POSSIBLE_TARBALL_MIMETYPES), urls[0]
 
         raise ArtifactNatureUndetected(
             f"Cannot determine artifact type from url <{url}>"

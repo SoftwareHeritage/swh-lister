@@ -173,6 +173,10 @@ def test_lister_nixguix_ok(datadir, swh_scheduler, requests_mock):
         "https://api.github.com/repos/trie/trie",
         [{"json": {"html_url": "https://github.com/trie/trie.git"}}],
     )
+    requests_mock.head(
+        "http://git.marmaro.de/?p=mmh;a=snapshot;h=431604647f89d5aac7b199a7883e98e56e4ccf9e;sf=tgz",
+        headers={"Content-Type": "application/gzip; charset=ISO-8859-1"},
+    )
 
     expected_visit_types = defaultdict(int)
     # origin upstream is added as origin

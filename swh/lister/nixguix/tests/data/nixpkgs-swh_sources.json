@@ -81,6 +81,13 @@
     },
     {
       "type": "url",
+      "urls": [
+        "http://git.marmaro.de/?p=mmh;a=snapshot;h=431604647f89d5aac7b199a7883e98e56e4ccf9e;sf=tgz"
+      ],
+      "integrity": "sha256-G/7oY5qdCSJ59VlwHtIbvMdT6+mriXhMqQIHNx65J+E="
+    },
+    {
+      "type": "url",
       "urls": ["svn://svn.code.sf.net/p/acme-crossass/code-0/trunk"],
       "integrity": "sha256-VifIQ+UEVMKJ+cNS+Xxusazinr5Cgu1lmGuhqj/5Mpk="
     }
