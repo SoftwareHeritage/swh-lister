@@ -38,6 +38,17 @@
       "inferredFetcher": "fetchzip"
     },
     {
+      "outputHash": "0s2mvy1nr2v1x0rr1fxlsv8ly1vyf9978rb4hwry5vnr678ls522",
+      "outputHashAlgo": "sha256",
+      "outputHashMode": "recursive",
+      "type": "url",
+      "urls": [
+        "https://www.unicode.org/Public/emoji/12.1/emoji-zwj-sequences.txt"
+      ],
+      "integrity": "sha256-QhRN0THZ7uIzh2RldFJyfgdP0da0u5Az6GGLbIPfVWg=",
+      "inferredFetcher": "unclassified"
+    },
+    {
       "type": "url",
       "urls": [ "unknown://example.org/wrong-scheme-so-skipped.txt" ],
       "integrity": "sha256-wAEswtkl3ulAw3zq4perrGS6Wlww5XXnQYsEAoYT9fI="

@@ -430,6 +430,18 @@ class NixGuixLister(StatelessLister[PageResult]):
                 #       the output can be anything, including a directory tree.
                 outputHashMode = artifact.get("outputHashMode", "flat")
 
+                if not is_tar and outputHashMode == "recursive":
+                    # T4608: Cannot deal with those properly yet as some can be missing
+                    # 'critical' information about how to recompute the hash (e.g. fs
+                    # layout, executable bit, ...)
+                    logger.warning(
+                        "Skipping artifact <%s>: 'file' artifact of type <%s> is "
+                        " missing information to properly check its integrity",
+                        artifact,
+                        artifact_type,
+                    )
+                    continue
+
                 logger.debug("%s: %s", "dir" if is_tar else "cnt", origin)
                 yield ArtifactType.ARTIFACT, Artifact(
                     origin=origin,
