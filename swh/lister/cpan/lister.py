@@ -6,7 +6,7 @@
 from collections import defaultdict
 from datetime import datetime
 import logging
-from typing import Any, Dict, Iterator, List, Optional, Set
+from typing import Any, Dict, Iterator, List, Optional, Set, Union
 
 import iso8601
 
@@ -45,6 +45,18 @@ def get_field_value(entry, field_name):
     if isinstance(field_value, list):
         field_value = field_value[0]
     return field_value
+
+
+def get_module_version(
+    module_name: str, module_version: Union[str, float, int], release_name: str
+) -> str:
+    # some old versions fail to be parsed and cpan api set version to 0
+    if module_version == 0:
+        prefix = f"{module_name}-"
+        if release_name.startswith(prefix):
+            # extract version from release name
+            module_version = release_name.replace(prefix, "", 1)
+    return str(module_version)
 
 
 class CpanLister(StatelessLister[CpanListerPage]):
@@ -103,6 +115,10 @@ class CpanLister(StatelessLister[CpanListerPage]):
             module_author = get_field_value(entry, "author")
             module_author_fullname = get_field_value(entry, "metadata.author")
             release_name = get_field_value(entry, "name")
+
+            module_version = get_module_version(
+                module_name, module_version, release_name
+            )
 
             self.artifacts[module_name].append(
                 {

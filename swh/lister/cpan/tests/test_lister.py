@@ -10,7 +10,7 @@ from pathlib import Path
 
 import pytest
 
-from swh.lister.cpan.lister import CpanLister
+from swh.lister.cpan.lister import CpanLister, get_module_version
 
 
 @pytest.fixture
@@ -20,16 +20,42 @@ def release_search_response(datadir):
     )
 
 
+def release_scroll_response(datadir, page):
+    return json.loads(
+        Path(
+            datadir, "https_fastapi.metacpan.org", f"v1__search_scroll_page{page}"
+        ).read_bytes()
+    )
+
+
 @pytest.fixture
 def release_scroll_first_response(datadir):
-    return json.loads(
-        Path(datadir, "https_fastapi.metacpan.org", "v1__search_scroll").read_bytes()
-    )
+    return release_scroll_response(datadir, page=1)
+
+
+@pytest.fixture
+def release_scroll_second_response(datadir):
+    return release_scroll_response(datadir, page=2)
+
+
+@pytest.fixture
+def release_scroll_third_response(datadir):
+    return release_scroll_response(datadir, page=3)
+
+
+@pytest.fixture
+def release_scroll_fourth_response(datadir):
+    return release_scroll_response(datadir, page=4)
 
 
 @pytest.fixture(autouse=True)
 def mock_network_requests(
-    requests_mock, release_search_response, release_scroll_first_response
+    requests_mock,
+    release_search_response,
+    release_scroll_first_response,
+    release_scroll_second_response,
+    release_scroll_third_response,
+    release_scroll_fourth_response,
 ):
     requests_mock.get(
         "https://fastapi.metacpan.org/v1/release/_search",
@@ -41,13 +67,45 @@ def mock_network_requests(
             {
                 "json": release_scroll_first_response,
             },
+            {
+                "json": release_scroll_second_response,
+            },
+            {
+                "json": release_scroll_third_response,
+            },
+            {
+                "json": release_scroll_fourth_response,
+            },
             {"json": {"hits": {"hits": []}, "_scroll_id": ""}},
         ],
     )
 
 
+@pytest.mark.parametrize(
+    "module_name,module_version,release_name,expected_version",
+    [
+        ("Validator-Custom", "0.1207", "Validator-Custom-0.1207", "0.1207"),
+        ("UDPServersAndClients", 0, "UDPServersAndClients", "0"),
+        ("Compiler", 0, "Compiler-a1", "a1"),
+        ("Call-Context", 0.01, "Call-Context-0.01", "0.01"),
+    ],
+)
+def test_get_module_version(
+    module_name, module_version, release_name, expected_version
+):
+    assert (
+        get_module_version(module_name, module_version, release_name)
+        == expected_version
+    )
+
+
 def test_cpan_lister(
-    swh_scheduler, release_search_response, release_scroll_first_response
+    swh_scheduler,
+    release_search_response,
+    release_scroll_first_response,
+    release_scroll_second_response,
+    release_scroll_third_response,
+    release_scroll_fourth_response,
 ):
     lister = CpanLister(scheduler=swh_scheduler)
     res = lister.run()
@@ -58,6 +116,9 @@ def test_cpan_lister(
     for release in chain(
         release_search_response["hits"]["hits"],
         release_scroll_first_response["hits"]["hits"],
+        release_scroll_second_response["hits"]["hits"],
+        release_scroll_third_response["hits"]["hits"],
+        release_scroll_fourth_response["hits"]["hits"],
     ):
         distribution = release["_source"]["distribution"]
         release_name = release["_source"]["name"]
@@ -69,6 +130,9 @@ def test_cpan_lister(
         author_fullname = release["_source"]["metadata"]["author"][0]
         date = release["_source"]["date"]
         origin_url = f"https://metacpan.org/dist/{distribution}"
+
+        version = get_module_version(distribution, version, release_name)
+
         expected_origins.add(origin_url)
         expected_artifacts[origin_url].append(
             {
