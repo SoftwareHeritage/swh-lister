@@ -20,7 +20,7 @@ Origins retrieving strategy
 ---------------------------
 
 To get a list of all package names we make a POST call to
-`https://hackage.haskell.org/packages/search` endpoint with some params given as
+``https://hackage.haskell.org/packages/search`` endpoint with some params given as
 json data.
 
 Default params::
@@ -34,6 +34,10 @@ Default params::
 
 The page size is 50. The lister will make has much http api call has needed to get
 all results.
+
+For incremental mode we expand the search query with ``lastUpload`` greater than
+``state.last_listing_date``, the api will return all new or updated package names since
+last run.
 
 Page listing
 ------------
@@ -60,7 +64,7 @@ Origins from page
 -----------------
 
 The lister yields 50 origins url per page.
-Each ListedOrigin has a `last_update` date set.
+Each ListedOrigin has a ``last_update`` date set.
 
 Running tests
 -------------
