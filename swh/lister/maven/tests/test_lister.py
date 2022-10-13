@@ -71,38 +71,13 @@ def maven_index_incr_first(datadir) -> bytes:
 
 
 @pytest.fixture
-def maven_pom_1(datadir) -> bytes:
-    return Path(datadir, "https_maven.org", "sprova4j-0.1.0.pom").read_bytes()
-
-
-@pytest.fixture
 def maven_index_null_mtime(datadir) -> bytes:
     return Path(datadir, "http_indexes", "export_null_mtime.fld").read_bytes()
 
 
-@pytest.fixture
-def maven_pom_1_malformed(datadir) -> bytes:
-    return Path(datadir, "https_maven.org", "sprova4j-0.1.0.malformed.pom").read_bytes()
-
-
-@pytest.fixture
-def maven_pom_2(datadir) -> bytes:
-    return Path(datadir, "https_maven.org", "sprova4j-0.1.1.pom").read_bytes()
-
-
-@pytest.fixture
-def maven_pom_3(datadir) -> bytes:
-    return Path(datadir, "https_maven.org", "arangodb-graphql-1.2.pom").read_bytes()
-
-
-@pytest.fixture
-def maven_pom_multi_byte_encoding(datadir) -> bytes:
-    return Path(datadir, "https_maven.org", "citrus-parent-3.0.7.pom").read_bytes()
-
-
-@pytest.fixture
-def requests_mock(requests_mock):
-    """If github api calls for the configured scm repository, returns its canonical url."""
+@pytest.fixture(autouse=True)
+def network_requests_mock(requests_mock, requests_mock_datadir, maven_index_full):
+    # If github api calls for the configured scm repository, returns its canonical url.
     for url_api, url_html in [
         (GIT_REPO_URL0_API, GIT_REPO_URL0_HTTPS),
         (GIT_REPO_URL1_API, GIT_REPO_URL1_HTTPS),
@@ -112,17 +87,8 @@ def requests_mock(requests_mock):
             url_api,
             json={"html_url": url_html},
         )
-    yield requests_mock
 
-
-@pytest.fixture(autouse=True)
-def network_requests_mock(
-    requests_mock, maven_index_full, maven_pom_1, maven_pom_2, maven_pom_3
-):
     requests_mock.get(INDEX_URL, content=maven_index_full)
-    requests_mock.get(URL_POM_1, content=maven_pom_1)
-    requests_mock.get(URL_POM_2, content=maven_pom_2)
-    requests_mock.get(URL_POM_3, content=maven_pom_3)
 
 
 @pytest.fixture(autouse=True)
@@ -171,7 +137,7 @@ def test_maven_full_listing(swh_scheduler):
 def test_maven_full_listing_malformed(
     swh_scheduler,
     requests_mock,
-    maven_pom_1_malformed,
+    datadir,
 ):
     """Covers full listing of multiple pages, checking page results with a malformed
     scm entry in pom."""
@@ -185,7 +151,9 @@ def test_maven_full_listing_malformed(
     )
 
     # Set up test.
-    requests_mock.get(URL_POM_1, content=maven_pom_1_malformed)
+    requests_mock.get(
+        URL_POM_1, content=Path(datadir, "sprova4j-0.1.0.malformed.pom").read_bytes()
+    )
 
     # Then run the lister.
     stats = lister.run()
@@ -357,10 +325,13 @@ def test_maven_lister_null_mtime(swh_scheduler, requests_mock, maven_index_null_
     assert scheduler_origins[0].last_update is None
 
 
-def test_maven_list_pom_bad_encoding(swh_scheduler, requests_mock, maven_pom_1):
+def test_maven_list_pom_bad_encoding(swh_scheduler, requests_mock):
     """should continue listing when failing to decode pom file."""
     # Test failure of pom parsing by reencoding a UTF-8 pom file to a not expected one
-    requests_mock.get(URL_POM_1, content=maven_pom_1.decode("utf-8").encode("utf-32"))
+    requests_mock.get(
+        URL_POM_1,
+        content=requests.get(URL_POM_1).content.decode("utf-8").encode("utf-32"),
+    )
 
     lister = MavenLister(scheduler=swh_scheduler, url=MVN_URL, index_url=INDEX_URL)
 
@@ -372,13 +343,13 @@ def test_maven_list_pom_bad_encoding(swh_scheduler, requests_mock, maven_pom_1):
     assert len(scheduler_origins) == 2
 
 
-def test_maven_list_pom_multi_byte_encoding(
-    swh_scheduler, requests_mock, maven_pom_multi_byte_encoding
-):
+def test_maven_list_pom_multi_byte_encoding(swh_scheduler, requests_mock, datadir):
     """should parse POM file with multi-byte encoding."""
 
     # replace pom file with a multi-byte encoding one
-    requests_mock.get(URL_POM_1, content=maven_pom_multi_byte_encoding)
+    requests_mock.get(
+        URL_POM_1, content=Path(datadir, "citrus-parent-3.0.7.pom").read_bytes()
+    )
 
     lister = MavenLister(scheduler=swh_scheduler, url=MVN_URL, index_url=INDEX_URL)
 
