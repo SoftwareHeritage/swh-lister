@@ -14,6 +14,7 @@ _packages_list = {
         "ljjackson/linnworks",
         "lky/wx_article",
         "spryker-eco/computop-api",
+        "idevlab/essential",
     ]
 }
 
@@ -32,7 +33,7 @@ def _request_with_if_modified_since(request):
     return request.headers.get("If-Modified-Since") is not None
 
 
-def test_packagist_lister(swh_scheduler, requests_mock, datadir):
+def test_packagist_lister(swh_scheduler, requests_mock, datadir, requests_mock_datadir):
     # first listing, should return one origin per package
     lister = PackagistLister(scheduler=swh_scheduler)
     requests_mock.get(lister.PACKAGIST_PACKAGES_LIST_URL, json=_packages_list)
@@ -53,19 +54,24 @@ def test_packagist_lister(swh_scheduler, requests_mock, datadir):
 
     expected_origins = {
         (
-            "https://github.com/gitlky/wx_article.git",
+            "https://github.com/gitlky/wx_article",  # standard case
             "git",
             datetime.datetime.fromisoformat("2018-08-30T07:37:09+00:00"),
         ),
         (
-            "https://github.com/ljjackson/linnworks.git",
+            "https://github.com/ljjackson/linnworks.git",  # API goes 404
             "git",
             datetime.datetime.fromisoformat("2018-11-01T21:45:50+00:00"),
         ),
         (
-            "https://github.com/spryker-eco/computop-api.git",
+            "https://github.com/spryker-eco/computop-api",  # SSH URL in manifest
             "git",
             datetime.datetime.fromisoformat("2020-06-22T15:50:29+00:00"),
+        ),
+        (
+            "git@gitlab.com:idevlab/Essential.git",  # not GitHub
+            "git",
+            datetime.datetime.fromisoformat("2022-10-12T10:34:29+00:00"),
         ),
     }
 
@@ -148,6 +154,38 @@ def test_packagist_lister_package_with_bitbucket_hg_origin(
 
     assert stats.pages == 1
     assert stats.origins == 0
+
+
+def test_packagist_lister_package_normalize_github_origin(
+    swh_scheduler, requests_mock, datadir, requests_mock_datadir
+):
+    package_name = "ycms/module-main"
+    lister = PackagistLister(scheduler=swh_scheduler)
+    requests_mock.get(
+        lister.PACKAGIST_PACKAGES_LIST_URL, json={"packageNames": [package_name]}
+    )
+    requests_mock.get(
+        f"{lister.PACKAGIST_REPO_BASE_URL}/{package_name}.json",
+        additional_matcher=_request_without_if_modified_since,
+        json=_package_metadata(datadir, package_name),
+    )
+
+    stats = lister.run()
+
+    assert stats.pages == 1
+    assert stats.origins == 1
+
+    expected_origins = {
+        (
+            "https://github.com/GameCHN/module-main",
+            "git",
+            datetime.datetime.fromisoformat("2015-08-23T04:42:33+00:00"),
+        ),
+    }
+    assert expected_origins == {
+        (o.url, o.visit_type, o.last_update)
+        for o in swh_scheduler.get_listed_origins(lister.lister_obj.id).results
+    }
 
 
 def test_lister_from_configfile(swh_scheduler_config, mocker):
