@@ -1,12 +1,11 @@
-# Copyright (C) 2019-2021  The Software Heritage developers
+# Copyright (C) 2019-2022  The Software Heritage developers
 # See the AUTHORS file at the top-level directory of this distribution
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
 
+import datetime
 import json
 from pathlib import Path
-
-import iso8601
 
 from swh.lister.packagist.lister import PackagistLister
 
@@ -23,20 +22,6 @@ def _package_metadata(datadir, package_name):
     return json.loads(
         Path(datadir, f"{package_name.replace('/', '_')}.json").read_text()
     )
-
-
-def _package_origin_info(package_name, package_metadata):
-    origin_url = None
-    visit_type = None
-    last_update = None
-    for version_info in package_metadata["packages"][package_name].values():
-        origin_url = version_info["source"].get("url")
-        visit_type = version_info["source"].get("type")
-        if "time" in version_info:
-            version_date = iso8601.parse_date(version_info["time"])
-        if last_update is None or version_date > last_update:
-            last_update = version_date
-    return origin_url, visit_type, last_update
 
 
 def _request_without_if_modified_since(request):
@@ -66,16 +51,28 @@ def test_packagist_lister(swh_scheduler, requests_mock, datadir):
     assert stats.origins == len(_packages_list["packageNames"])
     assert lister.updated
 
-    scheduler_origins = swh_scheduler.get_listed_origins(lister.lister_obj.id).results
+    expected_origins = {
+        (
+            "https://github.com/gitlky/wx_article.git",
+            "git",
+            datetime.datetime.fromisoformat("2018-08-30T07:37:09+00:00"),
+        ),
+        (
+            "https://github.com/ljjackson/linnworks.git",
+            "git",
+            datetime.datetime.fromisoformat("2018-11-01T21:45:50+00:00"),
+        ),
+        (
+            "https://github.com/spryker-eco/computop-api.git",
+            "git",
+            datetime.datetime.fromisoformat("2020-06-22T15:50:29+00:00"),
+        ),
+    }
 
-    for package_name, package_metadata in packages_metadata.items():
-        origin_url, visit_type, last_update = _package_origin_info(
-            package_name, package_metadata
-        )
-        filtered_origins = [o for o in scheduler_origins if o.url == origin_url]
-        assert filtered_origins
-        assert filtered_origins[0].visit_type == visit_type
-        assert filtered_origins[0].last_update == last_update
+    assert expected_origins == {
+        (o.url, o.visit_type, o.last_update)
+        for o in swh_scheduler.get_listed_origins(lister.lister_obj.id).results
+    }
 
     # second listing, should return 0 origins as no package metadata
     # has been updated since first listing
@@ -94,6 +91,11 @@ def test_packagist_lister(swh_scheduler, requests_mock, datadir):
     assert stats.pages == 1
     assert stats.origins == 0
     assert lister.updated
+
+    assert expected_origins == {
+        (o.url, o.visit_type, o.last_update)
+        for o in swh_scheduler.get_listed_origins(lister.lister_obj.id).results
+    }
 
 
 def test_packagist_lister_missing_metadata(swh_scheduler, requests_mock, datadir):
