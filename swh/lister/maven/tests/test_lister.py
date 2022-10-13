@@ -22,19 +22,19 @@ URL_POM_3 = MVN_URL + "com/arangodb/arangodb-graphql/1.2/arangodb-graphql-1.2.po
 USER_REPO0 = "aldialimucaj/sprova4j"
 GIT_REPO_URL0_HTTPS = f"https://github.com/{USER_REPO0}"
 GIT_REPO_URL0_API = f"https://api.github.com/repos/{USER_REPO0}"
-LIST_GIT = (GIT_REPO_URL0_HTTPS,)
+ORIGIN_GIT = GIT_REPO_URL0_HTTPS
 
 USER_REPO1 = "ArangoDB-Community/arangodb-graphql-java"
 GIT_REPO_URL1_HTTPS = f"https://github.com/{USER_REPO1}"
 GIT_REPO_URL1_GIT = f"git://github.com/{USER_REPO1}.git"
 GIT_REPO_URL1_API = f"https://api.github.com/repos/{USER_REPO1}"
-LIST_GIT_INCR = (GIT_REPO_URL1_HTTPS,)
+ORIGIN_GIT_INCR = GIT_REPO_URL1_HTTPS
 
 USER_REPO2 = "webx/citrus"
 GIT_REPO_URL2_HTTPS = f"https://github.com/{USER_REPO2}"
 GIT_REPO_URL2_API = f"https://api.github.com/repos/{USER_REPO2}"
 
-LIST_SRC = (MVN_URL + "al/aldi/sprova4j",)
+ORIGIN_SRC = MVN_URL + "al/aldi/sprova4j"
 
 LIST_SRC_DATA = (
     {
@@ -152,8 +152,8 @@ def test_maven_full_listing(swh_scheduler):
     origin_urls = [origin.url for origin in scheduler_origins]
 
     # 3 git origins + 1 maven origin with 2 releases (one per jar)
-    assert len(origin_urls) == 3
-    assert sorted(origin_urls) == sorted(LIST_GIT + LIST_GIT_INCR + LIST_SRC)
+    assert set(origin_urls) == {ORIGIN_GIT, ORIGIN_GIT_INCR, ORIGIN_SRC}
+    assert len(set(origin_urls)) == len(origin_urls)
 
     for origin in scheduler_origins:
         if origin.visit_type == "maven":
@@ -197,8 +197,8 @@ def test_maven_full_listing_malformed(
     origin_urls = [origin.url for origin in scheduler_origins]
 
     # 2 git origins + 1 maven origin with 2 releases (one per jar)
-    assert len(origin_urls) == 3
-    assert sorted(origin_urls) == sorted(LIST_GIT + LIST_GIT_INCR + LIST_SRC)
+    assert set(origin_urls) == {ORIGIN_GIT, ORIGIN_GIT_INCR, ORIGIN_SRC}
+    assert len(origin_urls) == len(set(origin_urls))
 
     for origin in scheduler_origins:
         if origin.visit_type == "maven":
@@ -245,8 +245,8 @@ def test_maven_incremental_listing(
     origin_urls = [origin.url for origin in scheduler_origins]
 
     # 1 git origins + 1 maven origin with 1 release (one per jar)
-    assert len(origin_urls) == 2
-    assert sorted(origin_urls) == sorted(LIST_GIT + LIST_SRC)
+    assert set(origin_urls) == {ORIGIN_GIT, ORIGIN_SRC}
+    assert len(origin_urls) == len(set(origin_urls))
 
     for origin in scheduler_origins:
         if origin.visit_type == "maven":
@@ -282,7 +282,8 @@ def test_maven_incremental_listing(
     scheduler_origins = swh_scheduler.get_listed_origins(lister.lister_obj.id).results
     origin_urls = [origin.url for origin in scheduler_origins]
 
-    assert sorted(origin_urls) == sorted(LIST_SRC + LIST_GIT + LIST_GIT_INCR)
+    assert set(origin_urls) == {ORIGIN_SRC, ORIGIN_GIT, ORIGIN_GIT_INCR}
+    assert len(origin_urls) == len(set(origin_urls))
 
     for origin in scheduler_origins:
         if origin.visit_type == "maven":
@@ -328,7 +329,10 @@ def test_maven_list_http_error_artifacts(
     # If the maven_index_full step succeeded but not the get_pom step,
     # then we get only one maven-jar origin and one git origin.
     scheduler_origins = swh_scheduler.get_listed_origins(lister.lister_obj.id).results
-    assert len(scheduler_origins) == 2
+    origin_urls = [origin.url for origin in scheduler_origins]
+
+    assert set(origin_urls) == {ORIGIN_SRC, ORIGIN_GIT_INCR}
+    assert len(origin_urls) == len(set(origin_urls))
 
 
 def test_maven_lister_null_mtime(swh_scheduler, requests_mock, maven_index_null_mtime):
