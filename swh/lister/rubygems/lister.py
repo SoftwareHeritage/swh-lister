@@ -142,7 +142,7 @@ class RubyGemsLister(StatelessLister[RubyGemsListerPage]):
             with db.cursor() as cursor:
                 cursor.execute("SELECT id, name from rubygems")
                 for gem_id, gem_name in cursor.fetchall():
-                    logger.debug("Processing gem named %s", gem_name[1])
+                    logger.debug("Processing gem named %s", gem_name)
                     with db.cursor() as cursor_v:
                         cursor_v.execute(
                             "SELECT authors, built_at, number, sha256, size from versions "
