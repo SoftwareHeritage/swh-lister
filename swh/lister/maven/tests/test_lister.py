@@ -77,17 +77,6 @@ def maven_index_null_mtime(datadir) -> bytes:
 
 @pytest.fixture(autouse=True)
 def network_requests_mock(requests_mock, requests_mock_datadir, maven_index_full):
-    # If github api calls for the configured scm repository, returns its canonical url.
-    for url_api, url_html in [
-        (GIT_REPO_URL0_API, GIT_REPO_URL0_HTTPS),
-        (GIT_REPO_URL1_API, GIT_REPO_URL1_HTTPS),
-        (GIT_REPO_URL2_API, GIT_REPO_URL2_HTTPS),
-    ]:
-        requests_mock.get(
-            url_api,
-            json={"html_url": url_html},
-        )
-
     requests_mock.get(INDEX_URL, content=maven_index_full)
 
 
