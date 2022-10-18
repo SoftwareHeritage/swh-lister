@@ -1,3 +1,11 @@
+swh-lister (4.0.0-1~swh1) unstable-swh; urgency=medium
+
+  * New upstream release 4.0.0     - (tagged by Antoine Lambert
+    <anlambert@softwareheritage.org> on 2022-10-18 12:18:48 +0200)
+  * Upstream changes:     - version 4.0.0
+
+ -- Software Heritage autobuilder (on jenkins-debian1) <jenkins@jenkins-debian1.internal.softwareheritage.org>  Tue, 18 Oct 2022 10:25:55 +0000
+
 swh-lister (3.0.2-1~swh1) unstable-swh; urgency=medium
 
   * New upstream release 3.0.2     - (tagged by Vincent SELLIER
