@@ -1,8 +1,9 @@
-# Copyright (C) 2017-2021 The Software Heritage developers
+# Copyright (C) 2017-2022 The Software Heritage developers
 # See the AUTHORS file at the top-level directory of this distribution
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
 
+import functools
 import json
 import logging
 from pathlib import Path
@@ -11,7 +12,7 @@ from typing import Dict, List
 import pytest
 from requests.status_codes import codes
 
-from swh.lister import USER_AGENT
+from swh.lister import USER_AGENT_TEMPLATE
 from swh.lister.gitlab.lister import GitLabLister, _parse_id_after
 from swh.lister.pattern import ListerStats
 from swh.lister.tests.test_utils import assert_sleep_calls
@@ -24,8 +25,8 @@ def api_url(instance: str) -> str:
     return f"https://{instance}/api/v4/"
 
 
-def _match_request(request):
-    return request.headers.get("User-Agent") == USER_AGENT
+def _match_request(request, lister_name="gitlab"):
+    return request.headers.get("User-Agent") == USER_AGENT_TEMPLATE % lister_name
 
 
 def test_lister_gitlab(datadir, swh_scheduler, requests_mock):
@@ -70,7 +71,7 @@ def test_lister_gitlab_heptapod(datadir, swh_scheduler, requests_mock):
     requests_mock.get(
         lister.page_url(),
         [{"json": response}],
-        additional_matcher=_match_request,
+        additional_matcher=functools.partial(_match_request, lister_name="heptapod"),
     )
 
     listed_result = lister.run()

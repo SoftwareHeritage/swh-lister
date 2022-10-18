@@ -1,0 +1,39 @@
+{
+  "_shards": {
+    "successful": 3,
+    "failed": 0,
+    "total": 3
+  },
+  "hits": {
+    "max_score": 16.105877,
+    "hits": [
+      {
+        "_id": "FM3U2W_LR4pgKJepBaDKUb4WEy0",
+        "_index": "cpan_v1_01",
+        "_type": "release",
+        "_source": {
+          "distribution": "UDPServersAndClients",
+          "date": "2006-04-20T00:03:25",
+          "checksum_sha256": "763da87c32e65cc7ff72d70a503b4e9497f6b506c174b82c97671af8667c1922",
+          "stat": {
+            "size": 5576
+          },
+          "author": "ROBINBANK",
+          "version": 0,
+          "download_url": "https://cpan.metacpan.org/authors/id/R/RO/ROBINBANK/UDPServersAndClients.zip",
+          "metadata": {
+            "author": [
+              "unknown"
+            ]
+          },
+          "name": "UDPServersAndClients"
+        },
+        "_score": 16.105877
+      }
+    ],
+    "total": 1
+  },
+  "took": 2,
+  "timed_out": false,
+  "_scroll_id": "cXVlcnlUaGVuRmV0Y2g7Mzs5OTQ2NzY3ODU6ZHZIZWxCb3BUZi1Cb3NwRDB5NmRQUTs5OTQ2NzY3ODQ6ZHZIZWxCb3BUZi1Cb3NwRDB5NmRQUTs5OTUyMzQzMTA6eXptdmszQUNUam1XbVJjRjRkRk9UdzswOw=="
+}

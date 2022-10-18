@@ -1,7 +1,8 @@
-# Copyright (C) 2021 The Software Heritage developers
+# Copyright (C) 2021-2022 The Software Heritage developers
 # See the AUTHORS file at the top-level directory of this distribution
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
+
 import datetime
 import functools
 import json
@@ -12,7 +13,7 @@ from iso8601 import iso8601
 import pytest
 from requests.exceptions import HTTPError
 
-from swh.lister import USER_AGENT
+from swh.lister import USER_AGENT_TEMPLATE
 from swh.lister.sourceforge.lister import (
     MAIN_SITEMAP_URL,
     PROJECT_API_URL_FORMAT,
@@ -74,7 +75,10 @@ def get_bzr_repo_page(datadir, repo_name):
 
 
 def _check_request_headers(request):
-    return request.headers.get("User-Agent") == USER_AGENT
+    return (
+        request.headers.get("User-Agent")
+        == USER_AGENT_TEMPLATE % SourceForgeLister.LISTER_NAME
+    )
 
 
 def _check_listed_origins(lister, swh_scheduler):
@@ -368,7 +372,7 @@ def test_sourceforge_lister_retry(swh_scheduler, requests_mock, mocker, datadir)
     lister = SourceForgeLister(scheduler=swh_scheduler)
 
     # Exponential retries take a long time, so stub time.sleep
-    mocked_sleep = mocker.patch.object(lister.page_request.retry, "sleep")
+    mocked_sleep = mocker.patch.object(lister.http_request.retry, "sleep")
 
     requests_mock.get(
         MAIN_SITEMAP_URL,
@@ -438,7 +442,7 @@ def test_sourceforge_lister_http_error(
     lister = SourceForgeLister(scheduler=swh_scheduler)
 
     # Exponential retries take a long time, so stub time.sleep
-    mocked_sleep = mocker.patch.object(lister.page_request.retry, "sleep")
+    mocked_sleep = mocker.patch.object(lister.http_request.retry, "sleep")
 
     requests_mock.get(MAIN_SITEMAP_URL, status_code=status_code)
 
@@ -458,7 +462,7 @@ def test_sourceforge_lister_project_error(
 ):
     lister = SourceForgeLister(scheduler=swh_scheduler)
     # Exponential retries take a long time, so stub time.sleep
-    mocker.patch.object(lister.page_request.retry, "sleep")
+    mocker.patch.object(lister.http_request.retry, "sleep")
 
     requests_mock.get(
         MAIN_SITEMAP_URL,

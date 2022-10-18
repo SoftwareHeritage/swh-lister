@@ -1,4 +1,4 @@
-# Copyright (C) 2018-2021 The Software Heritage developers
+# Copyright (C) 2018-2022 The Software Heritage developers
 # See the AUTHORS file at the top-level directory of this distribution
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
@@ -11,7 +11,7 @@ import iso8601
 import pytest
 from requests.exceptions import HTTPError
 
-from swh.lister import USER_AGENT
+from swh.lister import USER_AGENT_TEMPLATE
 from swh.lister.npm.lister import NpmLister, NpmListerState
 
 
@@ -35,6 +35,11 @@ def npm_incremental_listing_page2(datadir):
     return json.loads(Path(datadir, "npm_incremental_page2.json").read_text())
 
 
+@pytest.fixture(autouse=True)
+def retry_sleep_mock(mocker):
+    mocker.patch.object(NpmLister.http_request.retry, "sleep")
+
+
 def _check_listed_npm_packages(lister, packages, scheduler_origins):
     for package in packages:
         package_name = package["doc"]["name"]
@@ -48,7 +53,9 @@ def _check_listed_npm_packages(lister, packages, scheduler_origins):
 
 
 def _match_request(request):
-    return request.headers.get("User-Agent") == USER_AGENT
+    return (
+        request.headers.get("User-Agent") == USER_AGENT_TEMPLATE % NpmLister.LISTER_NAME
+    )
 
 
 def _url_params(page_size, **kwargs):
@@ -73,19 +80,21 @@ def test_npm_lister_full(
         additional_matcher=_match_request,
     )
 
-    spy_get = mocker.spy(lister.session, "get")
+    spy_request = mocker.spy(lister.session, "request")
 
     stats = lister.run()
     assert stats.pages == 2
     assert stats.origins == page_size * stats.pages
 
-    spy_get.assert_has_calls(
+    spy_request.assert_has_calls(
         [
             mocker.call(
+                "GET",
                 lister.API_FULL_LISTING_URL,
                 params=_url_params(page_size + 1, startkey='""'),
             ),
             mocker.call(
+                "GET",
                 lister.API_FULL_LISTING_URL,
                 params=_url_params(
                     page_size + 1,
@@ -127,7 +136,7 @@ def test_npm_lister_incremental(
         additional_matcher=_match_request,
     )
 
-    spy_get = mocker.spy(lister.session, "get")
+    spy_request = mocker.spy(lister.session, "request")
 
     assert lister.get_state_from_scheduler() == NpmListerState()
 
@@ -137,13 +146,15 @@ def test_npm_lister_incremental(
 
     last_seq = npm_incremental_listing_page2["results"][-1]["seq"]
 
-    spy_get.assert_has_calls(
+    spy_request.assert_has_calls(
         [
             mocker.call(
+                "GET",
                 lister.API_INCREMENTAL_LISTING_URL,
                 params=_url_params(page_size, since="0"),
             ),
             mocker.call(
+                "GET",
                 lister.API_INCREMENTAL_LISTING_URL,
                 params=_url_params(
                     page_size,
@@ -151,6 +162,7 @@ def test_npm_lister_incremental(
                 ),
             ),
             mocker.call(
+                "GET",
                 lister.API_INCREMENTAL_LISTING_URL,
                 params=_url_params(page_size, since=str(last_seq)),
             ),
@@ -184,11 +196,12 @@ def test_npm_lister_incremental_restart(
 
     requests_mock.get(lister.API_INCREMENTAL_LISTING_URL, json={"results": []})
 
-    spy_get = mocker.spy(lister.session, "get")
+    spy_request = mocker.spy(lister.session, "request")
 
     lister.run()
 
-    spy_get.assert_called_with(
+    spy_request.assert_called_with(
+        "GET",
         lister.API_INCREMENTAL_LISTING_URL,
         params=_url_params(page_size, since=str(last_seq)),
     )

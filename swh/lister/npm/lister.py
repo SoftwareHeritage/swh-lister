@@ -1,4 +1,4 @@
-# Copyright (C) 2018-2021 the Software Heritage developers
+# Copyright (C) 2018-2022 the Software Heritage developers
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
 
@@ -7,12 +7,8 @@ import logging
 from typing import Any, Dict, Iterator, List, Optional
 
 import iso8601
-import requests
-from tenacity.before_sleep import before_sleep_log
 
-from swh.lister import USER_AGENT
 from swh.lister.pattern import CredentialsType, Lister
-from swh.lister.utils import throttling_retry
 from swh.scheduler.interface import SchedulerInterface
 from swh.scheduler.model import ListedOrigin
 
@@ -75,10 +71,7 @@ class NpmLister(Lister[NpmListerState, List[Dict[str, Any]]]):
             self.page_size += 1
         self.incremental = incremental
 
-        self.session = requests.Session()
-        self.session.headers.update(
-            {"Accept": "application/json", "User-Agent": USER_AGENT}
-        )
+        self.session.headers.update({"Accept": "application/json"})
 
     def state_from_dict(self, d: Dict[str, Any]) -> NpmListerState:
         return NpmListerState(**d)
@@ -95,21 +88,6 @@ class NpmLister(Lister[NpmListerState, List[Dict[str, Any]]]):
             params["startkey"] = last_package_id
         return params
 
-    @throttling_retry(before_sleep=before_sleep_log(logger, logging.WARNING))
-    def page_request(self, last_package_id: str) -> requests.Response:
-        params = self.request_params(last_package_id)
-        logger.debug("Fetching URL %s with params %s", self.url, params)
-        response = self.session.get(self.url, params=params)
-        if response.status_code != 200:
-            logger.warning(
-                "Unexpected HTTP status code %s on %s: %s",
-                response.status_code,
-                response.url,
-                response.content,
-            )
-        response.raise_for_status()
-        return response
-
     def get_pages(self) -> Iterator[List[Dict[str, Any]]]:
         last_package_id: str = "0" if self.incremental else '""'
         if (
@@ -121,7 +99,9 @@ class NpmLister(Lister[NpmListerState, List[Dict[str, Any]]]):
 
         while True:
 
-            response = self.page_request(last_package_id)
+            response = self.http_request(
+                self.url, params=self.request_params(last_package_id)
+            )
 
             data = response.json()
             page = data["results"] if self.incremental else data["rows"]

@@ -1,0 +1,85 @@
+{
+  "took": 3,
+  "_shards": {
+    "successful": 3,
+    "failed": 0,
+    "total": 3
+  },
+  "timed_out": false,
+  "hits": {
+    "max_score": 13.962857,
+    "hits": [
+      {
+        "_score": 13.962857,
+        "_type": "release",
+        "_source": {
+          "version": 0,
+          "checksum_sha256": "a19fa7e735ea3406dfeb9c72f35fb2b64fda1e8035ce6ba0fabc15ce1c1e2f41",
+          "metadata": {
+            "author": [
+              "unknown"
+            ]
+          },
+          "author": "MICB",
+          "name": "Compiler-a3",
+          "download_url": "https://cpan.metacpan.org/authors/id/M/MI/MICB/Compiler-a3.tar.gz",
+          "date": "1996-09-02T14:04:00",
+          "stat": {
+            "size": 89134
+          },
+          "distribution": "Compiler"
+        },
+        "_id": "aBI9p6X_yq6r9e8pk7U17pbZMPM",
+        "_index": "cpan_v1_01"
+      },
+      {
+        "_score": 13.707853,
+        "_source": {
+          "checksum_sha256": "def01b544d23c76ec19cc2288a3295b39abcdbdea6dbded5b7fe6d17cd4525de",
+          "version": 0,
+          "name": "Compiler-a2",
+          "author": "MICB",
+          "metadata": {
+            "author": [
+              "unknown"
+            ]
+          },
+          "date": "1996-08-22T14:30:00",
+          "download_url": "https://cpan.metacpan.org/authors/id/M/MI/MICB/Compiler-a2.tar.gz",
+          "distribution": "Compiler",
+          "stat": {
+            "size": 85123
+          }
+        },
+        "_type": "release",
+        "_id": "fG9UelWPReQei13FQ4EAHytuZCo",
+        "_index": "cpan_v1_01"
+      },
+      {
+        "_source": {
+          "checksum_sha256": "b1f7afd4fa8825adf2c17a0cbd8706484e6d2da5294786a5e6e49c205708ee41",
+          "version": 0,
+          "name": "Compiler-a1",
+          "metadata": {
+            "author": [
+              "unknown"
+            ]
+          },
+          "author": "MICB",
+          "date": "1996-05-13T11:39:00",
+          "download_url": "https://cpan.metacpan.org/authors/id/M/MI/MICB/Compiler-a1.tar.gz",
+          "stat": {
+            "size": 61093
+          },
+          "distribution": "Compiler"
+        },
+        "_type": "release",
+        "_id": "8H7BRLllDoyILyqsjjV8sqkBpQY",
+        "_index": "cpan_v1_01",
+        "_score": 13.572314
+      }
+    ],
+    "total": 3
+  },
+  "_scroll_id": "cXVlcnlUaGVuRmV0Y2g7Mzs5OTQ2NzY3ODU6ZHZIZWxCb3BUZi1Cb3NwRDB5NmRQUTs5OTQ2NzY3ODQ6ZHZIZWxCb3BUZi1Cb3NwRDB5NmRQUTs5OTUyMzQzMTA6eXptdmszQUNUam1XbVJjRjRkRk9UdzswOw=="
+}

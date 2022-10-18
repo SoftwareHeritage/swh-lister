@@ -1,4 +1,4 @@
-# Copyright (C) 2019-2021 The Software Heritage developers
+# Copyright (C) 2019-2022 The Software Heritage developers
 # See the AUTHORS file at the top-level directory of this distribution
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
@@ -14,6 +14,8 @@ from typing import Any, List, Mapping, Sequence, Tuple
 from urllib.parse import urlparse
 
 import requests
+
+from swh.lister import TARBALL_EXTENSIONS
 
 logger = logging.getLogger(__name__)
 
@@ -186,21 +188,6 @@ def check_filename_is_archive(filename: str) -> bool:
     return False
 
 
-# to recognize existing naming pattern
-EXTENSIONS = [
-    "zip",
-    "tar",
-    "gz",
-    "tgz",
-    "bz2",
-    "bzip2",
-    "lzma",
-    "lz",
-    "xz",
-    "Z",
-    "7z",
-]
-
 VERSION_KEYWORDS = [
     "cygwin_me",
     "w32",
@@ -269,7 +256,7 @@ PATTERN = r"""
 (?P<extension>(?:\.(?:{extensions}))+)
 $
 """.format(
-    extensions="|".join(EXTENSIONS),
+    extensions="|".join(TARBALL_EXTENSIONS),
     vkeywords="|".join("%s[-]?" % k for k in VERSION_KEYWORDS),
 )
 

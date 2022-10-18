@@ -1,4 +1,4 @@
-# Copyright (C) 2018-2019  The Software Heritage developers
+# Copyright (C) 2018-2022  The Software Heritage developers
 # See the AUTHORS file at the top-level directory of this distribution
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
@@ -6,8 +6,6 @@
 import logging
 
 import pkg_resources
-
-from swh.lister import pattern
 
 logger = logging.getLogger(__name__)
 
@@ -17,9 +15,10 @@ try:
 except pkg_resources.DistributionNotFound:
     __version__ = "devel"
 
-USER_AGENT_TEMPLATE = "Software Heritage Lister (%s)"
-USER_AGENT = USER_AGENT_TEMPLATE % __version__
-
+USER_AGENT_TEMPLATE = (
+    f"Software Heritage %s lister v{__version__}"
+    " (+https://www.softwareheritage.org/contact)"
+)
 
 LISTERS = {
     entry_point.name.split(".", 1)[1]: entry_point
@@ -29,6 +28,28 @@ LISTERS = {
 
 
 SUPPORTED_LISTERS = list(LISTERS)
+
+TARBALL_EXTENSIONS = [
+    "crate",
+    "gem",
+    "jar",
+    "zip",
+    "tar",
+    "gz",
+    "tgz",
+    "tbz",
+    "bz2",
+    "bzip2",
+    "lzma",
+    "lz",
+    "txz",
+    "xz",
+    "z",
+    "Z",
+    "7z",
+    "zst",
+]
+"""Tarball recognition pattern"""
 
 
 def get_lister(lister_name, db_url=None, **conf):
@@ -53,6 +74,9 @@ def get_lister(lister_name, db_url=None, **conf):
 
     registry_entry = LISTERS[lister_name].load()()
     lister_cls = registry_entry["lister"]
+
+    from swh.lister import pattern
+
     if issubclass(lister_cls, pattern.Lister):
         return lister_cls.from_config(**conf)
     else:

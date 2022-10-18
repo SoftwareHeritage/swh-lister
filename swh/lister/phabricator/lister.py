@@ -1,15 +1,13 @@
-# Copyright (C) 2019-2021 the Software Heritage developers
+# Copyright (C) 2019-2022 the Software Heritage developers
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
+
 from collections import defaultdict
 import logging
 import random
 from typing import Any, Dict, Iterator, List, Optional
 from urllib.parse import urljoin
 
-import requests
-
-from swh.lister import USER_AGENT
 from swh.lister.pattern import CredentialsType, StatelessLister
 from swh.scheduler.interface import SchedulerInterface
 from swh.scheduler.model import ListedOrigin
@@ -47,10 +45,7 @@ class PhabricatorLister(StatelessLister[PageType]):
             scheduler, urljoin(url, self.API_REPOSITORY_PATH), instance, credentials
         )
 
-        self.session = requests.Session()
-        self.session.headers.update(
-            {"Accept": "application/json", "User-Agent": USER_AGENT}
-        )
+        self.session.headers.update({"Accept": "application/json"})
 
         if api_token is not None:
             self.api_token = api_token
@@ -91,22 +86,7 @@ class PhabricatorLister(StatelessLister[PageType]):
         after: Optional[str] = None
         while True:
             params = self.get_request_params(after)
-            logger.debug(
-                "Retrieving results on URI %s with parameters %s",
-                self.url,
-                self.filter_params(params),
-            )
-            response = self.session.post(self.url, data=params)
-
-            if response.status_code != 200:
-                logger.warning(
-                    "Unexpected HTTP status code %s on %s: %s",
-                    response.status_code,
-                    response.url,
-                    response.content,
-                )
-
-            response.raise_for_status()
+            response = self.http_request(self.url, method="POST", data=params)
 
             response_data = response.json()
 

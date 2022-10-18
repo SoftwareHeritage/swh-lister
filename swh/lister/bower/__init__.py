@@ -51,15 +51,15 @@ Testing with Docker
 
 Change directory to swh/docker then launch the docker environment::
 
-   docker-compose up -d
+   docker compose up -d
 
-Then connect to the lister::
+Then schedule a bower listing task::
 
-   docker exec -it docker_swh-lister_1 bash
+   docker compose exec swh-scheduler swh scheduler task add -p oneshot list-bower
 
-And run the lister (The output of this listing results in “oneshot” tasks in the scheduler)::
+You can follow lister execution by displaying logs of swh-lister service::
 
-   swh lister run -l bower
+   docker compose logs -f swh-lister
 
 .. _Bower: https://bower.io
 .. _registry.bower.io: https://registry.bower.io

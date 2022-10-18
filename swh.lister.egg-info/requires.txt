@@ -7,7 +7,9 @@ launchpadlib
 tenacity>=6.2
 lxml
 dulwich
-swh.core[db,github]>=2.8
+testing.postgresql
+psycopg2
+swh.core[db,github]>=2.16.1
 swh.scheduler>=0.8
 
 [testing]

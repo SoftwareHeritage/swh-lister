@@ -1,0 +1,41 @@
+{
+  "packages": {
+    "ycms/module-main": {
+      "dev-master": {
+        "name": "ycms/module-main",
+        "description": "",
+        "keywords": [],
+        "homepage": "",
+        "version": "dev-master",
+        "version_normalized": "9999999-dev",
+        "license": [],
+        "authors": [
+          {
+            "name": "YCMS Labs",
+            "email": "ycms.net@gmail.com"
+          }
+        ],
+        "source": {
+          "type": "git",
+          "url": "git@github.com:ycms/module-main.git",
+          "reference": "1173796881fbd7202009a68a2a59a5150bf2dbc6"
+        },
+        "dist": {
+          "type": "zip",
+          "url": "https://api.github.com/repos/ycms/module-main/zipball/1173796881fbd7202009a68a2a59a5150bf2dbc6",
+          "reference": "1173796881fbd7202009a68a2a59a5150bf2dbc6",
+          "shasum": ""
+        },
+        "type": "wordpress-plugin",
+        "time": "2015-08-23T04:42:33+00:00",
+        "autoload": {
+          "psr-4": {
+            "YC\\Main\\": ""
+          }
+        },
+        "default-branch": true,
+        "uid": 4064797
+      }
+    }
+  }
+}

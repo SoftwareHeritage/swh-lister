@@ -1,4 +1,4 @@
-# Copyright (C) 2020-2021  The Software Heritage developers
+# Copyright (C) 2020-2022  The Software Heritage developers
 # See the AUTHORS file at the top-level directory of this distribution
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
@@ -6,13 +6,22 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Any, Dict, Generic, Iterable, Iterator, List, Optional, TypeVar
+import logging
+from typing import Any, Dict, Generic, Iterable, Iterator, List, Optional, Set, TypeVar
 from urllib.parse import urlparse
+
+import requests
+from tenacity.before_sleep import before_sleep_log
 
 from swh.core.config import load_from_envvar
 from swh.core.utils import grouper
 from swh.scheduler import get_scheduler, model
 from swh.scheduler.interface import SchedulerInterface
+
+from . import USER_AGENT_TEMPLATE
+from .utils import http_retry
+
+logger = logging.getLogger(__name__)
 
 
 @dataclass
@@ -113,6 +122,31 @@ class Lister(Generic[StateType, PageType]):
         self.state = self.get_state_from_scheduler()
         self.updated = False
 
+        self.session = requests.Session()
+        # Declare the USER_AGENT is more sysadm-friendly for the forge we list
+        self.session.headers.update(
+            {"User-Agent": USER_AGENT_TEMPLATE % self.LISTER_NAME}
+        )
+
+        self.recorded_origins: Set[str] = set()
+
+    @http_retry(before_sleep=before_sleep_log(logger, logging.WARNING))
+    def http_request(self, url: str, method="GET", **kwargs) -> requests.Response:
+
+        logger.debug("Fetching URL %s with params %s", url, kwargs.get("params"))
+
+        response = self.session.request(method, url, **kwargs)
+        if response.status_code not in (200, 304):
+            logger.warning(
+                "Unexpected HTTP status code %s on %s: %s",
+                response.status_code,
+                response.url,
+                response.content,
+            )
+        response.raise_for_status()
+
+        return response
+
     def run(self) -> ListerStats:
         """Run the lister.
 
@@ -122,12 +156,15 @@ class Lister(Generic[StateType, PageType]):
 
         """
         full_stats = ListerStats()
+        self.recorded_origins = set()
 
         try:
             for page in self.get_pages():
                 full_stats.pages += 1
                 origins = self.get_origins_from_page(page)
-                full_stats.origins += self.send_origins(origins)
+                sent_origins = self.send_origins(origins)
+                self.recorded_origins.update(sent_origins)
+                full_stats.origins = len(self.recorded_origins)
                 self.commit_page(page)
         finally:
             self.finalize()
@@ -223,18 +260,18 @@ class Lister(Generic[StateType, PageType]):
         """
         pass
 
-    def send_origins(self, origins: Iterable[model.ListedOrigin]) -> int:
+    def send_origins(self, origins: Iterable[model.ListedOrigin]) -> List[str]:
         """Record a list of :class:`model.ListedOrigin` in the scheduler.
 
         Returns:
-          the number of listed origins recorded in the scheduler
+          the list of origin URLs recorded in scheduler database
         """
-        count = 0
+        recorded_origins = []
         for batch_origins in grouper(origins, n=1000):
             ret = self.scheduler.record_listed_origins(batch_origins)
-            count += len(ret)
+            recorded_origins += [origin.url for origin in ret]
 
-        return count
+        return recorded_origins
 
     @classmethod
     def from_config(cls, scheduler: Dict[str, Any], **config: Any):
