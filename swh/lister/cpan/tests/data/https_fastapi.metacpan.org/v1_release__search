@@ -1,0 +1,246 @@
+{
+   "timed_out": false,
+   "_shards": {
+      "total": 3,
+      "failed": 0,
+      "successful": 3
+   },
+   "hits": {
+      "hits": [
+         {
+            "_index": "cpan_v1_01",
+            "_id": "40MmOvf_SQx_mr8Kj9Eush14a3E",
+            "_source": {
+               "author": "KRYDE",
+               "name": "math-image-46",
+               "date": "2011-03-02T00:46:14",
+               "download_url": "https://cpan.metacpan.org/authors/id/K/KR/KRYDE/math-image-46.tar.gz",
+               "checksum_sha256": "6bd988e3959feb1071d3b9953d16e723af66bdb7b5440ea17add8709d95f20fa",
+               "version": "46",
+               "stat": {
+                  "size": 533502
+               },
+               "distribution": "math-image",
+               "metadata": {
+                  "author": [
+                     "Kevin Ryde <user42@zip.com.au>"
+                  ]
+               }
+            },
+            "_type": "release",
+            "_score": 1.0
+         },
+         {
+            "_index": "cpan_v1_01",
+            "_source": {
+               "author": "MITHALDU",
+               "name": "Dist-Zilla-Plugin-ProgCriticTests-1.101580-TRIAL",
+               "distribution": "Dist-Zilla-Plugin-ProgCriticTests",
+               "metadata": {
+                  "author": [
+                     "Christian Walde <mithaldu@yahoo.de>"
+                  ]
+               },
+               "stat": {
+                  "size": 16918
+               },
+               "checksum_sha256": "ef8c92d0fc55551392a6daeee20a1c13a3ee1bcd0fcacf611cbc2a6cc503f401",
+               "download_url": "https://cpan.metacpan.org/authors/id/M/MI/MITHALDU/Dist-Zilla-Plugin-ProgCriticTests-1.101580-TRIAL.tar.gz",
+               "date": "2010-06-07T14:43:36",
+               "version": "1.101580"
+            },
+            "_id": "6df77_MLO_BG8YC_vQKsay7OFYM",
+            "_type": "release",
+            "_score": 1.0
+         },
+         {
+            "_index": "cpan_v1_01",
+            "_type": "release",
+            "_source": {
+               "author": "MITHUN",
+               "name": "Net-Rapidshare-v0.04",
+               "download_url": "https://cpan.metacpan.org/authors/id/M/MI/MITHUN/Net-Rapidshare-v0.04.tar.gz",
+               "date": "2009-07-28T05:57:26",
+               "checksum_sha256": "f01456a8f8c2b6806a8dd041cf848f330884573d363b28c8b3ff12e837fa8f4f",
+               "version": "v0.04",
+               "distribution": "Net-Rapidshare",
+               "metadata": {
+                  "author": [
+                     "unknown"
+                  ]
+               },
+               "stat": {
+                  "size": 15068
+               }
+            },
+            "_id": "jCs3ZLWuoetrkMLOFKV3YTSr_fM",
+            "_score": 1.0
+         },
+         {
+            "_index": "cpan_v1_01",
+            "_source": {
+               "author": "MITHUN",
+               "name": "Net-Rapidshare-v0.05",
+               "version": "v0.05",
+               "download_url": "https://cpan.metacpan.org/authors/id/M/MI/MITHUN/Net-Rapidshare-v0.05.tgz",
+               "date": "2009-12-21T00:29:48",
+               "checksum_sha256": "e1128d3b35616530d9722d0fe3f5f0e343fd914bc8f9c0df55c1a9ad6c7402fe",
+               "metadata": {
+                  "author": [
+                     "unknown"
+                  ]
+               },
+               "distribution": "Net-Rapidshare",
+               "stat": {
+                  "size": 15971
+               }
+            },
+            "_id": "pExMIwabhz_0S1rX7xAY_lq0GTY",
+            "_type": "release",
+            "_score": 1.0
+         },
+         {
+            "_type": "release",
+            "_source": {
+               "author": "MITHUN",
+               "name": "Net-Rapidshare-v0.0.1",
+               "version": "v0.0.1",
+               "download_url": "https://cpan.metacpan.org/authors/id/M/MI/MITHUN/Net-Rapidshare-v0.0.1.tar.gz",
+               "checksum_sha256": "990de0a72753fa182e7a5867e55fd6755375b71280bb7e5b3a5f07c4de8af905",
+               "date": "2009-07-18T22:56:38",
+               "stat": {
+                  "size": 15161
+               },
+               "metadata": {
+                  "author": [
+                     "unknown"
+                  ]
+               },
+               "distribution": "Net-Rapidshare"
+            },
+            "_id": "eqkhDnj0efXHisWRrMZZ1EHFgug",
+            "_index": "cpan_v1_01",
+            "_score": 1.0
+         },
+         {
+            "_score": 1.0,
+            "_index": "cpan_v1_01",
+            "_type": "release",
+            "_source": {
+               "author": "KIMOTO",
+               "name": "DBIx-Custom-Basic-0.0101",
+               "stat": {
+                  "size": 3409
+               },
+               "distribution": "DBIx-Custom-Basic",
+               "metadata": {
+                  "author": [
+                     "Yuki Kimoto <kimoto.yuki@gmail.com>"
+                  ]
+               },
+               "download_url": "https://cpan.metacpan.org/authors/id/K/KI/KIMOTO/DBIx-Custom-Basic-0.0101.tar.gz",
+               "date": "2009-11-08T04:18:30",
+               "checksum_sha256": "86f68b2d0789934aa6b0202345e9807c5b650f8030b55d0d669ef25293fa3f1f",
+               "version": "0.0101"
+            },
+            "_id": "oKf3t0pXHXa6mZ_4sUZSaSMKuXg"
+         },
+         {
+            "_score": 1.0,
+            "_index": "cpan_v1_01",
+            "_source": {
+               "author": "KIMOTO",
+               "name": "DBIx-Custom-SQLite-0.0101",
+               "version": "0.0101",
+               "download_url": "https://cpan.metacpan.org/authors/id/K/KI/KIMOTO/DBIx-Custom-SQLite-0.0101.tar.gz",
+               "date": "2009-11-08T04:20:31",
+               "checksum_sha256": "0af123551dff95f9654f4fbc24e945c5d6481b92e67b8e03ca91ef4c83088cc7",
+               "metadata": {
+                  "author": [
+                     "Yuki Kimoto <kimoto.yuki@gmail.com>"
+                  ]
+               },
+               "distribution": "DBIx-Custom-SQLite",
+               "stat": {
+                  "size": 3927
+               }
+            },
+            "_type": "release",
+            "_id": "zpVA3zMoUhx0mj8Cn4YC9CuFyA8"
+         },
+         {
+            "_index": "cpan_v1_01",
+            "_source": {
+               "author": "KIMOTO",
+               "name": "Validator-Custom-Ext-Mojolicious-0.0103",
+               "checksum_sha256": "0911fe6ae65f9173c6eb68b6116600552b088939b94881be3c7275344b1cbdce",
+               "download_url": "https://cpan.metacpan.org/authors/id/K/KI/KIMOTO/Validator-Custom-Ext-Mojolicious-0.0103.tar.gz",
+               "date": "2010-01-16T14:51:11",
+               "version": "0.0103",
+               "stat": {
+                  "size": 4190
+               },
+               "distribution": "Validator-Custom-Ext-Mojolicious",
+               "metadata": {
+                  "author": [
+                     "Yuki Kimoto <kimoto.yuki@gmail.com>"
+                  ]
+               }
+            },
+            "_id": "mY_jP2O7NnTtr3utv_xZQNu10Ic",
+            "_type": "release",
+            "_score": 1.0
+         },
+         {
+            "_source": {
+               "author": "KIMOTO",
+               "name": "Validator-Custom-Ext-Mojolicious-0.0102",
+               "stat": {
+                  "size": 4257
+               },
+               "distribution": "Validator-Custom-Ext-Mojolicious",
+               "metadata": {
+                  "author": [
+                     "Yuki Kimoto <kimoto.yuki@gmail.com>"
+                  ]
+               },
+               "date": "2010-01-15T14:07:24",
+               "download_url": "https://cpan.metacpan.org/authors/id/K/KI/KIMOTO/Validator-Custom-Ext-Mojolicious-0.0102.tar.gz",
+               "checksum_sha256": "a88d01504353223f7a3cb0d6a240debb9c6d6155858f1048a19007c3b366beed",
+               "version": "0.0102"
+            },
+            "_id": "WZm6hQ6mBfOqgVE6dPQOE0L8hg0",
+            "_type": "release",
+            "_index": "cpan_v1_01",
+            "_score": 1.0
+         },
+         {
+            "_index": "cpan_v1_01",
+            "_type": "release",
+            "_source": {
+               "author": "KIMOTO",
+               "name": "Validator-Custom-0.1207",
+               "download_url": "https://cpan.metacpan.org/authors/id/K/KI/KIMOTO/Validator-Custom-0.1207.tar.gz",
+               "date": "2010-07-28T13:42:23",
+               "checksum_sha256": "f599da2ecc17ac74443628eb84233ee6b25b204511f83ea778dad9efd0f558e0",
+               "version": "0.1207",
+               "stat": {
+                  "size": 16985
+               },
+               "distribution": "Validator-Custom",
+               "metadata": {
+                  "author": [
+                     "Yuki Kimoto <kimoto.yuki@gmail.com>"
+                  ]
+               }
+            },
+            "_id": "NWJOqmjEinjfJqawfpkEpEhu4d0",
+            "_score": 1.0
+         }
+      ],
+      "total": 359941,
+      "max_score": 1.0
+   },
+   "took": 14,
+   "_scroll_id": "cXVlcnlUaGVuRmV0Y2g7Mzs5OTQ2NzY3ODU6ZHZIZWxCb3BUZi1Cb3NwRDB5NmRQUTs5OTQ2NzY3ODQ6ZHZIZWxCb3BUZi1Cb3NwRDB5NmRQUTs5OTUyMzQzMTA6eXptdmszQUNUam1XbVJjRjRkRk9UdzswOw=="
+}

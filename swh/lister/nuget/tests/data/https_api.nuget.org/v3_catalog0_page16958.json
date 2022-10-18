@@ -1,0 +1,44 @@
+{
+    "@id": "https://api.nuget.org/v3/catalog0/page16958.json",
+    "@type": "CatalogPage",
+    "commitId": "8b51bc91-722d-48fb-a4e4-e6167c9a459b",
+    "commitTimeStamp": "2022-09-23T09:10:26.5844749Z",
+    "count": 546,
+    "parent": "https://api.nuget.org/v3/catalog0/index.json",
+    "items": [
+        {
+            "@id": "https://api.nuget.org/v3/catalog0/data/2022.09.23.09.10.26/intersoft.crosslight.logging.entityframework.5.0.5000.1235-experimental.json",
+            "@type": "nuget:PackageDetails",
+            "commitId": "8b51bc91-722d-48fb-a4e4-e6167c9a459b",
+            "commitTimeStamp": "2022-09-23T09:10:26.5844749Z",
+            "nuget:id": "Intersoft.Crosslight.Logging.EntityFramework",
+            "nuget:version": "5.0.5000.1235-experimental"
+        },
+        {
+            "@id": "https://api.nuget.org/v3/catalog0/data/2022.09.23.08.07.54/sil.core.tests.10.0.1-beta0005.json",
+            "@type": "nuget:PackageDetails",
+            "commitId": "f97b1cb0-9a7f-4bfd-a9ee-d61a3cd59c6d",
+            "commitTimeStamp": "2022-09-23T08:07:54.051884Z",
+            "nuget:id": "SIL.Core.Tests",
+            "nuget:version": "10.0.1-beta0005"
+        },
+        {
+            "@id": "https://api.nuget.org/v3/catalog0/data/2022.09.23.08.07.54/sil.core.desktop.10.0.1-beta0012.json",
+            "@type": "nuget:PackageDetails",
+            "commitId": "f97b1cb0-9a7f-4bfd-a9ee-d61a3cd59c6d",
+            "commitTimeStamp": "2022-09-23T08:07:54.051884Z",
+            "nuget:id": "SIL.Core.Desktop",
+            "nuget:version": "10.0.1-beta0012"
+        }
+    ],
+    "@context": {
+        "@vocab": "http://schema.nuget.org/catalog#",
+        "nuget": "http://schema.nuget.org/schema#",
+        "items": {"@id": "item", "@container": "@set"},
+        "parent": {"@type": "@id"},
+        "commitTimeStamp": {"@type": "http://www.w3.org/2001/XMLSchema#dateTime"},
+        "nuget:lastCreated": {"@type": "http://www.w3.org/2001/XMLSchema#dateTime"},
+        "nuget:lastEdited": {"@type": "http://www.w3.org/2001/XMLSchema#dateTime"},
+        "nuget:lastDeleted": {"@type": "http://www.w3.org/2001/XMLSchema#dateTime"}
+    }
+}

@@ -1,4 +1,4 @@
-# Copyright (C) 2018-2021 The Software Heritage developers
+# Copyright (C) 2018-2022 The Software Heritage developers
 # See the AUTHORS file at the top-level directory of this distribution
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
@@ -10,14 +10,12 @@ from typing import Any, Dict, Iterator, Optional, Tuple
 from urllib.parse import parse_qs, urlencode, urlparse
 
 import iso8601
-import requests
 from requests.exceptions import HTTPError
 from requests.status_codes import codes
 from tenacity.before_sleep import before_sleep_log
 
-from swh.lister import USER_AGENT
 from swh.lister.pattern import CredentialsType, Lister
-from swh.lister.utils import is_retryable_exception, throttling_retry
+from swh.lister.utils import http_retry, is_retryable_exception
 from swh.scheduler.model import ListedOrigin
 
 logger = logging.getLogger(__name__)
@@ -118,10 +116,7 @@ class GitLabLister(Lister[GitLabListerState, PageResult]):
         self.last_page: Optional[str] = None
         self.per_page = 100
 
-        self.session = requests.Session()
-        self.session.headers.update(
-            {"Accept": "application/json", "User-Agent": USER_AGENT}
-        )
+        self.session.headers.update({"Accept": "application/json"})
 
         if len(self.credentials) > 0:
             cred = random.choice(self.credentials)
@@ -138,7 +133,7 @@ class GitLabLister(Lister[GitLabListerState, PageResult]):
     def state_to_dict(self, state: GitLabListerState) -> Dict[str, Any]:
         return asdict(state)
 
-    @throttling_retry(
+    @http_retry(
         retry=_if_rate_limited, before_sleep=before_sleep_log(logger, logging.WARNING)
     )
     def get_page_result(self, url: str) -> PageResult:

@@ -1,0 +1,190 @@
+{
+  "pagination": {
+    "limit": 100,
+    "offset": 100,
+    "first": "/v3/modules?limit=100&offset=0",
+    "previous": "/v3/modules?limit=100&offset=0",
+    "current": "/v3/modules?limit=100&offset=100",
+    "next": null,
+    "total": 7301
+  },
+  "results": [
+    {
+      "uri": "/v3/modules/electrical-file_concat",
+      "slug": "electrical-file_concat",
+      "name": "file_concat",
+      "downloads": 2293802,
+      "created_at": "2015-04-09 12:03:13 -0700",
+      "updated_at": "2016-12-28 20:00:02 -0800",
+      "deprecated_at": null,
+      "deprecated_for": null,
+      "superseded_by": null,
+      "supported": false,
+      "endorsement": null,
+      "module_group": "base",
+      "owner": {
+        "uri": "/v3/users/electrical",
+        "slug": "electrical",
+        "username": "electrical",
+        "gravatar_id": "46dbd1ee4484b8e993466bd2209858cf"
+      },
+      "premium": false,
+      "current_release": {
+        "uri": "/v3/releases/electrical-file_concat-1.0.1",
+        "slug": "electrical-file_concat-1.0.1",
+        "module": {
+          "uri": "/v3/modules/electrical-file_concat",
+          "slug": "electrical-file_concat",
+          "name": "file_concat",
+          "deprecated_at": null,
+          "owner": {
+            "uri": "/v3/users/electrical",
+            "slug": "electrical",
+            "username": "electrical",
+            "gravatar_id": "46dbd1ee4484b8e993466bd2209858cf"
+          }
+        },
+        "version": "1.0.1",
+        "metadata": {
+          "name": "electrical-file_concat",
+          "version": "1.0.1",
+          "author": "electrical",
+          "summary": "Library for concatenating different files into 1",
+          "license": "Apache License, Version 2.0",
+          "source": "https://github.com/electrical/puppet-lib-file_concat",
+          "project_page": "https://github.com/electrical/puppet-lib-file_concat",
+          "issues_url": "https://github.com/electrical/puppet-lib-file_concat/issues",
+          "operatingsystem_support": [
+            {
+              "operatingsystem": "RedHat",
+              "operatingsystemrelease": [
+                "5",
+                "6",
+                "7"
+              ]
+            },
+            {
+              "operatingsystem": "CentOS",
+              "operatingsystemrelease": [
+                "5",
+                "6",
+                "7"
+              ]
+            },
+            {
+              "operatingsystem": "OracleLinux",
+              "operatingsystemrelease": [
+                "5",
+                "6",
+                "7"
+              ]
+            },
+            {
+              "operatingsystem": "Scientific",
+              "operatingsystemrelease": [
+                "5",
+                "6",
+                "7"
+              ]
+            },
+            {
+              "operatingsystem": "SLES",
+              "operatingsystemrelease": [
+                "10 SP4",
+                "11 SP1",
+                "12"
+              ]
+            },
+            {
+              "operatingsystem": "Debian",
+              "operatingsystemrelease": [
+                "6",
+                "7"
+              ]
+            },
+            {
+              "operatingsystem": "Ubuntu",
+              "operatingsystemrelease": [
+                "10.04",
+                "12.04",
+                "14.04"
+              ]
+            },
+            {
+              "operatingsystem": "Solaris",
+              "operatingsystemrelease": [
+                "10",
+                "11"
+              ]
+            }
+          ],
+          "requirements": [
+            {
+              "name": "pe",
+              "version_requirement": "3.x"
+            },
+            {
+              "name": "puppet",
+              "version_requirement": "3.x"
+            }
+          ],
+          "description": "Library for concatenating different files into 1",
+          "dependencies": [
+
+          ]
+        },
+        "tags": [
+
+        ],
+        "supported": false,
+        "pdk": false,
+        "validation_score": 62,
+        "file_uri": "/v3/files/electrical-file_concat-1.0.1.tar.gz",
+        "file_size": 13335,
+        "file_md5": "74901a89544134478c2dfde5efbb7f14",
+        "file_sha256": "15e973613ea038d8a4f60bafe2d678f88f53f3624c02df3157c0043f4a400de6",
+        "downloads": 2291838,
+        "readme": "# puppet-lib-file_concat\n\n#### Table of Contents\n\n1. [Overview](#overview)\n2. [Usage - Configuration options and additional functionality](#usage)\n3. [Limitations - OS compatibility, etc.](#limitations)\n4. [Development - Guide for contributing to the module](#development)\n\n## Overview\n\nLibrary for concatenating multiple files into 1.\n\n## Usage\n\n### Creating a file fragment\n\nCreates a file fragment to be collected by file_concat based on the tag.\n\nExample with exported resource:\n\n    @@file_fragment { \"uniqe_name_${::fqdn}\":\n      tag     => 'unique_tag',            # Mandatory.\n      order   => 10,                      # Optional. Defaults to 10.\n      content => 'some content'           # OR\n      content => template('template.erb') # OR\n      source  => 'puppet:///path/to/file'\n    }\n\n### Concatenating file fragments into one file\n\nGets all the file fragments and puts these into the target file.\nThis will mostly be used with exported resources.\n\nexample:\n    \n    File_fragment <<| tag == 'unique_tag' |>>\n\n    file_concat { '/tmp/file':\n      tag     => 'unique_tag', # Mandatory\n      path    => '/tmp/file',  # Optional. If given it overrides the resource name.\n      owner   => 'root',       # Optional. Defaults to undef.\n      group   => 'root',       # Optional. Defaults to undef.\n      mode    => '0644'        # Optional. Defaults to undef.\n      order   => 'numeric'     # Optional. Set to 'numeric' or 'alpha'. Defaults to numeric.\n      replace => true          # Optional. Boolean Value. Defaults to true.\n      backup  => false         # Optional. true, false, 'puppet', or a string. Defaults to 'puppet' for Filebucketing.\n    }\n\n## Limitations\n\n## Development\n\n",
+        "changelog": "##1.0.1 ( Apr 17, 2015 )\n\n###Summary\nBugfix release\n\n####Features\n\n####Bugfixes\n* Fix windows support by not defaulting owner,group and mode values\n\n####Changes\n\n####Testing changes\n\n####Known bugs\n\n\n##1.0.0 ( Apr 09, 2015 )\n\n###Summary\nMajor release.\nThe module has been moved from the ispavailability account on Forge to elecrical.\n\n####Features\n* Major refactoring to enhance functionality\n* Re-use existing file resource to avoid code duplication\n* Make the module more compatiable with puppetlabs-concat\n* Support array of sources\n\n####Bugfixes\n\n####Changes\n\n####Testing changes\n* Add centos 7 acceptance testing\n* Add tests for user/group/mode options\n\n####Known bugs\n\n##0.3.0 ( Mar 26, 2015 )\n\n###Summary\nThis release adds windows support to the library.\n\n####Features\n* Added windows support to the library.\n\n####Bugfixes\n\n####Changes\n\n####Testing changes\n\n####Known bugs\n\n##0.2.1 ( Mar 25, 2015 )\n\n###Summary\nBugfix release\n\n####Features\n\n####Bugfixes\n* Fix a bug caused by some refactoring\n\n####Changes\n\n####Testing changes\n\n####Known bugs\n* Windows is not supported yet\n\n##0.2.0 ( Mar 25, 2015 )\n\n###Summary\nWith this release Ive done several code cleanups and added some basic tests.\nAlso support for puppet-server has been fixed\n\n####Features\n\n####Bugfixes\n* Remove unnecessary require which fixed support for puppet-server\n\n####Changes\n* Added some basic files\n* Implemented rubocop for style checking\n\n####Testing changes\n* Implemented basic acceptance tests\n\n####Known bugs\n* Windows is not supported yet\n\n##0.1.0 ( Jan 21, 2014 )\n  Rewrite of the fragment ordering part.\n    Fragments are now first ordered based on the order number and then on the resource name.\n  Convert `order` parameter to string to support integer values when using Hiera/YAML ( PR#3 by Michael G. Noll )\n\n##0.0.2 ( Mar 03, 2013 )\n  Adding source variable option to file_fragment type\n\n##0.0.1 ( Jan 13, 2013 )\n  Initial release of the module\n",
+        "license": "Copyright (c) 2013-2015 Richard Pijnenbug <richard@ispavailability.com>\nCopyright (c) 2012 Simon Effenberg <savar@schuldeigen.de>\nCopyright (c) 2012 Uwe Stuehler <uwe@bsdx.de>\n\nLicensed under the Apache License, Version 2.0 (the \"License\");\nyou may not use this file except in compliance with the License.\nYou may obtain a copy of the License at\n\n http://www.apache.org/licenses/LICENSE-2.0\n\nUnless required by applicable law or agreed to in writing, software\ndistributed under the License is distributed on an \"AS IS\" BASIS,\nWITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\nSee the License for the specific language governing permissions and\nlimitations under the License.\n",
+        "reference": null,
+        "malware_scan": null,
+        "tasks": [
+
+        ],
+        "plans": [
+
+        ],
+        "created_at": "2015-04-17 01:03:46 -0700",
+        "updated_at": "2019-07-03 15:45:50 -0700",
+        "deleted_at": null,
+        "deleted_for": null
+      },
+      "releases": [
+        {
+          "uri": "/v3/releases/electrical-file_concat-1.0.1",
+          "slug": "electrical-file_concat-1.0.1",
+          "version": "1.0.1",
+          "supported": false,
+          "created_at": "2015-04-17 01:03:46 -0700",
+          "deleted_at": null,
+          "file_uri": "/v3/files/electrical-file_concat-1.0.1.tar.gz",
+          "file_size": 13335
+        },
+        {
+          "uri": "/v3/releases/electrical-file_concat-1.0.0",
+          "slug": "electrical-file_concat-1.0.0",
+          "version": "1.0.0",
+          "supported": false,
+          "created_at": "2015-04-09 12:03:13 -0700",
+          "deleted_at": null,
+          "file_uri": "/v3/files/electrical-file_concat-1.0.0.tar.gz",
+          "file_size": 13289
+        }
+      ],
+      "feedback_score": null,
+      "homepage_url": "https://github.com/electrical/puppet-lib-file_concat",
+      "issues_url": "https://github.com/electrical/puppet-lib-file_concat/issues"
+    }
+  ]
+}

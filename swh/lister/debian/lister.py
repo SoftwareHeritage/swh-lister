@@ -1,8 +1,7 @@
-# Copyright (C) 2017-2021 The Software Heritage developers
+# Copyright (C) 2017-2022 The Software Heritage developers
 # See the AUTHORS file at the top-level directory of this distribution
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
-
 
 import bz2
 from collections import defaultdict
@@ -17,12 +16,11 @@ from typing import Any, Callable, Dict, Iterator, List, Optional, Set, Tuple
 from urllib.parse import urljoin
 
 from debian.deb822 import Sources
-import requests
+from requests.exceptions import HTTPError
 
 from swh.scheduler.interface import SchedulerInterface
 from swh.scheduler.model import ListedOrigin
 
-from .. import USER_AGENT
 from ..pattern import CredentialsType, Lister
 
 logger = logging.getLogger(__name__)
@@ -95,17 +93,9 @@ class DebianLister(Lister[DebianListerState, DebianPageType]):
         self.suites = suites
         self.components = components
 
-        self.session = requests.Session()
-        self.session.headers.update({"User-Agent": USER_AGENT})
-
         # will hold all listed origins info
         self.listed_origins: Dict[DebianOrigin, ListedOrigin] = {}
-        # will contain origin urls that have already been listed
-        # in a previous page
-        self.sent_origins: Set[DebianOrigin] = set()
-        # will contain already listed package info that need to be sent
-        # to the scheduler for update in the commit_page method
-        self.origins_to_update: Dict[DebianOrigin, ListedOrigin] = {}
+
         # will contain the lister state after a call to run
         self.package_versions: Dict[PkgName, Set[PkgVersion]] = {}
 
@@ -132,9 +122,11 @@ class DebianLister(Lister[DebianListerState, DebianPageType]):
     def page_request(self, suite: Suite, component: Component) -> DebianPageType:
         """Return parsed package Sources file for a given debian suite and component."""
         for url, compression in self.debian_index_urls(suite, component):
-            response = requests.get(url, stream=True)
-            logging.debug("Fetched URL: %s, status code: %s", url, response.status_code)
-            if response.status_code == 200:
+            try:
+                response = self.http_request(url, stream=True)
+            except HTTPError:
+                pass
+            else:
                 last_modified = response.headers.get("Last-Modified")
                 self.last_sources_update = (
                     parsedate_to_datetime(last_modified) if last_modified else None
@@ -188,7 +180,6 @@ class DebianLister(Lister[DebianListerState, DebianPageType]):
         assert self.lister_obj.id is not None
 
         origins_to_send = {}
-        self.origins_to_update = {}
 
         # iterate on each package source info
         for src_pkg in page:
@@ -231,17 +222,11 @@ class DebianLister(Lister[DebianListerState, DebianPageType]):
                     extra_loader_arguments={"packages": {}},
                     last_update=self.last_sources_update,
                 )
-                # origin will be yielded at the end of that method
-                origins_to_send[origin_url] = self.listed_origins[origin_url]
                 # init set that will contain all listed package versions
                 self.package_versions[package_name] = set()
 
-            # package has already been listed in a previous page or current page
-            elif origin_url not in origins_to_send:
-                # if package has been listed in a previous page, its new versions
-                # will be added to its ListedOrigin object but the update will
-                # be sent to the scheduler in the commit_page method
-                self.origins_to_update[origin_url] = self.listed_origins[origin_url]
+            # origin will be yielded at the end of that method
+            origins_to_send[origin_url] = self.listed_origins[origin_url]
 
             # update package versions data in parameter that will be provided
             # to the debian loader
@@ -276,20 +261,8 @@ class DebianLister(Lister[DebianListerState, DebianPageType]):
                 # no new versions so far, no need to send the origin to the scheduler
                 if not new_versions:
                     origins_to_send.pop(origin_url, None)
-                    self.origins_to_update.pop(origin_url, None)
-                # new versions found, ensure the origin will be sent to the scheduler
-                elif origin_url not in self.sent_origins:
-                    self.origins_to_update.pop(origin_url, None)
-                    origins_to_send[origin_url] = self.listed_origins[origin_url]
 
-        # update already counted origins with changes since last page
-        self.sent_origins.update(origins_to_send.keys())
-
-        logger.debug(
-            "Found %s new packages, %s packages with new versions.",
-            len(origins_to_send),
-            len(self.origins_to_update),
-        )
+        logger.debug("Found %s new packages.", len(origins_to_send))
         logger.debug(
             "Current total number of listed packages is equal to %s.",
             len(self.listed_origins),
@@ -297,15 +270,7 @@ class DebianLister(Lister[DebianListerState, DebianPageType]):
 
         yield from origins_to_send.values()
 
-    def get_origins_to_update(self) -> Iterator[ListedOrigin]:
-        yield from self.origins_to_update.values()
-
-    def commit_page(self, page: DebianPageType):
-        """Send to scheduler already listed origins where new versions have been found
-        in current page."""
-        self.send_origins(self.get_origins_to_update())
-
     def finalize(self):
         # set mapping between listed package names and versions as lister state
         self.state.package_versions = self.package_versions
-        self.updated = len(self.sent_origins) > 0
+        self.updated = len(self.listed_origins) > 0

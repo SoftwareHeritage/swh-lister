@@ -3,7 +3,8 @@
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
 
-from swh.lister.pubdev.lister import USER_AGENT, PubDevLister
+from swh.lister import USER_AGENT_TEMPLATE
+from swh.lister.pubdev.lister import PubDevLister
 
 expected_origins = {
     "https://pub.dev/packages/Autolinker",
@@ -29,7 +30,10 @@ def test_pubdev_lister(datadir, requests_mock_datadir, swh_scheduler):
 
 
 def _match_request(request):
-    return request.headers.get("User-Agent") == USER_AGENT
+    return (
+        request.headers.get("User-Agent")
+        == USER_AGENT_TEMPLATE % PubDevLister.LISTER_NAME
+    )
 
 
 def test_pubdev_lister_skip_package(

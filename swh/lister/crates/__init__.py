@@ -2,7 +2,6 @@
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
 
-
 """
 Crates lister
 =============
@@ -20,20 +19,24 @@ versions.
 Origins retrieving strategy
 ---------------------------
 
-A json http api to list packages from crates.io but we choose a `different strategy`_
-in order to reduce to its bare minimum the amount of http call and bandwidth.
-We clone a git repository which contains a tree of directories whose last child folder
-name corresponds to the package name and contains a Cargo.toml file with some json data
-to describe all existing versions of the package.
-It takes a few seconds to clone the repository and browse it to build a full index of
-existing package and related versions.
-The lister is incremental, so the first time it clones and browses the repository as
-previously described then stores the last seen commit id.
-Next time, it retrieves the list of new and changed files since last commit id and
-returns new or changed package with all of their related versions.
+A json http api to list packages from crates.io exists but we choose a
+`different strategy`_ in order to reduce to its bare minimum the amount
+of http call and bandwidth.
 
-Note that all Git related operations are done with `Dulwich`_, a Python
-implementation of the Git file formats and protocols.
+We download a `db-dump.tar.gz`_ archives which contains csv files as an export of
+the crates.io database. Crates.csv list package names, versions.csv list versions
+related to package names.
+It takes a few seconds to download the archive and parse csv files to build a
+full index of existing package and related versions.
+
+The archive also contains a metadata.json file with a timestamp corresponding to
+the date the database dump started. The database dump is automatically generated
+every 24 hours, around 02:00:00 UTC.
+
+The lister is incremental, so the first time it downloads the db-dump.tar.gz archive as
+previously described and store the last seen database dump timestamp.
+Next time, it downloads the db-dump.tar.gz but retrieves only the list of new and
+changed packages since last seen timestamp with all of their related versions.
 
 Page listing
 ------------
@@ -48,56 +51,45 @@ The data schema for each line is:
 * **crate_file**: Package download url
 * **checksum**: Package download checksum
 * **yanked**: Whether the package is yanked or not
-* **last_update**: Iso8601 last update date computed upon git commit date of the
-    related Cargo.toml file
+* **last_update**: Iso8601 last update
 
 Origins from page
 -----------------
 
 The lister yields one origin per page.
 The origin url corresponds to the http api url for a package, for example
-"https://crates.io/api/v1/crates/{package}".
+"https://crates.io/crates/{crate}".
 
-Additionally we add some data set to "extra_loader_arguments":
+Additionally we add some data for each version, set to "extra_loader_arguments":
 
 * **artifacts**: Represent data about the Crates to download, following
     :ref:`original-artifacts-json specification <extrinsic-metadata-original-artifacts-json>`
 * **crates_metadata**: To store all other interesting attributes that do not belongs
-    to artifacts. For now it mainly indicate when a version is `yanked`_.
+    to artifacts. For now it mainly indicate when a version is `yanked`_, and the version
+    last_update timestamp.
 
 Origin data example::
 
     {
-        "url": "https://crates.io/api/v1/crates/rand",
+        "url": "https://crates.io/api/v1/crates/regex-syntax",
         "artifacts": [
             {
+                "version": "0.1.0",
                 "checksums": {
-                    "sha256": "48a45b46c2a8c38348adb1205b13c3c5eb0174e0c0fec52cc88e9fb1de14c54d",  # noqa: B950
+                    "sha256": "398952a2f6cd1d22bc1774fd663808e32cf36add0280dee5cdd84a8fff2db944",  # noqa: B950
                 },
-                "filename": "rand-0.1.1.crate",
-                "url": "https://static.crates.io/crates/rand/rand-0.1.1.crate",
-                "version": "0.1.1",
-            },
-            {
-                "checksums": {
-                    "sha256": "6e229ed392842fa93c1d76018d197b7e1b74250532bafb37b0e1d121a92d4cf7",  # noqa: B950
-                },
-                "filename": "rand-0.1.2.crate",
-                "url": "https://static.crates.io/crates/rand/rand-0.1.2.crate",
-                "version": "0.1.2",
+                "filename": "regex-syntax-0.1.0.crate",
+                "url": "https://static.crates.io/crates/regex-syntax/regex-syntax-0.1.0.crate",  # noqa: B950
             },
         ],
         "crates_metadata": [
             {
-                "version": "0.1.1",
-                "yanked": False,
-            },
-            {
-                "version": "0.1.2",
+                "version": "0.1.0",
+                "last_update": "2017-11-30 03:37:17.449539",
                 "yanked": False,
             },
         ],
-    }
+    },
 
 Running tests
 -------------
@@ -111,15 +103,15 @@ Testing with Docker
 
 Change directory to swh/docker then launch the docker environment:
 
-   docker-compose up -d
+   docker compose up -d
 
-Then connect to the lister:
+Then schedule a crates listing task::
 
-   docker exec -it docker_swh-lister_1 bash
+   docker compose exec swh-scheduler swh scheduler task add -p oneshot list-crates
 
-And run the lister (The output of this listing results in “oneshot” tasks in the scheduler):
+You can follow lister execution by displaying logs of swh-lister service::
 
-   swh lister run -l crates
+   docker compose logs -f swh-lister
 
 .. _Crates.io: https://crates.io
 .. _packages: https://doc.rust-lang.org/book/ch07-01-packages-and-crates.html
@@ -128,8 +120,8 @@ And run the lister (The output of this listing results in “oneshot” tasks in
 .. _Cargo: https://doc.rust-lang.org/cargo/guide/why-cargo-exists.html#enter-cargo
 .. _Cargo.toml: https://doc.rust-lang.org/cargo/reference/manifest.html
 .. _different strategy: https://crates.io/data-access
-.. _Dulwich: https://www.dulwich.io/
 .. _yanked: https://doc.rust-lang.org/cargo/reference/publishing.html#cargo-yank
+.. _db-dump.tar.gz: https://static.crates.io/db-dump.tar.gz
 """
 
 

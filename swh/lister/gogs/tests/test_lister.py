@@ -177,7 +177,7 @@ def test_gogs_auth_instance(
     assert stats.origins == 6
 
 
-@pytest.mark.parametrize("http_code", [400, 500, 502])
+@pytest.mark.parametrize("http_code", [400, 500])
 def test_gogs_list_http_error(
     swh_scheduler, requests_mock, http_code, trygogs_p1, trygogs_p3_last
 ):
@@ -264,7 +264,7 @@ def test_gogs_incremental_lister(
     p3_text, p3_headers, p3_result, p3_origin_urls = trygogs_p3_last
     requests_mock.get(P3, text=p3_text, headers=p3_headers)
 
-    lister.session.get = mocker.spy(lister.session, "get")
+    lister.session.request = mocker.spy(lister.session, "request")
 
     attempt2_stats = lister.run()
 
@@ -277,8 +277,8 @@ def test_gogs_incremental_lister(
     query_params = lister.query_params
     query_params["page"] = page_id
 
-    lister.session.get.assert_called_once_with(
-        TRY_GOGS_URL + lister.REPO_LIST_PATH, params=query_params
+    lister.session.request.assert_called_once_with(
+        "GET", TRY_GOGS_URL + lister.REPO_LIST_PATH, params=query_params
     )
 
     # All the 9 origins (3 pages) should be passed on to the scheduler:

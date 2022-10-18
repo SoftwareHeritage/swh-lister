@@ -98,11 +98,12 @@ def _generate_responses(datadir, requests_mock):
 
 
 def test_golang_lister(swh_scheduler, mocker, requests_mock, datadir):
-    # first listing, should return one origin per package
-    lister = GolangLister(scheduler=swh_scheduler)
 
     # Exponential retries take a long time, so stub time.sleep
-    mocked_sleep = mocker.patch.object(lister.api_request.retry, "sleep")
+    mocked_sleep = mocker.patch.object(GolangLister.http_request.retry, "sleep")
+
+    # first listing, should return one origin per package
+    lister = GolangLister(scheduler=swh_scheduler)
 
     _generate_responses(datadir, requests_mock)
 
@@ -131,7 +132,7 @@ def test_golang_lister(swh_scheduler, mocker, requests_mock, datadir):
 
     # doing it all again (without incremental) should give us the same result
     lister = GolangLister(scheduler=swh_scheduler)
-    mocked_sleep = mocker.patch.object(lister.api_request.retry, "sleep")
+
     _generate_responses(datadir, requests_mock)
     stats = lister.run()
 

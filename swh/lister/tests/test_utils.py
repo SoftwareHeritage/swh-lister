@@ -1,4 +1,4 @@
-# Copyright (C) 2018-2021 the Software Heritage developers
+# Copyright (C) 2018-2022 the Software Heritage developers
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
 
@@ -7,12 +7,7 @@ import requests
 from requests.status_codes import codes
 from tenacity.wait import wait_fixed
 
-from swh.lister.utils import (
-    MAX_NUMBER_ATTEMPTS,
-    WAIT_EXP_BASE,
-    split_range,
-    throttling_retry,
-)
+from swh.lister.utils import MAX_NUMBER_ATTEMPTS, WAIT_EXP_BASE, http_retry, split_range
 
 
 @pytest.mark.parametrize(
@@ -51,7 +46,7 @@ def test_split_range_errors(total_pages, nb_pages):
 TEST_URL = "https://example.og/api/repositories"
 
 
-@throttling_retry()
+@http_retry()
 def make_request():
     response = requests.get(TEST_URL)
     response.raise_for_status()
@@ -62,13 +57,22 @@ def assert_sleep_calls(mocker, mock_sleep, sleep_params):
     mock_sleep.assert_has_calls([mocker.call(param) for param in sleep_params])
 
 
-def test_throttling_retry(requests_mock, mocker):
+@pytest.mark.parametrize(
+    "status_code",
+    [
+        codes.too_many_requests,
+        codes.internal_server_error,
+        codes.bad_gateway,
+        codes.service_unavailable,
+    ],
+)
+def test_http_retry(requests_mock, mocker, status_code):
     data = {"result": {}}
     requests_mock.get(
         TEST_URL,
         [
-            {"status_code": codes.too_many_requests},
-            {"status_code": codes.too_many_requests},
+            {"status_code": status_code},
+            {"status_code": status_code},
             {"status_code": codes.ok, "json": data},
         ],
     )
@@ -82,7 +86,7 @@ def test_throttling_retry(requests_mock, mocker):
     assert response.json() == data
 
 
-def test_throttling_retry_max_attemps(requests_mock, mocker):
+def test_http_retry_max_attemps(requests_mock, mocker):
     requests_mock.get(
         TEST_URL,
         [{"status_code": codes.too_many_requests}] * (MAX_NUMBER_ATTEMPTS),
@@ -102,14 +106,14 @@ def test_throttling_retry_max_attemps(requests_mock, mocker):
     )
 
 
-@throttling_retry(wait=wait_fixed(WAIT_EXP_BASE))
+@http_retry(wait=wait_fixed(WAIT_EXP_BASE))
 def make_request_wait_fixed():
     response = requests.get(TEST_URL)
     response.raise_for_status()
     return response
 
 
-def test_throttling_retry_wait_fixed(requests_mock, mocker):
+def test_http_retry_wait_fixed(requests_mock, mocker):
     requests_mock.get(
         TEST_URL,
         [

@@ -1,0 +1,247 @@
+{
+   "_shards": {
+      "failed": 0,
+      "total": 3,
+      "successful": 3
+   },
+   "_scroll_id": "cXVlcnlUaGVuRmV0Y2g7Mzs5OTQ2NzY3ODU6ZHZIZWxCb3BUZi1Cb3NwRDB5NmRQUTs5OTQ2NzY3ODQ6ZHZIZWxCb3BUZi1Cb3NwRDB5NmRQUTs5OTUyMzQzMTA6eXptdmszQUNUam1XbVJjRjRkRk9UdzswOw==",
+   "terminated_early": true,
+   "took": 3,
+   "hits": {
+      "max_score": 1.0,
+      "hits": [
+         {
+            "_score": 1.0,
+            "_source": {
+               "author": "KIMOTO",
+               "name": "Validator-Custom-0.1210",
+               "download_url": "https://cpan.metacpan.org/authors/id/K/KI/KIMOTO/Validator-Custom-0.1210.tar.gz",
+               "version": "0.1210",
+               "distribution": "Validator-Custom",
+               "date": "2010-08-14T01:41:56",
+               "stat": {
+                  "size": 17608
+               },
+               "checksum_sha256": "f7240f7793ced2952701f0ed28ecf43c07cc2fa4549cc505831eceb8424cba4a",
+               "metadata": {
+                  "author": [
+                     "Yuki Kimoto <kimoto.yuki@gmail.com>"
+                  ]
+               }
+            },
+            "_type": "release",
+            "_index": "cpan_v1_01",
+            "_id": "VGApYqMT4TCxUzHcITn8ZhGHlxE"
+         },
+         {
+            "_type": "release",
+            "_id": "ilQN4bpIIdRl6DoiB3y47fgNIk8",
+            "_index": "cpan_v1_01",
+            "_score": 1.0,
+            "_source": {
+               "author": "KIMOTO",
+               "name": "Validator-Custom-0.1208",
+               "date": "2010-07-28T23:00:52",
+               "distribution": "Validator-Custom",
+               "version": "0.1208",
+               "download_url": "https://cpan.metacpan.org/authors/id/K/KI/KIMOTO/Validator-Custom-0.1208.tar.gz",
+               "metadata": {
+                  "author": [
+                     "Yuki Kimoto <kimoto.yuki@gmail.com>"
+                  ]
+               },
+               "checksum_sha256": "e33a860b026cad852eb919da4a3645007b47e5f414eb7272534b10cee279b52b",
+               "stat": {
+                  "size": 17489
+               }
+            }
+         },
+         {
+            "_source": {
+               "author": "KIMOTO",
+               "name": "DBIx-Custom-0.1619",
+               "download_url": "https://cpan.metacpan.org/authors/id/K/KI/KIMOTO/DBIx-Custom-0.1619.tar.gz",
+               "version": "0.1619",
+               "distribution": "DBIx-Custom",
+               "date": "2010-10-20T15:01:35",
+               "stat": {
+                  "size": 27195
+               },
+               "checksum_sha256": "83c295343f48ebc03029139082345c93527ffe5831820f99e4a72ee67ef186a5",
+               "metadata": {
+                  "author": [
+                     "unknown"
+                  ]
+               }
+            },
+            "_score": 1.0,
+            "_id": "g7562_4h9d693lxvc_cgEOTJAZk",
+            "_index": "cpan_v1_01",
+            "_type": "release"
+         },
+         {
+            "_score": 1.0,
+            "_source": {
+               "author": "KIMOTO",
+               "name": "DBIx-Custom-0.1401",
+               "version": "0.1401",
+               "distribution": "DBIx-Custom",
+               "date": "2010-05-01T23:29:22",
+               "download_url": "https://cpan.metacpan.org/authors/id/K/KI/KIMOTO/DBIx-Custom-0.1401.tar.gz",
+               "checksum_sha256": "004be1d48b6819941b3cb3c53bf457799d811348e0bb15e7cf18211505637aba",
+               "metadata": {
+                  "author": [
+                     "Yuki Kimoto <kimoto.yuki@gmail.com>"
+                  ]
+               },
+               "stat": {
+                  "size": 22711
+               }
+            },
+            "_type": "release",
+            "_id": "bLRsOH2sevNQ6Q93exgkvCZONo0",
+            "_index": "cpan_v1_01"
+         },
+         {
+            "_type": "release",
+            "_index": "cpan_v1_01",
+            "_id": "D8L3qWKznn0IQZrZEeDi9uyXbJY",
+            "_score": 1.0,
+            "_source": {
+               "author": "KIMOTO",
+               "name": "DBIx-Custom-0.1301",
+               "stat": {
+                  "size": 22655
+               },
+               "metadata": {
+                  "author": [
+                     "Yuki Kimoto <kimoto.yuki@gmail.com>"
+                  ]
+               },
+               "checksum_sha256": "6b39e3ad2bc98f06af3a75c96cd8c056a25f7501ed216a375472c8fe7bbb72be",
+               "download_url": "https://cpan.metacpan.org/authors/id/K/KI/KIMOTO/DBIx-Custom-0.1301.tar.gz",
+               "distribution": "DBIx-Custom",
+               "version": "0.1301",
+               "date": "2010-05-01T13:02:19"
+            }
+         },
+         {
+            "_score": 1.0,
+            "_source": {
+               "author": "KIMOTO",
+               "name": "DBIx-Custom-0.1602",
+               "metadata": {
+                  "author": [
+                     "Yuki Kimoto <kimoto.yuki@gmail.com>"
+                  ]
+               },
+               "checksum_sha256": "7a7e18514e171a6c55ef4c8aef92bd548b15ffd7dec4c1fdc83c276a032f6b8a",
+               "stat": {
+                  "size": 18999
+               },
+               "date": "2010-06-25T12:11:33",
+               "distribution": "DBIx-Custom",
+               "version": "0.1602",
+               "download_url": "https://cpan.metacpan.org/authors/id/K/KI/KIMOTO/DBIx-Custom-0.1602.tar.gz"
+            },
+            "_type": "release",
+            "_index": "cpan_v1_01",
+            "_id": "kmzgsMLGdsuiHjrSW55lLwMRO4o"
+         },
+         {
+            "_source": {
+               "author": "KIMOTO",
+               "name": "Validator-Custom-0.1204",
+               "download_url": "https://cpan.metacpan.org/authors/id/K/KI/KIMOTO/Validator-Custom-0.1204.tar.gz",
+               "version": "0.1204",
+               "distribution": "Validator-Custom",
+               "date": "2010-07-08T13:14:23",
+               "stat": {
+                  "size": 13256
+               },
+               "checksum_sha256": "40800b3d92cebc09967b61725cecdd05de2b04649f095e3034c5dd82f3d4ad89",
+               "metadata": {
+                  "author": [
+                     "Yuki Kimoto <kimoto.yuki@gmail.com>"
+                  ]
+               }
+            },
+            "_score": 1.0,
+            "_index": "cpan_v1_01",
+            "_id": "M_lLALu56mb_cDK_jAXwUB2PUlw",
+            "_type": "release"
+         },
+         {
+            "_id": "EVuvfiFcvtEr9Ne5Q4QoMAaxe7E",
+            "_index": "cpan_v1_01",
+            "_type": "release",
+            "_source": {
+               "author": "KIMOTO",
+               "name": "Validator-Custom-0.1203",
+               "stat": {
+                  "size": 12572
+               },
+               "metadata": {
+                  "author": [
+                     "Yuki Kimoto <kimoto.yuki@gmail.com>"
+                  ]
+               },
+               "checksum_sha256": "028a0b41c152c585143167464bed2ac6b6680c8006aa80867f9a8faa4ca5efe7",
+               "download_url": "https://cpan.metacpan.org/authors/id/K/KI/KIMOTO/Validator-Custom-0.1203.tar.gz",
+               "date": "2010-07-07T13:29:41",
+               "distribution": "Validator-Custom",
+               "version": "0.1203"
+            },
+            "_score": 1.0
+         },
+         {
+            "_index": "cpan_v1_01",
+            "_id": "ZaT8bwXejVTHmrzZCqNJPRFImBY",
+            "_type": "release",
+            "_source": {
+               "author": "KIMOTO",
+               "name": "DBIx-Custom-0.1641",
+               "metadata": {
+                  "author": [
+                     "Yuki Kimoto <kimoto.yuki@gmail.com>"
+                  ]
+               },
+               "checksum_sha256": "940412af9b7faf4c946a5e4d57ca52e5b704e49c4d7d0aa5ecb6d2286477ebc6",
+               "stat": {
+                  "size": 40480
+               },
+               "distribution": "DBIx-Custom",
+               "version": "0.1641",
+               "date": "2011-01-27T05:19:14",
+               "download_url": "https://cpan.metacpan.org/authors/id/K/KI/KIMOTO/DBIx-Custom-0.1641.tar.gz"
+            },
+            "_score": 1.0
+         },
+         {
+            "_source": {
+               "author": "KIMOTO",
+               "name": "DBIx-Custom-0.1646",
+               "version": "0.1646",
+               "distribution": "DBIx-Custom",
+               "date": "2011-02-18T17:48:52",
+               "download_url": "https://cpan.metacpan.org/authors/id/K/KI/KIMOTO/DBIx-Custom-0.1646.tar.gz",
+               "metadata": {
+                  "author": [
+                     "Yuki Kimoto <kimoto.yuki@gmail.com>"
+                  ]
+               },
+               "checksum_sha256": "7f729311e3e22d36b158e62b42ab2fbd29f08eabd57206e235db939d1ae57d24",
+               "stat": {
+                  "size": 46577
+               }
+            },
+            "_score": 1.0,
+            "_index": "cpan_v1_01",
+            "_id": "j21QIzHRYZKz1vobyGAPa2BuO50",
+            "_type": "release"
+         }
+      ],
+      "total": 359941
+   },
+   "timed_out": false
+}

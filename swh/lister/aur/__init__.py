@@ -108,15 +108,15 @@ Testing with Docker
 
 Change directory to swh/docker then launch the docker environment::
 
-   docker-compose up -d
+   docker compose up -d
 
-Then connect to the lister::
+Then schedule an aur listing task::
 
-   docker exec -it docker_swh-lister_1 bash
+   docker compose exec swh-scheduler swh scheduler task add -p oneshot list-aur
 
-And run the lister (The output of this listing results in “oneshot” tasks in the scheduler)::
+You can follow lister execution by displaying logs of swh-lister service::
 
-   swh lister run -l aur
+   docker compose logs -f swh-lister
 
 .. _aur.archlinux.org: https://aur.archlinux.org
 .. _New AUR Metadata Archives: https://lists.archlinux.org/pipermail/aur-general/2021-November/036659.html

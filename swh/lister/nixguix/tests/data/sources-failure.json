@@ -1,0 +1,64 @@
+{
+  "sources": [
+    {"type": "git", "git_url": "", "git_ref": ""},
+    {"type": false},
+    {"type": "no-origin"},
+    {"type": "url", "urls": []},
+    {
+      "type": "url",
+      "urls": ["https://crates.io/api/v1/0.1.5/no-extension-and-head-404-so-skipped"],
+      "integrity": "sha256-HW6jxFlbljY8E5Q0l9s0r0Rg+0dKlcQ/REatNBuMl4U="
+    },
+    {
+      "type": "url",
+      "urls": [ "https://example.org/another-file-no-integrity-so-skipped.txt" ]
+    },
+    {
+      "type": "url",
+      "urls": [
+        "ftp://ftp.ourproject.org/file-with-no-extension"
+      ],
+      "integrity": "sha256-bss09x9yOnuW+Q5BHHjf8nNcCNxCKMdl9/2/jKSFcrQ="
+    },
+    {
+      "type": "url",
+      "urls": [
+        "https://git-tails.immerda.ch/onioncircuits"
+      ],
+      "integrity": "sha256-lV3xiWUZmSnt4LW0ni/sUyC/bbtaxkTzvFLFtJKLuI4="
+    },
+    {
+      "outputHash": "sha256-9uF0fYl4Zz/Ia2UKx7CBi8ZU8jfWoBfy2QSgTSwXo5A",
+      "outputHashAlgo": null,
+      "outputHashMode": "recursive",
+      "type": "url",
+      "urls": [
+        "https://github.com/figiel/hosts/archive/v1.0.0.tar.gz"
+      ],
+      "inferredFetcher": "fetchzip"
+    },
+    {
+      "outputHash": "0s2mvy1nr2v1x0rr1fxlsv8ly1vyf9978rb4hwry5vnr678ls522",
+      "outputHashAlgo": "sha256",
+      "outputHashMode": "recursive",
+      "type": "url",
+      "urls": [
+        "https://www.unicode.org/Public/emoji/12.1/emoji-zwj-sequences.txt"
+      ],
+      "integrity": "sha256-QhRN0THZ7uIzh2RldFJyfgdP0da0u5Az6GGLbIPfVWg=",
+      "inferredFetcher": "unclassified"
+    },
+    {
+      "type": "url",
+      "urls": [ "unknown://example.org/wrong-scheme-so-skipped.txt" ],
+      "integrity": "sha256-wAEswtkl3ulAw3zq4perrGS6Wlww5XXnQYsEAoYT9fI="
+    },
+    {
+      "type": "url",
+      "urls": [ "https://code.9front.org/hg/plan9front" ],
+      "integrity": "sha256-wAEswtkl3ulAw3zq4perrGS6Wlww5XXnQYsEAoYT9fI="
+    }
+  ],
+  "version":"1",
+  "revision":"ab59155c5a38dda7efaceb47c7528578fcf0def4"
+}

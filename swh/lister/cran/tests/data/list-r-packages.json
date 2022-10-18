@@ -1,40 +1,32 @@
 [
-
     {
-        "Package": "SeleMix",
-        "Version": "1.0.2",
-        "Packaged": "2020-11-28 22:16:43 UTC; Teresa"
+        "Package": "cNORM",
+        "Version": "3.0.2",
+        "Packaged": "2022-06-12 08:46:39 UTC; gbpa005",
+        "MD5sum": "d878686afc17b990e500dc88afb3a990"
     },
     {
-        "Package": "plink",
-        "Version": "1.5-1",
-        "Packaged": "2017-04-26 11:36:15 UTC; Jonathan"
+        "Package": "CNprep",
+        "Version": "2.2",
+        "Packaged": "2022-05-23 23:58:37 UTC; Astrid",
+        "MD5sum": "4b6ddc37df607c79b7fb50a96a57197f"
     },
     {
-        "Package": "jsonlite",
-        "Version": "1.7.2",
-        "Packaged": "2020-12-09 13:54:18 UTC; jeroen"
-
+        "Package": "CNPS",
+        "Version": "1.0.0",
+        "Packaged": "2021-05-21 16:55:04 UTC; Surface",
+        "MD5sum": "deac071a9387e3a296481d041e6d09ee"
     },
     {
-        "Package": "Records",
-        "Version": "1.0",
-        "Packaged": "2012-10-29 08:57:37 UTC; ripley"
+        "Package": "cns",
+        "Version": "0.1.0",
+        "Packaged": "2021-07-16 19:30:51 UTC; nfultz",
+        "MD5sum": "3ad5a474260dbacb889be461b826a73b"
     },
     {
-        "Package": "scRNAtools",
-        "Version": "1.0",
-        "Packaged": "2018-07-04 00:49:45 UTC; dell"
-    },
-    {
-        "Package": "Deriv",
-        "Version": "4.1.2",
-        "Packaged": "2020-12-10 11:12:28 UTC; sokol"
-    },
-    {
-        "Package": "BayesValidate",
-        "Version": "0.0",
-        "Packaged": "Thu Mar 30 10:48:35 2006; hornik"
+        "Package": "cnum",
+        "Version": "0.1.3",
+        "Packaged": "2021-01-11 13:24:52 UTC; Elgar",
+        "MD5sum": "3cb5ab3fdaf4277d1ebfbe147e8990e1"
     }
-
 ]

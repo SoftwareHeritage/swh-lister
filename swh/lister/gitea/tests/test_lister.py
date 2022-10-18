@@ -138,7 +138,7 @@ def test_gitea_auth_instance(swh_scheduler, requests_mock, trygitea_p1):
     assert stats.pages == 1
 
 
-@pytest.mark.parametrize("http_code", [400, 500, 502])
+@pytest.mark.parametrize("http_code", [400, 500])
 def test_gitea_list_http_error(
     swh_scheduler, requests_mock, http_code, trygitea_p1, trygitea_p2
 ):

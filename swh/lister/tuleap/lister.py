@@ -1,4 +1,4 @@
-# Copyright (C) 2021 The Software Heritage developers
+# Copyright (C) 2021-2022 The Software Heritage developers
 # See the AUTHORS file at the top-level directory of this distribution
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
@@ -8,14 +8,10 @@ from typing import Any, Dict, Iterator, List, Optional
 from urllib.parse import urljoin
 
 import iso8601
-import requests
-from tenacity.before_sleep import before_sleep_log
 
-from swh.lister.utils import throttling_retry
 from swh.scheduler.interface import SchedulerInterface
 from swh.scheduler.model import ListedOrigin
 
-from .. import USER_AGENT
 from ..pattern import CredentialsType, StatelessLister
 
 logger = logging.getLogger(__name__)
@@ -57,30 +53,7 @@ class TuleapLister(StatelessLister[RepoPage]):
             instance=instance,
         )
 
-        self.session = requests.Session()
-        self.session.headers.update(
-            {
-                "Accept": "application/json",
-                "User-Agent": USER_AGENT,
-            }
-        )
-
-    @throttling_retry(before_sleep=before_sleep_log(logger, logging.WARNING))
-    def page_request(self, url: str, params: Dict[str, Any]) -> requests.Response:
-
-        logger.info("Fetching URL %s with params %s", url, params)
-
-        response = self.session.get(url, params=params)
-        if response.status_code != 200:
-            logger.warning(
-                "Unexpected HTTP status code %s on %s: %s",
-                response.status_code,
-                response.url,
-                response.content,
-            )
-        response.raise_for_status()
-
-        return response
+        self.session.headers.update({"Accept": "application/json"})
 
     @classmethod
     def results_simplified(cls, url: str, repo_type: str, repo: RepoPage) -> RepoPage:
@@ -97,14 +70,14 @@ class TuleapLister(StatelessLister[RepoPage]):
         return rep
 
     def _get_repositories(self, url_repo) -> List[Dict[str, Any]]:
-        ret = self.page_request(url_repo, {})
+        ret = self.http_request(url_repo)
         reps_list = ret.json()["repositories"]
         limit = int(ret.headers["X-PAGINATION-LIMIT-MAX"])
         offset = int(ret.headers["X-PAGINATION-LIMIT"])
         size = int(ret.headers["X-PAGINATION-SIZE"])
         while offset < size:
             url_offset = url_repo + "?offset=" + str(offset) + "&limit=" + str(limit)
-            ret = self.page_request(url_offset, {}).json()
+            ret = self.http_request(url_offset).json()
             reps_list = reps_list + ret["repositories"]
             offset += limit
         return reps_list
@@ -115,7 +88,7 @@ class TuleapLister(StatelessLister[RepoPage]):
         url_projects = url_api + "/projects/"
 
         # Get the list of projects.
-        response = self.page_request(url_projects, {})
+        response = self.http_request(url_projects)
         projects_list = response.json()
         limit = int(response.headers["X-PAGINATION-LIMIT-MAX"])
         offset = int(response.headers["X-PAGINATION-LIMIT"])
@@ -124,7 +97,7 @@ class TuleapLister(StatelessLister[RepoPage]):
             url_offset = (
                 url_projects + "?offset=" + str(offset) + "&limit=" + str(limit)
             )
-            ret = self.page_request(url_offset, {}).json()
+            ret = self.http_request(url_offset).json()
             projects_list = projects_list + ret
             offset += limit
 

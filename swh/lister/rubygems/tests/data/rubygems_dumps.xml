@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListBucketResult xmlns="http://s3.amazonaws.com/doc/2006-03-01/">
+  <Name>rubygems-dumps</Name>
+  <Prefix>production/public_postgresql</Prefix>
+  <Marker></Marker>
+  <MaxKeys>1000</MaxKeys>
+  <IsTruncated>false</IsTruncated>
+  <Contents>
+    <Key>production/public_postgresql/2022.10.05.06.10.11/public_postgresql.tar</Key>
+    <LastModified>2022-10-05T06:11:15.000Z</LastModified>
+    <ETag>&quot;d1c447a2a490225c2d59061e60ed86e9-75&quot;</ETag>
+    <Size>391653888</Size>
+    <StorageClass>STANDARD</StorageClass>
+  </Contents>
+  <Contents>
+    <Key>production/public_postgresql/2022.10.06.06.10.05/public_postgresql.tar</Key>
+    <LastModified>2022-10-06T06:11:11.000Z</LastModified>
+    <ETag>&quot;2ccd9340e4f802ec982e4cd00db2d168-75&quot;</ETag>
+    <Size>390047744</Size>
+    <StorageClass>STANDARD</StorageClass>
+  </Contents>
+</ListBucketResult>

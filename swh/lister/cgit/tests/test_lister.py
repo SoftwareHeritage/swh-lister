@@ -1,4 +1,4 @@
-# Copyright (C) 2019-2021 The Software Heritage developers
+# Copyright (C) 2019-2022 The Software Heritage developers
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
 
@@ -69,7 +69,7 @@ def test_lister_cgit_run_with_page(requests_mock_datadir, swh_scheduler):
     for request in requests_mock_datadir.request_history:
         assert "User-Agent" in request.headers
         user_agent = request.headers["User-Agent"]
-        assert "Software Heritage Lister" in user_agent
+        assert "Software Heritage cgit lister" in user_agent
         assert __version__ in user_agent
 
 
@@ -258,7 +258,7 @@ def test_lister_cgit_get_pages_with_pages_and_retry(
 
         lister_cgit = CGitLister(swh_scheduler, url=url)
 
-        mocker.patch.object(lister_cgit._get_and_parse.retry, "sleep")
+        mocker.patch.object(lister_cgit.http_request.retry, "sleep")
 
         repos: List[List[str]] = list(lister_cgit.get_pages())
         flattened_repos = sum(repos, [])

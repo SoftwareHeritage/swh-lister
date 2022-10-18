@@ -1,0 +1,309 @@
+{
+  "packages": {
+    "idevlab/essential": {
+      "1.0.1": {
+        "name": "idevlab/essential",
+        "description": "All the methods and tools useful for the development of the various idevlab projects.",
+        "keywords": [],
+        "homepage": "",
+        "version": "1.0.1",
+        "version_normalized": "1.0.1.0",
+        "license": [],
+        "authors": [
+          {
+            "name": "Florian Sinama",
+            "email": "f.sinama@gmail.com"
+          }
+        ],
+        "source": {
+          "url": "git@gitlab.com:idevlab/Essential.git",
+          "type": "git",
+          "reference": "6ff62de2e789aae308f3ff6fb11ea5955c806e19"
+        },
+        "dist": {
+          "url": "https://gitlab.com/api/v4/projects/idevlab%2FEssential/repository/archive.zip?sha=6ff62de2e789aae308f3ff6fb11ea5955c806e19",
+          "type": "zip",
+          "shasum": "",
+          "reference": "6ff62de2e789aae308f3ff6fb11ea5955c806e19"
+        },
+        "type": "library",
+        "time": "2022-08-17T21:57:20+00:00",
+        "autoload": {
+          "psr-4": {
+            "Idevlab\\Essential\\": "src/"
+          }
+        },
+        "require": {
+          "php": "^8.1"
+        },
+        "uid": 6622550
+      },
+      "1.1.0": {
+        "name": "idevlab/essential",
+        "description": "All the methods and tools useful for the development of the various idevlab projects.",
+        "keywords": [],
+        "homepage": "",
+        "version": "1.1.0",
+        "version_normalized": "1.1.0.0",
+        "license": [],
+        "authors": [
+          {
+            "name": "Florian Sinama",
+            "email": "f.sinama@gmail.com"
+          }
+        ],
+        "source": {
+          "url": "git@gitlab.com:idevlab/Essential.git",
+          "type": "git",
+          "reference": "e69bdd42f03d7c453be072eef0c62f7cfeae2af8"
+        },
+        "dist": {
+          "url": "https://gitlab.com/api/v4/projects/idevlab%2FEssential/repository/archive.zip?sha=e69bdd42f03d7c453be072eef0c62f7cfeae2af8",
+          "type": "zip",
+          "shasum": "",
+          "reference": "e69bdd42f03d7c453be072eef0c62f7cfeae2af8"
+        },
+        "type": "library",
+        "time": "2022-08-17T22:11:20+00:00",
+        "autoload": {
+          "psr-4": {
+            "Idevlab\\Essential\\": "src/"
+          }
+        },
+        "require": {
+          "php": "^8.1",
+          "ext-mbstring": "*"
+        },
+        "uid": 6622551
+      },
+      "1.1.1": {
+        "name": "idevlab/essential",
+        "description": "All the methods and tools useful for the development of the various idevlab projects.",
+        "keywords": [],
+        "homepage": "",
+        "version": "1.1.1",
+        "version_normalized": "1.1.1.0",
+        "license": [],
+        "authors": [
+          {
+            "name": "Florian Sinama",
+            "email": "f.sinama@gmail.com"
+          }
+        ],
+        "source": {
+          "url": "git@gitlab.com:idevlab/Essential.git",
+          "type": "git",
+          "reference": "c6f5113ffad27402a9cafe593efd518517bc321c"
+        },
+        "dist": {
+          "url": "https://gitlab.com/api/v4/projects/idevlab%2FEssential/repository/archive.zip?sha=c6f5113ffad27402a9cafe593efd518517bc321c",
+          "type": "zip",
+          "shasum": "",
+          "reference": "c6f5113ffad27402a9cafe593efd518517bc321c"
+        },
+        "type": "library",
+        "time": "2022-08-17T22:31:14+00:00",
+        "autoload": {
+          "psr-4": {
+            "Idevlab\\Essential\\": "src/"
+          }
+        },
+        "require": {
+          "php": "^8.1",
+          "ext-mbstring": "*"
+        },
+        "uid": 6622552
+      },
+      "1.2.0": {
+        "name": "idevlab/essential",
+        "description": "All the methods and tools useful for the development of the various idevlab projects.",
+        "keywords": [],
+        "homepage": "",
+        "version": "1.2.0",
+        "version_normalized": "1.2.0.0",
+        "license": [],
+        "authors": [
+          {
+            "name": "Florian Sinama",
+            "email": "f.sinama@gmail.com"
+          }
+        ],
+        "source": {
+          "url": "git@gitlab.com:idevlab/Essential.git",
+          "type": "git",
+          "reference": "263fd95fcadfbfd4af6108749be0699d69d4df90"
+        },
+        "dist": {
+          "url": "https://gitlab.com/api/v4/projects/idevlab%2FEssential/repository/archive.zip?sha=263fd95fcadfbfd4af6108749be0699d69d4df90",
+          "type": "zip",
+          "shasum": "",
+          "reference": "263fd95fcadfbfd4af6108749be0699d69d4df90"
+        },
+        "type": "library",
+        "time": "2022-10-12T10:34:29+00:00",
+        "autoload": {
+          "psr-4": {
+            "Idevlab\\Essential\\": "src/"
+          }
+        },
+        "require": {
+          "php": "^8.1",
+          "ext-mbstring": "*"
+        },
+        "uid": 6624846
+      },
+      "dev-develop": {
+        "name": "idevlab/essential",
+        "description": "All the methods and tools useful for the development of the various idevlab projects.",
+        "keywords": [],
+        "homepage": "",
+        "version": "dev-develop",
+        "version_normalized": "dev-develop",
+        "license": [],
+        "authors": [
+          {
+            "name": "Florian Sinama",
+            "email": "f.sinama@gmail.com"
+          }
+        ],
+        "source": {
+          "url": "git@gitlab.com:idevlab/Essential.git",
+          "type": "git",
+          "reference": "8125bcc747e1bf5086a3195f74a682b7be0aea6a"
+        },
+        "dist": {
+          "url": "https://gitlab.com/api/v4/projects/idevlab%2FEssential/repository/archive.zip?sha=8125bcc747e1bf5086a3195f74a682b7be0aea6a",
+          "type": "zip",
+          "shasum": "",
+          "reference": "8125bcc747e1bf5086a3195f74a682b7be0aea6a"
+        },
+        "type": "library",
+        "time": "2022-10-12T10:34:29+00:00",
+        "autoload": {
+          "psr-4": {
+            "Idevlab\\Essential\\": "src/"
+          }
+        },
+        "require": {
+          "php": "^8.1",
+          "ext-mbstring": "*"
+        },
+        "uid": 6622554
+      },
+      "dev-main": {
+        "name": "idevlab/essential",
+        "description": "All the methods and tools useful for the development of the various idevlab projects.",
+        "keywords": [],
+        "homepage": "",
+        "version": "dev-main",
+        "version_normalized": "dev-main",
+        "license": [],
+        "authors": [
+          {
+            "name": "Florian Sinama",
+            "email": "f.sinama@gmail.com"
+          }
+        ],
+        "source": {
+          "url": "git@gitlab.com:idevlab/Essential.git",
+          "type": "git",
+          "reference": "263fd95fcadfbfd4af6108749be0699d69d4df90"
+        },
+        "dist": {
+          "url": "https://gitlab.com/api/v4/projects/idevlab%2FEssential/repository/archive.zip?sha=263fd95fcadfbfd4af6108749be0699d69d4df90",
+          "type": "zip",
+          "shasum": "",
+          "reference": "263fd95fcadfbfd4af6108749be0699d69d4df90"
+        },
+        "type": "library",
+        "time": "2022-10-12T10:34:29+00:00",
+        "autoload": {
+          "psr-4": {
+            "Idevlab\\Essential\\": "src/"
+          }
+        },
+        "default-branch": true,
+        "require": {
+          "php": "^8.1",
+          "ext-mbstring": "*"
+        },
+        "uid": 6622553
+      },
+      "dev-release/1.2.0": {
+        "name": "idevlab/essential",
+        "description": "All the methods and tools useful for the development of the various idevlab projects.",
+        "keywords": [],
+        "homepage": "",
+        "version": "dev-release/1.2.0",
+        "version_normalized": "dev-release/1.2.0",
+        "license": [],
+        "authors": [
+          {
+            "name": "Florian Sinama",
+            "email": "f.sinama@gmail.com"
+          }
+        ],
+        "source": {
+          "url": "git@gitlab.com:idevlab/Essential.git",
+          "type": "git",
+          "reference": "1688c6cb5f3b0e9f21a5bbcb9f9951138ab51a66"
+        },
+        "dist": {
+          "url": "https://gitlab.com/api/v4/projects/idevlab%2FEssential/repository/archive.zip?sha=1688c6cb5f3b0e9f21a5bbcb9f9951138ab51a66",
+          "type": "zip",
+          "shasum": "",
+          "reference": "1688c6cb5f3b0e9f21a5bbcb9f9951138ab51a66"
+        },
+        "type": "library",
+        "time": "2022-10-12T10:34:14+00:00",
+        "autoload": {
+          "psr-4": {
+            "Idevlab\\Essential\\": "src/"
+          }
+        },
+        "require": {
+          "php": "^8.1",
+          "ext-mbstring": "*"
+        },
+        "uid": 6624845
+      },
+      "v1.0.0": {
+        "name": "idevlab/essential",
+        "description": "All the methods and tools useful for the development of the various idevlab projects.",
+        "keywords": [],
+        "homepage": "",
+        "version": "v1.0.0",
+        "version_normalized": "1.0.0.0",
+        "license": [],
+        "authors": [
+          {
+            "name": "Florian Sinama",
+            "email": "f.sinama@gmail.com"
+          }
+        ],
+        "source": {
+          "url": "git@gitlab.com:idevlab/Essential.git",
+          "type": "git",
+          "reference": "b86767e1baf9ed9c218abcba963361876d55138a"
+        },
+        "dist": {
+          "url": "https://gitlab.com/api/v4/projects/idevlab%2FEssential/repository/archive.zip?sha=b86767e1baf9ed9c218abcba963361876d55138a",
+          "type": "zip",
+          "shasum": "",
+          "reference": "b86767e1baf9ed9c218abcba963361876d55138a"
+        },
+        "type": "library",
+        "time": "2022-08-17T21:34:05+00:00",
+        "autoload": {
+          "psr-4": {
+            "Idevlab\\Essential\\": "src/"
+          }
+        },
+        "require": {
+          "php": "^8.1"
+        },
+        "uid": 6622549
+      }
+    }
+  }
+}

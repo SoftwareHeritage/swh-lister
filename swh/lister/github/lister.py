@@ -15,7 +15,6 @@ from swh.core.github.utils import GitHubSession, MissingRateLimitReset
 from swh.scheduler.interface import SchedulerInterface
 from swh.scheduler.model import ListedOrigin
 
-from .. import USER_AGENT
 from ..pattern import CredentialsType, Lister
 
 logger = logging.getLogger(__name__)
@@ -87,7 +86,8 @@ class GitHubLister(Lister[GitHubListerState, List[Dict[str, Any]]]):
         self.relisting = self.first_id is not None or self.last_id is not None
 
         self.github_session = GitHubSession(
-            credentials=self.credentials, user_agent=USER_AGENT
+            credentials=self.credentials,
+            user_agent=str(self.session.headers["User-Agent"]),
         )
 
     def state_from_dict(self, d: Dict[str, Any]) -> GitHubListerState:

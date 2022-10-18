@@ -14,7 +14,7 @@ from lazr.restfulclient.errors import RestfulError
 from lazr.restfulclient.resource import Collection
 from tenacity.before_sleep import before_sleep_log
 
-from swh.lister.utils import retry_if_exception, throttling_retry
+from swh.lister.utils import http_retry, retry_if_exception
 from swh.scheduler.interface import SchedulerInterface
 from swh.scheduler.model import ListedOrigin
 
@@ -100,7 +100,7 @@ class LaunchpadLister(Lister[LaunchpadListerState, LaunchpadPageType]):
                     d[attribute_name] = date_last_modified.isoformat()
         return d
 
-    @throttling_retry(
+    @http_retry(
         retry=retry_if_restful_error,
         before_sleep=before_sleep_log(logger, logging.WARNING),
     )
