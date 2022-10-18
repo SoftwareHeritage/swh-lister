@@ -1,0 +1,107 @@
+{
+  "sources": [
+    {
+      "type": "url",
+      "urls": [ "https://github.com/owner-1/repository-1/revision-1.tgz" ],
+      "integrity": "sha256-3vm2Nt+O4zHf3Ovd/qsv1gKTEUwodX9FLxlrQdry0zs="
+    },
+    {
+      "type": "url",
+      "urls": [ "https://github.com/owner-3/repository-1/revision-1.tgz" ],
+      "integrity": "sha256-3vm2Nt+O4zHf3Ovd/qsv1gKTEUwodX9FLxlrQdry0zs="
+    },
+    {
+      "type": "url",
+      "urls": [ "https://example.com/file.txt" ],
+      "integrity": "sha256-Q0copBCnj1b8G1iZw1k0NuYasMcx6QctleltspAgXlM="
+    },
+    {
+      "type": "url",
+      "urls": [
+        "https://releases.wildfiregames.com/0ad-0.0.25b-alpha-unix-build.tar.xz"
+      ],
+      "integrity": "sha256-1w3NdfRzp9XIFDLD2SYJJr+Nnf9c1UF5YWlJfRxSLt0="
+    },
+    {
+      "type": "url",
+      "urls": [
+        "ftp://ftp.ourproject.org/pub/ytalk/ytalk-3.3.0.tar.gz"
+      ],
+      "integrity": "sha256-bss09x9yOnuW+Q5BHHjf8nNcCNxCKMdl9/2/jKSFcrQ="
+    },
+    {
+      "type": "url",
+      "urls": [
+        "www.roudoudou.com/export/cpc/rasm/rasm_v0117_src.zip"
+      ],
+      "integrity": "sha256-wAEswtkl3ulAw3zq4perrGS6Wlww5XXnQYsEAoYT9fI="
+    },
+    {
+      "type": "url",
+      "outputHashMode": "flat",
+      "urls": [
+        "http://downloads.sourceforge.net/project/nmon/lmon16n.c",
+        "http://ufpr.dl.sourceforge.net/project/nmon/lmon16n.c",
+        "http://netassist.dl.sourceforge.net/project/nmon/lmon16n.c"
+      ],
+      "integrity": "sha256-wAEswtkl3ulAw3zq4perrGS6Wlww5XXnQYsEAoYT9fI="
+    },
+    {
+      "outputHash": "0s7p9swjqjsqddylmgid6cv263ggq7pmb734z4k84yfcrgb6kg4g",
+      "outputHashAlgo": "sha256",
+      "outputHashMode": "recursive",
+      "type": "url",
+      "urls": [
+        "https://github.com/kandu/trie/archive/1.0.0.tar.gz"
+      ],
+      "integrity": "sha256-j7xp1svMeYIm+WScVe/B7w0jNjMtvkp9a1hLLLlO92g=",
+      "inferredFetcher": "fetchzip"
+    },
+    {
+      "type": "url",
+      "urls": [
+        "https://github.com/trie/trie.git"
+      ],
+      "integrity": "sha256-j7xp1svMeYIm+WScVe/B7w0jNjMtvkp9a1hLLLlO92g="
+    },
+    {
+      "type": "git",
+      "git_url": "https://example.org/pali/0xffff",
+      "git_ref": "0.9"
+    },
+    {
+      "type": "hg",
+      "hg_url": "https://example.org/vityok/cl-string-match",
+      "hg_changeset": "5048480a61243e6f1b02884012c8f25cdbee6d97"
+    },
+    {
+      "type": "svn",
+      "svn_url": "https://code.call-cc.org/svn/chicken-eggs/release/5/iset/tags/2.2",
+      "svn_revision": 39057
+    },
+    {
+      "outputHash": "sha256-LxVcYj2WKHbhNu5x/DFkxQPOYrVkNvwiE/qcODq52Lc=",
+      "outputHashAlgo": null,
+      "outputHashMode": "recursive",
+      "type": "url",
+      "urls": [
+        "https://github.com/julian-klode/triehash/archive/debian/0.3-3.tar.gz"
+      ],
+      "inferredFetcher": "fetchzip"
+    },
+    {
+      "type": "url",
+      "urls": [
+        "http://git.marmaro.de/?p=mmh;a=snapshot;h=431604647f89d5aac7b199a7883e98e56e4ccf9e;sf=tgz"
+      ],
+      "integrity": "sha256-G/7oY5qdCSJ59VlwHtIbvMdT6+mriXhMqQIHNx65J+E="
+    },
+    {
+      "type": "url",
+      "urls": ["svn://svn.code.sf.net/p/acme-crossass/code-0/trunk"],
+      "integrity": "sha256-VifIQ+UEVMKJ+cNS+Xxusazinr5Cgu1lmGuhqj/5Mpk="
+    }
+  ],
+  "version": "1",
+  "revision": "cc4e04c26672dd74e5fd0fecb78b435fb55368f7"
+}

@@ -1,4 +1,4 @@
-# Copyright (C) 2018-2021 the Software Heritage developers
+# Copyright (C) 2018-2022 the Software Heritage developers
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
 
@@ -66,14 +66,6 @@ def retry_if_exception(retry_state, predicate: Callable[[Exception], bool]) -> b
     return False
 
 
-def retry_if_throttling(retry_state) -> bool:
-    """
-    Custom tenacity retry predicate for handling HTTP responses with
-    status code 429 (too many requests).
-    """
-    return retry_if_exception(retry_state, is_throttling_exception)
-
-
 def retry_policy_generic(retry_state) -> bool:
     """
     Custom tenacity retry predicate for handling failed requests:
@@ -90,8 +82,8 @@ WAIT_EXP_BASE = 10
 MAX_NUMBER_ATTEMPTS = 5
 
 
-def throttling_retry(
-    retry=retry_if_throttling,
+def http_retry(
+    retry=retry_policy_generic,
     wait=wait_exponential(exp_base=WAIT_EXP_BASE),
     stop=stop_after_attempt(max_attempt_number=MAX_NUMBER_ATTEMPTS),
     **retry_args,

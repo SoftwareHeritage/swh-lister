@@ -13,15 +13,11 @@ from typing import Any, Dict, Iterator, List, Optional
 from urllib.parse import unquote, urljoin
 
 from bs4 import BeautifulSoup
-import requests
-from tenacity.before_sleep import before_sleep_log
 
-from swh.lister.utils import throttling_retry
 from swh.model.hashutil import hash_to_hex
 from swh.scheduler.interface import SchedulerInterface
 from swh.scheduler.model import ListedOrigin
 
-from .. import USER_AGENT
 from ..pattern import CredentialsType, StatelessLister
 
 logger = logging.getLogger(__name__)
@@ -125,29 +121,6 @@ class ArchLister(StatelessLister[ArchListerPage]):
         )
 
         self.flavours = flavours
-        self.session = requests.Session()
-        self.session.headers.update(
-            {
-                "User-Agent": USER_AGENT,
-            }
-        )
-
-    @throttling_retry(before_sleep=before_sleep_log(logger, logging.WARNING))
-    def request_get(self, url: str, params: Dict[str, Any]) -> requests.Response:
-
-        logger.debug("Fetching URL %s with params %s", url, params)
-
-        response = self.session.get(url, params=params)
-        if response.status_code != 200:
-            logger.warning(
-                "Unexpected HTTP status code %s on %s: %s",
-                response.status_code,
-                response.url,
-                response.content,
-            )
-        response.raise_for_status()
-
-        return response
 
     def scrap_package_versions(
         self, name: str, repo: str, base_url: str
@@ -179,7 +152,7 @@ class ArchLister(StatelessLister[ArchListerPage]):
         url = self.ARCH_PACKAGE_VERSIONS_URL_PATTERN.format(
             pkgname=name, base_url=base_url
         )
-        response = self.request_get(url=url, params={})
+        response = self.http_request(url)
         soup = BeautifulSoup(response.text, "html.parser")
         links = soup.find_all("a", href=True)
 
@@ -263,7 +236,7 @@ class ArchLister(StatelessLister[ArchListerPage]):
         Returns:
             a directory Path where the archive has been extracted to.
         """
-        res = self.request_get(url=url, params={})
+        res = self.http_request(url)
         destination_path.parent.mkdir(parents=True, exist_ok=True)
         destination_path.write_bytes(res.content)
 
@@ -480,6 +453,14 @@ class ArchLister(StatelessLister[ArchListerPage]):
                         "length": version["length"],
                     }
                 )
+                if version["version"] == origin["version"]:
+                    artifacts[-1]["checksums"] = {
+                        "md5": origin["data"]["md5sum"],
+                        "sha256": origin["data"]["sha256sum"],
+                    }
+                else:
+                    artifacts[-1]["checksums"] = {"length": version["length"]}
+
                 arch_metadata.append(
                     {
                         "version": version["version"],

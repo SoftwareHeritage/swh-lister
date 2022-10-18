@@ -2,6 +2,7 @@
 # See the AUTHORS file at the top-level directory of this distribution
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
+
 from dataclasses import asdict, dataclass
 import logging
 import random
@@ -9,14 +10,11 @@ from typing import Any, Dict, Iterator, List, Optional, Tuple
 from urllib.parse import parse_qs, parse_qsl, urlencode, urljoin, urlparse
 
 import iso8601
-import requests
-from tenacity.before_sleep import before_sleep_log
+from requests.exceptions import HTTPError
 
-from swh.lister.utils import throttling_retry
 from swh.scheduler.interface import SchedulerInterface
 from swh.scheduler.model import ListedOrigin
 
-from .. import USER_AGENT
 from ..pattern import CredentialsType, Lister
 
 logger = logging.getLogger(__name__)
@@ -96,13 +94,7 @@ class GogsLister(Lister[GogsListerState, GogsListerPage]):
                 # Raises an error on Gogs, or a warning on Gitea
                 self.on_anonymous_mode()
 
-        self.session = requests.Session()
-        self.session.headers.update(
-            {
-                "Accept": "application/json",
-                "User-Agent": USER_AGENT,
-            }
-        )
+        self.session.headers.update({"Accept": "application/json"})
 
         if self.api_token:
             self.session.headers["Authorization"] = f"token {self.api_token}"
@@ -116,34 +108,27 @@ class GogsLister(Lister[GogsListerState, GogsListerPage]):
     def state_to_dict(self, state: GogsListerState) -> Dict[str, Any]:
         return asdict(state)
 
-    @throttling_retry(before_sleep=before_sleep_log(logger, logging.WARNING))
     def page_request(
         self, url: str, params: Dict[str, Any]
     ) -> Tuple[Dict[str, Any], Dict[str, Any]]:
 
         logger.debug("Fetching URL %s with params %s", url, params)
 
-        response = self.session.get(url, params=params)
-
-        if response.status_code != 200:
-            logger.warning(
-                "Unexpected HTTP status code %s on %s: %s",
-                response.status_code,
-                response.url,
-                response.content,
-            )
-        if (
-            response.status_code == 500
-        ):  # Temporary hack for skipping fatal repos (T4423)
-            url_parts = urlparse(url)
-            query: Dict[str, Any] = dict(parse_qsl(url_parts.query))
-            query.update({"page": _parse_page_id(url) + 1})
-            next_page_link = url_parts._replace(query=urlencode(query)).geturl()
-            body: Dict[str, Any] = {"data": []}
-            links = {"next": {"url": next_page_link}}
-            return body, links
-        else:
-            response.raise_for_status()
+        try:
+            response = self.http_request(url, params=params)
+        except HTTPError as http_error:
+            if (
+                http_error.response.status_code == 500
+            ):  # Temporary hack for skipping fatal repos (T4423)
+                url_parts = urlparse(url)
+                query: Dict[str, Any] = dict(parse_qsl(url_parts.query))
+                query.update({"page": _parse_page_id(url) + 1})
+                next_page_link = url_parts._replace(query=urlencode(query)).geturl()
+                body: Dict[str, Any] = {"data": []}
+                links = {"next": {"url": next_page_link}}
+                return body, links
+            else:
+                raise
 
         return response.json(), response.links
 
@@ -159,6 +144,7 @@ class GogsLister(Lister[GogsListerState, GogsListerPage]):
 
         # base with trailing slash, path without leading slash for urljoin
         next_link: Optional[str] = urljoin(self.url, self.REPO_LIST_PATH)
+        assert next_link is not None
 
         body, links = self.page_request(
             next_link, {**self.query_params, "page": page_id}

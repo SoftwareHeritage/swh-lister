@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd">
+  <metadata>
+    <id>SIL.Core.Desktop</id>
+    <version>10.0.1-beta0012</version>
+    <authors>SIL International</authors>
+    <license type="expression">MIT</license>
+    <licenseUrl>https://licenses.nuget.org/MIT</licenseUrl>
+    <projectUrl>https://github.com/sillsdev/libpalaso</projectUrl>
+    <description>SIL.Core.Desktop provides general UI related utilities for language software.</description>
+    <releaseNotes>Changes since version 10.0.0
+
+Added:
+- [SIL.Core] Added SIL.PlatformUtilities.Platform.IsFlatpak property.
+- [SIL.Core.Desktop] Added Testing channel to UpdateSettings.
+
+Fixed:
+- [SIL.Core] Fixed SIL.IO.PathUtilities.DeleteToRecycleBin and .GetDefaultFileManager to work in a flatpak environment.
+- [SIL.Windows.Forms] Fixed ImageToolbox.ImageGallery.ImageCollectionManager.FromStandardLocations to work in a flatpak environment.
+- [SIL.WritingSystems] Fixed SLDR initialization for users with European number formats.
+
+See full changelog at https://github.com/sillsdev/libpalaso/blob/master/CHANGELOG.md</releaseNotes>
+    <copyright>Copyright © 2010-2021 SIL International</copyright>
+    <repository type="git" url="https://github.com/sillsdev/libpalaso.git" branch="master" commit="cb8fefb631ffebfe5278fa4e13c58d99d0055dae" />
+    <dependencies>
+      <group targetFramework=".NETFramework4.6.1">
+        <dependency id="SIL.Core" version="10.0.1-beta0012" exclude="Build,Analyzers" />
+        <dependency id="NDesk.DBus" version="0.15.0" exclude="Build,Analyzers" />
+        <dependency id="System.Configuration.ConfigurationManager" version="6.0.0" exclude="Build,Analyzers" />
+        <dependency id="System.Drawing.Common" version="6.0.0" exclude="Build,Analyzers" />
+        <dependency id="System.IO.FileSystem.AccessControl" version="5.0.0" exclude="Build,Analyzers" />
+      </group>
+      <group targetFramework=".NETStandard2.0">
+        <dependency id="SIL.Core" version="10.0.1-beta0012" exclude="Build,Analyzers" />
+        <dependency id="System.Configuration.ConfigurationManager" version="6.0.0" exclude="Build,Analyzers" />
+        <dependency id="System.Drawing.Common" version="6.0.0" exclude="Build,Analyzers" />
+        <dependency id="System.IO.FileSystem.AccessControl" version="5.0.0" exclude="Build,Analyzers" />
+      </group>
+    </dependencies>
+    <frameworkAssemblies>
+      <frameworkAssembly assemblyName="System.Configuration" targetFramework=".NETFramework4.6.1" />
+      <frameworkAssembly assemblyName="System.Management" targetFramework=".NETFramework4.6.1" />
+      <frameworkAssembly assemblyName="System.Security" targetFramework=".NETFramework4.6.1" />
+    </frameworkAssemblies>
+  </metadata>
+</package>

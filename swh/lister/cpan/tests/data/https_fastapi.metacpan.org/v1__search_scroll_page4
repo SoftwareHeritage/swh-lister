@@ -1,0 +1,131 @@
+{
+  "timed_out": false,
+  "_shards": {
+    "failed": 0,
+    "total": 3,
+    "successful": 3
+  },
+  "took": 14,
+  "hits": {
+    "total": 5,
+    "hits": [
+      {
+        "_score": 14.460719,
+        "_type": "release",
+        "_source": {
+          "stat": {
+            "size": 10738
+          },
+          "download_url": "https://cpan.metacpan.org/authors/id/F/FE/FELIPE/Call-Context-0.03-TRIAL1.tar.gz",
+          "distribution": "Call-Context",
+          "author": "FELIPE",
+          "version": "0.03-TRIAL1",
+          "checksum_sha256": "82aa854d6ae68342b58361b089c7f480b5b75e94f0c85c1d311f8cace1bfadea",
+          "metadata": {
+            "author": [
+              "Felipe Gasper (FELIPE)"
+            ]
+          },
+          "name": "Call-Context-0.03-TRIAL1",
+          "date": "2018-10-25T03:47:31"
+        },
+        "_index": "cpan_v1_01",
+        "_id": "Cjw1voci7z74uflSPriBTT_A_5c"
+      },
+      {
+        "_id": "VdVDByg5PHxbDh9HnvKAzf8QOws",
+        "_index": "cpan_v1_01",
+        "_source": {
+          "download_url": "https://cpan.metacpan.org/authors/id/F/FE/FELIPE/Call-Context-0.01.tar.gz",
+          "stat": {
+            "size": 10019
+          },
+          "author": "FELIPE",
+          "distribution": "Call-Context",
+          "version": 0.01,
+          "date": "2016-11-12T23:12:54",
+          "checksum_sha256": "21bf762ef5b3cbf1047192c2a3c499e9bd315b11e5530bd133856cdf87187b24",
+          "name": "Call-Context-0.01",
+          "metadata": {
+            "author": [
+              "Felipe Gasper (FELIPE)"
+            ]
+          }
+        },
+        "_type": "release",
+        "_score": 14.460719
+      },
+      {
+        "_score": 14.314282,
+        "_id": "_MA6FD8SOhOmTG8JUhvl3CN186I",
+        "_type": "release",
+        "_source": {
+          "stat": {
+            "size": 10046
+          },
+          "download_url": "https://cpan.metacpan.org/authors/id/F/FE/FELIPE/Call-Context-0.02.tar.gz",
+          "distribution": "Call-Context",
+          "author": "FELIPE",
+          "version": 0.02,
+          "metadata": {
+            "author": [
+              "Felipe Gasper (FELIPE)"
+            ]
+          },
+          "checksum_sha256": "b80d977f1df0e08bda2808124cd7218ad83f802e1a54aa258e17748ff5c02a0a",
+          "name": "Call-Context-0.02",
+          "date": "2016-11-13T01:07:43"
+        },
+        "_index": "cpan_v1_01"
+      },
+      {
+        "_id": "veMmCu9wirwpTX7czbuQq6SnKQQ",
+        "_type": "release",
+        "_source": {
+          "stat": {
+            "size": 10741
+          },
+          "download_url": "https://cpan.metacpan.org/authors/id/F/FE/FELIPE/Call-Context-0.03-TRIAL2.tar.gz",
+          "distribution": "Call-Context",
+          "author": "FELIPE",
+          "version": "0.03-TRIAL2",
+          "name": "Call-Context-0.03-TRIAL2",
+          "metadata": {
+            "author": [
+              "Felipe Gasper (FELIPE)"
+            ]
+          },
+          "checksum_sha256": "4ca799d81fc96a774f4f315c38eb3e53616322c332d47f1e3f756814b5bf4b5e",
+          "date": "2018-10-26T13:56:41"
+        },
+        "_index": "cpan_v1_01",
+        "_score": 14.291793
+      },
+      {
+        "_type": "release",
+        "_source": {
+          "version": "0.03",
+          "date": "2018-10-27T00:20:13",
+          "checksum_sha256": "0ee6bf46bc72755adb7a6b08e79d12e207de5f7809707b3c353b58cb2f0b5a26",
+          "metadata": {
+            "author": [
+              "Felipe Gasper (FELIPE)"
+            ]
+          },
+          "name": "Call-Context-0.03",
+          "download_url": "https://cpan.metacpan.org/authors/id/F/FE/FELIPE/Call-Context-0.03.tar.gz",
+          "stat": {
+            "size": 10730
+          },
+          "author": "FELIPE",
+          "distribution": "Call-Context"
+        },
+        "_index": "cpan_v1_01",
+        "_id": "CAAVfGh_7XpKnzpnLVaBKg8IPMM",
+        "_score": 14.291793
+      }
+    ],
+    "max_score": 14.460719
+  },
+  "_scroll_id": "cXVlcnlUaGVuRmV0Y2g7Mzs5OTQ2NzY3ODU6ZHZIZWxCb3BUZi1Cb3NwRDB5NmRQUTs5OTQ2NzY3ODQ6ZHZIZWxCb3BUZi1Cb3NwRDB5NmRQUTs5OTUyMzQzMTA6eXptdmszQUNUam1XbVJjRjRkRk9UdzswOw=="
+}

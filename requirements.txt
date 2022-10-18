@@ -7,3 +7,5 @@ launchpadlib
 tenacity >= 6.2
 lxml
 dulwich
+testing.postgresql
+psycopg2

@@ -1,0 +1,189 @@
+{
+  "@id": "https://api.nuget.org/v3/catalog0/data/2022.09.23.08.07.54/sil.core.desktop.10.0.1-beta0012.json",
+  "@type": [
+    "PackageDetails",
+    "catalog:Permalink"
+  ],
+  "authors": "SIL International",
+  "catalog:commitId": "f97b1cb0-9a7f-4bfd-a9ee-d61a3cd59c6d",
+  "catalog:commitTimeStamp": "2022-09-23T08:07:54.051884Z",
+  "copyright": "Copyright © 2010-2021 SIL International",
+  "created": "2022-08-25T21:03:44.337Z",
+  "description": "SIL.Core.Desktop provides general UI related utilities for language software.",
+  "frameworkAssemblyGroup": {
+    "@id": "https://api.nuget.org/v3/catalog0/data/2022.09.23.08.07.54/sil.core.desktop.10.0.1-beta0012.json#frameworkassemblygroup/.netframework4.6.1",
+    "assembly": [
+      "System.Configuration",
+      "System.Management",
+      "System.Security"
+    ],
+    "targetFramework": ".NETFramework4.6.1"
+  },
+  "id": "SIL.Core.Desktop",
+  "isPrerelease": true,
+  "lastEdited": "2022-09-23T08:07:21.247Z",
+  "licenseExpression": "MIT",
+  "licenseUrl": "https://licenses.nuget.org/MIT",
+  "listed": false,
+  "packageHash": "VeWqaDhGa/Y2dPKmeujabcBtTV2itT0sicfQnt5ZMESHddQg1S0T3Rm+8QDsGx7H7hGVHM/lTEbblOJ3LwyBBQ==",
+  "packageHashAlgorithm": "SHA512",
+  "packageSize": 68053,
+  "projectUrl": "https://github.com/sillsdev/libpalaso",
+  "published": "1900-01-01T00:00:00Z",
+  "releaseNotes": "Changes since version 10.0.0\n\nAdded:\n- [SIL.Core] Added SIL.PlatformUtilities.Platform.IsFlatpak property.\n- [SIL.Core.Desktop] Added Testing channel to UpdateSettings.\n\nFixed:\n- [SIL.Core] Fixed SIL.IO.PathUtilities.DeleteToRecycleBin and .GetDefaultFileManager to work in a flatpak environment.\n- [SIL.Windows.Forms] Fixed ImageToolbox.ImageGallery.ImageCollectionManager.FromStandardLocations to work in a flatpak environment.\n- [SIL.WritingSystems] Fixed SLDR initialization for users with European number formats.\n\nSee full changelog at https://github.com/sillsdev/libpalaso/blob/master/CHANGELOG.md",
+  "repository": "",
+  "verbatimVersion": "10.0.1-beta0012",
+  "version": "10.0.1-beta0012",
+  "dependencyGroups": [
+    {
+      "@id": "https://api.nuget.org/v3/catalog0/data/2022.09.23.08.07.54/sil.core.desktop.10.0.1-beta0012.json#dependencygroup/.netframework4.6.1",
+      "@type": "PackageDependencyGroup",
+      "dependencies": [
+        {
+          "@id": "https://api.nuget.org/v3/catalog0/data/2022.09.23.08.07.54/sil.core.desktop.10.0.1-beta0012.json#dependencygroup/.netframework4.6.1/sil.core",
+          "@type": "PackageDependency",
+          "id": "SIL.Core",
+          "range": "[10.0.1-beta0012, )"
+        },
+        {
+          "@id": "https://api.nuget.org/v3/catalog0/data/2022.09.23.08.07.54/sil.core.desktop.10.0.1-beta0012.json#dependencygroup/.netframework4.6.1/ndesk.dbus",
+          "@type": "PackageDependency",
+          "id": "NDesk.DBus",
+          "range": "[0.15.0, )"
+        },
+        {
+          "@id": "https://api.nuget.org/v3/catalog0/data/2022.09.23.08.07.54/sil.core.desktop.10.0.1-beta0012.json#dependencygroup/.netframework4.6.1/system.configuration.configurationmanager",
+          "@type": "PackageDependency",
+          "id": "System.Configuration.ConfigurationManager",
+          "range": "[6.0.0, )"
+        },
+        {
+          "@id": "https://api.nuget.org/v3/catalog0/data/2022.09.23.08.07.54/sil.core.desktop.10.0.1-beta0012.json#dependencygroup/.netframework4.6.1/system.drawing.common",
+          "@type": "PackageDependency",
+          "id": "System.Drawing.Common",
+          "range": "[6.0.0, )"
+        },
+        {
+          "@id": "https://api.nuget.org/v3/catalog0/data/2022.09.23.08.07.54/sil.core.desktop.10.0.1-beta0012.json#dependencygroup/.netframework4.6.1/system.io.filesystem.accesscontrol",
+          "@type": "PackageDependency",
+          "id": "System.IO.FileSystem.AccessControl",
+          "range": "[5.0.0, )"
+        }
+      ],
+      "targetFramework": ".NETFramework4.6.1"
+    },
+    {
+      "@id": "https://api.nuget.org/v3/catalog0/data/2022.09.23.08.07.54/sil.core.desktop.10.0.1-beta0012.json#dependencygroup/.netstandard2.0",
+      "@type": "PackageDependencyGroup",
+      "dependencies": [
+        {
+          "@id": "https://api.nuget.org/v3/catalog0/data/2022.09.23.08.07.54/sil.core.desktop.10.0.1-beta0012.json#dependencygroup/.netstandard2.0/sil.core",
+          "@type": "PackageDependency",
+          "id": "SIL.Core",
+          "range": "[10.0.1-beta0012, )"
+        },
+        {
+          "@id": "https://api.nuget.org/v3/catalog0/data/2022.09.23.08.07.54/sil.core.desktop.10.0.1-beta0012.json#dependencygroup/.netstandard2.0/system.configuration.configurationmanager",
+          "@type": "PackageDependency",
+          "id": "System.Configuration.ConfigurationManager",
+          "range": "[6.0.0, )"
+        },
+        {
+          "@id": "https://api.nuget.org/v3/catalog0/data/2022.09.23.08.07.54/sil.core.desktop.10.0.1-beta0012.json#dependencygroup/.netstandard2.0/system.drawing.common",
+          "@type": "PackageDependency",
+          "id": "System.Drawing.Common",
+          "range": "[6.0.0, )"
+        },
+        {
+          "@id": "https://api.nuget.org/v3/catalog0/data/2022.09.23.08.07.54/sil.core.desktop.10.0.1-beta0012.json#dependencygroup/.netstandard2.0/system.io.filesystem.accesscontrol",
+          "@type": "PackageDependency",
+          "id": "System.IO.FileSystem.AccessControl",
+          "range": "[5.0.0, )"
+        }
+      ],
+      "targetFramework": ".NETStandard2.0"
+    }
+  ],
+  "packageEntries": [
+    {
+      "@id": "https://api.nuget.org/v3/catalog0/data/2022.09.23.08.07.54/sil.core.desktop.10.0.1-beta0012.json#SIL.Core.Desktop.nuspec",
+      "@type": "PackageEntry",
+      "compressedLength": 984,
+      "fullName": "SIL.Core.Desktop.nuspec",
+      "length": 2835,
+      "name": "SIL.Core.Desktop.nuspec"
+    },
+    {
+      "@id": "https://api.nuget.org/v3/catalog0/data/2022.09.23.08.07.54/sil.core.desktop.10.0.1-beta0012.json#lib/net461/SIL.Core.Desktop.dll",
+      "@type": "PackageEntry",
+      "compressedLength": 31890,
+      "fullName": "lib/net461/SIL.Core.Desktop.dll",
+      "length": 75776,
+      "name": "SIL.Core.Desktop.dll"
+    },
+    {
+      "@id": "https://api.nuget.org/v3/catalog0/data/2022.09.23.08.07.54/sil.core.desktop.10.0.1-beta0012.json#lib/netstandard2.0/SIL.Core.Desktop.dll",
+      "@type": "PackageEntry",
+      "compressedLength": 23793,
+      "fullName": "lib/netstandard2.0/SIL.Core.Desktop.dll",
+      "length": 55296,
+      "name": "SIL.Core.Desktop.dll"
+    },
+    {
+      "@id": "https://api.nuget.org/v3/catalog0/data/2022.09.23.08.07.54/sil.core.desktop.10.0.1-beta0012.json#.signature.p7s",
+      "@type": "PackageEntry",
+      "compressedLength": 9465,
+      "fullName": ".signature.p7s",
+      "length": 9465,
+      "name": ".signature.p7s"
+    }
+  ],
+  "@context": {
+    "@vocab": "http://schema.nuget.org/schema#",
+    "catalog": "http://schema.nuget.org/catalog#",
+    "xsd": "http://www.w3.org/2001/XMLSchema#",
+    "dependencies": {
+      "@id": "dependency",
+      "@container": "@set"
+    },
+    "dependencyGroups": {
+      "@id": "dependencyGroup",
+      "@container": "@set"
+    },
+    "packageEntries": {
+      "@id": "packageEntry",
+      "@container": "@set"
+    },
+    "packageTypes": {
+      "@id": "packageType",
+      "@container": "@set"
+    },
+    "supportedFrameworks": {
+      "@id": "supportedFramework",
+      "@container": "@set"
+    },
+    "tags": {
+      "@id": "tag",
+      "@container": "@set"
+    },
+    "vulnerabilities": {
+      "@id": "vulnerability",
+      "@container": "@set"
+    },
+    "published": {
+      "@type": "xsd:dateTime"
+    },
+    "created": {
+      "@type": "xsd:dateTime"
+    },
+    "lastEdited": {
+      "@type": "xsd:dateTime"
+    },
+    "catalog:commitTimeStamp": {
+      "@type": "xsd:dateTime"
+    },
+    "reasons": {
+      "@container": "@set"
+    }
+  }
+}

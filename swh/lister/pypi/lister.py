@@ -13,7 +13,7 @@ from xmlrpc.client import Fault, ServerProxy
 
 from tenacity.before_sleep import before_sleep_log
 
-from swh.lister.utils import throttling_retry
+from swh.lister.utils import http_retry
 from swh.scheduler.interface import SchedulerInterface
 from swh.scheduler.model import ListedOrigin
 
@@ -88,7 +88,7 @@ class PyPILister(Lister[PyPIListerState, PackageListPage]):
     def state_to_dict(self, state: PyPIListerState) -> Dict[str, Any]:
         return asdict(state)
 
-    @throttling_retry(
+    @http_retry(
         retry=_if_rate_limited, before_sleep=before_sleep_log(logger, logging.WARNING)
     )
     def _changelog_last_serial(self, client: ServerProxy) -> int:
@@ -97,7 +97,7 @@ class PyPILister(Lister[PyPIListerState, PackageListPage]):
         assert isinstance(serial, int)
         return serial
 
-    @throttling_retry(
+    @http_retry(
         retry=_if_rate_limited, before_sleep=before_sleep_log(logger, logging.WARNING)
     )
     def _changelog_since_serial(

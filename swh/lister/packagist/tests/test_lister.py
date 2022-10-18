@@ -1,12 +1,11 @@
-# Copyright (C) 2019-2021  The Software Heritage developers
+# Copyright (C) 2019-2022  The Software Heritage developers
 # See the AUTHORS file at the top-level directory of this distribution
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
 
+import datetime
 import json
 from pathlib import Path
-
-import iso8601
 
 from swh.lister.packagist.lister import PackagistLister
 
@@ -15,6 +14,7 @@ _packages_list = {
         "ljjackson/linnworks",
         "lky/wx_article",
         "spryker-eco/computop-api",
+        "idevlab/essential",
     ]
 }
 
@@ -25,20 +25,6 @@ def _package_metadata(datadir, package_name):
     )
 
 
-def _package_origin_info(package_name, package_metadata):
-    origin_url = None
-    visit_type = None
-    last_update = None
-    for version_info in package_metadata["packages"][package_name].values():
-        origin_url = version_info["source"].get("url")
-        visit_type = version_info["source"].get("type")
-        if "time" in version_info:
-            version_date = iso8601.parse_date(version_info["time"])
-        if last_update is None or version_date > last_update:
-            last_update = version_date
-    return origin_url, visit_type, last_update
-
-
 def _request_without_if_modified_since(request):
     return request.headers.get("If-Modified-Since") is None
 
@@ -47,7 +33,7 @@ def _request_with_if_modified_since(request):
     return request.headers.get("If-Modified-Since") is not None
 
 
-def test_packagist_lister(swh_scheduler, requests_mock, datadir):
+def test_packagist_lister(swh_scheduler, requests_mock, datadir, requests_mock_datadir):
     # first listing, should return one origin per package
     lister = PackagistLister(scheduler=swh_scheduler)
     requests_mock.get(lister.PACKAGIST_PACKAGES_LIST_URL, json=_packages_list)
@@ -66,16 +52,33 @@ def test_packagist_lister(swh_scheduler, requests_mock, datadir):
     assert stats.origins == len(_packages_list["packageNames"])
     assert lister.updated
 
-    scheduler_origins = swh_scheduler.get_listed_origins(lister.lister_obj.id).results
+    expected_origins = {
+        (
+            "https://github.com/gitlky/wx_article",  # standard case
+            "git",
+            datetime.datetime.fromisoformat("2018-08-30T07:37:09+00:00"),
+        ),
+        (
+            "https://github.com/ljjackson/linnworks.git",  # API goes 404
+            "git",
+            datetime.datetime.fromisoformat("2018-11-01T21:45:50+00:00"),
+        ),
+        (
+            "https://github.com/spryker-eco/computop-api",  # SSH URL in manifest
+            "git",
+            datetime.datetime.fromisoformat("2020-06-22T15:50:29+00:00"),
+        ),
+        (
+            "git@gitlab.com:idevlab/Essential.git",  # not GitHub
+            "git",
+            datetime.datetime.fromisoformat("2022-10-12T10:34:29+00:00"),
+        ),
+    }
 
-    for package_name, package_metadata in packages_metadata.items():
-        origin_url, visit_type, last_update = _package_origin_info(
-            package_name, package_metadata
-        )
-        filtered_origins = [o for o in scheduler_origins if o.url == origin_url]
-        assert filtered_origins
-        assert filtered_origins[0].visit_type == visit_type
-        assert filtered_origins[0].last_update == last_update
+    assert expected_origins == {
+        (o.url, o.visit_type, o.last_update)
+        for o in swh_scheduler.get_listed_origins(lister.lister_obj.id).results
+    }
 
     # second listing, should return 0 origins as no package metadata
     # has been updated since first listing
@@ -94,6 +97,11 @@ def test_packagist_lister(swh_scheduler, requests_mock, datadir):
     assert stats.pages == 1
     assert stats.origins == 0
     assert lister.updated
+
+    assert expected_origins == {
+        (o.url, o.visit_type, o.last_update)
+        for o in swh_scheduler.get_listed_origins(lister.lister_obj.id).results
+    }
 
 
 def test_packagist_lister_missing_metadata(swh_scheduler, requests_mock, datadir):
@@ -146,6 +154,38 @@ def test_packagist_lister_package_with_bitbucket_hg_origin(
 
     assert stats.pages == 1
     assert stats.origins == 0
+
+
+def test_packagist_lister_package_normalize_github_origin(
+    swh_scheduler, requests_mock, datadir, requests_mock_datadir
+):
+    package_name = "ycms/module-main"
+    lister = PackagistLister(scheduler=swh_scheduler)
+    requests_mock.get(
+        lister.PACKAGIST_PACKAGES_LIST_URL, json={"packageNames": [package_name]}
+    )
+    requests_mock.get(
+        f"{lister.PACKAGIST_REPO_BASE_URL}/{package_name}.json",
+        additional_matcher=_request_without_if_modified_since,
+        json=_package_metadata(datadir, package_name),
+    )
+
+    stats = lister.run()
+
+    assert stats.pages == 1
+    assert stats.origins == 1
+
+    expected_origins = {
+        (
+            "https://github.com/GameCHN/module-main",
+            "git",
+            datetime.datetime.fromisoformat("2015-08-23T04:42:33+00:00"),
+        ),
+    }
+    assert expected_origins == {
+        (o.url, o.visit_type, o.last_update)
+        for o in swh_scheduler.get_listed_origins(lister.lister_obj.id).results
+    }
 
 
 def test_lister_from_configfile(swh_scheduler_config, mocker):

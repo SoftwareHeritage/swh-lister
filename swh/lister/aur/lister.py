@@ -7,8 +7,6 @@ import datetime
 import logging
 from typing import Any, Dict, Iterator, List, Optional
 
-import requests
-
 from swh.scheduler.interface import SchedulerInterface
 from swh.scheduler.model import ListedOrigin
 
@@ -65,7 +63,7 @@ class AurLister(StatelessLister[AurListerPage]):
             a directory Path where the archive has been downloaded to.
         """
         url = self.DEFAULT_PACKAGES_INDEX_URL.format(base_url=self.url)
-        return requests.get(url).json()
+        return self.http_request(url).json()
 
     def get_pages(self) -> Iterator[AurListerPage]:
         """Yield an iterator which returns 'page'

@@ -317,7 +317,7 @@ We generally recommend logging every unhandleable error with the response conten
 then immediately stop the listing by doing an equivalent of
 :py:meth:`Response.raise_for_status` from the ``requests`` library. As for rate-limiting
 errors, we have a strategy of using a flexible decorator to handle the retrying for us.
-It is based on the ``tenacity`` library and accessible as :py:func:`throttling_retry` from
+It is based on the ``tenacity`` library and accessible as :py:func:`http_retry` from
 :py:mod:`swh.lister.utils`.
 
 Pagination

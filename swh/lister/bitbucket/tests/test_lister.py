@@ -1,4 +1,4 @@
-# Copyright (C) 2017-2021 The Software Heritage developers
+# Copyright (C) 2017-2022 The Software Heritage developers
 # See the AUTHORS file at the top-level directory of this distribution
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
@@ -69,14 +69,16 @@ def test_bitbucket_incremental_lister(
     assert last_repo_cdate == bb_api_repositories_page2["values"][-1]["created_on"]
 
     # Second listing, restarting from last state
-    lister.session.get = mocker.spy(lister.session, "get")
+    lister.session.request = mocker.spy(lister.session, "request")
 
     lister.run()
 
     url_params = lister.url_params
     url_params["after"] = last_repo_cdate
 
-    lister.session.get.assert_called_once_with(lister.API_URL, params=url_params)
+    lister.session.request.assert_called_once_with(
+        "GET", lister.API_URL, params=url_params
+    )
 
     all_origins = (
         bb_api_repositories_page1["values"] + bb_api_repositories_page2["values"]
@@ -106,7 +108,7 @@ def test_bitbucket_lister_rate_limit_hit(
 
     lister = BitbucketLister(scheduler=swh_scheduler, page_size=10)
 
-    mocker.patch.object(lister.page_request.retry, "sleep")
+    mocker.patch.object(lister.http_request.retry, "sleep")
 
     stats = lister.run()
 

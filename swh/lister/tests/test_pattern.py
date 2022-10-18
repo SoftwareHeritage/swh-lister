@@ -198,3 +198,20 @@ def test_stateless_run(swh_scheduler):
 
     # And that all origins are stored
     check_listed_origins(swh_scheduler, lister, stored_lister)
+
+
+class ListerWithSameOriginInMultiplePages(RunnableStatelessLister):
+    def get_pages(self) -> Iterator[PageType]:
+        for _ in range(2):
+            yield [{"url": "https://example.org/user/project"}]
+
+
+def test_listed_origins_count(swh_scheduler):
+    lister = ListerWithSameOriginInMultiplePages(
+        scheduler=swh_scheduler, url="https://example.org", instance="example.org"
+    )
+
+    run_result = lister.run()
+
+    assert run_result.pages == 2
+    assert run_result.origins == 1
