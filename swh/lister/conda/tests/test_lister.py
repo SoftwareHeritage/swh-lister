@@ -3,36 +3,14 @@
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
 
+import pytest
+
 from swh.lister.conda.lister import CondaLister
 
 
-def test_conda_lister_free_channel(datadir, requests_mock_datadir, swh_scheduler):
-    lister = CondaLister(
-        scheduler=swh_scheduler, channel="free", archs=["linux-64", "osx-64", "win-64"]
-    )
-    res = lister.run()
-
-    assert res.pages == 3
-    assert res.origins == 11
-
-
-def test_conda_lister_conda_forge_channel(
-    datadir, requests_mock_datadir, swh_scheduler
-):
-    lister = CondaLister(
-        scheduler=swh_scheduler,
-        url="https://conda.anaconda.org",
-        channel="conda-forge",
-        archs=["linux-64"],
-    )
-    res = lister.run()
-
-    assert res.pages == 1
-    assert res.origins == 2
-
-    scheduler_origins = swh_scheduler.get_listed_origins(lister.lister_obj.id).results
-
-    expected_origins = [
+@pytest.fixture
+def expected_origins():
+    return [
         {
             "url": "https://anaconda.org/conda-forge/21cmfast",
             "artifacts": [
@@ -75,6 +53,33 @@ def test_conda_lister_conda_forge_channel(
         },
     ]
 
+
+def test_conda_lister_free_channel(datadir, requests_mock_datadir, swh_scheduler):
+    lister = CondaLister(
+        scheduler=swh_scheduler, channel="free", archs=["linux-64", "osx-64", "win-64"]
+    )
+    res = lister.run()
+
+    assert res.pages == 3
+    assert res.origins == 11
+
+
+def test_conda_lister_conda_forge_channel(
+    requests_mock_datadir, swh_scheduler, expected_origins
+):
+    lister = CondaLister(
+        scheduler=swh_scheduler,
+        url="https://conda.anaconda.org",
+        channel="conda-forge",
+        archs=["linux-64"],
+    )
+    res = lister.run()
+
+    assert res.pages == 1
+    assert res.origins == 2
+
+    scheduler_origins = swh_scheduler.get_listed_origins(lister.lister_obj.id).results
+
     assert len(scheduler_origins) == len(expected_origins)
 
     assert [
@@ -92,3 +97,23 @@ def test_conda_lister_conda_forge_channel(
         )
         for expected in sorted(expected_origins, key=lambda expected: expected["url"])
     ]
+
+
+def test_conda_lister_number_of_yielded_origins(
+    requests_mock_datadir, swh_scheduler, expected_origins
+):
+    """Check that a single ListedOrigin instance is sent by expected origins."""
+    lister = CondaLister(
+        scheduler=swh_scheduler,
+        url="https://conda.anaconda.org",
+        channel="conda-forge",
+        archs=["linux-64"],
+    )
+
+    listed_origins = []
+    for page in lister.get_pages():
+        listed_origins += list(lister.get_origins_from_page(page))
+
+    assert sorted([listed_origin.url for listed_origin in listed_origins]) == sorted(
+        [origin["url"] for origin in expected_origins]
+    )
