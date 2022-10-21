@@ -50,10 +50,15 @@ class GogsLister(Lister[GogsListerState, GogsListerPage]):
 
     Gogs API documentation: https://github.com/gogs/docs-api
 
-    The API is protected behind authentication so credentials/API tokens
-    are mandatory. It supports pagination and provides next page URL
-    through the 'next' value of the 'Link' header. The default value for
-    page size ('limit') is 10 but the maximum allowed value is 50.
+    The API may be protected behind authentication so credentials/API tokens can be
+    provided.
+
+    The lister supports pagination and provides next page URL through the 'next' value
+    of the 'Link' header. The default value for page size ('limit') is 10 but the
+    maximum allowed value is 50.
+
+    Api can usually be found at the location: https://<host>/api/v1/repos/search
+
     """
 
     LISTER_NAME = "gogs"
@@ -90,17 +95,15 @@ class GogsLister(Lister[GogsListerState, GogsListerPage]):
                 username = cred.get("username")
                 self.api_token = cred["password"]
                 logger.info("Using authentication credentials from user %s", username)
-            else:
-                # Raises an error on Gogs, or a warning on Gitea
-                self.on_anonymous_mode()
 
         self.session.headers.update({"Accept": "application/json"})
 
         if self.api_token:
             self.session.headers["Authorization"] = f"token {self.api_token}"
-
-    def on_anonymous_mode(self):
-        raise ValueError("No credentials or API token provided")
+        else:
+            logger.warning(
+                "No authentication token set in configuration, using anonymous mode"
+            )
 
     def state_from_dict(self, d: Dict[str, Any]) -> GogsListerState:
         return GogsListerState(**d)
@@ -153,7 +156,6 @@ class GogsLister(Lister[GogsListerState, GogsListerPage]):
         while next_link is not None:
             repos = self.extract_repos(body)
 
-            assert len(links) > 0, "API changed: no Link header found"
             if "next" in links:
                 next_link = links["next"]["url"]
             else:
