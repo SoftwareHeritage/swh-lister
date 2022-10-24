@@ -1,8 +1,12 @@
-swh-lister (4.0.0-1~swh1~bpo10+1) buster-swh; urgency=medium
+swh-lister (4.0.1-1~swh1) unstable-swh; urgency=medium
 
-  * Rebuild for buster-swh
+  * New upstream release 4.0.1     - (tagged by Antoine R. Dumont
+    (@ardumont) <ardumont@softwareheritage.org> on 2022-10-24 11:41:49
+    +0200)
+  * Upstream changes:     - v4.0.1     - gogs/lister: Allow public gogs
+    instance listing
 
- -- Software Heritage autobuilder (on jenkins-debian1) <jenkins@jenkins-debian1.internal.softwareheritage.org>  Tue, 18 Oct 2022 10:29:02 +0000
+ -- Software Heritage autobuilder (on jenkins-debian1) <jenkins@jenkins-debian1.internal.softwareheritage.org>  Mon, 24 Oct 2022 09:50:06 +0000
 
 swh-lister (4.0.0-1~swh1) unstable-swh; urgency=medium
 
