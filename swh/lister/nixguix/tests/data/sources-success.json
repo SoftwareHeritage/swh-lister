@@ -100,6 +100,83 @@
       "type": "url",
       "urls": ["svn://svn.code.sf.net/p/acme-crossass/code-0/trunk"],
       "integrity": "sha256-VifIQ+UEVMKJ+cNS+Xxusazinr5Cgu1lmGuhqj/5Mpk="
+    },
+    {
+      "outputHash": "0w2qkrrkzfy4h4jld18apypmbi8a8r89y2l11axlv808i2rg68fk",
+      "outputHashAlgo": "sha256",
+      "outputHashMode": "flat",
+      "type": "url",
+      "urls": [
+        "https://github.com/josefnpat/vapor/releases/download/0.2.3/vapor_dbf509f.love"
+      ],
+      "integrity": "sha256-0yHzsogIoE27CoEKn1BGCsVVr78KhUYlgcS7P3OeWHA=",
+      "inferredFetcher": "unclassified"
+    },
+    {
+      "outputHash": "0rf06axz1hxssg942w2g66avak30jy6rfdwxynhriqv3vrf17bja",
+      "outputHashAlgo": "sha256",
+      "outputHashMode": "flat",
+      "type": "url",
+      "urls": [
+        "http://mirrors.jenkins.io/war-stable/2.303.1/jenkins.war"
+      ],
+      "integrity": "sha256-Sq4TXN5j45ih9Z03l42XYEy1lTFPcEHS07rD8LsywGU=",
+      "inferredFetcher": "unclassified"
+    },
+    {
+      "outputHash": "1filqm050ixy53kdv81bd4n80vjvfapnmzizy7jg8a6pilv17gfc",
+      "outputHashAlgo": "sha256",
+      "outputHashMode": "flat",
+      "type": "url",
+      "urls": [
+        "https://files.pythonhosted.org/packages/py2.py3/g/geojson/geojson-2.5.0-py2.py3-none-any.whl"
+      ],
+      "integrity": "sha256-zL0TNo3XKPTk8T/+aq9yW26ALGkroN3mKL5HUEDFNLo=",
+      "inferredFetcher": "unclassified"
+    },
+    {
+      "outputHash": "sha256:0i1cw0nfg24b0sg2yc3q7315ng5vc5245nvh0l1cndkn2c9z4978",
+      "outputHashAlgo": "sha256",
+      "outputHashMode": "flat",
+      "type": "url",
+      "urls": [
+        "https://stavekontrolden.dk/dictionaries/da_DK/da_DK-2.5.189.oxt"
+      ],
+      "integrity": "sha256-6CTyExN2NssCBXDbQkRhuzxbwjh4MC+eBouI5yzgLEQ=",
+      "inferredFetcher": "unclassified"
+    },
+    {
+      "outputHash": "0y2HN4WGYUUXBfqp8Xb4oaA0hbLZmE3kDUXMBAOjvPQ=",
+      "outputHashAlgo": "sha256",
+      "outputHashMode": "flat",
+      "type": "url",
+      "urls": [
+        "https://github.com/microsoft/vscode-python/releases/download/2021.5.829140558/ms-python-release.vsix"
+      ],
+      "integrity": "sha256-0y2HN4WGYUUXBfqp8Xb4oaA0hbLZmE3kDUXMBAOjvPQ=",
+      "inferredFetcher": "unclassified"
+    },
+    {
+      "outputHash": "08dfl5h1k6s542qw5qx2czm1wb37ck9w2vpjz44kp2az352nmksb",
+      "outputHashAlgo": "sha256",
+      "outputHashMode": "flat",
+      "type": "url",
+      "urls": [
+        "https://zxh404.gallery.vsassets.io/_apis/public/gallery/publisher/zxh404/extension/vscode-proto3/0.5.4/assetbyname/Microsoft.VisualStudio.Services.VSIXPackage"
+      ],
+      "integrity": "sha256-S89qRRlfiTsJ+fJuwdNkZywe6mei48KxIEWbGWChriE=",
+      "inferredFetcher": "unclassified"
+    },
+    {
+      "outputHash": "0kaz8j85wjjnf18z0lz69xr1z8makg30jn2dzdyicd1asrj0q1jm",
+      "outputHashAlgo": "sha256",
+      "outputHashMode": "flat",
+      "type": "url",
+      "urls": [
+        "https://github.com/yvt/openspades/releases/download/v0.1.1b/NotoFonts.pak"
+      ],
+      "integrity": "sha256-VQYMZNYqNBZ9+01YCcabqqIfck/mU/BRcFZKXpBEX00=",
+      "inferredFetcher": "unclassified"
     }
   ],
   "version": "1",

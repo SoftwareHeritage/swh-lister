@@ -211,7 +211,7 @@ def test_lister_nixguix_ok(datadir, swh_scheduler, requests_mock):
                 expected_visit_types["content"] += 1
             elif url.startswith("svn"):  # mistyped artifact rendered as vcs nonetheless
                 expected_visit_types["svn"] += 1
-            else:
+            else:  # tarball artifacts
                 expected_visit_types["directory"] += 1
 
     assert set(expected_visit_types.keys()) == {
