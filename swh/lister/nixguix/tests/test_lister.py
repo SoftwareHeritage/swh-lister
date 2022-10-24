@@ -79,7 +79,7 @@ def test_is_tarball_not_so_simple(query_param):
     ],
 )
 def test_is_tarball_simple_not_tarball(files):
-    """Simple check on tarball should discriminate betwenn tarball and file"""
+    """Simple check on tarball should discriminate between tarball and file"""
     urls = [f"http://example.org/{file}" for file in files]
     is_tar, origin = is_tarball(urls)
     assert is_tar is False

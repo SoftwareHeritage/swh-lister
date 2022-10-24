@@ -139,16 +139,16 @@ def test_gogs_full_listing(
 def test_gogs_auth_instance(
     swh_scheduler, requests_mock, trygogs_p1, trygogs_p2, trygogs_p3_empty
 ):
-    """Covers token authentication, token from credentials,
+    """Covers without authentication, token authentication, token from credentials,
     instance inference from URL."""
 
     api_token = "secret"
     instance = "try_gogs"
 
     # Test lister initialization without api_token or credentials:
-    with pytest.raises(ValueError, match="No credentials or API token provided"):
-        kwargs1 = dict(url=TRY_GOGS_URL, instance=instance)
-        GogsLister(scheduler=swh_scheduler, **kwargs1)
+    kwargs1 = dict(url=TRY_GOGS_URL, instance=instance)
+    lister = GogsLister(scheduler=swh_scheduler, **kwargs1)
+    assert "Authorization" not in lister.session.headers
 
     # Test lister initialization using api_token:
     kwargs2 = dict(url=TRY_GOGS_URL, api_token=api_token, instance=instance)
