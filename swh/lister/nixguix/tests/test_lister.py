@@ -8,6 +8,7 @@ import json
 import logging
 from pathlib import Path
 from typing import Dict, List
+from urllib.parse import urlparse
 
 import pytest
 import requests
@@ -15,11 +16,14 @@ from requests.exceptions import ConnectionError, InvalidSchema, SSLError
 
 from swh.lister import TARBALL_EXTENSIONS
 from swh.lister.nixguix.lister import (
+    DEFAULT_EXTENSIONS_TO_IGNORE,
     POSSIBLE_TARBALL_MIMETYPES,
     ArtifactNatureMistyped,
     ArtifactNatureUndetected,
+    ArtifactWithoutExtension,
     NixGuixLister,
     is_tarball,
+    url_endswith,
 )
 from swh.lister.pattern import ListerStats
 
@@ -41,6 +45,33 @@ def page_response(datadir, instance: str = "success") -> List[Dict]:
     """Return list of repositories (out of test dataset)"""
     datapath = Path(datadir, f"sources-{instance}.json")
     return json.loads(datapath.read_text()) if datapath.exists else []
+
+
+@pytest.mark.parametrize(
+    "name,expected_result",
+    [(f"one.{ext}", True) for ext in TARBALL_EXTENSIONS]
+    + [(f"one.{ext}?foo=bar", True) for ext in TARBALL_EXTENSIONS]
+    + [(f"one?p0=1&foo=bar.{ext}", True) for ext in DEFAULT_EXTENSIONS_TO_IGNORE]
+    + [("two?file=something.el", False), ("foo?two=two&three=three", False)],
+)
+def test_url_endswith(name, expected_result):
+    """It should detect whether url or query params of the urls ends with extensions"""
+    urlparsed = urlparse(f"https://example.org/{name}")
+    assert (
+        url_endswith(
+            urlparsed,
+            TARBALL_EXTENSIONS + DEFAULT_EXTENSIONS_TO_IGNORE,
+            raise_when_no_extension=False,
+        )
+        is expected_result
+    )
+
+
+def test_url_endswith_raise():
+    """It should raise when the tested url has no extension"""
+    urlparsed = urlparse("https://example.org/foo?two=two&three=three")
+    with pytest.raises(ArtifactWithoutExtension):
+        url_endswith(urlparsed, ["unimportant"])
 
 
 @pytest.mark.parametrize(
@@ -254,10 +285,15 @@ def test_lister_nixguix_ok(datadir, swh_scheduler, requests_mock):
 
 
 def test_lister_nixguix_mostly_noop(datadir, swh_scheduler, requests_mock):
-    """NixGuixLister should ignore unsupported or incomplete origins"""
+    """NixGuixLister should ignore unsupported or incomplete or to ignore origins"""
     url = SOURCES["nixpkgs"]["manifest"]
     origin_upstream = SOURCES["nixpkgs"]["repo"]
-    lister = NixGuixLister(swh_scheduler, url=url, origin_upstream=origin_upstream)
+    lister = NixGuixLister(
+        swh_scheduler,
+        url=url,
+        origin_upstream=origin_upstream,
+        extensions_to_ignore=["foobar"],
+    )
 
     response = page_response(datadir, "failure")
 
