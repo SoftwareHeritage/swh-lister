@@ -188,6 +188,12 @@ def test_lister_nixguix_ok(datadir, swh_scheduler, requests_mock):
         "http://git.marmaro.de/?p=mmh;a=snapshot;h=431604647f89d5aac7b199a7883e98e56e4ccf9e;sf=tgz",
         headers={"Content-Type": "application/gzip; charset=ISO-8859-1"},
     )
+    requests_mock.head(
+        "https://crates.io/api/v1/crates/syntect/4.6.0/download",
+        headers={
+            "Location": "https://static.crates.io/crates/syntect/syntect-4.6.0.crate"
+        },
+    )
 
     expected_visit_types = defaultdict(int)
     # origin upstream is added as origin
@@ -211,6 +217,8 @@ def test_lister_nixguix_ok(datadir, swh_scheduler, requests_mock):
                 expected_visit_types["content"] += 1
             elif url.startswith("svn"):  # mistyped artifact rendered as vcs nonetheless
                 expected_visit_types["svn"] += 1
+            elif "crates.io" in url:
+                expected_visit_types["directory"] += 1
             else:  # tarball artifacts
                 expected_visit_types["directory"] += 1
 
