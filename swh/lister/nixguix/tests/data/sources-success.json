@@ -265,6 +265,13 @@
         "https://github.com/Doom-Utils/deutex/releases/download/v5.2.2/deutex-5.2.2.tar.zst"
       ],
       "integrity": "sha256-EO0OelM+yXy20DVI1CWPvsiIUqRbXqTPVDQ3atQXS18="
+    },
+    {
+      "type": "url",
+      "urls": [
+        "https://codeload.github.com/fifengine/fifechan/tar.gz/0.1.5"
+      ],
+      "integrity": "sha256-Kb5f9LN54vxPiO99i8FyNCEw3T53owYfZMinXv5OunM="
     }
   ],
   "version": "1",

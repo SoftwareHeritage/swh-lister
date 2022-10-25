@@ -22,6 +22,7 @@ from enum import Enum
 import logging
 from pathlib import Path
 import random
+import re
 from typing import Any, Dict, Iterator, List, Optional, Tuple, Union
 from urllib.parse import parse_qsl, urlparse
 
@@ -136,20 +137,36 @@ VCS_SUPPORTED = ("git", "svn", "hg")
 POSSIBLE_TARBALL_MIMETYPES = tuple(MIMETYPE_TO_ARCHIVE_FORMAT.keys())
 
 
+PATTERN_VERSION = re.compile(r"(v*[0-9]+[.])([0-9]+[.]*)+")
+
+
 def url_endswith(
     urlparsed, extensions: List[str], raise_when_no_extension: bool = True
 ) -> bool:
-    """Determine whether urlparsed ends with one of the extensions.
+    """Determine whether urlparsed ends with one of the extensions passed as parameter.
+
+    This also account for the edge case of a filename with only a version as name (so no
+    extension in the end.)
 
     Raises:
-        ArtifactWithoutExtension in case no extension is available and raise_when_no_extension
-          is True (the default)
+        ArtifactWithoutExtension in case no extension is available and
+        raise_when_no_extension is True (the default)
 
     """
     paths = [Path(p) for (_, p) in [("_", urlparsed.path)] + parse_qsl(urlparsed.query)]
     if raise_when_no_extension and not any(path.suffix != "" for path in paths):
         raise ArtifactWithoutExtension
-    return any(path.suffix.endswith(tuple(extensions)) for path in paths)
+    match = any(path.suffix.endswith(tuple(extensions)) for path in paths)
+    if match:
+        return match
+    # Some false negative can happen (e.g. https://<netloc>/path/0.1.5)), so make sure
+    # to catch those
+    name = Path(urlparsed.path).name
+    if not PATTERN_VERSION.match(name):
+        return match
+    if raise_when_no_extension:
+        raise ArtifactWithoutExtension
+    return False
 
 
 def is_tarball(urls: List[str], request: Optional[Any] = None) -> Tuple[bool, str]:

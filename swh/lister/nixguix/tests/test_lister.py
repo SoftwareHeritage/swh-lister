@@ -52,7 +52,13 @@ def page_response(datadir, instance: str = "success") -> List[Dict]:
     [(f"one.{ext}", True) for ext in TARBALL_EXTENSIONS]
     + [(f"one.{ext}?foo=bar", True) for ext in TARBALL_EXTENSIONS]
     + [(f"one?p0=1&foo=bar.{ext}", True) for ext in DEFAULT_EXTENSIONS_TO_IGNORE]
-    + [("two?file=something.el", False), ("foo?two=two&three=three", False)],
+    + [
+        ("two?file=something.el", False),
+        ("foo?two=two&three=three", False),
+        ("v1.2.3", False),  # with raise_when_no_extension is False
+        ("2048-game-20151026.1233", False),
+        ("v2048-game-20151026.1233", False),
+    ],
 )
 def test_url_endswith(name, expected_result):
     """It should detect whether url or query params of the urls ends with extensions"""
@@ -67,9 +73,12 @@ def test_url_endswith(name, expected_result):
     )
 
 
-def test_url_endswith_raise():
+@pytest.mark.parametrize(
+    "name", ["foo?two=two&three=three", "tar.gz/0.1.5", "tar.gz/v10.3.1"]
+)
+def test_url_endswith_raise(name):
     """It should raise when the tested url has no extension"""
-    urlparsed = urlparse("https://example.org/foo?two=two&three=three")
+    urlparsed = urlparse(f"https://example.org/{name}")
     with pytest.raises(ArtifactWithoutExtension):
         url_endswith(urlparsed, ["unimportant"])
 
@@ -225,6 +234,12 @@ def test_lister_nixguix_ok(datadir, swh_scheduler, requests_mock):
             "Location": "https://static.crates.io/crates/syntect/syntect-4.6.0.crate"
         },
     )
+    requests_mock.head(
+        "https://codeload.github.com/fifengine/fifechan/tar.gz/0.1.5",
+        headers={
+            "Content-Type": "application/x-gzip",
+        },
+    )
 
     expected_visit_types = defaultdict(int)
     # origin upstream is added as origin
@@ -248,7 +263,7 @@ def test_lister_nixguix_ok(datadir, swh_scheduler, requests_mock):
                 expected_visit_types["content"] += 1
             elif url.startswith("svn"):  # mistyped artifact rendered as vcs nonetheless
                 expected_visit_types["svn"] += 1
-            elif "crates.io" in url:
+            elif "crates.io" in url or "codeload.github.com" in url:
                 expected_visit_types["directory"] += 1
             else:  # tarball artifacts
                 expected_visit_types["directory"] += 1
