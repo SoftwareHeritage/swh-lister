@@ -240,6 +240,19 @@ def test_lister_nixguix_ok(datadir, swh_scheduler, requests_mock):
             "Content-Type": "application/x-gzip",
         },
     )
+    requests_mock.head(
+        "https://codeload.github.com/unknown-horizons/unknown-horizons/tar.gz/2019.1",
+        headers={
+            "Content-Disposition": "attachment; filename=unknown-horizons-2019.1.tar.gz",
+        },
+    )
+    requests_mock.head(
+        "https://codeload.github.com/fifengine/fifengine/tar.gz/0.4.2",
+        headers={
+            "Content-Disposition": "attachment; name=fieldName; "
+            "filename=fifengine-0.4.2.tar.gz; other=stuff",
+        },
+    )
 
     expected_visit_types = defaultdict(int)
     # origin upstream is added as origin

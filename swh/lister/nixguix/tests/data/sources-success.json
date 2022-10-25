@@ -272,6 +272,20 @@
         "https://codeload.github.com/fifengine/fifechan/tar.gz/0.1.5"
       ],
       "integrity": "sha256-Kb5f9LN54vxPiO99i8FyNCEw3T53owYfZMinXv5OunM="
+    },
+    {
+      "type": "url",
+      "urls": [
+        "https://codeload.github.com/unknown-horizons/unknown-horizons/tar.gz/2019.1"
+      ],
+      "integrity": "sha256-pBf9PTQiEv0ZDk8hvoLvE8EOHtfCiPu+RuRiAM895Ng="
+    },
+    {
+      "type": "url",
+      "urls": [
+        "https://codeload.github.com/fifengine/fifengine/tar.gz/0.4.2"
+      ],
+      "integrity": "sha256-6IK1W++jauLxqJraFq8PgUobePfL5gIexbFgVgTPj/g="
     }
   ],
   "version": "1",

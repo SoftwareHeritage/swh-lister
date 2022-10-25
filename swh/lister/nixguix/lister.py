@@ -242,12 +242,33 @@ def is_tarball(urls: List[str], request: Optional[Any] = None) -> Tuple[bool, st
                     url,
                 )
 
+        origin = urls[0]
+
         content_type = response.headers.get("Content-Type")
         if content_type:
             logger.debug("Content-Type: %s", content_type)
             if content_type == "application/json":
-                return False, urls[0]
-            return content_type.startswith(POSSIBLE_TARBALL_MIMETYPES), urls[0]
+                return False, origin
+            return content_type.startswith(POSSIBLE_TARBALL_MIMETYPES), origin
+
+        content_disposition = response.headers.get("Content-Disposition")
+        if content_disposition:
+            logger.debug("Content-Disposition: %s", content_disposition)
+            if "filename=" in content_disposition:
+                fields = content_disposition.split("; ")
+                for field in fields:
+                    if "filename=" in field:
+                        _, filename = field.split("filename=")
+                        break
+
+                return (
+                    url_endswith(
+                        urlparse(filename),
+                        TARBALL_EXTENSIONS,
+                        raise_when_no_extension=False,
+                    ),
+                    origin,
+                )
 
         raise ArtifactNatureUndetected(
             f"Cannot determine artifact type from url <{url}>"
