@@ -38,7 +38,7 @@ this pattern::
 
     "https://forge.puppet.com/modules/{owner}/{pkgname}"
 
-For each origin `last_update`is set via the module "updated_at" value.
+For each origin `last_update` is set via the module "updated_at" value.
 As the api also returns all existing versions for a package, we build an `artifacts`
 dict in `extra_loader_arguments` with the archive tarball corresponding to each
 existing versions.
@@ -47,20 +47,27 @@ Example for ``file_concat`` module located at
 https://forge.puppet.com/modules/electrical/file_concat::
 
     {
-        "artifacts": {
-            "1.0.0": {
-                "url": "https://forgeapi.puppet.com/v3/files/electrical-file_concat-1.0.0.tar.gz",  # noqa: B950
-                "version": "1.0.0",
-                "filename": "electrical-file_concat-1.0.0.tar.gz",
-                "last_update": "2015-04-09T12:03:13-07:00",
-            },
-            "1.0.1": {
+        "artifacts": [
+            {
                 "url": "https://forgeapi.puppet.com/v3/files/electrical-file_concat-1.0.1.tar.gz",  # noqa: B950
                 "version": "1.0.1",
                 "filename": "electrical-file_concat-1.0.1.tar.gz",
                 "last_update": "2015-04-17T01:03:46-07:00",
+                "checksums": {
+                    "md5": "74901a89544134478c2dfde5efbb7f14",
+                    "sha256": "15e973613ea038d8a4f60bafe2d678f88f53f3624c02df3157c0043f4a400de6",  # noqa: B950
+                },
             },
-        }
+            {
+                "url": "https://forgeapi.puppet.com/v3/files/electrical-file_concat-1.0.0.tar.gz",  # noqa: B950
+                "version": "1.0.0",
+                "filename": "electrical-file_concat-1.0.0.tar.gz",
+                "last_update": "2015-04-09T12:03:13-07:00",
+                "checksums": {
+                    "length": 13289,
+                },
+            },
+        ],
     }
 
 Running tests

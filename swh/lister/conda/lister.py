@@ -71,7 +71,9 @@ class CondaLister(StatelessLister[CondaListerPage]):
         assert self.lister_obj.id is not None
         arch, packages = page
 
+        package_names = set()
         for filename, package_metadata in packages.items():
+            package_names.add(package_metadata["name"])
             version_key = (
                 f"{arch}/{package_metadata['version']}-{package_metadata['build']}"
             )
@@ -102,22 +104,20 @@ class CondaLister(StatelessLister[CondaListerPage]):
             elif "date" in package_metadata:
                 package_date = iso8601.parse_date(package_metadata["date"])
 
-            last_update = None
             if package_date:
                 artifact["date"] = package_date.isoformat()
                 self.package_dates[package_metadata["name"]].append(package_date)
-                last_update = max(self.package_dates[package_metadata["name"]])
 
+        for package_name in package_names:
+            package_dates = self.package_dates[package_name]
             yield ListedOrigin(
                 lister_id=self.lister_obj.id,
                 visit_type=self.VISIT_TYPE,
                 url=self.ORIGIN_URL_PATTERN.format(
-                    channel=self.channel, pkgname=package_metadata["name"]
+                    channel=self.channel, pkgname=package_name
                 ),
-                last_update=last_update,
+                last_update=max(package_dates, default=None),
                 extra_loader_arguments={
-                    "artifacts": [
-                        v for k, v in self.packages[package_metadata["name"]].items()
-                    ],
+                    "artifacts": list(self.packages[package_name].values())
                 },
             )

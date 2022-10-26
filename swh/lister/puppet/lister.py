@@ -76,7 +76,7 @@ class PuppetLister(StatelessLister[PuppetListerPage]):
             pkgname = entry["name"]
             owner = entry["owner"]["slug"]
             url = f"https://forge.puppet.com/modules/{owner}/{pkgname}"
-            artifacts = {}
+            artifacts = []
             for release in entry["releases"]:
                 # Build an artifact entry following original-artifacts-json specification
                 # https://docs.softwareheritage.org/devel/swh-storage/extrinsic-metadata-specification.html#original-artifacts-json  # noqa: B950
@@ -92,15 +92,17 @@ class PuppetLister(StatelessLister[PuppetListerPage]):
                     # use file length as basic content check instead
                     checksums["length"] = release["file_size"]
 
-                artifacts[release["version"]] = {
-                    "filename": release["file_uri"].split("/")[-1],
-                    "url": urljoin(self.BASE_URL, release["file_uri"]),
-                    "version": release["version"],
-                    "last_update": datetime.strptime(
-                        release["created_at"], dt_parse_pattern
-                    ).isoformat(),
-                    "checksums": checksums,
-                }
+                artifacts.append(
+                    {
+                        "filename": release["file_uri"].split("/")[-1],
+                        "url": urljoin(self.BASE_URL, release["file_uri"]),
+                        "version": release["version"],
+                        "last_update": datetime.strptime(
+                            release["created_at"], dt_parse_pattern
+                        ).isoformat(),
+                        "checksums": checksums,
+                    }
+                )
 
             yield ListedOrigin(
                 lister_id=self.lister_obj.id,
