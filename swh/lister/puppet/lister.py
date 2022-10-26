@@ -3,15 +3,18 @@
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
 
-from datetime import datetime
+from dataclasses import dataclass
+from datetime import datetime, timedelta, timezone
 import logging
 from typing import Any, Dict, Iterator, List, Optional
 from urllib.parse import urljoin
 
+import iso8601
+
 from swh.scheduler.interface import SchedulerInterface
 from swh.scheduler.model import ListedOrigin
 
-from ..pattern import CredentialsType, StatelessLister
+from ..pattern import CredentialsType, Lister
 
 logger = logging.getLogger(__name__)
 
@@ -19,7 +22,15 @@ logger = logging.getLogger(__name__)
 PuppetListerPage = List[Dict[str, Any]]
 
 
-class PuppetLister(StatelessLister[PuppetListerPage]):
+@dataclass
+class PuppetListerState:
+    """Store lister state for incremental mode operations"""
+
+    last_listing_date: Optional[datetime] = None
+    """Last date when Puppet lister was executed"""
+
+
+class PuppetLister(Lister[PuppetListerState, PuppetListerPage]):
     """The Puppet lister list origins from 'Puppet Forge'"""
 
     LISTER_NAME = "puppet"
@@ -39,6 +50,21 @@ class PuppetLister(StatelessLister[PuppetListerPage]):
             instance=self.INSTANCE,
             url=self.BASE_URL,
         )
+        # Store the datetime the lister runs for incremental purpose
+        self.listing_date = datetime.now()
+
+    def state_from_dict(self, d: Dict[str, Any]) -> PuppetListerState:
+        last_listing_date = d.get("last_listing_date")
+        if last_listing_date is not None:
+            d["last_listing_date"] = iso8601.parse_date(last_listing_date)
+        return PuppetListerState(**d)
+
+    def state_to_dict(self, state: PuppetListerState) -> Dict[str, Any]:
+        d: Dict[str, Optional[str]] = {"last_listing_date": None}
+        last_listing_date = state.last_listing_date
+        if last_listing_date is not None:
+            d["last_listing_date"] = last_listing_date.isoformat()
+        return d
 
     def get_pages(self) -> Iterator[PuppetListerPage]:
         """Yield an iterator which returns 'page'
@@ -52,9 +78,21 @@ class PuppetLister(StatelessLister[PuppetListerPage]):
         """
         # limit = 100 is the max value for pagination
         limit: int = 100
-        response = self.http_request(
-            f"{self.BASE_URL}v3/modules", params={"limit": limit}
-        )
+        params: Dict[str, Any] = {"limit": limit}
+
+        if self.state.last_listing_date:
+            # Incremental mode filter query
+            # To ensure we don't miss records between two lister runs `last_str`` must be
+            # set with an offset of -15 hours, which is the lower timezone recorded in the
+            # tzdb
+            last_str = (
+                self.state.last_listing_date.astimezone(timezone(timedelta(hours=-15)))
+                .date()
+                .isoformat()
+            )
+            params["with_release_since"] = last_str
+
+        response = self.http_request(f"{self.BASE_URL}v3/modules", params=params)
         data: Dict[str, Any] = response.json()
         yield data["results"]
 
@@ -111,3 +149,7 @@ class PuppetLister(StatelessLister[PuppetListerPage]):
                 last_update=last_update,
                 extra_loader_arguments={"artifacts": artifacts},
             )
+
+    def finalize(self) -> None:
+        self.state.last_listing_date = self.listing_date
+        self.updated = True

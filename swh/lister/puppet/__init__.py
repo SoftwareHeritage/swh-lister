@@ -22,6 +22,10 @@ It returns a paginated list of results and a `next` url.
 
 The api follow `OpenApi 3.0 specifications`.
 
+The lister is incremental using ``with_release_since`` api argument whose value is an
+iso date set regarding the last time the lister has been executed, stored as
+``lister.state.last_listing_date``.
+
 Page listing
 ------------
 

@@ -3,6 +3,8 @@
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
 
+from datetime import datetime, timedelta, timezone
+
 from swh.lister.puppet.lister import PuppetLister
 
 # flake8: noqa: B950
@@ -118,3 +120,45 @@ def test_puppet_lister(datadir, requests_mock_datadir, swh_scheduler):
         )
         for expected in sorted(expected_origins, key=lambda expected: expected["url"])
     ]
+
+
+def test_puppet_lister_incremental(datadir, requests_mock_datadir, swh_scheduler):
+
+    # First run
+    lister = PuppetLister(scheduler=swh_scheduler)
+    res = lister.run()
+
+    assert res.pages == 2
+    assert res.origins == 1 + 1 + 1
+
+    scheduler_origins = swh_scheduler.get_listed_origins(lister.lister_obj.id).results
+
+    assert len(scheduler_origins) == len(expected_origins)
+
+    assert [
+        (
+            scheduled.visit_type,
+            scheduled.url,
+            scheduled.extra_loader_arguments["artifacts"],
+        )
+        for scheduled in sorted(scheduler_origins, key=lambda scheduled: scheduled.url)
+    ] == [
+        (
+            "puppet",
+            expected["url"],
+            expected["artifacts"],
+        )
+        for expected in sorted(expected_origins, key=lambda expected: expected["url"])
+    ]
+
+    # Second run
+    lister = PuppetLister(scheduler=swh_scheduler)
+    # Force lister.state.last_listing_date for correct fixture loading
+
+    lister.state.last_listing_date = datetime(2022, 9, 26, 18, 0).astimezone(
+        timezone(timedelta(hours=-7))
+    )
+    res = lister.run()
+
+    assert res.pages == 1
+    assert res.origins == 1
