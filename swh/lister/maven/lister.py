@@ -14,7 +14,6 @@ from bs4 import BeautifulSoup
 import lxml
 import requests
 
-from swh.core.github.utils import GitHubSession
 from swh.scheduler.interface import SchedulerInterface
 from swh.scheduler.model import ListedOrigin
 
@@ -88,15 +87,12 @@ class MavenLister(Lister[MavenListerState, RepoPage]):
             credentials=credentials,
             url=url,
             instance=instance,
+            with_github_session=True,
         )
 
         self.session.headers.update({"Accept": "application/json"})
 
         self.jar_origins: Dict[str, ListedOrigin] = {}
-        self.github_session = GitHubSession(
-            credentials=self.credentials,
-            user_agent=str(self.session.headers["User-Agent"]),
-        )
 
     def state_from_dict(self, d: Dict[str, Any]) -> MavenListerState:
         return MavenListerState(**d)
@@ -294,6 +290,7 @@ class MavenLister(Lister[MavenListerState, RepoPage]):
             return None
 
         if url and visit_type == "git":
+            assert self.github_session is not None
             # Non-github urls will be returned as is, github ones will be canonical ones
             url = self.github_session.get_canonical_url(url)
 

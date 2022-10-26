@@ -11,7 +11,6 @@ from typing import Any, Dict, Iterator, List, Optional
 import iso8601
 import requests
 
-from swh.core.github.utils import GitHubSession
 from swh.scheduler.interface import SchedulerInterface
 from swh.scheduler.model import ListedOrigin
 
@@ -60,14 +59,11 @@ class PackagistLister(Lister[PackagistListerState, PackagistPageType]):
             url=self.PACKAGIST_PACKAGES_LIST_URL,
             instance="packagist",
             credentials=credentials,
+            with_github_session=True,
         )
 
         self.session.headers.update({"Accept": "application/json"})
         self.listing_date = datetime.now().astimezone(tz=timezone.utc)
-        self.github_session = GitHubSession(
-            credentials=self.credentials,
-            user_agent=str(self.session.headers["User-Agent"]),
-        )
 
     def state_from_dict(self, d: Dict[str, Any]) -> PackagistListerState:
         last_listing_date = d.get("last_listing_date")
@@ -152,6 +148,7 @@ class PackagistLister(Lister[PackagistListerState, PackagistPageType]):
             if visit_type == "git":
                 # Non-github urls will be returned as is, github ones will be canonical
                 # ones
+                assert self.github_session is not None
                 origin_url = (
                     self.github_session.get_canonical_url(origin_url) or origin_url
                 )
