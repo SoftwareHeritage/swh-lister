@@ -29,7 +29,6 @@ from urllib.parse import parse_qsl, urlparse
 import requests
 from requests.exceptions import ConnectionError, InvalidSchema, SSLError
 
-from swh.core.github.utils import GitHubSession
 from swh.core.tarball import MIMETYPE_TO_ARCHIVE_FORMAT
 from swh.lister import TARBALL_EXTENSIONS
 from swh.lister.pattern import CredentialsType, StatelessLister
@@ -331,6 +330,7 @@ class NixGuixLister(StatelessLister[PageResult]):
             url=url.rstrip("/"),
             instance=instance,
             credentials=credentials,
+            with_github_session=canonicalize,
         )
         # either full fqdn NixOS/nixpkgs or guix repository urls
         # maybe add an assert on those specific urls?
@@ -338,16 +338,6 @@ class NixGuixLister(StatelessLister[PageResult]):
         self.extensions_to_ignore = DEFAULT_EXTENSIONS_TO_IGNORE + extensions_to_ignore
 
         self.session = requests.Session()
-        # for testing purposes, we may want to skip this step (e.g. docker run and rate
-        # limit)
-        self.github_session = (
-            GitHubSession(
-                credentials=self.credentials,
-                user_agent=str(self.session.headers["User-Agent"]),
-            )
-            if canonicalize
-            else None
-        )
 
     def build_artifact(
         self, artifact_url: str, artifact_type: str, artifact_ref: Optional[str] = None

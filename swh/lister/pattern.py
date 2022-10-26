@@ -14,6 +14,7 @@ import requests
 from tenacity.before_sleep import before_sleep_log
 
 from swh.core.config import load_from_envvar
+from swh.core.github.utils import GitHubSession
 from swh.core.utils import grouper
 from swh.scheduler import get_scheduler, model
 from swh.scheduler.interface import SchedulerInterface
@@ -93,6 +94,7 @@ class Lister(Generic[StateType, PageType]):
     """
 
     LISTER_NAME: str = ""
+    github_session: Optional[GitHubSession] = None
 
     def __init__(
         self,
@@ -100,6 +102,7 @@ class Lister(Generic[StateType, PageType]):
         url: str,
         instance: Optional[str] = None,
         credentials: CredentialsType = None,
+        with_github_session: bool = False,
     ):
         if not self.LISTER_NAME:
             raise ValueError("Must set the LISTER_NAME attribute on Lister classes")
@@ -126,6 +129,14 @@ class Lister(Generic[StateType, PageType]):
         # Declare the USER_AGENT is more sysadm-friendly for the forge we list
         self.session.headers.update(
             {"User-Agent": USER_AGENT_TEMPLATE % self.LISTER_NAME}
+        )
+        self.github_session: Optional[GitHubSession] = (
+            GitHubSession(
+                credentials=credentials.get("github", {}).get("github", []),
+                user_agent=str(self.session.headers["User-Agent"]),
+            )
+            if with_github_session
+            else None
         )
 
         self.recorded_origins: Set[str] = set()

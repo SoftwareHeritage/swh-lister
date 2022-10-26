@@ -141,7 +141,7 @@ def test_anonymous_ratelimit(swh_scheduler, caplog, requests_ratelimited) -> Non
     caplog.set_level(logging.DEBUG, "swh.core.github.utils")
 
     lister = GitHubLister(scheduler=swh_scheduler)
-    assert lister.github_session.anonymous
+    assert lister.github_session is not None and lister.github_session.anonymous
     assert "using anonymous mode" in caplog.records[-1].message
     caplog.clear()
 
