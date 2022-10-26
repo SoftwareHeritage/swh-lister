@@ -11,7 +11,7 @@ from urllib.parse import parse_qs, urlparse
 
 import iso8601
 
-from swh.core.github.utils import GitHubSession, MissingRateLimitReset
+from swh.core.github.utils import MissingRateLimitReset
 from swh.scheduler.interface import SchedulerInterface
 from swh.scheduler.model import ListedOrigin
 
@@ -78,17 +78,13 @@ class GitHubLister(Lister[GitHubListerState, List[Dict[str, Any]]]):
             credentials=credentials,
             url=self.API_URL,
             instance="github",
+            with_github_session=True,
         )
 
         self.first_id = first_id
         self.last_id = last_id
 
         self.relisting = self.first_id is not None or self.last_id is not None
-
-        self.github_session = GitHubSession(
-            credentials=self.credentials,
-            user_agent=str(self.session.headers["User-Agent"]),
-        )
 
     def state_from_dict(self, d: Dict[str, Any]) -> GitHubListerState:
         return GitHubListerState(**d)
@@ -109,6 +105,7 @@ class GitHubLister(Lister[GitHubListerState, List[Dict[str, Any]]]):
             logger.debug("Getting page %s", current_url)
 
             try:
+                assert self.github_session is not None
                 response = self.github_session.request(current_url)
             except MissingRateLimitReset:
                 # Give up
