@@ -22,6 +22,7 @@ from enum import Enum
 import logging
 from pathlib import Path
 import random
+import re
 from typing import Any, Dict, Iterator, List, Optional, Tuple, Union
 from urllib.parse import parse_qsl, urlparse
 
@@ -35,6 +36,21 @@ from swh.lister.pattern import CredentialsType, StatelessLister
 from swh.scheduler.model import ListedOrigin
 
 logger = logging.getLogger(__name__)
+
+
+# By default, ignore binary files and archives containing binaries
+DEFAULT_EXTENSIONS_TO_IGNORE = [
+    "AppImage",
+    "bin",
+    "exe",
+    "iso",
+    "linux64",
+    "msi",
+    "png",
+    "dic",
+    "deb",
+    "rpm",
+]
 
 
 class ArtifactNatureUndetected(ValueError):
@@ -55,11 +71,7 @@ class ArtifactNatureMistyped(ValueError):
 
 
 class ArtifactWithoutExtension(ValueError):
-    """Raised when an artifact nature cannot be determined by its name.
-
-    This exception is solely for internal use of the :meth:`is_tarball` method.
-
-    """
+    """Raised when an artifact nature cannot be determined by its name."""
 
     pass
 
@@ -125,6 +137,38 @@ VCS_SUPPORTED = ("git", "svn", "hg")
 POSSIBLE_TARBALL_MIMETYPES = tuple(MIMETYPE_TO_ARCHIVE_FORMAT.keys())
 
 
+PATTERN_VERSION = re.compile(r"(v*[0-9]+[.])([0-9]+[.]*)+")
+
+
+def url_endswith(
+    urlparsed, extensions: List[str], raise_when_no_extension: bool = True
+) -> bool:
+    """Determine whether urlparsed ends with one of the extensions passed as parameter.
+
+    This also account for the edge case of a filename with only a version as name (so no
+    extension in the end.)
+
+    Raises:
+        ArtifactWithoutExtension in case no extension is available and
+        raise_when_no_extension is True (the default)
+
+    """
+    paths = [Path(p) for (_, p) in [("_", urlparsed.path)] + parse_qsl(urlparsed.query)]
+    if raise_when_no_extension and not any(path.suffix != "" for path in paths):
+        raise ArtifactWithoutExtension
+    match = any(path.suffix.endswith(tuple(extensions)) for path in paths)
+    if match:
+        return match
+    # Some false negative can happen (e.g. https://<netloc>/path/0.1.5)), so make sure
+    # to catch those
+    name = Path(urlparsed.path).name
+    if not PATTERN_VERSION.match(name):
+        return match
+    if raise_when_no_extension:
+        raise ArtifactWithoutExtension
+    return False
+
+
 def is_tarball(urls: List[str], request: Optional[Any] = None) -> Tuple[bool, str]:
     """Determine whether a list of files actually are tarballs or simple files.
 
@@ -157,13 +201,7 @@ def is_tarball(urls: List[str], request: Optional[Any] = None) -> Tuple[bool, st
         urlparsed = urlparse(url)
         if urlparsed.scheme not in ("http", "https", "ftp"):
             raise ArtifactNatureMistyped(f"Mistyped artifact '{url}'")
-
-        paths = [
-            Path(p) for (_, p) in [("_", urlparsed.path)] + parse_qsl(urlparsed.query)
-        ]
-        if not any(path.suffix != "" for path in paths):
-            raise ArtifactWithoutExtension
-        return any(path.suffix.endswith(tuple(TARBALL_EXTENSIONS)) for path in paths)
+        return url_endswith(urlparsed, TARBALL_EXTENSIONS)
 
     index = random.randrange(len(urls))
     url = urls[index]
@@ -204,12 +242,33 @@ def is_tarball(urls: List[str], request: Optional[Any] = None) -> Tuple[bool, st
                     url,
                 )
 
+        origin = urls[0]
+
         content_type = response.headers.get("Content-Type")
         if content_type:
             logger.debug("Content-Type: %s", content_type)
             if content_type == "application/json":
-                return False, urls[0]
-            return content_type.startswith(POSSIBLE_TARBALL_MIMETYPES), urls[0]
+                return False, origin
+            return content_type.startswith(POSSIBLE_TARBALL_MIMETYPES), origin
+
+        content_disposition = response.headers.get("Content-Disposition")
+        if content_disposition:
+            logger.debug("Content-Disposition: %s", content_disposition)
+            if "filename=" in content_disposition:
+                fields = content_disposition.split("; ")
+                for field in fields:
+                    if "filename=" in field:
+                        _, filename = field.split("filename=")
+                        break
+
+                return (
+                    url_endswith(
+                        urlparse(filename),
+                        TARBALL_EXTENSIONS,
+                        raise_when_no_extension=False,
+                    ),
+                    origin,
+                )
 
         raise ArtifactNatureUndetected(
             f"Cannot determine artifact type from url <{url}>"
@@ -247,6 +306,10 @@ class NixGuixLister(StatelessLister[PageResult]):
     it fallbacks to query (HEAD) the url to retrieve the origin out of the `Location`
     response header, and then checks the extension again.
 
+    Optionally, when the `extension_to_ignore` parameter is provided, it extends the
+    default extensions to ignore (`DEFAULT_EXTENSIONS_TO_IGNORE`) with those passed.
+    This can be used to drop further binary files detected in the wild.
+
     """
 
     LISTER_NAME = "nixguix"
@@ -260,6 +323,7 @@ class NixGuixLister(StatelessLister[PageResult]):
         credentials: Optional[CredentialsType] = None,
         # canonicalize urls, can be turned off during docker runs
         canonicalize: bool = True,
+        extensions_to_ignore: List[str] = [],
         **kwargs: Any,
     ):
         super().__init__(
@@ -271,6 +335,7 @@ class NixGuixLister(StatelessLister[PageResult]):
         # either full fqdn NixOS/nixpkgs or guix repository urls
         # maybe add an assert on those specific urls?
         self.origin_upstream = origin_upstream
+        self.extensions_to_ignore = DEFAULT_EXTENSIONS_TO_IGNORE + extensions_to_ignore
 
         self.session = requests.Session()
         # for testing purposes, we may want to skip this step (e.g. docker run and rate
@@ -435,10 +500,31 @@ class NixGuixLister(StatelessLister[PageResult]):
                     # 'critical' information about how to recompute the hash (e.g. fs
                     # layout, executable bit, ...)
                     logger.warning(
-                        "Skipping artifact <%s>: 'file' artifact of type <%s> is "
+                        "Skipping artifact <%s>: 'file' artifact of type <%s> is"
                         " missing information to properly check its integrity",
                         artifact,
                         artifact_type,
+                    )
+                    continue
+
+                # At this point plenty of heuristics happened and we should have found
+                # the right origin and its nature.
+
+                # Let's check and filter it out if it is to be ignored (if possible).
+                # Some origin urls may not have extension at this point (e.g
+                # http://git.marmaro.de/?p=mmh;a=snp;h=<id>;sf=tgz), let them through.
+                if url_endswith(
+                    urlparse(origin),
+                    self.extensions_to_ignore,
+                    raise_when_no_extension=False,
+                ):
+                    logger.warning(
+                        "Skipping artifact <%s>: 'file' artifact of type <%s> is"
+                        " ignored due to lister configuration. It should ignore"
+                        " origins with extension [%s]",
+                        origin,
+                        artifact_type,
+                        ",".join(self.extensions_to_ignore),
                     )
                     continue
 

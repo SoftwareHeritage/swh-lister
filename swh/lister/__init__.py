@@ -33,6 +33,7 @@ TARBALL_EXTENSIONS = [
     "crate",
     "gem",
     "jar",
+    "love",  # zip
     "zip",
     "tar",
     "gz",
@@ -47,6 +48,12 @@ TARBALL_EXTENSIONS = [
     "z",
     "Z",
     "7z",
+    "oxt",  # zip
+    "pak",  # zip
+    "war",  # zip
+    "whl",  # zip
+    "vsix",  # zip
+    "VSIXPackage",  # zip
     "zst",
 ]
 """Tarball recognition pattern"""
