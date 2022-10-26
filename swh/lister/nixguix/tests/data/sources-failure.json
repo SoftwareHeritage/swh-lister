@@ -57,6 +57,123 @@
       "type": "url",
       "urls": [ "https://code.9front.org/hg/plan9front" ],
       "integrity": "sha256-wAEswtkl3ulAw3zq4perrGS6Wlww5XXnQYsEAoYT9fI="
+    },
+    {
+      "outputHash": "sha256-IgPqUEDpaIuGoaGoH2GCEzh3KxF3pkJC3VjTYXwSiQE=",
+      "outputHashAlgo": "sha256",
+      "outputHashMode": "flat",
+      "type": "url",
+      "urls": [
+        "https://github.com/KSP-CKAN/CKAN/releases/download/v1.30.4/ckan.exe"
+      ],
+      "integrity": "sha256-IgPqUEDpaIuGoaGoH2GCEzh3KxF3pkJC3VjTYXwSiQE=",
+      "inferredFetcher": "unclassified"
+    },
+    {
+      "outputHash": "sha256-ezJN/t0iNk0haMLPioEQSNXU4ugVeJe44GNVGd+cOF4=",
+      "outputHashAlgo": "sha256",
+      "outputHashMode": "flat",
+      "type": "url",
+      "urls": [
+        "https://github.com/johannesjo/super-productivity/releases/download/v7.5.1/superProductivity-7.5.1.AppImage"
+      ],
+      "integrity": "sha256-ezJN/t0iNk0haMLPioEQSNXU4ugVeJe44GNVGd+cOF4=",
+      "inferredFetcher": "unclassified"
+    },
+    {
+      "outputHash": "19ir6x4c01825hpx2wbbcxkk70ymwbw4j03v8b2xc13ayylwzx0r",
+      "outputHashAlgo": "sha256",
+      "outputHashMode": "flat",
+      "type": "url",
+      "urls": [
+        "http://gorilla.dp100.com/downloads/gorilla1537_64.bin"
+      ],
+      "integrity": "sha256-GfTPqfdqBNbFQnsASfji1YMzZ2drcdEvLAIFwEg3OaY=",
+      "inferredFetcher": "unclassified"
+    },
+    {
+      "outputHash": "1zj53xybygps66m3v5kzi61vqy987zp6bfgk0qin9pja68qq75vx",
+      "outputHashAlgo": "sha256",
+      "outputHashMode": "flat",
+      "type": "url",
+      "urls": [
+        "https://fedorapeople.org/groups/virt/virtio-win/direct-downloads/archive-virtio/virtio-win-0.1.196-1/virtio-win.iso"
+      ],
+      "integrity": "sha256-fZeDMTJK3mQjBvO5Ze4/KHm8g4l/lj2qMfo+v3wfRf4=",
+      "inferredFetcher": "unclassified"
+    },
+    {
+      "outputHash": "02qgsj4h4zrjxkcclx7clsqbqd699kg0dq1xxa9hbj3vfnddjv1f",
+      "outputHashAlgo": "sha256",
+      "outputHashMode": "flat",
+      "type": "url",
+      "urls": [
+        "https://www.pjrc.com/teensy/td_153/TeensyduinoInstall.linux64"
+      ],
+      "integrity": "sha256-LmzZmnV7yAWT6j3gBt5MyTS8sKbsdMrY7DJ/AonUDws=",
+      "inferredFetcher": "unclassified"
+    },
+    {
+      "outputHash": "sha256-24uF87kQWQ9hrb+gAFqZXWE+KZocxz0AVT1w3IEBDjY=",
+      "outputHashAlgo": "sha256",
+      "outputHashMode": "flat",
+      "type": "url",
+      "urls": [
+        "https://dl.winehq.org/wine/wine-mono/6.4.0/wine-mono-6.4.0-x86.msi"
+      ],
+      "integrity": "sha256-24uF87kQWQ9hrb+gAFqZXWE+KZocxz0AVT1w3IEBDjY=",
+      "inferredFetcher": "unclassified"
+    },
+    {
+      "outputHash": "00y96w9shbbrdbf6xcjlahqd08154kkrxmqraik7qshiwcqpw7p4",
+      "outputHashAlgo": "sha256",
+      "outputHashMode": "flat",
+      "type": "url",
+      "urls": [
+        "https://raw.githubusercontent.com/webtorrent/webtorrent-desktop/v0.21.0/static/linux/share/icons/hicolor/48x48/apps/webtorrent-desktop.png"
+      ],
+      "integrity": "sha256-5B5+MeMRanxmVBnXnuckJSDQMFRUsm7canktqBM3yQM=",
+      "inferredFetcher": "unclassified"
+    },
+    {
+      "outputHash": "0lw193jr7ldvln5x5z9p21rz1by46h0say9whfcw2kxs9vprd5b3",
+      "outputHashAlgo": "sha256",
+      "outputHashMode": "flat",
+      "type": "url",
+      "urls": [
+        "http://xuxen.eus/static/hunspell/eu_ES.dic"
+      ],
+      "integrity": "sha256-Y5WW7066T8GZgzx5pQE0xK/wcxA3/dKLpbvRk+VIgVM=",
+      "inferredFetcher": "unclassified"
+    },
+    {
+      "outputHash": "0wbhvypdr96a5ddg6kj41dn9sbl49n7pfi2vs762ij82hm2gvwcm",
+      "outputHashAlgo": "sha256",
+      "outputHashMode": "flat",
+      "type": "url",
+      "urls": [
+        "https://www.openprinting.org/download/printdriver/components/lsb3.2/main/RPMS/noarch/openprinting-ppds-postscript-lexmark-20160218-1lsb3.2.noarch.rpm"
+      ],
+      "integrity": "sha256-lfH9RIUCySjM0VtEd49NhC6dbAtETvNaK8qk3K7fcHE=",
+      "inferredFetcher": "unclassified"
+    },
+    {
+      "outputHash": "01gy84gr0gw5ap7hpy72azaf6hlzac7vxkn5cgad5sfbyzxgjgc9",
+      "outputHashAlgo": "sha256",
+      "outputHashMode": "flat",
+      "type": "url",
+      "urls": [
+        "https://wire-app.wire.com/linux/debian/pool/main/Wire-3.26.2941_amd64.deb"
+      ],
+      "integrity": "sha256-iT35+vfL6dLUY8XOvg9Tn0Lj1Ffi+AvPVYU/kB9B/gU=",
+      "inferredFetcher": "unclassified"
+    },
+    {
+      "type": "url",
+      "urls": [
+        "https://elpa.gnu.org/packages/zones.foobar"
+      ],
+      "integrity": "sha256-YRZc7dI3DjUzoSIp4fIshUyhMXIQ/fPKaKnjeYVa4WI="
     }
   ],
   "version":"1",

@@ -7,7 +7,7 @@
     },
     {
       "type": "url",
-      "urls": [ "https://github.com/owner-3/repository-1/revision-1.tgz" ],
+      "urls": [ "https://github.com/owner-3/repository-1/revision-1.tar" ],
       "integrity": "sha256-3vm2Nt+O4zHf3Ovd/qsv1gKTEUwodX9FLxlrQdry0zs="
     },
     {
@@ -52,7 +52,7 @@
       "outputHashMode": "recursive",
       "type": "url",
       "urls": [
-        "https://github.com/kandu/trie/archive/1.0.0.tar.gz"
+        "https://github.com/kandu/trie/archive/1.0.0.txz"
       ],
       "integrity": "sha256-j7xp1svMeYIm+WScVe/B7w0jNjMtvkp9a1hLLLlO92g=",
       "inferredFetcher": "fetchzip"
@@ -85,7 +85,7 @@
       "outputHashMode": "recursive",
       "type": "url",
       "urls": [
-        "https://github.com/julian-klode/triehash/archive/debian/0.3-3.tar.gz"
+        "https://github.com/julian-klode/triehash/archive/debian/0.3-3.tbz"
       ],
       "inferredFetcher": "fetchzip"
     },
@@ -100,6 +100,192 @@
       "type": "url",
       "urls": ["svn://svn.code.sf.net/p/acme-crossass/code-0/trunk"],
       "integrity": "sha256-VifIQ+UEVMKJ+cNS+Xxusazinr5Cgu1lmGuhqj/5Mpk="
+    },
+    {
+      "outputHash": "0w2qkrrkzfy4h4jld18apypmbi8a8r89y2l11axlv808i2rg68fk",
+      "outputHashAlgo": "sha256",
+      "outputHashMode": "flat",
+      "type": "url",
+      "urls": [
+        "https://github.com/josefnpat/vapor/releases/download/0.2.3/vapor_dbf509f.love"
+      ],
+      "integrity": "sha256-0yHzsogIoE27CoEKn1BGCsVVr78KhUYlgcS7P3OeWHA=",
+      "inferredFetcher": "unclassified"
+    },
+    {
+      "outputHash": "0rf06axz1hxssg942w2g66avak30jy6rfdwxynhriqv3vrf17bja",
+      "outputHashAlgo": "sha256",
+      "outputHashMode": "flat",
+      "type": "url",
+      "urls": [
+        "http://mirrors.jenkins.io/war-stable/2.303.1/jenkins.war"
+      ],
+      "integrity": "sha256-Sq4TXN5j45ih9Z03l42XYEy1lTFPcEHS07rD8LsywGU=",
+      "inferredFetcher": "unclassified"
+    },
+    {
+      "outputHash": "1filqm050ixy53kdv81bd4n80vjvfapnmzizy7jg8a6pilv17gfc",
+      "outputHashAlgo": "sha256",
+      "outputHashMode": "flat",
+      "type": "url",
+      "urls": [
+        "https://files.pythonhosted.org/packages/py2.py3/g/geojson/geojson-2.5.0-py2.py3-none-any.whl"
+      ],
+      "integrity": "sha256-zL0TNo3XKPTk8T/+aq9yW26ALGkroN3mKL5HUEDFNLo=",
+      "inferredFetcher": "unclassified"
+    },
+    {
+      "outputHash": "sha256:0i1cw0nfg24b0sg2yc3q7315ng5vc5245nvh0l1cndkn2c9z4978",
+      "outputHashAlgo": "sha256",
+      "outputHashMode": "flat",
+      "type": "url",
+      "urls": [
+        "https://stavekontrolden.dk/dictionaries/da_DK/da_DK-2.5.189.oxt"
+      ],
+      "integrity": "sha256-6CTyExN2NssCBXDbQkRhuzxbwjh4MC+eBouI5yzgLEQ=",
+      "inferredFetcher": "unclassified"
+    },
+    {
+      "outputHash": "0y2HN4WGYUUXBfqp8Xb4oaA0hbLZmE3kDUXMBAOjvPQ=",
+      "outputHashAlgo": "sha256",
+      "outputHashMode": "flat",
+      "type": "url",
+      "urls": [
+        "https://github.com/microsoft/vscode-python/releases/download/2021.5.829140558/ms-python-release.vsix"
+      ],
+      "integrity": "sha256-0y2HN4WGYUUXBfqp8Xb4oaA0hbLZmE3kDUXMBAOjvPQ=",
+      "inferredFetcher": "unclassified"
+    },
+    {
+      "outputHash": "08dfl5h1k6s542qw5qx2czm1wb37ck9w2vpjz44kp2az352nmksb",
+      "outputHashAlgo": "sha256",
+      "outputHashMode": "flat",
+      "type": "url",
+      "urls": [
+        "https://zxh404.gallery.vsassets.io/_apis/public/gallery/publisher/zxh404/extension/vscode-proto3/0.5.4/assetbyname/Microsoft.VisualStudio.Services.VSIXPackage"
+      ],
+      "integrity": "sha256-S89qRRlfiTsJ+fJuwdNkZywe6mei48KxIEWbGWChriE=",
+      "inferredFetcher": "unclassified"
+    },
+    {
+      "outputHash": "0kaz8j85wjjnf18z0lz69xr1z8makg30jn2dzdyicd1asrj0q1jm",
+      "outputHashAlgo": "sha256",
+      "outputHashMode": "flat",
+      "type": "url",
+      "urls": [
+        "https://github.com/yvt/openspades/releases/download/v0.1.1b/NotoFonts.pak"
+      ],
+      "integrity": "sha256-VQYMZNYqNBZ9+01YCcabqqIfck/mU/BRcFZKXpBEX00=",
+      "inferredFetcher": "unclassified"
+    },
+    {
+      "type": "url",
+      "urls": [
+        "https://crates.io/api/v1/crates/syntect/4.6.0/download"
+      ],
+      "integrity": "sha256-iyCBW76A7gvgbmlXRQqEEYX89pD+AXjxTXegXOLKoDE="
+    },
+    {
+      "outputHash": "0x5l2pn4x92734k6i2wcjbn2klmwgkiqaajvxadh35k74dgnyh18",
+      "outputHashAlgo": "sha256",
+      "outputHashMode": "flat",
+      "type": "url",
+      "urls": [
+        "https://rubygems.org/gems/wdm-0.1.1.gem"
+      ],
+      "integrity": "sha256-KEBvXyNnlgGb6lsqheN8vNIp7JKMi2gmGUekTuwVtHQ=",
+      "inferredFetcher": "unclassified"
+    },
+    {
+      "outputHash": "2al10188nwrdmi9zk3bid4ijjfsa8ymh6m9hin5jsja7hx7anbvs3i2y7kall56h4qn7j1rj73f8499x3i2k6x53kszmksvd2a1pkd4",
+      "outputHashAlgo": "sha512",
+      "outputHashMode": "flat",
+      "type": "url",
+      "urls": [
+        "https://repo1.maven.org/maven2/org/codehaus/plexus/plexus-compiler-manager/2.4/plexus-compiler-manager-2.4.jar"
+      ],
+      "integrity": "sha512-pM0blGhbz/r1HKWbKeLoKRHkxpE5yGMxgaZQqubxIg69l1Wnw6OklsVGmKqB1SOlnZSRtLjG/CnWlrlFKIBAlQ==",
+      "inferredFetcher": "unclassified"
+    },
+    {
+      "outputHash": "19mnq9a1yr16srqs8n6hddahr4f9d2gbpmld62pvlw1ps7nfrp9w",
+      "outputHashAlgo": "sha256",
+      "outputHashMode": "recursive",
+      "type": "url",
+      "urls": [
+        "https://bitbucket.org/zandoye/charinfo_width/get/1.1.0.tar.bz2"
+      ],
+      "integrity": "sha256-PN3s7NE3cLqvMI3Wu55oyZEMVWvQWKRx1iZkH1TCtqY=",
+      "inferredFetcher": "fetchzip"
+    },
+    {
+      "type": "url",
+      "urls": [
+        "https://ftpmirror.gnu.org/gnu/texinfo/texinfo-4.13a.tar.lzma",
+        "ftp://ftp.cs.tu-berlin.de/pub/gnu/texinfo/texinfo-4.13a.tar.lzma"
+      ],
+      "integrity": "sha256-bSiwzq6GbjU2FC/FUuejvJ+EyDAxGcJXMbJHju9kyeU="
+    },
+    {
+      "type": "url",
+      "urls": [
+        "https://download.savannah.gnu.org/releases/zutils/zutils-1.10.tar.lz",
+        "https://nongnu.freemirror.org/nongnu/zutils/zutils-1.10.tar.lz"
+      ],
+      "integrity": "sha256-DdRBOCktV1dkgDcZW2lFw99wsxYiG0KFUgrTjy6usZU="
+    },
+    {
+      "type": "url",
+      "urls": [
+        "http://www.rle.mit.edu/cpg/codes/fasthenry-3.0-12Nov96.tar.z"
+      ],
+      "integrity": "sha256-8V9YKMP4A50xYvmFlzh5sbQv6L39hD+znfAD0rzvBqg="
+    },
+    {
+      "type": "url",
+      "urls": [
+        "http://ftp.x.org/contrib/utilities/unclutter-8.tar.Z"
+      ],
+      "integrity": "sha256-uFWnjURlqy+GKH6srGOnPxUEsIUihAqjdxh3bn7JGSo="
+    },
+    {
+      "outputHash": "sha256-Y40oLjddunrd7ZF1JbCcgjSCn8jFTubq69jhAVxInXw=",
+      "outputHashAlgo": "sha256",
+      "outputHashMode": "flat",
+      "type": "url",
+      "urls": [
+        "https://github.com/vk-cli/vk/releases/download/0.7.6/vk-0.7.6-64-bin.7z"
+      ],
+      "integrity": "sha256-Y40oLjddunrd7ZF1JbCcgjSCn8jFTubq69jhAVxInXw=",
+      "inferredFetcher": "unclassified"
+    },
+    {
+      "type": "url",
+      "urls": [
+        "https://github.com/Doom-Utils/deutex/releases/download/v5.2.2/deutex-5.2.2.tar.zst"
+      ],
+      "integrity": "sha256-EO0OelM+yXy20DVI1CWPvsiIUqRbXqTPVDQ3atQXS18="
+    },
+    {
+      "type": "url",
+      "urls": [
+        "https://codeload.github.com/fifengine/fifechan/tar.gz/0.1.5"
+      ],
+      "integrity": "sha256-Kb5f9LN54vxPiO99i8FyNCEw3T53owYfZMinXv5OunM="
+    },
+    {
+      "type": "url",
+      "urls": [
+        "https://codeload.github.com/unknown-horizons/unknown-horizons/tar.gz/2019.1"
+      ],
+      "integrity": "sha256-pBf9PTQiEv0ZDk8hvoLvE8EOHtfCiPu+RuRiAM895Ng="
+    },
+    {
+      "type": "url",
+      "urls": [
+        "https://codeload.github.com/fifengine/fifengine/tar.gz/0.4.2"
+      ],
+      "integrity": "sha256-6IK1W++jauLxqJraFq8PgUobePfL5gIexbFgVgTPj/g="
     }
   ],
   "version": "1",
