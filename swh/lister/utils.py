@@ -2,7 +2,8 @@
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
 
-from typing import Callable, Iterator, Tuple
+from typing import Callable, Iterator, Optional, Tuple
+import urllib.parse
 
 from requests.exceptions import ConnectionError, HTTPError
 from requests.status_codes import codes
@@ -111,3 +112,50 @@ def http_retry(
 
     """
     return tenacity_retry(retry=retry, wait=wait, stop=stop, reraise=True, **retry_args)
+
+
+def is_valid_origin_url(url: Optional[str]) -> bool:
+    """Returns whether the given string is a valid origin URL.
+    This excludes Git SSH URLs and pseudo-URLs (eg. ``ssh://git@example.org:foo``
+    and ``git@example.org:foo``), as they are not supported by the Git loader
+    and usually require authentication.
+
+    All HTTP URLs are allowed:
+
+    >>> is_valid_origin_url("http://example.org/repo.git")
+    True
+    >>> is_valid_origin_url("http://example.org/repo")
+    True
+    >>> is_valid_origin_url("https://example.org/repo")
+    True
+    >>> is_valid_origin_url("https://foo:bar@example.org/repo")
+    True
+
+    Scheme-less URLs are rejected;
+
+    >>> is_valid_origin_url("example.org/repo")
+    False
+    >>> is_valid_origin_url("example.org:repo")
+    False
+
+    Git SSH URLs and pseudo-URLs are rejected:
+
+    >>> is_valid_origin_url("git@example.org:repo")
+    False
+    >>> is_valid_origin_url("ssh://git@example.org:repo")
+    False
+    """
+    if not url:
+        # Empty or None
+        return False
+
+    parsed = urllib.parse.urlparse(url)
+    if not parsed.netloc:
+        # Is parsed as a relative URL
+        return False
+
+    if parsed.scheme == "ssh":
+        # Git SSH URL
+        return False
+
+    return True

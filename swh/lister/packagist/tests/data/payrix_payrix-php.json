@@ -1,0 +1,151 @@
+{
+  "packages": {
+    "payrix/payrix-php": {
+      "dev-master": {
+        "name": "payrix/payrix-php",
+        "description": "PayrixPHP PHP SDK package",
+        "keywords": [],
+        "homepage": "https://portal.payrix.com",
+        "version": "dev-master",
+        "version_normalized": "9999999-dev",
+        "license": [
+          "Apache-2.0"
+        ],
+        "authors": [],
+        "source": {
+          "url": "git@gitlab.com:payrix/public/payrix-php.git",
+          "type": "git",
+          "reference": "cf02195d3c32424396932e087824bf581966e703"
+        },
+        "dist": {
+          "url": "https://gitlab.com/api/v4/projects/payrix%2Fpublic%2Fpayrix-php/repository/archive.zip?sha=cf02195d3c32424396932e087824bf581966e703",
+          "type": "zip",
+          "shasum": "",
+          "reference": "cf02195d3c32424396932e087824bf581966e703"
+        },
+        "type": "library",
+        "time": "2021-05-25T14:12:28+00:00",
+        "autoload": {
+          "psr-4": {
+            "PayrixPHP\\": "lib/"
+          }
+        },
+        "default-branch": true,
+        "require": {
+          "php": ">=5.4.0",
+          "ext-curl": "*",
+          "ext-openssl": "*"
+        },
+        "uid": 4416889
+      },
+      "v2.0.0": {
+        "name": "payrix/payrix-php",
+        "description": "PayrixPHP PHP SDK package",
+        "keywords": [],
+        "homepage": "https://portal.payrix.com",
+        "version": "v2.0.0",
+        "version_normalized": "2.0.0.0",
+        "license": [
+          "Apache-2.0"
+        ],
+        "authors": [],
+        "source": {
+          "url": "https://gitlab.com/payrix/public/payrix-php.git",
+          "type": "git",
+          "reference": "4b40ad457a5cdbddb384b4d8f2c62d8d8c04ce68"
+        },
+        "dist": {
+          "url": "https://gitlab.com/api/v4/projects/payrix%2Fpublic%2Fpayrix-php/repository/archive.zip?sha=4b40ad457a5cdbddb384b4d8f2c62d8d8c04ce68",
+          "type": "zip",
+          "shasum": "",
+          "reference": "4b40ad457a5cdbddb384b4d8f2c62d8d8c04ce68"
+        },
+        "type": "library",
+        "time": "2020-09-03T11:26:52+00:00",
+        "autoload": {
+          "psr-4": {
+            "PayrixPHP\\": "lib/"
+          }
+        },
+        "require": {
+          "php": ">=5.4.0",
+          "ext-curl": "*",
+          "ext-openssl": "*"
+        },
+        "uid": 4416947
+      },
+      "v2.0.1": {
+        "name": "payrix/payrix-php",
+        "description": "PayrixPHP PHP SDK package",
+        "keywords": [],
+        "homepage": "https://portal.payrix.com",
+        "version": "v2.0.1",
+        "version_normalized": "2.0.1.0",
+        "license": [
+          "Apache-2.0"
+        ],
+        "authors": [],
+        "source": {
+          "url": "https://gitlab.com/payrix/public/payrix-php.git",
+          "type": "git",
+          "reference": "9693f2dff0a589e16c88a9bf838069ab89166103"
+        },
+        "dist": {
+          "url": "https://gitlab.com/api/v4/projects/payrix%2Fpublic%2Fpayrix-php/repository/archive.zip?sha=9693f2dff0a589e16c88a9bf838069ab89166103",
+          "type": "zip",
+          "shasum": "",
+          "reference": "9693f2dff0a589e16c88a9bf838069ab89166103"
+        },
+        "type": "library",
+        "time": "2021-05-10T02:32:57+00:00",
+        "autoload": {
+          "psr-4": {
+            "PayrixPHP\\": "lib/"
+          }
+        },
+        "require": {
+          "php": ">=5.4.0",
+          "ext-curl": "*",
+          "ext-openssl": "*"
+        },
+        "uid": 5183918
+      },
+      "v2.0.2": {
+        "name": "payrix/payrix-php",
+        "description": "PayrixPHP PHP SDK package",
+        "keywords": [],
+        "homepage": "https://portal.payrix.com",
+        "version": "v2.0.2",
+        "version_normalized": "2.0.2.0",
+        "license": [
+          "Apache-2.0"
+        ],
+        "authors": [],
+        "source": {
+          "url": "https://gitlab.com/payrix/public/payrix-php.git",
+          "type": "git",
+          "reference": "cf02195d3c32424396932e087824bf581966e703"
+        },
+        "dist": {
+          "url": "https://gitlab.com/api/v4/projects/payrix%2Fpublic%2Fpayrix-php/repository/archive.zip?sha=cf02195d3c32424396932e087824bf581966e703",
+          "type": "zip",
+          "shasum": "",
+          "reference": "cf02195d3c32424396932e087824bf581966e703"
+        },
+        "type": "library",
+        "time": "2021-05-25T10:12:28+00:00",
+        "autoload": {
+          "psr-4": {
+            "PayrixPHP\\": "lib/"
+          }
+        },
+        "require": {
+          "php": ">=5.4.0",
+          "ext-curl": "*",
+          "ext-openssl": "*"
+        },
+        "uid": 5232658
+      }
+    }
+  }
+}

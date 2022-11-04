@@ -1,0 +1,24 @@
+{
+  "packages": {
+    "ycms/module-main": {
+      "dev-master": {
+        "name": "with/invalid_url",
+        "description": "",
+        "keywords": [],
+        "homepage": "",
+        "version": "dev-master",
+        "version_normalized": "9999999-dev",
+        "license": [],
+        "authors": [],
+        "source": {
+          "type": "git",
+          "url": "git@example.org/invalid/url.git",
+          "reference": "0000000000000000000000000000000000000000"
+        },
+        "time": "2015-08-23T04:42:33+00:00",
+        "default-branch": true,
+        "uid": 4064797
+      }
+    }
+  }
+}
