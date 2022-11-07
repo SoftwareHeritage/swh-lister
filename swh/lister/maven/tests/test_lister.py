@@ -170,6 +170,53 @@ def test_maven_full_listing_malformed(
     assert scheduler_state.last_seen_pom == -1
 
 
+def test_maven_ignore_invalid_url(
+    swh_scheduler,
+    requests_mock,
+    datadir,
+):
+    """Covers full listing of multiple pages, checking page results with a malformed
+    scm entry in pom."""
+
+    lister = MavenLister(
+        scheduler=swh_scheduler,
+        url=MVN_URL,
+        instance="maven.org",
+        index_url=INDEX_URL,
+        incremental=False,
+    )
+
+    # Set up test.
+    requests_mock.get(
+        URL_POM_1, content=Path(datadir, "sprova4j-0.1.0.invalidurl.pom").read_bytes()
+    )
+
+    # Then run the lister.
+    stats = lister.run()
+
+    # Start test checks.
+    assert stats.pages == 5
+
+    scheduler_origins = swh_scheduler.get_listed_origins(lister.lister_obj.id).results
+    origin_urls = [origin.url for origin in scheduler_origins]
+
+    # 1 git origins (the other ignored) + 1 maven origin with 2 releases (one per jar)
+    assert set(origin_urls) == {ORIGIN_GIT_INCR, ORIGIN_SRC}
+    assert len(origin_urls) == len(set(origin_urls))
+
+    for origin in scheduler_origins:
+        if origin.visit_type == "maven":
+            for src in LIST_SRC_DATA:
+                last_update_src = iso8601.parse_date(src["time"])
+                assert last_update_src <= origin.last_update
+            assert origin.extra_loader_arguments["artifacts"] == list(LIST_SRC_DATA)
+
+    scheduler_state = lister.get_state_from_scheduler()
+    assert scheduler_state is not None
+    assert scheduler_state.last_seen_doc == -1
+    assert scheduler_state.last_seen_pom == -1
+
+
 def test_maven_incremental_listing(
     swh_scheduler,
     requests_mock,

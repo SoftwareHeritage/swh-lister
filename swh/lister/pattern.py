@@ -20,7 +20,7 @@ from swh.scheduler import get_scheduler, model
 from swh.scheduler.interface import SchedulerInterface
 
 from . import USER_AGENT_TEMPLATE
-from .utils import http_retry
+from .utils import http_retry, is_valid_origin_url
 
 logger = logging.getLogger(__name__)
 
@@ -277,8 +277,15 @@ class Lister(Generic[StateType, PageType]):
         Returns:
           the list of origin URLs recorded in scheduler database
         """
+        valid_origins = []
+        for origin in origins:
+            if is_valid_origin_url(origin.url):
+                valid_origins.append(origin)
+            else:
+                logger.warning("Skipping invalid origin: %s", origin.url)
+
         recorded_origins = []
-        for batch_origins in grouper(origins, n=1000):
+        for batch_origins in grouper(valid_origins, n=1000):
             ret = self.scheduler.record_listed_origins(batch_origins)
             recorded_origins += [origin.url for origin in ret]
 

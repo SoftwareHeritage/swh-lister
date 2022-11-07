@@ -14,7 +14,9 @@ _packages_list = {
         "ljjackson/linnworks",
         "lky/wx_article",
         "spryker-eco/computop-api",
-        "idevlab/essential",
+        "idevlab/essential",  # Git SSH URL
+        "payrix/payrix-php",
+        "with/invalid_url",  # invalid URL
     ]
 }
 
@@ -49,7 +51,7 @@ def test_packagist_lister(swh_scheduler, requests_mock, datadir, requests_mock_d
     stats = lister.run()
 
     assert stats.pages == 1
-    assert stats.origins == len(_packages_list["packageNames"])
+    assert stats.origins == len(_packages_list["packageNames"]) - 2
     assert lister.updated
 
     expected_origins = {
@@ -69,9 +71,9 @@ def test_packagist_lister(swh_scheduler, requests_mock, datadir, requests_mock_d
             datetime.datetime.fromisoformat("2020-06-22T15:50:29+00:00"),
         ),
         (
-            "git@gitlab.com:idevlab/Essential.git",  # not GitHub
+            "https://gitlab.com/payrix/public/payrix-php.git",  # not GitHub
             "git",
-            datetime.datetime.fromisoformat("2022-10-12T10:34:29+00:00"),
+            datetime.datetime.fromisoformat("2021-05-25T14:12:28+00:00"),
         ),
     }
 

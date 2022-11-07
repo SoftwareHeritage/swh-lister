@@ -55,6 +55,16 @@
     },
     {
       "type": "url",
+      "urls": [ "ssh://git@example.org:wrong-scheme-so-skipped.txt" ],
+      "integrity": "sha256-wAEswtkl3ulAw3zq4perrGS6Wlww5XXnQYsEAoYT9fI="
+    },
+    {
+      "type": "url",
+      "urls": [ "git@example.org:git-pseudourl/so-skipped" ],
+      "integrity": "sha256-wAEswtkl3ulAw3zq4perrGS6Wlww5XXnQYsEAoYT9fI="
+    },
+    {
+      "type": "url",
       "urls": [ "https://code.9front.org/hg/plan9front" ],
       "integrity": "sha256-wAEswtkl3ulAw3zq4perrGS6Wlww5XXnQYsEAoYT9fI="
     },
