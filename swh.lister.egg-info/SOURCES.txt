@@ -266,6 +266,7 @@ swh/lister/maven/tests/__init__.py
 swh/lister/maven/tests/test_lister.py
 swh/lister/maven/tests/test_tasks.py
 swh/lister/maven/tests/data/citrus-parent-3.0.7.pom
+swh/lister/maven/tests/data/sprova4j-0.1.0.invalidurl.pom
 swh/lister/maven/tests/data/sprova4j-0.1.0.malformed.pom
 swh/lister/maven/tests/data/http_indexes/export_full.fld
 swh/lister/maven/tests/data/http_indexes/export_incr_first.fld
@@ -335,7 +336,9 @@ swh/lister/packagist/tests/data/den1n_contextmenu.json
 swh/lister/packagist/tests/data/idevlab_essential.json
 swh/lister/packagist/tests/data/ljjackson_linnworks.json
 swh/lister/packagist/tests/data/lky_wx_article.json
+swh/lister/packagist/tests/data/payrix_payrix-php.json
 swh/lister/packagist/tests/data/spryker-eco_computop-api.json
+swh/lister/packagist/tests/data/with_invalid_url.json
 swh/lister/packagist/tests/data/ycms_module-main.json
 swh/lister/packagist/tests/data/https_api.github.com/repos_gitlky_wx_article
 swh/lister/packagist/tests/data/https_api.github.com/repos_spryker-eco_computop-api
