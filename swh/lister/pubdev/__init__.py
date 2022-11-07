@@ -17,21 +17,21 @@ As of August 2022 `pub.dev`_ list 33535 package names.
 Origins retrieving strategy
 ---------------------------
 
-To get a list of all package names we call `https://pub.dev/api/packages` endpoint.
+To get a list of all package names we call `https://pub.dev/api/package-names` endpoint.
 There is no other way for discovery (no archive index, no database dump, no dvcs repository).
-
-Page listing
-------------
-
-There is only one page that list all origins url based
-on `https://pub.dev/api/packages/{pkgname}`.
-The origin url corresponds to the http api endpoint that returns complete information
-about the package versions (name, version, author, description, release date).
 
 Origins from page
 -----------------
 
-The lister yields all origins url from one page.
+The lister yields all origin urls from a single page.
+
+Getting last update date for each package
+-----------------------------------------
+
+Before sending a listed pubdev origin to the scheduler, we query the
+`https://pub.dev/api/packages/{pkgname}` endpoint to get the last update date
+for a package (date of its latest release). It enables Software Heritage to create
+new loading task for a package only if it has new releases since last visit.
 
 Running tests
 -------------

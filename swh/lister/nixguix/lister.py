@@ -402,7 +402,7 @@ class NixGuixLister(StatelessLister[PageResult]):
                 urls = []
                 for url in origin_urls:
                     urlparsed = urlparse(url)
-                    if urlparsed.scheme == "":
+                    if urlparsed.scheme == "" and not re.match(r"^\w+@[^/]+:", url):
                         logger.warning("Missing scheme for <%s>: fallback to http", url)
                         fixed_url = f"http://{url}"
                     else:

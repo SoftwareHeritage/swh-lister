@@ -353,13 +353,20 @@ def test_lister_nixguix_mostly_noop(datadir, swh_scheduler, requests_mock):
     )
 
     listed_result = lister.run()
-    # only the origin upstream is listed, every other entries are unsupported or incomplete
-    assert listed_result == ListerStats(pages=1, origins=1)
 
+    expected_origins = ["https://github.com/NixOS/nixpkgs"]
     scheduler_origins = lister.scheduler.get_listed_origins(
         lister.lister_obj.id
     ).results
-    assert len(scheduler_origins) == 1
+    scheduler_origin_urls = [orig.url for orig in scheduler_origins]
+
+    assert scheduler_origin_urls == expected_origins
+
+    # only the origin upstream is listed, every other entries are unsupported or incomplete
+    assert listed_result == ListerStats(pages=1, origins=1), (
+        f"Expected origins: {' '.join(expected_origins)}, got: "
+        f"{' '.join(scheduler_origin_urls)}"
+    )
 
     assert scheduler_origins[0].visit_type == "git"
 

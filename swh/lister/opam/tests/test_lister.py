@@ -48,7 +48,7 @@ def test_mock_init_repository_update(mock_opam, tmp_path, datadir):
     mock_init, mock_popen = mock_opam
 
     instance = "fake_opam_repo"
-    instance_url = f"file://{datadir}/{instance}"
+    instance_url = f"http://example.org/{instance}"
     opam_root = str(tmp_path / "test-opam")
 
     os.makedirs(opam_root, exist_ok=True)
@@ -112,8 +112,17 @@ def test_urls(swh_scheduler, mock_opam, tmp_path):
     assert expected_urls == result_urls
 
 
-def test_opam_binary(datadir, swh_scheduler, tmp_path):
-    instance_url = f"file://{datadir}/fake_opam_repo"
+def test_opam_binary(datadir, swh_scheduler, tmp_path, mocker):
+    from swh.lister.opam.lister import opam_init
+
+    instance_url = "http://example.org/fake_opam_repo"
+
+    def mock_opam_init(opam_root, instance, url, env):
+        assert url == instance_url
+        return opam_init(opam_root, instance, f"{datadir}/fake_opam_repo", env)
+
+    # Patch opam_init to use the local directory
+    mocker.patch("swh.lister.opam.lister.opam_init", side_effect=mock_opam_init)
 
     lister = OpamLister(
         swh_scheduler,
@@ -141,8 +150,17 @@ def test_opam_binary(datadir, swh_scheduler, tmp_path):
     assert expected_urls == result_urls
 
 
-def test_opam_multi_instance(datadir, swh_scheduler, tmp_path):
-    instance_url = f"file://{datadir}/fake_opam_repo"
+def test_opam_multi_instance(datadir, swh_scheduler, tmp_path, mocker):
+    from swh.lister.opam.lister import opam_init
+
+    instance_url = "http://example.org/fake_opam_repo"
+
+    def mock_opam_init(opam_root, instance, url, env):
+        assert url == instance_url
+        return opam_init(opam_root, instance, f"{datadir}/fake_opam_repo", env)
+
+    # Patch opam_init to use the local directory
+    mocker.patch("swh.lister.opam.lister.opam_init", side_effect=mock_opam_init)
 
     lister = OpamLister(
         swh_scheduler,
