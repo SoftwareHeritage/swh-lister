@@ -40,11 +40,9 @@ def rpm_url(release, path):
 def pkg_versions():
     return {
         "https://src.fedoraproject.org/rpms/0install": {
-            "2.11-4.fc26": {
+            "fedora26/everything/2.11-4": {
                 "name": "0install",
-                "version": "2.11",
-                "release": 26,
-                "edition": "Everything",
+                "version": "2.11-4",
                 "buildTime": "2017-02-10T04:59:31+00:00",
                 "url": rpm_url(26, "0/0install-2.11-4.fc26.src.rpm"),
                 "checksums": {
@@ -55,22 +53,18 @@ def pkg_versions():
             }
         },
         "https://src.fedoraproject.org/rpms/0xFFFF": {
-            "0.3.9-15.fc26": {
+            "fedora26/everything/0.3.9-15": {
                 "name": "0xFFFF",
-                "version": "0.3.9",
-                "release": 26,
-                "edition": "Everything",
+                "version": "0.3.9-15",
                 "buildTime": "2017-02-10T05:01:53+00:00",
                 "url": rpm_url(26, "0/0xFFFF-0.3.9-15.fc26.src.rpm"),
                 "checksums": {
                     "sha256": "96f9c163c0402d2b30e5343c8397a6d50e146c85a446804396b119ef9698231f"
                 },
             },
-            "0.9-4.fc36": {
+            "fedora36/everything/0.9-4": {
                 "name": "0xFFFF",
-                "version": "0.9",
-                "release": 36,
-                "edition": "Everything",
+                "version": "0.9-4",
                 "buildTime": "2022-01-19T19:13:53+00:00",
                 "url": rpm_url(36, "0/0xFFFF-0.9-4.fc36.src.rpm"),
                 "checksums": {
@@ -79,11 +73,9 @@ def pkg_versions():
             },
         },
         "https://src.fedoraproject.org/rpms/2ping": {
-            "4.5.1-2.fc36": {
+            "fedora36/everything/4.5.1-2": {
                 "name": "2ping",
-                "version": "4.5.1",
-                "release": 36,
-                "edition": "Everything",
+                "version": "4.5.1-2",
                 "buildTime": "2022-01-19T19:12:21+00:00",
                 "url": rpm_url(36, "2/2ping-4.5.1-2.fc36.src.rpm"),
                 "checksums": {
@@ -213,11 +205,9 @@ def test_incremental_lister(
     # Add new version to the set of expected pkg versions:
     pkg_versions["https://src.fedoraproject.org/rpms/0xFFFF"].update(
         {
-            "0.10-4.fc36": {
+            "fedora36/everything/0.10-4": {
                 "name": "0xFFFF",
-                "version": "0.10",
-                "release": 36,
-                "edition": "Everything",
+                "version": "0.10-4",
                 "buildTime": "2022-01-19T19:13:53+00:00",
                 "url": rpm_url(36, "0/0xFFFF-0.10-4.fc36.src.rpm"),
                 "checksums": {

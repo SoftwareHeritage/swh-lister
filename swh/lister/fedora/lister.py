@@ -170,14 +170,23 @@ class FedoraLister(Lister[FedoraListerState, FedoraPageType]):
         for pkg_metadata in page:
             # extract package metadata
             package_name = pkg_metadata.name
-            package_version = pkg_metadata.version
+            package_version = pkg_metadata.vr
+            package_version_split = package_version.split(".")
+            if package_version_split[-1].startswith("fc"):
+                # remove trailing ".fcXY" in version for the rpm loader to avoid
+                # creating multiple releases targeting same directory
+                package_version = ".".join(package_version_split[:-1])
+
             package_build_time = get_last_modified(pkg_metadata)
             package_download_path = pkg_metadata.location
 
             # build origin url
             origin_url = self.origin_url_for_package(package_name)
             # create package version key as expected by the fedora (rpm) loader
-            package_version_key = pkg_metadata.vr
+            package_version_key = (
+                f"fedora{self.current_release}/{self.current_edition}/"
+                f"{package_version}"
+            ).lower()
 
             # this is the first time a package is listed
             if origin_url not in self.listed_origins:
@@ -205,8 +214,6 @@ class FedoraLister(Lister[FedoraListerState, FedoraPageType]):
                 "name": package_name,
                 "version": package_version,
                 "url": urljoin(page.baseurl, package_download_path),
-                "release": self.current_release,
-                "edition": self.current_edition,
                 "buildTime": package_build_time.isoformat(),
                 "checksums": get_checksums(pkg_metadata),
             }
