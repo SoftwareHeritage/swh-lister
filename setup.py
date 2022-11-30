@@ -87,6 +87,7 @@ setup(
         lister.maven=swh.lister.maven:register
         lister.gogs=swh.lister.gogs:register
         lister.fedora=swh.lister.fedora:register
+        lister.hex=swh.lister.hex:register
     """,
     classifiers=[
         "Programming Language :: Python :: 3",
