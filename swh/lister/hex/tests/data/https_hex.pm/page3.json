@@ -1,0 +1,108 @@
+[
+    {
+        "configs": {
+            "erlang.mk": "dep_quagga_def = hex 0.4.0",
+            "mix.exs": "{:quagga_def, \"~> 0.4.0\"}",
+            "rebar.config": "{quagga_def, \"0.4.0\"}"
+        },
+        "docs_html_url": "https://hexdocs.pm/quagga_def/",
+        "downloads": {
+            "all": 106,
+            "day": 12,
+            "recent": 106,
+            "week": 22
+        },
+        "html_url": "https://hex.pm/packages/quagga_def",
+        "inserted_at": "2022-10-12T07:03:48.666872Z",
+        "latest_stable_version": "0.4.0",
+        "latest_version": "0.4.0",
+        "meta": {
+            "description": "Quagga bamboo clump convention definitions and functions",
+            "licenses": [
+                "MIT"
+            ],
+            "links": {
+                "GitHub": "https://github.com/mwmiller/quagga_def"
+            },
+            "maintainers": []
+        },
+        "name": "quagga_def",
+        "releases": [
+            {
+                "has_docs": true,
+                "inserted_at": null,
+                "url": "https://hex.pm/api/packages/quagga_def/releases/0.4.0",
+                "version": "0.4.0"
+            },
+            {
+                "has_docs": true,
+                "inserted_at": null,
+                "url": "https://hex.pm/api/packages/quagga_def/releases/0.3.0",
+                "version": "0.3.0"
+            },
+            {
+                "has_docs": true,
+                "inserted_at": null,
+                "url": "https://hex.pm/api/packages/quagga_def/releases/0.2.0",
+                "version": "0.2.0"
+            },
+            {
+                "has_docs": true,
+                "inserted_at": null,
+                "url": "https://hex.pm/api/packages/quagga_def/releases/0.1.0",
+                "version": "0.1.0"
+            }
+        ],
+        "repository": "hexpm",
+        "retirements": {},
+        "updated_at": "2022-11-29T11:41:15.862303Z",
+        "url": "https://hex.pm/api/packages/quagga_def"
+    },
+    {
+        "configs": {
+            "erlang.mk": "dep_logger_dev = hex 0.1.1",
+            "mix.exs": "{:logger_dev, \"~> 0.1.1\"}",
+            "rebar.config": "{logger_dev, \"0.1.1\"}"
+        },
+        "docs_html_url": "https://hexdocs.pm/logger_dev/",
+        "downloads": {
+            "all": 188,
+            "day": 4,
+            "recent": 188,
+            "week": 48
+        },
+        "html_url": "https://hex.pm/packages/logger_dev",
+        "inserted_at": "2022-09-08T21:37:20.359224Z",
+        "latest_stable_version": "0.1.1",
+        "latest_version": "0.1.1",
+        "meta": {
+            "description": "A more readable formatter for Logger.Backends.Console",
+            "licenses": [
+                "MIT"
+            ],
+            "links": {
+                "GitHub": "https://github.com/protestContest/logger_dev"
+            },
+            "maintainers": []
+        },
+        "name": "logger_dev",
+        "releases": [
+            {
+                "has_docs": true,
+                "inserted_at": null,
+                "url": "https://hex.pm/api/packages/logger_dev/releases/0.1.1",
+                "version": "0.1.1"
+            },
+            {
+                "has_docs": true,
+                "inserted_at": null,
+                "url": "https://hex.pm/api/packages/logger_dev/releases/0.1.0",
+                "version": "0.1.0"
+            }
+        ],
+        "repository": "hexpm",
+        "retirements": {},
+        "updated_at": "2022-09-09T21:00:14.993273Z",
+        "url": "https://hex.pm/api/packages/logger_dev"
+    }
+]

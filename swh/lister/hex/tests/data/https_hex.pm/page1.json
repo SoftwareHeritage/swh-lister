@@ -1,0 +1,190 @@
+[
+    {
+        "configs": {
+            "erlang.mk": "dep_aadya = hex 0.1.0",
+            "mix.exs": "{:aadya, \"~> 0.1.0\"}",
+            "rebar.config": "{aadya, \"0.1.0\"}"
+        },
+        "docs_html_url": "https://hexdocs.pm/aadya/",
+        "downloads": {
+            "all": 4199,
+            "recent": 2
+        },
+        "html_url": "https://hex.pm/packages/aadya",
+        "inserted_at": "2018-03-12T02:13:42.826404Z",
+        "latest_stable_version": "0.1.0",
+        "latest_version": "0.1.0",
+        "meta": {
+            "description": "CoAP framework",
+            "licenses": [
+                "GNU Lesser General Public License v3.0"
+            ],
+            "links": {
+                "GitHub": "https://gitlab.com/ahamtech/coap/aadya.git"
+            },
+            "maintainers": [
+                "Anwesh Reddy",
+                "Mahesh Reddy",
+                "Malreddy Ankanna"
+            ]
+        },
+        "name": "aadya",
+        "releases": [
+            {
+                "has_docs": true,
+                "inserted_at": null,
+                "url": "https://hex.pm/api/packages/aadya/releases/0.1.0",
+                "version": "0.1.0"
+            }
+        ],
+        "repository": "hexpm",
+        "retirements": {},
+        "updated_at": "2018-03-12T02:19:58.150334Z",
+        "url": "https://hex.pm/api/packages/aadya"
+    },
+    {
+        "configs": {
+            "erlang.mk": "dep_active_job = hex 0.1.1",
+            "mix.exs": "{:active_job, \"~> 0.1.1\"}",
+            "rebar.config": "{active_job, \"0.1.1\"}"
+        },
+        "docs_html_url": null,
+        "downloads": {
+            "all": 575,
+            "recent": 8
+        },
+        "html_url": "https://hex.pm/packages/active_job",
+        "inserted_at": "2022-05-04T05:07:26.204862Z",
+        "latest_stable_version": "0.1.1",
+        "latest_version": "0.1.1",
+        "meta": {
+            "description": "Declare job workers that can be run by a variety of queuing backends. This plugin is a port of the Rails ActiveJob gem",
+            "licenses": [
+                "MIT"
+            ],
+            "links": {
+                "GitHub": "https://github.com/chaskiq/ex-rails/active_job"
+            },
+            "maintainers": []
+        },
+        "name": "active_job",
+        "releases": [
+            {
+                "has_docs": false,
+                "inserted_at": null,
+                "url": "https://hex.pm/api/packages/active_job/releases/0.1.1",
+                "version": "0.1.1"
+            },
+            {
+                "has_docs": false,
+                "inserted_at": null,
+                "url": "https://hex.pm/api/packages/active_job/releases/0.1.0",
+                "version": "0.1.0"
+            }
+        ],
+        "repository": "hexpm",
+        "retirements": {},
+        "updated_at": "2022-06-17T07:01:32.486546Z",
+        "url": "https://hex.pm/api/packages/active_job"
+    },
+    {
+        "configs": {
+            "erlang.mk": "dep_active_jorb = hex 0.1.2",
+            "mix.exs": "{:active_jorb, \"~> 0.1.2\"}",
+            "rebar.config": "{active_jorb, \"0.1.2\"}"
+        },
+        "docs_html_url": "https://hexdocs.pm/active_jorb/",
+        "downloads": {
+            "all": 7148,
+            "recent": 10
+        },
+        "html_url": "https://hex.pm/packages/active_jorb",
+        "inserted_at": "2018-04-10T17:35:34.698754Z",
+        "latest_stable_version": "0.1.2",
+        "latest_version": "0.1.2",
+        "meta": {
+            "description": "A library to enqueue jobs with your Active Job job processor. You may want\nthis when strangling your Rails project.",
+            "licenses": [
+                "MIT"
+            ],
+            "links": {
+                "Github": "https://github.com/PrecisionNutrition/active_jorb"
+            },
+            "maintainers": [
+                "James Herdman"
+            ]
+        },
+        "name": "active_jorb",
+        "releases": [
+            {
+                "has_docs": true,
+                "inserted_at": null,
+                "url": "https://hex.pm/api/packages/active_jorb/releases/0.1.2",
+                "version": "0.1.2"
+            },
+            {
+                "has_docs": true,
+                "inserted_at": null,
+                "url": "https://hex.pm/api/packages/active_jorb/releases/0.1.1",
+                "version": "0.1.1"
+            },
+            {
+                "has_docs": true,
+                "inserted_at": null,
+                "url": "https://hex.pm/api/packages/active_jorb/releases/0.1.0",
+                "version": "0.1.0"
+            }
+        ],
+        "repository": "hexpm",
+        "retirements": {},
+        "updated_at": "2018-04-24T17:42:25.744971Z",
+        "url": "https://hex.pm/api/packages/active_jorb"
+    },
+    {
+        "configs": {
+            "erlang.mk": "dep_acx = hex 0.0.2",
+            "mix.exs": "{:acx, \"~> 0.0.2\"}",
+            "rebar.config": "{acx, \"0.0.2\"}"
+        },
+        "docs_html_url": "https://hexdocs.pm/acx/",
+        "downloads": {
+            "all": 4790,
+            "recent": 8
+        },
+        "html_url": "https://hex.pm/packages/acx",
+        "inserted_at": "2018-01-22T06:52:21.027352Z",
+        "latest_stable_version": "0.0.2",
+        "latest_version": "0.0.2",
+        "meta": {
+            "description": "A Elixir wrap for API of Acx.io exchange.",
+            "licenses": [
+                "MIT"
+            ],
+            "links": {
+                "Github": "https://github.com/2pd/acx-elixir"
+            },
+            "maintainers": [
+                "Liang Shi"
+            ]
+        },
+        "name": "acx",
+        "releases": [
+            {
+                "has_docs": true,
+                "inserted_at": null,
+                "url": "https://hex.pm/api/packages/acx/releases/0.0.2",
+                "version": "0.0.2"
+            },
+            {
+                "has_docs": true,
+                "inserted_at": null,
+                "url": "https://hex.pm/api/packages/acx/releases/0.0.1",
+                "version": "0.0.1"
+            }
+        ],
+        "repository": "hexpm",
+        "retirements": {},
+        "updated_at": "2018-01-30T04:56:03.053561Z",
+        "url": "https://hex.pm/api/packages/acx"
+    }
+]
