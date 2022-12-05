@@ -282,3 +282,37 @@ def test_lister_max_origins_per_page(
 
     assert run_result.pages == 10
     assert run_result.origins == 10 * expected_origins_per_page
+
+
+@pytest.mark.parametrize(
+    "enable_origins,expected",
+    [
+        (True, True),
+        (False, False),
+        # default behavior is to enable all listed origins
+        (None, True),
+    ],
+)
+def test_lister_enable_origins(swh_scheduler, enable_origins, expected):
+    extra_kwargs = {}
+    if enable_origins is not None:
+        extra_kwargs["enable_origins"] = enable_origins
+
+    lister = ListerWithALotOfPagesWithALotOfOrigins(
+        scheduler=swh_scheduler,
+        url="https://example.org",
+        instance="example.org",
+        **extra_kwargs,
+    )
+
+    run_result = lister.run()
+    assert run_result.pages == 10
+    assert run_result.origins == 100
+
+    origins = swh_scheduler.get_listed_origins(
+        lister_id=lister.lister_obj.id, enabled=None
+    ).results
+
+    assert origins
+
+    assert all(origin.enabled == expected for origin in origins)
