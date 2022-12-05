@@ -6,7 +6,7 @@
 from dataclasses import asdict, dataclass
 import logging
 import random
-from typing import Any, Dict, Iterator, Optional, Tuple
+from typing import Any, Dict, Iterator, List, Optional, Tuple
 from urllib.parse import parse_qs, urlencode, urlparse
 
 import iso8601
@@ -92,6 +92,7 @@ class GitLabLister(Lister[GitLabListerState, PageResult]):
         instance: a specific instance name (e.g. gitlab, tor, git-kernel, ...),
             url network location will be used if not provided
         incremental: defines if incremental listing is activated or not
+        ignored_project_prefixes: List of prefixes of project paths to ignore
 
     """
 
@@ -103,6 +104,7 @@ class GitLabLister(Lister[GitLabListerState, PageResult]):
         instance: Optional[str] = None,
         credentials: Optional[CredentialsType] = None,
         incremental: bool = False,
+        ignored_project_prefixes: Optional[List[str]] = None,
     ):
         if name is not None:
             self.LISTER_NAME = name
@@ -115,6 +117,9 @@ class GitLabLister(Lister[GitLabListerState, PageResult]):
         self.incremental = incremental
         self.last_page: Optional[str] = None
         self.per_page = 100
+        self.ignored_project_prefixes: Optional[Tuple[str, ...]] = None
+        if ignored_project_prefixes:
+            self.ignored_project_prefixes = tuple(ignored_project_prefixes)
 
         self.session.headers.update({"Accept": "application/json"})
 
@@ -203,6 +208,10 @@ class GitLabLister(Lister[GitLabListerState, PageResult]):
 
         repositories = page_result.repositories if page_result.repositories else []
         for repo in repositories:
+            if self.ignored_project_prefixes and repo["path_with_namespace"].startswith(
+                self.ignored_project_prefixes
+            ):
+                continue
             visit_type = repo.get("vcs_type", "git")
             visit_type = VCS_MAPPING.get(visit_type, visit_type)
             yield ListedOrigin(
