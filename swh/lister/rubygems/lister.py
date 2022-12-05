@@ -119,9 +119,13 @@ class RubyGemsLister(StatelessLister[RubyGemsListerPage]):
                 dump_tar.extractall(temp_dir)
 
                 logger.debug("Populating rubygems database with dump %s", dump_id)
+
+                # FIXME: make this work with -v ON_ERROR_STOP=1
                 psql = subprocess.Popen(
-                    ["psql", "-q", db_url],
+                    ["psql", "--no-psqlrc", "-q", db_url],
                     stdin=subprocess.PIPE,
+                    stdout=subprocess.PIPE,
+                    stderr=subprocess.PIPE,
                 )
 
                 # passing value of gzip.open as stdin of subprocess.run makes the process
@@ -132,6 +136,18 @@ class RubyGemsLister(StatelessLister[RubyGemsListerPage]):
                 # denote end of read file
                 psql.stdin.close()  # type: ignore
                 psql.wait()
+
+                if psql.returncode != 0:
+                    assert psql.stdout
+                    for line in psql.stdout.readlines():
+                        logger.warning("psql out: %s", line.decode().strip())
+                    assert psql.stderr
+                    for line in psql.stderr.readlines():
+                        logger.warning("psql err: %s", line.decode().strip())
+                    raise ValueError(
+                        "Loading rubygems dump failed with exit code %s.",
+                        psql.returncode,
+                    )
 
     def get_pages(self) -> Iterator[RubyGemsListerPage]:
         # spawn a temporary postgres instance (require initdb executable in environment)
