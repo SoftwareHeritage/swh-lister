@@ -6,7 +6,7 @@
 from dataclasses import dataclass, field
 from datetime import datetime, timezone
 import logging
-from typing import Any, Dict, Iterator, List, Set, Type
+from typing import Any, Dict, Iterator, List, Optional, Set, Type
 from urllib.error import HTTPError
 from urllib.parse import urljoin
 
@@ -91,12 +91,18 @@ class FedoraLister(Lister[FedoraListerState, FedoraPageType]):
         instance: str = "fedora",
         url: str = "https://archives.fedoraproject.org/pub/archive/fedora/linux/releases/",
         releases: List[Release] = [34, 35, 36],
+        max_origins_per_page: Optional[int] = None,
+        max_pages: Optional[int] = None,
+        enable_origins: bool = True,
     ):
         super().__init__(
             scheduler=scheduler,
             url=url,
             instance=instance,
             credentials={},
+            max_origins_per_page=max_origins_per_page,
+            max_pages=max_pages,
+            enable_origins=enable_origins,
         )
 
         self.releases = releases

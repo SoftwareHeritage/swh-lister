@@ -40,9 +40,18 @@ class PhabricatorLister(StatelessLister[PageType]):
         instance: Optional[str] = None,
         api_token: Optional[str] = None,
         credentials: CredentialsType = None,
+        max_origins_per_page: Optional[int] = None,
+        max_pages: Optional[int] = None,
+        enable_origins: bool = True,
     ):
         super().__init__(
-            scheduler, urljoin(url, self.API_REPOSITORY_PATH), instance, credentials
+            scheduler=scheduler,
+            url=urljoin(url, self.API_REPOSITORY_PATH),
+            instance=instance,
+            credentials=credentials,
+            max_origins_per_page=max_origins_per_page,
+            max_pages=max_pages,
+            enable_origins=enable_origins,
         )
 
         self.session.headers.update({"Accept": "application/json"})

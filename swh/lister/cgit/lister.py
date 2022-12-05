@@ -50,6 +50,9 @@ class CGitLister(StatelessLister[Repositories]):
         instance: Optional[str] = None,
         credentials: Optional[CredentialsType] = None,
         base_git_url: Optional[str] = None,
+        max_origins_per_page: Optional[int] = None,
+        max_pages: Optional[int] = None,
+        enable_origins: bool = True,
     ):
         """Lister class for CGit repositories.
 
@@ -67,6 +70,9 @@ class CGitLister(StatelessLister[Repositories]):
             url=url,
             instance=instance,
             credentials=credentials,
+            max_origins_per_page=max_origins_per_page,
+            max_pages=max_pages,
+            enable_origins=enable_origins,
         )
 
         self.session.headers.update({"Accept": "application/html"})

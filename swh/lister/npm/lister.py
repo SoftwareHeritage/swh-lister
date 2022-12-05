@@ -53,6 +53,9 @@ class NpmLister(Lister[NpmListerState, List[Dict[str, Any]]]):
         page_size: int = 1000,
         incremental: bool = False,
         credentials: CredentialsType = None,
+        max_origins_per_page: Optional[int] = None,
+        max_pages: Optional[int] = None,
+        enable_origins: bool = True,
     ):
         super().__init__(
             scheduler=scheduler,
@@ -61,6 +64,9 @@ class NpmLister(Lister[NpmListerState, List[Dict[str, Any]]]):
             if incremental
             else self.API_FULL_LISTING_URL,
             instance=self.INSTANCE,
+            max_origins_per_page=max_origins_per_page,
+            max_pages=max_pages,
+            enable_origins=enable_origins,
         )
 
         self.page_size = page_size

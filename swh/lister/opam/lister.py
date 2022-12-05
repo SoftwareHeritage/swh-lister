@@ -45,6 +45,9 @@ class OpamLister(StatelessLister[PageType]):
         url: str,
         instance: Optional[str] = None,
         credentials: CredentialsType = None,
+        max_origins_per_page: Optional[int] = None,
+        max_pages: Optional[int] = None,
+        enable_origins: bool = True,
         opam_root: str = "/tmp/opam/",
     ):
         super().__init__(
@@ -52,6 +55,9 @@ class OpamLister(StatelessLister[PageType]):
             credentials=credentials,
             url=url,
             instance=instance,
+            max_origins_per_page=max_origins_per_page,
+            max_pages=max_pages,
+            enable_origins=enable_origins,
         )
         self.env = os.environ.copy()
         # Opam root folder is initialized in the :meth:`get_pages` method as no

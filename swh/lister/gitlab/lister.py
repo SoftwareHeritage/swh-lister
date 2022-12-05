@@ -103,6 +103,9 @@ class GitLabLister(Lister[GitLabListerState, PageResult]):
         name: Optional[str] = "gitlab",
         instance: Optional[str] = None,
         credentials: Optional[CredentialsType] = None,
+        max_origins_per_page: Optional[int] = None,
+        max_pages: Optional[int] = None,
+        enable_origins: bool = True,
         incremental: bool = False,
         ignored_project_prefixes: Optional[List[str]] = None,
     ):
@@ -113,6 +116,9 @@ class GitLabLister(Lister[GitLabListerState, PageResult]):
             url=url.rstrip("/"),
             instance=instance,
             credentials=credentials,
+            max_origins_per_page=max_origins_per_page,
+            max_pages=max_pages,
+            enable_origins=enable_origins,
         )
         self.incremental = incremental
         self.last_page: Optional[str] = None

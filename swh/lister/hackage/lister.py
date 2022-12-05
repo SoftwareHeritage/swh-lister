@@ -44,6 +44,9 @@ class HackageLister(Lister[HackageListerState, HackageListerPage]):
         self,
         scheduler: SchedulerInterface,
         credentials: Optional[CredentialsType] = None,
+        max_origins_per_page: Optional[int] = None,
+        max_pages: Optional[int] = None,
+        enable_origins: bool = True,
         url: Optional[str] = None,
     ):
         super().__init__(
@@ -51,6 +54,9 @@ class HackageLister(Lister[HackageListerState, HackageListerPage]):
             credentials=credentials,
             instance=self.INSTANCE,
             url=url if url else self.BASE_URL,
+            max_origins_per_page=max_origins_per_page,
+            max_pages=max_pages,
+            enable_origins=enable_origins,
         )
         # Ensure to set this with same value as the http api search endpoint use
         # (50 as of august 2022)

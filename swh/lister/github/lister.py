@@ -70,6 +70,9 @@ class GitHubLister(Lister[GitHubListerState, List[Dict[str, Any]]]):
         self,
         scheduler: SchedulerInterface,
         credentials: CredentialsType = None,
+        max_origins_per_page: Optional[int] = None,
+        max_pages: Optional[int] = None,
+        enable_origins: bool = True,
         first_id: Optional[int] = None,
         last_id: Optional[int] = None,
     ):
@@ -79,6 +82,9 @@ class GitHubLister(Lister[GitHubListerState, List[Dict[str, Any]]]):
             url=self.API_URL,
             instance="github",
             with_github_session=True,
+            max_origins_per_page=max_origins_per_page,
+            max_pages=max_pages,
+            enable_origins=enable_origins,
         )
 
         self.first_id = first_id

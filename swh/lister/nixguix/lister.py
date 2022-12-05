@@ -320,6 +320,9 @@ class NixGuixLister(StatelessLister[PageResult]):
         origin_upstream: str,
         instance: Optional[str] = None,
         credentials: Optional[CredentialsType] = None,
+        max_origins_per_page: Optional[int] = None,
+        max_pages: Optional[int] = None,
+        enable_origins: bool = True,
         # canonicalize urls, can be turned off during docker runs
         canonicalize: bool = True,
         extensions_to_ignore: List[str] = [],
@@ -331,6 +334,9 @@ class NixGuixLister(StatelessLister[PageResult]):
             instance=instance,
             credentials=credentials,
             with_github_session=canonicalize,
+            max_origins_per_page=max_origins_per_page,
+            max_pages=max_pages,
+            enable_origins=enable_origins,
         )
         # either full fqdn NixOS/nixpkgs or guix repository urls
         # maybe add an assert on those specific urls?
