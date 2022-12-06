@@ -9,6 +9,7 @@ lxml
 dulwich
 testing.postgresql
 psycopg2
+repomd
 swh.core[db,github]>=2.16.1
 swh.scheduler>=0.8
 

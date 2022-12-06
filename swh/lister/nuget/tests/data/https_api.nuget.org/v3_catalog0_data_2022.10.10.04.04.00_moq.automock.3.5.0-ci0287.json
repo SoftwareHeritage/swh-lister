@@ -1,0 +1,187 @@
+{
+  "@id": "https://api.nuget.org/v3/catalog0/data/2022.10.10.04.04.00/moq.automock.3.5.0-ci0287.json",
+  "@type": [
+    "PackageDetails",
+    "catalog:Permalink"
+  ],
+  "authors": "Tim Kellogg, Adam Hewitt, Kevin Bost",
+  "catalog:commitId": "de4b22b8-397b-4fa1-a160-db3a7c5b17cd",
+  "catalog:commitTimeStamp": "2022-10-10T04:04:00.6654802Z",
+  "copyright": "Copyright Tim Kellogg 2022",
+  "created": "2022-10-10T04:01:52.21Z",
+  "description": "An auto-mocking container that generates mocks using Moq",
+  "id": "Moq.AutoMock",
+  "isPrerelease": true,
+  "lastEdited": "2022-10-10T04:03:52.51Z",
+  "licenseFile": "LICENSE",
+  "licenseUrl": "https://aka.ms/deprecateLicenseUrl",
+  "listed": true,
+  "packageHash": "jtvxZ9lJGiNWCvKx4oZByy/knRu86ze833hZa2XvAbzYcSR3gSesdWgbGw1yNGDY0TuHobTETq/lorrtE2/pPA==",
+  "packageHashAlgorithm": "SHA512",
+  "packageSize": 70853,
+  "projectUrl": "https://github.com/moq/Moq.AutoMocker",
+  "published": "2022-10-10T04:01:52.21Z",
+  "repository": "",
+  "verbatimVersion": "3.5.0-ci0287",
+  "version": "3.5.0-ci0287",
+  "dependencyGroups": [
+    {
+      "@id": "https://api.nuget.org/v3/catalog0/data/2022.10.10.04.04.00/moq.automock.3.5.0-ci0287.json#dependencygroup/.netframework4.6.1",
+      "@type": "PackageDependencyGroup",
+      "dependencies": [
+        {
+          "@id": "https://api.nuget.org/v3/catalog0/data/2022.10.10.04.04.00/moq.automock.3.5.0-ci0287.json#dependencygroup/.netframework4.6.1/moq",
+          "@type": "PackageDependency",
+          "id": "Moq",
+          "range": "[4.18.2, )"
+        },
+        {
+          "@id": "https://api.nuget.org/v3/catalog0/data/2022.10.10.04.04.00/moq.automock.3.5.0-ci0287.json#dependencygroup/.netframework4.6.1/nonblocking",
+          "@type": "PackageDependency",
+          "id": "NonBlocking",
+          "range": "[2.1.0, )"
+        },
+        {
+          "@id": "https://api.nuget.org/v3/catalog0/data/2022.10.10.04.04.00/moq.automock.3.5.0-ci0287.json#dependencygroup/.netframework4.6.1/system.valuetuple",
+          "@type": "PackageDependency",
+          "id": "System.ValueTuple",
+          "range": "[4.5.0, )"
+        }
+      ],
+      "targetFramework": ".NETFramework4.6.1"
+    },
+    {
+      "@id": "https://api.nuget.org/v3/catalog0/data/2022.10.10.04.04.00/moq.automock.3.5.0-ci0287.json#dependencygroup/.netstandard2.0",
+      "@type": "PackageDependencyGroup",
+      "dependencies": [
+        {
+          "@id": "https://api.nuget.org/v3/catalog0/data/2022.10.10.04.04.00/moq.automock.3.5.0-ci0287.json#dependencygroup/.netstandard2.0/moq",
+          "@type": "PackageDependency",
+          "id": "Moq",
+          "range": "[4.18.2, )"
+        },
+        {
+          "@id": "https://api.nuget.org/v3/catalog0/data/2022.10.10.04.04.00/moq.automock.3.5.0-ci0287.json#dependencygroup/.netstandard2.0/nonblocking",
+          "@type": "PackageDependency",
+          "id": "NonBlocking",
+          "range": "[2.1.0, )"
+        }
+      ],
+      "targetFramework": ".NETStandard2.0"
+    }
+  ],
+  "packageEntries": [
+    {
+      "@id": "https://api.nuget.org/v3/catalog0/data/2022.10.10.04.04.00/moq.automock.3.5.0-ci0287.json#Moq.AutoMock.nuspec",
+      "@type": "PackageEntry",
+      "compressedLength": 567,
+      "fullName": "Moq.AutoMock.nuspec",
+      "length": 1287,
+      "name": "Moq.AutoMock.nuspec"
+    },
+    {
+      "@id": "https://api.nuget.org/v3/catalog0/data/2022.10.10.04.04.00/moq.automock.3.5.0-ci0287.json#lib/net461/Moq.AutoMock.dll",
+      "@type": "PackageEntry",
+      "compressedLength": 17993,
+      "fullName": "lib/net461/Moq.AutoMock.dll",
+      "length": 41984,
+      "name": "Moq.AutoMock.dll"
+    },
+    {
+      "@id": "https://api.nuget.org/v3/catalog0/data/2022.10.10.04.04.00/moq.automock.3.5.0-ci0287.json#lib/net461/Moq.AutoMock.xml",
+      "@type": "PackageEntry",
+      "compressedLength": 5031,
+      "fullName": "lib/net461/Moq.AutoMock.xml",
+      "length": 55041,
+      "name": "Moq.AutoMock.xml"
+    },
+    {
+      "@id": "https://api.nuget.org/v3/catalog0/data/2022.10.10.04.04.00/moq.automock.3.5.0-ci0287.json#lib/netstandard2.0/Moq.AutoMock.dll",
+      "@type": "PackageEntry",
+      "compressedLength": 17927,
+      "fullName": "lib/netstandard2.0/Moq.AutoMock.dll",
+      "length": 41984,
+      "name": "Moq.AutoMock.dll"
+    },
+    {
+      "@id": "https://api.nuget.org/v3/catalog0/data/2022.10.10.04.04.00/moq.automock.3.5.0-ci0287.json#lib/netstandard2.0/Moq.AutoMock.xml",
+      "@type": "PackageEntry",
+      "compressedLength": 5031,
+      "fullName": "lib/netstandard2.0/Moq.AutoMock.xml",
+      "length": 55041,
+      "name": "Moq.AutoMock.xml"
+    },
+    {
+      "@id": "https://api.nuget.org/v3/catalog0/data/2022.10.10.04.04.00/moq.automock.3.5.0-ci0287.json#LICENSE",
+      "@type": "PackageEntry",
+      "compressedLength": 628,
+      "fullName": "LICENSE",
+      "length": 1068,
+      "name": "LICENSE"
+    },
+    {
+      "@id": "https://api.nuget.org/v3/catalog0/data/2022.10.10.04.04.00/moq.automock.3.5.0-ci0287.json#analyzers/dotnet/cs/Moq.AutoMocker.TestGenerator.dll",
+      "@type": "PackageEntry",
+      "compressedLength": 9686,
+      "fullName": "analyzers/dotnet/cs/Moq.AutoMocker.TestGenerator.dll",
+      "length": 25088,
+      "name": "Moq.AutoMocker.TestGenerator.dll"
+    },
+    {
+      "@id": "https://api.nuget.org/v3/catalog0/data/2022.10.10.04.04.00/moq.automock.3.5.0-ci0287.json#.signature.p7s",
+      "@type": "PackageEntry",
+      "compressedLength": 11534,
+      "fullName": ".signature.p7s",
+      "length": 11534,
+      "name": ".signature.p7s"
+    }
+  ],
+  "@context": {
+    "@vocab": "http://schema.nuget.org/schema#",
+    "catalog": "http://schema.nuget.org/catalog#",
+    "xsd": "http://www.w3.org/2001/XMLSchema#",
+    "dependencies": {
+      "@id": "dependency",
+      "@container": "@set"
+    },
+    "dependencyGroups": {
+      "@id": "dependencyGroup",
+      "@container": "@set"
+    },
+    "packageEntries": {
+      "@id": "packageEntry",
+      "@container": "@set"
+    },
+    "packageTypes": {
+      "@id": "packageType",
+      "@container": "@set"
+    },
+    "supportedFrameworks": {
+      "@id": "supportedFramework",
+      "@container": "@set"
+    },
+    "tags": {
+      "@id": "tag",
+      "@container": "@set"
+    },
+    "vulnerabilities": {
+      "@id": "vulnerability",
+      "@container": "@set"
+    },
+    "published": {
+      "@type": "xsd:dateTime"
+    },
+    "created": {
+      "@type": "xsd:dateTime"
+    },
+    "lastEdited": {
+      "@type": "xsd:dateTime"
+    },
+    "catalog:commitTimeStamp": {
+      "@type": "xsd:dateTime"
+    },
+    "reasons": {
+      "@container": "@set"
+    }
+  }
+}

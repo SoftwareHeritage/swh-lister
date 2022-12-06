@@ -86,6 +86,7 @@ setup(
         lister.tuleap=swh.lister.tuleap:register
         lister.maven=swh.lister.maven:register
         lister.gogs=swh.lister.gogs:register
+        lister.fedora=swh.lister.fedora:register
     """,
     classifiers=[
         "Programming Language :: Python :: 3",

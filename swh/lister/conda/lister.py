@@ -41,12 +41,18 @@ class CondaLister(StatelessLister[CondaListerPage]):
         url: str = BASE_REPO_URL,
         channel: str = "",
         archs: List = [],
+        max_origins_per_page: Optional[int] = None,
+        max_pages: Optional[int] = None,
+        enable_origins: bool = True,
     ):
         super().__init__(
             scheduler=scheduler,
             credentials=credentials,
             instance=self.INSTANCE,
             url=url,
+            max_origins_per_page=max_origins_per_page,
+            max_pages=max_pages,
+            enable_origins=enable_origins,
         )
         self.channel: str = channel
         self.archs: List[str] = archs
