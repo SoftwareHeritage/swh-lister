@@ -94,6 +94,9 @@ class ArchLister(StatelessLister[ArchListerPage]):
         self,
         scheduler: SchedulerInterface,
         credentials: Optional[CredentialsType] = None,
+        max_origins_per_page: Optional[int] = None,
+        max_pages: Optional[int] = None,
+        enable_origins: bool = True,
         flavours: Dict[str, Any] = {
             "official": {
                 "archs": ["x86_64"],
@@ -118,6 +121,9 @@ class ArchLister(StatelessLister[ArchListerPage]):
             credentials=credentials,
             url=flavours["official"]["base_info_url"],
             instance=self.INSTANCE,
+            max_origins_per_page=max_origins_per_page,
+            max_pages=max_pages,
+            enable_origins=enable_origins,
         )
 
         self.flavours = flavours

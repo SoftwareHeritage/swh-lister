@@ -77,12 +77,18 @@ class DebianLister(Lister[DebianListerState, DebianPageType]):
         suites: List[Suite] = ["stretch", "buster", "bullseye"],
         components: List[Component] = ["main", "contrib", "non-free"],
         credentials: Optional[CredentialsType] = None,
+        max_origins_per_page: Optional[int] = None,
+        max_pages: Optional[int] = None,
+        enable_origins: bool = True,
     ):
         super().__init__(
             scheduler=scheduler,
             url=mirror_url,
             instance=distribution,
             credentials=credentials,
+            max_origins_per_page=max_origins_per_page,
+            max_pages=max_pages,
+            enable_origins=enable_origins,
         )
 
         # to ensure urljoin will produce valid Sources URL

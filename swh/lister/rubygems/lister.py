@@ -63,12 +63,18 @@ class RubyGemsLister(StatelessLister[RubyGemsListerPage]):
         self,
         scheduler: SchedulerInterface,
         credentials: Optional[CredentialsType] = None,
+        max_origins_per_page: Optional[int] = None,
+        max_pages: Optional[int] = None,
+        enable_origins: bool = True,
     ):
         super().__init__(
             scheduler=scheduler,
             credentials=credentials,
             instance=self.INSTANCE,
             url=self.RUBY_GEMS_POSTGRES_DUMP_BASE_URL,
+            max_origins_per_page=max_origins_per_page,
+            max_pages=max_pages,
+            enable_origins=enable_origins,
         )
 
     def get_latest_dump_file(self) -> str:
@@ -119,9 +125,13 @@ class RubyGemsLister(StatelessLister[RubyGemsListerPage]):
                 dump_tar.extractall(temp_dir)
 
                 logger.debug("Populating rubygems database with dump %s", dump_id)
+
+                # FIXME: make this work with -v ON_ERROR_STOP=1
                 psql = subprocess.Popen(
-                    ["psql", "-q", db_url],
+                    ["psql", "--no-psqlrc", "-q", db_url],
                     stdin=subprocess.PIPE,
+                    stdout=subprocess.PIPE,
+                    stderr=subprocess.PIPE,
                 )
 
                 # passing value of gzip.open as stdin of subprocess.run makes the process
@@ -132,6 +142,18 @@ class RubyGemsLister(StatelessLister[RubyGemsListerPage]):
                 # denote end of read file
                 psql.stdin.close()  # type: ignore
                 psql.wait()
+
+                if psql.returncode != 0:
+                    assert psql.stdout
+                    for line in psql.stdout.readlines():
+                        logger.warning("psql out: %s", line.decode().strip())
+                    assert psql.stderr
+                    for line in psql.stderr.readlines():
+                        logger.warning("psql err: %s", line.decode().strip())
+                    raise ValueError(
+                        "Loading rubygems dump failed with exit code %s.",
+                        psql.returncode,
+                    )
 
     def get_pages(self) -> Iterator[RubyGemsListerPage]:
         # spawn a temporary postgres instance (require initdb executable in environment)

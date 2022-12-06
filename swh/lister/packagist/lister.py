@@ -53,6 +53,9 @@ class PackagistLister(Lister[PackagistListerState, PackagistPageType]):
         self,
         scheduler: SchedulerInterface,
         credentials: CredentialsType = None,
+        max_origins_per_page: Optional[int] = None,
+        max_pages: Optional[int] = None,
+        enable_origins: bool = True,
     ):
         super().__init__(
             scheduler=scheduler,
@@ -60,6 +63,9 @@ class PackagistLister(Lister[PackagistListerState, PackagistPageType]):
             instance="packagist",
             credentials=credentials,
             with_github_session=True,
+            max_origins_per_page=max_origins_per_page,
+            max_pages=max_pages,
+            enable_origins=enable_origins,
         )
 
         self.session.headers.update({"Accept": "application/json"})

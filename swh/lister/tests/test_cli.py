@@ -39,6 +39,9 @@ lister_args = {
         "url": "https://guix.gnu.org/sources.json",
         "origin_upstream": "https://git.savannah.gnu.org/cgit/guix.git/",
     },
+    "fedora": {
+        "url": "https://archives.fedoraproject.org/pub/archive/fedora/linux/releases//",
+    },
 }
 
 

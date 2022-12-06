@@ -356,3 +356,38 @@ def test_lister_gitlab_url_computation(url, swh_scheduler):
 )
 def test__parse_id_after(url, expected_result):
     assert _parse_id_after(url) == expected_result
+
+
+def test_lister_gitlab_ignored_project_prefixes(datadir, swh_scheduler, requests_mock):
+    """Gitlab lister supports listing with ignored project prefixes"""
+    instance = "gitlab.com"
+    lister = GitLabLister(
+        swh_scheduler,
+        url=api_url(instance),
+        instance=instance,
+        ignored_project_prefixes=["jonan/"],
+    )
+
+    response = gitlab_page_response(datadir, instance, 1)
+
+    requests_mock.get(
+        lister.page_url(),
+        [{"json": response}],
+        additional_matcher=_match_request,
+    )
+
+    listed_result = lister.run()
+    # 2 origins start with jonan/
+    expected_nb_origins = len(response) - 2
+    assert listed_result == ListerStats(pages=1, origins=expected_nb_origins)
+
+    scheduler_origins = lister.scheduler.get_listed_origins(
+        lister.lister_obj.id
+    ).results
+    assert len(scheduler_origins) == expected_nb_origins
+
+    for listed_origin in scheduler_origins:
+        assert listed_origin.visit_type == "git"
+        assert listed_origin.url.startswith(f"https://{instance}")
+        assert not listed_origin.url.startswith(f"https://{instance}/jonan/")
+        assert listed_origin.last_update is not None

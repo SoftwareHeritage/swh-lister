@@ -20,9 +20,13 @@ Origins retrieving strategy
 Nuget.org provides an `http api`_ with several endpoint to discover and list packages
 and versions.
 
-The recommended way to retrieve all packages is to use the `catalog`_ api endpoint.
-It provides a first endpoint that list all available pages. We then iterate to get
-content of related pages.
+The recommended way to `retrieve all packages`_ is to use the `catalog`_ api endpoint.
+It provides a `catalog index endpoint`_ that list all available pages. We then iterate to
+get content of related pages.
+
+The lister is incremental following a `cursor`_ principle, based on the value of
+``commitTimeStamp`` from the catalog index endpoint. It retrieve only pages for which
+``commitTimeStamp``is greater than ``lister.state.last_listing_date``.
 
 Page listing
 ------------
@@ -65,9 +69,12 @@ You can follow lister execution by displaying logs of swh-lister service::
 .. _nuget.org/packages: https://www.nuget.org/packages
 .. _http api: https://api.nuget.org/v3/index.json
 .. _catalog: https://learn.microsoft.com/en-us/nuget/api/catalog-resource
+.. _catalog index endpoint: https://learn.microsoft.com/en-us/nuget/api/catalog-resource#catalog-page-object-in-the-index
+.. _retrieve all packages: https://learn.microsoft.com/en-us/nuget/guides/api/query-for-all-published-packages#initialize-a-cursor
+.. _cursor: https://learn.microsoft.com/en-us/nuget/api/catalog-resource#cursor
 .. _package metadata: https://learn.microsoft.com/en-us/nuget/api/registration-base-url-resource
-.. _package manifest: https://learn.microsoft.com/en-us/nuget/api/package-base-address-resource#download-package-manifest-nuspec  # noqa: B950
-"""
+.. _package manifest: https://learn.microsoft.com/en-us/nuget/api/package-base-address-resource#download-package-manifest-nuspec
+"""  # noqa: B950
 
 
 def register():

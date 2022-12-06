@@ -12,6 +12,7 @@ lister.cpan = swh.lister.cpan:register
 lister.cran = swh.lister.cran:register
 lister.crates = swh.lister.crates:register
 lister.debian = swh.lister.debian:register
+lister.fedora = swh.lister.fedora:register
 lister.gitea = swh.lister.gitea:register
 lister.github = swh.lister.github:register
 lister.gitlab = swh.lister.gitlab:register
