@@ -30,9 +30,7 @@ def test_full_listing(lister, swh_scheduler_celery_app, swh_scheduler_celery_wor
     res.wait()
     assert res.successful()
 
-    actual_kwargs = dict(**kwargs, instance=None, api_token=None, page_size=None)
-
-    lister.from_configfile.assert_called_once_with(**actual_kwargs)
+    lister.from_configfile.assert_called_once_with(**kwargs)
     lister.run.assert_called_once_with()
 
 
