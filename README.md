@@ -26,6 +26,7 @@ following Python modules:
 - `swh.lister.pypi`
 - `swh.lister.tuleap`
 - `swh.lister.gogs`
+- `swh.liser.fedora`
 
 Dependencies
 ------------

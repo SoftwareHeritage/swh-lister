@@ -32,9 +32,18 @@ class CRANLister(StatelessLister[PageType]):
         self,
         scheduler: SchedulerInterface,
         credentials: Optional[CredentialsType] = None,
+        max_origins_per_page: Optional[int] = None,
+        max_pages: Optional[int] = None,
+        enable_origins: bool = True,
     ):
         super().__init__(
-            scheduler, url=CRAN_MIRROR, instance="cran", credentials=credentials
+            scheduler,
+            url=CRAN_MIRROR,
+            instance="cran",
+            credentials=credentials,
+            max_origins_per_page=max_origins_per_page,
+            max_pages=max_pages,
+            enable_origins=enable_origins,
         )
 
     def get_pages(self) -> Iterator[PageType]:

@@ -61,6 +61,9 @@ class MavenLister(Lister[MavenListerState, RepoPage]):
         index_url: str = None,
         instance: Optional[str] = None,
         credentials: CredentialsType = None,
+        max_origins_per_page: Optional[int] = None,
+        max_pages: Optional[int] = None,
+        enable_origins: bool = True,
         incremental: bool = True,
     ):
         """Lister class for Maven repositories.
@@ -88,6 +91,9 @@ class MavenLister(Lister[MavenListerState, RepoPage]):
             url=url,
             instance=instance,
             with_github_session=True,
+            max_origins_per_page=max_origins_per_page,
+            max_pages=max_pages,
+            enable_origins=enable_origins,
         )
 
         self.session.headers.update({"Accept": "application/json"})

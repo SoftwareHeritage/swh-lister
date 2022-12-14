@@ -1,8 +1,25 @@
-swh-lister (4.2.0-1~swh1~bpo10+1) buster-swh; urgency=medium
+swh-lister (4.3.1-1~swh1) unstable-swh; urgency=medium
 
-  * Rebuild for buster-swh
+  * New upstream release 4.3.1     - (tagged by Antoine R. Dumont
+    (@ardumont) <ardumont@softwareheritage.org> on 2022-12-14 16:18:11
+    +0100)
+  * Upstream changes:     - v4.3.1     - gogs, gitea: Fix task execution
+    to pass along extra kwargs
 
- -- Software Heritage autobuilder (on jenkins-debian1) <jenkins@jenkins-debian1.internal.softwareheritage.org>  Mon, 07 Nov 2022 09:53:20 +0000
+ -- Software Heritage autobuilder (on jenkins-debian1) <jenkins@jenkins-debian1.internal.softwareheritage.org>  Wed, 14 Dec 2022 15:27:34 +0000
+
+swh-lister (4.3.0-1~swh1) unstable-swh; urgency=medium
+
+  * New upstream release 4.3.0     - (tagged by Nicolas Dandrimont
+    <nicolas@dandrimont.eu> on 2022-12-06 10:47:31 +0100)
+  * Upstream changes:     - Release swh.lister 4.3.0     - introduce
+    Fedora lister     - implement incremental mode for nuget and puppet
+    listers     - add a list of ignored path prefixes for the GitLab
+    lister     - add page limit and origins per page limit to all
+    listers     - add an option to send all origins as disabled to all
+    listers
+
+ -- Software Heritage autobuilder (on jenkins-debian1) <jenkins@jenkins-debian1.internal.softwareheritage.org>  Tue, 06 Dec 2022 09:57:36 +0000
 
 swh-lister (4.2.0-1~swh1) unstable-swh; urgency=medium
 

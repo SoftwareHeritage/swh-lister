@@ -31,12 +31,18 @@ class GNULister(StatelessLister[GNUPageType]):
         self,
         scheduler: SchedulerInterface,
         credentials: CredentialsType = None,
+        max_origins_per_page: Optional[int] = None,
+        max_pages: Optional[int] = None,
+        enable_origins: bool = True,
     ):
         super().__init__(
             scheduler=scheduler,
             url=self.GNU_FTP_URL,
             instance="GNU",
             credentials=credentials,
+            max_origins_per_page=max_origins_per_page,
+            max_pages=max_pages,
+            enable_origins=enable_origins,
         )
         # no side-effect calls in constructor, if extra state is needed, as preconized
         # by the pattern docstring, this must happen in the get_pages method.

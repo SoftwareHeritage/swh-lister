@@ -215,3 +215,104 @@ def test_listed_origins_count(swh_scheduler):
 
     assert run_result.pages == 2
     assert run_result.origins == 1
+
+
+class ListerWithALotOfPagesWithALotOfOrigins(RunnableStatelessLister):
+    def get_pages(self) -> Iterator[PageType]:
+        for page in range(10):
+            yield [
+                {"url": f"https://example.org/page{page}/origin{origin}"}
+                for origin in range(10)
+            ]
+
+
+@pytest.mark.parametrize(
+    "max_pages,expected_pages",
+    [
+        (2, 2),
+        (10, 10),
+        (100, 10),
+        # The default returns all 10 pages
+        (None, 10),
+    ],
+)
+def test_lister_max_pages(swh_scheduler, max_pages, expected_pages):
+    extra_kwargs = {}
+    if max_pages is not None:
+        extra_kwargs["max_pages"] = max_pages
+
+    lister = ListerWithALotOfPagesWithALotOfOrigins(
+        scheduler=swh_scheduler,
+        url="https://example.org",
+        instance="example.org",
+        **extra_kwargs,
+    )
+
+    run_result = lister.run()
+
+    assert run_result.pages == expected_pages
+    assert run_result.origins == expected_pages * 10
+
+
+@pytest.mark.parametrize(
+    "max_origins_per_page,expected_origins_per_page",
+    [
+        (2, 2),
+        (10, 10),
+        (100, 10),
+        # The default returns all 10 origins per page
+        (None, 10),
+    ],
+)
+def test_lister_max_origins_per_page(
+    swh_scheduler, max_origins_per_page, expected_origins_per_page
+):
+    extra_kwargs = {}
+    if max_origins_per_page is not None:
+        extra_kwargs["max_origins_per_page"] = max_origins_per_page
+
+    lister = ListerWithALotOfPagesWithALotOfOrigins(
+        scheduler=swh_scheduler,
+        url="https://example.org",
+        instance="example.org",
+        **extra_kwargs,
+    )
+
+    run_result = lister.run()
+
+    assert run_result.pages == 10
+    assert run_result.origins == 10 * expected_origins_per_page
+
+
+@pytest.mark.parametrize(
+    "enable_origins,expected",
+    [
+        (True, True),
+        (False, False),
+        # default behavior is to enable all listed origins
+        (None, True),
+    ],
+)
+def test_lister_enable_origins(swh_scheduler, enable_origins, expected):
+    extra_kwargs = {}
+    if enable_origins is not None:
+        extra_kwargs["enable_origins"] = enable_origins
+
+    lister = ListerWithALotOfPagesWithALotOfOrigins(
+        scheduler=swh_scheduler,
+        url="https://example.org",
+        instance="example.org",
+        **extra_kwargs,
+    )
+
+    run_result = lister.run()
+    assert run_result.pages == 10
+    assert run_result.origins == 100
+
+    origins = swh_scheduler.get_listed_origins(
+        lister_id=lister.lister_obj.id, enabled=None
+    ).results
+
+    assert origins
+
+    assert all(origin.enabled == expected for origin in origins)
