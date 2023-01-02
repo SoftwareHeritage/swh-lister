@@ -217,6 +217,7 @@ def test_ratelimit_reset_sleep(
     requests_ratelimited,
     monkeypatch_sleep_calls,
     num_before_ratelimit,
+    num_ratelimit,
     ratelimit_reset,
     github_credentials,
     lister_credentials,
