@@ -1,3 +1,13 @@
+swh-lister (4.3.3-1~swh1) unstable-swh; urgency=medium
+
+  * New upstream release 4.3.3     - (tagged by Antoine R. Dumont
+    (@ardumont) <ardumont@softwareheritage.org> on 2023-01-03 10:42:06
+    +0100)
+  * Upstream changes:     - v4.3.3     - github: Fix fixtures use in
+    tests
+
+ -- Software Heritage autobuilder (on jenkins-debian1) <jenkins@jenkins-debian1.internal.softwareheritage.org>  Tue, 03 Jan 2023 09:48:49 +0000
+
 swh-lister (4.3.1-1~swh1) unstable-swh; urgency=medium
 
   * New upstream release 4.3.1     - (tagged by Antoine R. Dumont
