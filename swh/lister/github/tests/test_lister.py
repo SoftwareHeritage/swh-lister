@@ -5,10 +5,9 @@
 
 import datetime
 import logging
-from typing import Any, Dict, Iterator, List
+from typing import Any, Dict, List
 
 import pytest
-import requests_mock
 
 from swh.core.github.pytest_plugin import github_response_callback
 from swh.lister.github.lister import GitHubLister
@@ -20,11 +19,13 @@ NUM_PAGES = 10
 ORIGIN_COUNT = GitHubLister.PAGE_SIZE * NUM_PAGES
 
 
+def response_callback(request, context):
+    return github_response_callback(request, context, remaining_requests=1000)
+
+
 @pytest.fixture()
-def requests_mocker() -> Iterator[requests_mock.Mocker]:
-    with requests_mock.Mocker() as mock:
-        mock.get(GitHubLister.API_URL, json=github_response_callback)
-        yield mock
+def requests_mocker(requests_mock):
+    requests_mock.get(GitHubLister.API_URL, json=response_callback)
 
 
 def get_lister_data(swh_scheduler: SchedulerInterface) -> Lister:
@@ -65,9 +66,7 @@ def check_origin_5555(swh_scheduler: SchedulerInterface, lister: Lister) -> None
     assert origin_5555.last_update is None
 
 
-def test_from_empty_state(
-    swh_scheduler, caplog, requests_mocker: requests_mock.Mocker
-) -> None:
+def test_from_empty_state(swh_scheduler, caplog, requests_mocker) -> None:
     caplog.set_level(logging.DEBUG, "swh.lister.github.lister")
 
     # Run the lister in incremental mode
@@ -137,7 +136,9 @@ def test_relister(swh_scheduler, caplog, requests_mocker) -> None:
     assert lister_data.current_state == {"last_seen_id": 123}
 
 
-def test_anonymous_ratelimit(swh_scheduler, caplog, requests_ratelimited) -> None:
+def test_anonymous_ratelimit(
+    swh_scheduler, caplog, github_requests_ratelimited
+) -> None:
     caplog.set_level(logging.DEBUG, "swh.core.github.utils")
 
     lister = GitHubLister(scheduler=swh_scheduler)
@@ -179,7 +180,7 @@ def test_authenticated_credentials(
 def test_ratelimit_once_recovery(
     swh_scheduler,
     caplog,
-    requests_ratelimited,
+    github_requests_ratelimited,
     num_ratelimit,
     monkeypatch_sleep_calls,
     lister_credentials,
@@ -214,12 +215,13 @@ def test_ratelimit_once_recovery(
 def test_ratelimit_reset_sleep(
     swh_scheduler,
     caplog,
-    requests_ratelimited,
+    github_requests_ratelimited,
     monkeypatch_sleep_calls,
-    num_before_ratelimit,
-    ratelimit_reset,
     github_credentials,
     lister_credentials,
+    num_before_ratelimit,
+    num_ratelimit,
+    ratelimit_reset,
 ):
     """Check that the lister properly handles rate-limiting when providing it with
     authentication tokens"""
