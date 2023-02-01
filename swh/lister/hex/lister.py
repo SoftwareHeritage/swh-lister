@@ -4,6 +4,7 @@
 # See top-level LICENSE file for more information
 
 from dataclasses import asdict, dataclass
+from datetime import datetime
 import logging
 from typing import Any, Dict, Iterator, List
 from urllib.parse import urljoin
@@ -32,10 +33,12 @@ class HexListerState:
     """Id of the last page listed on an incremental pass"""
     last_pkg_name: str = ""
     """Name of the last package inserted at on an incremental pass"""
+    last_updated_at: str = datetime.min.replace(tzinfo=iso8601.UTC).isoformat()
+    """updated_at value of the last seen package on an incremental pass"""
 
 
 class HexLister(Lister[HexListerState, HexListerPage]):
-    """List origins from the "Hex" forge."""
+    """List origins from the Hex.pm"""
 
     LISTER_NAME = "hex"
     VISIT_TYPE = "hex"
@@ -73,12 +76,19 @@ class HexLister(Lister[HexListerState, HexListerPage]):
         url = urljoin(self.url, self.PACKAGES_PATH)
 
         while page_id is not None:
+            logger.debug(
+                "Fetching URL %s with page_id = %s and updated_after = %s",
+                url,
+                page_id,
+                self.state.last_updated_at,
+            )
+
             body = self.http_request(
                 url,
                 params={
                     "page": page_id,
-                    "sort": "name",
-                },  # sort=name is actually the default
+                    "search": f"updated_after:{self.state.last_updated_at}",
+                },
             ).json()
 
             yield body
@@ -116,15 +126,23 @@ class HexLister(Lister[HexListerState, HexListerPage]):
             return
 
         last_pkg_name = page[-1]["name"]
-
-        # incoming page should have alphabetically greater
-        # last package name than the one stored in the state
-        if last_pkg_name > self.state.last_pkg_name:
+        last_updated_at = page[-1]["updated_at"]
+        # TODO: Think more about 2nd condition:
+        if (
+            iso8601.parse_date(last_updated_at)
+            > iso8601.parse_date(self.state.last_updated_at)
+            and last_pkg_name != self.state.last_pkg_name
+            and len(page) > 0
+        ):
             self.state.last_pkg_name = last_pkg_name
             self.state.last_page_id += 1
+            self.state.last_updated_at = last_updated_at
 
     def finalize(self) -> None:
         scheduler_state = self.get_state_from_scheduler()
 
-        if self.state.last_page_id > scheduler_state.last_page_id:
+        # Mark the lister as updated only if it finds any updated repos
+        if iso8601.parse_date(self.state.last_updated_at) > iso8601.parse_date(
+            scheduler_state.last_updated_at
+        ):
             self.updated = True
