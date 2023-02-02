@@ -13,7 +13,6 @@ from swh.scheduler.interface import SchedulerInterface
 @pytest.fixture
 def hexpm_page(datadir):
     def get_page(page_id: int):
-        # FIXME: Update the test data to match ?sort=name
         text = Path(datadir, "https_hex.pm", f"page{page_id}.json").read_text()
         page_result = json.loads(text)
         origins = [origin["html_url"] for origin in page_result]
@@ -114,9 +113,7 @@ def test_hex_incremental_lister(
     p3_origin_urls, p3_json = hexpm_page(3)
 
     mock_hexpm_page(3, "2019-03-27T00:32:47.822901Z", p3_json)
-    mock_hexpm_page(
-        4, "2022-09-09T21:00:14.993273Z", []
-    )  # TODO: Try with 40x/50x here?
+    mock_hexpm_page(4, "2022-09-09T21:00:14.993273Z", [])
 
     stats = lister.run()
 
@@ -126,9 +123,7 @@ def test_hex_incremental_lister(
     scheduler_origins = swh_scheduler.get_listed_origins(lister.lister_obj.id).results
 
     lister_state = lister.get_state_from_scheduler()
-    assert (
-        lister_state.last_page_id == 4
-    )  # TODO: Shouldn't this be 3 given that P4 is empty?
+    assert lister_state.last_page_id == 4
     assert lister.state.last_pkg_name == "logger_dev"
     assert lister.updated
 
@@ -139,17 +134,15 @@ def test_hex_incremental_lister(
     lister.updated = False  # Reset the flag
 
     # Third run: No new origins
-    # The lister should revisit the last page (P3)
+    # The lister should revisit the last page (P4)
 
     stats = lister.run()
 
     assert stats.pages == 1
-    assert stats.origins == 0  # FIXME: inconsistent with Gogs lister
+    assert stats.origins == 0
 
     lister_state = lister.get_state_from_scheduler()
-    assert (
-        lister_state.last_page_id == 4
-    )  # TODO: Shouldn't this be 3 given that P4 is empty?
+    assert lister_state.last_page_id == 4
     assert lister.state.last_pkg_name == "logger_dev"
     assert lister.updated is False  # No new origins so state isn't updated
 
@@ -163,7 +156,6 @@ def test_hex_lister_http_error(swh_scheduler, http_code, mock_hexpm_page, hexpm_
     """Test handling of some HTTP errors commonly encountered"""
     lister = HexLister(swh_scheduler)
 
-    # First run: P1 and P2 return 4 origins each and P3 returns 0
     p1_origin_urls, p1_json = hexpm_page(1)
     _, p3_json = hexpm_page(3)
 
