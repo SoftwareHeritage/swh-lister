@@ -59,14 +59,14 @@ def test_full_lister_hex(
     mock_hexpm_page("2019-03-27T00:32:47.822901Z", p3_json)
     mock_hexpm_page("2022-09-09T21:00:14.993273Z", [])
 
-    lister = HexLister(swh_scheduler)
+    lister = HexLister(swh_scheduler, page_size=4)
 
     stats = lister.run()
     scheduler_origins = swh_scheduler.get_listed_origins(lister.lister_obj.id).results
     lister_state = lister.get_state_from_scheduler()
 
-    assert stats.pages == 4
-    assert stats.origins == 10  # 4 + 4 + 2 + 0
+    assert stats.pages == 3  # 4 + 4 + 2 (2 < page_size so lister stops at page 3)
+    assert stats.origins == 10
 
     check_listed_origins(
         p1_origin_urls + p2_origin_urls + p3_origin_urls, scheduler_origins
@@ -81,7 +81,7 @@ def test_hex_incremental_lister(
     mock_hexpm_page,
     hexpm_page,
 ):
-    lister = HexLister(swh_scheduler)
+    lister = HexLister(swh_scheduler, page_size=4)
 
     # First run: P1 and P2 return 4 origins each and P3 returns 0
     p1_origin_urls, p1_json = hexpm_page(1)
@@ -114,7 +114,7 @@ def test_hex_incremental_lister(
 
     stats = lister.run()
 
-    assert stats.pages == 2
+    assert stats.pages == 1
     assert stats.origins == 2
 
     scheduler_origins = swh_scheduler.get_listed_origins(lister.lister_obj.id).results
@@ -149,7 +149,7 @@ def test_hex_incremental_lister(
 @pytest.mark.parametrize("http_code", [400, 500])
 def test_hex_lister_http_error(swh_scheduler, http_code, mock_hexpm_page, hexpm_page):
     """Test handling of some HTTP errors commonly encountered"""
-    lister = HexLister(swh_scheduler)
+    lister = HexLister(swh_scheduler, page_size=4)
 
     p1_origin_urls, p1_json = hexpm_page(1)
     _, p3_json = hexpm_page(3)

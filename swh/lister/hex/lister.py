@@ -47,6 +47,7 @@ class HexLister(Lister[HexListerState, HexListerPage]):
         self,
         scheduler: SchedulerInterface,
         instance: str = "hex",
+        page_size: int = 100,
         credentials: CredentialsType = None,
     ):
         super().__init__(
@@ -56,6 +57,7 @@ class HexLister(Lister[HexListerState, HexListerPage]):
             instance=instance,
         )
         # TODO: Add authentication support
+        self.page_size = page_size
 
         self.session.headers.update({"Accept": "application/json"})
 
@@ -73,12 +75,13 @@ class HexLister(Lister[HexListerState, HexListerPage]):
                 url,
                 params={
                     "search": f"updated_after:{self.state.page_updated_at}",
+                    # We expect 100 packages per page. The API doesn't allow us to change that.
                 },
             ).json()
 
             yield body
 
-            if len(body) == 0:
+            if len(body) < self.page_size:  # Always 100 in when running on the real API
                 break
 
     def get_origins_from_page(self, page: HexListerPage) -> Iterator[ListedOrigin]:
