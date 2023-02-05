@@ -4,7 +4,6 @@
 # See top-level LICENSE file for more information
 
 from dataclasses import asdict, dataclass
-from datetime import datetime
 import logging
 from typing import Any, Dict, Iterator, List
 from urllib.parse import urljoin
@@ -29,12 +28,10 @@ def get_tar_url(pkg_name: str, release_version: str):
 class HexListerState:
     """The HexLister instance state. This is used for incremental listing."""
 
-    last_page_id: int = 1
-    """Id of the last page listed on an incremental pass"""
-    last_pkg_name: str = ""
-    """Name of the last package inserted at on an incremental pass"""
-    last_updated_at: str = datetime.min.replace(tzinfo=iso8601.UTC).isoformat()
-    """updated_at value of the last seen package on an incremental pass"""
+    # Note: Default values are used only when the lister is run for the first time.
+
+    page_updated_at: str = "0001-01-01T00:00:00.000000Z"  # Min datetime
+    """`updated_at` value of the last seen package in the page."""
 
 
 class HexLister(Lister[HexListerState, HexListerPage]):
@@ -69,34 +66,20 @@ class HexLister(Lister[HexListerState, HexListerPage]):
         return asdict(state)
 
     def get_pages(self) -> Iterator[HexListerPage]:
-        page_id = 1
-        if self.state.last_page_id is not None:
-            page_id = self.state.last_page_id
-
         url = urljoin(self.url, self.PACKAGES_PATH)
 
-        while page_id is not None:
-            logger.debug(
-                "Fetching URL %s with page_id = %s and updated_after = %s",
-                url,
-                page_id,
-                self.state.last_updated_at,
-            )
-
-            body = self.http_request(
+        while True:
+            body = self.http_request(  # This also logs the request
                 url,
                 params={
-                    "page": page_id,
-                    "search": f"updated_after:{self.state.last_updated_at}",
+                    "search": f"updated_after:{self.state.page_updated_at}",
                 },
             ).json()
 
             yield body
 
-            page_id += 1  # Consider stopping before yielding?
-
             if len(body) == 0:
-                break  # Consider stopping if number of items < 100?
+                break
 
     def get_origins_from_page(self, page: HexListerPage) -> Iterator[ListedOrigin]:
         """Convert a page of HexLister repositories into a list of ListedOrigins"""
@@ -125,24 +108,24 @@ class HexLister(Lister[HexListerState, HexListerPage]):
         if len(page) == 0:
             return
 
-        last_pkg_name = page[-1]["name"]
-        last_updated_at = page[-1]["updated_at"]
-        # TODO: Think more about 2nd condition:
+        page_updated_at = page[-1]["updated_at"]
+        """`page_updated_at` is same as `updated_at` of the last package in the page."""
+
         if (
-            iso8601.parse_date(last_updated_at)
-            > iso8601.parse_date(self.state.last_updated_at)
-            and last_pkg_name != self.state.last_pkg_name
+            iso8601.parse_date(page_updated_at)
+            > iso8601.parse_date(self.state.page_updated_at)
             and len(page) > 0
         ):
-            self.state.last_pkg_name = last_pkg_name
-            self.state.last_page_id += 1
-            self.state.last_updated_at = last_updated_at
+            # There's one edge case where `updated_at` don't change between two pages.
+            # But that seems practically impossible because we have 100 packages
+            # per page and the `updated_at` keeps on increasing with time.
+            self.state.page_updated_at = page_updated_at
 
     def finalize(self) -> None:
         scheduler_state = self.get_state_from_scheduler()
 
         # Mark the lister as updated only if it finds any updated repos
-        if iso8601.parse_date(self.state.last_updated_at) > iso8601.parse_date(
-            scheduler_state.last_updated_at
+        if iso8601.parse_date(self.state.page_updated_at) > iso8601.parse_date(
+            scheduler_state.page_updated_at
         ):
-            self.updated = True
+            self.updated = True  # This will update the lister state in the scheduler

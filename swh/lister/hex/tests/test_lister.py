@@ -29,13 +29,12 @@ def check_listed_origins(lister_urls: List[str], scheduler_origins: List[ListedO
 @pytest.fixture
 def mock_hexpm_page(requests_mock):
     def func(
-        page_id: int,
         updated_after: str,
         body: Optional[List[dict]],
         status_code: int = 200,
     ):
         search_query = quote(f"updated_after:{updated_after}")
-        page_url = f"https://hex.pm/api/packages/?page={page_id}&search={search_query}"
+        page_url = f"https://hex.pm/api/packages/?search={search_query}"
         requests_mock.get(
             page_url, json=body, complete_qs=True, status_code=status_code
         )
@@ -55,10 +54,10 @@ def test_full_lister_hex(
     p2_origin_urls, p2_json = hexpm_page(2)
     p3_origin_urls, p3_json = hexpm_page(3)
 
-    mock_hexpm_page(1, "0001-01-01T00:00:00+00:00", p1_json)
-    mock_hexpm_page(2, "2018-01-30T04:56:03.053561Z", p2_json)
-    mock_hexpm_page(3, "2019-03-27T00:32:47.822901Z", p3_json)
-    mock_hexpm_page(4, "2022-09-09T21:00:14.993273Z", [])
+    mock_hexpm_page("0001-01-01T00:00:00.000000Z", p1_json)
+    mock_hexpm_page("2018-01-30T04:56:03.053561Z", p2_json)
+    mock_hexpm_page("2019-03-27T00:32:47.822901Z", p3_json)
+    mock_hexpm_page("2022-09-09T21:00:14.993273Z", [])
 
     lister = HexLister(swh_scheduler)
 
@@ -73,8 +72,7 @@ def test_full_lister_hex(
         p1_origin_urls + p2_origin_urls + p3_origin_urls, scheduler_origins
     )
 
-    assert lister_state.last_page_id == 4
-    assert lister_state.last_pkg_name == "logger_dev"
+    assert lister_state.page_updated_at == "2022-09-09T21:00:14.993273Z"
     assert lister.updated
 
 
@@ -89,9 +87,9 @@ def test_hex_incremental_lister(
     p1_origin_urls, p1_json = hexpm_page(1)
     p2_origin_urls, p2_json = hexpm_page(2)
 
-    mock_hexpm_page(1, "0001-01-01T00:00:00+00:00", p1_json)
-    mock_hexpm_page(2, "2018-01-30T04:56:03.053561Z", p2_json)
-    mock_hexpm_page(3, "2019-03-27T00:32:47.822901Z", [])
+    mock_hexpm_page("0001-01-01T00:00:00.000000Z", p1_json)
+    mock_hexpm_page("2018-01-30T04:56:03.053561Z", p2_json)
+    mock_hexpm_page("2019-03-27T00:32:47.822901Z", [])
 
     stats = lister.run()
 
@@ -101,8 +99,7 @@ def test_hex_incremental_lister(
     scheduler_origins = swh_scheduler.get_listed_origins(lister.lister_obj.id).results
 
     lister_state = lister.get_state_from_scheduler()
-    assert lister_state.last_page_id == 3
-    assert lister.state.last_pkg_name == "alchemy_vm"
+    assert lister_state.page_updated_at == "2019-03-27T00:32:47.822901Z"
     assert lister.updated
 
     check_listed_origins(p1_origin_urls + p2_origin_urls, scheduler_origins)
@@ -112,8 +109,8 @@ def test_hex_incremental_lister(
     # Second run: P3 isn't empty anymore
     p3_origin_urls, p3_json = hexpm_page(3)
 
-    mock_hexpm_page(3, "2019-03-27T00:32:47.822901Z", p3_json)
-    mock_hexpm_page(4, "2022-09-09T21:00:14.993273Z", [])
+    mock_hexpm_page("2019-03-27T00:32:47.822901Z", p3_json)
+    mock_hexpm_page("2022-09-09T21:00:14.993273Z", [])
 
     stats = lister.run()
 
@@ -123,8 +120,7 @@ def test_hex_incremental_lister(
     scheduler_origins = swh_scheduler.get_listed_origins(lister.lister_obj.id).results
 
     lister_state = lister.get_state_from_scheduler()
-    assert lister_state.last_page_id == 4
-    assert lister.state.last_pkg_name == "logger_dev"
+    assert lister.state.page_updated_at == "2022-09-09T21:00:14.993273Z"
     assert lister.updated
 
     check_listed_origins(
@@ -142,8 +138,7 @@ def test_hex_incremental_lister(
     assert stats.origins == 0
 
     lister_state = lister.get_state_from_scheduler()
-    assert lister_state.last_page_id == 4
-    assert lister.state.last_pkg_name == "logger_dev"
+    assert lister_state.page_updated_at == "2022-09-09T21:00:14.993273Z"
     assert lister.updated is False  # No new origins so state isn't updated
 
     check_listed_origins(
@@ -159,9 +154,9 @@ def test_hex_lister_http_error(swh_scheduler, http_code, mock_hexpm_page, hexpm_
     p1_origin_urls, p1_json = hexpm_page(1)
     _, p3_json = hexpm_page(3)
 
-    mock_hexpm_page(1, "0001-01-01T00:00:00+00:00", p1_json)
-    mock_hexpm_page(2, "2018-01-30T04:56:03.053561Z", None, http_code)
-    mock_hexpm_page(3, "2019-03-27T00:32:47.822901Z", p3_json)
+    mock_hexpm_page("0001-01-01T00:00:00.000000Z", p1_json)
+    mock_hexpm_page("2018-01-30T04:56:03.053561Z", None, http_code)
+    mock_hexpm_page("2019-03-27T00:32:47.822901Z", p3_json)
 
     with pytest.raises(HTTPError):
         lister.run()

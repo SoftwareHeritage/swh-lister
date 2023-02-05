@@ -9,7 +9,7 @@ from celery import shared_task
 from .lister import HexLister
 
 
-@shared_task(name=__name__ + ".FullHexRelister")
+@shared_task(name=__name__ + ".HexListerTask")
 def list_hex_full(
     instance: Optional[str] = None,
 ) -> Dict[str, int]:
