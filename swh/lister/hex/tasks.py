@@ -13,7 +13,7 @@ from .lister import HexLister
 def list_hex_full(
     instance: Optional[str] = None,
 ) -> Dict[str, int]:
-    """Full listing of Hex.pm"""
+    """Lister task for Hex.pm"""
     lister = HexLister.from_configfile(instance=instance)
     return lister.run().dict()
 

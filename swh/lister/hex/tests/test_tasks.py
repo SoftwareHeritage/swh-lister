@@ -23,7 +23,7 @@ def test_full_listing(lister, swh_scheduler_celery_app, swh_scheduler_celery_wor
 
     kwargs = dict()
     res = swh_scheduler_celery_app.send_task(
-        "swh.lister.hex.tasks.FullHexRelister",
+        "swh.lister.hex.tasks.HexListerTask",
         kwargs=kwargs,
     )
     assert res
@@ -45,7 +45,7 @@ def test_full_listing_params(
 
     kwargs = dict(instance="hex.pm")
     res = swh_scheduler_celery_app.send_task(
-        "swh.lister.hex.tasks.FullHexRelister",
+        "swh.lister.hex.tasks.HexListerTask",
         kwargs=kwargs,
     )
     assert res
