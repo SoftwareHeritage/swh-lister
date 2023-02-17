@@ -58,7 +58,7 @@ class MavenLister(Lister[MavenListerState, RepoPage]):
         self,
         scheduler: SchedulerInterface,
         url: str,
-        index_url: str = None,
+        index_url: str,
         instance: Optional[str] = None,
         credentials: CredentialsType = None,
         max_origins_per_page: Optional[int] = None,
