@@ -161,5 +161,5 @@
       }
     }
   ],
-  "next": "https://api.bitbucket.org/2.0/repositories?pagelen=10&after=2011-09-03T12%3A33%3A16.028393%2B00%3A00&fields=next%2Cvalues.links.clone.href%2Cvalues.slug%2Cvalues.scm%2Cvalues.updated_on%2Cvalues.created_on"
+  "next": "https://api.bitbucket.org/2.0/repositories?pagelen=10&fields=next%2Cvalues.links.clone.href%2Cvalues.scm%2Cvalues.updated_on%2Cvalues.created_on&after=2011-09-03T12%3A33%3A16.028393%2B00%3A00"
 }
