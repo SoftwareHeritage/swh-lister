@@ -1,4 +1,4 @@
-# Copyright (C) 2017-2022 The Software Heritage developers
+# Copyright (C) 2017-2023 The Software Heritage developers
 # See the AUTHORS file at the top-level directory of this distribution
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
@@ -10,6 +10,7 @@ import os
 import pytest
 
 from swh.lister.bitbucket.lister import BitbucketLister
+from swh.lister.utils import MAX_NUMBER_ATTEMPTS
 
 
 @pytest.fixture
@@ -178,3 +179,37 @@ def test_bitbucket_full_lister(
     )
 
     _check_listed_origins(lister.get_origins_from_page(all_origins), scheduler_origins)
+
+
+def test_bitbucket_lister_buggy_page(
+    swh_scheduler,
+    requests_mock,
+    mocker,
+    bb_api_repositories_page1,
+    bb_api_repositories_page2,
+):
+
+    requests_mock.get(
+        BitbucketLister.API_URL,
+        [
+            {"json": bb_api_repositories_page1, "status_code": 200},
+            *[{"json": None, "status_code": 500}] * MAX_NUMBER_ATTEMPTS,
+            {"json": {"next": bb_api_repositories_page1["next"]}, "status_code": 200},
+            {"json": bb_api_repositories_page2, "status_code": 200},
+        ],
+    )
+
+    lister = BitbucketLister(scheduler=swh_scheduler, page_size=10)
+
+    mocker.patch.object(lister.http_request.retry, "sleep")
+
+    stats = lister.run()
+
+    assert stats.pages == 2
+    assert stats.origins == 20
+    assert len(swh_scheduler.get_listed_origins(lister.lister_obj.id).results) == 20
+
+    assert (
+        requests_mock.request_history[MAX_NUMBER_ATTEMPTS + 2].url
+        == bb_api_repositories_page1["next"]
+    )
