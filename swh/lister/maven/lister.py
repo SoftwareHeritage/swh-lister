@@ -58,7 +58,7 @@ class MavenLister(Lister[MavenListerState, RepoPage]):
         self,
         scheduler: SchedulerInterface,
         url: str,
-        index_url: str = None,
+        index_url: str,
         instance: Optional[str] = None,
         credentials: CredentialsType = None,
         max_origins_per_page: Optional[int] = None,
@@ -301,6 +301,13 @@ class MavenLister(Lister[MavenListerState, RepoPage]):
             url = self.github_session.get_canonical_url(url)
 
         if not url:
+            return None
+
+        if "${" in url:
+            # A handful of URLs contain templated strings (21, as of 2023-01-30)
+            # We could implement support for
+            # https://maven.apache.org/guides/introduction/introduction-to-the-pom.html#Project_Interpolation_and_Variables
+            # but most of them seem to use variables not defined in this spec.
             return None
 
         assert visit_type is not None

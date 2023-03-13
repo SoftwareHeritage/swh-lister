@@ -44,7 +44,7 @@ SOURCES = {
 def page_response(datadir, instance: str = "success") -> List[Dict]:
     """Return list of repositories (out of test dataset)"""
     datapath = Path(datadir, f"sources-{instance}.json")
-    return json.loads(datapath.read_text()) if datapath.exists else []
+    return json.loads(datapath.read_text()) if datapath.exists() else []
 
 
 @pytest.mark.parametrize(

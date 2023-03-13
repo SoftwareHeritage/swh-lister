@@ -1,4 +1,4 @@
-# Copyright (C) 2017-2022 The Software Heritage developers
+# Copyright (C) 2017-2023 The Software Heritage developers
 # See the AUTHORS file at the top-level directory of this distribution
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
@@ -11,6 +11,7 @@ from typing import Any, Dict, Iterator, List, Optional
 from urllib import parse
 
 import iso8601
+from requests import HTTPError
 
 from swh.scheduler.interface import SchedulerInterface
 from swh.scheduler.model import ListedOrigin
@@ -118,9 +119,22 @@ class BitbucketLister(Lister[BitbucketListerState, List[Dict[str, Any]]]):
 
         while True:
             self.url_params["after"] = last_repo_cdate
-            body = self.http_request(self.url, params=self.url_params).json()
-
-            yield body["values"]
+            try:
+                body = self.http_request(self.url, params=self.url_params).json()
+                yield body["values"]
+            except HTTPError as e:
+                if e.response.status_code == 500:
+                    logger.warning(
+                        "URL %s is buggy (error 500), skip it and get next page.",
+                        e.response.url,
+                    )
+                    body = self.http_request(
+                        self.url,
+                        params={
+                            "pagelen": self.url_params["pagelen"],
+                            "fields": "next",
+                        },
+                    ).json()
 
             next_page_url = body.get("next")
             if next_page_url is not None:
