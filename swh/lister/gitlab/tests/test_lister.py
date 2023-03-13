@@ -96,7 +96,7 @@ def test_lister_gitlab_heptapod(datadir, swh_scheduler, requests_mock):
 def gitlab_page_response(datadir, instance: str, id_after: int) -> List[Dict]:
     """Return list of repositories (out of test dataset)"""
     datapath = Path(datadir, f"https_{instance}", f"api_response_page{id_after}.json")
-    return json.loads(datapath.read_text()) if datapath.exists else []
+    return json.loads(datapath.read_text()) if datapath.exists() else []
 
 
 def test_lister_gitlab_with_pages(swh_scheduler, requests_mock, datadir):
