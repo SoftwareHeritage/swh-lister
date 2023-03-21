@@ -20,6 +20,7 @@ lister.gnu = swh.lister.gnu:register
 lister.gogs = swh.lister.gogs:register
 lister.golang = swh.lister.golang:register
 lister.hackage = swh.lister.hackage:register
+lister.hex = swh.lister.hex:register
 lister.launchpad = swh.lister.launchpad:register
 lister.maven = swh.lister.maven:register
 lister.nixguix = swh.lister.nixguix:register

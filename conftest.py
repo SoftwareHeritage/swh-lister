@@ -5,6 +5,14 @@
 
 import os
 
+import pytest
+
 pytest_plugins = ["swh.scheduler.pytest_plugin", "swh.core.github.pytest_plugin"]
 
 os.environ["LC_ALL"] = "C.UTF-8"
+
+
+@pytest.fixture(autouse=True)
+def tenacity_wait(mocker):
+    # Stops tenacity from blocking lister tests for 50x errors
+    mocker.patch("tenacity.nap.time")

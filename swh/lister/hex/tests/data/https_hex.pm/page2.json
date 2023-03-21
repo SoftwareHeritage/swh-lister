@@ -1,0 +1,223 @@
+[
+    {
+        "configs": {
+            "erlang.mk": "dep_adam7 = hex 0.4.0",
+            "mix.exs": "{:adam7, \"~> 0.4.0\"}",
+            "rebar.config": "{adam7, \"0.4.0\"}"
+        },
+        "docs_html_url": null,
+        "downloads": {
+            "all": 12746,
+            "recent": 27,
+            "week": 10
+        },
+        "html_url": "https://hex.pm/packages/adam7",
+        "inserted_at": "2015-10-10T05:09:04.399996Z",
+        "latest_stable_version": "0.4.0",
+        "latest_version": "0.4.0",
+        "meta": {
+            "description": "Adam7 interlacing library for Elixir.\nPrimarily used for interlacing and de-interlacing image data for PNGs.",
+            "licenses": [
+                "MIT"
+            ],
+            "links": {
+                "github": "https://github.com/SenecaSystems/imagineer"
+            },
+            "maintainers": [
+                "Chris Maddox"
+            ]
+        },
+        "name": "adam7",
+        "releases": [
+            {
+                "has_docs": false,
+                "inserted_at": null,
+                "url": "https://hex.pm/api/packages/adam7/releases/0.4.0",
+                "version": "0.4.0"
+            },
+            {
+                "has_docs": false,
+                "inserted_at": null,
+                "url": "https://hex.pm/api/packages/adam7/releases/0.3.0",
+                "version": "0.3.0"
+            },
+            {
+                "has_docs": false,
+                "inserted_at": null,
+                "url": "https://hex.pm/api/packages/adam7/releases/0.2.0",
+                "version": "0.2.0"
+            },
+            {
+                "has_docs": false,
+                "inserted_at": null,
+                "url": "https://hex.pm/api/packages/adam7/releases/0.1.1",
+                "version": "0.1.1"
+            },
+            {
+                "has_docs": false,
+                "inserted_at": null,
+                "url": "https://hex.pm/api/packages/adam7/releases/0.1.0",
+                "version": "0.1.0"
+            }
+        ],
+        "repository": "hexpm",
+        "retirements": {},
+        "updated_at": "2015-10-10T05:09:04.400005Z",
+        "url": "https://hex.pm/api/packages/adam7"
+    },
+    {
+        "configs": {
+            "erlang.mk": "dep_addressBook = hex 0.1.1",
+            "mix.exs": "{:addressBook, \"~> 0.1.1\"}",
+            "rebar.config": "{addressBook, \"0.1.1\"}"
+        },
+        "docs_html_url": "https://hexdocs.pm/addressBook/",
+        "downloads": {
+            "all": 4871,
+            "recent": 8,
+            "week": 4
+        },
+        "html_url": "https://hex.pm/packages/addressBook",
+        "inserted_at": "2017-06-05T19:59:12.978909Z",
+        "latest_stable_version": "0.1.1",
+        "latest_version": "0.1.1",
+        "meta": {
+            "description": "Simple package for managing address book.",
+            "licenses": [
+                "Apache 2.0"
+            ],
+            "links": {
+                "GitHub": "https://github.com/maxiwoj/AddressBook"
+            },
+            "maintainers": [
+                "Maksymilian Wojczuk"
+            ]
+        },
+        "name": "addressBook",
+        "releases": [
+            {
+                "has_docs": true,
+                "inserted_at": null,
+                "url": "https://hex.pm/api/packages/addressBook/releases/0.1.1",
+                "version": "0.1.1"
+            },
+            {
+                "has_docs": true,
+                "inserted_at": null,
+                "url": "https://hex.pm/api/packages/addressBook/releases/0.1.0",
+                "version": "0.1.0"
+            }
+        ],
+        "repository": "hexpm",
+        "retirements": {},
+        "updated_at": "2017-06-05T21:06:42.788652Z",
+        "url": "https://hex.pm/api/packages/addressBook"
+    },
+    {
+        "configs": {
+            "erlang.mk": "dep_address_us = hex 0.4.1",
+            "mix.exs": "{:address_us, \"~> 0.4.1\"}",
+            "rebar.config": "{address_us, \"0.4.1\"}"
+        },
+        "docs_html_url": "https://hexdocs.pm/address_us/",
+        "downloads": {
+            "all": 55337,
+            "day": 2,
+            "recent": 7105,
+            "week": 194
+        },
+        "html_url": "https://hex.pm/packages/address_us",
+        "inserted_at": "2014-10-10T20:24:11.000000Z",
+        "latest_stable_version": "0.4.1",
+        "latest_version": "0.4.1",
+        "meta": {
+            "description": "Library for parsing US Addresses into their individual parts.",
+            "licenses": [
+                "Apache 2.0"
+            ],
+            "links": {
+                "Docs": "https://smashedtoatoms.github.io/address_us",
+                "GitHub": "https://github.com/smashedtoatoms/address_us"
+            },
+            "maintainers": []
+        },
+        "name": "address_us",
+        "releases": [
+            {
+                "has_docs": true,
+                "inserted_at": null,
+                "url": "https://hex.pm/api/packages/address_us/releases/0.4.1",
+                "version": "0.4.1"
+            },
+            {
+                "has_docs": true,
+                "inserted_at": null,
+                "url": "https://hex.pm/api/packages/address_us/releases/0.4.0",
+                "version": "0.4.0"
+            },
+            {
+                "has_docs": true,
+                "inserted_at": null,
+                "url": "https://hex.pm/api/packages/address_us/releases/0.2.1",
+                "version": "0.2.1"
+            },
+            {
+                "has_docs": true,
+                "inserted_at": null,
+                "url": "https://hex.pm/api/packages/address_us/releases/0.1.1",
+                "version": "0.1.1"
+            },
+            {
+                "has_docs": false,
+                "inserted_at": null,
+                "url": "https://hex.pm/api/packages/address_us/releases/0.1.0",
+                "version": "0.1.0"
+            }
+        ],
+        "repository": "hexpm",
+        "retirements": {},
+        "updated_at": "2020-12-11T05:07:11.118292Z",
+        "url": "https://hex.pm/api/packages/address_us"
+    },
+    {
+        "configs": {
+            "erlang.mk": "dep_alchemy_vm = hex 0.8.1",
+            "mix.exs": "{:alchemy_vm, \"~> 0.8.1\"}",
+            "rebar.config": "{alchemy_vm, \"0.8.1\"}"
+        },
+        "docs_html_url": "https://hexdocs.pm/alchemy_vm/",
+        "downloads": {
+            "all": 2368,
+            "recent": 3,
+            "week": 2
+        },
+        "html_url": "https://hex.pm/packages/alchemy_vm",
+        "inserted_at": "2019-03-27T00:32:40.709924Z",
+        "latest_stable_version": "0.8.1",
+        "latest_version": "0.8.1",
+        "meta": {
+            "description": "A WebAssembly Virtual Machine",
+            "licenses": [
+                "MIT"
+            ],
+            "links": {
+                "Elixium Network Website": "https://www.elixiumnetwork.org",
+                "GitHub": "https://github.com/ElixiumNetwork/AlchemyVM"
+            },
+            "maintainers": []
+        },
+        "name": "alchemy_vm",
+        "releases": [
+            {
+                "has_docs": true,
+                "inserted_at": null,
+                "url": "https://hex.pm/api/packages/alchemy_vm/releases/0.8.1",
+                "version": "0.8.1"
+            }
+        ],
+        "repository": "hexpm",
+        "retirements": {},
+        "updated_at": "2019-03-27T00:32:47.822901Z",
+        "url": "https://hex.pm/api/packages/alchemy_vm"
+    }
+]
