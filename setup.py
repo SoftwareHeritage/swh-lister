@@ -65,12 +65,15 @@ setup(
         lister.cran=swh.lister.cran:register
         lister.crates=swh.lister.crates:register
         lister.debian=swh.lister.debian:register
+        lister.fedora=swh.lister.fedora:register
         lister.gitea=swh.lister.gitea:register
         lister.github=swh.lister.github:register
         lister.gitlab=swh.lister.gitlab:register
         lister.gnu=swh.lister.gnu:register
         lister.golang=swh.lister.golang:register
+        lister.gogs=swh.lister.gogs:register
         lister.hackage=swh.lister.hackage:register
+        lister.hex=swh.lister.hex:register
         lister.launchpad=swh.lister.launchpad:register
         lister.nixguix=swh.lister.nixguix:register
         lister.npm=swh.lister.npm:register
@@ -85,8 +88,6 @@ setup(
         lister.sourceforge=swh.lister.sourceforge:register
         lister.tuleap=swh.lister.tuleap:register
         lister.maven=swh.lister.maven:register
-        lister.gogs=swh.lister.gogs:register
-        lister.fedora=swh.lister.fedora:register
     """,
     classifiers=[
         "Programming Language :: Python :: 3",

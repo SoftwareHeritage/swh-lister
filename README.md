@@ -13,11 +13,14 @@ following Python modules:
 - `swh.lister.cgit`
 - `swh.lister.cran`
 - `swh.lister.debian`
+- `swh.liser.fedora`
 - `swh.lister.gitea`
 - `swh.lister.github`
 - `swh.lister.gitlab`
 - `swh.lister.gnu`
+- `swh.lister.gogs`
 - `swh.lister.golang`
+- `swh.lister.hex`
 - `swh.lister.launchpad`
 - `swh.lister.maven`
 - `swh.lister.npm`
@@ -25,8 +28,6 @@ following Python modules:
 - `swh.lister.phabricator`
 - `swh.lister.pypi`
 - `swh.lister.tuleap`
-- `swh.lister.gogs`
-- `swh.liser.fedora`
 
 Dependencies
 ------------

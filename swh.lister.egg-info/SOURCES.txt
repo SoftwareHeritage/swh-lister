@@ -261,6 +261,15 @@ swh/lister/hackage/tests/data/https_hackage.haskell.org/packages_search_0_visit1
 swh/lister/hackage/tests/data/https_hackage.haskell.org/packages_search_0_visit2
 swh/lister/hackage/tests/data/https_hackage.haskell.org/packages_search_1
 swh/lister/hackage/tests/data/https_hackage.haskell.org/packages_search_2
+swh/lister/hex/__init__.py
+swh/lister/hex/lister.py
+swh/lister/hex/tasks.py
+swh/lister/hex/tests/__init__.py
+swh/lister/hex/tests/test_lister.py
+swh/lister/hex/tests/test_tasks.py
+swh/lister/hex/tests/data/https_hex.pm/page1.json
+swh/lister/hex/tests/data/https_hex.pm/page2.json
+swh/lister/hex/tests/data/https_hex.pm/page3.json
 swh/lister/launchpad/__init__.py
 swh/lister/launchpad/lister.py
 swh/lister/launchpad/tasks.py
