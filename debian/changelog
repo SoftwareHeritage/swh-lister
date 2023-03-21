@@ -1,3 +1,13 @@
+swh-lister (5.0.0-1~swh1) unstable-swh; urgency=medium
+
+  * New upstream release 5.0.0     - (tagged by Antoine R. Dumont
+    (@ardumont) <ardumont@softwareheritage.org> on 2023-03-21 14:34:38
+    +0100)
+  * Upstream changes:     - v5.0.0     - feat: Add Hex.pm lister     -
+    Allow passing more parameters to cgit lister task
+
+ -- Software Heritage autobuilder (on jenkins-debian1) <jenkins@jenkins-debian1.internal.softwareheritage.org>  Tue, 21 Mar 2023 13:46:09 +0000
+
 swh-lister (4.4.0-1~swh1) unstable-swh; urgency=medium
 
   * New upstream release 4.4.0     - (tagged by Antoine R. Dumont
