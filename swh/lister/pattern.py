@@ -182,17 +182,20 @@ class Lister(Generic[StateType, PageType]):
         try:
             for page in self.get_pages():
                 full_stats.pages += 1
-                origins = list(self.get_origins_from_page(page))
-                if (
-                    self.max_origins_per_page
-                    and len(origins) > self.max_origins_per_page
-                ):
-                    logger.info(
-                        "Max origins per page set, truncated %s page results down to %s",
-                        len(origins),
-                        self.max_origins_per_page,
-                    )
-                    origins = origins[: self.max_origins_per_page]
+                origins = []
+                for origin in self.get_origins_from_page(page):
+                    origins.append(origin)
+                    if (
+                        self.max_origins_per_page
+                        and len(origins) == self.max_origins_per_page
+                    ):
+                        logger.info(
+                            "Max origins per page set to %s and reached, "
+                            "aborting page processing",
+                            self.max_origins_per_page,
+                        )
+                        break
+
                 if not self.enable_origins:
                     logger.info(
                         "Disabling origins before sending them to the scheduler"
