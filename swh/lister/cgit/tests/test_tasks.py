@@ -1,4 +1,4 @@
-# Copyright (C) 2019-2021 The Software Heritage developers
+# Copyright (C) 2019 The Software Heritage developers
 # See the AUTHORS file at the top-level directory of this distribution
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
@@ -22,7 +22,9 @@ def test_cgit_lister_task(
     lister.from_configfile.return_value = lister
     lister.run.return_value = ListerStats(pages=10, origins=500)
 
-    kwargs = dict(url="https://git.kernel.org/", instance="kernel", base_git_url=None)
+    kwargs = dict(
+        url="https://git.kernel.org/", instance="kernel", base_git_url=None, max_pages=1
+    )
 
     res = swh_scheduler_celery_app.send_task(
         "swh.lister.cgit.tasks.CGitListerTask",

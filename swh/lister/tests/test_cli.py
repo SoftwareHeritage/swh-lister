@@ -40,7 +40,7 @@ lister_args = {
         "origin_upstream": "https://git.savannah.gnu.org/cgit/guix.git/",
     },
     "fedora": {
-        "url": "https://archives.fedoraproject.org/pub/archive/fedora/linux/releases//",
+        "url": "https://archives.fedoraproject.org/pub/archive/fedora/linux/releases/",
     },
 }
 
