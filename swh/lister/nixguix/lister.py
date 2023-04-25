@@ -1,4 +1,4 @@
-# Copyright (C) 2020-2022  The Software Heritage developers
+# Copyright (C) 2020-2023  The Software Heritage developers
 # See the AUTHORS file at the top-level directory of this distribution
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
@@ -75,7 +75,7 @@ class ArtifactWithoutExtension(ValueError):
     pass
 
 
-class ChecksumsComputation(Enum):
+class ChecksumLayout(Enum):
     """The possible artifact types listed out of the manifest."""
 
     STANDARD = "standard"
@@ -85,9 +85,9 @@ class ChecksumsComputation(Enum):
     directory.)"""
 
 
-MAPPING_CHECKSUMS_COMPUTATION = {
-    "flat": ChecksumsComputation.STANDARD,
-    "recursive": ChecksumsComputation.NAR,
+MAPPING_CHECKSUM_LAYOUT = {
+    "flat": ChecksumLayout.STANDARD,
+    "recursive": ChecksumLayout.NAR,
 }
 """Mapping between the outputHashMode from the manifest and how to compute checksums."""
 
@@ -104,8 +104,8 @@ class Artifact:
     """List of urls to retrieve tarball artifact if canonical url no longer works."""
     checksums: Dict[str, str]
     """Integrity hash converted into a checksum dict."""
-    checksums_computation: ChecksumsComputation
-    """Checksums computation mode to provide to loaders (e.g. nar, standard, ...)"""
+    checksum_layout: ChecksumLayout
+    """Checksum layout mode to provide to loaders (e.g. nar, standard, ...)"""
 
 
 @dataclass
@@ -529,7 +529,7 @@ class NixGuixLister(StatelessLister[PageResult]):
                     origin=origin,
                     fallback_urls=fallback_urls,
                     checksums=checksums,
-                    checksums_computation=MAPPING_CHECKSUMS_COMPUTATION[outputHashMode],
+                    checksum_layout=MAPPING_CHECKSUM_LAYOUT[outputHashMode],
                     visit_type="directory" if is_tar else "content",
                 )
             else:
@@ -558,7 +558,7 @@ class NixGuixLister(StatelessLister[PageResult]):
             visit_type=artifact.visit_type,
             extra_loader_arguments={
                 "checksums": artifact.checksums,
-                "checksums_computation": artifact.checksums_computation.value,
+                "checksum_layout": artifact.checksum_layout.value,
                 "fallback_urls": artifact.fallback_urls,
             },
         )
