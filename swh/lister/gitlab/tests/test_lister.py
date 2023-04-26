@@ -12,11 +12,11 @@ from typing import Dict, List
 import pytest
 from requests.status_codes import codes
 
+from swh.core.retry import WAIT_EXP_BASE
 from swh.lister import USER_AGENT_TEMPLATE
 from swh.lister.gitlab.lister import GitLabLister, _parse_id_after
 from swh.lister.pattern import ListerStats
-from swh.lister.tests.test_utils import assert_sleep_calls
-from swh.lister.utils import WAIT_EXP_BASE
+from swh.lister.tests.utils import assert_sleep_calls
 
 logger = logging.getLogger(__name__)
 

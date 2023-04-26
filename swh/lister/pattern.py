@@ -1,4 +1,4 @@
-# Copyright (C) 2020-2022  The Software Heritage developers
+# Copyright (C) 2020-2023  The Software Heritage developers
 # See the AUTHORS file at the top-level directory of this distribution
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
@@ -16,12 +16,13 @@ from tenacity.before_sleep import before_sleep_log
 
 from swh.core.config import load_from_envvar
 from swh.core.github.utils import GitHubSession
+from swh.core.retry import http_retry
 from swh.core.utils import grouper
 from swh.scheduler import get_scheduler, model
 from swh.scheduler.interface import SchedulerInterface
 
 from . import USER_AGENT_TEMPLATE
-from .utils import http_retry, is_valid_origin_url
+from .utils import is_valid_origin_url
 
 logger = logging.getLogger(__name__)
 
@@ -153,7 +154,6 @@ class Lister(Generic[StateType, PageType]):
 
     @http_retry(before_sleep=before_sleep_log(logger, logging.WARNING))
     def http_request(self, url: str, method="GET", **kwargs) -> requests.Response:
-
         logger.debug("Fetching URL %s with params %s", url, kwargs.get("params"))
 
         response = self.session.request(method, url, **kwargs)
