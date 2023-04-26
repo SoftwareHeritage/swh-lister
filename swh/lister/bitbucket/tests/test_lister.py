@@ -9,8 +9,8 @@ import os
 
 import pytest
 
+from swh.core.retry import MAX_NUMBER_ATTEMPTS
 from swh.lister.bitbucket.lister import BitbucketLister
-from swh.lister.utils import MAX_NUMBER_ATTEMPTS
 
 
 @pytest.fixture
@@ -188,7 +188,6 @@ def test_bitbucket_lister_buggy_page(
     bb_api_repositories_page1,
     bb_api_repositories_page2,
 ):
-
     requests_mock.get(
         BitbucketLister.API_URL,
         [

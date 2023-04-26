@@ -437,6 +437,7 @@ swh/lister/tests/__init__.py
 swh/lister/tests/test_cli.py
 swh/lister/tests/test_pattern.py
 swh/lister/tests/test_utils.py
+swh/lister/tests/utils.py
 swh/lister/tuleap/__init__.py
 swh/lister/tuleap/lister.py
 swh/lister/tuleap/tasks.py

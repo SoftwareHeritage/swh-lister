@@ -1,4 +1,4 @@
-# Copyright (C) 2021-2022 The Software Heritage developers
+# Copyright (C) 2021-2023 The Software Heritage developers
 # See the AUTHORS file at the top-level directory of this distribution
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
@@ -13,6 +13,7 @@ from iso8601 import iso8601
 import pytest
 from requests.exceptions import HTTPError
 
+from swh.core.retry import WAIT_EXP_BASE
 from swh.lister import USER_AGENT_TEMPLATE
 from swh.lister.sourceforge.lister import (
     MAIN_SITEMAP_URL,
@@ -20,8 +21,7 @@ from swh.lister.sourceforge.lister import (
     SourceForgeLister,
     SourceForgeListerState,
 )
-from swh.lister.tests.test_utils import assert_sleep_calls
-from swh.lister.utils import WAIT_EXP_BASE
+from swh.lister.tests.utils import assert_sleep_calls
 
 # Mapping of project name to namespace
 from swh.scheduler.model import ListedOrigin
@@ -368,7 +368,6 @@ def test_sourceforge_lister_incremental(swh_scheduler, requests_mock, datadir, m
 
 
 def test_sourceforge_lister_retry(swh_scheduler, requests_mock, mocker, datadir):
-
     lister = SourceForgeLister(scheduler=swh_scheduler)
 
     # Exponential retries take a long time, so stub time.sleep

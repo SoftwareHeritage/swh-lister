@@ -1,4 +1,4 @@
-# Copyright (C) 2018-2022 The Software Heritage developers
+# Copyright (C) 2018-2023 The Software Heritage developers
 # See the AUTHORS file at the top-level directory of this distribution
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
@@ -14,8 +14,8 @@ from requests.exceptions import HTTPError
 from requests.status_codes import codes
 from tenacity.before_sleep import before_sleep_log
 
+from swh.core.retry import http_retry, is_retryable_exception
 from swh.lister.pattern import CredentialsType, Lister
-from swh.lister.utils import http_retry, is_retryable_exception
 from swh.scheduler.model import ListedOrigin
 
 logger = logging.getLogger(__name__)
