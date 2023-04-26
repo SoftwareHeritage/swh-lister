@@ -1,4 +1,4 @@
-# Copyright (C) 2022  The Software Heritage developers
+# Copyright (C) 2022-2023  The Software Heritage developers
 # See the AUTHORS file at the top-level directory of this distribution
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
@@ -8,9 +8,9 @@ from pathlib import Path
 
 import iso8601
 
+from swh.core.retry import WAIT_EXP_BASE
 from swh.lister.golang.lister import GolangLister, GolangStateType
-from swh.lister.tests.test_utils import assert_sleep_calls
-from swh.lister.utils import WAIT_EXP_BASE
+from swh.lister.tests.utils import assert_sleep_calls
 
 # https://pkg.go.dev prefix omitted
 expected_listed = [
@@ -98,7 +98,6 @@ def _generate_responses(datadir, requests_mock):
 
 
 def test_golang_lister(swh_scheduler, mocker, requests_mock, datadir):
-
     # Exponential retries take a long time, so stub time.sleep
     mocked_sleep = mocker.patch.object(GolangLister.http_request.retry, "sleep")
 

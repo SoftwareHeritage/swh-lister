@@ -97,10 +97,11 @@ class HexLister(Lister[HexListerState, HexListerPage]):
                 last_update=iso8601.parse_date(pkg["updated_at"]),
                 extra_loader_arguments={
                     "releases": {
-                        release["url"]: {
-                            "package": pkg["name"],
-                            "version": release["version"],
-                            "tar_url": get_tar_url(pkg["name"], release["version"]),
+                        release["version"]: {
+                            "name": pkg["name"],
+                            "release_url": release["url"],
+                            "tarball_url": get_tar_url(pkg["name"], release["version"]),
+                            "inserted_at": release["inserted_at"],
                         }
                         for release in pkg["releases"]
                     }

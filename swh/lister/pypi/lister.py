@@ -1,4 +1,4 @@
-# Copyright (C) 2018-2021 The Software Heritage developers
+# Copyright (C) 2018-2023 The Software Heritage developers
 # See the AUTHORS file at the top-level directory of this distribution
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
@@ -13,7 +13,7 @@ from xmlrpc.client import Fault, ServerProxy
 
 from tenacity.before_sleep import before_sleep_log
 
-from swh.lister.utils import http_retry
+from swh.core.retry import http_retry
 from swh.scheduler.interface import SchedulerInterface
 from swh.scheduler.model import ListedOrigin
 
