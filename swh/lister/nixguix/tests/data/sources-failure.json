@@ -16,6 +16,7 @@
     {
       "type": "url",
       "urls": [
+        "ftp://example.mirror.org/extensionless-file",
         "ftp://ftp.ourproject.org/file-with-no-extension"
       ],
       "integrity": "sha256-bss09x9yOnuW+Q5BHHjf8nNcCNxCKMdl9/2/jKSFcrQ="
