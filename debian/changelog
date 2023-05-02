@@ -1,3 +1,13 @@
+swh-lister (5.3.0-1~swh1) unstable-swh; urgency=medium
+
+  * New upstream release 5.3.0     - (tagged by Antoine R. Dumont
+    (@ardumont) <ardumont@softwareheritage.org> on 2023-05-02 11:47:13
+    +0200)
+  * Upstream changes:     - v5.3.0     - lister/nixguix: Make artifact
+    nature check happen on all urls
+
+ -- Software Heritage autobuilder (on jenkins-debian1) <jenkins@jenkins-debian1.internal.softwareheritage.org>  Tue, 02 May 2023 12:39:23 +0000
+
 swh-lister (5.2.0-1~swh1) unstable-swh; urgency=medium
 
   * New upstream release 5.2.0     - (tagged by Antoine R. Dumont
