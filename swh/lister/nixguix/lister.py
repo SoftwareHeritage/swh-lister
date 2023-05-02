@@ -168,19 +168,28 @@ def url_endswith(
     return False
 
 
-def is_tarball(urls: List[str], request: Optional[Any] = None) -> Tuple[bool, str]:
-    """Determine whether a list of files actually are tarballs or simple files.
+def is_tarball(
+    urls: List[str],
+    request: Optional[Any] = None,
+) -> Tuple[bool, str]:
+    """Determine whether a list of files actually are tarball or simple files.
 
-    When this cannot be answered simply out of the url, when request is provided, this
+    This iterates over the list of urls provided to detect the artifact's nature. When
+    this cannot be answered simply out of the url and ``request`` is provided, this
     executes a HTTP `HEAD` query on the url to determine the information. If request is
     not provided, this raises an ArtifactNatureUndetected exception.
 
+    If, at the end of the iteration on the urls, no detection could be deduced, this
+    raises an ArtifactNatureUndetected.
+
     Args:
-        urls: name of the remote files for which the extension needs to be checked.
+        urls: name of the remote files to check for artifact nature.
+        request: (Optional) Request object allowing http calls. If not provided and
+            naive check cannot detect anything, this raises ArtifactNatureUndetected.
 
     Raises:
         ArtifactNatureUndetected when the artifact's nature cannot be detected out
-            of its url
+            of its urls
         ArtifactNatureMistyped when the artifact is not a tarball nor a file. It's up to
             the caller to do what's right with it.
 
@@ -202,76 +211,86 @@ def is_tarball(urls: List[str], request: Optional[Any] = None) -> Tuple[bool, st
             raise ArtifactNatureMistyped(f"Mistyped artifact '{url}'")
         return url_endswith(urlparsed, TARBALL_EXTENSIONS)
 
-    index = random.randrange(len(urls))
-    url = urls[index]
-
-    try:
-        return _is_tarball(url), urls[0]
-    except ArtifactWithoutExtension:
-        if request is None:
-            raise ArtifactNatureUndetected(
-                f"Cannot determine artifact type from url <{url}>"
-            )
-        logger.warning(
-            "Cannot detect extension for <%s>. Fallback to http head query",
-            url,
-        )
-
+    # Check all urls and as soon as an url allows the nature detection, this stops.
+    exceptions_to_raise = []
+    for url in urls:
         try:
-            response = request.head(url)
-        except (InvalidSchema, SSLError, ConnectionError):
-            raise ArtifactNatureUndetected(
-                f"Cannot determine artifact type from url <{url}>"
+            return _is_tarball(url), urls[0]
+        except ArtifactWithoutExtension:
+            if request is None:
+                exc = ArtifactNatureUndetected(
+                    f"Cannot determine artifact type from url <{url}>"
+                )
+                exceptions_to_raise.append(exc)
+                continue
+
+            logger.warning(
+                "Cannot detect extension for <%s>. Fallback to http head query",
+                url,
             )
 
-        if not response.ok or response.status_code == 404:
-            raise ArtifactNatureUndetected(
-                f"Cannot determine artifact type from url <{url}>"
-            )
-        location = response.headers.get("Location")
-        if location:  # It's not always present
-            logger.debug("Location: %s", location)
             try:
-                # FIXME: location is also returned as it's considered the true origin,
-                # true enough?
-                return _is_tarball(location), location
-            except ArtifactWithoutExtension:
-                logger.warning(
-                    "Still cannot detect extension through location <%s>...",
-                    url,
+                response = request.head(url)
+            except (InvalidSchema, SSLError, ConnectionError):
+                exc = ArtifactNatureUndetected(
+                    f"Cannot determine artifact type from url <{url}>"
                 )
+                exceptions_to_raise.append(exc)
+                continue
 
-        origin = urls[0]
-
-        content_type = response.headers.get("Content-Type")
-        if content_type:
-            logger.debug("Content-Type: %s", content_type)
-            if content_type == "application/json":
-                return False, origin
-            return content_type.startswith(POSSIBLE_TARBALL_MIMETYPES), origin
-
-        content_disposition = response.headers.get("Content-Disposition")
-        if content_disposition:
-            logger.debug("Content-Disposition: %s", content_disposition)
-            if "filename=" in content_disposition:
-                fields = content_disposition.split("; ")
-                for field in fields:
-                    if "filename=" in field:
-                        _, filename = field.split("filename=")
-                        break
-
-                return (
-                    url_endswith(
-                        urlparse(filename),
-                        TARBALL_EXTENSIONS,
-                        raise_when_no_extension=False,
-                    ),
-                    origin,
+            if not response.ok or response.status_code == 404:
+                exc = ArtifactNatureUndetected(
+                    f"Cannot determine artifact type from url <{url}>"
                 )
+                exceptions_to_raise.append(exc)
+                continue
 
-        raise ArtifactNatureUndetected(
-            f"Cannot determine artifact type from url <{url}>"
-        )
+            location = response.headers.get("Location")
+            if location:  # It's not always present
+                logger.debug("Location: %s", location)
+                try:
+                    # FIXME: location is also returned as it's considered the true
+                    # origin, true enough?
+                    return _is_tarball(location), location
+                except ArtifactWithoutExtension:
+                    logger.warning(
+                        "Still cannot detect extension through location <%s>...",
+                        url,
+                    )
+
+            origin = urls[0]
+
+            content_type = response.headers.get("Content-Type")
+            if content_type:
+                logger.debug("Content-Type: %s", content_type)
+                if content_type == "application/json":
+                    return False, origin
+                return content_type.startswith(POSSIBLE_TARBALL_MIMETYPES), origin
+
+            content_disposition = response.headers.get("Content-Disposition")
+            if content_disposition:
+                logger.debug("Content-Disposition: %s", content_disposition)
+                if "filename=" in content_disposition:
+                    fields = content_disposition.split("; ")
+                    for field in fields:
+                        if "filename=" in field:
+                            _, filename = field.split("filename=")
+                            break
+
+                    return (
+                        url_endswith(
+                            urlparse(filename),
+                            TARBALL_EXTENSIONS,
+                            raise_when_no_extension=False,
+                        ),
+                        origin,
+                    )
+
+    if len(exceptions_to_raise) > 0:
+        raise exceptions_to_raise[0]
+    raise ArtifactNatureUndetected(
+        f"Cannot determine artifact type from url <{urls[0]}>"
+    )
 
 
 VCS_KEYS_MAPPING = {
@@ -438,6 +457,7 @@ class NixGuixLister(StatelessLister[PageResult]):
                     # We'll deal with outputHash as integrity field
                     integrity = outputHash
 
+                # Checks urls for the artifact nature of the origin
                 try:
                     is_tar, origin = is_tarball(urls, self.session)
                 except ArtifactNatureMistyped:
