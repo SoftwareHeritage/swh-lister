@@ -25,6 +25,7 @@
     {
       "type": "url",
       "urls": [
+        "ftp://ftp.ourproject.org/pub/ytalk",
         "ftp://ftp.ourproject.org/pub/ytalk/ytalk-3.3.0.tar.gz"
       ],
       "integrity": "sha256-bss09x9yOnuW+Q5BHHjf8nNcCNxCKMdl9/2/jKSFcrQ="
