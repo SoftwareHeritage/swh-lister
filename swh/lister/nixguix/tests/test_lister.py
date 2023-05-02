@@ -253,6 +253,11 @@ def test_lister_nixguix_ok(datadir, swh_scheduler, requests_mock):
             "filename=fifengine-0.4.2.tar.gz; other=stuff",
         },
     )
+    # The url will not succeed, so the other url will be fetched
+    requests_mock.head(
+        "ftp://ftp.ourproject.org/pub/ytalk",
+        status_code=404,
+    )
 
     expected_visit_types = defaultdict(int)
     # origin upstream is added as origin
@@ -335,8 +340,12 @@ def test_lister_nixguix_mostly_noop(datadir, swh_scheduler, requests_mock):
         "https://crates.io/api/v1/0.1.5/no-extension-and-head-404-so-skipped",
         status_code=404,
     )
-    # Invalid schema for that origin (and no extension), so skip origin
-    # from its name
+    # Either not found or invalid schema for that origin (and no extension), so skip
+    # origin from its name
+    requests_mock.head(
+        "ftp://example.mirror.org/extensionless-file",
+        status_code=404,
+    )
     requests_mock.head(
         "ftp://ftp.ourproject.org/file-with-no-extension",
         exc=InvalidSchema,
