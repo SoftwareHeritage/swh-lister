@@ -79,10 +79,13 @@ class ChecksumLayout(Enum):
     """The possible artifact types listed out of the manifest."""
 
     STANDARD = "standard"
-    """Standard checksums (e.g. sha1, sha256, ...) on the tarball or file."""
+    """Standard "flat" checksums (e.g. sha1, sha256, ...) on the tarball or file."""
     NAR = "nar"
-    """The hash is computed over the NAR archive dump of the output (e.g. uncompressed
-    directory.)"""
+    """The checksum(s) are computed over the NAR dump of the output (e.g. uncompressed
+    directory.). That uncompressed directory can come from a tarball or a (d)vcs. It's
+    also called "recursive" in the "outputHashMode" key in the upstream dataset.
+
+    """
 
 
 MAPPING_CHECKSUM_LAYOUT = {
@@ -106,6 +109,8 @@ class Artifact:
     """Integrity hash converted into a checksum dict."""
     checksum_layout: ChecksumLayout
     """Checksum layout mode to provide to loaders (e.g. nar, standard, ...)"""
+    ref: Optional[str]
+    """Optional reference on the artifact (git commit, branch, svn commit, tag, ...)"""
 
 
 @dataclass
@@ -116,8 +121,6 @@ class VCS:
     """Origin url of the vcs"""
     type: str
     """Type of (d)vcs, e.g. svn, git, hg, ..."""
-    ref: Optional[str] = None
-    """Reference either a svn commit id, a git commit, ..."""
 
 
 class ArtifactType(Enum):
@@ -317,16 +320,23 @@ class NixGuixLister(StatelessLister[PageResult]):
     - vcs repositories (e.g. git, hg, svn)
     - unique file (.lisp, .py, ...)
 
-    Note that no `last_update` is available in either manifest.
+    In the case of vcs repositories, if a reference is provided (``git_ref``,
+    ``svn_revision`` or ``hg_changeset`` with a specific ``outputHashMode``
+    ``recursive``), this provides one more origin to ingest as 'directory'. The
+    DirectoryLoader will then be in charge to ingest the origin (checking the associated
+    ``integrity`` field first).
+
+    Note that, no `last_update` is available in either manifest (``guix`` or
+    ``nixpkgs``), so listed_origins do not have it set.
 
     For `url` types artifacts, this tries to determine the artifact's nature, tarball or
     file. It first tries to compute out of the "url" extension. In case of no extension,
-    it fallbacks to query (HEAD) the url to retrieve the origin out of the `Location`
+    it fallbacks to (HEAD) query the url to retrieve the origin out of the `Location`
     response header, and then checks the extension again.
 
     Optionally, when the `extension_to_ignore` parameter is provided, it extends the
     default extensions to ignore (`DEFAULT_EXTENSIONS_TO_IGNORE`) with those passed.
-    This can be used to drop further binary files detected in the wild.
+    This can be optionally used to filter some more binary files detected in the wild.
 
     """
 
@@ -365,7 +375,7 @@ class NixGuixLister(StatelessLister[PageResult]):
         self.session = requests.Session()
 
     def build_artifact(
-        self, artifact_url: str, artifact_type: str, artifact_ref: Optional[str] = None
+        self, artifact_url: str, artifact_type: str
     ) -> Optional[Tuple[ArtifactType, VCS]]:
         """Build a canonicalized vcs artifact when possible."""
         origin = (
@@ -375,9 +385,26 @@ class NixGuixLister(StatelessLister[PageResult]):
         )
         if not origin:
             return None
-        return ArtifactType.VCS, VCS(
-            origin=origin, type=artifact_type, ref=artifact_ref
-        )
+        return ArtifactType.VCS, VCS(origin=origin, type=artifact_type)
+
+    def convert_integrity_to_checksums(
+        self, integrity: str, failure_log: str
+    ) -> Optional[Dict[str, str]]:
+        """Determine the content checksum stored in the integrity field and convert
+        into a dict of checksums. This only parses the `hash-expression`
+        (hash-<b64-encoded-checksum>) as defined in
+        https://w3c.github.io/webappsec-subresource-integrity/#the-integrity-attribute
+
+        """
+        try:
+            chksum_algo, chksum_b64 = integrity.split("-")
+            checksums: Dict[str, str] = {
+                chksum_algo: base64.decodebytes(chksum_b64.encode()).hex()
+            }
+            return checksums
+        except binascii.Error:
+            logger.warning(failure_log)
+            return None
 
     def get_pages(self) -> Iterator[PageResult]:
         """Yield one page per "typed" origin referenced in manifest."""
@@ -405,14 +432,40 @@ class NixGuixLister(StatelessLister[PageResult]):
         for artifact in sources:
             artifact_type = artifact["type"]
             if artifact_type in VCS_SUPPORTED:
+                # This can output up to 2 origins of type
+                # - vcs
+                # - directory (with "nar" hashes)
                 plain_url = artifact[VCS_KEYS_MAPPING[artifact_type]["url"]]
-                plain_ref = artifact[VCS_KEYS_MAPPING[artifact_type]["ref"]]
-                built_artifact = self.build_artifact(
-                    plain_url, artifact_type, plain_ref
-                )
+                built_artifact = self.build_artifact(plain_url, artifact_type)
                 if not built_artifact:
                     continue
                 yield built_artifact
+
+                # Now, if we have also specific reference on the vcs, we want to ingest
+                # a specific directory with nar hashes
+                plain_ref = artifact.get(VCS_KEYS_MAPPING[artifact_type]["ref"])
+                outputHashMode = artifact.get("outputHashMode", "flat")
+                integrity = artifact.get("integrity")
+                if plain_ref and integrity and outputHashMode == "recursive":
+                    failure_log_if_any = (
+                        f"Skipping url: <{plain_url}>: integrity computation failure "
+                        f"for <{artifact}>"
+                    )
+                    checksums = self.convert_integrity_to_checksums(
+                        integrity, failure_log=failure_log_if_any
+                    )
+                    if not checksums:
+                        continue
+
+                    yield ArtifactType.ARTIFACT, Artifact(
+                        origin=plain_url,
+                        fallback_urls=[],
+                        checksums=checksums,
+                        checksum_layout=MAPPING_CHECKSUM_LAYOUT[outputHashMode],
+                        visit_type="directory",
+                        ref=plain_ref,
+                    )
+
             elif artifact_type == "url":
                 # It's either a tarball or a file
                 origin_urls = artifact.get("urls")
@@ -483,21 +536,14 @@ class NixGuixLister(StatelessLister[PageResult]):
                     )
                     continue
 
-                # Determine the content checksum stored in the integrity field and
-                # convert into a dict of checksums. This only parses the
-                # `hash-expression` (hash-<b64-encoded-checksum>) as defined in
-                # https://w3c.github.io/webappsec-subresource-integrity/#the-integrity-attribute
-                try:
-                    chksum_algo, chksum_b64 = integrity.split("-")
-                    checksums: Dict[str, str] = {
-                        chksum_algo: base64.decodebytes(chksum_b64.encode()).hex()
-                    }
-                except binascii.Error:
-                    logger.exception(
-                        "Skipping url: <%s>: integrity computation failure for <%s>",
-                        url,
-                        artifact,
-                    )
+                failure_log_if_any = (
+                    f"Skipping url: <{origin}>: integrity computation failure "
+                    f"for <{artifact}>"
+                )
+                checksums = self.convert_integrity_to_checksums(
+                    integrity, failure_log=failure_log_if_any
+                )
+                if not checksums:
                     continue
 
                 # The 'outputHashMode' attribute determines how the hash is computed. It
@@ -510,7 +556,6 @@ class NixGuixLister(StatelessLister[PageResult]):
                 #       output (i.e., the result of `nix-store --dump`). In this case,
                 #       the output can be anything, including a directory tree.
                 outputHashMode = artifact.get("outputHashMode", "flat")
-
                 if not is_tar and outputHashMode == "recursive":
                     # T4608: Cannot deal with those properly yet as some can be missing
                     # 'critical' information about how to recompute the hash (e.g. fs
@@ -551,6 +596,7 @@ class NixGuixLister(StatelessLister[PageResult]):
                     checksums=checksums,
                     checksum_layout=MAPPING_CHECKSUM_LAYOUT[outputHashMode],
                     visit_type="directory" if is_tar else "content",
+                    ref=None,
                 )
             else:
                 logger.warning(
@@ -562,7 +608,7 @@ class NixGuixLister(StatelessLister[PageResult]):
     def vcs_to_listed_origin(self, artifact: VCS) -> Iterator[ListedOrigin]:
         """Given a vcs repository, yield a ListedOrigin."""
         assert self.lister_obj.id is not None
-        # FIXME: What to do with the "ref" (e.g. git/hg/svn commit, ...)
+        # Yield a vcs origin
         yield ListedOrigin(
             lister_id=self.lister_obj.id,
             url=artifact.origin,
