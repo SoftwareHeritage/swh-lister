@@ -99,7 +99,7 @@ class GitLabLister(Lister[GitLabListerState, PageResult]):
     def __init__(
         self,
         scheduler,
-        url: str,
+        url: Optional[str] = None,
         name: Optional[str] = "gitlab",
         instance: Optional[str] = None,
         credentials: Optional[CredentialsType] = None,
@@ -113,7 +113,8 @@ class GitLabLister(Lister[GitLabListerState, PageResult]):
             self.LISTER_NAME = name
         super().__init__(
             scheduler=scheduler,
-            url=url.rstrip("/"),
+            # if url is not provided, url will be built in the `build_url` method
+            url=url.rstrip("/") if url else None,
             instance=instance,
             credentials=credentials,
             max_origins_per_page=max_origins_per_page,
@@ -137,6 +138,11 @@ class GitLabLister(Lister[GitLabListerState, PageResult]):
             api_token = cred["password"]
             if api_token:
                 self.session.headers["Authorization"] = f"Bearer {api_token}"
+
+    def build_url(self, instance: str) -> str:
+        """Build gitlab api url."""
+        prefix_url = super().build_url(instance)
+        return f"{prefix_url}/api/v4"
 
     def state_from_dict(self, d: Dict[str, Any]) -> GitLabListerState:
         return GitLabListerState(**d)

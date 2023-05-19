@@ -104,7 +104,7 @@ class Lister(Generic[StateType, PageType]):
     def __init__(
         self,
         scheduler: SchedulerInterface,
-        url: str,
+        url: Optional[str] = None,
         instance: Optional[str] = None,
         credentials: CredentialsType = None,
         max_origins_per_page: Optional[int] = None,
@@ -115,11 +115,23 @@ class Lister(Generic[StateType, PageType]):
         if not self.LISTER_NAME:
             raise ValueError("Must set the LISTER_NAME attribute on Lister classes")
 
-        self.url = url
+        self.url: str
+        if url is not None:
+            # Retro-compability with lister already instantiated out of a provided url
+            self.url = url
+        elif url is None and instance is not None:
+            # Allow lister to be instantiated simply with their type and instance
+            # (as in their domain like "gitlab.com", "git.garbaye.fr", ...)
+            self.url = self.build_url(instance)
+        else:
+            raise ValueError(
+                "Either 'url' or 'instance' parameter should be provided for listing."
+            )
+
         if instance is not None:
             self.instance = instance
         else:
-            self.instance = urlparse(url).netloc
+            self.instance = urlparse(self.url).netloc
 
         self.scheduler = scheduler
 
@@ -151,6 +163,25 @@ class Lister(Generic[StateType, PageType]):
         self.max_pages = max_pages
         self.max_origins_per_page = max_origins_per_page
         self.enable_origins = enable_origins
+
+    def build_url(self, instance: str) -> str:
+        """Optionally build the forge url to list. When the url is not provided in the
+        constructor, this method is called. This should compute the actual url to use to
+        list the forge.
+
+        This is particularly useful for forges which uses an api. This simplifies the
+        cli calls to use. They should then only provide the instance (its domain).
+
+        For example:
+        - gitlab: https://{instance}/api/v4
+        - gitea: https://{instance}/api/v1
+        - ...
+
+        """
+        scheme = urlparse(instance).scheme
+        if scheme:
+            raise ValueError("Instance should only be a net location.")
+        return f"https://{instance}"
 
     @http_retry(before_sleep=before_sleep_log(logger, logging.WARNING))
     def http_request(self, url: str, method="GET", **kwargs) -> requests.Response:

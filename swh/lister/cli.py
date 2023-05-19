@@ -53,7 +53,11 @@ def lister(ctx, config_file):
     "defined by the user",
 )
 @click.option(
-    "--lister", "-l", help="Lister to run", type=click.Choice(SUPPORTED_LISTERS)
+    "--lister",
+    "-l",
+    help="Lister to run",
+    type=click.Choice(SUPPORTED_LISTERS),
+    required=True,
 )
 @click.argument("options", nargs=-1)
 @click.pass_context

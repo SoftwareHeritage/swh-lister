@@ -1,4 +1,4 @@
-# Copyright (C) 2022  The Software Heritage developers
+# Copyright (C) 2022-2023  The Software Heritage developers
 # See the AUTHORS file at the top-level directory of this distribution
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
@@ -99,13 +99,23 @@ def check_listed_origins(lister_urls: List[str], scheduler_origins: List[ListedO
     assert set(lister_urls) == {origin.url for origin in scheduler_origins}
 
 
+def test_lister_gogs_fail_to_instantiate(swh_scheduler):
+    """Build a lister without its url nor its instance should raise"""
+    # while instantiating a gogs lister is fine with the url or the instance...
+    assert GogsLister(swh_scheduler, url="https://try.gogs.io/api/v1") is not None
+    assert GogsLister(swh_scheduler, instance="try.gogs.io") is not None
+
+    # ... It will raise without any of those
+    with pytest.raises(ValueError, match="'url' or 'instance'"):
+        GogsLister(swh_scheduler)
+
+
 def test_gogs_full_listing(
     swh_scheduler, requests_mock, mocker, trygogs_p1, trygogs_p2, trygogs_p3_last
 ):
-    kwargs = dict(
-        url=TRY_GOGS_URL, instance="try_gogs", page_size=3, api_token="secret"
-    )
+    kwargs = dict(instance="try.gogs.io", page_size=3, api_token="secret")
     lister = GogsLister(scheduler=swh_scheduler, **kwargs)
+    assert lister.url == TRY_GOGS_URL
 
     lister.get_origins_from_page: Mock = mocker.spy(lister, "get_origins_from_page")
 
