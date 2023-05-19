@@ -22,17 +22,30 @@ logger = logging.getLogger(__name__)
 
 
 def api_url(instance: str) -> str:
-    return f"https://{instance}/api/v4/"
+    return f"https://{instance}/api/v4"
 
 
 def _match_request(request, lister_name="gitlab"):
     return request.headers.get("User-Agent") == USER_AGENT_TEMPLATE % lister_name
 
 
+def test_lister_gitlab_fail_to_instantiate(swh_scheduler):
+    """Build a lister without its url nor its instance should raise"""
+    # while instantiating a gitlab lister is fine with the url or the instance...
+    assert GitLabLister(swh_scheduler, url="https://gitlab.com/api/v4") is not None
+    assert GitLabLister(swh_scheduler, instance="gitlab.fr") is not None
+
+    # ... It will raise without any of those
+    with pytest.raises(ValueError, match="'url' or 'instance'"):
+        GitLabLister(swh_scheduler)
+
+
 def test_lister_gitlab(datadir, swh_scheduler, requests_mock):
     """Gitlab lister supports full listing"""
     instance = "gitlab.com"
-    lister = GitLabLister(swh_scheduler, url=api_url(instance), instance=instance)
+    lister = GitLabLister(swh_scheduler, instance=instance)
+
+    assert lister.url == api_url(instance)
 
     response = gitlab_page_response(datadir, instance, 1)
 
