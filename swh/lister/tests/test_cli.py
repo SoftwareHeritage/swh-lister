@@ -1,4 +1,4 @@
-# Copyright (C) 2019-2021  The Software Heritage developers
+# Copyright (C) 2019-2023  The Software Heritage developers
 # See the AUTHORS file at the top-level directory of this distribution
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
@@ -17,14 +17,13 @@ lister_args = {
         "api_token": "bogus",
     },
     "gitea": {
-        "url": "https://try.gitea.io/api/v1/",
+        "instance": "try.gitea.io",
     },
     "tuleap": {
         "url": "https://tuleap.net",
     },
     "gitlab": {
-        "url": "https://gitlab.ow2.org/api/v4",
-        "instance": "ow2",
+        "instance": "gitlab.ow2.org",
     },
     "opam": {"url": "https://opam.ocaml.org", "instance": "opam"},
     "maven": {
@@ -32,7 +31,7 @@ lister_args = {
         "index_url": "http://indexes/export.fld",
     },
     "gogs": {
-        "url": "https://try.gogs.io/",
+        "instance": "try.gogs.io",
         "api_token": "secret",
     },
     "nixguix": {
