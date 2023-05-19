@@ -24,6 +24,24 @@ class InstantiableLister(pattern.Lister[StateType, PageType]):
         return d
 
 
+def test_instantiation_fail_to_instantiate(swh_scheduler):
+    """Instantiation without proper url or instance will raise."""
+    # While instantiating with either a url or instance is fine...
+    InstantiableLister(scheduler=swh_scheduler, url="https://example.com")
+    InstantiableLister(scheduler=swh_scheduler, instance="example.com")
+
+    # ... Instantiating will fail when:
+    # - no instance nor url parameters are provided to the constructor
+    with pytest.raises(ValueError, match="'url' or 'instance"):
+        InstantiableLister(
+            scheduler=swh_scheduler,
+        )
+
+    # - an instance, which is not in a net location format, is provided
+    with pytest.raises(ValueError, match="net location"):
+        InstantiableLister(scheduler=swh_scheduler, instance="http://example.com")
+
+
 def test_instantiation(swh_scheduler):
     lister = InstantiableLister(
         scheduler=swh_scheduler, url="https://example.com", instance="example.com"

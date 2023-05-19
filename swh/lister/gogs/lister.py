@@ -1,4 +1,4 @@
-# Copyright (C) 2022  The Software Heritage developers
+# Copyright (C) 2023  The Software Heritage developers
 # See the AUTHORS file at the top-level directory of this distribution
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
@@ -70,7 +70,7 @@ class GogsLister(Lister[GogsListerState, GogsListerPage]):
     def __init__(
         self,
         scheduler: SchedulerInterface,
-        url: str,
+        url: Optional[str] = None,
         instance: Optional[str] = None,
         api_token: Optional[str] = None,
         page_size: int = 50,
@@ -110,6 +110,11 @@ class GogsLister(Lister[GogsListerState, GogsListerPage]):
             logger.warning(
                 "No authentication token set in configuration, using anonymous mode"
             )
+
+    def build_url(self, instance: str) -> str:
+        "Build gogs url out of the instance."
+        prefix_url = super().build_url(instance)
+        return f"{prefix_url}/api/v1/"
 
     def state_from_dict(self, d: Dict[str, Any]) -> GogsListerState:
         return GogsListerState(**d)
