@@ -116,12 +116,14 @@ class Lister(Generic[StateType, PageType]):
             raise ValueError("Must set the LISTER_NAME attribute on Lister classes")
 
         self.url: str
+        # lister can be instantiated using directly their 'url' (the default behavior)
+        # or derive their url through an 'instance' (their domain's root path) parameter
         if url is not None:
-            # Retro-compability with lister already instantiated out of a provided url
+            # direct url instantiation
             self.url = url
         elif url is None and instance is not None:
-            # Allow lister to be instantiated simply with their type and instance
-            # (as in their domain like "gitlab.com", "git.garbaye.fr", ...)
+            # Allow instantiation through their instance parameter (domain's root path)
+            # (e.g. "gitlab.com", "git.garbaye.fr", ...)
             self.url = self.build_url(instance)
         else:
             raise ValueError(

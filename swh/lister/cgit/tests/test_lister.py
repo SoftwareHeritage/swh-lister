@@ -1,4 +1,4 @@
-# Copyright (C) 2019-2022 The Software Heritage developers
+# Copyright (C) 2019-2023 The Software Heritage developers
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
 
@@ -153,6 +153,25 @@ requests_mock_datadir_missing_url = requests_mock_datadir_factory(
         "https://git.tizen/cgit/adaptation/ap_samsung/audio-hal-e4x12",
     ]
 )
+
+
+def test_lister_cgit_instantiate(swh_scheduler):
+    """Build a lister with either an url or an instance is fine"""
+    url = "https://source.codeaurora.org"
+    lister = CGitLister(swh_scheduler, url=url)
+    assert lister is not None
+    assert lister.url == url
+
+    assert CGitLister(swh_scheduler, instance="source.codeaurora.org") is not None
+    assert lister is not None
+    assert lister.url == url
+
+
+def test_lister_cgit_fail_to_instantiate(swh_scheduler):
+    """Build a lister without its url nor its instance should raise"""
+    # ... It will raise without any of those
+    with pytest.raises(ValueError, match="'url' or 'instance'"):
+        CGitLister(swh_scheduler)
 
 
 def test_lister_cgit_get_origin_from_repo_failing(
