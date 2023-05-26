@@ -1,4 +1,4 @@
-# Copyright (C) 2019-2022 The Software Heritage developers
+# Copyright (C) 2019-2023 The Software Heritage developers
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
 
@@ -46,7 +46,7 @@ class CGitLister(StatelessLister[Repositories]):
     def __init__(
         self,
         scheduler: SchedulerInterface,
-        url: str,
+        url: Optional[str] = None,
         instance: Optional[str] = None,
         credentials: Optional[CredentialsType] = None,
         base_git_url: Optional[str] = None,
@@ -57,8 +57,9 @@ class CGitLister(StatelessLister[Repositories]):
         """Lister class for CGit repositories.
 
         Args:
-            url: main URL of the CGit instance, i.e. url of the index
-                of published git repositories on this instance.
+            url: (Optional) Root URL of the CGit instance, i.e. url of the index of
+                published git repositories on this instance. Defaults to
+                :file:`https://{instance}` if unset.
             instance: Name of cgit instance. Defaults to url's network location
                 if unset.
             base_git_url: Optional base git url which allows the origin url
