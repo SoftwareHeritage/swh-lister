@@ -261,11 +261,11 @@ def test_lister_nixguix_ok(datadir, swh_scheduler, requests_mock):
 
     expected_visit_types = defaultdict(int)
     # origin upstream is added as origin
-    expected_nb_origins = 1
+    expected_nb_pages = 1
+
     expected_visit_types["git"] += 1
     for artifact in response["sources"]:
-        # Each artifact is considered an origin (even "url" artifacts with mirror urls)
-        expected_nb_origins += 1
+        expected_nb_pages += 1
         artifact_type = artifact["type"]
         if artifact_type in [
             "git",
@@ -273,6 +273,11 @@ def test_lister_nixguix_ok(datadir, swh_scheduler, requests_mock):
             "hg",
         ]:
             expected_visit_types[artifact_type] += 1
+            outputHashMode = artifact.get("outputHashMode", "flat")
+            if outputHashMode == "recursive":
+                # 1 origin of type "directory" is listed in that case too
+                expected_visit_types["directory"] += 1
+                expected_nb_pages += 1
         elif artifact_type == "url":
             url = artifact["urls"][0]
             if url.endswith(".git"):
@@ -296,14 +301,30 @@ def test_lister_nixguix_ok(datadir, swh_scheduler, requests_mock):
 
     listed_result = lister.run()
 
+    # Each artifact is considered an origin (even "url" artifacts with mirror urls) but
+    expected_nb_origins = sum(expected_visit_types.values())
+    # 1 origin is duplicated for both visit_type 'git' and 'directory'
+    expected_nb_dictincts_origins = expected_nb_origins - 1
+
     # 1 page read is 1 origin
-    nb_pages = expected_nb_origins
-    assert listed_result == ListerStats(pages=nb_pages, origins=expected_nb_origins)
+    assert listed_result == ListerStats(
+        pages=expected_nb_pages, origins=expected_nb_dictincts_origins
+    )
 
     scheduler_origins = lister.scheduler.get_listed_origins(
         lister.lister_obj.id
     ).results
     assert len(scheduler_origins) == expected_nb_origins
+
+    # The dataset will trigger 2 listed origins, with 2 distinct visit types
+    duplicated_url = "https://example.org/rgerganov/footswitch"
+    duplicated_visit_types = [
+        origin.visit_type
+        for origin in scheduler_origins
+        if origin.url == duplicated_url
+    ]
+
+    assert set(duplicated_visit_types) == {"git", "directory"}
 
     mapping_visit_types = defaultdict(int)
 
