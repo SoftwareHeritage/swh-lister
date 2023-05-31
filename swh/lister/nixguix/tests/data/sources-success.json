@@ -287,6 +287,14 @@
         "https://codeload.github.com/fifengine/fifengine/tar.gz/0.4.2"
       ],
       "integrity": "sha256-6IK1W++jauLxqJraFq8PgUobePfL5gIexbFgVgTPj/g="
+    },
+    {
+      "type": "git",
+      "git_url": "https://example.org/rgerganov/footswitch",
+      "git_ref": "ca43d53fc2002520cc825d119702afc124303e73",
+      "outputHashAlgo": "sha256",
+      "outputHashMode": "recursive",
+      "integrity": "sha256-yOAaOu/HiG1N/r2tAtdou/fPB+rEJt1TQbIGzQn7/pI="
     }
   ],
   "version": "1",
