@@ -295,6 +295,22 @@
       "outputHashAlgo": "sha256",
       "outputHashMode": "recursive",
       "integrity": "sha256-yOAaOu/HiG1N/r2tAtdou/fPB+rEJt1TQbIGzQn7/pI="
+    },
+    {
+      "type": "hg",
+      "hg_url": "https://hg.sr.ht/~olly/yoyo",
+      "integrity": "sha256-mME9v34RyvpoCATSiLYqN78gtPNK4+1Pj54P2d5KX2A=",
+      "outputHashAlgo": "sha256",
+      "outputHashMode": "recursive",
+      "hg_changeset": "v7.2.0-release"
+    },
+    {
+      "type": "svn",
+      "svn_url": "svn://svn.savannah.gnu.org/apl/trunk",
+      "integrity": "sha256-48aUFwjpsAlJ4Kw6oBWW3d57NQwV5igwzr8Ml4Aa7K0=",
+      "outputHashAlgo": "sha256",
+      "outputHashMode": "recursive",
+      "svn_revision": "1550"
     }
   ],
   "version": "1",

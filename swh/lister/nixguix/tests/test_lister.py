@@ -18,6 +18,7 @@ from swh.lister import TARBALL_EXTENSIONS
 from swh.lister.nixguix.lister import (
     DEFAULT_EXTENSIONS_TO_IGNORE,
     POSSIBLE_TARBALL_MIMETYPES,
+    VCS_ARTIFACT_TYPE_TO_VISIT_TYPE,
     ArtifactNatureMistyped,
     ArtifactNatureUndetected,
     ArtifactWithoutExtension,
@@ -275,21 +276,25 @@ def test_lister_nixguix_ok(datadir, swh_scheduler, requests_mock):
             expected_visit_types[artifact_type] += 1
             outputHashMode = artifact.get("outputHashMode", "flat")
             if outputHashMode == "recursive":
-                # 1 origin of type "directory" is listed in that case too
-                expected_visit_types["directory"] += 1
+                # Those are specific
+                visit_type = VCS_ARTIFACT_TYPE_TO_VISIT_TYPE[artifact_type]
+                expected_visit_types[visit_type] += 1
+                # 1 origin of type `visit_type` is listed in that case too
                 expected_nb_pages += 1
+
         elif artifact_type == "url":
             url = artifact["urls"][0]
             if url.endswith(".git"):
-                expected_visit_types["git"] += 1
+                visit_type = "git"
             elif url.endswith(".c") or url.endswith(".txt"):
-                expected_visit_types["content"] += 1
+                visit_type = "content"
             elif url.startswith("svn"):  # mistyped artifact rendered as vcs nonetheless
-                expected_visit_types["svn"] += 1
+                visit_type = "svn"
             elif "crates.io" in url or "codeload.github.com" in url:
-                expected_visit_types["directory"] += 1
+                visit_type = "directory"
             else:  # tarball artifacts
-                expected_visit_types["directory"] += 1
+                visit_type = "directory"
+            expected_visit_types[visit_type] += 1
 
     assert set(expected_visit_types.keys()) == {
         "content",
@@ -297,14 +302,19 @@ def test_lister_nixguix_ok(datadir, swh_scheduler, requests_mock):
         "svn",
         "hg",
         "directory",
+        "git-checkout",
+        "svn-export",
+        "hg-checkout",
     }
 
     listed_result = lister.run()
 
     # Each artifact is considered an origin (even "url" artifacts with mirror urls) but
     expected_nb_origins = sum(expected_visit_types.values())
-    # 1 origin is duplicated for both visit_type 'git' and 'directory'
-    expected_nb_dictincts_origins = expected_nb_origins - 1
+    # 3 origins have their recursive hash mentioned, they are sent both as vcs and as
+    # specific vcs directory to ingest. So they are duplicated with visit_type 'git' and
+    # 'git-checkout', 'svn' and 'svn-export', 'hg' and 'hg-checkout'.
+    expected_nb_dictincts_origins = expected_nb_origins - 3
 
     # 1 page read is 1 origin
     assert listed_result == ListerStats(
@@ -316,15 +326,31 @@ def test_lister_nixguix_ok(datadir, swh_scheduler, requests_mock):
     ).results
     assert len(scheduler_origins) == expected_nb_origins
 
-    # The dataset will trigger 2 listed origins, with 2 distinct visit types
-    duplicated_url = "https://example.org/rgerganov/footswitch"
-    duplicated_visit_types = [
-        origin.visit_type
-        for origin in scheduler_origins
-        if origin.url == duplicated_url
-    ]
+    # The test dataset will trigger some origins duplicated as mentioned above
+    # Let's check them out
+    duplicated_visit_types = []
+    for duplicated_url in [
+        "https://example.org/rgerganov/footswitch",
+        "https://hg.sr.ht/~olly/yoyo",
+        "svn://svn.savannah.gnu.org/apl/trunk",
+    ]:
+        duplicated_visit_types.extend(
+            [
+                origin.visit_type
+                for origin in scheduler_origins
+                if origin.url == duplicated_url
+            ]
+        )
 
-    assert set(duplicated_visit_types) == {"git", "directory"}
+    assert len(duplicated_visit_types) == 6
+    assert set(duplicated_visit_types) == {
+        "git",
+        "git-checkout",
+        "svn",
+        "svn-export",
+        "hg",
+        "hg-checkout",
+    }
 
     mapping_visit_types = defaultdict(int)
 
