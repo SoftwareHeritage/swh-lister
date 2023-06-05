@@ -312,6 +312,14 @@ VCS_KEYS_MAPPING = {
 }
 
 
+VCS_ARTIFACT_TYPE_TO_VISIT_TYPE = {
+    "git": "git-checkout",
+    "hg": "hg-checkout",
+    "svn": "svn-export",
+}
+"""Mapping between the vcs artifact type to the loader's visit type."""
+
+
 class NixGuixLister(StatelessLister[PageResult]):
     """List Guix or Nix sources out of a public json manifest.
 
@@ -462,7 +470,7 @@ class NixGuixLister(StatelessLister[PageResult]):
                         fallback_urls=[],
                         checksums=checksums,
                         checksum_layout=MAPPING_CHECKSUM_LAYOUT[outputHashMode],
-                        visit_type="directory",
+                        visit_type=VCS_ARTIFACT_TYPE_TO_VISIT_TYPE[artifact_type],
                         ref=plain_ref,
                     )
 
