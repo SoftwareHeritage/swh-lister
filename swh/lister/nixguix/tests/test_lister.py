@@ -359,6 +359,9 @@ def test_lister_nixguix_ok(datadir, swh_scheduler, requests_mock):
         # no last update is listed on those manifests
         assert listed_origin.last_update is None
 
+        if listed_origin.visit_type in {"git-checkout", "svn-export", "hg-checkout"}:
+            assert listed_origin.extra_loader_arguments["ref"] is not None
+
         mapping_visit_types[listed_origin.visit_type] += 1
 
     assert dict(mapping_visit_types) == expected_visit_types
