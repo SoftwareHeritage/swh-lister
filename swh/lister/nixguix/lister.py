@@ -626,15 +626,18 @@ class NixGuixLister(StatelessLister[PageResult]):
     def artifact_to_listed_origin(self, artifact: Artifact) -> Iterator[ListedOrigin]:
         """Given an artifact (tarball, file), yield one ListedOrigin."""
         assert self.lister_obj.id is not None
+        loader_arguments = {
+            "checksums": artifact.checksums,
+            "checksum_layout": artifact.checksum_layout.value,
+            "fallback_urls": artifact.fallback_urls,
+        }
+        if artifact.ref:
+            loader_arguments["ref"] = artifact.ref
         yield ListedOrigin(
             lister_id=self.lister_obj.id,
             url=artifact.origin,
             visit_type=artifact.visit_type,
-            extra_loader_arguments={
-                "checksums": artifact.checksums,
-                "checksum_layout": artifact.checksum_layout.value,
-                "fallback_urls": artifact.fallback_urls,
-            },
+            extra_loader_arguments=loader_arguments,
         )
 
     def get_origins_from_page(
