@@ -603,7 +603,7 @@ class NixGuixLister(StatelessLister[PageResult]):
                     fallback_urls=fallback_urls,
                     checksums=checksums,
                     checksum_layout=MAPPING_CHECKSUM_LAYOUT[outputHashMode],
-                    visit_type="directory" if is_tar else "content",
+                    visit_type="tarball-directory" if is_tar else "content",
                     ref=None,
                 )
             else:

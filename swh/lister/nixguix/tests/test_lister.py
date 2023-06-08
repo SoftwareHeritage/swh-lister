@@ -291,9 +291,9 @@ def test_lister_nixguix_ok(datadir, swh_scheduler, requests_mock):
             elif url.startswith("svn"):  # mistyped artifact rendered as vcs nonetheless
                 visit_type = "svn"
             elif "crates.io" in url or "codeload.github.com" in url:
-                visit_type = "directory"
+                visit_type = "tarball-directory"
             else:  # tarball artifacts
-                visit_type = "directory"
+                visit_type = "tarball-directory"
             expected_visit_types[visit_type] += 1
 
     assert set(expected_visit_types.keys()) == {
@@ -301,7 +301,7 @@ def test_lister_nixguix_ok(datadir, swh_scheduler, requests_mock):
         "git",
         "svn",
         "hg",
-        "directory",
+        "tarball-directory",
         "git-checkout",
         "svn-export",
         "hg-checkout",
