@@ -6,6 +6,7 @@
 import io
 import logging
 import os
+import shutil
 from subprocess import PIPE, Popen, call
 from typing import Any, Dict, Iterator, Optional
 
@@ -18,6 +19,19 @@ from ..pattern import CredentialsType
 logger = logging.getLogger(__name__)
 
 PageType = str
+
+
+def opam() -> str:
+    """Get the path to the opam executable.
+
+    Raises:
+      EnvironmentError if no opam executable is found
+    """
+    ret = shutil.which("opam")
+    if not ret:
+        raise EnvironmentError("No opam executable found in path {os.environ['PATH']}")
+
+    return ret
 
 
 class OpamLister(StatelessLister[PageType]):
@@ -71,7 +85,7 @@ class OpamLister(StatelessLister[PageType]):
         # Actually list opam instance data
         proc = Popen(
             [
-                "opam",
+                opam(),
                 "list",
                 "--all",
                 "--no-switch",
@@ -124,7 +138,7 @@ def opam_init(opam_root: str, instance: str, url: str, env: Dict[str, Any]) -> N
     """
     if not os.path.exists(opam_root) or not os.listdir(opam_root):
         command = [
-            "opam",
+            opam(),
             "init",
             "--reinit",
             "--bare",
@@ -138,7 +152,7 @@ def opam_init(opam_root: str, instance: str, url: str, env: Dict[str, Any]) -> N
         # The repository exists and is populated, we just add another instance in the
         # repository. If it's already setup, it's a noop
         command = [
-            "opam",
+            opam(),
             "repository",
             "add",
             "--root",
