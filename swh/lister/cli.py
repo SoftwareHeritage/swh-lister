@@ -69,6 +69,14 @@ def run(ctx, lister, options):
     if options:
         config.update(parse_options(options)[1])
 
+    if "scheduler" not in config:
+        logger.warning(
+            "No scheduler configuration detected, using a temporary instance "
+            "with postgresql backend instead."
+        )
+
+        config["scheduler"] = {"cls": "temporary"}
+
     get_lister(lister, **config).run()
 
 
