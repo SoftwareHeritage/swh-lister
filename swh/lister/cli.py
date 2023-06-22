@@ -77,7 +77,7 @@ def run(ctx, lister, options):
 
         config["scheduler"] = {"cls": "temporary"}
 
-    get_lister(lister, **config).run()
+    print(get_lister(lister, **config).run())
 
 
 if __name__ == "__main__":
