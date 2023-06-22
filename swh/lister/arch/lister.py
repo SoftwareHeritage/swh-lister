@@ -26,41 +26,6 @@ logger = logging.getLogger(__name__)
 ArchListerPage = List[Dict[str, Any]]
 
 
-def size_to_bytes(size: str) -> int:
-    """Convert human readable file size to bytes.
-
-    Resulting value is an approximation as input value is in most case rounded.
-
-    Args:
-        size: A string representing a human readable file size (eg: '500K')
-
-    Returns:
-        A decimal representation of file size
-
-        Examples::
-
-            >>> size_to_bytes("500")
-            500
-            >>> size_to_bytes("1K")
-            1000
-    """
-    units = {
-        "K": 1000,
-        "M": 1000**2,
-        "G": 1000**3,
-        "T": 1000**4,
-        "P": 1000**5,
-        "E": 1000**6,
-        "Z": 1000**7,
-        "Y": 1000**8,
-    }
-    if size.endswith(tuple(units)):
-        v, u = (size[:-1], size[-1])
-        return int(v) * units[u]
-    else:
-        return int(size)
-
-
 class ArchLister(StatelessLister[ArchListerPage]):
     """List Arch linux origins from 'core', 'extra', and 'community' repositories
 
@@ -134,9 +99,9 @@ class ArchLister(StatelessLister[ArchListerPage]):
     def scrap_package_versions(
         self, name: str, repo: str, base_url: str
     ) -> List[Dict[str, Any]]:
-        """Given a package 'name' and 'repo', make an http call to origin url and parse its content
-        to get package versions artifacts data.
-        That method is suitable only for 'official' Arch Linux, not 'arm'.
+        """Given a package 'name' and 'repo', make an http call to origin url and parse
+        its content to get package versions artifacts data.  That method is suitable
+        only for 'official' Arch Linux, not 'arm'.
 
         Args:
             name: Package name
@@ -153,10 +118,10 @@ class ArchLister(StatelessLister[ArchListerPage]):
                     "repo": "core",
                     "name": "dialog",
                     "version": "1:1.3_20190211-1",
-                    "length": 180000,
                     "filename": "dialog-1:1.3_20190211-1-x86_64.pkg.tar.xz",
                     "last_modified": "2019-02-13T08:36:00"},
                 ]
+
         """
         url = self.ARCH_PACKAGE_VERSIONS_URL_PATTERN.format(
             pkgname=name, base_url=base_url
@@ -194,26 +159,23 @@ class ArchLister(StatelessLister[ArchListerPage]):
                 # Extract last_modified and an approximate file size
                 raw_text = link.next_sibling
                 raw_text_rex = re.compile(
-                    r"^(?P<last_modified>\d+-\w+-\d+ \d\d:\d\d)\s+(?P<size>\w+)$"
+                    r"^(?P<last_modified>\d+-\w+-\d+ \d\d:\d\d)\s+.*$"
                 )
                 s = raw_text_rex.search(raw_text.strip())
                 if s is None:
                     logger.error(
-                        "Can not find a match for 'last_modified' and/or "
-                        "'size' in '%(raw_text)s'",
+                        "Can not find a match for 'last_modified' in '%(raw_text)s'",
                         dict(raw_text=raw_text),
                     )
                 else:
-                    assert s.groups()
-                    assert len(s.groups()) == 2
-                    last_modified_str, size = s.groups()
+                    values = s.groups()
+                    assert values and len(values) == 1
+                    last_modified_str = values[0]
 
                 # format as expected
                 last_modified = datetime.datetime.strptime(
                     last_modified_str, "%d-%b-%Y %H:%M"
                 ).isoformat()
-
-                length = size_to_bytes(size)  # we want bytes
 
                 # link url is relative, format a canonical one
                 url = self.ARCH_PACKAGE_DOWNLOAD_URL_PATTERN.format(
@@ -228,7 +190,6 @@ class ArchLister(StatelessLister[ArchListerPage]):
                         filename=filename,
                         url=url,
                         last_modified=last_modified,
-                        length=length,
                     )
                 )
         return versions
@@ -432,7 +393,6 @@ class ArchLister(StatelessLister[ArchListerPage]):
                             last_modified=last_modified.replace(tzinfo=None).isoformat(
                                 timespec="seconds"
                             ),
-                            length=int(data["csize"]),
                         )
                     ]
 
@@ -459,7 +419,6 @@ class ArchLister(StatelessLister[ArchListerPage]):
                         "version": version["version"],
                         "filename": version["filename"],
                         "url": version["url"],
-                        "length": version["length"],
                     }
                 )
                 if version["version"] == origin["version"]:
@@ -468,7 +427,7 @@ class ArchLister(StatelessLister[ArchListerPage]):
                         "sha256": origin["data"]["sha256sum"],
                     }
                 else:
-                    artifacts[-1]["checksums"] = {"length": version["length"]}
+                    artifacts[-1]["checksums"] = {}
 
                 arch_metadata.append(
                     {

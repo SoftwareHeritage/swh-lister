@@ -1,4 +1,4 @@
-# Copyright (C) 2022  The Software Heritage developers
+# Copyright (C) 2022-2023  The Software Heritage developers
 # See the AUTHORS file at the top-level directory of this distribution
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
@@ -16,205 +16,138 @@ expected_origins = [
                 {
                     "url": "https://archive.archlinux.org/packages/d/dialog/dialog-1:1.3_20190211-1-x86_64.pkg.tar.xz",
                     "version": "1:1.3_20190211-1",
-                    "length": 180000,
                     "filename": "dialog-1:1.3_20190211-1-x86_64.pkg.tar.xz",
-                    "checksums": {
-                        "length": 180000,
-                    },
+                    "checksums": {},
                 },
                 {
                     "url": "https://archive.archlinux.org/packages/d/dialog/dialog-1:1.3_20190724-1-x86_64.pkg.tar.xz",
                     "version": "1:1.3_20190724-1",
-                    "length": 180000,
                     "filename": "dialog-1:1.3_20190724-1-x86_64.pkg.tar.xz",
-                    "checksums": {
-                        "length": 180000,
-                    },
+                    "checksums": {},
                 },
                 {
                     "url": "https://archive.archlinux.org/packages/d/dialog/dialog-1:1.3_20190728-1-x86_64.pkg.tar.xz",
                     "version": "1:1.3_20190728-1",
-                    "length": 180000,
                     "filename": "dialog-1:1.3_20190728-1-x86_64.pkg.tar.xz",
-                    "checksums": {
-                        "length": 180000,
-                    },
+                    "checksums": {},
                 },
                 {
                     "url": "https://archive.archlinux.org/packages/d/dialog/dialog-1:1.3_20190806-1-x86_64.pkg.tar.xz",
                     "version": "1:1.3_20190806-1",
-                    "length": 182000,
                     "filename": "dialog-1:1.3_20190806-1-x86_64.pkg.tar.xz",
-                    "checksums": {
-                        "length": 182000,
-                    },
+                    "checksums": {},
                 },
                 {
                     "url": "https://archive.archlinux.org/packages/d/dialog/dialog-1:1.3_20190808-1-x86_64.pkg.tar.xz",
                     "version": "1:1.3_20190808-1",
-                    "length": 182000,
                     "filename": "dialog-1:1.3_20190808-1-x86_64.pkg.tar.xz",
-                    "checksums": {
-                        "length": 182000,
-                    },
+                    "checksums": {},
                 },
                 {
                     "url": "https://archive.archlinux.org/packages/d/dialog/dialog-1:1.3_20191110-1-x86_64.pkg.tar.xz",
                     "version": "1:1.3_20191110-1",
-                    "length": 183000,
                     "filename": "dialog-1:1.3_20191110-1-x86_64.pkg.tar.xz",
-                    "checksums": {
-                        "length": 183000,
-                    },
+                    "checksums": {},
                 },
                 {
                     "url": "https://archive.archlinux.org/packages/d/dialog/dialog-1:1.3_20191110-2-x86_64.pkg.tar.xz",
                     "version": "1:1.3_20191110-2",
-                    "length": 183000,
                     "filename": "dialog-1:1.3_20191110-2-x86_64.pkg.tar.xz",
-                    "checksums": {
-                        "length": 183000,
-                    },
+                    "checksums": {},
                 },
                 {
                     "url": "https://archive.archlinux.org/packages/d/dialog/dialog-1:1.3_20191209-1-x86_64.pkg.tar.xz",
                     "version": "1:1.3_20191209-1",
-                    "length": 183000,
                     "filename": "dialog-1:1.3_20191209-1-x86_64.pkg.tar.xz",
-                    "checksums": {
-                        "length": 183000,
-                    },
+                    "checksums": {},
                 },
                 {
                     "url": "https://archive.archlinux.org/packages/d/dialog/dialog-1:1.3_20191210-1-x86_64.pkg.tar.xz",
                     "version": "1:1.3_20191210-1",
-                    "length": 184000,
                     "filename": "dialog-1:1.3_20191210-1-x86_64.pkg.tar.xz",
-                    "checksums": {
-                        "length": 184000,
-                    },
+                    "checksums": {},
                 },
                 {
                     "url": "https://archive.archlinux.org/packages/d/dialog/dialog-1:1.3_20200228-1-x86_64.pkg.tar.zst",
                     "version": "1:1.3_20200228-1",
-                    "length": 196000,
                     "filename": "dialog-1:1.3_20200228-1-x86_64.pkg.tar.zst",
-                    "checksums": {
-                        "length": 196000,
-                    },
+                    "checksums": {},
                 },
                 {
                     "url": "https://archive.archlinux.org/packages/d/dialog/dialog-1:1.3_20200327-1-x86_64.pkg.tar.zst",
                     "version": "1:1.3_20200327-1",
-                    "length": 196000,
                     "filename": "dialog-1:1.3_20200327-1-x86_64.pkg.tar.zst",
-                    "checksums": {
-                        "length": 196000,
-                    },
+                    "checksums": {},
                 },
                 {
                     "url": "https://archive.archlinux.org/packages/d/dialog/dialog-1:1.3_20201126-1-x86_64.pkg.tar.zst",
                     "version": "1:1.3_20201126-1",
-                    "length": 199000,
                     "filename": "dialog-1:1.3_20201126-1-x86_64.pkg.tar.zst",
-                    "checksums": {
-                        "length": 199000,
-                    },
+                    "checksums": {},
                 },
                 {
                     "url": "https://archive.archlinux.org/packages/d/dialog/dialog-1:1.3_20210117-1-x86_64.pkg.tar.zst",
                     "version": "1:1.3_20210117-1",
-                    "length": 200000,
                     "filename": "dialog-1:1.3_20210117-1-x86_64.pkg.tar.zst",
-                    "checksums": {
-                        "length": 200000,
-                    },
+                    "checksums": {},
                 },
                 {
                     "url": "https://archive.archlinux.org/packages/d/dialog/dialog-1:1.3_20210306-1-x86_64.pkg.tar.zst",
                     "version": "1:1.3_20210306-1",
-                    "length": 201000,
                     "filename": "dialog-1:1.3_20210306-1-x86_64.pkg.tar.zst",
-                    "checksums": {
-                        "length": 201000,
-                    },
+                    "checksums": {},
                 },
                 {
                     "url": "https://archive.archlinux.org/packages/d/dialog/dialog-1:1.3_20210319-1-x86_64.pkg.tar.zst",
                     "version": "1:1.3_20210319-1",
-                    "length": 201000,
                     "filename": "dialog-1:1.3_20210319-1-x86_64.pkg.tar.zst",
-                    "checksums": {
-                        "length": 201000,
-                    },
+                    "checksums": {},
                 },
                 {
                     "url": "https://archive.archlinux.org/packages/d/dialog/dialog-1:1.3_20210324-1-x86_64.pkg.tar.zst",
                     "version": "1:1.3_20210324-1",
-                    "length": 201000,
                     "filename": "dialog-1:1.3_20210324-1-x86_64.pkg.tar.zst",
-                    "checksums": {
-                        "length": 201000,
-                    },
+                    "checksums": {},
                 },
                 {
                     "url": "https://archive.archlinux.org/packages/d/dialog/dialog-1:1.3_20210509-1-x86_64.pkg.tar.zst",
                     "version": "1:1.3_20210509-1",
-                    "length": 198000,
                     "filename": "dialog-1:1.3_20210509-1-x86_64.pkg.tar.zst",
-                    "checksums": {
-                        "length": 198000,
-                    },
+                    "checksums": {},
                 },
                 {
                     "url": "https://archive.archlinux.org/packages/d/dialog/dialog-1:1.3_20210530-1-x86_64.pkg.tar.zst",
                     "version": "1:1.3_20210530-1",
-                    "length": 198000,
                     "filename": "dialog-1:1.3_20210530-1-x86_64.pkg.tar.zst",
-                    "checksums": {
-                        "length": 198000,
-                    },
+                    "checksums": {},
                 },
                 {
                     "url": "https://archive.archlinux.org/packages/d/dialog/dialog-1:1.3_20210621-1-x86_64.pkg.tar.zst",
                     "version": "1:1.3_20210621-1",
-                    "length": 199000,
                     "filename": "dialog-1:1.3_20210621-1-x86_64.pkg.tar.zst",
-                    "checksums": {
-                        "length": 199000,
-                    },
+                    "checksums": {},
                 },
                 {
                     "url": "https://archive.archlinux.org/packages/d/dialog/dialog-1:1.3_20211107-1-x86_64.pkg.tar.zst",
                     "version": "1:1.3_20211107-1",
-                    "length": 197000,
                     "filename": "dialog-1:1.3_20211107-1-x86_64.pkg.tar.zst",
-                    "checksums": {
-                        "length": 197000,
-                    },
+                    "checksums": {},
                 },
                 {
                     "url": "https://archive.archlinux.org/packages/d/dialog/dialog-1:1.3_20211214-1-x86_64.pkg.tar.zst",
                     "version": "1:1.3_20211214-1",
-                    "length": 197000,
                     "filename": "dialog-1:1.3_20211214-1-x86_64.pkg.tar.zst",
-                    "checksums": {
-                        "length": 197000,
-                    },
+                    "checksums": {},
                 },
                 {
                     "url": "https://archive.archlinux.org/packages/d/dialog/dialog-1:1.3_20220117-1-x86_64.pkg.tar.zst",
                     "version": "1:1.3_20220117-1",
-                    "length": 199000,
                     "filename": "dialog-1:1.3_20220117-1-x86_64.pkg.tar.zst",
-                    "checksums": {
-                        "length": 199000,
-                    },
+                    "checksums": {},
                 },
                 {
                     "url": "https://archive.archlinux.org/packages/d/dialog/dialog-1:1.3_20220414-1-x86_64.pkg.tar.zst",
                     "version": "1:1.3_20220414-1",
-                    "length": 198000,
                     "filename": "dialog-1:1.3_20220414-1-x86_64.pkg.tar.zst",
                     "checksums": {
                         "md5": "06407c0cb11c50d7bf83d600f2e8107c",
@@ -395,52 +328,36 @@ expected_origins = [
                 {
                     "url": "https://archive.archlinux.org/packages/g/gnome-code-assistance/gnome-code-assistance-1:3.16.1+15+g0fd8b5f-1-x86_64.pkg.tar.xz",
                     "version": "1:3.16.1+15+g0fd8b5f-1",
-                    "length": 2000000,
                     "filename": "gnome-code-assistance-1:3.16.1+15+g0fd8b5f-1-x86_64.pkg.tar.xz",
-                    "checksums": {
-                        "length": 2000000,
-                    },
+                    "checksums": {},
                 },
                 {
                     "url": "https://archive.archlinux.org/packages/g/gnome-code-assistance/gnome-code-assistance-1:3.16.1+15+g0fd8b5f-2-x86_64.pkg.tar.zst",
                     "version": "1:3.16.1+15+g0fd8b5f-2",
-                    "length": 2000000,
                     "filename": "gnome-code-assistance-1:3.16.1+15+g0fd8b5f-2-x86_64.pkg.tar.zst",
-                    "checksums": {
-                        "length": 2000000,
-                    },
+                    "checksums": {},
                 },
                 {
                     "url": "https://archive.archlinux.org/packages/g/gnome-code-assistance/gnome-code-assistance-1:3.16.1+15+g0fd8b5f-3-x86_64.pkg.tar.zst",
                     "version": "1:3.16.1+15+g0fd8b5f-3",
-                    "length": 2000000,
                     "filename": "gnome-code-assistance-1:3.16.1+15+g0fd8b5f-3-x86_64.pkg.tar.zst",
-                    "checksums": {
-                        "length": 2000000,
-                    },
+                    "checksums": {},
                 },
                 {
                     "url": "https://archive.archlinux.org/packages/g/gnome-code-assistance/gnome-code-assistance-1:3.16.1+15+g0fd8b5f-4-x86_64.pkg.tar.zst",
                     "version": "1:3.16.1+15+g0fd8b5f-4",
-                    "length": 2000000,
                     "filename": "gnome-code-assistance-1:3.16.1+15+g0fd8b5f-4-x86_64.pkg.tar.zst",
-                    "checksums": {
-                        "length": 2000000,
-                    },
+                    "checksums": {},
                 },
                 {
                     "url": "https://archive.archlinux.org/packages/g/gnome-code-assistance/gnome-code-assistance-2:3.16.1+14+gaad6437-1-x86_64.pkg.tar.zst",
                     "version": "2:3.16.1+14+gaad6437-1",
-                    "length": 2000000,
                     "filename": "gnome-code-assistance-2:3.16.1+14+gaad6437-1-x86_64.pkg.tar.zst",
-                    "checksums": {
-                        "length": 2000000,
-                    },
+                    "checksums": {},
                 },
                 {
                     "url": "https://archive.archlinux.org/packages/g/gnome-code-assistance/gnome-code-assistance-2:3.16.1+14+gaad6437-2-x86_64.pkg.tar.zst",
                     "version": "2:3.16.1+14+gaad6437-2",
-                    "length": 2000000,
                     "filename": "gnome-code-assistance-2:3.16.1+14+gaad6437-2-x86_64.pkg.tar.zst",
                     "checksums": {
                         "md5": "eadcf1a6bb70a3e564f260b7fc58135a",
@@ -450,38 +367,26 @@ expected_origins = [
                 {
                     "url": "https://archive.archlinux.org/packages/g/gnome-code-assistance/gnome-code-assistance-3.16.1+14+gaad6437-1-x86_64.pkg.tar.xz",
                     "version": "3.16.1+14+gaad6437-1",
-                    "length": 2000000,
                     "filename": "gnome-code-assistance-3.16.1+14+gaad6437-1-x86_64.pkg.tar.xz",
-                    "checksums": {
-                        "length": 2000000,
-                    },
+                    "checksums": {},
                 },
                 {
                     "url": "https://archive.archlinux.org/packages/g/gnome-code-assistance/gnome-code-assistance-3.16.1+14+gaad6437-2-x86_64.pkg.tar.xz",
                     "version": "3.16.1+14+gaad6437-2",
-                    "length": 2000000,
                     "filename": "gnome-code-assistance-3.16.1+14+gaad6437-2-x86_64.pkg.tar.xz",
-                    "checksums": {
-                        "length": 2000000,
-                    },
+                    "checksums": {},
                 },
                 {
                     "url": "https://archive.archlinux.org/packages/g/gnome-code-assistance/gnome-code-assistance-3.16.1+15+gb9ffc4d-1-x86_64.pkg.tar.xz",
                     "version": "3.16.1+15+gb9ffc4d-1",
-                    "length": 2000000,
                     "filename": "gnome-code-assistance-3.16.1+15+gb9ffc4d-1-x86_64.pkg.tar.xz",
-                    "checksums": {
-                        "length": 2000000,
-                    },
+                    "checksums": {},
                 },
                 {
                     "url": "https://archive.archlinux.org/packages/g/gnome-code-assistance/gnome-code-assistance-3:3.16.1+r14+gaad6437-1-x86_64.pkg.tar.zst",
                     "version": "3:3.16.1+r14+gaad6437-1",
-                    "length": 2000000,
                     "filename": "gnome-code-assistance-3:3.16.1+r14+gaad6437-1-x86_64.pkg.tar.zst",
-                    "checksums": {
-                        "length": 2000000,
-                    },
+                    "checksums": {},
                 },
             ],
             "arch_metadata": [
@@ -566,43 +471,30 @@ expected_origins = [
                 {
                     "url": "https://archive.archlinux.org/packages/g/gzip/gzip-1.10-1-x86_64.pkg.tar.xz",
                     "version": "1.10-1",
-                    "length": 78000,
                     "filename": "gzip-1.10-1-x86_64.pkg.tar.xz",
-                    "checksums": {
-                        "length": 78000,
-                    },
+                    "checksums": {},
                 },
                 {
                     "url": "https://archive.archlinux.org/packages/g/gzip/gzip-1.10-2-x86_64.pkg.tar.xz",
                     "version": "1.10-2",
-                    "length": 78000,
                     "filename": "gzip-1.10-2-x86_64.pkg.tar.xz",
-                    "checksums": {
-                        "length": 78000,
-                    },
+                    "checksums": {},
                 },
                 {
                     "url": "https://archive.archlinux.org/packages/g/gzip/gzip-1.10-3-x86_64.pkg.tar.xz",
                     "version": "1.10-3",
-                    "length": 78000,
                     "filename": "gzip-1.10-3-x86_64.pkg.tar.xz",
-                    "checksums": {
-                        "length": 78000,
-                    },
+                    "checksums": {},
                 },
                 {
                     "url": "https://archive.archlinux.org/packages/g/gzip/gzip-1.11-1-x86_64.pkg.tar.zst",
                     "version": "1.11-1",
-                    "length": 82000,
                     "filename": "gzip-1.11-1-x86_64.pkg.tar.zst",
-                    "checksums": {
-                        "length": 82000,
-                    },
+                    "checksums": {},
                 },
                 {
                     "url": "https://archive.archlinux.org/packages/g/gzip/gzip-1.12-1-x86_64.pkg.tar.zst",
                     "version": "1.12-1",
-                    "length": 80000,
                     "filename": "gzip-1.12-1-x86_64.pkg.tar.zst",
                     "checksums": {
                         "md5": "3e72c94305917d00d9e361a687cf0a3e",
@@ -657,16 +549,12 @@ expected_origins = [
                 {
                     "url": "https://archive.archlinux.org/packages/l/libasyncns/libasyncns-0.8+3+g68cd5af-2-x86_64.pkg.tar.xz",
                     "version": "0.8+3+g68cd5af-2",
-                    "length": 16000,
                     "filename": "libasyncns-0.8+3+g68cd5af-2-x86_64.pkg.tar.xz",
-                    "checksums": {
-                        "length": 16000,
-                    },
+                    "checksums": {},
                 },
                 {
                     "url": "https://archive.archlinux.org/packages/l/libasyncns/libasyncns-0.8+3+g68cd5af-3-x86_64.pkg.tar.zst",
                     "version": "0.8+3+g68cd5af-3",
-                    "length": 17000,
                     "filename": "libasyncns-0.8+3+g68cd5af-3-x86_64.pkg.tar.zst",
                     "checksums": {
                         "md5": "0aad62f00eab3d0ec7798cb5b4a6eddd",
@@ -676,11 +564,8 @@ expected_origins = [
                 {
                     "url": "https://archive.archlinux.org/packages/l/libasyncns/libasyncns-1:0.8+r3+g68cd5af-1-x86_64.pkg.tar.zst",
                     "version": "1:0.8+r3+g68cd5af-1",
-                    "length": 17000,
                     "filename": "libasyncns-1:0.8+r3+g68cd5af-1-x86_64.pkg.tar.zst",
-                    "checksums": {
-                        "length": 17000,
-                    },
+                    "checksums": {},
                 },
             ],
             "arch_metadata": [
@@ -716,403 +601,270 @@ expected_origins = [
                 {
                     "url": "https://archive.archlinux.org/packages/m/mercurial/mercurial-4.8.2-1-x86_64.pkg.tar.xz",
                     "version": "4.8.2-1",
-                    "length": 4000000,
                     "filename": "mercurial-4.8.2-1-x86_64.pkg.tar.xz",
-                    "checksums": {
-                        "length": 4000000,
-                    },
+                    "checksums": {},
                 },
                 {
                     "url": "https://archive.archlinux.org/packages/m/mercurial/mercurial-4.9-1-x86_64.pkg.tar.xz",
                     "version": "4.9-1",
-                    "length": 4000000,
                     "filename": "mercurial-4.9-1-x86_64.pkg.tar.xz",
-                    "checksums": {
-                        "length": 4000000,
-                    },
+                    "checksums": {},
                 },
                 {
                     "url": "https://archive.archlinux.org/packages/m/mercurial/mercurial-4.9.1-1-x86_64.pkg.tar.xz",
                     "version": "4.9.1-1",
-                    "length": 4000000,
                     "filename": "mercurial-4.9.1-1-x86_64.pkg.tar.xz",
-                    "checksums": {
-                        "length": 4000000,
-                    },
+                    "checksums": {},
                 },
                 {
                     "url": "https://archive.archlinux.org/packages/m/mercurial/mercurial-5.0-1-x86_64.pkg.tar.xz",
                     "version": "5.0-1",
-                    "length": 4000000,
                     "filename": "mercurial-5.0-1-x86_64.pkg.tar.xz",
-                    "checksums": {
-                        "length": 4000000,
-                    },
+                    "checksums": {},
                 },
                 {
                     "url": "https://archive.archlinux.org/packages/m/mercurial/mercurial-5.0.1-1-x86_64.pkg.tar.xz",
                     "version": "5.0.1-1",
-                    "length": 4000000,
                     "filename": "mercurial-5.0.1-1-x86_64.pkg.tar.xz",
-                    "checksums": {
-                        "length": 4000000,
-                    },
+                    "checksums": {},
                 },
                 {
                     "url": "https://archive.archlinux.org/packages/m/mercurial/mercurial-5.0.2-1-x86_64.pkg.tar.xz",
                     "version": "5.0.2-1",
-                    "length": 4000000,
                     "filename": "mercurial-5.0.2-1-x86_64.pkg.tar.xz",
-                    "checksums": {
-                        "length": 4000000,
-                    },
+                    "checksums": {},
                 },
                 {
                     "url": "https://archive.archlinux.org/packages/m/mercurial/mercurial-5.1-1-x86_64.pkg.tar.xz",
                     "version": "5.1-1",
-                    "length": 4000000,
                     "filename": "mercurial-5.1-1-x86_64.pkg.tar.xz",
-                    "checksums": {
-                        "length": 4000000,
-                    },
+                    "checksums": {},
                 },
                 {
                     "url": "https://archive.archlinux.org/packages/m/mercurial/mercurial-5.1.2-1-x86_64.pkg.tar.xz",
                     "version": "5.1.2-1",
-                    "length": 4000000,
                     "filename": "mercurial-5.1.2-1-x86_64.pkg.tar.xz",
-                    "checksums": {
-                        "length": 4000000,
-                    },
+                    "checksums": {},
                 },
                 {
                     "url": "https://archive.archlinux.org/packages/m/mercurial/mercurial-5.2-1-x86_64.pkg.tar.xz",
                     "version": "5.2-1",
-                    "length": 4000000,
                     "filename": "mercurial-5.2-1-x86_64.pkg.tar.xz",
-                    "checksums": {
-                        "length": 4000000,
-                    },
+                    "checksums": {},
                 },
                 {
                     "url": "https://archive.archlinux.org/packages/m/mercurial/mercurial-5.2.1-1-x86_64.pkg.tar.zst",
                     "version": "5.2.1-1",
-                    "length": 4000000,
                     "filename": "mercurial-5.2.1-1-x86_64.pkg.tar.zst",
-                    "checksums": {
-                        "length": 4000000,
-                    },
+                    "checksums": {},
                 },
                 {
                     "url": "https://archive.archlinux.org/packages/m/mercurial/mercurial-5.2.2-1-x86_64.pkg.tar.zst",
                     "version": "5.2.2-1",
-                    "length": 5000000,
                     "filename": "mercurial-5.2.2-1-x86_64.pkg.tar.zst",
-                    "checksums": {
-                        "length": 5000000,
-                    },
+                    "checksums": {},
                 },
                 {
                     "url": "https://archive.archlinux.org/packages/m/mercurial/mercurial-5.2.2-2-x86_64.pkg.tar.zst",
                     "version": "5.2.2-2",
-                    "length": 4000000,
                     "filename": "mercurial-5.2.2-2-x86_64.pkg.tar.zst",
-                    "checksums": {
-                        "length": 4000000,
-                    },
+                    "checksums": {},
                 },
                 {
                     "url": "https://archive.archlinux.org/packages/m/mercurial/mercurial-5.3-1-x86_64.pkg.tar.zst",
                     "version": "5.3-1",
-                    "length": 5000000,
                     "filename": "mercurial-5.3-1-x86_64.pkg.tar.zst",
-                    "checksums": {
-                        "length": 5000000,
-                    },
+                    "checksums": {},
                 },
                 {
                     "url": "https://archive.archlinux.org/packages/m/mercurial/mercurial-5.3.1-1-x86_64.pkg.tar.zst",
                     "version": "5.3.1-1",
-                    "length": 4000000,
                     "filename": "mercurial-5.3.1-1-x86_64.pkg.tar.zst",
-                    "checksums": {
-                        "length": 4000000,
-                    },
+                    "checksums": {},
                 },
                 {
                     "url": "https://archive.archlinux.org/packages/m/mercurial/mercurial-5.3.2-1-x86_64.pkg.tar.zst",
                     "version": "5.3.2-1",
-                    "length": 4000000,
                     "filename": "mercurial-5.3.2-1-x86_64.pkg.tar.zst",
-                    "checksums": {
-                        "length": 4000000,
-                    },
+                    "checksums": {},
                 },
                 {
                     "url": "https://archive.archlinux.org/packages/m/mercurial/mercurial-5.4-1-x86_64.pkg.tar.zst",
                     "version": "5.4-1",
-                    "length": 5000000,
                     "filename": "mercurial-5.4-1-x86_64.pkg.tar.zst",
-                    "checksums": {
-                        "length": 5000000,
-                    },
+                    "checksums": {},
                 },
                 {
                     "url": "https://archive.archlinux.org/packages/m/mercurial/mercurial-5.4-2-x86_64.pkg.tar.zst",
                     "version": "5.4-2",
-                    "length": 5000000,
                     "filename": "mercurial-5.4-2-x86_64.pkg.tar.zst",
-                    "checksums": {
-                        "length": 5000000,
-                    },
+                    "checksums": {},
                 },
                 {
                     "url": "https://archive.archlinux.org/packages/m/mercurial/mercurial-5.4.1-1-x86_64.pkg.tar.zst",
                     "version": "5.4.1-1",
-                    "length": 5000000,
                     "filename": "mercurial-5.4.1-1-x86_64.pkg.tar.zst",
-                    "checksums": {
-                        "length": 5000000,
-                    },
+                    "checksums": {},
                 },
                 {
                     "url": "https://archive.archlinux.org/packages/m/mercurial/mercurial-5.4.2-1-x86_64.pkg.tar.zst",
                     "version": "5.4.2-1",
-                    "length": 5000000,
                     "filename": "mercurial-5.4.2-1-x86_64.pkg.tar.zst",
-                    "checksums": {
-                        "length": 5000000,
-                    },
+                    "checksums": {},
                 },
                 {
                     "url": "https://archive.archlinux.org/packages/m/mercurial/mercurial-5.5-1-x86_64.pkg.tar.zst",
                     "version": "5.5-1",
-                    "length": 5000000,
                     "filename": "mercurial-5.5-1-x86_64.pkg.tar.zst",
-                    "checksums": {
-                        "length": 5000000,
-                    },
+                    "checksums": {},
                 },
                 {
                     "url": "https://archive.archlinux.org/packages/m/mercurial/mercurial-5.5.1-1-x86_64.pkg.tar.zst",
                     "version": "5.5.1-1",
-                    "length": 5000000,
                     "filename": "mercurial-5.5.1-1-x86_64.pkg.tar.zst",
-                    "checksums": {
-                        "length": 5000000,
-                    },
+                    "checksums": {},
                 },
                 {
                     "url": "https://archive.archlinux.org/packages/m/mercurial/mercurial-5.5.2-1-x86_64.pkg.tar.zst",
                     "version": "5.5.2-1",
-                    "length": 5000000,
                     "filename": "mercurial-5.5.2-1-x86_64.pkg.tar.zst",
-                    "checksums": {
-                        "length": 5000000,
-                    },
+                    "checksums": {},
                 },
                 {
                     "url": "https://archive.archlinux.org/packages/m/mercurial/mercurial-5.6-1-x86_64.pkg.tar.zst",
                     "version": "5.6-1",
-                    "length": 5000000,
                     "filename": "mercurial-5.6-1-x86_64.pkg.tar.zst",
-                    "checksums": {
-                        "length": 5000000,
-                    },
+                    "checksums": {},
                 },
                 {
                     "url": "https://archive.archlinux.org/packages/m/mercurial/mercurial-5.6-2-x86_64.pkg.tar.zst",
                     "version": "5.6-2",
-                    "length": 5000000,
                     "filename": "mercurial-5.6-2-x86_64.pkg.tar.zst",
-                    "checksums": {
-                        "length": 5000000,
-                    },
+                    "checksums": {},
                 },
                 {
                     "url": "https://archive.archlinux.org/packages/m/mercurial/mercurial-5.6-3-x86_64.pkg.tar.zst",
                     "version": "5.6-3",
-                    "length": 5000000,
                     "filename": "mercurial-5.6-3-x86_64.pkg.tar.zst",
-                    "checksums": {
-                        "length": 5000000,
-                    },
+                    "checksums": {},
                 },
                 {
                     "url": "https://archive.archlinux.org/packages/m/mercurial/mercurial-5.6.1-1-x86_64.pkg.tar.zst",
                     "version": "5.6.1-1",
-                    "length": 5000000,
                     "filename": "mercurial-5.6.1-1-x86_64.pkg.tar.zst",
-                    "checksums": {
-                        "length": 5000000,
-                    },
+                    "checksums": {},
                 },
                 {
                     "url": "https://archive.archlinux.org/packages/m/mercurial/mercurial-5.7-1-x86_64.pkg.tar.zst",
                     "version": "5.7-1",
-                    "length": 5000000,
                     "filename": "mercurial-5.7-1-x86_64.pkg.tar.zst",
-                    "checksums": {
-                        "length": 5000000,
-                    },
+                    "checksums": {},
                 },
                 {
                     "url": "https://archive.archlinux.org/packages/m/mercurial/mercurial-5.7.1-1-x86_64.pkg.tar.zst",
                     "version": "5.7.1-1",
-                    "length": 5000000,
                     "filename": "mercurial-5.7.1-1-x86_64.pkg.tar.zst",
-                    "checksums": {
-                        "length": 5000000,
-                    },
+                    "checksums": {},
                 },
                 {
                     "url": "https://archive.archlinux.org/packages/m/mercurial/mercurial-5.8-1-x86_64.pkg.tar.zst",
                     "version": "5.8-1",
-                    "length": 5000000,
                     "filename": "mercurial-5.8-1-x86_64.pkg.tar.zst",
-                    "checksums": {
-                        "length": 5000000,
-                    },
+                    "checksums": {},
                 },
                 {
                     "url": "https://archive.archlinux.org/packages/m/mercurial/mercurial-5.8-2-x86_64.pkg.tar.zst",
                     "version": "5.8-2",
-                    "length": 5000000,
                     "filename": "mercurial-5.8-2-x86_64.pkg.tar.zst",
-                    "checksums": {
-                        "length": 5000000,
-                    },
+                    "checksums": {},
                 },
                 {
                     "url": "https://archive.archlinux.org/packages/m/mercurial/mercurial-5.8.1-1-x86_64.pkg.tar.zst",
                     "version": "5.8.1-1",
-                    "length": 5000000,
                     "filename": "mercurial-5.8.1-1-x86_64.pkg.tar.zst",
-                    "checksums": {
-                        "length": 5000000,
-                    },
+                    "checksums": {},
                 },
                 {
                     "url": "https://archive.archlinux.org/packages/m/mercurial/mercurial-5.9.1-1-x86_64.pkg.tar.zst",
                     "version": "5.9.1-1",
-                    "length": 5000000,
                     "filename": "mercurial-5.9.1-1-x86_64.pkg.tar.zst",
-                    "checksums": {
-                        "length": 5000000,
-                    },
+                    "checksums": {},
                 },
                 {
                     "url": "https://archive.archlinux.org/packages/m/mercurial/mercurial-5.9.1-2-x86_64.pkg.tar.zst",
                     "version": "5.9.1-2",
-                    "length": 5000000,
                     "filename": "mercurial-5.9.1-2-x86_64.pkg.tar.zst",
-                    "checksums": {
-                        "length": 5000000,
-                    },
+                    "checksums": {},
                 },
                 {
                     "url": "https://archive.archlinux.org/packages/m/mercurial/mercurial-5.9.2-1-x86_64.pkg.tar.zst",
                     "version": "5.9.2-1",
-                    "length": 5000000,
                     "filename": "mercurial-5.9.2-1-x86_64.pkg.tar.zst",
-                    "checksums": {
-                        "length": 5000000,
-                    },
+                    "checksums": {},
                 },
                 {
                     "url": "https://archive.archlinux.org/packages/m/mercurial/mercurial-5.9.3-1-x86_64.pkg.tar.zst",
                     "version": "5.9.3-1",
-                    "length": 5000000,
                     "filename": "mercurial-5.9.3-1-x86_64.pkg.tar.zst",
-                    "checksums": {
-                        "length": 5000000,
-                    },
+                    "checksums": {},
                 },
                 {
                     "url": "https://archive.archlinux.org/packages/m/mercurial/mercurial-6.0-1-x86_64.pkg.tar.zst",
                     "version": "6.0-1",
-                    "length": 5000000,
                     "filename": "mercurial-6.0-1-x86_64.pkg.tar.zst",
-                    "checksums": {
-                        "length": 5000000,
-                    },
+                    "checksums": {},
                 },
                 {
                     "url": "https://archive.archlinux.org/packages/m/mercurial/mercurial-6.0-2-x86_64.pkg.tar.zst",
                     "version": "6.0-2",
-                    "length": 5000000,
                     "filename": "mercurial-6.0-2-x86_64.pkg.tar.zst",
-                    "checksums": {
-                        "length": 5000000,
-                    },
+                    "checksums": {},
                 },
                 {
                     "url": "https://archive.archlinux.org/packages/m/mercurial/mercurial-6.0-3-x86_64.pkg.tar.zst",
                     "version": "6.0-3",
-                    "length": 5000000,
                     "filename": "mercurial-6.0-3-x86_64.pkg.tar.zst",
-                    "checksums": {
-                        "length": 5000000,
-                    },
+                    "checksums": {},
                 },
                 {
                     "url": "https://archive.archlinux.org/packages/m/mercurial/mercurial-6.0.1-1-x86_64.pkg.tar.zst",
                     "version": "6.0.1-1",
-                    "length": 5000000,
                     "filename": "mercurial-6.0.1-1-x86_64.pkg.tar.zst",
-                    "checksums": {
-                        "length": 5000000,
-                    },
+                    "checksums": {},
                 },
                 {
                     "url": "https://archive.archlinux.org/packages/m/mercurial/mercurial-6.0.2-1-x86_64.pkg.tar.zst",
                     "version": "6.0.2-1",
-                    "length": 5000000,
                     "filename": "mercurial-6.0.2-1-x86_64.pkg.tar.zst",
-                    "checksums": {
-                        "length": 5000000,
-                    },
+                    "checksums": {},
                 },
                 {
                     "url": "https://archive.archlinux.org/packages/m/mercurial/mercurial-6.0.3-1-x86_64.pkg.tar.zst",
                     "version": "6.0.3-1",
-                    "length": 5000000,
                     "filename": "mercurial-6.0.3-1-x86_64.pkg.tar.zst",
-                    "checksums": {
-                        "length": 5000000,
-                    },
+                    "checksums": {},
                 },
                 {
                     "url": "https://archive.archlinux.org/packages/m/mercurial/mercurial-6.1-1-x86_64.pkg.tar.zst",
                     "version": "6.1-1",
-                    "length": 5000000,
                     "filename": "mercurial-6.1-1-x86_64.pkg.tar.zst",
-                    "checksums": {
-                        "length": 5000000,
-                    },
+                    "checksums": {},
                 },
                 {
                     "url": "https://archive.archlinux.org/packages/m/mercurial/mercurial-6.1-2-x86_64.pkg.tar.zst",
                     "version": "6.1-2",
-                    "length": 5000000,
                     "filename": "mercurial-6.1-2-x86_64.pkg.tar.zst",
-                    "checksums": {
-                        "length": 5000000,
-                    },
+                    "checksums": {},
                 },
                 {
                     "url": "https://archive.archlinux.org/packages/m/mercurial/mercurial-6.1.1-1-x86_64.pkg.tar.zst",
                     "version": "6.1.1-1",
-                    "length": 5000000,
                     "filename": "mercurial-6.1.1-1-x86_64.pkg.tar.zst",
-                    "checksums": {
-                        "length": 5000000,
-                    },
+                    "checksums": {},
                 },
                 {
                     "url": "https://archive.archlinux.org/packages/m/mercurial/mercurial-6.1.2-1-x86_64.pkg.tar.zst",
                     "version": "6.1.2-1",
-                    "length": 5000000,
                     "filename": "mercurial-6.1.2-1-x86_64.pkg.tar.zst",
                     "checksums": {
                         "md5": "037ff48bf6127e9d37ad7da7026a6dc0",
@@ -1447,43 +1199,30 @@ expected_origins = [
                 {
                     "url": "https://archive.archlinux.org/packages/p/python-hglib/python-hglib-2.6.1-3-any.pkg.tar.xz",
                     "version": "2.6.1-3",
-                    "length": 40000,
                     "filename": "python-hglib-2.6.1-3-any.pkg.tar.xz",
-                    "checksums": {
-                        "length": 40000,
-                    },
+                    "checksums": {},
                 },
                 {
                     "url": "https://archive.archlinux.org/packages/p/python-hglib/python-hglib-2.6.2-1-any.pkg.tar.zst",
                     "version": "2.6.2-1",
-                    "length": 43000,
                     "filename": "python-hglib-2.6.2-1-any.pkg.tar.zst",
-                    "checksums": {
-                        "length": 43000,
-                    },
+                    "checksums": {},
                 },
                 {
                     "url": "https://archive.archlinux.org/packages/p/python-hglib/python-hglib-2.6.2-2-any.pkg.tar.zst",
                     "version": "2.6.2-2",
-                    "length": 43000,
                     "filename": "python-hglib-2.6.2-2-any.pkg.tar.zst",
-                    "checksums": {
-                        "length": 43000,
-                    },
+                    "checksums": {},
                 },
                 {
                     "url": "https://archive.archlinux.org/packages/p/python-hglib/python-hglib-2.6.2-3-any.pkg.tar.zst",
                     "version": "2.6.2-3",
-                    "length": 43000,
                     "filename": "python-hglib-2.6.2-3-any.pkg.tar.zst",
-                    "checksums": {
-                        "length": 43000,
-                    },
+                    "checksums": {},
                 },
                 {
                     "url": "https://archive.archlinux.org/packages/p/python-hglib/python-hglib-2.6.2-4-any.pkg.tar.zst",
                     "version": "2.6.2-4",
-                    "length": 43000,
                     "filename": "python-hglib-2.6.2-4-any.pkg.tar.zst",
                     "checksums": {
                         "md5": "ecc6598834dc216efd938466a2425eae",
@@ -1537,7 +1276,6 @@ expected_origins = [
             "artifacts": [
                 {
                     "url": "https://uk.mirror.archlinuxarm.org/aarch64/core/gzip-1.12-1-aarch64.pkg.tar.xz",
-                    "length": 79640,
                     "version": "1.12-1",
                     "filename": "gzip-1.12-1-aarch64.pkg.tar.xz",
                     "checksums": {
@@ -1564,7 +1302,6 @@ expected_origins = [
             "artifacts": [
                 {
                     "url": "https://uk.mirror.archlinuxarm.org/aarch64/extra/mercurial-6.1.3-1-aarch64.pkg.tar.xz",
-                    "length": 4931228,
                     "version": "6.1.3-1",
                     "filename": "mercurial-6.1.3-1-aarch64.pkg.tar.xz",
                     "checksums": {
@@ -1591,7 +1328,6 @@ expected_origins = [
             "artifacts": [
                 {
                     "url": "https://uk.mirror.archlinuxarm.org/any/community/python-hglib-2.6.2-4-any.pkg.tar.xz",
-                    "length": 41432,
                     "version": "2.6.2-4",
                     "filename": "python-hglib-2.6.2-4-any.pkg.tar.xz",
                     "checksums": {
@@ -1618,7 +1354,6 @@ expected_origins = [
             "artifacts": [
                 {
                     "url": "https://uk.mirror.archlinuxarm.org/armv7h/core/gzip-1.12-1-armv7h.pkg.tar.xz",
-                    "length": 78468,
                     "version": "1.12-1",
                     "filename": "gzip-1.12-1-armv7h.pkg.tar.xz",
                     "checksums": {
@@ -1645,7 +1380,6 @@ expected_origins = [
             "artifacts": [
                 {
                     "url": "https://uk.mirror.archlinuxarm.org/armv7h/extra/mercurial-6.1.3-1-armv7h.pkg.tar.xz",
-                    "length": 4897816,
                     "version": "6.1.3-1",
                     "filename": "mercurial-6.1.3-1-armv7h.pkg.tar.xz",
                     "checksums": {
