@@ -232,11 +232,13 @@ class DebianLister(Lister[DebianListerState, DebianPageType]):
                 self.package_versions[package_name] = set()
 
             # origin will be yielded at the end of that method
-            origins_to_send[origin_url] = self.listed_origins[origin_url]
+            current_origin = origins_to_send[origin_url] = self.listed_origins[
+                origin_url
+            ]
 
             # update package versions data in parameter that will be provided
             # to the debian loader
-            self.listed_origins[origin_url].extra_loader_arguments["packages"].update(
+            current_origin.extra_loader_arguments["packages"].update(
                 {
                     package_version_key: {
                         "name": package_name,
@@ -246,14 +248,13 @@ class DebianLister(Lister[DebianListerState, DebianPageType]):
                 }
             )
 
-            if self.listed_origins[origin_url].last_update is None or (
+            if current_origin.last_update is None or (
                 self.last_sources_update is not None
-                and self.last_sources_update  # type: ignore
-                > self.listed_origins[origin_url].last_update
+                and self.last_sources_update > current_origin.last_update
             ):
                 # update debian package last update if current processed sources index
                 # has a greater modification date
-                self.listed_origins[origin_url].last_update = self.last_sources_update
+                current_origin.last_update = self.last_sources_update
 
             # add package version key to the set of found versions
             self.package_versions[package_name].add(package_version_key)

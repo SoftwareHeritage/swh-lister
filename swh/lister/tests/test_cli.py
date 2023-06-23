@@ -41,6 +41,7 @@ lister_args = {
     "fedora": {
         "url": "https://archives.fedoraproject.org/pub/archive/fedora/linux/releases/",
     },
+    "pagure": {"instance": "pagure.io"},
 }
 
 

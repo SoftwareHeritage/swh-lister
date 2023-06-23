@@ -28,6 +28,7 @@ lister.npm = swh.lister.npm:register
 lister.nuget = swh.lister.nuget:register
 lister.opam = swh.lister.opam:register
 lister.packagist = swh.lister.packagist:register
+lister.pagure = swh.lister.pagure:register
 lister.phabricator = swh.lister.phabricator:register
 lister.pubdev = swh.lister.pubdev:register
 lister.puppet = swh.lister.puppet:register
