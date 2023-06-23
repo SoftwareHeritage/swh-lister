@@ -11,6 +11,7 @@ from .lister import PagureLister
 
 @shared_task(name=__name__ + ".PagureListerTask")
 def list_pagure(**lister_args) -> Dict[str, int]:
+    "List git repositories hosted on a pagure forge."
     lister = PagureLister.from_configfile(**lister_args)
     return lister.run().dict()
 
