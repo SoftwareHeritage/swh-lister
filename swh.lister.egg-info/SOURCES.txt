@@ -369,6 +369,14 @@ swh/lister/packagist/tests/data/ycms_module-main.json
 swh/lister/packagist/tests/data/https_api.github.com/repos_gitlky_wx_article
 swh/lister/packagist/tests/data/https_api.github.com/repos_spryker-eco_computop-api
 swh/lister/packagist/tests/data/https_api.github.com/repos_ycms_module-main
+swh/lister/pagure/__init__.py
+swh/lister/pagure/lister.py
+swh/lister/pagure/tasks.py
+swh/lister/pagure/tests/__init__.py
+swh/lister/pagure/tests/test_lister.py
+swh/lister/pagure/tests/test_tasks.py
+swh/lister/pagure/tests/data/https_pagure.io/api_0_projects,per_page=2
+swh/lister/pagure/tests/data/https_pagure.io/api_0_projects,per_page=2,page=2
 swh/lister/phabricator/__init__.py
 swh/lister/phabricator/lister.py
 swh/lister/phabricator/tasks.py

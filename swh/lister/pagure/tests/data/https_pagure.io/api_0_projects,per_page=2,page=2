@@ -1,0 +1,103 @@
+{
+  "args": {
+    "fork": null,
+    "namespace": null,
+    "owner": null,
+    "page": 2,
+    "pattern": null,
+    "per_page": 2,
+    "short": false,
+    "tags": [],
+    "username": null
+  },
+  "pagination": {
+    "first": "https://pagure.io/api/0/projects?per_page=2&page=1",
+    "last": "https://pagure.io/api/0/projects?per_page=2&page=2",
+    "next": null,
+    "page": 2,
+    "pages": 4921,
+    "per_page": 2,
+    "prev": "https://pagure.io/api/0/projects?per_page=2&page=1"
+  },
+  "projects": [
+    {
+      "access_groups": {
+        "admin": [],
+        "collaborator": [],
+        "commit": [],
+        "ticket": []
+      },
+      "access_users": {
+        "admin": [],
+        "collaborator": [],
+        "commit": [],
+        "owner": [
+          "ankursinha"
+        ],
+        "ticket": []
+      },
+      "close_status": [],
+      "custom_keys": [],
+      "date_created": "1568047513",
+      "date_modified": "1568047513",
+      "description": "NeuroFedora presentation for the OSB workshop",
+      "full_url": "https://pagure.io/neuro-sig/20190909-OSB-workshop-presentation",
+      "fullname": "neuro-sig/20190909-OSB-workshop-presentation",
+      "id": 6715,
+      "milestones": {},
+      "name": "20190909-OSB-workshop-presentation",
+      "namespace": "neuro-sig",
+      "parent": null,
+      "priorities": {},
+      "tags": [],
+      "url_path": "neuro-sig/20190909-OSB-workshop-presentation",
+      "user": {
+        "full_url": "https://pagure.io/user/ankursinha",
+        "fullname": "Ankur Sinha",
+        "name": "ankursinha",
+        "url_path": "user/ankursinha"
+      }
+    },
+    {
+      "access_groups": {
+        "admin": [
+          "neuro-sig"
+        ],
+        "collaborator": [],
+        "commit": [],
+        "ticket": []
+      },
+      "access_users": {
+        "admin": [],
+        "collaborator": [],
+        "commit": [],
+        "owner": [
+          "ankursinha"
+        ],
+        "ticket": []
+      },
+      "close_status": [],
+      "custom_keys": [],
+      "date_created": "1564047918",
+      "date_modified": "1565348955",
+      "description": "Presentation slides for NeuroFedora talk at Flock",
+      "full_url": "https://pagure.io/neuro-sig/2019-flock-neurofedora",
+      "fullname": "neuro-sig/2019-flock-neurofedora",
+      "id": 6523,
+      "milestones": {},
+      "name": "2019-flock-neurofedora",
+      "namespace": "neuro-sig",
+      "parent": null,
+      "priorities": {},
+      "tags": [],
+      "url_path": "neuro-sig/2019-flock-neurofedora",
+      "user": {
+        "full_url": "https://pagure.io/user/ankursinha",
+        "fullname": "Ankur Sinha",
+        "name": "ankursinha",
+        "url_path": "user/ankursinha"
+      }
+    }
+  ],
+  "total_projects": 9842
+}

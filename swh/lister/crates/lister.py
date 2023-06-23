@@ -121,15 +121,20 @@ class CratesLister(Lister[CratesListerState, CratesListerPage]):
 
             # Extract the Db dump
             db_dump_path = Path(str(archive_path).split(".tar.gz")[0])
-            tar = tarfile.open(archive_path)
-            tar.extractall(path=db_dump_path)
-            tar.close()
+            members_to_extract = []
+            with tarfile.open(archive_path) as tf:
+                for member in tf.getmembers():
+                    if member.name.endswith(
+                        ("/data/crates.csv", "/data/versions.csv", "/metadata.json")
+                    ):
+                        members_to_extract.append(member)
+                tf.extractall(members=members_to_extract, path=db_dump_path)
 
             csv.field_size_limit(1000000)
 
             (crates_csv_path,) = list(db_dump_path.glob("*/data/crates.csv"))
             (versions_csv_path,) = list(db_dump_path.glob("*/data/versions.csv"))
-            (index_metadata_json_path,) = list(db_dump_path.rglob("*metadata.json"))
+            (index_metadata_json_path,) = list(db_dump_path.rglob("*/metadata.json"))
 
             with index_metadata_json_path.open("rb") as index_metadata_json:
                 self.index_metadata = json.load(index_metadata_json)
