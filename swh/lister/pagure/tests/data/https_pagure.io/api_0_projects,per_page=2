@@ -1,0 +1,101 @@
+{
+  "args": {
+    "fork": null,
+    "namespace": null,
+    "owner": null,
+    "page": 1,
+    "pattern": null,
+    "per_page": 2,
+    "short": false,
+    "tags": [],
+    "username": null
+  },
+  "pagination": {
+    "first": "https://pagure.io/api/0/projects?per_page=2&page=1",
+    "last": "https://pagure.io/api/0/projects?per_page=2&page=2",
+    "next": "https://pagure.io/api/0/projects?per_page=2&page=2",
+    "page": 1,
+    "pages": 4921,
+    "per_page": 2,
+    "prev": null
+  },
+  "projects": [
+    {
+      "access_groups": {
+        "admin": [],
+        "collaborator": [],
+        "commit": [],
+        "ticket": []
+      },
+      "access_users": {
+        "admin": [],
+        "collaborator": [],
+        "commit": [],
+        "owner": [
+          "jg-dev"
+        ],
+        "ticket": []
+      },
+      "close_status": [],
+      "custom_keys": [],
+      "date_created": "1642633824",
+      "date_modified": "1642633824",
+      "description": "Testing notes and files for ticket 10291",
+      "full_url": "https://pagure.io/10291-testing",
+      "fullname": "10291-testing",
+      "id": 11286,
+      "milestones": {},
+      "name": "10291-testing",
+      "namespace": null,
+      "parent": null,
+      "priorities": {},
+      "tags": [],
+      "url_path": "10291-testing",
+      "user": {
+        "full_url": "https://pagure.io/user/jg-dev",
+        "fullname": "Jason Giddings",
+        "name": "jg-dev",
+        "url_path": "user/jg-dev"
+      }
+    },
+    {
+      "access_groups": {
+        "admin": [],
+        "collaborator": [],
+        "commit": [],
+        "ticket": []
+      },
+      "access_users": {
+        "admin": [],
+        "collaborator": [],
+        "commit": [],
+        "owner": [
+          "ankursinha"
+        ],
+        "ticket": []
+      },
+      "close_status": [],
+      "custom_keys": [],
+      "date_created": "1568047513",
+      "date_modified": "1568047513",
+      "description": "NeuroFedora presentation for the OSB workshop",
+      "full_url": "https://pagure.io/neuro-sig/20190909-OSB-workshop-presentation",
+      "fullname": "neuro-sig/20190909-OSB-workshop-presentation",
+      "id": 6715,
+      "milestones": {},
+      "name": "20190909-OSB-workshop-presentation",
+      "namespace": "neuro-sig",
+      "parent": null,
+      "priorities": {},
+      "tags": [],
+      "url_path": "neuro-sig/20190909-OSB-workshop-presentation",
+      "user": {
+        "full_url": "https://pagure.io/user/ankursinha",
+        "fullname": "Ankur Sinha",
+        "name": "ankursinha",
+        "url_path": "user/ankursinha"
+      }
+    }
+  ],
+  "total_projects": 9842
+}
