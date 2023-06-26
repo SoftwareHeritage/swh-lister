@@ -89,9 +89,12 @@ class GogsLister(Lister[GogsListerState, GogsListerPage]):
             enable_origins=enable_origins,
         )
 
-        self.query_params = {
+        self.query_params: Dict[str, Any] = {
             "limit": page_size,
         }
+
+        if self.LISTER_NAME == "gogs":
+            self.query_params["q"] = "_"  # wildcard for all repositories
 
         self.api_token = api_token
         if self.api_token is None:
@@ -175,7 +178,7 @@ class GogsLister(Lister[GogsListerState, GogsListerPage]):
             yield GogsListerPage(repos=repos, next_link=next_link)
 
             if next_link is not None:
-                body, links = self.page_request(next_link, {})
+                body, links = self.page_request(next_link, self.query_params)
 
     def get_origins_from_page(self, page: GogsListerPage) -> Iterator[ListedOrigin]:
         """Convert a page of Gogs repositories into a list of ListedOrigins"""
