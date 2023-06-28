@@ -18,7 +18,7 @@ TRY_GOGS_URL = "https://try.gogs.io/api/v1/"
 
 
 def try_gogs_page(n: int):
-    return TRY_GOGS_URL + GogsLister.REPO_LIST_PATH + f"?page={n}&limit=3"
+    return TRY_GOGS_URL + GogsLister.REPO_LIST_PATH + f"?q=_&page={n}&limit=3"
 
 
 P1 = try_gogs_page(1)
