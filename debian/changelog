@@ -1,8 +1,12 @@
-swh-lister (5.7.1-1~swh1~bpo10+1) buster-swh; urgency=medium
+swh-lister (5.7.2-1~swh1) unstable-swh; urgency=medium
 
-  * Rebuild for buster-swh
+  * New upstream release 5.7.2     - (tagged by Antoine R. Dumont
+    (@ardumont) <ardumont@softwareheritage.org> on 2023-06-28 14:12:59
+    +0200)
+  * Upstream changes:     - v5.7.2     - gogs: Ensure to list all
+    repositories
 
- -- Software Heritage autobuilder (on jenkins-debian1) <jenkins@jenkins-debian1.internal.softwareheritage.org>  Fri, 23 Jun 2023 12:40:12 +0000
+ -- Software Heritage autobuilder (on jenkins-debian1) <jenkins@jenkins-debian1.internal.softwareheritage.org>  Wed, 28 Jun 2023 12:19:13 +0000
 
 swh-lister (5.7.1-1~swh1) unstable-swh; urgency=medium
 
