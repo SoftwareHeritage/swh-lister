@@ -1,12 +1,12 @@
-# Copyright (C) 2021  The Software Heritage developers
+# Copyright (C) 2021-2023  The Software Heritage developers
 # See the AUTHORS file at the top-level directory of this distribution
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
 
-import io
 import os
+import shutil
+from subprocess import CalledProcessError
 from tempfile import mkdtemp
-from unittest.mock import MagicMock
 
 import pytest
 
@@ -14,24 +14,27 @@ from swh.lister.opam.lister import OpamLister, opam_init
 
 module_name = "swh.lister.opam.lister"
 
+opam_path = shutil.which("opam")
+
 
 @pytest.fixture
 def mock_opam(mocker):
     """Fixture to bypass the actual opam calls within the test context."""
-    # inhibits the real `subprocess.call` which prepares the required internal opam
-    # state
-    mock_init = mocker.patch(f"{module_name}.call", return_value=None)
+
     # replaces the real Popen with a fake one (list origins command)
-    mocked_popen = MagicMock()
-    mocked_popen.stdout = io.BytesIO(b"bar\nbaz\nfoo\n")
-    mock_open = mocker.patch(f"{module_name}.Popen", return_value=mocked_popen)
-    return mock_init, mock_open
+    completed_process = mocker.MagicMock()
+    completed_process.stdout = "bar\nbaz\nfoo\n"
+
+    # inhibits the real calls to `subprocess.run` which prepare the required
+    # internal opam state then list all packages
+    mock_opam = mocker.patch(
+        f"{module_name}.run", side_effect=[None, completed_process]
+    )
+    return mock_opam
 
 
 def test_mock_init_repository_init(mock_opam, tmp_path, datadir):
     """Initializing opam root directory with an instance should be ok"""
-    mock_init, mock_popen = mock_opam
-
     instance = "fake"
     instance_url = f"file://{datadir}/{instance}"
     opam_root = str(tmp_path / "test-opam")
@@ -40,13 +43,11 @@ def test_mock_init_repository_init(mock_opam, tmp_path, datadir):
     # This will initialize an opam directory with the instance
     opam_init(opam_root, instance, instance_url, {})
 
-    assert mock_init.called
+    assert mock_opam.called
 
 
 def test_mock_init_repository_update(mock_opam, tmp_path, datadir):
     """Updating opam root directory with another instance should be ok"""
-    mock_init, mock_popen = mock_opam
-
     instance = "fake_opam_repo"
     instance_url = f"http://example.org/{instance}"
     opam_root = str(tmp_path / "test-opam")
@@ -60,7 +61,7 @@ def test_mock_init_repository_update(mock_opam, tmp_path, datadir):
     # This will update the repository opam with another instance
     opam_init(opam_root, instance, instance_url, {})
 
-    assert mock_init.called
+    assert mock_opam.called
 
 
 def test_lister_opam_optional_instance(swh_scheduler):
@@ -77,7 +78,6 @@ def test_lister_opam_optional_instance(swh_scheduler):
 
 
 def test_urls(swh_scheduler, mock_opam, tmp_path):
-    mock_init, mock_popen = mock_opam
     instance_url = "https://opam.ocaml.org"
     tmp_folder = mkdtemp(dir=tmp_path, prefix="swh_opam_lister")
 
@@ -93,8 +93,7 @@ def test_urls(swh_scheduler, mock_opam, tmp_path):
     # call the lister and get all listed origins urls
     stats = lister.run()
 
-    assert mock_init.called
-    assert mock_popen.called
+    assert mock_opam.call_count == 2
 
     assert stats.pages == 3
     assert stats.origins == 3
@@ -112,6 +111,7 @@ def test_urls(swh_scheduler, mock_opam, tmp_path):
     assert expected_urls == result_urls
 
 
+@pytest.mark.skipif(opam_path is None, reason="opam binary is missing")
 def test_opam_binary(datadir, swh_scheduler, tmp_path, mocker):
     from swh.lister.opam.lister import opam_init
 
@@ -150,6 +150,7 @@ def test_opam_binary(datadir, swh_scheduler, tmp_path, mocker):
     assert expected_urls == result_urls
 
 
+@pytest.mark.skipif(opam_path is None, reason="opam binary is missing")
 def test_opam_multi_instance(datadir, swh_scheduler, tmp_path, mocker):
     from swh.lister.opam.lister import opam_init
 
@@ -186,3 +187,49 @@ def test_opam_multi_instance(datadir, swh_scheduler, tmp_path, mocker):
     result_urls = [origin.url for origin in scheduler_origins]
 
     assert expected_urls == result_urls
+
+
+def test_opam_init_failure(swh_scheduler, mocker, tmp_path):
+    instance = "fake_opam_repo"
+    instance_url = f"http://example.org/{instance}"
+    opam_root = str(tmp_path / "test-opam")
+
+    mock_opam = mocker.patch(
+        f"{module_name}.run",
+        side_effect=CalledProcessError(returncode=1, cmd="opam init"),
+    )
+
+    lister = OpamLister(
+        swh_scheduler,
+        url=instance_url,
+        instance=instance,
+        opam_root=opam_root,
+    )
+
+    with pytest.raises(CalledProcessError, match="opam init"):
+        lister.run()
+
+    assert mock_opam.called
+
+
+def test_opam_list_failure(swh_scheduler, mocker, tmp_path):
+    instance = "fake_opam_repo"
+    instance_url = f"http://example.org/{instance}"
+    opam_root = str(tmp_path / "test-opam")
+
+    mock_opam = mocker.patch(
+        f"{module_name}.run",
+        side_effect=[None, CalledProcessError(returncode=1, cmd="opam list")],
+    )
+
+    lister = OpamLister(
+        swh_scheduler,
+        url=instance_url,
+        instance=instance,
+        opam_root=opam_root,
+    )
+
+    with pytest.raises(CalledProcessError, match="opam list"):
+        lister.run()
+
+    assert mock_opam.call_count == 2

@@ -1,13 +1,12 @@
-# Copyright (C) 2021  The Software Heritage developers
+# Copyright (C) 2021-2023  The Software Heritage developers
 # See the AUTHORS file at the top-level directory of this distribution
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
 
-import io
 import logging
 import os
 import shutil
-from subprocess import PIPE, Popen, call
+from subprocess import run
 from typing import Any, Dict, Iterator, Optional
 
 from swh.lister.pattern import StatelessLister
@@ -83,7 +82,7 @@ class OpamLister(StatelessLister[PageType]):
         opam_init(self.opam_root, self.instance, self.url, self.env)
 
         # Actually list opam instance data
-        proc = Popen(
+        proc = run(
             [
                 opam(),
                 "list",
@@ -98,11 +97,13 @@ class OpamLister(StatelessLister[PageType]):
                 "--short",
             ],
             env=self.env,
-            stdout=PIPE,
+            capture_output=True,
+            text=True,
+            check=True,
         )
+
         if proc.stdout is not None:
-            for line in io.TextIOWrapper(proc.stdout):
-                yield line.rstrip("\n")
+            yield from proc.stdout.splitlines()
 
     def get_origins_from_page(self, page: PageType) -> Iterator[ListedOrigin]:
         """Convert a page of OpamLister repositories into a list of ListedOrigins"""
@@ -161,4 +162,4 @@ def opam_init(opam_root: str, instance: str, url: str, env: Dict[str, Any]) -> N
             url,
         ]
     # Actually execute the command
-    call(command, env=env)
+    run(command, env=env, check=True)
