@@ -163,30 +163,40 @@ def test_opam_multi_instance(datadir, swh_scheduler, tmp_path, mocker):
     # Patch opam_init to use the local directory
     mocker.patch("swh.lister.opam.lister.opam_init", side_effect=mock_opam_init)
 
-    lister = OpamLister(
-        swh_scheduler,
-        url=instance_url,
-        instance="fake",
-        opam_root=mkdtemp(dir=tmp_path, prefix="swh_opam_lister"),
-    )
+    opam_root = mkdtemp(dir=tmp_path, prefix="swh_opam_lister")
 
-    stats = lister.run()
+    def check_listing():
+        lister = OpamLister(
+            swh_scheduler,
+            url=instance_url,
+            instance="fake",
+            opam_root=opam_root,
+        )
 
-    assert stats.pages == 4
-    assert stats.origins == 4
+        stats = lister.run()
 
-    scheduler_origins = swh_scheduler.get_listed_origins(lister.lister_obj.id).results
+        assert stats.pages == 4
+        assert stats.origins == 4
 
-    expected_urls = [
-        f"opam+{instance_url}/packages/agrid/",
-        f"opam+{instance_url}/packages/calculon/",
-        f"opam+{instance_url}/packages/directories/",
-        f"opam+{instance_url}/packages/ocb/",
-    ]
+        scheduler_origins = swh_scheduler.get_listed_origins(
+            lister.lister_obj.id
+        ).results
 
-    result_urls = [origin.url for origin in scheduler_origins]
+        expected_urls = [
+            f"opam+{instance_url}/packages/agrid/",
+            f"opam+{instance_url}/packages/calculon/",
+            f"opam+{instance_url}/packages/directories/",
+            f"opam+{instance_url}/packages/ocb/",
+        ]
 
-    assert expected_urls == result_urls
+        result_urls = [origin.url for origin in scheduler_origins]
+
+        assert expected_urls == result_urls
+
+    # first listing
+    check_listing()
+    # check second listing works as expected
+    check_listing()
 
 
 def test_opam_init_failure(swh_scheduler, mocker, tmp_path):

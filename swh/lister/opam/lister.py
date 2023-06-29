@@ -156,6 +156,7 @@ def opam_init(opam_root: str, instance: str, url: str, env: Dict[str, Any]) -> N
             opam(),
             "repository",
             "add",
+            "--set-default",
             "--root",
             opam_root,
             instance,
