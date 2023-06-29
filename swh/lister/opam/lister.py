@@ -6,7 +6,7 @@
 import logging
 import os
 import shutil
-from subprocess import run
+from subprocess import PIPE, run
 from typing import Any, Dict, Iterator, Optional
 
 from swh.lister.pattern import StatelessLister
@@ -97,7 +97,7 @@ class OpamLister(StatelessLister[PageType]):
                 "--short",
             ],
             env=self.env,
-            capture_output=True,
+            stdout=PIPE,
             text=True,
             check=True,
         )
