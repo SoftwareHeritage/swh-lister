@@ -15,4 +15,6 @@ os.environ["LC_ALL"] = "C.UTF-8"
 @pytest.fixture(autouse=True)
 def tenacity_wait(mocker):
     # Stops tenacity from blocking lister tests for 50x errors
-    mocker.patch("tenacity.nap.time")
+    from swh.lister.pattern import Lister
+
+    mocker.patch.object(Lister.http_request.retry, "sleep")
