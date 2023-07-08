@@ -6,6 +6,7 @@ beautifulsoup4
 launchpadlib
 tenacity >= 6.2
 lxml
+dateparser
 dulwich
 testing.postgresql
 psycopg2
