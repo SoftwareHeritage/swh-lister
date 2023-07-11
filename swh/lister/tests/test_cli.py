@@ -48,6 +48,9 @@ lister_args = {
     "gitiles": {
         "instance": "gerrit.googlesource.com",
     },
+    "stagit": {
+        "url": "https://git.codemadness.org",
+    },
 }
 
 
