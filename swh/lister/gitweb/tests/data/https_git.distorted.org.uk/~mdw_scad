@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-US" lang="en-US">
+<!-- git web interface version 2.11.0, (C) 2005-2006, Kay Sievers <kay.sievers@vrfy.org>, Christian Gierke -->
+<!-- git core binaries version 2.11.0 -->
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+<meta name="generator" content="gitweb/2.11.0 git/2.11.0"/>
+<meta name="robots" content="index, nofollow"/>
+<title>mdw@git.distorted.org.uk Git - scad/summary</title>
+<base href="https://git.distorted.org.uk" />
+<link rel="stylesheet" type="text/css" href="/gitweb/gitweb.css"/>
+<link rel="stylesheet" type="text/css" href="/local/gitweb.css"/>
+<link rel="alternate" title="scad - log - RSS feed" href="https://git.distorted.org.uk/~mdw/scad/rss" type="application/rss+xml" />
+<link rel="alternate" title="scad - log - RSS feed (no merges)" href="https://git.distorted.org.uk/~mdw/scad/rss?opt=--no-merges" type="application/rss+xml" />
+<link rel="alternate" title="scad - log - Atom feed" href="https://git.distorted.org.uk/~mdw/scad/atom" type="application/atom+xml" />
+<link rel="alternate" title="scad - log - Atom feed (no merges)" href="https://git.distorted.org.uk/~mdw/scad/atom?opt=--no-merges" type="application/atom+xml" />
+<link rel="shortcut icon" href="/gitweb/git-favicon.png" type="image/png" />
+</head>
+<body>
+<div class="page_header">
+<a href="http://git-scm.com/" title="git homepage"><img alt="git" class="logo" height="27" src="/gitweb/git-logo.png" width="72" /></a><a href="/~mdw/">~mdw</a> / <a href="https://git.distorted.org.uk/~mdw/scad">scad</a> / summary
+</div>
+<form method="get" action="https://git.distorted.org.uk/~mdw//scad" enctype="multipart/form-data"><div class="search">
+<input name="a" type="hidden" value="search" />
+<input name="h" type="hidden" value="HEAD" />
+<select name="st" >
+<option selected="selected" value="commit">commit</option>
+<option value="grep">grep</option>
+<option value="author">author</option>
+<option value="committer">committer</option>
+<option value="pickaxe">pickaxe</option>
+</select> <a href="https://git.distorted.org.uk/~mdw/scad/search_help" title="search help">?</a> search:
+<input type="text" name="s"  />
+<span title="Extended regular expression"><label><input type="checkbox" name="sr" value="1" />re</label></span></div>
+</form>
+<div class="page_nav">
+summary | <a href="https://git.distorted.org.uk/~mdw/scad/shortlog">shortlog</a> | <a href="https://git.distorted.org.uk/~mdw/scad/log">log</a> | <a href="https://git.distorted.org.uk/~mdw/scad/commit/e05980e366e948132d10acde1abd0de29b6dae8a">commit</a> | <a href="https://git.distorted.org.uk/~mdw/scad/commitdiff/e05980e366e948132d10acde1abd0de29b6dae8a">commitdiff</a> | <a href="https://git.distorted.org.uk/~mdw/scad/tree">tree</a><br/>
+<br/>
+</div>
+<div class="title">&nbsp;</div>
+<table class="projects_list">
+<tr id="metadata_desc"><td>description</td><td>OpenSCAD models that I&#39;ve designed.</td></tr>
+<tr id="metadata_owner"><td>owner</td><td>Mark Wooding</td></tr>
+<tr id="metadata_lchange"><td>last change</td><td><span class="datetime">Wed, 15 Mar 2023 00:57:55 +0000</span> (<span class="atnight">00:57</span> +0000)</td></tr>
+<tr class="metadata_url"><td>URL</td><td>https://git.distorted.org.uk/~mdw/scad</td></tr>
+<tr class="metadata_url"><td></td><td>git://git.distorted.org.uk/~mdw/scad</td></tr>
+</table>
+<div class="header">
+<a class="title" href="https://git.distorted.org.uk/~mdw/scad/shortlog">shortlog</a>
+</div>
+<table class="shortlog">
+<tr class="dark">
+<td title="3 months ago"><i>2023-03-15</i></td>
+<td class="author"><a class="list" href="https://git.distorted.org.uk/~mdw/scad/search?s=Mark+Wooding;st=author" title="Search for commits authored by Mark Wooding">Mark Wooding</a></td><td><a class="list subject" href="https://git.distorted.org.uk/~mdw/scad/commit/e05980e366e948132d10acde1abd0de29b6dae8a" title="discpick-tensioner.scad: Improved tensioning component with longer prongs.">discpick-tensioner.scad: Improved tensioning component... </a> <span class="refs"> <span class="head" title="heads/master"><a href="https://git.distorted.org.uk/~mdw/scad/shortlog/refs/heads/master">master</a></span></span></td>
+<td class="link"><a href="https://git.distorted.org.uk/~mdw/scad/commit/e05980e366e948132d10acde1abd0de29b6dae8a">commit</a> | <a href="https://git.distorted.org.uk/~mdw/scad/commitdiff/e05980e366e948132d10acde1abd0de29b6dae8a">commitdiff</a> | <a href="https://git.distorted.org.uk/~mdw/scad/tree/e05980e366e948132d10acde1abd0de29b6dae8a">tree</a> | snapshot (<a href="https://git.distorted.org.uk/~mdw/scad/snapshot/e05980e366e948132d10acde1abd0de29b6dae8a.tar.gz">tar.gz</a> <a href="https://git.distorted.org.uk/~mdw/scad/snapshot/e05980e366e948132d10acde1abd0de29b6dae8a.zip">zip</a>)</td>
+</tr>
+<tr class="light">
+<td title="8 months ago"><i>2022-10-28</i></td>
+<td class="author"><a class="list" href="https://git.distorted.org.uk/~mdw/scad/search?s=Mark+Wooding;st=author" title="Search for commits authored by Mark Wooding">Mark Wooding</a></td><td><a class="list subject" href="https://git.distorted.org.uk/~mdw/scad/commit/5f1872e84d2cb5198dfc6b9b6214ae7836cd9e4a">Add a build system.</a></td>
+<td class="link"><a href="https://git.distorted.org.uk/~mdw/scad/commit/5f1872e84d2cb5198dfc6b9b6214ae7836cd9e4a">commit</a> | <a href="https://git.distorted.org.uk/~mdw/scad/commitdiff/5f1872e84d2cb5198dfc6b9b6214ae7836cd9e4a">commitdiff</a> | <a href="https://git.distorted.org.uk/~mdw/scad/tree/5f1872e84d2cb5198dfc6b9b6214ae7836cd9e4a">tree</a> | snapshot (<a href="https://git.distorted.org.uk/~mdw/scad/snapshot/5f1872e84d2cb5198dfc6b9b6214ae7836cd9e4a.tar.gz">tar.gz</a> <a href="https://git.distorted.org.uk/~mdw/scad/snapshot/5f1872e84d2cb5198dfc6b9b6214ae7836cd9e4a.zip">zip</a>)</td>
+</tr>
+<tr class="dark">
+<td title="9 months ago"><i>2022-09-30</i></td>
+<td class="author"><a class="list" href="https://git.distorted.org.uk/~mdw/scad/search?s=Mark+Wooding;st=author" title="Search for commits authored by Mark Wooding">Mark Wooding</a></td><td><a class="list subject" href="https://git.distorted.org.uk/~mdw/scad/commit/bfe485ff99b7430ceb074c89e2aa2f5bfd256b2a">discpick-collar.scad: Successful print.</a></td>
+<td class="link"><a href="https://git.distorted.org.uk/~mdw/scad/commit/bfe485ff99b7430ceb074c89e2aa2f5bfd256b2a">commit</a> | <a href="https://git.distorted.org.uk/~mdw/scad/commitdiff/bfe485ff99b7430ceb074c89e2aa2f5bfd256b2a">commitdiff</a> | <a href="https://git.distorted.org.uk/~mdw/scad/tree/bfe485ff99b7430ceb074c89e2aa2f5bfd256b2a">tree</a> | snapshot (<a href="https://git.distorted.org.uk/~mdw/scad/snapshot/bfe485ff99b7430ceb074c89e2aa2f5bfd256b2a.tar.gz">tar.gz</a> <a href="https://git.distorted.org.uk/~mdw/scad/snapshot/bfe485ff99b7430ceb074c89e2aa2f5bfd256b2a.zip">zip</a>)</td>
+</tr>
+</table>
+<div class="header">
+<a class="title" href="https://git.distorted.org.uk/~mdw/scad/heads">heads</a>
+</div>
+<table class="heads">
+<tr class="dark">
+<td><i>3 months ago</i></td>
+<td class="current_head"><a class="list name" href="https://git.distorted.org.uk/~mdw/scad/shortlog/refs/heads/master">master</a></td>
+<td class="link"><a href="https://git.distorted.org.uk/~mdw/scad/shortlog/refs/heads/master">shortlog</a> | <a href="https://git.distorted.org.uk/~mdw/scad/log/refs/heads/master">log</a> | <a href="https://git.distorted.org.uk/~mdw/scad/tree/refs/heads/master">tree</a></td>
+</tr></table>
+<div class="page_footer">
+<div class="page_footer_text">OpenSCAD models that I&#39;ve designed.</div>
+<a class="rss_logo" href="https://git.distorted.org.uk/~mdw/scad/rss" title="log RSS feed">RSS</a>
+<a class="rss_logo" href="https://git.distorted.org.uk/~mdw/scad/atom" title="log Atom feed">Atom</a>
+</div>
+<script type="text/javascript" src="/gitweb/gitweb.js"></script>
+<script type="text/javascript">
+window.onload = function () {
+	var tz_cookie = { name: 'gitweb_tz', expires: 14, path: '/' };
+	onloadTZSetup('local', tz_cookie, 'datetime');
+};
+</script>
+</body>
+</html>
