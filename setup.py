@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# Copyright (C) 2015-2020  The Software Heritage developers
+# Copyright (C) 2015-2023  The Software Heritage developers
 # See the AUTHORS file at the top-level directory of this distribution
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
@@ -69,6 +69,7 @@ setup(
         lister.gitea=swh.lister.gitea:register
         lister.github=swh.lister.github:register
         lister.gitlab=swh.lister.gitlab:register
+        lister.gitweb=swh.lister.gitweb:register
         lister.gnu=swh.lister.gnu:register
         lister.golang=swh.lister.golang:register
         lister.gogs=swh.lister.gogs:register
