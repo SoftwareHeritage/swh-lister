@@ -1,3 +1,9 @@
+swh-lister (5.8.0-2~swh1) unstable-swh; urgency=medium
+
+  * Fix dependency and bump new release
+
+ -- Antoine R. Dumont (@ardumont) <antoine.romain.dumont@gmail.com>  Tue, 11 Jul 2023 13:04:03 +0000
+
 swh-lister (5.8.0-1~swh1) unstable-swh; urgency=medium
 
   * New upstream release 5.8.0     - (tagged by Antoine R. Dumont
