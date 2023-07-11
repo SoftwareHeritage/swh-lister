@@ -42,6 +42,9 @@ lister_args = {
         "url": "https://archives.fedoraproject.org/pub/archive/fedora/linux/releases/",
     },
     "pagure": {"instance": "pagure.io"},
+    "gitweb": {
+        "url": "https://git.distorted.org.uk/~mdw/",
+    },
 }
 
 

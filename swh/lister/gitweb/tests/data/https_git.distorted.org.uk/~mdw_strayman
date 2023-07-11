@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-US" lang="en-US">
+<!-- git web interface version 2.11.0, (C) 2005-2006, Kay Sievers <kay.sievers@vrfy.org>, Christian Gierke -->
+<!-- git core binaries version 2.11.0 -->
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+<meta name="generator" content="gitweb/2.11.0 git/2.11.0"/>
+<meta name="robots" content="index, nofollow"/>
+<title>mdw@git.distorted.org.uk Git - strayman/summary</title>
+<base href="https://git.distorted.org.uk" />
+<link rel="stylesheet" type="text/css" href="/gitweb/gitweb.css"/>
+<link rel="stylesheet" type="text/css" href="/local/gitweb.css"/>
+<link rel="alternate" title="strayman - log - RSS feed" href="https://git.distorted.org.uk/~mdw/strayman/rss" type="application/rss+xml" />
+<link rel="alternate" title="strayman - log - RSS feed (no merges)" href="https://git.distorted.org.uk/~mdw/strayman/rss?opt=--no-merges" type="application/rss+xml" />
+<link rel="alternate" title="strayman - log - Atom feed" href="https://git.distorted.org.uk/~mdw/strayman/atom" type="application/atom+xml" />
+<link rel="alternate" title="strayman - log - Atom feed (no merges)" href="https://git.distorted.org.uk/~mdw/strayman/atom?opt=--no-merges" type="application/atom+xml" />
+<link rel="shortcut icon" href="/gitweb/git-favicon.png" type="image/png" />
+</head>
+<body>
+<div class="page_header">
+<a href="http://git-scm.com/" title="git homepage"><img alt="git" class="logo" height="27" src="/gitweb/git-logo.png" width="72" /></a><a href="/~mdw/">~mdw</a> / <a href="https://git.distorted.org.uk/~mdw/strayman">strayman</a> / summary
+</div>
+<form method="get" action="https://git.distorted.org.uk/~mdw//strayman" enctype="multipart/form-data"><div class="search">
+<input name="a" type="hidden" value="search" />
+<input name="h" type="hidden" value="HEAD" />
+<select name="st" >
+<option selected="selected" value="commit">commit</option>
+<option value="grep">grep</option>
+<option value="author">author</option>
+<option value="committer">committer</option>
+<option value="pickaxe">pickaxe</option>
+</select> <a href="https://git.distorted.org.uk/~mdw/strayman/search_help" title="search help">?</a> search:
+<input type="text" name="s"  />
+<span title="Extended regular expression"><label><input type="checkbox" name="sr" value="1" />re</label></span></div>
+</form>
+<div class="page_nav">
+summary | <a href="https://git.distorted.org.uk/~mdw/strayman/shortlog">shortlog</a> | <a href="https://git.distorted.org.uk/~mdw/strayman/log">log</a> | <a href="https://git.distorted.org.uk/~mdw/strayman/commit/aaa6f8c35e8cdbc5089abe865bf05e11dda958e6">commit</a> | <a href="https://git.distorted.org.uk/~mdw/strayman/commitdiff/aaa6f8c35e8cdbc5089abe865bf05e11dda958e6">commitdiff</a> | <a href="https://git.distorted.org.uk/~mdw/strayman/tree">tree</a><br/>
+<br/>
+</div>
+<div class="title">&nbsp;</div>
+<table class="projects_list">
+<tr id="metadata_desc"><td>description</td><td>LaTeX document class for various documents</td></tr>
+<tr id="metadata_owner"><td>owner</td><td>Mark Wooding</td></tr>
+<tr id="metadata_lchange"><td>last change</td><td><span class="datetime">Mon, 8 Jun 2020 16:00:49 +0000</span> (17:00 +0100)</td></tr>
+<tr class="metadata_url"><td>URL</td><td>https://git.distorted.org.uk/~mdw/strayman</td></tr>
+<tr class="metadata_url"><td></td><td>git://git.distorted.org.uk/~mdw/strayman</td></tr>
+</table>
+<div class="header">
+<a class="title" href="https://git.distorted.org.uk/~mdw/strayman/shortlog">shortlog</a>
+</div>
+<table class="shortlog">
+<tr class="dark">
+<td title="3 years ago"><i>2020-06-08</i></td>
+<td class="author"><a class="list" href="https://git.distorted.org.uk/~mdw/strayman/search?s=Mark+Wooding;st=author" title="Search for commits authored by Mark Wooding">Mark Wooding</a></td><td><a class="list subject" href="https://git.distorted.org.uk/~mdw/strayman/commit/aaa6f8c35e8cdbc5089abe865bf05e11dda958e6" title=".mdw-build.conf: Don't try `vpath' builds with this package.">.mdw-build.conf: Don&#39;t try `vpath&#39; builds with this... </a> <span class="refs"> <span class="head" title="heads/master"><a href="https://git.distorted.org.uk/~mdw/strayman/shortlog/refs/heads/master">master</a></span></span></td>
+<td class="link"><a href="https://git.distorted.org.uk/~mdw/strayman/commit/aaa6f8c35e8cdbc5089abe865bf05e11dda958e6">commit</a> | <a href="https://git.distorted.org.uk/~mdw/strayman/commitdiff/aaa6f8c35e8cdbc5089abe865bf05e11dda958e6">commitdiff</a> | <a href="https://git.distorted.org.uk/~mdw/strayman/tree/aaa6f8c35e8cdbc5089abe865bf05e11dda958e6">tree</a> | snapshot (<a href="https://git.distorted.org.uk/~mdw/strayman/snapshot/aaa6f8c35e8cdbc5089abe865bf05e11dda958e6.tar.gz">tar.gz</a> <a href="https://git.distorted.org.uk/~mdw/strayman/snapshot/aaa6f8c35e8cdbc5089abe865bf05e11dda958e6.zip">zip</a>)</td>
+</tr>
+<tr class="light">
+<td title="3 years ago"><i>2019-08-24</i></td>
+<td class="author"><a class="list" href="https://git.distorted.org.uk/~mdw/strayman/search?s=Mark+Wooding;st=author" title="Search for commits authored by Mark Wooding">Mark Wooding</a></td><td><a class="list subject" href="https://git.distorted.org.uk/~mdw/strayman/commit/20d4967967cddbb26bdd155cf5e26cd2461724c5">Release 1.1.5.</a> <span class="refs"> <span class="tag indirect" title="tags/1.1.5"><a href="https://git.distorted.org.uk/~mdw/strayman/tag/refs/tags/1.1.5">1.1.5</a></span></span></td>
+<td class="link"><a href="https://git.distorted.org.uk/~mdw/strayman/commit/20d4967967cddbb26bdd155cf5e26cd2461724c5">commit</a> | <a href="https://git.distorted.org.uk/~mdw/strayman/commitdiff/20d4967967cddbb26bdd155cf5e26cd2461724c5">commitdiff</a> | <a href="https://git.distorted.org.uk/~mdw/strayman/tree/20d4967967cddbb26bdd155cf5e26cd2461724c5">tree</a> | snapshot (<a href="https://git.distorted.org.uk/~mdw/strayman/snapshot/20d4967967cddbb26bdd155cf5e26cd2461724c5.tar.gz">tar.gz</a> <a href="https://git.distorted.org.uk/~mdw/strayman/snapshot/20d4967967cddbb26bdd155cf5e26cd2461724c5.zip">zip</a>)</td>
+</tr>
+<tr class="dark">
+<td title="3 years ago"><i>2019-08-24</i></td>
+<td class="author"><a class="list" href="https://git.distorted.org.uk/~mdw/strayman/search?s=Mark+Wooding;st=author" title="Search for commits authored by Mark Wooding">Mark Wooding</a></td><td><a class="list subject" href="https://git.distorted.org.uk/~mdw/strayman/commit/54682c9b9affec159fb26c1cf23eb2ba3e0a1e53" title="debian/copyright: Switch to machine-readable copyright file.">debian/copyright: Switch to machine-readable copyright... </a></td>
+<td class="link"><a href="https://git.distorted.org.uk/~mdw/strayman/commit/54682c9b9affec159fb26c1cf23eb2ba3e0a1e53">commit</a> | <a href="https://git.distorted.org.uk/~mdw/strayman/commitdiff/54682c9b9affec159fb26c1cf23eb2ba3e0a1e53">commitdiff</a> | <a href="https://git.distorted.org.uk/~mdw/strayman/tree/54682c9b9affec159fb26c1cf23eb2ba3e0a1e53">tree</a> | snapshot (<a href="https://git.distorted.org.uk/~mdw/strayman/snapshot/54682c9b9affec159fb26c1cf23eb2ba3e0a1e53.tar.gz">tar.gz</a> <a href="https://git.distorted.org.uk/~mdw/strayman/snapshot/54682c9b9affec159fb26c1cf23eb2ba3e0a1e53.zip">zip</a>)</td>
+</tr>
+<tr class="light">
+<td title="3 years ago"><i>2019-08-24</i></td>
+<td class="author"><a class="list" href="https://git.distorted.org.uk/~mdw/strayman/search?s=Mark+Wooding;st=author" title="Search for commits authored by Mark Wooding">Mark Wooding</a></td><td><a class="list subject" href="https://git.distorted.org.uk/~mdw/strayman/commit/2713c178e5a5445aff599f12a5a3f2c81bc1c5d1" title="strayman.dtx: Move left-side headers and footers into the margin.">strayman.dtx: Move left-side headers and footers into... </a></td>
+<td class="link"><a href="https://git.distorted.org.uk/~mdw/strayman/commit/2713c178e5a5445aff599f12a5a3f2c81bc1c5d1">commit</a> | <a href="https://git.distorted.org.uk/~mdw/strayman/commitdiff/2713c178e5a5445aff599f12a5a3f2c81bc1c5d1">commitdiff</a> | <a href="https://git.distorted.org.uk/~mdw/strayman/tree/2713c178e5a5445aff599f12a5a3f2c81bc1c5d1">tree</a> | snapshot (<a href="https://git.distorted.org.uk/~mdw/strayman/snapshot/2713c178e5a5445aff599f12a5a3f2c81bc1c5d1.tar.gz">tar.gz</a> <a href="https://git.distorted.org.uk/~mdw/strayman/snapshot/2713c178e5a5445aff599f12a5a3f2c81bc1c5d1.zip">zip</a>)</td>
+</tr>
+<tr class="dark">
+<td title="3 years ago"><i>2019-08-07</i></td>
+<td class="author"><a class="list" href="https://git.distorted.org.uk/~mdw/strayman/search?s=Mark+Wooding;st=author" title="Search for commits authored by Mark Wooding">Mark Wooding</a></td><td><a class="list subject" href="https://git.distorted.org.uk/~mdw/strayman/commit/580fe06e87e25a9d153540766a5f7c9dd33c9b37">Release 1.1.4.</a> <span class="refs"> <span class="tag indirect" title="tags/1.1.4"><a href="https://git.distorted.org.uk/~mdw/strayman/tag/refs/tags/1.1.4">1.1.4</a></span></span></td>
+<td class="link"><a href="https://git.distorted.org.uk/~mdw/strayman/commit/580fe06e87e25a9d153540766a5f7c9dd33c9b37">commit</a> | <a href="https://git.distorted.org.uk/~mdw/strayman/commitdiff/580fe06e87e25a9d153540766a5f7c9dd33c9b37">commitdiff</a> | <a href="https://git.distorted.org.uk/~mdw/strayman/tree/580fe06e87e25a9d153540766a5f7c9dd33c9b37">tree</a> | snapshot (<a href="https://git.distorted.org.uk/~mdw/strayman/snapshot/580fe06e87e25a9d153540766a5f7c9dd33c9b37.tar.gz">tar.gz</a> <a href="https://git.distorted.org.uk/~mdw/strayman/snapshot/580fe06e87e25a9d153540766a5f7c9dd33c9b37.zip">zip</a>)</td>
+</tr>
+<tr class="light">
+<td title="5 years ago"><i>2018-06-30</i></td>
+<td class="author"><a class="list" href="https://git.distorted.org.uk/~mdw/strayman/search?s=Mark+Wooding;st=author" title="Search for commits authored by Mark Wooding">Mark Wooding</a></td><td><a class="list subject" href="https://git.distorted.org.uk/~mdw/strayman/commit/35f7eeda5f604a3a1272614f7c3634fe4459c76a" title="strayman.dtx: Forbid page breaks before lists attached to paragraphs.">strayman.dtx: Forbid page breaks before lists attached... </a></td>
+<td class="link"><a href="https://git.distorted.org.uk/~mdw/strayman/commit/35f7eeda5f604a3a1272614f7c3634fe4459c76a">commit</a> | <a href="https://git.distorted.org.uk/~mdw/strayman/commitdiff/35f7eeda5f604a3a1272614f7c3634fe4459c76a">commitdiff</a> | <a href="https://git.distorted.org.uk/~mdw/strayman/tree/35f7eeda5f604a3a1272614f7c3634fe4459c76a">tree</a> | snapshot (<a href="https://git.distorted.org.uk/~mdw/strayman/snapshot/35f7eeda5f604a3a1272614f7c3634fe4459c76a.tar.gz">tar.gz</a> <a href="https://git.distorted.org.uk/~mdw/strayman/snapshot/35f7eeda5f604a3a1272614f7c3634fe4459c76a.zip">zip</a>)</td>
+</tr>
+<tr class="dark">
+<td title="5 years ago"><i>2018-06-22</i></td>
+<td class="author"><a class="list" href="https://git.distorted.org.uk/~mdw/strayman/search?s=Mark+Wooding;st=author" title="Search for commits authored by Mark Wooding">Mark Wooding</a></td><td><a class="list subject" href="https://git.distorted.org.uk/~mdw/strayman/commit/e642ddb81feeb8056762575b02d26cb6efd9092f">Release 1.1.3.2.</a> <span class="refs"> <span class="tag indirect" title="tags/1.1.3.2"><a href="https://git.distorted.org.uk/~mdw/strayman/tag/refs/tags/1.1.3.2">1.1.3.2</a></span></span></td>
+<td class="link"><a href="https://git.distorted.org.uk/~mdw/strayman/commit/e642ddb81feeb8056762575b02d26cb6efd9092f">commit</a> | <a href="https://git.distorted.org.uk/~mdw/strayman/commitdiff/e642ddb81feeb8056762575b02d26cb6efd9092f">commitdiff</a> | <a href="https://git.distorted.org.uk/~mdw/strayman/tree/e642ddb81feeb8056762575b02d26cb6efd9092f">tree</a> | snapshot (<a href="https://git.distorted.org.uk/~mdw/strayman/snapshot/e642ddb81feeb8056762575b02d26cb6efd9092f.tar.gz">tar.gz</a> <a href="https://git.distorted.org.uk/~mdw/strayman/snapshot/e642ddb81feeb8056762575b02d26cb6efd9092f.zip">zip</a>)</td>
+</tr>
+<tr class="light">
+<td title="5 years ago"><i>2018-06-21</i></td>
+<td class="author"><a class="list" href="https://git.distorted.org.uk/~mdw/strayman/search?s=Mark+Wooding;st=author" title="Search for commits authored by Mark Wooding">Mark Wooding</a></td><td><a class="list subject" href="https://git.distorted.org.uk/~mdw/strayman/commit/8a24a0f2daa29db373515002f0101df4fbac2154" title="debian/control: Add Build-Depends: ghostscript because `ps2pdf'.">debian/control: Add Build-Depends: ghostscript because... </a></td>
+<td class="link"><a href="https://git.distorted.org.uk/~mdw/strayman/commit/8a24a0f2daa29db373515002f0101df4fbac2154">commit</a> | <a href="https://git.distorted.org.uk/~mdw/strayman/commitdiff/8a24a0f2daa29db373515002f0101df4fbac2154">commitdiff</a> | <a href="https://git.distorted.org.uk/~mdw/strayman/tree/8a24a0f2daa29db373515002f0101df4fbac2154">tree</a> | snapshot (<a href="https://git.distorted.org.uk/~mdw/strayman/snapshot/8a24a0f2daa29db373515002f0101df4fbac2154.tar.gz">tar.gz</a> <a href="https://git.distorted.org.uk/~mdw/strayman/snapshot/8a24a0f2daa29db373515002f0101df4fbac2154.zip">zip</a>)</td>
+</tr>
+<tr class="dark">
+<td title="5 years ago"><i>2018-06-21</i></td>
+<td class="author"><a class="list" href="https://git.distorted.org.uk/~mdw/strayman/search?s=Mark+Wooding;st=author" title="Search for commits authored by Mark Wooding">Mark Wooding</a></td><td><a class="list subject" href="https://git.distorted.org.uk/~mdw/strayman/commit/9c3e8626aeeac67fcbdb629e930d5047b2d5946c" title="strayman.dtx (\part): Don't establish the label reference in a block.">strayman.dtx (\part): Don&#39;t establish the label referen... </a></td>
+<td class="link"><a href="https://git.distorted.org.uk/~mdw/strayman/commit/9c3e8626aeeac67fcbdb629e930d5047b2d5946c">commit</a> | <a href="https://git.distorted.org.uk/~mdw/strayman/commitdiff/9c3e8626aeeac67fcbdb629e930d5047b2d5946c">commitdiff</a> | <a href="https://git.distorted.org.uk/~mdw/strayman/tree/9c3e8626aeeac67fcbdb629e930d5047b2d5946c">tree</a> | snapshot (<a href="https://git.distorted.org.uk/~mdw/strayman/snapshot/9c3e8626aeeac67fcbdb629e930d5047b2d5946c.tar.gz">tar.gz</a> <a href="https://git.distorted.org.uk/~mdw/strayman/snapshot/9c3e8626aeeac67fcbdb629e930d5047b2d5946c.zip">zip</a>)</td>
+</tr>
+<tr class="light">
+<td title="7 years ago"><i>2016-05-05</i></td>
+<td class="author"><a class="list" href="https://git.distorted.org.uk/~mdw/strayman/search?s=Mark+Wooding;st=author" title="Search for commits authored by Mark Wooding">Mark Wooding</a></td><td><a class="list subject" href="https://git.distorted.org.uk/~mdw/strayman/commit/fddb126af21406e22353db8a377b81a90244abe3">strayman.dtx: Whitespace fixes.</a></td>
+<td class="link"><a href="https://git.distorted.org.uk/~mdw/strayman/commit/fddb126af21406e22353db8a377b81a90244abe3">commit</a> | <a href="https://git.distorted.org.uk/~mdw/strayman/commitdiff/fddb126af21406e22353db8a377b81a90244abe3">commitdiff</a> | <a href="https://git.distorted.org.uk/~mdw/strayman/tree/fddb126af21406e22353db8a377b81a90244abe3">tree</a> | snapshot (<a href="https://git.distorted.org.uk/~mdw/strayman/snapshot/fddb126af21406e22353db8a377b81a90244abe3.tar.gz">tar.gz</a> <a href="https://git.distorted.org.uk/~mdw/strayman/snapshot/fddb126af21406e22353db8a377b81a90244abe3.zip">zip</a>)</td>
+</tr>
+<tr class="dark">
+<td title="10 years ago"><i>2013-07-08</i></td>
+<td class="author"><a class="list" href="https://git.distorted.org.uk/~mdw/strayman/search?s=Mark+Wooding;st=author" title="Search for commits authored by Mark Wooding">Mark Wooding</a></td><td><a class="list subject" href="https://git.distorted.org.uk/~mdw/strayman/commit/b40e3be3e44f20ca28cc17fc3fd23317e6ee9010" title="Actually arrange to distribute the Automake helper scripts.">Actually arrange to distribute the Automake helper... </a> <span class="refs"> <span class="tag indirect" title="tags/1.1.3.1"><a href="https://git.distorted.org.uk/~mdw/strayman/tag/refs/tags/1.1.3.1">1.1.3.1</a></span></span></td>
+<td class="link"><a href="https://git.distorted.org.uk/~mdw/strayman/commit/b40e3be3e44f20ca28cc17fc3fd23317e6ee9010">commit</a> | <a href="https://git.distorted.org.uk/~mdw/strayman/commitdiff/b40e3be3e44f20ca28cc17fc3fd23317e6ee9010">commitdiff</a> | <a href="https://git.distorted.org.uk/~mdw/strayman/tree/b40e3be3e44f20ca28cc17fc3fd23317e6ee9010">tree</a> | snapshot (<a href="https://git.distorted.org.uk/~mdw/strayman/snapshot/b40e3be3e44f20ca28cc17fc3fd23317e6ee9010.tar.gz">tar.gz</a> <a href="https://git.distorted.org.uk/~mdw/strayman/snapshot/b40e3be3e44f20ca28cc17fc3fd23317e6ee9010.zip">zip</a>)</td>
+</tr>
+<tr class="light">
+<td title="10 years ago"><i>2013-07-08</i></td>
+<td class="author"><a class="list" href="https://git.distorted.org.uk/~mdw/strayman/search?s=Mark+Wooding;st=author" title="Search for commits authored by Mark Wooding">Mark Wooding</a></td><td><a class="list subject" href="https://git.distorted.org.uk/~mdw/strayman/commit/0ff6fe0fad5462b75328fc3da0b074a5aeba4042">.gitignore: Ignore `auto-version&#39; script.</a></td>
+<td class="link"><a href="https://git.distorted.org.uk/~mdw/strayman/commit/0ff6fe0fad5462b75328fc3da0b074a5aeba4042">commit</a> | <a href="https://git.distorted.org.uk/~mdw/strayman/commitdiff/0ff6fe0fad5462b75328fc3da0b074a5aeba4042">commitdiff</a> | <a href="https://git.distorted.org.uk/~mdw/strayman/tree/0ff6fe0fad5462b75328fc3da0b074a5aeba4042">tree</a> | snapshot (<a href="https://git.distorted.org.uk/~mdw/strayman/snapshot/0ff6fe0fad5462b75328fc3da0b074a5aeba4042.tar.gz">tar.gz</a> <a href="https://git.distorted.org.uk/~mdw/strayman/snapshot/0ff6fe0fad5462b75328fc3da0b074a5aeba4042.zip">zip</a>)</td>
+</tr>
+<tr class="dark">
+<td title="11 years ago"><i>2012-05-05</i></td>
+<td class="author"><a class="list" href="https://git.distorted.org.uk/~mdw/strayman/search?s=Mark+Wooding;st=author" title="Search for commits authored by Mark Wooding">Mark Wooding</a></td><td><a class="list subject" href="https://git.distorted.org.uk/~mdw/strayman/commit/a9e5961e0f27bf6e61fea17a1ff1042a3b7ff59d">Debianization!</a> <span class="refs"> <span class="tag indirect" title="tags/1.1.3"><a href="https://git.distorted.org.uk/~mdw/strayman/tag/refs/tags/1.1.3">1.1.3</a></span></span></td>
+<td class="link"><a href="https://git.distorted.org.uk/~mdw/strayman/commit/a9e5961e0f27bf6e61fea17a1ff1042a3b7ff59d">commit</a> | <a href="https://git.distorted.org.uk/~mdw/strayman/commitdiff/a9e5961e0f27bf6e61fea17a1ff1042a3b7ff59d">commitdiff</a> | <a href="https://git.distorted.org.uk/~mdw/strayman/tree/a9e5961e0f27bf6e61fea17a1ff1042a3b7ff59d">tree</a> | snapshot (<a href="https://git.distorted.org.uk/~mdw/strayman/snapshot/a9e5961e0f27bf6e61fea17a1ff1042a3b7ff59d.tar.gz">tar.gz</a> <a href="https://git.distorted.org.uk/~mdw/strayman/snapshot/a9e5961e0f27bf6e61fea17a1ff1042a3b7ff59d.zip">zip</a>)</td>
+</tr>
+<tr class="light">
+<td title="11 years ago"><i>2012-04-10</i></td>
+<td class="author"><a class="list" href="https://git.distorted.org.uk/~mdw/strayman/search?s=Mark+Wooding;st=author" title="Search for commits authored by Mark Wooding">Mark Wooding</a></td><td><a class="list subject" href="https://git.distorted.org.uk/~mdw/strayman/commit/36bc1cc40c76ec8e66ec72b6d18d041593cdda50">Build: version from Git.</a></td>
+<td class="link"><a href="https://git.distorted.org.uk/~mdw/strayman/commit/36bc1cc40c76ec8e66ec72b6d18d041593cdda50">commit</a> | <a href="https://git.distorted.org.uk/~mdw/strayman/commitdiff/36bc1cc40c76ec8e66ec72b6d18d041593cdda50">commitdiff</a> | <a href="https://git.distorted.org.uk/~mdw/strayman/tree/36bc1cc40c76ec8e66ec72b6d18d041593cdda50">tree</a> | snapshot (<a href="https://git.distorted.org.uk/~mdw/strayman/snapshot/36bc1cc40c76ec8e66ec72b6d18d041593cdda50.tar.gz">tar.gz</a> <a href="https://git.distorted.org.uk/~mdw/strayman/snapshot/36bc1cc40c76ec8e66ec72b6d18d041593cdda50.zip">zip</a>)</td>
+</tr>
+<tr class="dark">
+<td title="11 years ago"><i>2012-04-10</i></td>
+<td class="author"><a class="list" href="https://git.distorted.org.uk/~mdw/strayman/search?s=Mark+Wooding;st=author" title="Search for commits authored by Mark Wooding">Mark Wooding</a></td><td><a class="list subject" href="https://git.distorted.org.uk/~mdw/strayman/commit/deee9d1ff95901da3da1a8ce81b33126f2832175">Whitespace fixups.</a></td>
+<td class="link"><a href="https://git.distorted.org.uk/~mdw/strayman/commit/deee9d1ff95901da3da1a8ce81b33126f2832175">commit</a> | <a href="https://git.distorted.org.uk/~mdw/strayman/commitdiff/deee9d1ff95901da3da1a8ce81b33126f2832175">commitdiff</a> | <a href="https://git.distorted.org.uk/~mdw/strayman/tree/deee9d1ff95901da3da1a8ce81b33126f2832175">tree</a> | snapshot (<a href="https://git.distorted.org.uk/~mdw/strayman/snapshot/deee9d1ff95901da3da1a8ce81b33126f2832175.tar.gz">tar.gz</a> <a href="https://git.distorted.org.uk/~mdw/strayman/snapshot/deee9d1ff95901da3da1a8ce81b33126f2832175.zip">zip</a>)</td>
+</tr>
+<tr class="light">
+<td title="11 years ago"><i>2012-04-10</i></td>
+<td class="author"><a class="list" href="https://git.distorted.org.uk/~mdw/strayman/search?s=Mark+Wooding;st=author" title="Search for commits authored by Mark Wooding">Mark Wooding</a></td><td><a class="list subject" href="https://git.distorted.org.uk/~mdw/strayman/commit/e673b6d13629fcf620a440c13de6e6f2da44df1d">Generate Postscript and PDF versions of documents.</a></td>
+<td class="link"><a href="https://git.distorted.org.uk/~mdw/strayman/commit/e673b6d13629fcf620a440c13de6e6f2da44df1d">commit</a> | <a href="https://git.distorted.org.uk/~mdw/strayman/commitdiff/e673b6d13629fcf620a440c13de6e6f2da44df1d">commitdiff</a> | <a href="https://git.distorted.org.uk/~mdw/strayman/tree/e673b6d13629fcf620a440c13de6e6f2da44df1d">tree</a> | snapshot (<a href="https://git.distorted.org.uk/~mdw/strayman/snapshot/e673b6d13629fcf620a440c13de6e6f2da44df1d.tar.gz">tar.gz</a> <a href="https://git.distorted.org.uk/~mdw/strayman/snapshot/e673b6d13629fcf620a440c13de6e6f2da44df1d.zip">zip</a>)</td>
+</tr>
+<tr>
+<td colspan="4"><a href="https://git.distorted.org.uk/~mdw/strayman/shortlog">...</a></td>
+</tr>
+</table>
+<div class="header">
+<a class="title" href="https://git.distorted.org.uk/~mdw/strayman/tags">tags</a>
+</div>
+<table class="tags">
+<tr class="dark">
+<td><i>3 years ago</i></td>
+<td><a class="list name" href="https://git.distorted.org.uk/~mdw/strayman/commit/20d4967967cddbb26bdd155cf5e26cd2461724c5">1.1.5</a></td>
+<td><a class="list subject" href="https://git.distorted.org.uk/~mdw/strayman/tag/353b9d290e55ab09137ae658278b6eebc5844921">Release 1.1.5.</a></td>
+<td class="selflink"><a href="https://git.distorted.org.uk/~mdw/strayman/tag/353b9d290e55ab09137ae658278b6eebc5844921">tag</a></td>
+<td class="link"> | <a href="https://git.distorted.org.uk/~mdw/strayman/commit/20d4967967cddbb26bdd155cf5e26cd2461724c5">commit</a> | <a href="https://git.distorted.org.uk/~mdw/strayman/shortlog/refs/tags/1.1.5">shortlog</a> | <a href="https://git.distorted.org.uk/~mdw/strayman/log/refs/tags/1.1.5">log</a></td>
+</tr><tr class="light">
+<td><i>3 years ago</i></td>
+<td><a class="list name" href="https://git.distorted.org.uk/~mdw/strayman/commit/580fe06e87e25a9d153540766a5f7c9dd33c9b37">1.1.4</a></td>
+<td><a class="list subject" href="https://git.distorted.org.uk/~mdw/strayman/tag/e25f20c1b7ce406c35b172bbd630b05b93bc8bae">Release 1.1.4.</a></td>
+<td class="selflink"><a href="https://git.distorted.org.uk/~mdw/strayman/tag/e25f20c1b7ce406c35b172bbd630b05b93bc8bae">tag</a></td>
+<td class="link"> | <a href="https://git.distorted.org.uk/~mdw/strayman/commit/580fe06e87e25a9d153540766a5f7c9dd33c9b37">commit</a> | <a href="https://git.distorted.org.uk/~mdw/strayman/shortlog/refs/tags/1.1.4">shortlog</a> | <a href="https://git.distorted.org.uk/~mdw/strayman/log/refs/tags/1.1.4">log</a></td>
+</tr><tr class="dark">
+<td><i>5 years ago</i></td>
+<td><a class="list name" href="https://git.distorted.org.uk/~mdw/strayman/commit/e642ddb81feeb8056762575b02d26cb6efd9092f">1.1.3.2</a></td>
+<td><a class="list subject" href="https://git.distorted.org.uk/~mdw/strayman/tag/b667ed3792b2ec77da597cf38681715c578bd115">Release 1.1.3.2.</a></td>
+<td class="selflink"><a href="https://git.distorted.org.uk/~mdw/strayman/tag/b667ed3792b2ec77da597cf38681715c578bd115">tag</a></td>
+<td class="link"> | <a href="https://git.distorted.org.uk/~mdw/strayman/commit/e642ddb81feeb8056762575b02d26cb6efd9092f">commit</a> | <a href="https://git.distorted.org.uk/~mdw/strayman/shortlog/refs/tags/1.1.3.2">shortlog</a> | <a href="https://git.distorted.org.uk/~mdw/strayman/log/refs/tags/1.1.3.2">log</a></td>
+</tr><tr class="light">
+<td><i>10 years ago</i></td>
+<td><a class="list name" href="https://git.distorted.org.uk/~mdw/strayman/commit/b40e3be3e44f20ca28cc17fc3fd23317e6ee9010">1.1.3.1</a></td>
+<td><a class="list subject" href="https://git.distorted.org.uk/~mdw/strayman/tag/aa4b45f1f7b0c8024310a175c3b655e910907c4c">Release 1.1.3.1.</a></td>
+<td class="selflink"><a href="https://git.distorted.org.uk/~mdw/strayman/tag/aa4b45f1f7b0c8024310a175c3b655e910907c4c">tag</a></td>
+<td class="link"> | <a href="https://git.distorted.org.uk/~mdw/strayman/commit/b40e3be3e44f20ca28cc17fc3fd23317e6ee9010">commit</a> | <a href="https://git.distorted.org.uk/~mdw/strayman/shortlog/refs/tags/1.1.3.1">shortlog</a> | <a href="https://git.distorted.org.uk/~mdw/strayman/log/refs/tags/1.1.3.1">log</a></td>
+</tr><tr class="dark">
+<td><i>11 years ago</i></td>
+<td><a class="list name" href="https://git.distorted.org.uk/~mdw/strayman/commit/a9e5961e0f27bf6e61fea17a1ff1042a3b7ff59d">1.1.3</a></td>
+<td><a class="list subject" href="https://git.distorted.org.uk/~mdw/strayman/tag/fb121d1290acb22cfb500560f11a37608a6acddd">Release 1.1.3.</a></td>
+<td class="selflink"><a href="https://git.distorted.org.uk/~mdw/strayman/tag/fb121d1290acb22cfb500560f11a37608a6acddd">tag</a></td>
+<td class="link"> | <a href="https://git.distorted.org.uk/~mdw/strayman/commit/a9e5961e0f27bf6e61fea17a1ff1042a3b7ff59d">commit</a> | <a href="https://git.distorted.org.uk/~mdw/strayman/shortlog/refs/tags/1.1.3">shortlog</a> | <a href="https://git.distorted.org.uk/~mdw/strayman/log/refs/tags/1.1.3">log</a></td>
+</tr><tr class="light">
+<td><i>11 years ago</i></td>
+<td><a class="list name" href="https://git.distorted.org.uk/~mdw/strayman/commit/c3f26ad36fea70261b3a2d594cd47e4b0bb05415">1.1.2</a></td>
+<td><a class="list subject" href="https://git.distorted.org.uk/~mdw/strayman/tag/f2920f8233dce0415e8c5dc079c3434d1e06ed6b">Release 1.1.2.</a></td>
+<td class="selflink"><a href="https://git.distorted.org.uk/~mdw/strayman/tag/f2920f8233dce0415e8c5dc079c3434d1e06ed6b">tag</a></td>
+<td class="link"> | <a href="https://git.distorted.org.uk/~mdw/strayman/commit/c3f26ad36fea70261b3a2d594cd47e4b0bb05415">commit</a> | <a href="https://git.distorted.org.uk/~mdw/strayman/shortlog/refs/tags/1.1.2">shortlog</a> | <a href="https://git.distorted.org.uk/~mdw/strayman/log/refs/tags/1.1.2">log</a></td>
+</tr><tr class="dark">
+<td><i>11 years ago</i></td>
+<td><a class="list name" href="https://git.distorted.org.uk/~mdw/strayman/commit/1ffa90443b7d571c1d2af00626db04dea063302d">1.1.0</a></td>
+<td><a class="list subject" href="https://git.distorted.org.uk/~mdw/strayman/tag/e888e9d01ce67f09daa9ff06cf04161816c32002">Release 1.1.0.</a></td>
+<td class="selflink"><a href="https://git.distorted.org.uk/~mdw/strayman/tag/e888e9d01ce67f09daa9ff06cf04161816c32002">tag</a></td>
+<td class="link"> | <a href="https://git.distorted.org.uk/~mdw/strayman/commit/1ffa90443b7d571c1d2af00626db04dea063302d">commit</a> | <a href="https://git.distorted.org.uk/~mdw/strayman/shortlog/refs/tags/1.1.0">shortlog</a> | <a href="https://git.distorted.org.uk/~mdw/strayman/log/refs/tags/1.1.0">log</a></td>
+</tr></table>
+<div class="header">
+<a class="title" href="https://git.distorted.org.uk/~mdw/strayman/heads">heads</a>
+</div>
+<table class="heads">
+<tr class="dark">
+<td><i>2 months ago</i></td>
+<td><a class="list name" href="https://git.distorted.org.uk/~mdw/strayman/shortlog/refs/heads/mdw/tangle">mdw/tangle</a></td>
+<td class="link"><a href="https://git.distorted.org.uk/~mdw/strayman/shortlog/refs/heads/mdw/tangle">shortlog</a> | <a href="https://git.distorted.org.uk/~mdw/strayman/log/refs/heads/mdw/tangle">log</a> | <a href="https://git.distorted.org.uk/~mdw/strayman/tree/refs/heads/mdw/tangle">tree</a></td>
+</tr><tr class="light">
+<td><i>3 years ago</i></td>
+<td class="current_head"><a class="list name" href="https://git.distorted.org.uk/~mdw/strayman/shortlog/refs/heads/master">master</a></td>
+<td class="link"><a href="https://git.distorted.org.uk/~mdw/strayman/shortlog/refs/heads/master">shortlog</a> | <a href="https://git.distorted.org.uk/~mdw/strayman/log/refs/heads/master">log</a> | <a href="https://git.distorted.org.uk/~mdw/strayman/tree/refs/heads/master">tree</a></td>
+</tr></table>
+<div class="page_footer">
+<div class="page_footer_text">LaTeX document class for various documents</div>
+<a class="rss_logo" href="https://git.distorted.org.uk/~mdw/strayman/rss" title="log RSS feed">RSS</a>
+<a class="rss_logo" href="https://git.distorted.org.uk/~mdw/strayman/atom" title="log Atom feed">Atom</a>
+</div>
+<script type="text/javascript" src="/gitweb/gitweb.js"></script>
+<script type="text/javascript">
+window.onload = function () {
+	var tz_cookie = { name: 'gitweb_tz', expires: 14, path: '/' };
+	onloadTZSetup('local', tz_cookie, 'datetime');
+};
+</script>
+</body>
+</html>

@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-US" lang="en-US">
+<!-- git web interface version 2.11.0, (C) 2005-2006, Kay Sievers <kay.sievers@vrfy.org>, Christian Gierke -->
+<!-- git core binaries version 2.11.0 -->
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+<meta name="generator" content="gitweb/2.11.0 git/2.11.0"/>
+<meta name="robots" content="index, nofollow"/>
+<title>mdw@git.distorted.org.uk Git - udpkey/summary</title>
+<base href="https://git.distorted.org.uk" />
+<link rel="stylesheet" type="text/css" href="/gitweb/gitweb.css"/>
+<link rel="stylesheet" type="text/css" href="/local/gitweb.css"/>
+<link rel="alternate" title="udpkey - log - RSS feed" href="https://git.distorted.org.uk/~mdw/udpkey/rss" type="application/rss+xml" />
+<link rel="alternate" title="udpkey - log - RSS feed (no merges)" href="https://git.distorted.org.uk/~mdw/udpkey/rss?opt=--no-merges" type="application/rss+xml" />
+<link rel="alternate" title="udpkey - log - Atom feed" href="https://git.distorted.org.uk/~mdw/udpkey/atom" type="application/atom+xml" />
+<link rel="alternate" title="udpkey - log - Atom feed (no merges)" href="https://git.distorted.org.uk/~mdw/udpkey/atom?opt=--no-merges" type="application/atom+xml" />
+<link rel="shortcut icon" href="/gitweb/git-favicon.png" type="image/png" />
+</head>
+<body>
+<div class="page_header">
+<a href="http://git-scm.com/" title="git homepage"><img alt="git" class="logo" height="27" src="/gitweb/git-logo.png" width="72" /></a><a href="/~mdw/">~mdw</a> / <a href="https://git.distorted.org.uk/~mdw/udpkey">udpkey</a> / summary
+</div>
+<form method="get" action="https://git.distorted.org.uk/~mdw//udpkey" enctype="multipart/form-data"><div class="search">
+<input name="a" type="hidden" value="search" />
+<input name="h" type="hidden" value="HEAD" />
+<select name="st" >
+<option selected="selected" value="commit">commit</option>
+<option value="grep">grep</option>
+<option value="author">author</option>
+<option value="committer">committer</option>
+<option value="pickaxe">pickaxe</option>
+</select> <a href="https://git.distorted.org.uk/~mdw/udpkey/search_help" title="search help">?</a> search:
+<input type="text" name="s"  />
+<span title="Extended regular expression"><label><input type="checkbox" name="sr" value="1" />re</label></span></div>
+</form>
+<div class="page_nav">
+summary | <a href="https://git.distorted.org.uk/~mdw/udpkey/shortlog">shortlog</a> | <a href="https://git.distorted.org.uk/~mdw/udpkey/log">log</a> | <a href="https://git.distorted.org.uk/~mdw/udpkey/commit/266e54e16bdab10461daa17e754acfedf669d05a">commit</a> | <a href="https://git.distorted.org.uk/~mdw/udpkey/commitdiff/266e54e16bdab10461daa17e754acfedf669d05a">commitdiff</a> | <a href="https://git.distorted.org.uk/~mdw/udpkey/tree">tree</a><br/>
+<br/>
+</div>
+<div class="title">&nbsp;</div>
+<table class="projects_list">
+<tr id="metadata_desc"><td>description</td><td>Transmit and receive cryptographic keys over UDP; useful during boot.</td></tr>
+<tr id="metadata_owner"><td>owner</td><td>Mark Wooding</td></tr>
+<tr id="metadata_lchange"><td>last change</td><td><span class="datetime">Thu, 18 Feb 2016 17:53:27 +0000</span> (17:53 +0000)</td></tr>
+<tr class="metadata_url"><td>URL</td><td>https://git.distorted.org.uk/~mdw/udpkey</td></tr>
+<tr class="metadata_url"><td></td><td>git://git.distorted.org.uk/~mdw/udpkey</td></tr>
+</table>
+<div class="header">
+<a class="title" href="https://git.distorted.org.uk/~mdw/udpkey/shortlog">shortlog</a>
+</div>
+<table class="shortlog">
+<tr class="dark">
+<td title="7 years ago"><i>2016-02-18</i></td>
+<td class="author"><a class="list" href="https://git.distorted.org.uk/~mdw/udpkey/search?s=Mark+Wooding;st=author" title="Search for commits authored by Mark Wooding">Mark Wooding</a></td><td><a class="list subject" href="https://git.distorted.org.uk/~mdw/udpkey/commit/266e54e16bdab10461daa17e754acfedf669d05a">Release 1.0.2.</a> <span class="refs"> <span class="head" title="heads/master"><a href="https://git.distorted.org.uk/~mdw/udpkey/shortlog/refs/heads/master">master</a></span> <span class="tag indirect" title="tags/1.0.2"><a href="https://git.distorted.org.uk/~mdw/udpkey/tag/refs/tags/1.0.2">1.0.2</a></span></span></td>
+<td class="link"><a href="https://git.distorted.org.uk/~mdw/udpkey/commit/266e54e16bdab10461daa17e754acfedf669d05a">commit</a> | <a href="https://git.distorted.org.uk/~mdw/udpkey/commitdiff/266e54e16bdab10461daa17e754acfedf669d05a">commitdiff</a> | <a href="https://git.distorted.org.uk/~mdw/udpkey/tree/266e54e16bdab10461daa17e754acfedf669d05a">tree</a> | snapshot (<a href="https://git.distorted.org.uk/~mdw/udpkey/snapshot/266e54e16bdab10461daa17e754acfedf669d05a.tar.gz">tar.gz</a> <a href="https://git.distorted.org.uk/~mdw/udpkey/snapshot/266e54e16bdab10461daa17e754acfedf669d05a.zip">zip</a>)</td>
+</tr>
+<tr class="light">
+<td title="7 years ago"><i>2016-02-18</i></td>
+<td class="author"><a class="list" href="https://git.distorted.org.uk/~mdw/udpkey/search?s=Mark+Wooding;st=author" title="Search for commits authored by Mark Wooding">Mark Wooding</a></td><td><a class="list subject" href="https://git.distorted.org.uk/~mdw/udpkey/commit/5c7e9df83788dcb1f8f57d88ce0a945fe44b4ca0">debian/control: Fix the Build-Depends.</a></td>
+<td class="link"><a href="https://git.distorted.org.uk/~mdw/udpkey/commit/5c7e9df83788dcb1f8f57d88ce0a945fe44b4ca0">commit</a> | <a href="https://git.distorted.org.uk/~mdw/udpkey/commitdiff/5c7e9df83788dcb1f8f57d88ce0a945fe44b4ca0">commitdiff</a> | <a href="https://git.distorted.org.uk/~mdw/udpkey/tree/5c7e9df83788dcb1f8f57d88ce0a945fe44b4ca0">tree</a> | snapshot (<a href="https://git.distorted.org.uk/~mdw/udpkey/snapshot/5c7e9df83788dcb1f8f57d88ce0a945fe44b4ca0.tar.gz">tar.gz</a> <a href="https://git.distorted.org.uk/~mdw/udpkey/snapshot/5c7e9df83788dcb1f8f57d88ce0a945fe44b4ca0.zip">zip</a>)</td>
+</tr>
+<tr class="dark">
+<td title="7 years ago"><i>2016-02-18</i></td>
+<td class="author"><a class="list" href="https://git.distorted.org.uk/~mdw/udpkey/search?s=Mark+Wooding;st=author" title="Search for commits authored by Mark Wooding">Mark Wooding</a></td><td><a class="list subject" href="https://git.distorted.org.uk/~mdw/udpkey/commit/413e4264e7164a7474b4affa71c487b6ccc474a8" title="debian/source/format: Apparently I'm meant to have one of these.">debian/source/format: Apparently I&#39;m meant to have... </a></td>
+<td class="link"><a href="https://git.distorted.org.uk/~mdw/udpkey/commit/413e4264e7164a7474b4affa71c487b6ccc474a8">commit</a> | <a href="https://git.distorted.org.uk/~mdw/udpkey/commitdiff/413e4264e7164a7474b4affa71c487b6ccc474a8">commitdiff</a> | <a href="https://git.distorted.org.uk/~mdw/udpkey/tree/413e4264e7164a7474b4affa71c487b6ccc474a8">tree</a> | snapshot (<a href="https://git.distorted.org.uk/~mdw/udpkey/snapshot/413e4264e7164a7474b4affa71c487b6ccc474a8.tar.gz">tar.gz</a> <a href="https://git.distorted.org.uk/~mdw/udpkey/snapshot/413e4264e7164a7474b4affa71c487b6ccc474a8.zip">zip</a>)</td>
+</tr>
+<tr class="light">
+<td title="10 years ago"><i>2013-06-29</i></td>
+<td class="author"><a class="list" href="https://git.distorted.org.uk/~mdw/udpkey/search?s=Mark+Wooding;st=author" title="Search for commits authored by Mark Wooding">Mark Wooding</a></td><td><a class="list subject" href="https://git.distorted.org.uk/~mdw/udpkey/commit/c33ded254b17ed0b7871ec8ef08ddf447df08952">udpkey.c: Fix typos in commentary.</a></td>
+<td class="link"><a href="https://git.distorted.org.uk/~mdw/udpkey/commit/c33ded254b17ed0b7871ec8ef08ddf447df08952">commit</a> | <a href="https://git.distorted.org.uk/~mdw/udpkey/commitdiff/c33ded254b17ed0b7871ec8ef08ddf447df08952">commitdiff</a> | <a href="https://git.distorted.org.uk/~mdw/udpkey/tree/c33ded254b17ed0b7871ec8ef08ddf447df08952">tree</a> | snapshot (<a href="https://git.distorted.org.uk/~mdw/udpkey/snapshot/c33ded254b17ed0b7871ec8ef08ddf447df08952.tar.gz">tar.gz</a> <a href="https://git.distorted.org.uk/~mdw/udpkey/snapshot/c33ded254b17ed0b7871ec8ef08ddf447df08952.zip">zip</a>)</td>
+</tr>
+<tr class="dark">
+<td title="10 years ago"><i>2013-06-29</i></td>
+<td class="author"><a class="list" href="https://git.distorted.org.uk/~mdw/udpkey/search?s=Mark+Wooding;st=author" title="Search for commits authored by Mark Wooding">Mark Wooding</a></td><td><a class="list subject" href="https://git.distorted.org.uk/~mdw/udpkey/commit/cb4edb9f61ee8a2b6b8a89f1069fec6d5a771c70" title="udpkey.1: Prepend a line telling man(1)'s that it should call eqn(1).">udpkey.1: Prepend a line telling man(1)&#39;s that it shoul... </a></td>
+<td class="link"><a href="https://git.distorted.org.uk/~mdw/udpkey/commit/cb4edb9f61ee8a2b6b8a89f1069fec6d5a771c70">commit</a> | <a href="https://git.distorted.org.uk/~mdw/udpkey/commitdiff/cb4edb9f61ee8a2b6b8a89f1069fec6d5a771c70">commitdiff</a> | <a href="https://git.distorted.org.uk/~mdw/udpkey/tree/cb4edb9f61ee8a2b6b8a89f1069fec6d5a771c70">tree</a> | snapshot (<a href="https://git.distorted.org.uk/~mdw/udpkey/snapshot/cb4edb9f61ee8a2b6b8a89f1069fec6d5a771c70.tar.gz">tar.gz</a> <a href="https://git.distorted.org.uk/~mdw/udpkey/snapshot/cb4edb9f61ee8a2b6b8a89f1069fec6d5a771c70.zip">zip</a>)</td>
+</tr>
+<tr class="light">
+<td title="10 years ago"><i>2013-06-29</i></td>
+<td class="author"><a class="list" href="https://git.distorted.org.uk/~mdw/udpkey/search?s=Mark+Wooding;st=author" title="Search for commits authored by Mark Wooding">Mark Wooding</a></td><td><a class="list subject" href="https://git.distorted.org.uk/~mdw/udpkey/commit/336b3767c33f397e1db883fc220c607ecb2d9e8d">udpkey.1: Fix misformatting in a syntax display.</a></td>
+<td class="link"><a href="https://git.distorted.org.uk/~mdw/udpkey/commit/336b3767c33f397e1db883fc220c607ecb2d9e8d">commit</a> | <a href="https://git.distorted.org.uk/~mdw/udpkey/commitdiff/336b3767c33f397e1db883fc220c607ecb2d9e8d">commitdiff</a> | <a href="https://git.distorted.org.uk/~mdw/udpkey/tree/336b3767c33f397e1db883fc220c607ecb2d9e8d">tree</a> | snapshot (<a href="https://git.distorted.org.uk/~mdw/udpkey/snapshot/336b3767c33f397e1db883fc220c607ecb2d9e8d.tar.gz">tar.gz</a> <a href="https://git.distorted.org.uk/~mdw/udpkey/snapshot/336b3767c33f397e1db883fc220c607ecb2d9e8d.zip">zip</a>)</td>
+</tr>
+<tr class="dark">
+<td title="10 years ago"><i>2013-06-29</i></td>
+<td class="author"><a class="list" href="https://git.distorted.org.uk/~mdw/udpkey/search?s=Mark+Wooding;st=author" title="Search for commits authored by Mark Wooding">Mark Wooding</a></td><td><a class="list subject" href="https://git.distorted.org.uk/~mdw/udpkey/commit/b5491aaa8978c7adc42c7f758ddbed6263c67e3a">Release 1.0.1.</a> <span class="refs"> <span class="tag indirect" title="tags/1.0.1"><a href="https://git.distorted.org.uk/~mdw/udpkey/tag/refs/tags/1.0.1">1.0.1</a></span></span></td>
+<td class="link"><a href="https://git.distorted.org.uk/~mdw/udpkey/commit/b5491aaa8978c7adc42c7f758ddbed6263c67e3a">commit</a> | <a href="https://git.distorted.org.uk/~mdw/udpkey/commitdiff/b5491aaa8978c7adc42c7f758ddbed6263c67e3a">commitdiff</a> | <a href="https://git.distorted.org.uk/~mdw/udpkey/tree/b5491aaa8978c7adc42c7f758ddbed6263c67e3a">tree</a> | snapshot (<a href="https://git.distorted.org.uk/~mdw/udpkey/snapshot/b5491aaa8978c7adc42c7f758ddbed6263c67e3a.tar.gz">tar.gz</a> <a href="https://git.distorted.org.uk/~mdw/udpkey/snapshot/b5491aaa8978c7adc42c7f758ddbed6263c67e3a.zip">zip</a>)</td>
+</tr>
+<tr class="light">
+<td title="10 years ago"><i>2013-06-29</i></td>
+<td class="author"><a class="list" href="https://git.distorted.org.uk/~mdw/udpkey/search?s=Mark+Wooding;st=author" title="Search for commits authored by Mark Wooding">Mark Wooding</a></td><td><a class="list subject" href="https://git.distorted.org.uk/~mdw/udpkey/commit/37b2b8ac141b664344365678b1606232cad3af25" title="debian/udpkey.keyscript: Don't send network setup chatter as key.">debian/udpkey.keyscript: Don&#39;t send network setup chatt... </a></td>
+<td class="link"><a href="https://git.distorted.org.uk/~mdw/udpkey/commit/37b2b8ac141b664344365678b1606232cad3af25">commit</a> | <a href="https://git.distorted.org.uk/~mdw/udpkey/commitdiff/37b2b8ac141b664344365678b1606232cad3af25">commitdiff</a> | <a href="https://git.distorted.org.uk/~mdw/udpkey/tree/37b2b8ac141b664344365678b1606232cad3af25">tree</a> | snapshot (<a href="https://git.distorted.org.uk/~mdw/udpkey/snapshot/37b2b8ac141b664344365678b1606232cad3af25.tar.gz">tar.gz</a> <a href="https://git.distorted.org.uk/~mdw/udpkey/snapshot/37b2b8ac141b664344365678b1606232cad3af25.zip">zip</a>)</td>
+</tr>
+<tr class="dark">
+<td title="10 years ago"><i>2013-06-29</i></td>
+<td class="author"><a class="list" href="https://git.distorted.org.uk/~mdw/udpkey/search?s=Mark+Wooding;st=author" title="Search for commits authored by Mark Wooding">Mark Wooding</a></td><td><a class="list subject" href="https://git.distorted.org.uk/~mdw/udpkey/commit/f3d1f95d4aed8e1cd02046650c17dd7a7bdbd952" title="debian/udpkey.initramfs-hook: Ensure seed is not publicly readable.">debian/udpkey.initramfs-hook: Ensure seed is not public... </a></td>
+<td class="link"><a href="https://git.distorted.org.uk/~mdw/udpkey/commit/f3d1f95d4aed8e1cd02046650c17dd7a7bdbd952">commit</a> | <a href="https://git.distorted.org.uk/~mdw/udpkey/commitdiff/f3d1f95d4aed8e1cd02046650c17dd7a7bdbd952">commitdiff</a> | <a href="https://git.distorted.org.uk/~mdw/udpkey/tree/f3d1f95d4aed8e1cd02046650c17dd7a7bdbd952">tree</a> | snapshot (<a href="https://git.distorted.org.uk/~mdw/udpkey/snapshot/f3d1f95d4aed8e1cd02046650c17dd7a7bdbd952.tar.gz">tar.gz</a> <a href="https://git.distorted.org.uk/~mdw/udpkey/snapshot/f3d1f95d4aed8e1cd02046650c17dd7a7bdbd952.zip">zip</a>)</td>
+</tr>
+<tr class="light">
+<td title="10 years ago"><i>2013-06-29</i></td>
+<td class="author"><a class="list" href="https://git.distorted.org.uk/~mdw/udpkey/search?s=Mark+Wooding;st=author" title="Search for commits authored by Mark Wooding">Mark Wooding</a></td><td><a class="list subject" href="https://git.distorted.org.uk/~mdw/udpkey/commit/cfec381392ae1a5fb4ac0ffc010e3bc9154889c0">Makefile.am: Distribute the extra Debian files.</a></td>
+<td class="link"><a href="https://git.distorted.org.uk/~mdw/udpkey/commit/cfec381392ae1a5fb4ac0ffc010e3bc9154889c0">commit</a> | <a href="https://git.distorted.org.uk/~mdw/udpkey/commitdiff/cfec381392ae1a5fb4ac0ffc010e3bc9154889c0">commitdiff</a> | <a href="https://git.distorted.org.uk/~mdw/udpkey/tree/cfec381392ae1a5fb4ac0ffc010e3bc9154889c0">tree</a> | snapshot (<a href="https://git.distorted.org.uk/~mdw/udpkey/snapshot/cfec381392ae1a5fb4ac0ffc010e3bc9154889c0.tar.gz">tar.gz</a> <a href="https://git.distorted.org.uk/~mdw/udpkey/snapshot/cfec381392ae1a5fb4ac0ffc010e3bc9154889c0.zip">zip</a>)</td>
+</tr>
+<tr class="dark">
+<td title="10 years ago"><i>2013-06-29</i></td>
+<td class="author"><a class="list" href="https://git.distorted.org.uk/~mdw/udpkey/search?s=Mark+Wooding;st=author" title="Search for commits authored by Mark Wooding">Mark Wooding</a></td><td><a class="list subject" href="https://git.distorted.org.uk/~mdw/udpkey/commit/92469bdf40b72f8faa63cb5fd7abcadcc663c110">Annotate `printf&#39;-like functions for better warnings.</a></td>
+<td class="link"><a href="https://git.distorted.org.uk/~mdw/udpkey/commit/92469bdf40b72f8faa63cb5fd7abcadcc663c110">commit</a> | <a href="https://git.distorted.org.uk/~mdw/udpkey/commitdiff/92469bdf40b72f8faa63cb5fd7abcadcc663c110">commitdiff</a> | <a href="https://git.distorted.org.uk/~mdw/udpkey/tree/92469bdf40b72f8faa63cb5fd7abcadcc663c110">tree</a> | snapshot (<a href="https://git.distorted.org.uk/~mdw/udpkey/snapshot/92469bdf40b72f8faa63cb5fd7abcadcc663c110.tar.gz">tar.gz</a> <a href="https://git.distorted.org.uk/~mdw/udpkey/snapshot/92469bdf40b72f8faa63cb5fd7abcadcc663c110.zip">zip</a>)</td>
+</tr>
+<tr class="light">
+<td title="10 years ago"><i>2013-06-29</i></td>
+<td class="author"><a class="list" href="https://git.distorted.org.uk/~mdw/udpkey/search?s=Mark+Wooding;st=author" title="Search for commits authored by Mark Wooding">Mark Wooding</a></td><td><a class="list subject" href="https://git.distorted.org.uk/~mdw/udpkey/commit/a2fd0b74b87c7d838333e331f4c76c5de8f958dc">udpkey.c: Missing newline in version string.</a></td>
+<td class="link"><a href="https://git.distorted.org.uk/~mdw/udpkey/commit/a2fd0b74b87c7d838333e331f4c76c5de8f958dc">commit</a> | <a href="https://git.distorted.org.uk/~mdw/udpkey/commitdiff/a2fd0b74b87c7d838333e331f4c76c5de8f958dc">commitdiff</a> | <a href="https://git.distorted.org.uk/~mdw/udpkey/tree/a2fd0b74b87c7d838333e331f4c76c5de8f958dc">tree</a> | snapshot (<a href="https://git.distorted.org.uk/~mdw/udpkey/snapshot/a2fd0b74b87c7d838333e331f4c76c5de8f958dc.tar.gz">tar.gz</a> <a href="https://git.distorted.org.uk/~mdw/udpkey/snapshot/a2fd0b74b87c7d838333e331f4c76c5de8f958dc.zip">zip</a>)</td>
+</tr>
+<tr class="dark">
+<td title="10 years ago"><i>2013-06-29</i></td>
+<td class="author"><a class="list" href="https://git.distorted.org.uk/~mdw/udpkey/search?s=Mark+Wooding;st=author" title="Search for commits authored by Mark Wooding">Mark Wooding</a></td><td><a class="list subject" href="https://git.distorted.org.uk/~mdw/udpkey/commit/a5f873bee5d69f4f12160360ec9a756b7c1c907a">Use constant-time comparison for checking MAC tags.</a></td>
+<td class="link"><a href="https://git.distorted.org.uk/~mdw/udpkey/commit/a5f873bee5d69f4f12160360ec9a756b7c1c907a">commit</a> | <a href="https://git.distorted.org.uk/~mdw/udpkey/commitdiff/a5f873bee5d69f4f12160360ec9a756b7c1c907a">commitdiff</a> | <a href="https://git.distorted.org.uk/~mdw/udpkey/tree/a5f873bee5d69f4f12160360ec9a756b7c1c907a">tree</a> | snapshot (<a href="https://git.distorted.org.uk/~mdw/udpkey/snapshot/a5f873bee5d69f4f12160360ec9a756b7c1c907a.tar.gz">tar.gz</a> <a href="https://git.distorted.org.uk/~mdw/udpkey/snapshot/a5f873bee5d69f4f12160360ec9a756b7c1c907a.zip">zip</a>)</td>
+</tr>
+<tr class="light">
+<td title="10 years ago"><i>2013-06-29</i></td>
+<td class="author"><a class="list" href="https://git.distorted.org.uk/~mdw/udpkey/search?s=Mark+Wooding;st=author" title="Search for commits authored by Mark Wooding">Mark Wooding</a></td><td><a class="list subject" href="https://git.distorted.org.uk/~mdw/udpkey/commit/46716e8f42305a5b622274ebe53bad13d3f54bab">udpkey.c: Fix format-string error.</a></td>
+<td class="link"><a href="https://git.distorted.org.uk/~mdw/udpkey/commit/46716e8f42305a5b622274ebe53bad13d3f54bab">commit</a> | <a href="https://git.distorted.org.uk/~mdw/udpkey/commitdiff/46716e8f42305a5b622274ebe53bad13d3f54bab">commitdiff</a> | <a href="https://git.distorted.org.uk/~mdw/udpkey/tree/46716e8f42305a5b622274ebe53bad13d3f54bab">tree</a> | snapshot (<a href="https://git.distorted.org.uk/~mdw/udpkey/snapshot/46716e8f42305a5b622274ebe53bad13d3f54bab.tar.gz">tar.gz</a> <a href="https://git.distorted.org.uk/~mdw/udpkey/snapshot/46716e8f42305a5b622274ebe53bad13d3f54bab.zip">zip</a>)</td>
+</tr>
+<tr class="dark">
+<td title="10 years ago"><i>2013-06-29</i></td>
+<td class="author"><a class="list" href="https://git.distorted.org.uk/~mdw/udpkey/search?s=Mark+Wooding;st=author" title="Search for commits authored by Mark Wooding">Mark Wooding</a></td><td><a class="list subject" href="https://git.distorted.org.uk/~mdw/udpkey/commit/d07ca53230ccef4664ec4130f41463a54c694488">udpkey.1: Some more tweaks to the manpage.</a></td>
+<td class="link"><a href="https://git.distorted.org.uk/~mdw/udpkey/commit/d07ca53230ccef4664ec4130f41463a54c694488">commit</a> | <a href="https://git.distorted.org.uk/~mdw/udpkey/commitdiff/d07ca53230ccef4664ec4130f41463a54c694488">commitdiff</a> | <a href="https://git.distorted.org.uk/~mdw/udpkey/tree/d07ca53230ccef4664ec4130f41463a54c694488">tree</a> | snapshot (<a href="https://git.distorted.org.uk/~mdw/udpkey/snapshot/d07ca53230ccef4664ec4130f41463a54c694488.tar.gz">tar.gz</a> <a href="https://git.distorted.org.uk/~mdw/udpkey/snapshot/d07ca53230ccef4664ec4130f41463a54c694488.zip">zip</a>)</td>
+</tr>
+<tr class="light">
+<td title="10 years ago"><i>2013-06-28</i></td>
+<td class="author"><a class="list" href="https://git.distorted.org.uk/~mdw/udpkey/search?s=Mark+Wooding;st=author" title="Search for commits authored by Mark Wooding">Mark Wooding</a></td><td><a class="list subject" href="https://git.distorted.org.uk/~mdw/udpkey/commit/4adfd9ca68db08bc025ea8b973c492f2175b2673">.gitignore: Ignore the `autom4te.cache&#39; directory.</a></td>
+<td class="link"><a href="https://git.distorted.org.uk/~mdw/udpkey/commit/4adfd9ca68db08bc025ea8b973c492f2175b2673">commit</a> | <a href="https://git.distorted.org.uk/~mdw/udpkey/commitdiff/4adfd9ca68db08bc025ea8b973c492f2175b2673">commitdiff</a> | <a href="https://git.distorted.org.uk/~mdw/udpkey/tree/4adfd9ca68db08bc025ea8b973c492f2175b2673">tree</a> | snapshot (<a href="https://git.distorted.org.uk/~mdw/udpkey/snapshot/4adfd9ca68db08bc025ea8b973c492f2175b2673.tar.gz">tar.gz</a> <a href="https://git.distorted.org.uk/~mdw/udpkey/snapshot/4adfd9ca68db08bc025ea8b973c492f2175b2673.zip">zip</a>)</td>
+</tr>
+<tr>
+<td colspan="4"><a href="https://git.distorted.org.uk/~mdw/udpkey/shortlog">...</a></td>
+</tr>
+</table>
+<div class="header">
+<a class="title" href="https://git.distorted.org.uk/~mdw/udpkey/tags">tags</a>
+</div>
+<table class="tags">
+<tr class="dark">
+<td><i>7 years ago</i></td>
+<td><a class="list name" href="https://git.distorted.org.uk/~mdw/udpkey/commit/266e54e16bdab10461daa17e754acfedf669d05a">1.0.2</a></td>
+<td><a class="list subject" href="https://git.distorted.org.uk/~mdw/udpkey/tag/5b7c3af6e7b6398744d0975b17565db51c25617f">Release 1.0.2.</a></td>
+<td class="selflink"><a href="https://git.distorted.org.uk/~mdw/udpkey/tag/5b7c3af6e7b6398744d0975b17565db51c25617f">tag</a></td>
+<td class="link"> | <a href="https://git.distorted.org.uk/~mdw/udpkey/commit/266e54e16bdab10461daa17e754acfedf669d05a">commit</a> | <a href="https://git.distorted.org.uk/~mdw/udpkey/shortlog/refs/tags/1.0.2">shortlog</a> | <a href="https://git.distorted.org.uk/~mdw/udpkey/log/refs/tags/1.0.2">log</a></td>
+</tr><tr class="light">
+<td><i>10 years ago</i></td>
+<td><a class="list name" href="https://git.distorted.org.uk/~mdw/udpkey/commit/b5491aaa8978c7adc42c7f758ddbed6263c67e3a">1.0.1</a></td>
+<td><a class="list subject" href="https://git.distorted.org.uk/~mdw/udpkey/tag/334a8821ad53204cb0671a789342ca1a6835f05d">Release 1.0.1.</a></td>
+<td class="selflink"><a href="https://git.distorted.org.uk/~mdw/udpkey/tag/334a8821ad53204cb0671a789342ca1a6835f05d">tag</a></td>
+<td class="link"> | <a href="https://git.distorted.org.uk/~mdw/udpkey/commit/b5491aaa8978c7adc42c7f758ddbed6263c67e3a">commit</a> | <a href="https://git.distorted.org.uk/~mdw/udpkey/shortlog/refs/tags/1.0.1">shortlog</a> | <a href="https://git.distorted.org.uk/~mdw/udpkey/log/refs/tags/1.0.1">log</a></td>
+</tr><tr class="dark">
+<td><i>10 years ago</i></td>
+<td><a class="list name" href="https://git.distorted.org.uk/~mdw/udpkey/commit/247f344ab1dcb88890b92fd96258f8872f76acf8">1.0.0</a></td>
+<td><a class="list subject" href="https://git.distorted.org.uk/~mdw/udpkey/tag/8825ebf8d2a4b8deb8d3f2a9206a319b2437bd52">Release 1.0.0.</a></td>
+<td class="selflink"><a href="https://git.distorted.org.uk/~mdw/udpkey/tag/8825ebf8d2a4b8deb8d3f2a9206a319b2437bd52">tag</a></td>
+<td class="link"> | <a href="https://git.distorted.org.uk/~mdw/udpkey/commit/247f344ab1dcb88890b92fd96258f8872f76acf8">commit</a> | <a href="https://git.distorted.org.uk/~mdw/udpkey/shortlog/refs/tags/1.0.0">shortlog</a> | <a href="https://git.distorted.org.uk/~mdw/udpkey/log/refs/tags/1.0.0">log</a></td>
+</tr></table>
+<div class="header">
+<a class="title" href="https://git.distorted.org.uk/~mdw/udpkey/heads">heads</a>
+</div>
+<table class="heads">
+<tr class="dark">
+<td><i>7 years ago</i></td>
+<td><a class="list name" href="https://git.distorted.org.uk/~mdw/udpkey/shortlog/refs/heads/mdw/wip.crybaby.2016-05-05">mdw/wip.crybaby.2016-05-05</a></td>
+<td class="link"><a href="https://git.distorted.org.uk/~mdw/udpkey/shortlog/refs/heads/mdw/wip.crybaby.2016-05-05">shortlog</a> | <a href="https://git.distorted.org.uk/~mdw/udpkey/log/refs/heads/mdw/wip.crybaby.2016-05-05">log</a> | <a href="https://git.distorted.org.uk/~mdw/udpkey/tree/refs/heads/mdw/wip.crybaby.2016-05-05">tree</a></td>
+</tr><tr class="light">
+<td><i>7 years ago</i></td>
+<td class="current_head"><a class="list name" href="https://git.distorted.org.uk/~mdw/udpkey/shortlog/refs/heads/master">master</a></td>
+<td class="link"><a href="https://git.distorted.org.uk/~mdw/udpkey/shortlog/refs/heads/master">shortlog</a> | <a href="https://git.distorted.org.uk/~mdw/udpkey/log/refs/heads/master">log</a> | <a href="https://git.distorted.org.uk/~mdw/udpkey/tree/refs/heads/master">tree</a></td>
+</tr><tr class="dark">
+<td><i>9 years ago</i></td>
+<td><a class="list name" href="https://git.distorted.org.uk/~mdw/udpkey/shortlog/refs/heads/mdw/fwd-sec">mdw/fwd-sec</a></td>
+<td class="link"><a href="https://git.distorted.org.uk/~mdw/udpkey/shortlog/refs/heads/mdw/fwd-sec">shortlog</a> | <a href="https://git.distorted.org.uk/~mdw/udpkey/log/refs/heads/mdw/fwd-sec">log</a> | <a href="https://git.distorted.org.uk/~mdw/udpkey/tree/refs/heads/mdw/fwd-sec">tree</a></td>
+</tr></table>
+<div class="page_footer">
+<div class="page_footer_text">Transmit and receive cryptographic keys over UDP; useful during boot.</div>
+<a class="rss_logo" href="https://git.distorted.org.uk/~mdw/udpkey/rss" title="log RSS feed">RSS</a>
+<a class="rss_logo" href="https://git.distorted.org.uk/~mdw/udpkey/atom" title="log Atom feed">Atom</a>
+</div>
+<script type="text/javascript" src="/gitweb/gitweb.js"></script>
+<script type="text/javascript">
+window.onload = function () {
+	var tz_cookie = { name: 'gitweb_tz', expires: 14, path: '/' };
+	onloadTZSetup('local', tz_cookie, 'datetime');
+};
+</script>
+</body>
+</html>

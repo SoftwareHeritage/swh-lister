@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-US" lang="en-US">
+<!-- git web interface version 2.11.0, (C) 2005-2006, Kay Sievers <kay.sievers@vrfy.org>, Christian Gierke -->
+<!-- git core binaries version 2.11.0 -->
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+<meta name="generator" content="gitweb/2.11.0 git/2.11.0"/>
+<meta name="robots" content="index, nofollow"/>
+<title>mdw@git.distorted.org.uk Git - firewall/summary</title>
+<base href="https://git.distorted.org.uk" />
+<link rel="stylesheet" type="text/css" href="/gitweb/gitweb.css"/>
+<link rel="stylesheet" type="text/css" href="/local/gitweb.css"/>
+<link rel="alternate" title="firewall - log - RSS feed" href="https://git.distorted.org.uk/~mdw/firewall/rss" type="application/rss+xml" />
+<link rel="alternate" title="firewall - log - RSS feed (no merges)" href="https://git.distorted.org.uk/~mdw/firewall/rss?opt=--no-merges" type="application/rss+xml" />
+<link rel="alternate" title="firewall - log - Atom feed" href="https://git.distorted.org.uk/~mdw/firewall/atom" type="application/atom+xml" />
+<link rel="alternate" title="firewall - log - Atom feed (no merges)" href="https://git.distorted.org.uk/~mdw/firewall/atom?opt=--no-merges" type="application/atom+xml" />
+<link rel="shortcut icon" href="/gitweb/git-favicon.png" type="image/png" />
+</head>
+<body>
+<div class="page_header">
+<a href="http://git-scm.com/" title="git homepage"><img alt="git" class="logo" height="27" src="/gitweb/git-logo.png" width="72" /></a><a href="/~mdw/">~mdw</a> / <a href="https://git.distorted.org.uk/~mdw/firewall">firewall</a> / summary
+</div>
+<form method="get" action="https://git.distorted.org.uk/~mdw//firewall" enctype="multipart/form-data"><div class="search">
+<input name="a" type="hidden" value="search" />
+<input name="h" type="hidden" value="HEAD" />
+<select name="st" >
+<option selected="selected" value="commit">commit</option>
+<option value="grep">grep</option>
+<option value="author">author</option>
+<option value="committer">committer</option>
+<option value="pickaxe">pickaxe</option>
+</select> <a href="https://git.distorted.org.uk/~mdw/firewall/search_help" title="search help">?</a> search:
+<input type="text" name="s"  />
+<span title="Extended regular expression"><label><input type="checkbox" name="sr" value="1" />re</label></span></div>
+</form>
+<div class="page_nav">
+summary | <a href="https://git.distorted.org.uk/~mdw/firewall/shortlog">shortlog</a> | <a href="https://git.distorted.org.uk/~mdw/firewall/log">log</a> | <a href="https://git.distorted.org.uk/~mdw/firewall/commit/8a3660c1f5d30802baec439821c42ea93eb66584">commit</a> | <a href="https://git.distorted.org.uk/~mdw/firewall/commitdiff/8a3660c1f5d30802baec439821c42ea93eb66584">commitdiff</a> | <a href="https://git.distorted.org.uk/~mdw/firewall/tree">tree</a><br/>
+<br/>
+</div>
+<div class="title">&nbsp;</div>
+<table class="projects_list">
+<tr id="metadata_desc"><td>description</td><td>Firewall scripts for distorted.org.uk.</td></tr>
+<tr id="metadata_owner"><td>owner</td><td>Mark Wooding</td></tr>
+<tr id="metadata_lchange"><td>last change</td><td><span class="datetime">Thu, 16 Mar 2023 18:09:32 +0000</span> (18:09 +0000)</td></tr>
+<tr class="metadata_url"><td>URL</td><td>https://git.distorted.org.uk/~mdw/firewall</td></tr>
+<tr class="metadata_url"><td></td><td>git://git.distorted.org.uk/~mdw/firewall</td></tr>
+</table>
+<div class="header">
+<a class="title" href="https://git.distorted.org.uk/~mdw/firewall/shortlog">shortlog</a>
+</div>
+<table class="shortlog">
+<tr class="dark">
+<td title="3 months ago"><i>2023-03-16</i></td>
+<td class="author"><a class="list" href="https://git.distorted.org.uk/~mdw/firewall/search?s=Mark+Wooding;st=author" title="Search for commits authored by Mark Wooding">Mark Wooding</a></td><td><a class="list subject" href="https://git.distorted.org.uk/~mdw/firewall/commit/8a3660c1f5d30802baec439821c42ea93eb66584" title="local.m4: Fix the IPv4 version of the `inbound-untrusted' chain.">local.m4: Fix the IPv4 version of the `inbound-untruste... </a> <span class="refs"> <span class="head" title="heads/master"><a href="https://git.distorted.org.uk/~mdw/firewall/shortlog/refs/heads/master">master</a></span></span></td>
+<td class="link"><a href="https://git.distorted.org.uk/~mdw/firewall/commit/8a3660c1f5d30802baec439821c42ea93eb66584">commit</a> | <a href="https://git.distorted.org.uk/~mdw/firewall/commitdiff/8a3660c1f5d30802baec439821c42ea93eb66584">commitdiff</a> | <a href="https://git.distorted.org.uk/~mdw/firewall/tree/8a3660c1f5d30802baec439821c42ea93eb66584">tree</a> | snapshot (<a href="https://git.distorted.org.uk/~mdw/firewall/snapshot/8a3660c1f5d30802baec439821c42ea93eb66584.tar.gz">tar.gz</a> <a href="https://git.distorted.org.uk/~mdw/firewall/snapshot/8a3660c1f5d30802baec439821c42ea93eb66584.zip">zip</a>)</td>
+</tr>
+<tr class="light">
+<td title="4 months ago"><i>2023-02-25</i></td>
+<td class="author"><a class="list" href="https://git.distorted.org.uk/~mdw/firewall/search?s=Mark+Wooding;st=author" title="Search for commits authored by Mark Wooding">Mark Wooding</a></td><td><a class="list subject" href="https://git.distorted.org.uk/~mdw/firewall/commit/d41e2f123e242866ae3cac6919cc1ce73825c605" title="local.mk, roadstar.m4: Move lpr service to roadstar; decommission vampire.">local.mk, roadstar.m4: Move lpr service to roadstar... </a></td>
+<td class="link"><a href="https://git.distorted.org.uk/~mdw/firewall/commit/d41e2f123e242866ae3cac6919cc1ce73825c605">commit</a> | <a href="https://git.distorted.org.uk/~mdw/firewall/commitdiff/d41e2f123e242866ae3cac6919cc1ce73825c605">commitdiff</a> | <a href="https://git.distorted.org.uk/~mdw/firewall/tree/d41e2f123e242866ae3cac6919cc1ce73825c605">tree</a> | snapshot (<a href="https://git.distorted.org.uk/~mdw/firewall/snapshot/d41e2f123e242866ae3cac6919cc1ce73825c605.tar.gz">tar.gz</a> <a href="https://git.distorted.org.uk/~mdw/firewall/snapshot/d41e2f123e242866ae3cac6919cc1ce73825c605.zip">zip</a>)</td>
+</tr>
+<tr class="dark">
+<td title="13 months ago"><i>2022-05-30</i></td>
+<td class="author"><a class="list" href="https://git.distorted.org.uk/~mdw/firewall/search?s=Mark+Wooding;st=author" title="Search for commits authored by Mark Wooding">Mark Wooding</a></td><td><a class="list subject" href="https://git.distorted.org.uk/~mdw/firewall/commit/599e123ad47ff30d11eb91fd74262b5cf90d3257">*.m4: Actually allow NFS to untrusted hosts.</a></td>
+<td class="link"><a href="https://git.distorted.org.uk/~mdw/firewall/commit/599e123ad47ff30d11eb91fd74262b5cf90d3257">commit</a> | <a href="https://git.distorted.org.uk/~mdw/firewall/commitdiff/599e123ad47ff30d11eb91fd74262b5cf90d3257">commitdiff</a> | <a href="https://git.distorted.org.uk/~mdw/firewall/tree/599e123ad47ff30d11eb91fd74262b5cf90d3257">tree</a> | snapshot (<a href="https://git.distorted.org.uk/~mdw/firewall/snapshot/599e123ad47ff30d11eb91fd74262b5cf90d3257.tar.gz">tar.gz</a> <a href="https://git.distorted.org.uk/~mdw/firewall/snapshot/599e123ad47ff30d11eb91fd74262b5cf90d3257.zip">zip</a>)</td>
+</tr>
+<tr class="light">
+<td title="13 months ago"><i>2022-05-30</i></td>
+<td class="author"><a class="list" href="https://git.distorted.org.uk/~mdw/firewall/search?s=Mark+Wooding;st=author" title="Search for commits authored by Mark Wooding">Mark Wooding</a></td><td><a class="list subject" href="https://git.distorted.org.uk/~mdw/firewall/commit/94ce6e764e92676c1a7dea68820bcf198ea4c466" title="local.m4, etc.: Establish `inbound-untrusted' chain and deploy.">local.m4, etc.: Establish `inbound-untrusted&#39; chain... </a></td>
+<td class="link"><a href="https://git.distorted.org.uk/~mdw/firewall/commit/94ce6e764e92676c1a7dea68820bcf198ea4c466">commit</a> | <a href="https://git.distorted.org.uk/~mdw/firewall/commitdiff/94ce6e764e92676c1a7dea68820bcf198ea4c466">commitdiff</a> | <a href="https://git.distorted.org.uk/~mdw/firewall/tree/94ce6e764e92676c1a7dea68820bcf198ea4c466">tree</a> | snapshot (<a href="https://git.distorted.org.uk/~mdw/firewall/snapshot/94ce6e764e92676c1a7dea68820bcf198ea4c466.tar.gz">tar.gz</a> <a href="https://git.distorted.org.uk/~mdw/firewall/snapshot/94ce6e764e92676c1a7dea68820bcf198ea4c466.zip">zip</a>)</td>
+</tr>
+<tr class="dark">
+<td title="13 months ago"><i>2022-05-30</i></td>
+<td class="author"><a class="list" href="https://git.distorted.org.uk/~mdw/firewall/search?s=Mark+Wooding;st=author" title="Search for commits authored by Mark Wooding">Mark Wooding</a></td><td><a class="list subject" href="https://git.distorted.org.uk/~mdw/firewall/commit/4942d7c1381f147b6c1f06e035d710e29b45dae0" title="fender.m4, ibanez.m4, vampire.m4: Invoke `footables' via `run'.">fender.m4, ibanez.m4, vampire.m4: Invoke `footables... </a></td>
+<td class="link"><a href="https://git.distorted.org.uk/~mdw/firewall/commit/4942d7c1381f147b6c1f06e035d710e29b45dae0">commit</a> | <a href="https://git.distorted.org.uk/~mdw/firewall/commitdiff/4942d7c1381f147b6c1f06e035d710e29b45dae0">commitdiff</a> | <a href="https://git.distorted.org.uk/~mdw/firewall/tree/4942d7c1381f147b6c1f06e035d710e29b45dae0">tree</a> | snapshot (<a href="https://git.distorted.org.uk/~mdw/firewall/snapshot/4942d7c1381f147b6c1f06e035d710e29b45dae0.tar.gz">tar.gz</a> <a href="https://git.distorted.org.uk/~mdw/firewall/snapshot/4942d7c1381f147b6c1f06e035d710e29b45dae0.zip">zip</a>)</td>
+</tr>
+<tr class="light">
+<td title="13 months ago"><i>2022-05-09</i></td>
+<td class="author"><a class="list" href="https://git.distorted.org.uk/~mdw/firewall/search?s=Mark+Wooding;st=author" title="Search for commits authored by Mark Wooding">Mark Wooding</a></td><td><a class="list subject" href="https://git.distorted.org.uk/~mdw/firewall/commit/f788388b46884fb049640a504a0e95238277e1a2" title="Merge branch 'master' of git.distorted.org.uk:~mdw/publish/public-git/firewall">Merge branch &#39;master&#39; of git.distorted.org.uk:~mdw... </a></td>
+<td class="link"><a href="https://git.distorted.org.uk/~mdw/firewall/commit/f788388b46884fb049640a504a0e95238277e1a2">commit</a> | <a href="https://git.distorted.org.uk/~mdw/firewall/commitdiff/f788388b46884fb049640a504a0e95238277e1a2">commitdiff</a> | <a href="https://git.distorted.org.uk/~mdw/firewall/tree/f788388b46884fb049640a504a0e95238277e1a2">tree</a> | snapshot (<a href="https://git.distorted.org.uk/~mdw/firewall/snapshot/f788388b46884fb049640a504a0e95238277e1a2.tar.gz">tar.gz</a> <a href="https://git.distorted.org.uk/~mdw/firewall/snapshot/f788388b46884fb049640a504a0e95238277e1a2.zip">zip</a>)</td>
+</tr>
+<tr class="dark">
+<td title="13 months ago"><i>2022-05-09</i></td>
+<td class="author"><a class="list" href="https://git.distorted.org.uk/~mdw/firewall/search?s=Mark+Wooding;st=author" title="Search for commits authored by Mark Wooding">Mark Wooding</a></td><td><a class="list subject" href="https://git.distorted.org.uk/~mdw/firewall/commit/25778fe86b2806f0a179662ad70c9787f92af767" title="numbers.m4, artist.m4: Add a second DisOrder port for RTP multicast.">numbers.m4, artist.m4: Add a second DisOrder port for... </a></td>
+<td class="link"><a href="https://git.distorted.org.uk/~mdw/firewall/commit/25778fe86b2806f0a179662ad70c9787f92af767">commit</a> | <a href="https://git.distorted.org.uk/~mdw/firewall/commitdiff/25778fe86b2806f0a179662ad70c9787f92af767">commitdiff</a> | <a href="https://git.distorted.org.uk/~mdw/firewall/tree/25778fe86b2806f0a179662ad70c9787f92af767">tree</a> | snapshot (<a href="https://git.distorted.org.uk/~mdw/firewall/snapshot/25778fe86b2806f0a179662ad70c9787f92af767.tar.gz">tar.gz</a> <a href="https://git.distorted.org.uk/~mdw/firewall/snapshot/25778fe86b2806f0a179662ad70c9787f92af767.zip">zip</a>)</td>
+</tr>
+<tr class="light">
+<td title="13 months ago"><i>2022-05-09</i></td>
+<td class="author"><a class="list" href="https://git.distorted.org.uk/~mdw/firewall/search?s=Mark+Wooding;st=author" title="Search for commits authored by Mark Wooding">Mark Wooding</a></td><td><a class="list subject" href="https://git.distorted.org.uk/~mdw/firewall/commit/175f1d48c46ae845fbaa3298a000e13ffb4e62fd">local.m4: Add `mdwdev.upn&#39;.</a></td>
+<td class="link"><a href="https://git.distorted.org.uk/~mdw/firewall/commit/175f1d48c46ae845fbaa3298a000e13ffb4e62fd">commit</a> | <a href="https://git.distorted.org.uk/~mdw/firewall/commitdiff/175f1d48c46ae845fbaa3298a000e13ffb4e62fd">commitdiff</a> | <a href="https://git.distorted.org.uk/~mdw/firewall/tree/175f1d48c46ae845fbaa3298a000e13ffb4e62fd">tree</a> | snapshot (<a href="https://git.distorted.org.uk/~mdw/firewall/snapshot/175f1d48c46ae845fbaa3298a000e13ffb4e62fd.tar.gz">tar.gz</a> <a href="https://git.distorted.org.uk/~mdw/firewall/snapshot/175f1d48c46ae845fbaa3298a000e13ffb4e62fd.zip">zip</a>)</td>
+</tr>
+<tr class="dark">
+<td title="20 months ago"><i>2021-11-01</i></td>
+<td class="author"><a class="list" href="https://git.distorted.org.uk/~mdw/firewall/search?s=Mark+Wooding;st=author" title="Search for commits authored by Mark Wooding">Mark Wooding</a></td><td><a class="list subject" href="https://git.distorted.org.uk/~mdw/firewall/commit/5e5950c5e929593b05740aa4173c93c50eac0110">jazz.m4, numbers.m4: Allow Privoxy access to SGO VPN.</a></td>
+<td class="link"><a href="https://git.distorted.org.uk/~mdw/firewall/commit/5e5950c5e929593b05740aa4173c93c50eac0110">commit</a> | <a href="https://git.distorted.org.uk/~mdw/firewall/commitdiff/5e5950c5e929593b05740aa4173c93c50eac0110">commitdiff</a> | <a href="https://git.distorted.org.uk/~mdw/firewall/tree/5e5950c5e929593b05740aa4173c93c50eac0110">tree</a> | snapshot (<a href="https://git.distorted.org.uk/~mdw/firewall/snapshot/5e5950c5e929593b05740aa4173c93c50eac0110.tar.gz">tar.gz</a> <a href="https://git.distorted.org.uk/~mdw/firewall/snapshot/5e5950c5e929593b05740aa4173c93c50eac0110.zip">zip</a>)</td>
+</tr>
+<tr class="light">
+<td title="2 years ago"><i>2021-02-03</i></td>
+<td class="author"><a class="list" href="https://git.distorted.org.uk/~mdw/firewall/search?s=Mark+Wooding;st=author" title="Search for commits authored by Mark Wooding">Mark Wooding</a></td><td><a class="list subject" href="https://git.distorted.org.uk/~mdw/firewall/commit/c8d1a00b58e6621d5929d8938ca893ed995fb6fa">local.m4: Update external NTP servers.</a></td>
+<td class="link"><a href="https://git.distorted.org.uk/~mdw/firewall/commit/c8d1a00b58e6621d5929d8938ca893ed995fb6fa">commit</a> | <a href="https://git.distorted.org.uk/~mdw/firewall/commitdiff/c8d1a00b58e6621d5929d8938ca893ed995fb6fa">commitdiff</a> | <a href="https://git.distorted.org.uk/~mdw/firewall/tree/c8d1a00b58e6621d5929d8938ca893ed995fb6fa">tree</a> | snapshot (<a href="https://git.distorted.org.uk/~mdw/firewall/snapshot/c8d1a00b58e6621d5929d8938ca893ed995fb6fa.tar.gz">tar.gz</a> <a href="https://git.distorted.org.uk/~mdw/firewall/snapshot/c8d1a00b58e6621d5929d8938ca893ed995fb6fa.zip">zip</a>)</td>
+</tr>
+<tr class="dark">
+<td title="3 years ago"><i>2020-04-08</i></td>
+<td class="author"><a class="list" href="https://git.distorted.org.uk/~mdw/firewall/search?s=Mark+Wooding;st=author" title="Search for commits authored by Mark Wooding">Mark Wooding</a></td><td><a class="list subject" href="https://git.distorted.org.uk/~mdw/firewall/commit/ea2e5ed4e1bbb86b70c69a96c72e3809284fe293">local.m4: Add entry for new laptop `spirit&#39;.</a></td>
+<td class="link"><a href="https://git.distorted.org.uk/~mdw/firewall/commit/ea2e5ed4e1bbb86b70c69a96c72e3809284fe293">commit</a> | <a href="https://git.distorted.org.uk/~mdw/firewall/commitdiff/ea2e5ed4e1bbb86b70c69a96c72e3809284fe293">commitdiff</a> | <a href="https://git.distorted.org.uk/~mdw/firewall/tree/ea2e5ed4e1bbb86b70c69a96c72e3809284fe293">tree</a> | snapshot (<a href="https://git.distorted.org.uk/~mdw/firewall/snapshot/ea2e5ed4e1bbb86b70c69a96c72e3809284fe293.tar.gz">tar.gz</a> <a href="https://git.distorted.org.uk/~mdw/firewall/snapshot/ea2e5ed4e1bbb86b70c69a96c72e3809284fe293.zip">zip</a>)</td>
+</tr>
+<tr class="light">
+<td title="4 years ago"><i>2018-12-26</i></td>
+<td class="author"><a class="list" href="https://git.distorted.org.uk/~mdw/firewall/search?s=Mark+Wooding;st=author" title="Search for commits authored by Mark Wooding">Mark Wooding</a></td><td><a class="list subject" href="https://git.distorted.org.uk/~mdw/firewall/commit/1b1012475aa2ffe55ac358220c15c970cb49df4a" title="local.m4, precision.m4: Introduce `vpnnat' network class for nefarious hacks.">local.m4, precision.m4: Introduce `vpnnat&#39; network... </a></td>
+<td class="link"><a href="https://git.distorted.org.uk/~mdw/firewall/commit/1b1012475aa2ffe55ac358220c15c970cb49df4a">commit</a> | <a href="https://git.distorted.org.uk/~mdw/firewall/commitdiff/1b1012475aa2ffe55ac358220c15c970cb49df4a">commitdiff</a> | <a href="https://git.distorted.org.uk/~mdw/firewall/tree/1b1012475aa2ffe55ac358220c15c970cb49df4a">tree</a> | snapshot (<a href="https://git.distorted.org.uk/~mdw/firewall/snapshot/1b1012475aa2ffe55ac358220c15c970cb49df4a.tar.gz">tar.gz</a> <a href="https://git.distorted.org.uk/~mdw/firewall/snapshot/1b1012475aa2ffe55ac358220c15c970cb49df4a.zip">zip</a>)</td>
+</tr>
+<tr class="dark">
+<td title="4 years ago"><i>2018-12-26</i></td>
+<td class="author"><a class="list" href="https://git.distorted.org.uk/~mdw/firewall/search?s=Mark+Wooding;st=author" title="Search for commits authored by Mark Wooding">Mark Wooding</a></td><td><a class="list subject" href="https://git.distorted.org.uk/~mdw/firewall/commit/d21c8fa90dc31cc1f552de6fd3c22d1cefa1d15d">local.mk: Reinstate mango.</a></td>
+<td class="link"><a href="https://git.distorted.org.uk/~mdw/firewall/commit/d21c8fa90dc31cc1f552de6fd3c22d1cefa1d15d">commit</a> | <a href="https://git.distorted.org.uk/~mdw/firewall/commitdiff/d21c8fa90dc31cc1f552de6fd3c22d1cefa1d15d">commitdiff</a> | <a href="https://git.distorted.org.uk/~mdw/firewall/tree/d21c8fa90dc31cc1f552de6fd3c22d1cefa1d15d">tree</a> | snapshot (<a href="https://git.distorted.org.uk/~mdw/firewall/snapshot/d21c8fa90dc31cc1f552de6fd3c22d1cefa1d15d.tar.gz">tar.gz</a> <a href="https://git.distorted.org.uk/~mdw/firewall/snapshot/d21c8fa90dc31cc1f552de6fd3c22d1cefa1d15d.zip">zip</a>)</td>
+</tr>
+<tr class="light">
+<td title="5 years ago"><i>2017-10-02</i></td>
+<td class="author"><a class="list" href="https://git.distorted.org.uk/~mdw/firewall/search?s=Mark+Wooding;st=author" title="Search for commits authored by Mark Wooding">Mark Wooding</a></td><td><a class="list subject" href="https://git.distorted.org.uk/~mdw/firewall/commit/7377aca7bc3d4cfd29e6974c861048db8e1a4161">local.m4: Filter out source routing in the firewall.</a></td>
+<td class="link"><a href="https://git.distorted.org.uk/~mdw/firewall/commit/7377aca7bc3d4cfd29e6974c861048db8e1a4161">commit</a> | <a href="https://git.distorted.org.uk/~mdw/firewall/commitdiff/7377aca7bc3d4cfd29e6974c861048db8e1a4161">commitdiff</a> | <a href="https://git.distorted.org.uk/~mdw/firewall/tree/7377aca7bc3d4cfd29e6974c861048db8e1a4161">tree</a> | snapshot (<a href="https://git.distorted.org.uk/~mdw/firewall/snapshot/7377aca7bc3d4cfd29e6974c861048db8e1a4161.tar.gz">tar.gz</a> <a href="https://git.distorted.org.uk/~mdw/firewall/snapshot/7377aca7bc3d4cfd29e6974c861048db8e1a4161.zip">zip</a>)</td>
+</tr>
+<tr class="dark">
+<td title="5 years ago"><i>2017-10-02</i></td>
+<td class="author"><a class="list" href="https://git.distorted.org.uk/~mdw/firewall/search?s=Mark+Wooding;st=author" title="Search for commits authored by Mark Wooding">Mark Wooding</a></td><td><a class="list subject" href="https://git.distorted.org.uk/~mdw/firewall/commit/994ac8d0782c89a636f47b02a2dc096c72ff58c5">local.m4: Don&#39;t expect `forbidden&#39; to return.</a></td>
+<td class="link"><a href="https://git.distorted.org.uk/~mdw/firewall/commit/994ac8d0782c89a636f47b02a2dc096c72ff58c5">commit</a> | <a href="https://git.distorted.org.uk/~mdw/firewall/commitdiff/994ac8d0782c89a636f47b02a2dc096c72ff58c5">commitdiff</a> | <a href="https://git.distorted.org.uk/~mdw/firewall/tree/994ac8d0782c89a636f47b02a2dc096c72ff58c5">tree</a> | snapshot (<a href="https://git.distorted.org.uk/~mdw/firewall/snapshot/994ac8d0782c89a636f47b02a2dc096c72ff58c5.tar.gz">tar.gz</a> <a href="https://git.distorted.org.uk/~mdw/firewall/snapshot/994ac8d0782c89a636f47b02a2dc096c72ff58c5.zip">zip</a>)</td>
+</tr>
+<tr class="light">
+<td title="5 years ago"><i>2017-10-01</i></td>
+<td class="author"><a class="list" href="https://git.distorted.org.uk/~mdw/firewall/search?s=Mark+Wooding;st=author" title="Search for commits authored by Mark Wooding">Mark Wooding</a></td><td><a class="list subject" href="https://git.distorted.org.uk/~mdw/firewall/commit/d0409c909cb113596f5d0daed5be237a42878c8d">local.m4: Add the `hippotat&#39; network.</a></td>
+<td class="link"><a href="https://git.distorted.org.uk/~mdw/firewall/commit/d0409c909cb113596f5d0daed5be237a42878c8d">commit</a> | <a href="https://git.distorted.org.uk/~mdw/firewall/commitdiff/d0409c909cb113596f5d0daed5be237a42878c8d">commitdiff</a> | <a href="https://git.distorted.org.uk/~mdw/firewall/tree/d0409c909cb113596f5d0daed5be237a42878c8d">tree</a> | snapshot (<a href="https://git.distorted.org.uk/~mdw/firewall/snapshot/d0409c909cb113596f5d0daed5be237a42878c8d.tar.gz">tar.gz</a> <a href="https://git.distorted.org.uk/~mdw/firewall/snapshot/d0409c909cb113596f5d0daed5be237a42878c8d.zip">zip</a>)</td>
+</tr>
+<tr>
+<td colspan="4"><a href="https://git.distorted.org.uk/~mdw/firewall/shortlog">...</a></td>
+</tr>
+</table>
+<div class="header">
+<a class="title" href="https://git.distorted.org.uk/~mdw/firewall/heads">heads</a>
+</div>
+<table class="heads">
+<tr class="dark">
+<td><i>3 months ago</i></td>
+<td class="current_head"><a class="list name" href="https://git.distorted.org.uk/~mdw/firewall/shortlog/refs/heads/master">master</a></td>
+<td class="link"><a href="https://git.distorted.org.uk/~mdw/firewall/shortlog/refs/heads/master">shortlog</a> | <a href="https://git.distorted.org.uk/~mdw/firewall/log/refs/heads/master">log</a> | <a href="https://git.distorted.org.uk/~mdw/firewall/tree/refs/heads/master">tree</a></td>
+</tr><tr class="light">
+<td><i>8 years ago</i></td>
+<td><a class="list name" href="https://git.distorted.org.uk/~mdw/firewall/shortlog/refs/heads/jaguar">jaguar</a></td>
+<td class="link"><a href="https://git.distorted.org.uk/~mdw/firewall/shortlog/refs/heads/jaguar">shortlog</a> | <a href="https://git.distorted.org.uk/~mdw/firewall/log/refs/heads/jaguar">log</a> | <a href="https://git.distorted.org.uk/~mdw/firewall/tree/refs/heads/jaguar">tree</a></td>
+</tr><tr class="dark">
+<td><i>11 years ago</i></td>
+<td><a class="list name" href="https://git.distorted.org.uk/~mdw/firewall/shortlog/refs/heads/emergency">emergency</a></td>
+<td class="link"><a href="https://git.distorted.org.uk/~mdw/firewall/shortlog/refs/heads/emergency">shortlog</a> | <a href="https://git.distorted.org.uk/~mdw/firewall/log/refs/heads/emergency">log</a> | <a href="https://git.distorted.org.uk/~mdw/firewall/tree/refs/heads/emergency">tree</a></td>
+</tr></table>
+<div class="page_footer">
+<div class="page_footer_text">Firewall scripts for distorted.org.uk.</div>
+<a class="rss_logo" href="https://git.distorted.org.uk/~mdw/firewall/rss" title="log RSS feed">RSS</a>
+<a class="rss_logo" href="https://git.distorted.org.uk/~mdw/firewall/atom" title="log Atom feed">Atom</a>
+</div>
+<script type="text/javascript" src="/gitweb/gitweb.js"></script>
+<script type="text/javascript">
+window.onload = function () {
+	var tz_cookie = { name: 'gitweb_tz', expires: 14, path: '/' };
+	onloadTZSetup('local', tz_cookie, 'datetime');
+};
+</script>
+</body>
+</html>
