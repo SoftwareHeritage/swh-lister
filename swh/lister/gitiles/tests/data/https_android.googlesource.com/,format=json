@@ -1,0 +1,35 @@
+)]}'
+{
+  "accessories/manifest": {
+    "name": "accessories/manifest",
+    "clone_url": "https://android.googlesource.com/accessories/manifest"
+  },
+  "device/google/gs201": {
+    "name": "device/google/gs201",
+    "clone_url": "https://android.googlesource.com/device/google/gs201",
+    "description": "Bug: 244231765"
+  },
+  "device/google/sunfish-kernel": {
+    "name": "device/google/sunfish-kernel",
+    "clone_url": "https://android.googlesource.com/device/google/sunfish-kernel",
+    "description": "Bug: 160260413"
+  },
+  "device/lge/mako-kernel": {
+    "name": "device/lge/mako-kernel",
+    "clone_url": "https://android.googlesource.com/device/lge/mako-kernel"
+  },
+  "kernel/msm-extra/camera-devicetree": {
+    "name": "kernel/msm-extra/camera-devicetree",
+    "clone_url": "https://android.googlesource.com/kernel/msm-extra/camera-devicetree",
+    "description": "Bug: 167236823"
+  },
+  "platform/external/google-fonts/rubik": {
+    "name": "platform/external/google-fonts/rubik",
+    "clone_url": "https://android.googlesource.com/platform/external/google-fonts/rubik",
+    "description": "Bug: 122303069"
+  },
+  "trusty/vendor/google/aosp": {
+    "name": "trusty/vendor/google/aosp",
+    "clone_url": "https://android.googlesource.com/trusty/vendor/google/aosp"
+  }
+}

@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Repositories</title>
+<link rel="icon" type="image/png" href="favicon.png" />
+<link rel="stylesheet" type="text/css" href="style.css" />
+</head>
+<body>
+<table>
+<tr><td><img src="logo.png" alt="" width="32" height="32" /></td>
+<td><span class="desc">Repositories</span></td></tr><tr><td></td><td>
+</td></tr>
+</table>
+<hr/>
+<div id="content">
+<table id="index"><thead>
+<tr><td><b>Name</b></td><td><b>Description</b></td><td><b>Owner</b></td><td><b>Last commit</b></td></tr></thead><tbody>
+<tr><td><a href="bmf/log.html">bmf</a></td><td>bmf (Bayesian Mail Filter) 0.9.4 fork + patches
+</td><td></td><td>2020-02-04 22:03</td></tr><tr><td><a href="dmenu/log.html">dmenu</a></td><td>my customized version of dmenu (hiltjo branch)
+</td><td>Hiltjo Posthuma</td><td>2022-05-01 16:38</td></tr><tr><td><a href="dwm/log.html">dwm</a></td><td>my customized version of dwm (hiltjo branch)
+</td><td>Hiltjo Posthuma</td><td>2023-04-10 10:34</td></tr><tr><td><a href="stagit/log.html">stagit</a></td><td>static git page generator
+</td><td>Hiltjo Posthuma</td><td>2020-03-03 23:49</td></tr></tbody>
+</table>
+</div>
+</body>
+</html>
