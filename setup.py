@@ -68,6 +68,7 @@ setup(
         lister.fedora=swh.lister.fedora:register
         lister.gitea=swh.lister.gitea:register
         lister.github=swh.lister.github:register
+        lister.gitiles=swh.lister.gitiles:register
         lister.gitlab=swh.lister.gitlab:register
         lister.gitweb=swh.lister.gitweb:register
         lister.gnu=swh.lister.gnu:register
@@ -88,6 +89,7 @@ setup(
         lister.pypi=swh.lister.pypi:register
         lister.rubygems=swh.lister.rubygems:register
         lister.sourceforge=swh.lister.sourceforge:register
+        lister.stagit=swh.lister.stagit:register
         lister.tuleap=swh.lister.tuleap:register
         lister.maven=swh.lister.maven:register
     """,
