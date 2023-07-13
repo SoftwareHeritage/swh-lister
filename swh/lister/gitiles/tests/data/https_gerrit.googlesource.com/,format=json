@@ -1,0 +1,16 @@
+{
+  "apps/analytics-etl": {
+    "name": "apps/analytics-etl",
+    "clone_url": "https://gerrit.googlesource.com/apps/analytics-etl",
+    "description": "Spark ETL to extra analytics data from Gerrit Projects using the Analytics plugin"
+  },
+  "apps/kibana-dashboard": {
+    "name": "apps/kibana-dashboard",
+    "clone_url": "https://gerrit.googlesource.com/apps/kibana-dashboard"
+  },
+  "apps/reviewit": {
+    "name": "apps/reviewit",
+    "clone_url": "https://gerrit.googlesource.com/apps/reviewit",
+    "description": "The \u0027Review It!?\u0027 app is an Android application for Gerrit that allows sorting of incoming changes and review of small/trivial changes.\n\nThis is not an official Google product."
+  }
+}

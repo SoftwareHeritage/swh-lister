@@ -45,6 +45,12 @@ lister_args = {
     "gitweb": {
         "url": "https://git.distorted.org.uk/~mdw/",
     },
+    "gitiles": {
+        "instance": "gerrit.googlesource.com",
+    },
+    "stagit": {
+        "url": "https://git.codemadness.org",
+    },
 }
 
 
