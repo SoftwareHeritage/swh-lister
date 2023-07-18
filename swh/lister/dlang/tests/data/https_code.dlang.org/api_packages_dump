@@ -1,0 +1,688 @@
+[
+  {
+    "_id": "5b704cf09603f8d552a6f511",
+    "owner": "590df882a26e9ec51fdc1b23",
+    "name": "silly",
+    "repository": {
+      "kind": "gitlab",
+      "owner": "AntonMeep",
+      "project": "silly"
+    },
+    "versions": [
+      {
+        "date": "2022-08-28T11:25:18Z",
+        "version": "~master",
+        "commitID": "63219a6d7695caeea02db044ee9238068975c6fe",
+        "info": {
+          "packageDescriptionFile": "dub.json",
+          "authors": [
+            "Anton Fediushin"
+          ],
+          "sourceFiles": [
+            "silly.d"
+          ],
+          "license": "ISC",
+          "copyright": "Copyright © 2018-2019, Anton Fediushin",
+          "name": "silly",
+          "description": "Better test runner for D",
+          "importPaths": [
+            "."
+          ],
+          "targetType": "sourceLibrary"
+        },
+        "readme": "silly [![Repository](https://img.shields.io/badge/repository-on%20GitLab-orange.svg)](https://gitlab.com/AntonMeep/silly) [![pipeline\nstatus](https://gitlab.com/AntonMeep/silly/badges/master/pipeline.svg)](https://gitlab.com/AntonMeep/silly/commits/master) [![coverage\nreport](https://gitlab.com/AntonMeep/silly/badges/master/coverage.svg)](https://gitlab.com/AntonMeep/silly/commits/master) [![ISC\nLicence](https://img.shields.io/badge/licence-ISC-blue.svg)](https://gitlab.com/AntonMeep/silly/blob/master/LICENSE) [![Package\nversion](https://img.shields.io/dub/v/silly.svg)](https://gitlab.com/AntonMeep/silly/tags)\n=====\n\n**silly** is a modern and light test runner for the D programming language.\n\n# Used by\n\n[Optional](http://optional.dub.pm/), [expected](http://expected.dub.pm/), [ddash](http://ddash.dub.pm/), and more!\n\n> Got a cool project that uses **silly**? [Let us know!](https://gitlab.com/AntonMeep/silly/issues)\n\n# Features\n\n- Easy to install and use with dub\n- No changes of your code are required to start using silly\n- Seamless integration with `dub test`\n- Named tests\n- Multi-threaded test execution\n- Filtering tests\n- Colourful output\n\n# Getting started\n\nAdd **silly** to your project:\n\n```\n$ dub add silly\n```\n\nThis should be it! Try to run tests:\n\n```\n$ dub test\n```\n\nIf it succeeded then congratulations, you have just finished setting up **silly**! Make sure to add more tests and give them nice names.\n\n# Troubleshooting\n\nUnfortunately, setup isn't that easy sometimes and running `dub test` will fail. Don't panic, most of the issues are caused by the quirks and twists of dub. Here are some suggestions on what to check first:\n\n## Make sure `main()` function isn't defined when built in `unittest` mode\n\nSo, instead of this:\n```d\nvoid main() {\n\n}\n```\n\nDo this:\n```d\nversion(unittest) {\n\t// Do nothing here, dub takes care of that\n} else {\n\tvoid main() {\n\n\t}\n}\n```\n\n## Make sure there is a special `unittest` configuration in your dub.json/dub.sdl\n\n```json\n{\n    ...\n\t\"configurations\": [\n\t\t{\n\t\t\t\"name\": \"executable\"\n\t\t},\n\t\t{\n\t\t\t\"name\": \"unittest\"\n\t\t}\n\t]\n}\n```\n\nSee also [#32](https://gitlab.com/AntonMeep/silly/issues/32).\n\n> **Pro Tip**: dub configurations can have `dependencies` as well! You may want to add silly as a dependency only for the `unittest` configuration to indicate that it's only used for tests.\n\n## Make sure there is no `targetType: executable` in `unittest` configuration in your dub.json/dub.sdl\n\nInstead of this:\n\n```json\n{\n\t...\n\t\"configurations\": [\n\t\t...\n\t\t{\n\t\t\t\"name\": \"unittest\",\n\t\t\t\"targetType\": \"executable\",\n\t\t\t...\n\t\t}\n\t]\n}\n```\n\nDo this:\n\n```json\n{\n\t...\n\t\"configurations\": [\n\t\t...\n\t\t{\n\t\t\t\"name\": \"unittest\",\n\t\t\t...\n\t\t}\n\t]\n}\n```\n\nSee [#12](https://gitlab.com/AntonMeep/silly/issues/12) for more information.\n\n## Nothing helped?\n\nOpen a new [issue](https://gitlab.com/AntonMeep/silly/issues), we will be happy to help you!\n\n# Naming tests\n\nIt is as easy as adding a `string` [user-defined attribute](https://dlang.org/spec/attribute.html#UserDefinedAttribute) to your `unittest` declaration.\n\n```d\n@(\"Johny\")\nunittest {\n\t// This unittest is named Johny\n}\n```\n\nIf there are multiple such UDAs, the first one is chosen to be the name of the unittest.\n\n```d\n@(\"Hello, \") @(\"World!\")\nunittest {\n\t// This unittest's name is \"Hello, \"\n}\n```\n\n# Command line options\n\n**Silly** accept various command-line options that let you customize its behaviour:\n\n```\n$ dub test -- <options>\n\nOptions:\n  --no-colours                    Disable colours\n  -t <n>      --threads <n>       Number of worker threads. 0 to auto-detect (default)\n  -i <regexp> --include <regexp>  Run tests if their name matches specified regular expression. See filtering tests\n  -e <regexp> --exclude <regexp>  Skip tests if their name matches specified regular expression. See filtering tests\n              --fail-fast         Stop executing all tests when a test fails\n  -v          --verbose           Show verbose output (full stack traces, location and durations)\n  -h          --help              Help information\n```\n\n# Filtering tests\n\nWith `--include` and `--exclude` options it's possible to control what tests will be run. These options take regular expressions in [std.regex'](https://dlang.org/phobos/std_regex.html#Syntax%20and%20general%20information) format.\n\n`--include` only tests that match provided regular expression will be run, other tests will be skipped.\n`--exclude` all of the tests that don't match provided regular expression will be run.\n\n> Using both options at the same time will produce unexpected results!\n\n# Best practices\n\n- Running tests in multi-threaded mode (default) can potentially cause issues, try running tests with `--threads 1`\n- Although unittests inside of nested classes and structs are discovered and executed by Silly, it may be unreliable. Consider having unittest blocks on the toplevel\n\n",
+        "readmeMarkdown": true,
+        "docFolder": ""
+      },
+      {
+        "date": "2018-08-26T08:10:08Z",
+        "version": "0.3.0",
+        "commitID": "93a5705135470d7437c309aa9ceb671bcc678dd0",
+        "info": {
+          "packageDescriptionFile": "dub.json",
+          "authors": [
+            "Anton Fediushin"
+          ],
+          "sourceFiles": [
+            "silly.d"
+          ],
+          "license": "MIT",
+          "copyright": "Copyright © 2018, Anton Fediushin",
+          "name": "silly",
+          "description": "Better test runner for D",
+          "importPaths": [
+            "."
+          ],
+          "targetType": "sourceLibrary"
+        },
+        "readme": "silly [![Repository](https://img.shields.io/badge/repository-on%20GitLab-orange.svg)](https://gitlab.com/ohboi/silly) [![pipeline status](https://gitlab.com/ohboi/silly/badges/master/pipeline.svg)](https://gitlab.com/ohboi/silly/commits/master) [![MIT Licence](https://img.shields.io/badge/licence-MIT-blue.svg)](https://gitlab.com/ohboi/silly/blob/master/LICENCE) [![Package version](https://img.shields.io/dub/v/silly.svg)](https://gitlab.com/ohboi/silly/tags)\n=====\n\n**silly** is a no-nonsense test runner for the D programming language. Instead of re-inventing the wheel and adding more and more levels of abstraction it just works, requiring as little effort from the programmer as possible.\n\n> Note that project's development happens on the [GitLab](https://gitlab.com/ohboi/silly).\n> GitHub repository is a mirror, it might *not* always be up-to-date.\n\nMake sure to check out project's [homepage](https://ohboi.gitlab.io/silly/) for more information about installation and usage.\n\n## Why?\n\nBuilt-in test runner is not good enough. It does its job, but it doesn't show what tests were executed. It just runs them all stopping on the first failed one. Of course, community offers many different solutions for that problem. Being an overcomplicated projects with thousands lines of code they could make you *less* productive increasing build times and deeply integrating into your project.\n\n**silly** is developed with strict principles in mind.\n\n### Keep It Simple, Silly\n\nFind -> run -> report. That's all there is about test runners. It can't be simpler.\n\n### Less code more better\n\nWriting code is hard, writing useful code is even harder, but writing no code is genius. **silly** is meant to contain no useless code.\n\n### Just a test runner, nothing more\n\nYou won't find anything besides the test runner here. It's not test runner's business to provide you with assertions and other nonsense.\n\n### Don't reinvent the wheel\n\n[dub](https://dub.pm/) is a great tool and there's no reason not to use it. Some other test runners use scripts or even integrate dub as part of them but **silly** is just an another dependency of your project.\n\n### It just works\n\nJust add it as a dependency and that's it. No editing of your project's source code is required. No editing of `dub.json/dub.sdl` except for adding a dependency is required. No changes in your editor config or terminal aliases are required, **silly** just runs with\n```\n$ dub test\n```\n\n### Your choice, your test runner\n\nIt's up to you whether you want to use this test runner or not. Get rid of it just by removing the dependency. It won't break your CI/CD scripts and cause any trouble.\n",
+        "readmeMarkdown": true,
+        "docFolder": ""
+      },
+      {
+        "date": "2018-08-27T14:35:33Z",
+        "version": "0.4.0",
+        "commitID": "009f98a18fc1207caa05bf8f517a0cd4e938263b",
+        "info": {
+          "packageDescriptionFile": "dub.json",
+          "authors": [
+            "Anton Fediushin"
+          ],
+          "sourceFiles": [
+            "silly.d"
+          ],
+          "license": "MIT",
+          "copyright": "Copyright © 2018, Anton Fediushin",
+          "name": "silly",
+          "description": "Better test runner for D",
+          "importPaths": [
+            "."
+          ],
+          "targetType": "sourceLibrary"
+        },
+        "readme": "silly [![Repository](https://img.shields.io/badge/repository-on%20GitLab-orange.svg)](https://gitlab.com/ohboi/silly) [![pipeline status](https://gitlab.com/ohboi/silly/badges/master/pipeline.svg)](https://gitlab.com/ohboi/silly/commits/master) [![MIT Licence](https://img.shields.io/badge/licence-MIT-blue.svg)](https://gitlab.com/ohboi/silly/blob/master/LICENCE) [![Package version](https://img.shields.io/dub/v/silly.svg)](https://gitlab.com/ohboi/silly/tags)\n=====\n\n**silly** is a no-nonsense test runner for the D programming language. Instead of re-inventing the wheel and adding more and more levels of abstraction it just works, requiring as little effort from the programmer as possible.\n\n> Note that project's development happens on the [GitLab](https://gitlab.com/ohboi/silly).\n> GitHub repository is a mirror, it might *not* always be up-to-date.\n\nMake sure to check out project's [homepage](https://ohboi.gitlab.io/silly/) for more information about installation and usage.\n\n## Why?\n\nBuilt-in test runner is not good enough. It does its job, but it doesn't show what tests were executed. It just runs them all stopping on the first failed one. Of course, community offers many different solutions for that problem. Being an overcomplicated projects with thousands lines of code they could make you *less* productive increasing build times and deeply integrating into your project.\n\n**silly** is developed with strict principles in mind.\n\n### Keep It Simple, Silly\n\nFind -> run -> report. That's all there is about test runners. It can't be simpler.\n\n### Less code more better\n\nWriting code is hard, writing useful code is even harder, but writing no code is genius. **silly** is meant to contain no useless code.\n\n### Just a test runner, nothing more\n\nYou won't find anything besides the test runner here. It's not test runner's business to provide you with assertions and other nonsense.\n\n### Don't reinvent the wheel\n\n[dub](https://dub.pm/) is a great tool and there's no reason not to use it. Some other test runners use scripts or even integrate dub as part of them but **silly** is just an another dependency of your project.\n\n### It just works\n\nJust add it as a dependency and that's it. No editing of your project's source code is required. No editing of `dub.json/dub.sdl` except for adding a dependency is required. No changes in your editor config or terminal aliases are required, **silly** just runs with\n```\n$ dub test\n```\n\n### Your choice, your test runner\n\nIt's up to you whether you want to use this test runner or not. Get rid of it just by removing the dependency. It won't break your CI/CD scripts and cause any trouble.\n",
+        "readmeMarkdown": true,
+        "docFolder": ""
+      },
+      {
+        "date": "2018-08-28T08:58:26Z",
+        "version": "0.4.1",
+        "commitID": "83d352de8df2305ce8c0810c891a98e960182d36",
+        "info": {
+          "packageDescriptionFile": "dub.json",
+          "authors": [
+            "Anton Fediushin"
+          ],
+          "sourceFiles": [
+            "silly.d"
+          ],
+          "license": "MIT",
+          "copyright": "Copyright © 2018, Anton Fediushin",
+          "name": "silly",
+          "description": "Better test runner for D",
+          "importPaths": [
+            "."
+          ],
+          "targetType": "sourceLibrary"
+        },
+        "readme": "silly [![Repository](https://img.shields.io/badge/repository-on%20GitLab-orange.svg)](https://gitlab.com/ohboi/silly) [![pipeline status](https://gitlab.com/ohboi/silly/badges/master/pipeline.svg)](https://gitlab.com/ohboi/silly/commits/master) [![coverage report](https://gitlab.com/ohboi/silly/badges/master/coverage.svg)](https://gitlab.com/ohboi/silly/commits/master) [![MIT Licence](https://img.shields.io/badge/licence-MIT-blue.svg)](https://gitlab.com/ohboi/silly/blob/master/LICENCE) [![Package version](https://img.shields.io/dub/v/silly.svg)](https://gitlab.com/ohboi/silly/tags)\n=====\n\n**silly** is a no-nonsense test runner for the D programming language. Instead of re-inventing the wheel and adding more and more levels of abstraction it just works, requiring as little effort from the programmer as possible.\n\n> Note that project's development happens on the [GitLab](https://gitlab.com/ohboi/silly).\n> GitHub repository is a mirror, it might *not* always be up-to-date.\n\nMake sure to check out project's [homepage](https://ohboi.gitlab.io/silly/) for more information about installation and usage.\n\n## Why?\n\nBuilt-in test runner is not good enough. It does its job, but it doesn't show what tests were executed. It just runs them all stopping on the first failed one. Of course, community offers many different solutions for that problem. Being an overcomplicated projects with thousands lines of code they could make you *less* productive increasing build times and deeply integrating into your project.\n\n**silly** is developed with strict principles in mind.\n\n### Keep It Simple, Silly\n\nFind -> run -> report. That's all there is about test runners. It can't be simpler.\n\n### Less code more better\n\nWriting code is hard, writing useful code is even harder, but writing no code is genius. **silly** is meant to contain no useless code.\n\n### Just a test runner, nothing more\n\nYou won't find anything besides the test runner here. It's not test runner's business to provide you with assertions and other nonsense.\n\n### Don't reinvent the wheel\n\n[dub](https://dub.pm/) is a great tool and there's no reason not to use it. Some other test runners use scripts or even integrate dub as part of them but **silly** is just an another dependency of your project.\n\n### It just works\n\nJust add it as a dependency and that's it. No editing of your project's source code is required. No editing of `dub.json/dub.sdl` except for adding a dependency is required. No changes in your editor config or terminal aliases are required, **silly** just runs with\n```\n$ dub test\n```\n\n### Your choice, your test runner\n\nIt's up to you whether you want to use this test runner or not. Get rid of it just by removing the dependency. It won't break your CI/CD scripts and cause any trouble.\n",
+        "readmeMarkdown": true,
+        "docFolder": ""
+      },
+      {
+        "date": "2018-08-28T20:18:10Z",
+        "version": "0.4.2",
+        "commitID": "610c64a62d59a1e6f9b398484bbe24b6686e37fd",
+        "info": {
+          "packageDescriptionFile": "dub.json",
+          "authors": [
+            "Anton Fediushin"
+          ],
+          "sourceFiles": [
+            "silly.d"
+          ],
+          "license": "MIT",
+          "copyright": "Copyright © 2018, Anton Fediushin",
+          "name": "silly",
+          "description": "Better test runner for D",
+          "importPaths": [
+            "."
+          ],
+          "targetType": "sourceLibrary"
+        },
+        "readme": "silly [![Repository](https://img.shields.io/badge/repository-on%20GitLab-orange.svg)](https://gitlab.com/ohboi/silly) [![pipeline status](https://gitlab.com/ohboi/silly/badges/master/pipeline.svg)](https://gitlab.com/ohboi/silly/commits/master) [![coverage report](https://gitlab.com/ohboi/silly/badges/master/coverage.svg)](https://gitlab.com/ohboi/silly/commits/master) [![MIT Licence](https://img.shields.io/badge/licence-MIT-blue.svg)](https://gitlab.com/ohboi/silly/blob/master/LICENCE) [![Package version](https://img.shields.io/dub/v/silly.svg)](https://gitlab.com/ohboi/silly/tags)\n=====\n\n**silly** is a no-nonsense test runner for the D programming language. Instead of re-inventing the wheel and adding more and more levels of abstraction it just works, requiring as little effort from the programmer as possible.\n\n> Note that project's development happens on the [GitLab](https://gitlab.com/ohboi/silly).\n> GitHub repository is a mirror, it might *not* always be up-to-date.\n\nMake sure to check out project's [homepage](https://ohboi.gitlab.io/silly/) for more information about installation and usage.\n\n## Why?\n\nBuilt-in test runner is not good enough. It does its job, but it doesn't show what tests were executed. It just runs them all stopping on the first failed one. Of course, community offers many different solutions for that problem. Being an overcomplicated projects with thousands lines of code they could make you *less* productive increasing build times and deeply integrating into your project.\n\n**silly** is developed with strict principles in mind.\n\n### Keep It Simple, Silly\n\nFind -> run -> report. That's all there is about test runners. It can't be simpler.\n\n### Less code more better\n\nWriting code is hard, writing useful code is even harder, but writing no code is genius. **silly** is meant to contain no useless code.\n\n### Just a test runner, nothing more\n\nYou won't find anything besides the test runner here. It's not test runner's business to provide you with assertions and other nonsense.\n\n### Don't reinvent the wheel\n\n[dub](https://dub.pm/) is a great tool and there's no reason not to use it. Some other test runners use scripts or even integrate dub as part of them but **silly** is just an another dependency of your project.\n\n### It just works\n\nJust add it as a dependency and that's it. No editing of your project's source code is required. No editing of `dub.json/dub.sdl` except for adding a dependency is required. No changes in your editor config or terminal aliases are required, **silly** just runs with\n```\n$ dub test\n```\n\n### Your choice, your test runner\n\nIt's up to you whether you want to use this test runner or not. Get rid of it just by removing the dependency. It won't break your CI/CD scripts and cause any trouble.\n",
+        "readmeMarkdown": true,
+        "docFolder": ""
+      },
+      {
+        "date": "2018-08-30T19:58:52Z",
+        "version": "0.4.3",
+        "commitID": "8ff18ebbb37f93f947b5f6ce8f4a3262ac9cbe5a",
+        "info": {
+          "packageDescriptionFile": "dub.json",
+          "authors": [
+            "Anton Fediushin"
+          ],
+          "sourceFiles": [
+            "silly.d"
+          ],
+          "license": "MIT",
+          "copyright": "Copyright © 2018, Anton Fediushin",
+          "name": "silly",
+          "description": "Better test runner for D",
+          "homepage": "https://ohboi.gitlab.io/silly/",
+          "importPaths": [
+            "."
+          ],
+          "targetType": "sourceLibrary"
+        },
+        "readme": "silly [![Repository](https://img.shields.io/badge/repository-on%20GitLab-orange.svg)](https://gitlab.com/ohboi/silly) [![pipeline status](https://gitlab.com/ohboi/silly/badges/master/pipeline.svg)](https://gitlab.com/ohboi/silly/commits/master) [![coverage report](https://gitlab.com/ohboi/silly/badges/master/coverage.svg)](https://gitlab.com/ohboi/silly/commits/master) [![MIT Licence](https://img.shields.io/badge/licence-MIT-blue.svg)](https://gitlab.com/ohboi/silly/blob/master/LICENCE) [![Package version](https://img.shields.io/dub/v/silly.svg)](https://gitlab.com/ohboi/silly/tags)\n=====\n\n**silly** is a no-nonsense test runner for the D programming language. Instead of re-inventing the wheel and adding more and more levels of abstraction it just works, requiring as little effort from the programmer as possible.\n\n> Note that project's development happens on the [GitLab](https://gitlab.com/ohboi/silly).\n> GitHub repository is a mirror, it might *not* always be up-to-date.\n\nMake sure to check out project's [homepage](https://ohboi.gitlab.io/silly/) for more information about installation and usage.\n\n## Why?\n\nBuilt-in test runner is not good enough. It does its job, but it doesn't show what tests were executed. It just runs them all stopping on the first failed one. Of course, community offers many different solutions for that problem. Being an overcomplicated projects with thousands lines of code they could make you *less* productive increasing build times and deeply integrating into your project.\n\n**silly** is developed with strict principles in mind.\n\n### Keep It Simple, Silly\n\nFind -> run -> report. That's all there is about test runners. It can't be simpler.\n\n### Less code more better\n\nWriting code is hard, writing useful code is even harder, but writing no code is genius. **silly** is meant to contain no useless code.\n\n### Just a test runner, nothing more\n\nYou won't find anything besides the test runner here. It's not test runner's business to provide you with assertions and other nonsense.\n\n### Don't reinvent the wheel\n\n[dub](https://dub.pm/) is a great tool and there's no reason not to use it. Some other test runners use scripts or even integrate dub as part of them but **silly** is just an another dependency of your project.\n\n### It just works\n\nJust add it as a dependency and that's it. No editing of your project's source code is required. No editing of `dub.json/dub.sdl` except for adding a dependency is required. No changes in your editor config or terminal aliases are required, **silly** just runs with\n```\n$ dub test\n```\n\n### Your choice, your test runner\n\nIt's up to you whether you want to use this test runner or not. Get rid of it just by removing the dependency. It won't break your CI/CD scripts and cause any trouble.\n",
+        "readmeMarkdown": true,
+        "docFolder": ""
+      },
+      {
+        "date": "2018-08-31T09:30:32Z",
+        "version": "0.5.0",
+        "commitID": "7ed0de70c3b11c88fa6217f6a00270cf66d788ee",
+        "info": {
+          "packageDescriptionFile": "dub.json",
+          "authors": [
+            "Anton Fediushin"
+          ],
+          "sourceFiles": [
+            "silly.d"
+          ],
+          "license": "MIT",
+          "copyright": "Copyright © 2018, Anton Fediushin",
+          "name": "silly",
+          "description": "Better test runner for D",
+          "homepage": "https://ohboi.gitlab.io/silly/",
+          "importPaths": [
+            "."
+          ],
+          "targetType": "sourceLibrary"
+        },
+        "readme": "silly [![Repository](https://img.shields.io/badge/repository-on%20GitLab-orange.svg)](https://gitlab.com/ohboi/silly) [![pipeline status](https://gitlab.com/ohboi/silly/badges/master/pipeline.svg)](https://gitlab.com/ohboi/silly/commits/master) [![coverage report](https://gitlab.com/ohboi/silly/badges/master/coverage.svg)](https://gitlab.com/ohboi/silly/commits/master) [![MIT Licence](https://img.shields.io/badge/licence-MIT-blue.svg)](https://gitlab.com/ohboi/silly/blob/master/LICENCE) [![Package version](https://img.shields.io/dub/v/silly.svg)](https://gitlab.com/ohboi/silly/tags)\n=====\n\n**silly** is a no-nonsense test runner for the D programming language. Instead of re-inventing the wheel and adding more and more levels of abstraction it just works, requiring as little effort from the programmer as possible.\n\n> Note that project's development happens on the [GitLab](https://gitlab.com/ohboi/silly).\n> GitHub repository is a mirror, it might *not* always be up-to-date.\n\nMake sure to check out project's [homepage](https://ohboi.gitlab.io/silly/) for more information about installation and usage.\n\n## Why?\n\nBuilt-in test runner is not good enough. It does its job, but it doesn't show what tests were executed. It just runs them all stopping on the first failed one. Of course, community offers many different solutions for that problem. Being an overcomplicated projects with thousands lines of code they could make you *less* productive increasing build times and deeply integrating into your project.\n\n**silly** is developed with strict principles in mind.\n\n### Keep It Simple, Silly\n\nFind -> run -> report. That's all there is about test runners. It can't be simpler.\n\n### Less code more better\n\nWriting code is hard, writing useful code is even harder, but writing no code is genius. **silly** is meant to contain no useless code.\n\n### Just a test runner, nothing more\n\nYou won't find anything besides the test runner here. It's not test runner's business to provide you with assertions and other nonsense.\n\n### Don't reinvent the wheel\n\n[dub](https://dub.pm/) is a great tool and there's no reason not to use it. Some other test runners use scripts or even integrate dub as part of them but **silly** is just an another dependency of your project.\n\n### It just works\n\nJust add it as a dependency and that's it. No editing of your project's source code is required. No editing of `dub.json/dub.sdl` except for adding a dependency is required. No changes in your editor config or terminal aliases are required, **silly** just runs with\n```\n$ dub test\n```\n\n### Your choice, your test runner\n\nIt's up to you whether you want to use this test runner or not. Get rid of it just by removing the dependency. It won't break your CI/CD scripts and cause any trouble.\n",
+        "readmeMarkdown": true,
+        "docFolder": ""
+      },
+      {
+        "date": "2018-09-04T17:26:57Z",
+        "version": "0.6.0",
+        "commitID": "cc4b7620652d2ebf896f57cde92a53d2ebc240c4",
+        "info": {
+          "packageDescriptionFile": "dub.json",
+          "authors": [
+            "Anton Fediushin"
+          ],
+          "sourceFiles": [
+            "silly.d"
+          ],
+          "license": "MIT",
+          "copyright": "Copyright © 2018, Anton Fediushin",
+          "name": "silly",
+          "description": "Better test runner for D",
+          "homepage": "https://ohboi.gitlab.io/silly/",
+          "importPaths": [
+            "."
+          ],
+          "targetType": "sourceLibrary"
+        },
+        "readme": "silly [![Repository](https://img.shields.io/badge/repository-on%20GitLab-orange.svg)](https://gitlab.com/ohboi/silly) [![pipeline status](https://gitlab.com/ohboi/silly/badges/master/pipeline.svg)](https://gitlab.com/ohboi/silly/commits/master) [![coverage report](https://gitlab.com/ohboi/silly/badges/master/coverage.svg)](https://gitlab.com/ohboi/silly/commits/master) [![MIT Licence](https://img.shields.io/badge/licence-MIT-blue.svg)](https://gitlab.com/ohboi/silly/blob/master/LICENCE) [![Package version](https://img.shields.io/dub/v/silly.svg)](https://gitlab.com/ohboi/silly/tags)\n=====\n\n**silly** is a no-nonsense test runner for the D programming language. Instead of re-inventing the wheel and adding more and more levels of abstraction it just works, requiring as little effort from the programmer as possible.\n\n> Note that project's development happens on the [GitLab](https://gitlab.com/ohboi/silly).\n> GitHub repository is a mirror, it might *not* always be up-to-date.\n\nMake sure to check out project's [homepage](https://ohboi.gitlab.io/silly/) for more information about installation and usage.\n\n## Why?\n\nBuilt-in test runner is not good enough. It does its job, but it doesn't show what tests were executed. It just runs them all stopping on the first failed one. Of course, community offers many different solutions for that problem. Being an overcomplicated projects with thousands lines of code they could make you *less* productive increasing build times and deeply integrating into your project.\n\n**silly** is developed with strict principles in mind.\n\n### Keep It Simple, Silly\n\nFind -> run -> report. That's all there is about test runners. It can't be simpler.\n\n### Less code more better\n\nWriting code is hard, writing useful code is even harder, but writing no code is genius. **silly** is meant to contain no useless code.\n\n### Just a test runner, nothing more\n\nYou won't find anything besides the test runner here. It's not test runner's business to provide you with assertions and other nonsense.\n\n### Don't reinvent the wheel\n\n[dub](https://dub.pm/) is a great tool and there's no reason not to use it. Some other test runners use scripts or even integrate dub as part of them but **silly** is just an another dependency of your project.\n\n### It just works\n\nJust add it as a dependency and that's it. No editing of your project's source code is required. No editing of `dub.json/dub.sdl` except for adding a dependency is required. No changes in your editor config or terminal aliases are required, **silly** just runs with\n```\n$ dub test\n```\n\n### Your choice, your test runner\n\nIt's up to you whether you want to use this test runner or not. Get rid of it just by removing the dependency. It won't break your CI/CD scripts and cause any trouble.\n",
+        "readmeMarkdown": true,
+        "docFolder": ""
+      },
+      {
+        "date": "2018-09-05T20:03:39Z",
+        "version": "0.7.0-alpha",
+        "commitID": "96dd1e5407e25a8197987c9cb08a3162aea0fc0c",
+        "info": {
+          "packageDescriptionFile": "dub.json",
+          "authors": [
+            "Anton Fediushin"
+          ],
+          "sourceFiles": [
+            "silly.d"
+          ],
+          "license": "MIT",
+          "copyright": "Copyright © 2018, Anton Fediushin",
+          "name": "silly",
+          "description": "Better test runner for D",
+          "homepage": "https://ohboi.gitlab.io/silly/",
+          "importPaths": [
+            "."
+          ],
+          "targetType": "sourceLibrary"
+        },
+        "readme": "silly [![Repository](https://img.shields.io/badge/repository-on%20GitLab-orange.svg)](https://gitlab.com/ohboi/silly) [![pipeline status](https://gitlab.com/ohboi/silly/badges/master/pipeline.svg)](https://gitlab.com/ohboi/silly/commits/master) [![coverage report](https://gitlab.com/ohboi/silly/badges/master/coverage.svg)](https://gitlab.com/ohboi/silly/commits/master) [![MIT Licence](https://img.shields.io/badge/licence-MIT-blue.svg)](https://gitlab.com/ohboi/silly/blob/master/LICENCE) [![Package version](https://img.shields.io/dub/v/silly.svg)](https://gitlab.com/ohboi/silly/tags)\n=====\n\n**silly** is a no-nonsense test runner for the D programming language. Instead of re-inventing the wheel and adding more and more levels of abstraction it just works, requiring as little effort from the programmer as possible.\n\n> Note that project's development happens on the [GitLab](https://gitlab.com/ohboi/silly).\n> GitHub repository is a mirror, it might *not* always be up-to-date.\n\nMake sure to check out project's [homepage](https://ohboi.gitlab.io/silly/) for more information about installation and usage.\n\n## Why?\n\nBuilt-in test runner is not good enough. It does its job, but it doesn't show what tests were executed. It just runs them all stopping on the first failed one. Of course, community offers many different solutions for that problem. Being an overcomplicated projects with thousands lines of code they could make you *less* productive increasing build times and deeply integrating into your project.\n\n**silly** is developed with strict principles in mind.\n\n### Keep It Simple, Silly\n\nFind -> run -> report. That's all there is about test runners. It can't be simpler.\n\n### Less code more better\n\nWriting code is hard, writing useful code is even harder, but writing no code is genius. **silly** is meant to contain no useless code.\n\n### Just a test runner, nothing more\n\nYou won't find anything besides the test runner here. It's not test runner's business to provide you with assertions and other nonsense.\n\n### Don't reinvent the wheel\n\n[dub](https://dub.pm/) is a great tool and there's no reason not to use it. Some other test runners use scripts or even integrate dub as part of them but **silly** is just an another dependency of your project.\n\n### It just works\n\nJust add it as a dependency and that's it. No editing of your project's source code is required. No editing of `dub.json/dub.sdl` except for adding a dependency is required. No changes in your editor config or terminal aliases are required, **silly** just runs with\n```\n$ dub test\n```\n\n### Your choice, your test runner\n\nIt's up to you whether you want to use this test runner or not. Get rid of it just by removing the dependency. It won't break your CI/CD scripts and cause any trouble.\n",
+        "readmeMarkdown": true,
+        "docFolder": ""
+      },
+      {
+        "date": "2018-09-06T10:30:38Z",
+        "version": "0.7.0",
+        "commitID": "931bded68f2d2dd03db2bf55795760344caf85fa",
+        "info": {
+          "packageDescriptionFile": "dub.json",
+          "authors": [
+            "Anton Fediushin"
+          ],
+          "sourceFiles": [
+            "silly.d"
+          ],
+          "license": "MIT",
+          "copyright": "Copyright © 2018, Anton Fediushin",
+          "name": "silly",
+          "description": "Better test runner for D",
+          "homepage": "https://ohboi.gitlab.io/silly/",
+          "importPaths": [
+            "."
+          ],
+          "targetType": "sourceLibrary"
+        },
+        "readme": "silly [![Repository](https://img.shields.io/badge/repository-on%20GitLab-orange.svg)](https://gitlab.com/ohboi/silly) [![pipeline status](https://gitlab.com/ohboi/silly/badges/master/pipeline.svg)](https://gitlab.com/ohboi/silly/commits/master) [![coverage report](https://gitlab.com/ohboi/silly/badges/master/coverage.svg)](https://gitlab.com/ohboi/silly/commits/master) [![MIT Licence](https://img.shields.io/badge/licence-MIT-blue.svg)](https://gitlab.com/ohboi/silly/blob/master/LICENCE) [![Package version](https://img.shields.io/dub/v/silly.svg)](https://gitlab.com/ohboi/silly/tags)\n=====\n\n**silly** is a no-nonsense test runner for the D programming language. Instead of re-inventing the wheel and adding more and more levels of abstraction it just works, requiring as little effort from the programmer as possible.\n\n> Note that project's development happens on the [GitLab](https://gitlab.com/ohboi/silly).\n> GitHub repository is a mirror, it might *not* always be up-to-date.\n\nMake sure to check out project's [homepage](https://ohboi.gitlab.io/silly/) for more information about installation and usage.\n\n## Why?\n\nBuilt-in test runner is not good enough. It does its job, but it doesn't show what tests were executed. It just runs them all stopping on the first failed one. Of course, community offers many different solutions for that problem. Being an overcomplicated projects with thousands lines of code they could make you *less* productive increasing build times and deeply integrating into your project.\n\n**silly** is developed with strict principles in mind.\n\n### Keep It Simple, Silly\n\nFind -> run -> report. That's all there is about test runners. It can't be simpler.\n\n### Less code more better\n\nWriting code is hard, writing useful code is even harder, but writing no code is genius. **silly** is meant to contain no useless code.\n\n### Just a test runner, nothing more\n\nYou won't find anything besides the test runner here. It's not test runner's business to provide you with assertions and other nonsense.\n\n### Don't reinvent the wheel\n\n[dub](https://dub.pm/) is a great tool and there's no reason not to use it. Some other test runners use scripts or even integrate dub as part of them but **silly** is just an another dependency of your project.\n\n### It just works\n\nJust add it as a dependency and that's it. No editing of your project's source code is required. No editing of `dub.json/dub.sdl` except for adding a dependency is required. No changes in your editor config or terminal aliases are required, **silly** just runs with\n```\n$ dub test\n```\n\n### Your choice, your test runner\n\nIt's up to you whether you want to use this test runner or not. Get rid of it just by removing the dependency. It won't break your CI/CD scripts and cause any trouble.\n",
+        "readmeMarkdown": true,
+        "docFolder": ""
+      },
+      {
+        "date": "2018-09-12T09:42:26Z",
+        "version": "0.7.1",
+        "commitID": "37a157641867f5f3bd43c64be54733f28a9ea14d",
+        "info": {
+          "packageDescriptionFile": "dub.json",
+          "authors": [
+            "Anton Fediushin"
+          ],
+          "sourceFiles": [
+            "silly.d"
+          ],
+          "license": "MIT",
+          "copyright": "Copyright © 2018, Anton Fediushin",
+          "name": "silly",
+          "description": "Better test runner for D",
+          "homepage": "https://ohboi.gitlab.io/silly/",
+          "importPaths": [
+            "."
+          ],
+          "targetType": "sourceLibrary"
+        },
+        "readme": "silly [![Repository](https://img.shields.io/badge/repository-on%20GitLab-orange.svg)](https://gitlab.com/ohboi/silly) [![pipeline status](https://gitlab.com/ohboi/silly/badges/master/pipeline.svg)](https://gitlab.com/ohboi/silly/commits/master) [![coverage report](https://gitlab.com/ohboi/silly/badges/master/coverage.svg)](https://gitlab.com/ohboi/silly/commits/master) [![MIT Licence](https://img.shields.io/badge/licence-MIT-blue.svg)](https://gitlab.com/ohboi/silly/blob/master/LICENCE) [![Package version](https://img.shields.io/dub/v/silly.svg)](https://gitlab.com/ohboi/silly/tags)\n=====\n\n**silly** is a no-nonsense test runner for the D programming language. Instead of re-inventing the wheel and adding more and more levels of abstraction it just works, requiring as little effort from the programmer as possible.\n\n> Note that project's development happens on the [GitLab](https://gitlab.com/ohboi/silly).\n> GitHub repository is a mirror, it might *not* always be up-to-date.\n\nMake sure to check out project's [homepage](https://ohboi.gitlab.io/silly/) for more information about installation and usage.\n\n## Why?\n\nBuilt-in test runner is not good enough. It does its job, but it doesn't show what tests were executed. It just runs them all stopping on the first failed one. Of course, community offers many different solutions for that problem. Being an overcomplicated projects with thousands lines of code they could make you *less* productive increasing build times and deeply integrating into your project.\n\n**silly** is developed with strict principles in mind.\n\n### Keep It Simple, Silly\n\nFind -> run -> report. That's all there is about test runners. It can't be simpler.\n\n### Less code more better\n\nWriting code is hard, writing useful code is even harder, but writing no code is genius. **silly** is meant to contain no useless code.\n\n### Just a test runner, nothing more\n\nYou won't find anything besides the test runner here. It's not test runner's business to provide you with assertions and other nonsense.\n\n### Don't reinvent the wheel\n\n[dub](https://dub.pm/) is a great tool and there's no reason not to use it. Some other test runners use scripts or even integrate dub as part of them but **silly** is just an another dependency of your project.\n\n### It just works\n\nJust add it as a dependency and that's it. No editing of your project's source code is required. No editing of `dub.json/dub.sdl` except for adding a dependency is required. No changes in your editor config or terminal aliases are required, **silly** just runs with\n```\n$ dub test\n```\n\n### Your choice, your test runner\n\nIt's up to you whether you want to use this test runner or not. Get rid of it just by removing the dependency. It won't break your CI/CD scripts and cause any trouble.\n",
+        "readmeMarkdown": true,
+        "docFolder": ""
+      },
+      {
+        "date": "2018-09-20T10:16:34Z",
+        "version": "0.8.0",
+        "commitID": "6357ab77e7329fad47b3e63d4764e3322ab97d40",
+        "info": {
+          "packageDescriptionFile": "dub.json",
+          "authors": [
+            "Anton Fediushin"
+          ],
+          "sourceFiles": [
+            "silly.d"
+          ],
+          "license": "MIT",
+          "copyright": "Copyright © 2018, Anton Fediushin",
+          "name": "silly",
+          "description": "Better test runner for D",
+          "homepage": "https://ohboi.gitlab.io/silly/",
+          "importPaths": [
+            "."
+          ],
+          "targetType": "sourceLibrary"
+        },
+        "readme": "silly [![Repository](https://img.shields.io/badge/repository-on%20GitLab-orange.svg)](https://gitlab.com/ohboi/silly) [![pipeline status](https://gitlab.com/ohboi/silly/badges/master/pipeline.svg)](https://gitlab.com/ohboi/silly/commits/master) [![coverage report](https://gitlab.com/ohboi/silly/badges/master/coverage.svg)](https://gitlab.com/ohboi/silly/commits/master) [![MIT Licence](https://img.shields.io/badge/licence-MIT-blue.svg)](https://gitlab.com/ohboi/silly/blob/master/LICENCE) [![Package version](https://img.shields.io/dub/v/silly.svg)](https://gitlab.com/ohboi/silly/tags)\n=====\n\n**silly** is a no-nonsense test runner for the D programming language. Instead of re-inventing the wheel and adding more and more levels of abstraction it just works, requiring as little effort from the programmer as possible.\n\n> Note that project's development happens on the [GitLab](https://gitlab.com/ohboi/silly).\n> GitHub repository is a mirror, it might *not* always be up-to-date.\n\nMake sure to check out project's [homepage](https://ohboi.gitlab.io/silly/) for more information about installation and usage.\n\n## Why?\n\nBuilt-in test runner is not good enough. It does its job, but it doesn't show what tests were executed. It just runs them all stopping on the first failed one. Of course, community offers many different solutions for that problem. Being an overcomplicated projects with thousands lines of code they could make you *less* productive increasing build times and deeply integrating into your project.\n\n**silly** is developed with strict principles in mind.\n\n### Keep It Simple, Silly\n\nFind -> run -> report. That's all there is about test runners. It can't be simpler.\n\n### Less code more better\n\nWriting code is hard, writing useful code is even harder, but writing no code is genius. **silly** is meant to contain no useless code.\n\n### Just a test runner, nothing more\n\nYou won't find anything besides the test runner here. It's not test runner's business to provide you with assertions and other nonsense.\n\n### Don't reinvent the wheel\n\n[dub](https://dub.pm/) is a great tool and there's no reason not to use it. Some other test runners use scripts or even integrate dub as part of them but **silly** is just an another dependency of your project.\n\n### It just works\n\nJust add it as a dependency and that's it. No editing of your project's source code is required. No editing of `dub.json/dub.sdl` except for adding a dependency is required. No changes in your editor config or terminal aliases are required, **silly** just runs with\n```\n$ dub test\n```\n\n### Your choice, your test runner\n\nIt's up to you whether you want to use this test runner or not. Get rid of it just by removing the dependency. It won't break your CI/CD scripts and cause any trouble.\n",
+        "readmeMarkdown": true,
+        "docFolder": ""
+      },
+      {
+        "date": "2019-03-17T12:58:17Z",
+        "version": "0.8.1",
+        "commitID": "78b19c8ca06cec4d3df1da95c31d6f3c8973843b",
+        "info": {
+          "packageDescriptionFile": "dub.json",
+          "authors": [
+            "Anton Fediushin"
+          ],
+          "sourceFiles": [
+            "silly.d"
+          ],
+          "license": "MIT",
+          "copyright": "Copyright © 2018, Anton Fediushin",
+          "name": "silly",
+          "description": "Better test runner for D",
+          "homepage": "https://ohboi.gitlab.io/silly/",
+          "importPaths": [
+            "."
+          ],
+          "targetType": "sourceLibrary"
+        },
+        "readme": "silly [![Repository](https://img.shields.io/badge/repository-on%20GitLab-orange.svg)](https://gitlab.com/AntonMeep/silly) [![pipeline \nstatus](https://gitlab.com/AntonMeep/silly/badges/master/pipeline.svg)](https://gitlab.com/AntonMeep/silly/commits/master) [![coverage \nreport](https://gitlab.com/AntonMeep/silly/badges/master/coverage.svg)](https://gitlab.com/AntonMeep/silly/commits/master) [![MIT \nLicence](https://img.shields.io/badge/licence-MIT-blue.svg)](https://gitlab.com/AntonMeep/silly/blob/master/LICENCE) [![Package \nversion](https://img.shields.io/dub/v/silly.svg)](https://gitlab.com/AntonMeep/silly/tags)\n=====\n\n**silly** is a no-nonsense test runner for the D programming language. Instead of re-inventing the wheel and adding more and more levels of abstraction it just works, requiring as little effort from the programmer as possible.\n\n> Note that project's development happens on the [GitLab](https://gitlab.com/AntonMeep/silly).\n> GitHub repository is a mirror, it might *not* always be up-to-date.\n\nMake sure to check out project's [homepage](https://antonmeep.gitlab.io/silly/) for more information about installation and usage.\n\n## Why?\n\nBuilt-in test runner is not good enough. It does its job, but it doesn't show what tests were executed. It just runs them all stopping on the first failed one. Of course, community offers many different solutions for that problem. Being an overcomplicated projects with thousands lines of code they could make you *less* productive increasing build times and deeply integrating into your project.\n\n**silly** is developed with strict principles in mind.\n\n### Keep It Simple, Silly\n\nFind -> run -> report. That's all there is about test runners. It can't be simpler.\n\n### Less code more better\n\nWriting code is hard, writing useful code is even harder, but writing no code is genius. **silly** is meant to contain no useless code.\n\n### Just a test runner, nothing more\n\nYou won't find anything besides the test runner here. It's not test runner's business to provide you with assertions and other nonsense.\n\n### Don't reinvent the wheel\n\n[dub](https://dub.pm/) is a great tool and there's no reason not to use it. Some other test runners use scripts or even integrate dub as part of them but **silly** is just an another dependency of your project.\n\n### It just works\n\nJust add it as a dependency and that's it. No editing of your project's source code is required. No editing of `dub.json/dub.sdl` except for adding a dependency is required. No changes in your editor config or terminal aliases are required, **silly** just runs with\n```\n$ dub test\n```\n\n### Your choice, your test runner\n\nIt's up to you whether you want to use this test runner or not. Get rid of it just by removing the dependency. It won't break your CI/CD scripts and cause any trouble.\n",
+        "readmeMarkdown": true,
+        "docFolder": ""
+      },
+      {
+        "date": "2019-03-17T13:09:35Z",
+        "version": "0.8.2",
+        "commitID": "771c6fec3ab56890f14c3a4bd19848584adfa803",
+        "info": {
+          "packageDescriptionFile": "dub.json",
+          "authors": [
+            "Anton Fediushin"
+          ],
+          "sourceFiles": [
+            "silly.d"
+          ],
+          "license": "MIT",
+          "copyright": "Copyright © 2018, Anton Fediushin",
+          "name": "silly",
+          "description": "Better test runner for D",
+          "homepage": "https://ohboi.gitlab.io/silly/",
+          "importPaths": [
+            "."
+          ],
+          "targetType": "sourceLibrary"
+        },
+        "readme": "silly [![Repository](https://img.shields.io/badge/repository-on%20GitLab-orange.svg)](https://gitlab.com/AntonMeep/silly) [![pipeline \nstatus](https://gitlab.com/AntonMeep/silly/badges/master/pipeline.svg)](https://gitlab.com/AntonMeep/silly/commits/master) [![coverage \nreport](https://gitlab.com/AntonMeep/silly/badges/master/coverage.svg)](https://gitlab.com/AntonMeep/silly/commits/master) [![MIT \nLicence](https://img.shields.io/badge/licence-MIT-blue.svg)](https://gitlab.com/AntonMeep/silly/blob/master/LICENCE) [![Package \nversion](https://img.shields.io/dub/v/silly.svg)](https://gitlab.com/AntonMeep/silly/tags)\n=====\n\n**silly** is a no-nonsense test runner for the D programming language. Instead of re-inventing the wheel and adding more and more levels of abstraction it just works, requiring as little effort from the programmer as possible.\n\n> Note that project's development happens on the [GitLab](https://gitlab.com/AntonMeep/silly).\n> GitHub repository is a mirror, it might *not* always be up-to-date.\n\nMake sure to check out project's [homepage](https://antonmeep.gitlab.io/silly/) for more information about installation and usage.\n\n## Why?\n\nBuilt-in test runner is not good enough. It does its job, but it doesn't show what tests were executed. It just runs them all stopping on the first failed one. Of course, community offers many different solutions for that problem. Being an overcomplicated projects with thousands lines of code they could make you *less* productive increasing build times and deeply integrating into your project.\n\n**silly** is developed with strict principles in mind.\n\n### Keep It Simple, Silly\n\nFind -> run -> report. That's all there is about test runners. It can't be simpler.\n\n### Less code more better\n\nWriting code is hard, writing useful code is even harder, but writing no code is genius. **silly** is meant to contain no useless code.\n\n### Just a test runner, nothing more\n\nYou won't find anything besides the test runner here. It's not test runner's business to provide you with assertions and other nonsense.\n\n### Don't reinvent the wheel\n\n[dub](https://dub.pm/) is a great tool and there's no reason not to use it. Some other test runners use scripts or even integrate dub as part of them but **silly** is just an another dependency of your project.\n\n### It just works\n\nJust add it as a dependency and that's it. No editing of your project's source code is required. No editing of `dub.json/dub.sdl` except for adding a dependency is required. No changes in your editor config or terminal aliases are required, **silly** just runs with\n```\n$ dub test\n```\n\n### Your choice, your test runner\n\nIt's up to you whether you want to use this test runner or not. Get rid of it just by removing the dependency. It won't break your CI/CD scripts and cause any trouble.\n",
+        "readmeMarkdown": true,
+        "docFolder": ""
+      },
+      {
+        "date": "2019-11-24T07:42:59Z",
+        "version": "1.0.0",
+        "commitID": "2d5072cb84b25ff6a471f1234596af53bc139fc9",
+        "info": {
+          "packageDescriptionFile": "dub.json",
+          "authors": [
+            "Anton Fediushin"
+          ],
+          "sourceFiles": [
+            "silly.d"
+          ],
+          "license": "ISC",
+          "copyright": "Copyright © 2018-2019, Anton Fediushin",
+          "name": "silly",
+          "description": "Better test runner for D",
+          "importPaths": [
+            "."
+          ],
+          "targetType": "sourceLibrary"
+        },
+        "readme": "silly [![Repository](https://img.shields.io/badge/repository-on%20GitLab-orange.svg)](https://gitlab.com/AntonMeep/silly) [![pipeline\nstatus](https://gitlab.com/AntonMeep/silly/badges/master/pipeline.svg)](https://gitlab.com/AntonMeep/silly/commits/master) [![coverage\nreport](https://gitlab.com/AntonMeep/silly/badges/master/coverage.svg)](https://gitlab.com/AntonMeep/silly/commits/master) [![ISC\nLicence](https://img.shields.io/badge/licence-ISC-blue.svg)](https://gitlab.com/AntonMeep/silly/blob/master/LICENSE) [![Package\nversion](https://img.shields.io/dub/v/silly.svg)](https://gitlab.com/AntonMeep/silly/tags)\n=====\n\n**silly** is a modern and light test runner for the D programming language.\n\n# Used by\n\n[Optional](http://optional.dub.pm/), [expected](http://expected.dub.pm/), [ddash](http://ddash.dub.pm/), and more!\n\n> Got a cool project that uses **silly**? [Let us know!](https://gitlab.com/AntonMeep/silly/issues)\n\n# Features\n\n- Easy to install and use with dub\n- No changes of your code are required to start using silly\n- Seamless integration with `dub test`\n- Named tests\n- Multi-threaded test execution\n- Filtering tests\n- Colourful output\n\n# Getting started\n\nAdd **silly** to your project:\n\n```\n$ dub add silly\n```\n\nThis should be it! Try to run tests:\n\n```\n$ dub test\n```\n\nIf it succeeded then congratulations, you have just finished setting up **silly**! Make sure to add more tests and give them nice names.\n\n# Troubleshooting\n\nUnfortunately, setup isn't that easy sometimes and running `dub test` will fail. Don't panic, most of the issues are caused by the quirks and twists of dub. Here are some suggestions on what to check first:\n\n## Make sure `main()` function isn't defined when built in `unittest` mode\n\nSo, instead of this:\n```d\nvoid main() {\n\n}\n```\n\nDo this:\n```d\nversion(unittest) {\n\t// Do nothing here, dub takes care of that\n} else {\n\tvoid main() {\n\n\t}\n}\n```\n\n## Make sure there is no `targetType: executable` in `unittest` configuration in your dub.json/dub.sdl\n\nInstead of this:\n\n```json\n{\n\t...\n\t\"configurations\": [\n\t\t...\n\t\t{\n\t\t\t\"name\": \"unittest\",\n\t\t\t\"targetType\": \"executable\",\n\t\t\t...\n\t\t}\n\t]\n}\n```\n\nDo this:\n\n```json\n{\n\t...\n\t\"configurations\": [\n\t\t...\n\t\t{\n\t\t\t\"name\": \"unittest\",\n\t\t\t...\n\t\t}\n\t]\n}\n```\n\nSee [#12](https://gitlab.com/AntonMeep/silly/issues/12) for more information.\n\n## Nothing helped?\n\nOpen a new [issue](https://gitlab.com/AntonMeep/silly/issues), we will be happy to help you!\n\n# Naming tests\n\nIt is as easy as adding a `string` [user-defined attribute](https://dlang.org/spec/attribute.html#UserDefinedAttribute) to your `unittest` declaration.\n\n```d\n@(\"Johny\")\nunittest {\n\t// This unittest is named Johny\n}\n```\n\nIf there are multiple such UDAs, the first one is chosen to be the name of the unittest.\n\n```d\n@(\"Hello, \") @(\"World!\")\nunittest {\n\t// This unittest's name is \"Hello, \"\n}\n```\n\n# Command line options\n\n**Silly** accept various command-line options that let you customize its behaviour:\n\n```\n$ dub test -- <options>\n\nOptions:\n  --no-colours                    Disable colours\n  -t <n>      --threads <n>       Number of worker threads. 0 to auto-detect (default)\n  -i <regexp> --include <regexp>  Run tests if their name matches specified regular expression. See filtering tests\n  -e <regexp> --exclude <regexp>  Skip tests if their name matches specified regular expression. See filtering tests\n  -v          --verbose           Show verbose output (full stack traces and durations)\n  -h          --help              Help information\n```\n\n# Filtering tests\n\nWith `--include` and `--exclude` options it's possible to control what tests will be run. These options take regular expressions in [std.regex'](https://dlang.org/phobos/std_regex.html#Syntax%20and%20general%20information) format.\n\n`--include` only tests that match provided regular expression will be run, other tests will be skipped.\n`--exclude` all of the tests that don't match provided regular expression will be run.\n\n> Using both options at the same time will produce unexpected results!\n",
+        "readmeMarkdown": true,
+        "docFolder": ""
+      },
+      {
+        "date": "2020-01-06T10:47:54Z",
+        "version": "1.0.1",
+        "commitID": "b0970cf62ba7d9d8f4e9bd70a2635f72523d8c23",
+        "info": {
+          "packageDescriptionFile": "dub.json",
+          "authors": [
+            "Anton Fediushin"
+          ],
+          "sourceFiles": [
+            "silly.d"
+          ],
+          "license": "ISC",
+          "copyright": "Copyright © 2018-2019, Anton Fediushin",
+          "name": "silly",
+          "description": "Better test runner for D",
+          "importPaths": [
+            "."
+          ],
+          "targetType": "sourceLibrary"
+        },
+        "readme": "silly [![Repository](https://img.shields.io/badge/repository-on%20GitLab-orange.svg)](https://gitlab.com/AntonMeep/silly) [![pipeline\nstatus](https://gitlab.com/AntonMeep/silly/badges/master/pipeline.svg)](https://gitlab.com/AntonMeep/silly/commits/master) [![coverage\nreport](https://gitlab.com/AntonMeep/silly/badges/master/coverage.svg)](https://gitlab.com/AntonMeep/silly/commits/master) [![ISC\nLicence](https://img.shields.io/badge/licence-ISC-blue.svg)](https://gitlab.com/AntonMeep/silly/blob/master/LICENSE) [![Package\nversion](https://img.shields.io/dub/v/silly.svg)](https://gitlab.com/AntonMeep/silly/tags)\n=====\n\n**silly** is a modern and light test runner for the D programming language.\n\n# Used by\n\n[Optional](http://optional.dub.pm/), [expected](http://expected.dub.pm/), [ddash](http://ddash.dub.pm/), and more!\n\n> Got a cool project that uses **silly**? [Let us know!](https://gitlab.com/AntonMeep/silly/issues)\n\n# Features\n\n- Easy to install and use with dub\n- No changes of your code are required to start using silly\n- Seamless integration with `dub test`\n- Named tests\n- Multi-threaded test execution\n- Filtering tests\n- Colourful output\n\n# Getting started\n\nAdd **silly** to your project:\n\n```\n$ dub add silly\n```\n\nThis should be it! Try to run tests:\n\n```\n$ dub test\n```\n\nIf it succeeded then congratulations, you have just finished setting up **silly**! Make sure to add more tests and give them nice names.\n\n# Troubleshooting\n\nUnfortunately, setup isn't that easy sometimes and running `dub test` will fail. Don't panic, most of the issues are caused by the quirks and twists of dub. Here are some suggestions on what to check first:\n\n## Make sure `main()` function isn't defined when built in `unittest` mode\n\nSo, instead of this:\n```d\nvoid main() {\n\n}\n```\n\nDo this:\n```d\nversion(unittest) {\n\t// Do nothing here, dub takes care of that\n} else {\n\tvoid main() {\n\n\t}\n}\n```\n\n## Make sure there is no `targetType: executable` in `unittest` configuration in your dub.json/dub.sdl\n\nInstead of this:\n\n```json\n{\n\t...\n\t\"configurations\": [\n\t\t...\n\t\t{\n\t\t\t\"name\": \"unittest\",\n\t\t\t\"targetType\": \"executable\",\n\t\t\t...\n\t\t}\n\t]\n}\n```\n\nDo this:\n\n```json\n{\n\t...\n\t\"configurations\": [\n\t\t...\n\t\t{\n\t\t\t\"name\": \"unittest\",\n\t\t\t...\n\t\t}\n\t]\n}\n```\n\nSee [#12](https://gitlab.com/AntonMeep/silly/issues/12) for more information.\n\n## Nothing helped?\n\nOpen a new [issue](https://gitlab.com/AntonMeep/silly/issues), we will be happy to help you!\n\n# Naming tests\n\nIt is as easy as adding a `string` [user-defined attribute](https://dlang.org/spec/attribute.html#UserDefinedAttribute) to your `unittest` declaration.\n\n```d\n@(\"Johny\")\nunittest {\n\t// This unittest is named Johny\n}\n```\n\nIf there are multiple such UDAs, the first one is chosen to be the name of the unittest.\n\n```d\n@(\"Hello, \") @(\"World!\")\nunittest {\n\t// This unittest's name is \"Hello, \"\n}\n```\n\n# Command line options\n\n**Silly** accept various command-line options that let you customize its behaviour:\n\n```\n$ dub test -- <options>\n\nOptions:\n  --no-colours                    Disable colours\n  -t <n>      --threads <n>       Number of worker threads. 0 to auto-detect (default)\n  -i <regexp> --include <regexp>  Run tests if their name matches specified regular expression. See filtering tests\n  -e <regexp> --exclude <regexp>  Skip tests if their name matches specified regular expression. See filtering tests\n  -v          --verbose           Show verbose output (full stack traces and durations)\n  -h          --help              Help information\n```\n\n# Filtering tests\n\nWith `--include` and `--exclude` options it's possible to control what tests will be run. These options take regular expressions in [std.regex'](https://dlang.org/phobos/std_regex.html#Syntax%20and%20general%20information) format.\n\n`--include` only tests that match provided regular expression will be run, other tests will be skipped.\n`--exclude` all of the tests that don't match provided regular expression will be run.\n\n> Using both options at the same time will produce unexpected results!\n",
+        "readmeMarkdown": true,
+        "docFolder": ""
+      },
+      {
+        "date": "2020-02-03T16:04:04Z",
+        "version": "1.0.2",
+        "commitID": "01b7e5558f644e1c310be84b5890454bb0ccb61c",
+        "info": {
+          "packageDescriptionFile": "dub.json",
+          "authors": [
+            "Anton Fediushin"
+          ],
+          "sourceFiles": [
+            "silly.d"
+          ],
+          "license": "ISC",
+          "copyright": "Copyright © 2018-2019, Anton Fediushin",
+          "name": "silly",
+          "description": "Better test runner for D",
+          "importPaths": [
+            "."
+          ],
+          "targetType": "sourceLibrary"
+        },
+        "readme": "silly [![Repository](https://img.shields.io/badge/repository-on%20GitLab-orange.svg)](https://gitlab.com/AntonMeep/silly) [![pipeline\nstatus](https://gitlab.com/AntonMeep/silly/badges/master/pipeline.svg)](https://gitlab.com/AntonMeep/silly/commits/master) [![coverage\nreport](https://gitlab.com/AntonMeep/silly/badges/master/coverage.svg)](https://gitlab.com/AntonMeep/silly/commits/master) [![ISC\nLicence](https://img.shields.io/badge/licence-ISC-blue.svg)](https://gitlab.com/AntonMeep/silly/blob/master/LICENSE) [![Package\nversion](https://img.shields.io/dub/v/silly.svg)](https://gitlab.com/AntonMeep/silly/tags)\n=====\n\n**silly** is a modern and light test runner for the D programming language.\n\n# Used by\n\n[Optional](http://optional.dub.pm/), [expected](http://expected.dub.pm/), [ddash](http://ddash.dub.pm/), and more!\n\n> Got a cool project that uses **silly**? [Let us know!](https://gitlab.com/AntonMeep/silly/issues)\n\n# Features\n\n- Easy to install and use with dub\n- No changes of your code are required to start using silly\n- Seamless integration with `dub test`\n- Named tests\n- Multi-threaded test execution\n- Filtering tests\n- Colourful output\n\n# Getting started\n\nAdd **silly** to your project:\n\n```\n$ dub add silly\n```\n\nThis should be it! Try to run tests:\n\n```\n$ dub test\n```\n\nIf it succeeded then congratulations, you have just finished setting up **silly**! Make sure to add more tests and give them nice names.\n\n# Troubleshooting\n\nUnfortunately, setup isn't that easy sometimes and running `dub test` will fail. Don't panic, most of the issues are caused by the quirks and twists of dub. Here are some suggestions on what to check first:\n\n## Make sure `main()` function isn't defined when built in `unittest` mode\n\nSo, instead of this:\n```d\nvoid main() {\n\n}\n```\n\nDo this:\n```d\nversion(unittest) {\n\t// Do nothing here, dub takes care of that\n} else {\n\tvoid main() {\n\n\t}\n}\n```\n\n## Make sure there is no `targetType: executable` in `unittest` configuration in your dub.json/dub.sdl\n\nInstead of this:\n\n```json\n{\n\t...\n\t\"configurations\": [\n\t\t...\n\t\t{\n\t\t\t\"name\": \"unittest\",\n\t\t\t\"targetType\": \"executable\",\n\t\t\t...\n\t\t}\n\t]\n}\n```\n\nDo this:\n\n```json\n{\n\t...\n\t\"configurations\": [\n\t\t...\n\t\t{\n\t\t\t\"name\": \"unittest\",\n\t\t\t...\n\t\t}\n\t]\n}\n```\n\nSee [#12](https://gitlab.com/AntonMeep/silly/issues/12) for more information.\n\n## Nothing helped?\n\nOpen a new [issue](https://gitlab.com/AntonMeep/silly/issues), we will be happy to help you!\n\n# Naming tests\n\nIt is as easy as adding a `string` [user-defined attribute](https://dlang.org/spec/attribute.html#UserDefinedAttribute) to your `unittest` declaration.\n\n```d\n@(\"Johny\")\nunittest {\n\t// This unittest is named Johny\n}\n```\n\nIf there are multiple such UDAs, the first one is chosen to be the name of the unittest.\n\n```d\n@(\"Hello, \") @(\"World!\")\nunittest {\n\t// This unittest's name is \"Hello, \"\n}\n```\n\n# Command line options\n\n**Silly** accept various command-line options that let you customize its behaviour:\n\n```\n$ dub test -- <options>\n\nOptions:\n  --no-colours                    Disable colours\n  -t <n>      --threads <n>       Number of worker threads. 0 to auto-detect (default)\n  -i <regexp> --include <regexp>  Run tests if their name matches specified regular expression. See filtering tests\n  -e <regexp> --exclude <regexp>  Skip tests if their name matches specified regular expression. See filtering tests\n  -v          --verbose           Show verbose output (full stack traces and durations)\n  -h          --help              Help information\n```\n\n# Filtering tests\n\nWith `--include` and `--exclude` options it's possible to control what tests will be run. These options take regular expressions in [std.regex'](https://dlang.org/phobos/std_regex.html#Syntax%20and%20general%20information) format.\n\n`--include` only tests that match provided regular expression will be run, other tests will be skipped.\n`--exclude` all of the tests that don't match provided regular expression will be run.\n\n> Using both options at the same time will produce unexpected results!\n",
+        "readmeMarkdown": true,
+        "docFolder": ""
+      },
+      {
+        "date": "2020-06-20T08:03:06Z",
+        "version": "1.1.0",
+        "commitID": "7cf73242665d006d4a7267a9fa14490db5532f6a",
+        "info": {
+          "packageDescriptionFile": "dub.json",
+          "authors": [
+            "Anton Fediushin"
+          ],
+          "sourceFiles": [
+            "silly.d"
+          ],
+          "license": "ISC",
+          "copyright": "Copyright © 2018-2019, Anton Fediushin",
+          "name": "silly",
+          "description": "Better test runner for D",
+          "importPaths": [
+            "."
+          ],
+          "targetType": "sourceLibrary"
+        },
+        "readme": "silly [![Repository](https://img.shields.io/badge/repository-on%20GitLab-orange.svg)](https://gitlab.com/AntonMeep/silly) [![pipeline\nstatus](https://gitlab.com/AntonMeep/silly/badges/master/pipeline.svg)](https://gitlab.com/AntonMeep/silly/commits/master) [![coverage\nreport](https://gitlab.com/AntonMeep/silly/badges/master/coverage.svg)](https://gitlab.com/AntonMeep/silly/commits/master) [![ISC\nLicence](https://img.shields.io/badge/licence-ISC-blue.svg)](https://gitlab.com/AntonMeep/silly/blob/master/LICENSE) [![Package\nversion](https://img.shields.io/dub/v/silly.svg)](https://gitlab.com/AntonMeep/silly/tags)\n=====\n\n**silly** is a modern and light test runner for the D programming language.\n\n# Used by\n\n[Optional](http://optional.dub.pm/), [expected](http://expected.dub.pm/), [ddash](http://ddash.dub.pm/), and more!\n\n> Got a cool project that uses **silly**? [Let us know!](https://gitlab.com/AntonMeep/silly/issues)\n\n# Features\n\n- Easy to install and use with dub\n- No changes of your code are required to start using silly\n- Seamless integration with `dub test`\n- Named tests\n- Multi-threaded test execution\n- Filtering tests\n- Colourful output\n\n# Getting started\n\nAdd **silly** to your project:\n\n```\n$ dub add silly\n```\n\nThis should be it! Try to run tests:\n\n```\n$ dub test\n```\n\nIf it succeeded then congratulations, you have just finished setting up **silly**! Make sure to add more tests and give them nice names.\n\n# Troubleshooting\n\nUnfortunately, setup isn't that easy sometimes and running `dub test` will fail. Don't panic, most of the issues are caused by the quirks and twists of dub. Here are some suggestions on what to check first:\n\n## Make sure `main()` function isn't defined when built in `unittest` mode\n\nSo, instead of this:\n```d\nvoid main() {\n\n}\n```\n\nDo this:\n```d\nversion(unittest) {\n\t// Do nothing here, dub takes care of that\n} else {\n\tvoid main() {\n\n\t}\n}\n```\n\n## Make sure there is a special `unittest` configuration in your dub.json/dub.sdl\n\n```json\n{\n    ...\n\t\"configurations\": [\n\t\t{\n\t\t\t\"name\": \"executable\"\n\t\t},\n\t\t{\n\t\t\t\"name\": \"unittest\"\n\t\t}\n\t]\n}\n```\n\nSee also [#32](https://gitlab.com/AntonMeep/silly/issues/32).\n\n> **Pro Tip**: dub configurations can have `dependencies` as well! You may want to add silly as a dependency only for the `unittest` configuration to indicate that it's only used for tests.\n\n## Make sure there is no `targetType: executable` in `unittest` configuration in your dub.json/dub.sdl\n\nInstead of this:\n\n```json\n{\n\t...\n\t\"configurations\": [\n\t\t...\n\t\t{\n\t\t\t\"name\": \"unittest\",\n\t\t\t\"targetType\": \"executable\",\n\t\t\t...\n\t\t}\n\t]\n}\n```\n\nDo this:\n\n```json\n{\n\t...\n\t\"configurations\": [\n\t\t...\n\t\t{\n\t\t\t\"name\": \"unittest\",\n\t\t\t...\n\t\t}\n\t]\n}\n```\n\nSee [#12](https://gitlab.com/AntonMeep/silly/issues/12) for more information.\n\n## Nothing helped?\n\nOpen a new [issue](https://gitlab.com/AntonMeep/silly/issues), we will be happy to help you!\n\n# Naming tests\n\nIt is as easy as adding a `string` [user-defined attribute](https://dlang.org/spec/attribute.html#UserDefinedAttribute) to your `unittest` declaration.\n\n```d\n@(\"Johny\")\nunittest {\n\t// This unittest is named Johny\n}\n```\n\nIf there are multiple such UDAs, the first one is chosen to be the name of the unittest.\n\n```d\n@(\"Hello, \") @(\"World!\")\nunittest {\n\t// This unittest's name is \"Hello, \"\n}\n```\n\n# Command line options\n\n**Silly** accept various command-line options that let you customize its behaviour:\n\n```\n$ dub test -- <options>\n\nOptions:\n  --no-colours                    Disable colours\n  -t <n>      --threads <n>       Number of worker threads. 0 to auto-detect (default)\n  -i <regexp> --include <regexp>  Run tests if their name matches specified regular expression. See filtering tests\n  -e <regexp> --exclude <regexp>  Skip tests if their name matches specified regular expression. See filtering tests\n  -v          --verbose           Show verbose output (full stack traces, location and durations)\n  -h          --help              Help information\n```\n\n# Filtering tests\n\nWith `--include` and `--exclude` options it's possible to control what tests will be run. These options take regular expressions in [std.regex'](https://dlang.org/phobos/std_regex.html#Syntax%20and%20general%20information) format.\n\n`--include` only tests that match provided regular expression will be run, other tests will be skipped.\n`--exclude` all of the tests that don't match provided regular expression will be run.\n\n> Using both options at the same time will produce unexpected results!\n",
+        "readmeMarkdown": true,
+        "docFolder": ""
+      },
+      {
+        "date": "2020-12-27T19:00:48Z",
+        "version": "1.1.1",
+        "commitID": "9c7743d73b7dae6c7ec841fe719d0a04a99096b9",
+        "info": {
+          "packageDescriptionFile": "dub.json",
+          "authors": [
+            "Anton Fediushin"
+          ],
+          "sourceFiles": [
+            "silly.d"
+          ],
+          "license": "ISC",
+          "copyright": "Copyright © 2018-2019, Anton Fediushin",
+          "name": "silly",
+          "description": "Better test runner for D",
+          "importPaths": [
+            "."
+          ],
+          "targetType": "sourceLibrary"
+        },
+        "readme": "silly [![Repository](https://img.shields.io/badge/repository-on%20GitLab-orange.svg)](https://gitlab.com/AntonMeep/silly) [![pipeline\nstatus](https://gitlab.com/AntonMeep/silly/badges/master/pipeline.svg)](https://gitlab.com/AntonMeep/silly/commits/master) [![coverage\nreport](https://gitlab.com/AntonMeep/silly/badges/master/coverage.svg)](https://gitlab.com/AntonMeep/silly/commits/master) [![ISC\nLicence](https://img.shields.io/badge/licence-ISC-blue.svg)](https://gitlab.com/AntonMeep/silly/blob/master/LICENSE) [![Package\nversion](https://img.shields.io/dub/v/silly.svg)](https://gitlab.com/AntonMeep/silly/tags)\n=====\n\n**silly** is a modern and light test runner for the D programming language.\n\n# Used by\n\n[Optional](http://optional.dub.pm/), [expected](http://expected.dub.pm/), [ddash](http://ddash.dub.pm/), and more!\n\n> Got a cool project that uses **silly**? [Let us know!](https://gitlab.com/AntonMeep/silly/issues)\n\n# Features\n\n- Easy to install and use with dub\n- No changes of your code are required to start using silly\n- Seamless integration with `dub test`\n- Named tests\n- Multi-threaded test execution\n- Filtering tests\n- Colourful output\n\n# Getting started\n\nAdd **silly** to your project:\n\n```\n$ dub add silly\n```\n\nThis should be it! Try to run tests:\n\n```\n$ dub test\n```\n\nIf it succeeded then congratulations, you have just finished setting up **silly**! Make sure to add more tests and give them nice names.\n\n# Troubleshooting\n\nUnfortunately, setup isn't that easy sometimes and running `dub test` will fail. Don't panic, most of the issues are caused by the quirks and twists of dub. Here are some suggestions on what to check first:\n\n## Make sure `main()` function isn't defined when built in `unittest` mode\n\nSo, instead of this:\n```d\nvoid main() {\n\n}\n```\n\nDo this:\n```d\nversion(unittest) {\n\t// Do nothing here, dub takes care of that\n} else {\n\tvoid main() {\n\n\t}\n}\n```\n\n## Make sure there is a special `unittest` configuration in your dub.json/dub.sdl\n\n```json\n{\n    ...\n\t\"configurations\": [\n\t\t{\n\t\t\t\"name\": \"executable\"\n\t\t},\n\t\t{\n\t\t\t\"name\": \"unittest\"\n\t\t}\n\t]\n}\n```\n\nSee also [#32](https://gitlab.com/AntonMeep/silly/issues/32).\n\n> **Pro Tip**: dub configurations can have `dependencies` as well! You may want to add silly as a dependency only for the `unittest` configuration to indicate that it's only used for tests.\n\n## Make sure there is no `targetType: executable` in `unittest` configuration in your dub.json/dub.sdl\n\nInstead of this:\n\n```json\n{\n\t...\n\t\"configurations\": [\n\t\t...\n\t\t{\n\t\t\t\"name\": \"unittest\",\n\t\t\t\"targetType\": \"executable\",\n\t\t\t...\n\t\t}\n\t]\n}\n```\n\nDo this:\n\n```json\n{\n\t...\n\t\"configurations\": [\n\t\t...\n\t\t{\n\t\t\t\"name\": \"unittest\",\n\t\t\t...\n\t\t}\n\t]\n}\n```\n\nSee [#12](https://gitlab.com/AntonMeep/silly/issues/12) for more information.\n\n## Nothing helped?\n\nOpen a new [issue](https://gitlab.com/AntonMeep/silly/issues), we will be happy to help you!\n\n# Naming tests\n\nIt is as easy as adding a `string` [user-defined attribute](https://dlang.org/spec/attribute.html#UserDefinedAttribute) to your `unittest` declaration.\n\n```d\n@(\"Johny\")\nunittest {\n\t// This unittest is named Johny\n}\n```\n\nIf there are multiple such UDAs, the first one is chosen to be the name of the unittest.\n\n```d\n@(\"Hello, \") @(\"World!\")\nunittest {\n\t// This unittest's name is \"Hello, \"\n}\n```\n\n# Command line options\n\n**Silly** accept various command-line options that let you customize its behaviour:\n\n```\n$ dub test -- <options>\n\nOptions:\n  --no-colours                    Disable colours\n  -t <n>      --threads <n>       Number of worker threads. 0 to auto-detect (default)\n  -i <regexp> --include <regexp>  Run tests if their name matches specified regular expression. See filtering tests\n  -e <regexp> --exclude <regexp>  Skip tests if their name matches specified regular expression. See filtering tests\n  -v          --verbose           Show verbose output (full stack traces, location and durations)\n  -h          --help              Help information\n```\n\n# Filtering tests\n\nWith `--include` and `--exclude` options it's possible to control what tests will be run. These options take regular expressions in [std.regex'](https://dlang.org/phobos/std_regex.html#Syntax%20and%20general%20information) format.\n\n`--include` only tests that match provided regular expression will be run, other tests will be skipped.\n`--exclude` all of the tests that don't match provided regular expression will be run.\n\n> Using both options at the same time will produce unexpected results!\n",
+        "readmeMarkdown": true,
+        "docFolder": ""
+      },
+      {
+        "date": "2021-06-19T08:15:10Z",
+        "version": "1.2.0-dev.1",
+        "commitID": "b2f89e90a90d7ea5214ef4a26ee11e7e6163b611",
+        "info": {
+          "packageDescriptionFile": "dub.json",
+          "authors": [
+            "Anton Fediushin"
+          ],
+          "sourceFiles": [
+            "silly.d"
+          ],
+          "license": "ISC",
+          "copyright": "Copyright © 2018-2019, Anton Fediushin",
+          "name": "silly",
+          "description": "Better test runner for D",
+          "importPaths": [
+            "."
+          ],
+          "targetType": "sourceLibrary"
+        },
+        "readme": "silly [![Repository](https://img.shields.io/badge/repository-on%20GitLab-orange.svg)](https://gitlab.com/AntonMeep/silly) [![pipeline\nstatus](https://gitlab.com/AntonMeep/silly/badges/master/pipeline.svg)](https://gitlab.com/AntonMeep/silly/commits/master) [![coverage\nreport](https://gitlab.com/AntonMeep/silly/badges/master/coverage.svg)](https://gitlab.com/AntonMeep/silly/commits/master) [![ISC\nLicence](https://img.shields.io/badge/licence-ISC-blue.svg)](https://gitlab.com/AntonMeep/silly/blob/master/LICENSE) [![Package\nversion](https://img.shields.io/dub/v/silly.svg)](https://gitlab.com/AntonMeep/silly/tags)\n=====\n\n**silly** is a modern and light test runner for the D programming language.\n\n# Used by\n\n[Optional](http://optional.dub.pm/), [expected](http://expected.dub.pm/), [ddash](http://ddash.dub.pm/), and more!\n\n> Got a cool project that uses **silly**? [Let us know!](https://gitlab.com/AntonMeep/silly/issues)\n\n# Features\n\n- Easy to install and use with dub\n- No changes of your code are required to start using silly\n- Seamless integration with `dub test`\n- Named tests\n- Multi-threaded test execution\n- Filtering tests\n- Colourful output\n\n# Getting started\n\nAdd **silly** to your project:\n\n```\n$ dub add silly\n```\n\nThis should be it! Try to run tests:\n\n```\n$ dub test\n```\n\nIf it succeeded then congratulations, you have just finished setting up **silly**! Make sure to add more tests and give them nice names.\n\n# Troubleshooting\n\nUnfortunately, setup isn't that easy sometimes and running `dub test` will fail. Don't panic, most of the issues are caused by the quirks and twists of dub. Here are some suggestions on what to check first:\n\n## Make sure `main()` function isn't defined when built in `unittest` mode\n\nSo, instead of this:\n```d\nvoid main() {\n\n}\n```\n\nDo this:\n```d\nversion(unittest) {\n\t// Do nothing here, dub takes care of that\n} else {\n\tvoid main() {\n\n\t}\n}\n```\n\n## Make sure there is a special `unittest` configuration in your dub.json/dub.sdl\n\n```json\n{\n    ...\n\t\"configurations\": [\n\t\t{\n\t\t\t\"name\": \"executable\"\n\t\t},\n\t\t{\n\t\t\t\"name\": \"unittest\"\n\t\t}\n\t]\n}\n```\n\nSee also [#32](https://gitlab.com/AntonMeep/silly/issues/32).\n\n> **Pro Tip**: dub configurations can have `dependencies` as well! You may want to add silly as a dependency only for the `unittest` configuration to indicate that it's only used for tests.\n\n## Make sure there is no `targetType: executable` in `unittest` configuration in your dub.json/dub.sdl\n\nInstead of this:\n\n```json\n{\n\t...\n\t\"configurations\": [\n\t\t...\n\t\t{\n\t\t\t\"name\": \"unittest\",\n\t\t\t\"targetType\": \"executable\",\n\t\t\t...\n\t\t}\n\t]\n}\n```\n\nDo this:\n\n```json\n{\n\t...\n\t\"configurations\": [\n\t\t...\n\t\t{\n\t\t\t\"name\": \"unittest\",\n\t\t\t...\n\t\t}\n\t]\n}\n```\n\nSee [#12](https://gitlab.com/AntonMeep/silly/issues/12) for more information.\n\n## Nothing helped?\n\nOpen a new [issue](https://gitlab.com/AntonMeep/silly/issues), we will be happy to help you!\n\n# Naming tests\n\nIt is as easy as adding a `string` [user-defined attribute](https://dlang.org/spec/attribute.html#UserDefinedAttribute) to your `unittest` declaration.\n\n```d\n@(\"Johny\")\nunittest {\n\t// This unittest is named Johny\n}\n```\n\nIf there are multiple such UDAs, the first one is chosen to be the name of the unittest.\n\n```d\n@(\"Hello, \") @(\"World!\")\nunittest {\n\t// This unittest's name is \"Hello, \"\n}\n```\n\n# Command line options\n\n**Silly** accept various command-line options that let you customize its behaviour:\n\n```\n$ dub test -- <options>\n\nOptions:\n  --no-colours                    Disable colours\n  -t <n>      --threads <n>       Number of worker threads. 0 to auto-detect (default)\n  -i <regexp> --include <regexp>  Run tests if their name matches specified regular expression. See filtering tests\n  -e <regexp> --exclude <regexp>  Skip tests if their name matches specified regular expression. See filtering tests\n              --fail-fast         Stop executing all tests when a test fails\n  -v          --verbose           Show verbose output (full stack traces, location and durations)\n  -h          --help              Help information\n```\n\n# Filtering tests\n\nWith `--include` and `--exclude` options it's possible to control what tests will be run. These options take regular expressions in [std.regex'](https://dlang.org/phobos/std_regex.html#Syntax%20and%20general%20information) format.\n\n`--include` only tests that match provided regular expression will be run, other tests will be skipped.\n`--exclude` all of the tests that don't match provided regular expression will be run.\n\n> Using both options at the same time will produce unexpected results!\n\n# Best practices\n\n- Running tests in multi-threaded mode (default) can potentially cause issues, try running tests with `--threads 1`\n- Although unittests inside of nested classes and structs are discovered and executed by Silly, it may be unreliable. Consider having unittest blocks on the toplevel\n\n",
+        "readmeMarkdown": true,
+        "docFolder": ""
+      },
+      {
+        "date": "2022-08-28T11:25:18Z",
+        "version": "1.2.0-dev.2",
+        "commitID": "63219a6d7695caeea02db044ee9238068975c6fe",
+        "info": {
+          "packageDescriptionFile": "dub.json",
+          "authors": [
+            "Anton Fediushin"
+          ],
+          "sourceFiles": [
+            "silly.d"
+          ],
+          "license": "ISC",
+          "copyright": "Copyright © 2018-2019, Anton Fediushin",
+          "name": "silly",
+          "description": "Better test runner for D",
+          "importPaths": [
+            "."
+          ],
+          "targetType": "sourceLibrary"
+        },
+        "readme": "silly [![Repository](https://img.shields.io/badge/repository-on%20GitLab-orange.svg)](https://gitlab.com/AntonMeep/silly) [![pipeline\nstatus](https://gitlab.com/AntonMeep/silly/badges/master/pipeline.svg)](https://gitlab.com/AntonMeep/silly/commits/master) [![coverage\nreport](https://gitlab.com/AntonMeep/silly/badges/master/coverage.svg)](https://gitlab.com/AntonMeep/silly/commits/master) [![ISC\nLicence](https://img.shields.io/badge/licence-ISC-blue.svg)](https://gitlab.com/AntonMeep/silly/blob/master/LICENSE) [![Package\nversion](https://img.shields.io/dub/v/silly.svg)](https://gitlab.com/AntonMeep/silly/tags)\n=====\n\n**silly** is a modern and light test runner for the D programming language.\n\n# Used by\n\n[Optional](http://optional.dub.pm/), [expected](http://expected.dub.pm/), [ddash](http://ddash.dub.pm/), and more!\n\n> Got a cool project that uses **silly**? [Let us know!](https://gitlab.com/AntonMeep/silly/issues)\n\n# Features\n\n- Easy to install and use with dub\n- No changes of your code are required to start using silly\n- Seamless integration with `dub test`\n- Named tests\n- Multi-threaded test execution\n- Filtering tests\n- Colourful output\n\n# Getting started\n\nAdd **silly** to your project:\n\n```\n$ dub add silly\n```\n\nThis should be it! Try to run tests:\n\n```\n$ dub test\n```\n\nIf it succeeded then congratulations, you have just finished setting up **silly**! Make sure to add more tests and give them nice names.\n\n# Troubleshooting\n\nUnfortunately, setup isn't that easy sometimes and running `dub test` will fail. Don't panic, most of the issues are caused by the quirks and twists of dub. Here are some suggestions on what to check first:\n\n## Make sure `main()` function isn't defined when built in `unittest` mode\n\nSo, instead of this:\n```d\nvoid main() {\n\n}\n```\n\nDo this:\n```d\nversion(unittest) {\n\t// Do nothing here, dub takes care of that\n} else {\n\tvoid main() {\n\n\t}\n}\n```\n\n## Make sure there is a special `unittest` configuration in your dub.json/dub.sdl\n\n```json\n{\n    ...\n\t\"configurations\": [\n\t\t{\n\t\t\t\"name\": \"executable\"\n\t\t},\n\t\t{\n\t\t\t\"name\": \"unittest\"\n\t\t}\n\t]\n}\n```\n\nSee also [#32](https://gitlab.com/AntonMeep/silly/issues/32).\n\n> **Pro Tip**: dub configurations can have `dependencies` as well! You may want to add silly as a dependency only for the `unittest` configuration to indicate that it's only used for tests.\n\n## Make sure there is no `targetType: executable` in `unittest` configuration in your dub.json/dub.sdl\n\nInstead of this:\n\n```json\n{\n\t...\n\t\"configurations\": [\n\t\t...\n\t\t{\n\t\t\t\"name\": \"unittest\",\n\t\t\t\"targetType\": \"executable\",\n\t\t\t...\n\t\t}\n\t]\n}\n```\n\nDo this:\n\n```json\n{\n\t...\n\t\"configurations\": [\n\t\t...\n\t\t{\n\t\t\t\"name\": \"unittest\",\n\t\t\t...\n\t\t}\n\t]\n}\n```\n\nSee [#12](https://gitlab.com/AntonMeep/silly/issues/12) for more information.\n\n## Nothing helped?\n\nOpen a new [issue](https://gitlab.com/AntonMeep/silly/issues), we will be happy to help you!\n\n# Naming tests\n\nIt is as easy as adding a `string` [user-defined attribute](https://dlang.org/spec/attribute.html#UserDefinedAttribute) to your `unittest` declaration.\n\n```d\n@(\"Johny\")\nunittest {\n\t// This unittest is named Johny\n}\n```\n\nIf there are multiple such UDAs, the first one is chosen to be the name of the unittest.\n\n```d\n@(\"Hello, \") @(\"World!\")\nunittest {\n\t// This unittest's name is \"Hello, \"\n}\n```\n\n# Command line options\n\n**Silly** accept various command-line options that let you customize its behaviour:\n\n```\n$ dub test -- <options>\n\nOptions:\n  --no-colours                    Disable colours\n  -t <n>      --threads <n>       Number of worker threads. 0 to auto-detect (default)\n  -i <regexp> --include <regexp>  Run tests if their name matches specified regular expression. See filtering tests\n  -e <regexp> --exclude <regexp>  Skip tests if their name matches specified regular expression. See filtering tests\n              --fail-fast         Stop executing all tests when a test fails\n  -v          --verbose           Show verbose output (full stack traces, location and durations)\n  -h          --help              Help information\n```\n\n# Filtering tests\n\nWith `--include` and `--exclude` options it's possible to control what tests will be run. These options take regular expressions in [std.regex'](https://dlang.org/phobos/std_regex.html#Syntax%20and%20general%20information) format.\n\n`--include` only tests that match provided regular expression will be run, other tests will be skipped.\n`--exclude` all of the tests that don't match provided regular expression will be run.\n\n> Using both options at the same time will produce unexpected results!\n\n# Best practices\n\n- Running tests in multi-threaded mode (default) can potentially cause issues, try running tests with `--threads 1`\n- Although unittests inside of nested classes and structs are discovered and executed by Silly, it may be unreliable. Consider having unittest blocks on the toplevel\n\n",
+        "readmeMarkdown": true,
+        "docFolder": ""
+      }
+    ],
+    "stats": {
+      "updatedAt": "2023-07-12T01:32:31.235Z",
+      "downloads": {
+        "total": 495619,
+        "monthly": 13247,
+        "weekly": 3064,
+        "daily": 433
+      },
+      "repo": {
+        "stars": 13,
+        "watchers": 0,
+        "forks": 6,
+        "issues": 11
+      },
+      "score": 4.99225902557373
+    },
+    "errors": [],
+    "categories": [
+      "application.desktop.development"
+    ],
+    "updateCounter": 27,
+    "logo": "5b704da37ba6ffce63502c1f",
+    "documentationURL": "https://gitlab.com/AntonMeep/silly",
+    "textScore": 0
+  },
+  {
+    "_id": "64adcc9f53d32c16c0158e78",
+    "owner": "63277a2ba808d5cc3555d560",
+    "name": "theprocess",
+    "repository": {
+      "kind": "github",
+      "owner": "katyukha",
+      "project": "TheProcess"
+    },
+    "versions": [
+      {
+        "date": "2023-07-11T21:37:33Z",
+        "version": "~master",
+        "commitID": "cbeac1d05c47255c30ab89d2fbdf3609f2a967b1",
+        "info": {
+          "packageDescriptionFile": "dub.sdl",
+          "authors": [
+            "Dmytro Katyukha"
+          ],
+          "license": "MPL-2",
+          "copyright": "Copyright © 2023, Dmytro Katyukha",
+          "targetPath": "./build/",
+          "name": "theprocess",
+          "description": "The easy way to run external commands",
+          "dependencies": {
+            "thepath": ">=0.1.7"
+          },
+          "targetType": "library",
+          "configurations": [
+            {
+              "targetType": "library",
+              "name": "library"
+            },
+            {
+              "targetType": "library",
+              "name": "sourceLibrary"
+            },
+            {
+              "dependencies": {
+                "dshould": ">=1.7.0"
+              },
+              "targetType": "library",
+              "name": "unittest"
+            }
+          ]
+        },
+        "readme": "# The Process\n\nThis lib is designed to be able to easily run external process with complex configuration.\nIt uses builder pattern to configure process (args, env, workdir, etc),\nthus it allows to easily use complex logic to prepare arguments and env for external process.\n\nCurrent stage: ***Alpha***\n\nJust few real examples at the moment:\n\n```d\n// Simply run git add command\nProcess(\"git\")\n    .withArgs([\"add\", this.dst_info.path])\n    .inWorkDir(this.config.package_dir)\n    .execute\n    .ensureStatus;\n\n\n// Run Odoo server with different args depending on configuration\nauto runner = Process(venv_path.join(\"bin\", \"run-in-venv\"))\n    .inWorkDir(_project.project_root.toString)\n    .withEnv(getServerEnv);\n\nif (_project.odoo.server_user)\n    runner.setUser(_project.odoo.server_user);\n\nif (coverage.enable) {\n    // Run server with coverage mode\n    runner.addArgs(\n        _project.venv.path.join(\"bin\", \"coverage\").toString,\n        \"run\",\n        \"--parallel-mode\",\n        \"--omit=*/__openerp__.py,*/__manifest__.py\",\n        // TODO: Add --data-file option. possibly store it in CoverageOptions\n    );\n    if (coverage.source.length > 0)\n        runner.addArgs(\n            \"--source=%s\".format(\n                coverage.source.map!(p => p.toString).join(\",\")),\n        );\n    if (coverage.include.length > 0)\n        runner.addArgs(\n            \"--include=%s\".format(\n                coverage.include.map!(\n                    p => p.toString ~ \"/*\").join(\",\")),\n        );\n}\n\nrunner.addArgs(scriptPath.toString);\nrunner.addArgs(options);\n\nif (detach) {\n    runner.setFlag(Config.detached);\n    runner.addArgs(\"--logfile=%s\".format(_project.odoo.logfile));\n}\n\nauto pid = runner.spawn();\n\nif (!detach)\n    std.process.wait(pid);\n```\n",
+        "readmeMarkdown": true,
+        "docFolder": ""
+      },
+      {
+        "date": "2023-07-11T21:37:33Z",
+        "version": "0.0.1",
+        "commitID": "cbeac1d05c47255c30ab89d2fbdf3609f2a967b1",
+        "info": {
+          "packageDescriptionFile": "dub.sdl",
+          "authors": [
+            "Dmytro Katyukha"
+          ],
+          "license": "MPL-2",
+          "copyright": "Copyright © 2023, Dmytro Katyukha",
+          "targetPath": "./build/",
+          "name": "theprocess",
+          "description": "The easy way to run external commands",
+          "dependencies": {
+            "thepath": ">=0.1.7"
+          },
+          "targetType": "library",
+          "configurations": [
+            {
+              "targetType": "library",
+              "name": "library"
+            },
+            {
+              "targetType": "library",
+              "name": "sourceLibrary"
+            },
+            {
+              "dependencies": {
+                "dshould": ">=1.7.0"
+              },
+              "targetType": "library",
+              "name": "unittest"
+            }
+          ]
+        },
+        "readme": "# The Process\n\nThis lib is designed to be able to easily run external process with complex configuration.\nIt uses builder pattern to configure process (args, env, workdir, etc),\nthus it allows to easily use complex logic to prepare arguments and env for external process.\n\nCurrent stage: ***Alpha***\n\nJust few real examples at the moment:\n\n```d\n// Simply run git add command\nProcess(\"git\")\n    .withArgs([\"add\", this.dst_info.path])\n    .inWorkDir(this.config.package_dir)\n    .execute\n    .ensureStatus;\n\n\n// Run Odoo server with different args depending on configuration\nauto runner = Process(venv_path.join(\"bin\", \"run-in-venv\"))\n    .inWorkDir(_project.project_root.toString)\n    .withEnv(getServerEnv);\n\nif (_project.odoo.server_user)\n    runner.setUser(_project.odoo.server_user);\n\nif (coverage.enable) {\n    // Run server with coverage mode\n    runner.addArgs(\n        _project.venv.path.join(\"bin\", \"coverage\").toString,\n        \"run\",\n        \"--parallel-mode\",\n        \"--omit=*/__openerp__.py,*/__manifest__.py\",\n        // TODO: Add --data-file option. possibly store it in CoverageOptions\n    );\n    if (coverage.source.length > 0)\n        runner.addArgs(\n            \"--source=%s\".format(\n                coverage.source.map!(p => p.toString).join(\",\")),\n        );\n    if (coverage.include.length > 0)\n        runner.addArgs(\n            \"--include=%s\".format(\n                coverage.include.map!(\n                    p => p.toString ~ \"/*\").join(\",\")),\n        );\n}\n\nrunner.addArgs(scriptPath.toString);\nrunner.addArgs(options);\n\nif (detach) {\n    runner.setFlag(Config.detached);\n    runner.addArgs(\"--logfile=%s\".format(_project.odoo.logfile));\n}\n\nauto pid = runner.spawn();\n\nif (!detach)\n    std.process.wait(pid);\n```\n",
+        "readmeMarkdown": true,
+        "docFolder": ""
+      }
+    ],
+    "stats": {
+      "updatedAt": "2023-07-12T14:42:46.231Z",
+      "downloads": {
+        "total": 12,
+        "monthly": 12,
+        "weekly": 12,
+        "daily": 12
+      },
+      "repo": {
+        "stars": 1,
+        "watchers": 1,
+        "forks": 0,
+        "issues": 0
+      },
+      "score": 0.5773213505744934
+    },
+    "errors": [],
+    "categories": [
+      "library"
+    ],
+    "updateCounter": 2,
+    "logo": "000000000000000000000000",
+    "documentationURL": "",
+    "textScore": 0
+  }
+]
