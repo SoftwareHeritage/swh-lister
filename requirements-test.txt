@@ -5,3 +5,4 @@ requests_mock
 types-click
 types-pyyaml
 types-requests
+types-toml

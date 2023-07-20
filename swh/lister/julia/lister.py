@@ -1,0 +1,90 @@
+# Copyright (C) 2023  The Software Heritage developers
+# See the AUTHORS file at the top-level directory of this distribution
+# License: GNU General Public License version 3, or any later version
+# See top-level LICENSE file for more information
+
+import logging
+from pathlib import Path
+from typing import Any, Iterator, List, Optional, Tuple
+
+from dulwich import porcelain
+import toml
+
+from swh.scheduler.interface import SchedulerInterface
+from swh.scheduler.model import ListedOrigin
+
+from ..pattern import CredentialsType, StatelessLister
+
+logger = logging.getLogger(__name__)
+
+# Aliasing the page results returned by `get_pages` method from the lister.
+JuliaListerPage = List[Tuple[str, Any]]
+
+
+class JuliaLister(StatelessLister[JuliaListerPage]):
+    """List Julia packages origins"""
+
+    LISTER_NAME = "julia"
+    VISIT_TYPE = "git"  # Julia origins url are Git repositories
+    INSTANCE = "julia"
+
+    REPO_URL = (
+        "https://github.com/JuliaRegistries/General.git"  # Julia General Registry
+    )
+    REPO_PATH = Path("/tmp/General")
+    REGISTRY_PATH = REPO_PATH / "Registry.toml"
+
+    def __init__(
+        self,
+        scheduler: SchedulerInterface,
+        credentials: Optional[CredentialsType] = None,
+        url: Optional[str] = None,
+        max_origins_per_page: Optional[int] = None,
+        max_pages: Optional[int] = None,
+        enable_origins: bool = True,
+    ):
+        super().__init__(
+            scheduler=scheduler,
+            credentials=credentials,
+            instance=self.INSTANCE,
+            url=url or self.REPO_URL,
+            max_origins_per_page=max_origins_per_page,
+            max_pages=max_pages,
+            enable_origins=enable_origins,
+        )
+
+    def get_registry_repository(self) -> None:
+        """Get Julia General Registry Git repository up to date on disk"""
+        if self.REPO_PATH.exists():
+            porcelain.pull(self.REPO_PATH, remote_location=self.url)
+        else:
+            porcelain.clone(source=self.url, target=self.REPO_PATH)
+
+    def get_pages(self) -> Iterator[JuliaListerPage]:
+        """Yield an iterator which returns 'page'
+
+        It uses the api endpoint provided by `https://registry.julia.io/packages`
+        to get a list of package names with an origin url that corresponds to Git
+        repository.
+
+        There is only one page that list all origins urls.
+        """
+        self.get_registry_repository()
+        assert self.REGISTRY_PATH.exists()
+        registry = toml.load(self.REGISTRY_PATH)
+        yield registry["packages"].items()
+
+    def get_origins_from_page(self, page: JuliaListerPage) -> Iterator[ListedOrigin]:
+        """Iterate on all pages and yield ListedOrigin instances"""
+        assert self.lister_obj.id is not None
+        assert self.REPO_PATH.exists()
+
+        for uuid, info in page:
+            package_info_path = self.REPO_PATH / info["path"] / "Package.toml"
+            package_info = toml.load(package_info_path)
+            yield ListedOrigin(
+                lister_id=self.lister_obj.id,
+                visit_type=self.VISIT_TYPE,
+                url=package_info["repo"],
+                last_update=None,
+            )

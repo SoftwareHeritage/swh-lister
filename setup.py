@@ -76,6 +76,7 @@ setup(
         lister.gogs=swh.lister.gogs:register
         lister.hackage=swh.lister.hackage:register
         lister.hex=swh.lister.hex:register
+        lister.julia=swh.lister.julia:register
         lister.launchpad=swh.lister.launchpad:register
         lister.nixguix=swh.lister.nixguix:register
         lister.npm=swh.lister.npm:register

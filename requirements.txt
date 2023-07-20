@@ -12,3 +12,4 @@ rpy2
 setuptools
 tenacity >= 6.2
 testing.postgresql
+toml
