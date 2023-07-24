@@ -1,0 +1,20 @@
+[
+  {
+    "name": "elm/bytes",
+    "summary": "Work with sequences of bytes (a.k.a. ArrayBuffer, typed arrays, DataView)",
+    "license": "BSD-3-Clause",
+    "version": "1.0.8"
+  },
+  {
+    "name": "STTR13/ziplist",
+    "summary": "List with a selected element that makes impossible state impossible.",
+    "license": "BSD-3-Clause",
+    "version": "1.4.2"
+  },
+  {
+    "name": "cuducos/elm-format-number",
+    "summary": "Format numbers as pretty strings",
+    "license": "BSD-3-Clause",
+    "version": "9.0.1"
+  }
+]
