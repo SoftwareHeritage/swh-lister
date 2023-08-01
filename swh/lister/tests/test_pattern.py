@@ -3,6 +3,7 @@
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
 
+from itertools import tee
 from typing import TYPE_CHECKING, Any, Dict, Iterator, List
 
 import pytest
@@ -334,3 +335,31 @@ def test_lister_enable_origins(swh_scheduler, enable_origins, expected):
     assert origins
 
     assert all(origin.enabled == expected for origin in origins)
+
+
+@pytest.mark.parametrize("batch_size", [5, 10, 20])
+def test_lister_send_origins_with_stream_is_flushed_regularly(
+    swh_scheduler, mocker, batch_size
+):
+    """Ensure the send_origins method is flushing regularly records to the scheduler"""
+    lister = RunnableLister(
+        scheduler=swh_scheduler,
+        url="https://example.com",
+        instance="example.com",
+        record_batch_size=batch_size,
+    )
+
+    def iterate_origins(lister: pattern.Lister) -> Iterator[ListedOrigin]:
+        """Basic origin iteration to ease testing."""
+        for page in lister.get_pages():
+            for origin in lister.get_origins_from_page(page):
+                yield origin
+
+    all_origins, iterator_origins = tee(iterate_origins(lister))
+
+    spy = mocker.spy(lister, "scheduler")
+    lister.send_origins(iterator_origins)
+
+    expected_nb_origins = len(list(all_origins))
+
+    assert len(spy.method_calls) == expected_nb_origins / batch_size
