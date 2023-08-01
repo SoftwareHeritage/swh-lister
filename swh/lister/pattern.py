@@ -89,6 +89,7 @@ class Lister(Generic[StateType, PageType]):
       max_pages: the maximum number of pages listed in a full listing operation
       max_origins_per_page: the maximum number of origins processed per page
       enable_origins: whether the created origins should be enabled or not
+      record_batch_size: maximum number of records to flush to the scheduler at once.
 
     Generic types:
       - *StateType*: concrete lister type; should usually be a :class:`dataclass` for
@@ -111,6 +112,7 @@ class Lister(Generic[StateType, PageType]):
         max_pages: Optional[int] = None,
         enable_origins: bool = True,
         with_github_session: bool = False,
+        record_batch_size: int = 1000,
     ):
         if not self.LISTER_NAME:
             raise ValueError("Must set the LISTER_NAME attribute on Lister classes")
@@ -165,6 +167,7 @@ class Lister(Generic[StateType, PageType]):
         self.max_pages = max_pages
         self.max_origins_per_page = max_origins_per_page
         self.enable_origins = enable_origins
+        self.record_batch_size = record_batch_size
 
     def build_url(self, instance: str) -> str:
         """Optionally build the forge url to list. When the url is not provided in the
@@ -344,8 +347,8 @@ class Lister(Generic[StateType, PageType]):
         Returns:
           the list of origin URLs recorded in scheduler database
         """
-        recorded_origins = []
-        for origins in grouper(origins, n=1000):
+        recorded_origins: List[str] = []
+        for origins in grouper(origins, n=self.record_batch_size):
             valid_origins = []
             for origin in origins:
                 if is_valid_origin_url(origin.url):
@@ -354,7 +357,7 @@ class Lister(Generic[StateType, PageType]):
                     logger.warning("Skipping invalid origin: %s", origin.url)
 
             ret = self.scheduler.record_listed_origins(valid_origins)
-            recorded_origins += [origin.url for origin in ret]
+            recorded_origins.extend(origin.url for origin in ret)
 
         return recorded_origins
 
