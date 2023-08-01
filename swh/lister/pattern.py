@@ -337,21 +337,23 @@ class Lister(Generic[StateType, PageType]):
         pass
 
     def send_origins(self, origins: Iterable[model.ListedOrigin]) -> List[str]:
-        """Record a list of :class:`model.ListedOrigin` in the scheduler.
+        """Record the stream of valid :class:`model.ListedOrigin` in the scheduler.
+
+        This will filter out invalid urls prior to record origins to the scheduler.
 
         Returns:
           the list of origin URLs recorded in scheduler database
         """
-        valid_origins = []
-        for origin in origins:
-            if is_valid_origin_url(origin.url):
-                valid_origins.append(origin)
-            else:
-                logger.warning("Skipping invalid origin: %s", origin.url)
-
         recorded_origins = []
-        for batch_origins in grouper(valid_origins, n=1000):
-            ret = self.scheduler.record_listed_origins(batch_origins)
+        for origins in grouper(origins, n=1000):
+            valid_origins = []
+            for origin in origins:
+                if is_valid_origin_url(origin.url):
+                    valid_origins.append(origin)
+                else:
+                    logger.warning("Skipping invalid origin: %s", origin.url)
+
+            ret = self.scheduler.record_listed_origins(valid_origins)
             recorded_origins += [origin.url for origin in ret]
 
         return recorded_origins
