@@ -1,4 +1,4 @@
-# Copyright (C) 2019-2022  The Software Heritage developers
+# Copyright (C) 2019-2023  The Software Heritage developers
 # See the AUTHORS file at the top-level directory of this distribution
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
@@ -43,8 +43,11 @@ def test_packagist_lister(swh_scheduler, requests_mock, datadir, requests_mock_d
     for package_name in _packages_list["packageNames"]:
         metadata = _package_metadata(datadir, package_name)
         packages_metadata[package_name] = metadata
+        package_metadata_url = lister.PACKAGIST_PACKAGE_URL_FORMATS[1].format(
+            package_name=package_name
+        )
         requests_mock.get(
-            f"{lister.PACKAGIST_REPO_BASE_URL}/{package_name}.json",
+            package_metadata_url,
             json=metadata,
             additional_matcher=_request_without_if_modified_since,
         )
@@ -86,8 +89,11 @@ def test_packagist_lister(swh_scheduler, requests_mock, datadir, requests_mock_d
     # has been updated since first listing
     lister = PackagistLister(scheduler=swh_scheduler)
     for package_name in _packages_list["packageNames"]:
+        package_metadata_url = lister.PACKAGIST_PACKAGE_URL_FORMATS[1].format(
+            package_name=package_name
+        )
         requests_mock.get(
-            f"{lister.PACKAGIST_REPO_BASE_URL}/{package_name}.json",
+            package_metadata_url,
             additional_matcher=_request_with_if_modified_since,
             status_code=304,
         )
@@ -110,11 +116,13 @@ def test_packagist_lister_missing_metadata(swh_scheduler, requests_mock, datadir
     lister = PackagistLister(scheduler=swh_scheduler)
     requests_mock.get(lister.PACKAGIST_PACKAGES_LIST_URL, json=_packages_list)
     for package_name in _packages_list["packageNames"]:
-        requests_mock.get(
-            f"{lister.PACKAGIST_REPO_BASE_URL}/{package_name}.json",
-            additional_matcher=_request_without_if_modified_since,
-            status_code=404,
-        )
+        for format_url in lister.PACKAGIST_PACKAGE_URL_FORMATS:
+            url = format_url.format(package_name=package_name)
+            requests_mock.get(
+                url,
+                additional_matcher=_request_without_if_modified_since,
+                status_code=404,
+            )
 
     stats = lister.run()
 
@@ -126,11 +134,13 @@ def test_packagist_lister_empty_metadata(swh_scheduler, requests_mock, datadir):
     lister = PackagistLister(scheduler=swh_scheduler)
     requests_mock.get(lister.PACKAGIST_PACKAGES_LIST_URL, json=_packages_list)
     for package_name in _packages_list["packageNames"]:
-        requests_mock.get(
-            f"{lister.PACKAGIST_REPO_BASE_URL}/{package_name}.json",
-            additional_matcher=_request_without_if_modified_since,
-            json={"packages": {}},
-        )
+        for format_url in lister.PACKAGIST_PACKAGE_URL_FORMATS:
+            url = format_url.format(package_name=package_name)
+            requests_mock.get(
+                url,
+                additional_matcher=_request_without_if_modified_since,
+                json={"packages": {}},
+            )
 
     stats = lister.run()
 
@@ -146,8 +156,19 @@ def test_packagist_lister_package_with_bitbucket_hg_origin(
     requests_mock.get(
         lister.PACKAGIST_PACKAGES_LIST_URL, json={"packageNames": [package_name]}
     )
+    url_not_found = lister.PACKAGIST_PACKAGE_URL_FORMATS[0].format(
+        package_name=package_name
+    )
     requests_mock.get(
-        f"{lister.PACKAGIST_REPO_BASE_URL}/{package_name}.json",
+        url_not_found,
+        additional_matcher=_request_without_if_modified_since,
+        status_code=404,
+    )
+    url_with_results = lister.PACKAGIST_PACKAGE_URL_FORMATS[1].format(
+        package_name=package_name
+    )
+    requests_mock.get(
+        url_with_results,
         additional_matcher=_request_without_if_modified_since,
         json=_package_metadata(datadir, package_name),
     )
@@ -166,8 +187,11 @@ def test_packagist_lister_package_normalize_github_origin(
     requests_mock.get(
         lister.PACKAGIST_PACKAGES_LIST_URL, json={"packageNames": [package_name]}
     )
+    url_with_results = lister.PACKAGIST_PACKAGE_URL_FORMATS[0].format(
+        package_name=package_name
+    )
     requests_mock.get(
-        f"{lister.PACKAGIST_REPO_BASE_URL}/{package_name}.json",
+        url_with_results,
         additional_matcher=_request_without_if_modified_since,
         json=_package_metadata(datadir, package_name),
     )
