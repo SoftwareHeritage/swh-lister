@@ -143,6 +143,7 @@ class PackagistLister(Lister[PackagistListerState, PackagistPageType]):
             metadata_url = package_url_format.format(package_name=package_name)
             metadata = self.api_request(metadata_url)
             packages = metadata.get("packages", {})
+            format_json = metadata.get("minified")
             if not packages:
                 # package metadata not updated since last listing
                 return None
@@ -150,7 +151,16 @@ class PackagistLister(Lister[PackagistListerState, PackagistPageType]):
             if package_info is None:
                 # missing package metadata in response
                 return None
-            return package_info.values()  # could be an empty response though -> []
+            logger.debug(
+                "package-name: %s, package-info: %s", package_name, package_info
+            )
+            if format_json == "composer/2.0":  # /p2/ output
+                # In that format, the package info is a list of dict for each package
+                # version
+                return package_info
+            else:
+                # Otherwise, /p/, /packages/ urls returns a dict output
+                return package_info.values()
         except requests.HTTPError:
             # error when getting package metadata (usually 404 when a package has
             # been removed), skip it and process next package

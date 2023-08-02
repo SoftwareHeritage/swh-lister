@@ -66,7 +66,7 @@ def test_packagist_lister(swh_scheduler, requests_mock, datadir, requests_mock_d
         (
             "https://github.com/ljjackson/linnworks.git",  # API goes 404
             "git",
-            datetime.datetime.fromisoformat("2018-11-01T21:45:50+00:00"),
+            datetime.datetime.fromisoformat("2018-10-22T19:52:25+00:00"),
         ),
         (
             "https://github.com/spryker-eco/computop-api",  # SSH URL in manifest
