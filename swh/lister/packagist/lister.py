@@ -6,11 +6,12 @@
 from dataclasses import dataclass
 from datetime import datetime, timezone
 import logging
-from typing import Any, Dict, Iterator, List, Optional
 from random import shuffle
+from typing import Any, Dict, Iterator, List, Optional
 
 import iso8601
 import requests
+from tenacity import RetryError
 
 from swh.scheduler.interface import SchedulerInterface
 from swh.scheduler.model import ListedOrigin
@@ -248,9 +249,14 @@ class PackagistLister(Lister[PackagistListerState, PackagistPageType]):
                 # Non-github urls will be returned as is, github ones will be canonical
                 # ones
                 assert self.github_session is not None
-                origin_url = (
-                    self.github_session.get_canonical_url(origin_url) or origin_url
-                )
+                try:
+                    origin_url = (
+                        self.github_session.get_canonical_url(origin_url) or origin_url
+                    )
+                except (requests.exceptions.ConnectionError, RetryError):
+                    # server hangs up, let's ignore it for now
+                    # that might not happen later on
+                    continue
 
             # bitbucket closed its mercurial hosting service, those origins can not be
             # loaded into the archive anymore
