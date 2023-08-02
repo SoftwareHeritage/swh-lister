@@ -1,3 +1,13 @@
+swh-lister (5.9.4-1~swh1) unstable-swh; urgency=medium
+
+  * New upstream release 5.9.4     - (tagged by Antoine R. Dumont
+    (@ardumont) <ardumont@softwareheritage.org> on 2023-08-02 16:42:55
+    +0200)
+  * Upstream changes:     - v5.9.4     - packagist: Fix json parsing
+    which is different depending on the metadata page used
+
+ -- Software Heritage autobuilder (on jenkins-debian1) <jenkins@jenkins-debian1.internal.softwareheritage.org>  Wed, 02 Aug 2023 14:49:58 +0000
+
 swh-lister (5.9.3-1~swh1) unstable-swh; urgency=medium
 
   * New upstream release 5.9.3     - (tagged by Antoine R. Dumont
