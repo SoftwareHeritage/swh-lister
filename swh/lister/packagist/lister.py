@@ -1,4 +1,4 @@
-# Copyright (C) 2019-2022  The Software Heritage developers
+# Copyright (C) 2019-2023  The Software Heritage developers
 # See the AUTHORS file at the top-level directory of this distribution
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
@@ -19,6 +19,12 @@ from ..pattern import CredentialsType, Lister
 logger = logging.getLogger(__name__)
 
 PackagistPageType = List[str]
+
+
+class NotModifiedSinceLastVisit(ValueError):
+    """Exception raised when a package has seen no change since the last visit."""
+
+    pass
 
 
 @dataclass
@@ -47,7 +53,18 @@ class PackagistLister(Lister[PackagistListerState, PackagistPageType]):
 
     LISTER_NAME = "Packagist"
     PACKAGIST_PACKAGES_LIST_URL = "https://packagist.org/packages/list.json"
-    PACKAGIST_REPO_BASE_URL = "https://repo.packagist.org/p"
+    PACKAGIST_PACKAGE_URL_FORMATS = [
+        # preferred, static, efficient on their side as it can be cached
+        "https://repo.packagist.org/p2/{package_name}.json",
+        # fallback from 1. ^ as it might contain development versions
+        "https://repo.packagist.org/p2/{package_name}~dev.json",
+        # composer v1 metadata, static, efficient but deprecated on their side.
+        # From previous lister version: very few results but some still exists so ok to
+        # check
+        "https://repo.packagist.org/p/{package_name}.json",
+        # dynamic, inefficient on packagist's end, should be used as a last resort
+        "https://repo.packagist.org/packages/{package_name}.json",
+    ]
 
     def __init__(
         self,
@@ -84,16 +101,85 @@ class PackagistLister(Lister[PackagistListerState, PackagistPageType]):
             d["last_listing_date"] = last_listing_date.isoformat()
         return d
 
-    def api_request(self, url: str) -> Any:
+    def api_request(self, url: str) -> Dict:
+        """Execute api request to packagist server.
+
+        Raise:
+            NotModifiedSinceLastVisit: if the url returns a 304 response.
+
+        Return:
+            The json result in case of a 200, an empty response otherwise.
+
+        """
         response = self.http_request(url)
         # response is empty when status code is 304
-        return response.json() if response.status_code == 200 else {}
+        status_code = response.status_code
+        if status_code == 200:
+            return response.json()
+        elif status_code == 304:
+            raise NotModifiedSinceLastVisit(url)
+        else:
+            return {}
 
     def get_pages(self) -> Iterator[PackagistPageType]:
         """
         Yield a single page listing all Packagist projects.
         """
-        yield self.api_request(self.PACKAGIST_PACKAGES_LIST_URL)["packageNames"]
+        yield self.api_request(self.url)["packageNames"]
+
+    def _get_metadata_from_page(
+        self, package_url_format: str, package_name: str
+    ) -> Optional[List[Dict]]:
+        """Retrieve metadata from a package if any.
+
+        Raise:
+            NotModifiedSinceLastVisit: if the url returns a 304 response.
+
+        Return:
+            metadata from a package if any
+
+        """
+        try:
+            metadata_url = package_url_format.format(package_name=package_name)
+            metadata = self.api_request(metadata_url)
+            packages = metadata.get("packages", {})
+            if not packages:
+                # package metadata not updated since last listing
+                return None
+            package_info = packages.get(package_name)
+            if package_info is None:
+                # missing package metadata in response
+                return None
+            return package_info.values()  # could be an empty response though -> []
+        except requests.HTTPError:
+            # error when getting package metadata (usually 404 when a package has
+            # been removed), skip it and process next package
+            return None
+
+    def _get_metadata_for_package(self, package_name: str) -> Optional[List[Dict]]:
+        """Tentatively retrieve metadata information from a package name.
+
+        This tries out in order the following pages:
+        - /p2/{package}.json: static and performant (on packagist's side) url.
+        - /p2/{package}~dev.json: static, performant for development package url.
+        - /packages/{package}.json: costly (for packagist's side) url
+
+        If nothing is found in all urls, a None result is returned.
+
+        Raise:
+            NotModifiedSinceLastVisit: if the url returns a 304 response.
+
+        Return:
+            Metadata information on the package name if any.
+
+        """
+        for package_url_format in self.PACKAGIST_PACKAGE_URL_FORMATS:
+            meta_info = self._get_metadata_from_page(package_url_format, package_name)
+            # If information, return it immediately, otherwise fallback to the next
+            if meta_info:
+                return meta_info
+
+        return None
 
     def get_origins_from_page(self, page: PackagistPageType) -> Iterator[ListedOrigin]:
         """
@@ -114,19 +200,13 @@ class PackagistLister(Lister[PackagistListerState, PackagistPageType]):
 
         for package_name in page:
             try:
-                metadata = self.api_request(
-                    f"{self.PACKAGIST_REPO_BASE_URL}/{package_name}.json"
-                )
-                if not metadata.get("packages", {}):
-                    # package metadata not updated since last listing
-                    continue
-                if package_name not in metadata["packages"]:
-                    # missing package metadata in response
-                    continue
-                versions_info = metadata["packages"][package_name].values()
-            except requests.HTTPError:
-                # error when getting package metadata (usually 404 when a
-                # package has been removed), skip it and process next package
+                versions_info = self._get_metadata_for_package(package_name)
+            except NotModifiedSinceLastVisit:
+                # Package was not modified server side since the last visit, we skip it
+                continue
+
+            if versions_info is None:
+                # No info on package, we skip it
                 continue
 
             origin_url = None
