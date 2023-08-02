@@ -7,6 +7,7 @@ from dataclasses import dataclass
 from datetime import datetime, timezone
 import logging
 from typing import Any, Dict, Iterator, List, Optional
+from random import shuffle
 
 import iso8601
 import requests
@@ -123,9 +124,11 @@ class PackagistLister(Lister[PackagistListerState, PackagistPageType]):
 
     def get_pages(self) -> Iterator[PackagistPageType]:
         """
-        Yield a single page listing all Packagist projects.
+        Yield a single page listing all Packagist projects (randomly).
         """
-        yield self.api_request(self.url)["packageNames"]
+        package_names = self.api_request(self.url)["packageNames"]
+        shuffle(package_names)
+        yield package_names
 
     def _get_metadata_from_page(
         self, package_url_format: str, package_name: str
