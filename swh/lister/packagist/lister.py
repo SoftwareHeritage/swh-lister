@@ -13,6 +13,7 @@ import iso8601
 import requests
 from tenacity import RetryError
 
+from swh.core.utils import grouper
 from swh.scheduler.interface import SchedulerInterface
 from swh.scheduler.model import ListedOrigin
 
@@ -126,12 +127,11 @@ class PackagistLister(Lister[PackagistListerState, PackagistPageType]):
             return {}
 
     def get_pages(self) -> Iterator[PackagistPageType]:
-        """
-        Yield a single page listing all Packagist projects (randomly).
-        """
+        """Retrieve & randomize unique list of packages into pages of packages."""
         package_names = self.api_request(self.url)["packageNames"]
         shuffle(package_names)
-        yield package_names
+        for page_packages in grouper(package_names, n=self.record_batch_size):
+            yield page_packages
 
     def _get_metadata_from_page(
         self, package_url_format: str, package_name: str
