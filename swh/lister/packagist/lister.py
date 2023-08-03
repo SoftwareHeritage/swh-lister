@@ -239,7 +239,10 @@ class PackagistLister(Lister[PackagistListerState, PackagistPageType]):
                 dist_time_str = version_info.get("time", "")
                 if not dist_time_str:
                     continue
-                dist_time = iso8601.parse_date(dist_time_str)
+                try:
+                    dist_time = iso8601.parse_date(dist_time_str)
+                except iso8601.iso8601.ParseError:
+                    continue
                 if last_update is None or dist_time > last_update:
                     last_update = dist_time
 
