@@ -75,6 +75,7 @@ class PackagistLister(Lister[PackagistListerState, PackagistPageType]):
         max_origins_per_page: Optional[int] = None,
         max_pages: Optional[int] = None,
         enable_origins: bool = True,
+        record_batch_size: int = 1000,
     ):
         super().__init__(
             scheduler=scheduler,
@@ -85,6 +86,7 @@ class PackagistLister(Lister[PackagistListerState, PackagistPageType]):
             max_origins_per_page=max_origins_per_page,
             max_pages=max_pages,
             enable_origins=enable_origins,
+            record_batch_size=record_batch_size,
         )
 
         self.session.headers.update({"Accept": "application/json"})
