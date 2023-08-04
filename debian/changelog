@@ -1,3 +1,17 @@
+swh-lister (5.9.5-1~swh1) unstable-swh; urgency=medium
+
+  * New upstream release 5.9.5     - (tagged by Antoine R. Dumont
+    (@ardumont) <ardumont@softwareheritage.org> on 2023-08-04 11:15:58
+    +0200)
+  * Upstream changes:     - v5.9.5     - packagist: Yield pages of
+    origins to regularly record origins     - packagist: Skip package if
+    unable to parse the last update date     - packagist: Allow batch
+    size records configuration in constructor     - packagist: Continue
+    listing when github server hangs up     - packagist: Randomize the
+    packages list
+
+ -- Software Heritage autobuilder (on jenkins-debian1) <jenkins@jenkins-debian1.internal.softwareheritage.org>  Fri, 04 Aug 2023 09:22:55 +0000
+
 swh-lister (5.9.4-1~swh1) unstable-swh; urgency=medium
 
   * New upstream release 5.9.4     - (tagged by Antoine R. Dumont
