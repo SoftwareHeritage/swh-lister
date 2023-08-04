@@ -356,6 +356,7 @@ class Lister(Generic[StateType, PageType]):
                 else:
                     logger.warning("Skipping invalid origin: %s", origin.url)
 
+            logger.debug("Record valid %s origins in the scheduler", len(valid_origins))
             ret = self.scheduler.record_listed_origins(valid_origins)
             recorded_origins.extend(origin.url for origin in ret)
 
