@@ -1,4 +1,4 @@
-# Copyright (C) 2019-2021  The Software Heritage developers
+# Copyright (C) 2019-2023  The Software Heritage developers
 # See the AUTHORS file at the top-level directory of this distribution
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
@@ -24,14 +24,16 @@ def test_sourceforge_full_lister_task(
     mock_lister.from_configfile.return_value = mock_lister
     mock_lister.run.return_value = stats
 
+    kwargs = dict(enable_origins=False)
     res = swh_scheduler_celery_app.send_task(
-        "swh.lister.sourceforge.tasks.FullSourceForgeLister"
+        "swh.lister.sourceforge.tasks.FullSourceForgeLister",
+        kwargs=kwargs,
     )
     assert res
     res.wait()
     assert res.successful()
 
-    mock_lister.from_configfile.assert_called_once()
+    mock_lister.from_configfile.assert_called_once_with(**kwargs)
     mock_lister.run.assert_called_once()
     assert res.result == stats.dict()
 
@@ -45,12 +47,12 @@ def test_incremental_listing(
     mock_lister.run.return_value = stats
 
     res = swh_scheduler_celery_app.send_task(
-        "swh.lister.sourceforge.tasks.IncrementalSourceForgeLister"
+        "swh.lister.sourceforge.tasks.IncrementalSourceForgeLister",
     )
     assert res
     res.wait()
     assert res.successful()
 
-    mock_lister.from_configfile.assert_called_once()
+    mock_lister.from_configfile.assert_called_once_with(incremental=True)
     mock_lister.run.assert_called_once()
     assert res.result == stats.dict()
