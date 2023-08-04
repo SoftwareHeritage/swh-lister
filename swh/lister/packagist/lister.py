@@ -6,11 +6,14 @@
 from dataclasses import dataclass
 from datetime import datetime, timezone
 import logging
+from random import shuffle
 from typing import Any, Dict, Iterator, List, Optional
 
 import iso8601
 import requests
+from tenacity import RetryError
 
+from swh.core.utils import grouper
 from swh.scheduler.interface import SchedulerInterface
 from swh.scheduler.model import ListedOrigin
 
@@ -73,6 +76,7 @@ class PackagistLister(Lister[PackagistListerState, PackagistPageType]):
         max_origins_per_page: Optional[int] = None,
         max_pages: Optional[int] = None,
         enable_origins: bool = True,
+        record_batch_size: int = 1000,
     ):
         super().__init__(
             scheduler=scheduler,
@@ -83,6 +87,7 @@ class PackagistLister(Lister[PackagistListerState, PackagistPageType]):
             max_origins_per_page=max_origins_per_page,
             max_pages=max_pages,
             enable_origins=enable_origins,
+            record_batch_size=record_batch_size,
         )
 
         self.session.headers.update({"Accept": "application/json"})
@@ -122,10 +127,11 @@ class PackagistLister(Lister[PackagistListerState, PackagistPageType]):
             return {}
 
     def get_pages(self) -> Iterator[PackagistPageType]:
-        """
-        Yield a single page listing all Packagist projects.
-        """
-        yield self.api_request(self.url)["packageNames"]
+        """Retrieve & randomize unique list of packages into pages of packages."""
+        package_names = self.api_request(self.url)["packageNames"]
+        shuffle(package_names)
+        for page_packages in grouper(package_names, n=self.record_batch_size):
+            yield page_packages
 
     def _get_metadata_from_page(
         self, package_url_format: str, package_name: str
@@ -233,7 +239,10 @@ class PackagistLister(Lister[PackagistListerState, PackagistPageType]):
                 dist_time_str = version_info.get("time", "")
                 if not dist_time_str:
                     continue
-                dist_time = iso8601.parse_date(dist_time_str)
+                try:
+                    dist_time = iso8601.parse_date(dist_time_str)
+                except iso8601.iso8601.ParseError:
+                    continue
                 if last_update is None or dist_time > last_update:
                     last_update = dist_time
 
@@ -245,9 +254,14 @@ class PackagistLister(Lister[PackagistListerState, PackagistPageType]):
                 # Non-github urls will be returned as is, github ones will be canonical
                 # ones
                 assert self.github_session is not None
-                origin_url = (
-                    self.github_session.get_canonical_url(origin_url) or origin_url
-                )
+                try:
+                    origin_url = (
+                        self.github_session.get_canonical_url(origin_url) or origin_url
+                    )
+                except (requests.exceptions.ConnectionError, RetryError):
+                    # server hangs up, let's ignore it for now
+                    # that might not happen later on
+                    continue
 
             # bitbucket closed its mercurial hosting service, those origins can not be
             # loaded into the archive anymore
