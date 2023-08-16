@@ -13,7 +13,6 @@ following Python modules:
 - `swh.lister.cgit`
 - `swh.lister.cran`
 - `swh.lister.debian`
-- `swh.liser.fedora`
 - `swh.lister.gitea`
 - `swh.lister.github`
 - `swh.lister.gitlab`
@@ -27,6 +26,7 @@ following Python modules:
 - `swh.lister.packagist`
 - `swh.lister.phabricator`
 - `swh.lister.pypi`
+- `swh.lister.rpm`
 - `swh.lister.tuleap`
 
 Dependencies

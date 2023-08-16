@@ -1,0 +1,38 @@
+# RPM lister parameters to process Rocky Linux source packages
+
+url: https://rockylinux.org
+instance: RockyLinux
+rpm_src_data:
+  - base_url: https://download.rockylinux.org/
+    releases:
+      - "8.3"
+      - "8.4"
+      - "8.4-RC1"
+      - "8.5"
+      - "8.6"
+      - "8.7"
+      - "8.8"
+      - "9.0"
+      - "9.1"
+      - "9.2"
+    components:
+      - AppStream
+      - BaseOS
+      - Devel
+      - HighAvailability
+      - Minimal
+      - PowerTools
+      - ResilientStorage
+      - CRB
+      - NFV
+      - RT
+      - SAP
+      - SAPHANA
+      - devel
+      - extras
+      - plus
+      - nfv
+      - rockyrpi
+    index_url_templates:
+      - $base_url/vault/rocky/$release/$component/source/tree/
+      - $base_url/pub/rocky/$release/$component/source/tree/
