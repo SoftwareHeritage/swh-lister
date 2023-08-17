@@ -6,18 +6,10 @@
 from os import path
 
 import pandas
+import pyreadr
 import pytest
-from rpy2 import robjects
-from rpy2.robjects import pandas2ri
-from rpy2.robjects.conversion import localconverter
 
-try:
-    from rpy2.robjects.conversion import py2rpy
-except ImportError:
-    # for old rpy2 versions (fix debian buster package build)
-    from rpy2.robjects.pandas2ri import py2ri as py2rpy  # noqa
-
-from swh.lister.cran.lister import CRAN_INFO_DB_URL, CRAN_MIRROR_URL, CRANLister
+from swh.lister.cran.lister import CRAN_MIRROR_URL, CRANLister
 
 CRAN_INFO_DB_DATA = {
     "/srv/ftp/pub/R/src/contrib/Archive/zooimage/zooimage_3.0-3.tar.gz": {
@@ -103,31 +95,46 @@ def cran_info_db_rds_path(tmp_path):
         orient="index",
     )
     rds_path = path.join(tmp_path, "cran_info_db.rds")
-    # Convert pandas dataframe to R dataframe
-    with localconverter(robjects.default_converter + pandas2ri.converter):
-        r_df = py2rpy(df)
-    robjects.r.assign("cran_info_db_df", r_df)
-    robjects.r(f"saveRDS(cran_info_db_df, file='{rds_path}')")
+    pyreadr.write_rds(rds_path, df)
     return rds_path
 
 
-def test_cran_lister_cran(swh_scheduler, requests_mock, cran_info_db_rds_path):
+def test_cran_lister_cran(swh_scheduler, mocker, cran_info_db_rds_path):
+    lister = CRANLister(swh_scheduler)
 
-    with open(cran_info_db_rds_path, "rb") as cran_db_rds:
+    mock_download_file = mocker.patch("swh.lister.cran.lister.pyreadr.download_file")
+    mock_download_file.return_value = cran_info_db_rds_path
 
-        requests_mock.get(CRAN_INFO_DB_URL, body=cran_db_rds)
+    read_r = pyreadr.read_r
 
-        lister = CRANLister(swh_scheduler)
+    def read_r_restore_data_lost_by_write_r(*args, **kwargs):
+        result = read_r(*args, **kwargs)
+        # DataFrame index is lost when calling pyreadr.write_rds so recreate
+        # the same one as in original cran_info_db.rds file
+        # https://github.com/ofajardo/pyreadr/issues/68
+        result[None]["rownames"] = list(CRAN_INFO_DB_DATA.keys())
+        result[None].set_index("rownames", inplace=True)
+        # pyreadr.write_rds serializes datetime to string so restore datetime type
+        # as in original cran_info_db.rds file
+        for dt_column in ("mtime", "ctime", "atime"):
+            result[None][dt_column] = pandas.to_datetime(
+                result[None][dt_column], utc=True
+            )
+        return result
 
-        stats = lister.run()
+    mocker.patch(
+        "swh.lister.cran.lister.pyreadr.read_r",
+        wraps=read_r_restore_data_lost_by_write_r,
+    )
 
-        assert stats.pages == 1
-        assert stats.origins == 2
+    stats = lister.run()
 
-        scheduler_origins = {
-            o.url: o
-            for o in swh_scheduler.get_listed_origins(lister.lister_obj.id).results
-        }
+    assert stats.pages == 1
+    assert stats.origins == 2
+
+    scheduler_origins = {
+        o.url: o for o in swh_scheduler.get_listed_origins(lister.lister_obj.id).results
+    }
 
     assert set(scheduler_origins.keys()) == {
         f"{CRAN_MIRROR_URL}/package=zooimage",
@@ -189,7 +196,6 @@ def test_cran_lister_cran(swh_scheduler, requests_mock, cran_info_db_rds_path):
 def test_lister_cran_instantiation_with_credentials(
     credentials, expected_credentials, swh_scheduler
 ):
-
     lister = CRANLister(swh_scheduler, credentials=credentials)
 
     # Credentials are allowed in constructor
@@ -197,7 +203,6 @@ def test_lister_cran_instantiation_with_credentials(
 
 
 def test_lister_cran_from_configfile(swh_scheduler_config, mocker):
-
     load_from_envvar = mocker.patch("swh.lister.pattern.load_from_envvar")
     load_from_envvar.return_value = {
         "scheduler": {"cls": "local", **swh_scheduler_config},

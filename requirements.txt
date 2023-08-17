@@ -5,10 +5,10 @@ iso8601
 launchpadlib
 lxml
 psycopg2
+pyreadr
 python_debian
 repomd
 requests
-rpy2
 setuptools
 tenacity >= 6.2
 testing.postgresql

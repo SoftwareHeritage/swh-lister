@@ -3,14 +3,14 @@
 # See top-level LICENSE file for more information
 
 from collections import defaultdict
-from datetime import datetime, timezone
 import logging
 import os
 import tempfile
 from typing import Any, Dict, Iterator, List, Optional, Tuple
 from urllib.parse import urljoin
 
-from rpy2 import robjects
+import iso8601
+import pyreadr
 
 from swh.lister.pattern import CredentialsType, StatelessLister
 from swh.scheduler.interface import SchedulerInterface
@@ -64,23 +64,14 @@ class CRANLister(StatelessLister[PageType]):
         with tempfile.TemporaryDirectory() as tmpdir:
             package_artifacts: Dict[str, Dict[str, Any]] = defaultdict(dict)
             dest_path = os.path.join(tmpdir, os.path.basename(CRAN_INFO_DB_URL))
-
-            response = self.http_request(CRAN_INFO_DB_URL, stream=True)
-            with open(dest_path, "wb") as rds_file:
-                for chunk in response.iter_content(chunk_size=1024):
-                    rds_file.write(chunk)
-
+            logger.debug("Fetching %s file to %s", CRAN_INFO_DB_URL, dest_path)
+            dest_path = pyreadr.download_file(CRAN_INFO_DB_URL, dest_path)
             logger.debug("Parsing %s file", dest_path)
-            robjects.r(f"cran_info_db_df <- readRDS('{dest_path}')")
-            r_df = robjects.r["cran_info_db_df"]
-            colnames = list(r_df.colnames)
-
-            def _get_col_value(row, colname):
-                return r_df[colnames.index(colname)][row]
+            cran_db_df = pyreadr.read_r(dest_path)[None]
 
             logger.debug("Processing CRAN packages")
-            for i in range(r_df.nrow):
-                tarball_path = r_df.rownames[i]
+            for package_artifact_metadata in cran_db_df.itertuples():
+                tarball_path = package_artifact_metadata[0]
                 package_info = tarball_path.split("/")[-1].replace(".tar.gz", "")
                 if "_" not in package_info and "-" not in package_info:
                     # skip package artifact with no version
@@ -98,11 +89,9 @@ class CRANLister(StatelessLister[PageType]):
                     ),
                     "version": package_version,
                     "package": package_name,
-                    "checksums": {"length": int(_get_col_value(i, "size"))},
-                    "mtime": (
-                        datetime.fromtimestamp(
-                            _get_col_value(i, "mtime"), tz=timezone.utc
-                        )
+                    "checksums": {"length": int(package_artifact_metadata.size)},
+                    "mtime": iso8601.parse_date(
+                        package_artifact_metadata.mtime.isoformat()
                     ),
                 }
 
