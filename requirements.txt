@@ -1,13 +1,13 @@
-python_debian
-requests
-setuptools
-iso8601
 beautifulsoup4
-launchpadlib
-tenacity >= 6.2
-lxml
 dateparser
 dulwich
-testing.postgresql
+iso8601
+launchpadlib
+lxml
 psycopg2
+python_debian
 repomd
+requests
+setuptools
+tenacity >= 6.2
+testing.postgresql
