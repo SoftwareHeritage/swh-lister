@@ -1,0 +1,77 @@
+# RPM lister parameters to process Fedora source packages
+
+url: https://fedoraproject.org
+instance: "Fedora"
+rpm_src_data:
+  - base_url: https://archives.fedoraproject.org/pub/archive/fedora/linux/
+    releases:
+      - "2"
+      - "3"
+      - "4"
+      - "5"
+      - "6"
+    components:
+      - core
+      - extras
+    index_url_templates:
+      - $base_url/$component/$release/SRPMS
+      - $base_url/$component/$release/source/SRPMS
+      - $base_url/$component/$release/x86_64/os/
+
+  - base_url: https://archives.fedoraproject.org/pub/archive/fedora/linux/
+    releases:
+      - "7"
+      - "8"
+      - "9"
+      - "10"
+      - "11"
+      - "12"
+      - "13"
+      - "14"
+      - "15"
+      - "16"
+      - "17"
+      - "18"
+      - "19"
+      - "20"
+      - "21"
+      - "22"
+      - "23"
+      - "24"
+      - "25"
+      - "26"
+      - "27"
+      - "28"
+      - "29"
+      - "30"
+      - "31"
+      - "32"
+      - "33"
+      - "34"
+      - "35"
+    components:
+      - Everything
+      - Server
+      - Workstation
+      - Modular
+      - Fedora
+    index_url_templates:
+      - $base_url/releases/$release/$component/source/tree/
+      - $base_url/updates/$release/$component/source/tree/
+      - $base_url/releases/$release/$component/source/SRPMS/
+      - $base_url/updates/$release/SRPMS/
+
+  - base_url: https://dl.fedoraproject.org/pub/fedora/linux/
+    releases:
+      - "36"
+      - "37"
+      - "38"
+    components:
+      - Everything
+      - Server
+      - Workstation
+      - Modular
+      - Fedora
+    index_url_templates:
+      - $base_url/releases/$release/$component/source/tree/
+      - $base_url/updates/$release/$component/source/tree/
