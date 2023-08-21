@@ -1,0 +1,100 @@
+# RPM lister parameters to process CentOS source packages
+
+url: https://www.centos.org
+instance: CentOS
+rpm_src_data:
+  - base_url: https://vault.centos.org/
+    releases:
+      - "3.7"
+      - "3.8"
+      - "3.9"
+      - "4.0"
+      - "4.1"
+      - "4.2"
+      - "4.3"
+      - "4.4"
+      - "4.5"
+      - "4.6"
+      - "4.7"
+      - "4.8"
+      - "4.9"
+      - "5.0"
+      - "5.1"
+      - "5.2"
+      - "5.3"
+      - "5.4"
+      - "5.5"
+      - "5.6"
+      - "5.7"
+      - "5.8"
+      - "5.9"
+      - "5.10"
+      - "5.11"
+      - "6.0"
+      - "6.1"
+      - "6.2"
+      - "6.3"
+      - "6.4"
+      - "6.5"
+      - "6.6"
+      - "6.7"
+      - "6.8"
+      - "6.9"
+      - "6.10"
+      - "7.0.1406"
+      - "7.1.1503"
+      - "7.2.1511"
+      - "7.3.1611"
+      - "7.4.1708"
+      - "7.5.1804"
+      - "7.6.1810"
+      - "7.7.1908"
+      - "7.8.2003"
+      - "7.9.2009"
+      - "8-stream"
+      - "8.0.1905"
+      - "8.1.1911"
+      - "8.2.2004"
+      - "8.3.2011"
+      - "8.4.2105"
+      - "8.5.2111"
+    components:
+      - AppStream
+      - BaseOS
+      - HighAvailability
+      - PowerTools
+      - SCL
+      - addons
+      - centosplus
+      - contrib
+      - cr
+      - csgfs
+      - dotnet
+      - extras
+      - fasttrack
+      - opstools
+      - os
+      - rt
+      - testing
+      - updates
+      - xen4
+
+    index_url_templates:
+      - $base_url/$release/$component/Source/
+      - $base_url/$release/$component/SRPMS/
+      - $base_url/$release/$component/x86_64/
+
+  - base_url: https://mirror.stream.centos.org
+    releases:
+      - 9-stream
+    components:
+      - AppStream
+      - BaseOS
+      - CRB
+      - HighAvailability
+      - NFV
+      - RT
+      - ResilientStorage
+
+    index_url_templates:
+      - $base_url/$release/$component/source/tree/

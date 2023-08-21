@@ -38,9 +38,7 @@ lister_args = {
         "url": "https://guix.gnu.org/sources.json",
         "origin_upstream": "https://git.savannah.gnu.org/cgit/guix.git/",
     },
-    "fedora": {
-        "url": "https://archives.fedoraproject.org/pub/archive/fedora/linux/releases/",
-    },
+    "rpm": {"url": "http://opensuse.org", "instance": "openSUSE", "rpm_src_data": []},
     "pagure": {"instance": "pagure.io"},
     "gitweb": {
         "url": "https://git.distorted.org.uk/~mdw/",
@@ -64,8 +62,7 @@ def test_get_lister_wrong_input():
 
 def test_get_lister(swh_scheduler_config):
     """Instantiating a supported lister should be ok"""
-    # Drop launchpad lister from the lister to check, its test setup is more involved
-    # than the other listers and it's not currently done here
+
     for lister_name in SUPPORTED_LISTERS:
         lst = get_lister(
             lister_name,

@@ -65,7 +65,6 @@ setup(
         lister.cran=swh.lister.cran:register
         lister.crates=swh.lister.crates:register
         lister.debian=swh.lister.debian:register
-        lister.fedora=swh.lister.fedora:register
         lister.gitea=swh.lister.gitea:register
         lister.github=swh.lister.github:register
         lister.gitiles=swh.lister.gitiles:register
@@ -87,6 +86,7 @@ setup(
         lister.pubdev=swh.lister.pubdev:register
         lister.puppet=swh.lister.puppet:register
         lister.pypi=swh.lister.pypi:register
+        lister.rpm=swh.lister.rpm:register
         lister.rubygems=swh.lister.rubygems:register
         lister.sourceforge=swh.lister.sourceforge:register
         lister.stagit=swh.lister.stagit:register

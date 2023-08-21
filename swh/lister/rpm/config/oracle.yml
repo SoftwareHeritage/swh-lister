@@ -1,0 +1,156 @@
+# RPM lister parameters to process Oracle Linux source packages
+
+url: https://www.oracle.com/linux
+instance: OracleLinux
+rpm_src_data:
+  - base_url: https://yum.oracle.com/repo/EnterpriseLinux/
+    releases:
+      - EL5
+    components:
+      - addons
+      - oracle_addons
+      - unsupported
+      - 0/base
+      - 1/base
+      - 2/base
+      - 3/base
+      - 4/base
+      - 5/base
+
+    index_url_templates:
+      - $base_url/$release/$component/x86_64
+
+  - base_url: https://yum.oracle.com/repo/OracleLinux/
+    releases:
+      - OL5
+      - OL6
+      - OL7
+      - OL8
+      - OL9
+    components:
+      - 0/base
+      - 0/baseos/base
+      - 1/base
+      - 1/baseos/base
+      - 10/base
+      - 11/base
+      - 2/base
+      - 2/baseos/base
+      - 3/base
+      - 3/baseos/base
+      - 4/base
+      - 4/baseos/base
+      - 4/security/validation
+      - 5/base
+      - 5/baseos/base
+      - 6/base
+      - 6/baseos/base
+      - 7/base
+      - 7/baseos/base
+      - 8/base
+      - 8/baseos/base
+      - 8/security/validation
+      - 9/base
+      - MODRHCK
+      - MySQL
+      - MySQL56
+      - MySQL57_community
+      - MySQL80/community
+      - MySQL80/connectors/community
+      - MySQL80/tools/community
+      - MySQL80_community
+      - RDMA
+      - SoftwareCollections
+      - UEK/latest
+      - UEKR3
+      - UEKR3/latest
+      - UEKR3_OFED20
+      - UEKR4
+      - UEKR4/OFED
+      - UEKR4/archive
+      - UEKR5
+      - UEKR5/RDMA
+      - UEKR5/archive
+      - UEKR6
+      - UEKR6/RDMA
+      - UEKR7
+      - UEKR7/RDMA
+      - addons
+      - appstream
+      - appstream/developer
+      - automation2
+      - baseos/developer
+      - baseos/latest
+      - beta
+      - ceph
+      - ceph30
+      - codeready/builder
+      - codeready/builder/developer
+      - developer
+      - developer/EPEL
+      - developer/EPEL/modular
+      - developer/UEKR5
+      - developer/UEKR6
+      - developer/UEKR7
+      - developer/golang117
+      - developer/golang118
+      - developer/golang119
+      - developer/kvm/utils
+      - developer/nodejs12
+      - developer/olcne
+      - developer/php74
+      - developer_EPEL
+      - developer_gluster310
+      - developer_gluster312
+      - distro/builder
+      - gluster/appstream
+      - gluster312
+      - gluster41
+      - gluster5
+      - gluster6
+      - gluster8
+      - kvm/appstream
+      - kvm/utils
+      - latest
+      - latest/archive
+      - leapp
+      - ofed_UEK
+      - olcne
+      - olcne11
+      - olcne12
+      - olcne13
+      - olcne14
+      - olcne15
+      - olcne16
+      - openstack10
+      - openstack21
+      - openstack30
+      - openstack40
+      - openstack40_extras
+      - openstack50
+      - openstack50_extras
+      - optional
+      - optional/archive
+      - optional/beta
+      - oracle/instantclient
+      - oracle/instantclient21
+      - oraclelinuxmanager210/client
+      - oraclelinuxmanager210/server
+      - ovirt42
+      - ovirt42/extras
+      - ovirt43
+      - ovirt43/extras
+      - ovirt44
+      - ovirt44/extras
+      - security/validation
+      - spacewalk210/client
+      - spacewalk210/server
+      - spacewalk24/client
+      - spacewalk24/server
+      - spacewalk26/client
+      - spacewalk26/server
+      - spacewalk27/client
+      - spacewalk27/server
+
+    index_url_templates:
+      - $base_url/$release/$component/x86_64
