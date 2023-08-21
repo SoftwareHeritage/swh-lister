@@ -1,14 +1,16 @@
-# Copyright (C) 2019-2021 the Software Heritage developers
+# Copyright (C) 2019-2023 the Software Heritage developers
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
 
+from collections import defaultdict
 from datetime import datetime, timezone
-import json
 import logging
-import subprocess
-from typing import Dict, Iterator, List, Optional, Tuple
+import os
+import tempfile
+from typing import Any, Dict, Iterator, List, Optional, Tuple
+from urllib.parse import urljoin
 
-import pkg_resources
+from rpy2 import robjects
 
 from swh.lister.pattern import CredentialsType, StatelessLister
 from swh.scheduler.interface import SchedulerInterface
@@ -16,17 +18,22 @@ from swh.scheduler.model import ListedOrigin
 
 logger = logging.getLogger(__name__)
 
-CRAN_MIRROR = "https://cran.r-project.org"
+CRAN_MIRROR_URL = "https://cran.r-project.org"
+CRAN_INFO_DB_URL = f"{CRAN_MIRROR_URL}/web/dbs/cran_info_db.rds"
 
-PageType = List[Dict[str, str]]
+# List[Tuple[origin_url, List[Dict[package_version, package_metdata]]]]
+PageType = List[Tuple[str, List[Dict[str, Any]]]]
 
 
 class CRANLister(StatelessLister[PageType]):
     """
     List all packages hosted on The Comprehensive R Archive Network.
+
+    The lister parses and reads the content of the weekly CRAN database
+    dump in RDS format referencing all downloadable package tarballs.
     """
 
-    LISTER_NAME = "CRAN"
+    LISTER_NAME = "cran"
 
     def __init__(
         self,
@@ -38,7 +45,7 @@ class CRANLister(StatelessLister[PageType]):
     ):
         super().__init__(
             scheduler,
-            url=CRAN_MIRROR,
+            url=CRAN_MIRROR_URL,
             instance="cran",
             credentials=credentials,
             max_origins_per_page=max_origins_per_page,
@@ -50,110 +57,69 @@ class CRANLister(StatelessLister[PageType]):
         """
         Yields a single page containing all CRAN packages info.
         """
-        yield read_cran_data()
+
+        with tempfile.TemporaryDirectory() as tmpdir:
+            package_artifacts: Dict[str, Dict[str, Any]] = defaultdict(dict)
+            dest_path = os.path.join(tmpdir, os.path.basename(CRAN_INFO_DB_URL))
+
+            response = self.http_request(CRAN_INFO_DB_URL, stream=True)
+            with open(dest_path, "wb") as rds_file:
+                for chunk in response.iter_content(chunk_size=1024):
+                    rds_file.write(chunk)
+
+            logger.debug("Parsing %s file", dest_path)
+            robjects.r(f"cran_info_db_df <- readRDS('{dest_path}')")
+            r_df = robjects.r["cran_info_db_df"]
+            colnames = list(r_df.colnames)
+
+            def _get_col_value(row, colname):
+                return r_df[colnames.index(colname)][row]
+
+            logger.debug("Processing CRAN packages")
+            for i in range(r_df.nrow):
+                tarball_path = r_df.rownames[i]
+                package_info = tarball_path.split("/")[-1].replace(".tar.gz", "")
+                if "_" not in package_info and "-" not in package_info:
+                    # skip package artifact with no version
+                    continue
+
+                try:
+                    package_name, package_version = package_info.split("_", maxsplit=1)
+                except ValueError:
+                    # old artifacts can separate name and version with a dash
+                    package_name, package_version = package_info.split("-", maxsplit=1)
+
+                package_artifacts[package_name][package_version] = {
+                    "url": urljoin(
+                        CRAN_MIRROR_URL, tarball_path.replace("/srv/ftp/pub/R", "")
+                    ),
+                    "version": package_version,
+                    "package": package_name,
+                    "checksums": {"length": int(_get_col_value(i, "size"))},
+                    "mtime": (
+                        datetime.fromtimestamp(
+                            _get_col_value(i, "mtime"), tz=timezone.utc
+                        )
+                    ),
+                }
+
+            yield [
+                (f"{CRAN_MIRROR_URL}/package={package_name}", list(artifacts.values()))
+                for package_name, artifacts in package_artifacts.items()
+            ]
 
     def get_origins_from_page(self, page: PageType) -> Iterator[ListedOrigin]:
         assert self.lister_obj.id is not None
 
-        seen_urls = set()
-        for package_info in page:
-            origin_url, artifact_url = compute_origin_urls(package_info)
-
-            if origin_url in seen_urls:
-                # prevent multiple listing of an origin,
-                # most recent version will be listed first
-                continue
-
-            seen_urls.add(origin_url)
+        for origin_url, artifacts in page:
+            mtimes = [artifact.pop("mtime") for artifact in artifacts]
 
             yield ListedOrigin(
                 lister_id=self.lister_obj.id,
                 url=origin_url,
                 visit_type="cran",
-                last_update=parse_packaged_date(package_info),
+                last_update=max(mtimes),
                 extra_loader_arguments={
-                    "artifacts": [
-                        {
-                            "url": artifact_url,
-                            "version": package_info["Version"],
-                            "package": package_info["Package"],
-                            "checksums": {"md5": package_info["MD5sum"]},
-                        }
-                    ]
+                    "artifacts": list(sorted(artifacts, key=lambda a: a["version"]))
                 },
             )
-
-
-def read_cran_data() -> List[Dict[str, str]]:
-    """
-    Runs R script which uses inbuilt API to return a json response
-            containing data about the R packages.
-
-    Returns:
-        List of Dict about R packages. For example::
-
-            [
-                {
-                    'Package': 'A3',
-                    'Version': '1.0.0'
-                },
-                {
-                    'Package': 'abbyyR',
-                    'Version': '0.5.4'
-                },
-                ...
-            ]
-    """
-    filepath = pkg_resources.resource_filename("swh.lister.cran", "list_all_packages.R")
-    logger.debug("Executing R script %s", filepath)
-    response = subprocess.run(filepath, stdout=subprocess.PIPE, shell=False)
-    return json.loads(response.stdout.decode("utf-8"))
-
-
-def compute_origin_urls(package_info: Dict[str, str]) -> Tuple[str, str]:
-    """Compute the package url from the repo dict.
-
-    Args:
-        repo: dict with key 'Package', 'Version'
-
-    Returns:
-        the tuple project url, artifact url
-
-    """
-    package = package_info["Package"]
-    version = package_info["Version"]
-    origin_url = f"{CRAN_MIRROR}/package={package}"
-    artifact_url = f"{CRAN_MIRROR}/src/contrib/{package}_{version}.tar.gz"
-    return origin_url, artifact_url
-
-
-def parse_packaged_date(package_info: Dict[str, str]) -> Optional[datetime]:
-    packaged_at_str = package_info.get("Packaged", "")
-    packaged_at = None
-    if packaged_at_str:
-        packaged_at_str = packaged_at_str.replace(" UTC", "")
-        # Packaged field possible formats:
-        #   - "%Y-%m-%d %H:%M:%S[.%f] UTC; <packager>",
-        #   - "%a %b %d %H:%M:%S %Y; <packager>"
-        for date_format in (
-            "%Y-%m-%d %H:%M:%S",
-            "%Y-%m-%d %H:%M:%S.%f",
-            "%a %b %d %H:%M:%S %Y",
-        ):
-            try:
-                packaged_at = datetime.strptime(
-                    packaged_at_str.split(";")[0],
-                    date_format,
-                ).replace(tzinfo=timezone.utc)
-                break
-            except Exception:
-                continue
-
-        if packaged_at is None:
-            logger.debug(
-                "Could not parse %s package release date: %s",
-                package_info["Package"],
-                packaged_at_str,
-            )
-
-    return packaged_at
