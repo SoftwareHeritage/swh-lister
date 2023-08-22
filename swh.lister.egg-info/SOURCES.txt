@@ -189,7 +189,6 @@ swh/lister/gitea/tests/data/https_try.gitea.io/repos_page2
 swh/lister/github/__init__.py
 swh/lister/github/lister.py
 swh/lister/github/tasks.py
-swh/lister/github/utils.py
 swh/lister/github/tests/__init__.py
 swh/lister/github/tests/test_lister.py
 swh/lister/github/tests/test_tasks.py
