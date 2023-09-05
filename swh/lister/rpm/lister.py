@@ -14,6 +14,7 @@ from urllib.parse import urljoin
 import repomd
 from typing_extensions import TypedDict
 
+from swh.lister.pattern import CredentialsType
 from swh.scheduler.interface import SchedulerInterface
 from swh.scheduler.model import ListedOrigin
 
@@ -111,12 +112,13 @@ class RPMLister(Lister[RPMListerState, RPMPageType]):
         max_origins_per_page: Optional[int] = None,
         max_pages: Optional[int] = None,
         enable_origins: bool = True,
+        credentials: Optional[CredentialsType] = None,
     ):
         super().__init__(
             scheduler=scheduler,
             url=url,
             instance=instance,
-            credentials={},
+            credentials=credentials,
             max_origins_per_page=max_origins_per_page,
             max_pages=max_pages,
             enable_origins=enable_origins,
