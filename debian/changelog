@@ -1,3 +1,13 @@
+swh-lister (5.9.9-1~swh1) unstable-swh; urgency=medium
+
+  * New upstream release 5.9.9     - (tagged by Antoine R. Dumont
+    (@ardumont) <ardumont@softwareheritage.org> on 2023-09-05 17:48:32
+    +0200)
+  * Upstream changes:     - v5.9.9     - rpm: Adapt lister constructor
+    to accept the credentials parameter
+
+ -- Software Heritage autobuilder (on jenkins-debian1) <jenkins@jenkins-debian1.internal.softwareheritage.org>  Tue, 05 Sep 2023 15:56:31 +0000
+
 swh-lister (5.9.8-1~swh1) unstable-swh; urgency=medium
 
   * New upstream release 5.9.8     - (tagged by Antoine R. Dumont
