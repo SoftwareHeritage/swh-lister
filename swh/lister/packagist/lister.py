@@ -55,6 +55,7 @@ class PackagistLister(Lister[PackagistListerState, PackagistPageType]):
     """
 
     LISTER_NAME = "Packagist"
+    INSTANCE = "packagist"
     PACKAGIST_PACKAGES_LIST_URL = "https://packagist.org/packages/list.json"
     PACKAGIST_PACKAGE_URL_FORMATS = [
         # preferred, static, efficient on their side as it can be cached
@@ -72,6 +73,8 @@ class PackagistLister(Lister[PackagistListerState, PackagistPageType]):
     def __init__(
         self,
         scheduler: SchedulerInterface,
+        url: str = PACKAGIST_PACKAGES_LIST_URL,
+        instance: str = INSTANCE,
         credentials: CredentialsType = None,
         max_origins_per_page: Optional[int] = None,
         max_pages: Optional[int] = None,
@@ -80,8 +83,8 @@ class PackagistLister(Lister[PackagistListerState, PackagistPageType]):
     ):
         super().__init__(
             scheduler=scheduler,
-            url=self.PACKAGIST_PACKAGES_LIST_URL,
-            instance="packagist",
+            url=url,
+            instance=instance,
             credentials=credentials,
             with_github_session=True,
             max_origins_per_page=max_origins_per_page,

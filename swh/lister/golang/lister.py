@@ -1,4 +1,4 @@
-# Copyright (C) 2022  The Software Heritage developers
+# Copyright (C) 2022-2023  The Software Heritage developers
 # See the AUTHORS file at the top-level directory of this distribution
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
@@ -45,6 +45,8 @@ class GolangLister(Lister[GolangStateType, GolangPageType]):
     def __init__(
         self,
         scheduler: SchedulerInterface,
+        url: str = GOLANG_MODULES_INDEX_URL,
+        instance: str = LISTER_NAME,
         incremental: bool = False,
         credentials: CredentialsType = None,
         max_origins_per_page: Optional[int] = None,
@@ -53,8 +55,8 @@ class GolangLister(Lister[GolangStateType, GolangPageType]):
     ):
         super().__init__(
             scheduler=scheduler,
-            url=self.GOLANG_MODULES_INDEX_URL,
-            instance=self.LISTER_NAME,
+            url=url,
+            instance=instance,
             credentials=credentials,
             max_origins_per_page=max_origins_per_page,
             max_pages=max_pages,

@@ -1,4 +1,4 @@
-# Copyright (C) 2021-2022  The Software Heritage developers
+# Copyright (C) 2021-2023  The Software Heritage developers
 # See the AUTHORS file at the top-level directory of this distribution
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
@@ -105,12 +105,16 @@ ProjectsLastModifiedCache = Dict[Tuple[str, str], LastModifiedT]
 class SourceForgeLister(Lister[SourceForgeListerState, SourceForgeListerPage]):
     """List origins from the "SourceForge" forge."""
 
+    SOURCEFORGE_URL = "https://sourceforge.net"
     # Part of the lister API, that identifies this lister
     LISTER_NAME = "sourceforge"
+    INSTANCE = "main"
 
     def __init__(
         self,
         scheduler: SchedulerInterface,
+        url: str = SOURCEFORGE_URL,
+        instance: str = INSTANCE,
         incremental: bool = False,
         credentials: Optional[CredentialsType] = None,
         max_origins_per_page: Optional[int] = None,
@@ -119,8 +123,8 @@ class SourceForgeLister(Lister[SourceForgeListerState, SourceForgeListerPage]):
     ):
         super().__init__(
             scheduler=scheduler,
-            url="https://sourceforge.net",
-            instance="main",
+            url=url,
+            instance=instance,
             credentials=credentials,
             max_origins_per_page=max_origins_per_page,
             max_pages=max_pages,

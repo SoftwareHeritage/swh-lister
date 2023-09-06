@@ -34,10 +34,13 @@ class CRANLister(StatelessLister[PageType]):
     """
 
     LISTER_NAME = "cran"
+    INSTANCE = "cran"
 
     def __init__(
         self,
         scheduler: SchedulerInterface,
+        url: str = CRAN_MIRROR_URL,
+        instance: str = INSTANCE,
         credentials: Optional[CredentialsType] = None,
         max_origins_per_page: Optional[int] = None,
         max_pages: Optional[int] = None,
@@ -45,8 +48,8 @@ class CRANLister(StatelessLister[PageType]):
     ):
         super().__init__(
             scheduler,
-            url=CRAN_MIRROR_URL,
-            instance="cran",
+            url=url,
+            instance=instance,
             credentials=credentials,
             max_origins_per_page=max_origins_per_page,
             max_pages=max_pages,

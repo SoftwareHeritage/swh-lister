@@ -1,4 +1,4 @@
-# Copyright (C) 2018-2022 the Software Heritage developers
+# Copyright (C) 2018-2023 the Software Heritage developers
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
 
@@ -50,6 +50,8 @@ class NpmLister(Lister[NpmListerState, List[Dict[str, Any]]]):
     def __init__(
         self,
         scheduler: SchedulerInterface,
+        url: str = API_FULL_LISTING_URL,
+        instance: str = INSTANCE,
         page_size: int = 1000,
         incremental: bool = False,
         credentials: CredentialsType = None,
@@ -60,10 +62,8 @@ class NpmLister(Lister[NpmListerState, List[Dict[str, Any]]]):
         super().__init__(
             scheduler=scheduler,
             credentials=credentials,
-            url=self.API_INCREMENTAL_LISTING_URL
-            if incremental
-            else self.API_FULL_LISTING_URL,
-            instance=self.INSTANCE,
+            url=url,
+            instance=instance,
             max_origins_per_page=max_origins_per_page,
             max_pages=max_pages,
             enable_origins=enable_origins,
@@ -75,6 +75,8 @@ class NpmLister(Lister[NpmListerState, List[Dict[str, Any]]]):
             # provided as the startkey query parameter value, so we increment the page
             # size by one to avoid double package processing
             self.page_size += 1
+        else:
+            self.url = self.API_INCREMENTAL_LISTING_URL
         self.incremental = incremental
 
         self.session.headers.update({"Accept": "application/json"})

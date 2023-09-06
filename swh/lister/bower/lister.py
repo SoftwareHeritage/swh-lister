@@ -1,4 +1,4 @@
-# Copyright (C) 2022  The Software Heritage developers
+# Copyright (C) 2022-2023  The Software Heritage developers
 # See the AUTHORS file at the top-level directory of this distribution
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
@@ -29,6 +29,8 @@ class BowerLister(StatelessLister[BowerListerPage]):
     def __init__(
         self,
         scheduler: SchedulerInterface,
+        url: str = API_URL,
+        instance: str = INSTANCE,
         credentials: Optional[CredentialsType] = None,
         max_origins_per_page: Optional[int] = None,
         max_pages: Optional[int] = None,
@@ -37,8 +39,8 @@ class BowerLister(StatelessLister[BowerListerPage]):
         super().__init__(
             scheduler=scheduler,
             credentials=credentials,
-            instance=self.INSTANCE,
-            url=self.API_URL,
+            instance=instance,
+            url=url,
             max_origins_per_page=max_origins_per_page,
             max_pages=max_pages,
             enable_origins=enable_origins,

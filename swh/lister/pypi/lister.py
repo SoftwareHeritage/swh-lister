@@ -69,6 +69,8 @@ class PyPILister(Lister[PyPIListerState, PackageListPage]):
     def __init__(
         self,
         scheduler: SchedulerInterface,
+        url: str = PACKAGE_LIST_URL,
+        instance: str = INSTANCE,
         credentials: Optional[CredentialsType] = None,
         max_origins_per_page: Optional[int] = None,
         max_pages: Optional[int] = None,
@@ -76,8 +78,8 @@ class PyPILister(Lister[PyPIListerState, PackageListPage]):
     ):
         super().__init__(
             scheduler=scheduler,
-            url=self.PACKAGE_LIST_URL,
-            instance=self.INSTANCE,
+            url=url,
+            instance=instance,
             credentials=credentials,
             max_origins_per_page=max_origins_per_page,
             max_pages=max_pages,

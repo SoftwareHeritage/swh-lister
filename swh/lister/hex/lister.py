@@ -1,11 +1,11 @@
-# Copyright (C) 2021-2022  The Software Heritage developers
+# Copyright (C) 2021-2023  The Software Heritage developers
 # See the AUTHORS file at the top-level directory of this distribution
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
 
 from dataclasses import asdict, dataclass
 import logging
-from typing import Any, Dict, Iterator, List
+from typing import Any, Dict, Iterator, List, Optional
 from urllib.parse import urljoin
 
 import iso8601
@@ -46,15 +46,22 @@ class HexLister(Lister[HexListerState, HexListerPage]):
     def __init__(
         self,
         scheduler: SchedulerInterface,
-        instance: str = "hex",
+        url: str = HEX_API_URL,
+        instance: str = LISTER_NAME,
         page_size: int = 100,
         credentials: CredentialsType = None,
+        max_origins_per_page: Optional[int] = None,
+        max_pages: Optional[int] = None,
+        enable_origins: bool = True,
     ):
         super().__init__(
             scheduler=scheduler,
             credentials=credentials,
-            url=self.HEX_API_URL,
+            url=url,
             instance=instance,
+            max_origins_per_page=max_origins_per_page,
+            max_pages=max_pages,
+            enable_origins=enable_origins,
         )
         # TODO: Add authentication support
         self.page_size = page_size

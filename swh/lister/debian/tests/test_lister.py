@@ -65,7 +65,7 @@ def _init_test(
 
     lister = DebianLister(
         scheduler=swh_scheduler,
-        mirror_url=_mirror_url,
+        url=_mirror_url,
         suites=list(debian_sources.keys()),
         components=_components,
     )

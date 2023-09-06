@@ -51,6 +51,8 @@ class BitbucketLister(Lister[BitbucketListerState, List[Dict[str, Any]]]):
     def __init__(
         self,
         scheduler: SchedulerInterface,
+        url: str = API_URL,
+        instance: str = INSTANCE,
         page_size: int = 1000,
         incremental: bool = True,
         credentials: CredentialsType = None,
@@ -61,8 +63,8 @@ class BitbucketLister(Lister[BitbucketListerState, List[Dict[str, Any]]]):
         super().__init__(
             scheduler=scheduler,
             credentials=credentials,
-            url=self.API_URL,
-            instance=self.INSTANCE,
+            url=url,
+            instance=instance,
             max_origins_per_page=max_origins_per_page,
             max_pages=max_pages,
             enable_origins=enable_origins,

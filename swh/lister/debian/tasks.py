@@ -10,6 +10,11 @@ from .lister import DebianLister
 @shared_task(name=__name__ + ".DebianListerTask")
 def list_debian_distribution(**lister_args):
     """List a Debian distribution"""
+    # for backward compatibility with previous parameter names
+    if "mirror_url" in lister_args:
+        lister_args["url"] = lister_args.pop("mirror_url")
+    if "distribution" in lister_args:
+        lister_args["instance"] = lister_args.pop("distribution")
     return DebianLister.from_configfile(**lister_args).run().dict()
 
 

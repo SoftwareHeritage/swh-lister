@@ -24,6 +24,35 @@ def test_lister(lister, swh_scheduler_celery_app, swh_scheduler_celery_worker):
     lister.run.return_value = stats
 
     kwargs = dict(
+        url="http://www-ftp.lip6.fr/pub/linux/distributions/Ubuntu/archive/",
+        instance="Ubuntu",
+        suites=["xenial", "bionic", "focal"],
+        components=["main", "multiverse", "restricted", "universe"],
+    )
+
+    res = swh_scheduler_celery_app.send_task(
+        "swh.lister.debian.tasks.DebianListerTask", kwargs=kwargs
+    )
+    assert res
+    res.wait()
+    assert res.successful()
+
+    lister.from_configfile.assert_called_once_with(**kwargs)
+    lister.run.assert_called_once_with()
+
+    assert res.result == stats.dict()
+
+
+@patch("swh.lister.debian.tasks.DebianLister")
+def test_lister_old_parameter_names(
+    lister, swh_scheduler_celery_app, swh_scheduler_celery_worker
+):
+    # setup the mocked DebianLister
+    lister.from_configfile.return_value = lister
+    stats = ListerStats(pages=12, origins=35618)
+    lister.run.return_value = stats
+
+    kwargs = dict(
         mirror_url="http://www-ftp.lip6.fr/pub/linux/distributions/Ubuntu/archive/",
         distribution="Ubuntu",
         suites=["xenial", "bionic", "focal"],
@@ -36,6 +65,9 @@ def test_lister(lister, swh_scheduler_celery_app, swh_scheduler_celery_worker):
     assert res
     res.wait()
     assert res.successful()
+
+    kwargs["url"] = kwargs.pop("mirror_url")
+    kwargs["instance"] = kwargs.pop("distribution")
 
     lister.from_configfile.assert_called_once_with(**kwargs)
     lister.run.assert_called_once_with()

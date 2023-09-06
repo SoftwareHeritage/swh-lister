@@ -1,4 +1,4 @@
-# Copyright (C) 2017-2022 The Software Heritage developers
+# Copyright (C) 2017-2023 The Software Heritage developers
 # See the AUTHORS file at the top-level directory of this distribution
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
@@ -68,12 +68,14 @@ class DebianLister(Lister[DebianListerState, DebianPageType]):
     """
 
     LISTER_NAME = "debian"
+    MIRROR_URL = "http://deb.debian.org/debian/"
+    INSTANCE = "Debian"
 
     def __init__(
         self,
         scheduler: SchedulerInterface,
-        distribution: str = "Debian",
-        mirror_url: str = "http://deb.debian.org/debian/",
+        url: str = MIRROR_URL,
+        instance: str = INSTANCE,
         suites: List[Suite] = ["stretch", "buster", "bullseye"],
         components: List[Component] = ["main", "contrib", "non-free"],
         credentials: Optional[CredentialsType] = None,
@@ -83,8 +85,8 @@ class DebianLister(Lister[DebianListerState, DebianPageType]):
     ):
         super().__init__(
             scheduler=scheduler,
-            url=mirror_url,
-            instance=distribution,
+            url=url,
+            instance=instance,
             credentials=credentials,
             max_origins_per_page=max_origins_per_page,
             max_pages=max_pages,
@@ -95,7 +97,7 @@ class DebianLister(Lister[DebianListerState, DebianPageType]):
         if not self.url.endswith("/"):
             self.url += "/"
 
-        self.distribution = distribution
+        self.distribution = instance
         self.suites = suites
         self.components = components
 

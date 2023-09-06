@@ -1,4 +1,4 @@
-# Copyright (C) 2022  The Software Heritage developers
+# Copyright (C) 2022-2023  The Software Heritage developers
 # See the AUTHORS file at the top-level directory of this distribution
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
@@ -39,6 +39,7 @@ class CondaLister(StatelessLister[CondaListerPage]):
         scheduler: SchedulerInterface,
         credentials: Optional[CredentialsType] = None,
         url: str = BASE_REPO_URL,
+        instance: str = INSTANCE,
         channel: str = "",
         archs: List = [],
         max_origins_per_page: Optional[int] = None,
@@ -48,7 +49,7 @@ class CondaLister(StatelessLister[CondaListerPage]):
         super().__init__(
             scheduler=scheduler,
             credentials=credentials,
-            instance=self.INSTANCE,
+            instance=instance,
             url=url,
             max_origins_per_page=max_origins_per_page,
             max_pages=max_pages,

@@ -59,11 +59,14 @@ class LaunchpadLister(Lister[LaunchpadListerState, LaunchpadPageType]):
             will be returned
     """
 
+    LAUNCHPAD_URL = "https://launchpad.net/"
     LISTER_NAME = "launchpad"
 
     def __init__(
         self,
         scheduler: SchedulerInterface,
+        url: str = LAUNCHPAD_URL,
+        instance: str = LISTER_NAME,
         incremental: bool = False,
         credentials: CredentialsType = None,
         max_origins_per_page: Optional[int] = None,
@@ -72,8 +75,8 @@ class LaunchpadLister(Lister[LaunchpadListerState, LaunchpadPageType]):
     ):
         super().__init__(
             scheduler=scheduler,
-            url="https://launchpad.net/",
-            instance="launchpad",
+            url=url,
+            instance=instance,
             credentials=credentials,
             max_origins_per_page=max_origins_per_page,
             max_pages=max_pages,

@@ -1,4 +1,4 @@
-# Copyright (C) 2020-2022  The Software Heritage developers
+# Copyright (C) 2020-2023  The Software Heritage developers
 # See the AUTHORS file at the top-level directory of this distribution
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
@@ -62,6 +62,7 @@ class GitHubLister(Lister[GitHubListerState, List[Dict[str, Any]]]):
     """  # noqa: B950
 
     LISTER_NAME = "github"
+    INSTANCE = "github"
 
     API_URL = "https://api.github.com/repositories"
     PAGE_SIZE = 1000
@@ -69,6 +70,8 @@ class GitHubLister(Lister[GitHubListerState, List[Dict[str, Any]]]):
     def __init__(
         self,
         scheduler: SchedulerInterface,
+        url: str = API_URL,
+        instance: str = INSTANCE,
         credentials: CredentialsType = None,
         max_origins_per_page: Optional[int] = None,
         max_pages: Optional[int] = None,
@@ -79,8 +82,8 @@ class GitHubLister(Lister[GitHubListerState, List[Dict[str, Any]]]):
         super().__init__(
             scheduler=scheduler,
             credentials=credentials,
-            url=self.API_URL,
-            instance="github",
+            url=url,
+            instance=instance,
             with_github_session=True,
             max_origins_per_page=max_origins_per_page,
             max_pages=max_pages,

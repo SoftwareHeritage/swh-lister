@@ -1,4 +1,4 @@
-# Copyright (C) 2019-2021  The Software Heritage developers
+# Copyright (C) 2019-2023  The Software Heritage developers
 # See the AUTHORS file at the top-level directory of this distribution
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
@@ -25,11 +25,14 @@ class GNULister(StatelessLister[GNUPageType]):
     """
 
     LISTER_NAME = "GNU"
+    INSTANCE = "GNU"
     GNU_FTP_URL = "https://ftp.gnu.org"
 
     def __init__(
         self,
         scheduler: SchedulerInterface,
+        url: str = GNU_FTP_URL,
+        instance: str = INSTANCE,
         credentials: CredentialsType = None,
         max_origins_per_page: Optional[int] = None,
         max_pages: Optional[int] = None,
@@ -37,8 +40,8 @@ class GNULister(StatelessLister[GNUPageType]):
     ):
         super().__init__(
             scheduler=scheduler,
-            url=self.GNU_FTP_URL,
-            instance="GNU",
+            url=url,
+            instance=instance,
             credentials=credentials,
             max_origins_per_page=max_origins_per_page,
             max_pages=max_pages,
