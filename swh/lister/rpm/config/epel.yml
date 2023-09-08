@@ -1,0 +1,62 @@
+# RPM lister parameters to process EPEL source packages
+
+url: https://docs.fedoraproject.org/en-US/epel
+instance: "EPEL"
+rpm_src_data:
+  - base_url: https://archives.fedoraproject.org/pub/archive/epel/
+    releases:
+      - "4"
+      - "4AS"
+      - "4ES"
+      - "4WS"
+      - "5"
+      - "5Client"
+      - "5Server"
+      - "6"
+      - "6.2017-11-07"
+      - "7"
+      - "7.2019-05-29"
+      - "7.2020-04-20"
+      - "7.2020-10-05"
+      - "7.7"
+      - "7.8"
+    components: []
+    index_url_templates:
+      - $base_url/$release/SRPMS
+
+  - base_url: https://archives.fedoraproject.org/pub/archive/epel/
+    releases:
+      - "8.1.2020-04-22"
+      - "8.1"
+      - "8.2.2020-11-04"
+      - "8.2"
+      - "8.3.2021-05-20"
+      - "8.3"
+      - "8.4.2021-11-30"
+      - "8.4"
+      - "8.5.2022-05-10"
+      - "8.5"
+      - "8.7.2023-05-09"
+      - "8.7"
+      - "9.1.2023-05-09"
+      - "9.1"
+    components:
+      - Everything
+      - Modular
+    index_url_templates:
+      - $base_url/$release/$component/SRPMS/
+      - $base_url/$release/$component/source/tree/
+
+  - base_url: https://dl.fedoraproject.org/pub/epel/
+    releases:
+      - "7"
+      - "7Server"
+      - "8"
+      - "9"
+    components:
+      - Everything
+      - Modular
+    index_url_templates:
+      - $base_url/$release/SRPMS
+      - $base_url/$release/$component/SRPMS/
+      - $base_url/$release/$component/source/tree/
