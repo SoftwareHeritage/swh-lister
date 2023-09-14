@@ -64,11 +64,11 @@ For the long read about why we came to here, please continue.
 
 ## About the Maven ecosystem
 
-Maven repositories are a loose, decentralised network of HTTP servers with a well-defined hosted structure. They are used according to the Maven dependency resolver[i](#sdendnote1sym), an inheritance-based mechanism used to identify and locate artefacts required in Maven builds.
+Maven repositories are a loose, decentralised network of HTTP servers with a well-defined hosted structure. They are used according to the [Maven dependency resolver](https://maven.apache.org/resolver/index.html), an inheritance-based mechanism used to identify and locate artefacts required in Maven builds.
 
-There is no uniform, standardised way to list the contents of maven repositories, since consumers are supposed to know what artefacts they need. Instead, Maven repository owners usually setup a Maven Indexer[ii](#sdendnote2sym) to enablesource code identification and listing in IDEs – for this reason, source jars usually don’t have build files and information, only providing pure sources.
+There is no uniform, standardised way to list the contents of maven repositories, since consumers are supposed to know what artefacts they need. Instead, Maven repository owners usually setup a [Maven Indexer](https://maven.apache.org/maven-indexer/) to enablesource code identification and listing in IDEs – for this reason, source jars usually don’t have build files and information, only providing pure sources.
 
-Maven Indexer is not a mandatory part of the maven repository stack, but it is the *de facto* standard for maven repositories indexing and querying. All major Maven repositories we have seen so far use it. Most artefacts are located in the main central repository: Maven Central[iii](#sdendnote3sym), hosted and run by Sonatype[iv](#sdendnote4sym). Other well-known repositories are listed on MVN Repository[v](#sdendnote5sym).
+Maven Indexer is not a mandatory part of the maven repository stack, but it is the *de facto* standard for maven repositories indexing and querying. All major Maven repositories we have seen so far use it. Most artefacts are located in the main central repository: [Maven Central](https://search.maven.org/), hosted and run by [Sonatype](https://www.sonatype.com/). Other well-known repositories are listed on [MVN Repository](https://mvnrepository.com/repos).
 
 Maven repositories are mainly used for binary content (e.g. class jars), but the following sources of information are relevant to our goal in the maven repositories/ecosystem:
 
@@ -79,23 +79,13 @@ Maven repositories are mainly used for binary content (e.g. class jars), but the
 
   They come in various archiving formats (jar, zip, tar.bz2, tar.gz) and require a specific loader to attach the artefact metadata.
 
-[i](#sdendnote1anc)Maven dependency resolver: [https://maven.apache.org/resolver/index.html](https://maven.apache.org/resolver/index.html)
-
-[ii](#sdendnote2anc)Maven Indexer: [https://maven.apache.org/maven-indexer/](https://maven.apache.org/maven-indexer/)
-
-[iii](#sdendnote3anc)Maven Central: [https://search.maven.org/](https://search.maven.org/)
-
-[iv](#sdendnote4anc)Sonatype Company: [https://www.sonatype.com/](https://www.sonatype.com/)
-
-[v](#sdendnote5anc)MVN Repository: [https://mvnrepository.com/repos](https://mvnrepository.com/repos)
-
 ## Preliminary research
 
 Listing the full content of a Maven repository is very unusual, and the whole system has not been built for this purpose. Instead, tools and build systems can easily fetch individual artefacts according to their Maven coordinates (groupId, artifactId, version, classifier, extension). Usual listing means (e.g. scapping) are highly discouraged and will trigger bannishment easily. There is no common API defined either.
 
 Once we have the artifactId/group we can easily get the list of versions (e.g. for updates) by reading the [maven-metadata.xml file at the package level](https://repo1.maven.org/maven2/ant/ant/maven-metadata.xml), although this is not always reliable. The various options that were investigated to get the interesting artefacts are:
 
-* **Scrapping** could work but is explicitly forbidden[i](#sdendnote1sym). Pages could easily be parsed through, and it would allow to identify \*all\* artifacts.
+* **Scrapping** could work but is explicitly [forbidden](https://repo1.maven.org/terms.html). Pages could easily be parsed through, and it would allow to identify \*all\* artifacts.
 * Using **Maven indexes** is the "official" way to retrieve information from a maven repository and most repositories provide this feature. It would also enable a smart incremental listing. The Maven Indexer data format however is not we
   ll documented. It relies under the hood on an old version (Lucene54) of a lucene indexes, and the only libraries that can access it are written in java. This implies a dedicated Docker container with a jvm and some specific tools (maven indexer and luke for the lucene index), and thus would bring some complexity to the docker & prod setups.
 * A third path could be to **parse all the pom.xml's** that we find and follow all artifactId's recursively, building a graph of dependencies and parent poms. This is more of a non-complete heuristic, and we would miss leaf nodes (i.e. artifacts that are not used by others), but it could help setup a basic list.
@@ -103,13 +93,11 @@ Once we have the artifactId/group we can easily get the list of versions (e.g. f
 
 The best option in our opinion is to go with the Maven Indexer, for it is the most complete listing available (notably for the biggest repository by far: maven central).
 
-[i](#sdendnote1anc)Maven repository’s Terms of Service: [https://repo1.maven.org/terms.html](https://repo1.maven.org/terms.html)
-
 ## Maven indexes conversion
 
 [Maven-Indexer](https://maven.apache.org/maven-indexer/) is a (thick) wrapper around lucene. It parses the repository and stores documents, fields and terms in an index. One can extract the lucene index from a maven index using the command: `java -jar indexer-cli-5.1.1.jar --unpack nexus-maven-repository-index.gz --destination test --type full`. Note however that 5.1.1 is an old version of maven indexer; newer versions of the maven indexer won't work on the central indexes.
 
-[Clue](https://maven.apache.org/maven-indexer/) is a CLI tool to read lucene indexes, and version 6.2.0 works with our maven indexes. One can use the following command to export the index to text: `java -jar clue-6.2.0-1.0.0.jar maven/central-lucene-index/ export central_export text`.
+[Clue](https://github.com/javasoze/clue) is a CLI tool to read lucene indexes, and version 6.2.0 works with our maven indexes. One can use the following command to export the index to text: `java -jar clue-6.2.0-1.0.0.jar maven/central-lucene-index/ export central_export text`.
 
 The exported text file looks like this:
 
