@@ -66,7 +66,6 @@ setup(
         lister.crates=swh.lister.crates:register
         lister.debian=swh.lister.debian:register
         lister.dlang=swh.lister.dlang:register
-        lister.fedora=swh.lister.fedora:register
         lister.gitea=swh.lister.gitea:register
         lister.github=swh.lister.github:register
         lister.gitiles=swh.lister.gitiles:register
