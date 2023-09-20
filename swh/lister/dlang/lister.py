@@ -27,18 +27,19 @@ class DlangLister(StatelessLister[DlangListerPage]):
     INSTANCE = "dlang"
 
     BASE_URL = "https://code.dlang.org"
-    PACKAGES_DUMP_URL = BASE_URL + "/api/packages/dump"
+    PACKAGES_DUMP_URL_PATTERN = "{url}/api/packages/dump"
     KINDS = {
         "github": "https://github.com",
         "gitlab": "https://gitlab.com",
         "bitbucket": "https://bitbucket.com",
     }
-
     KIND_URL_PATTERN = "{url}/{owner}/{project}"
 
     def __init__(
         self,
         scheduler: SchedulerInterface,
+        url: str = BASE_URL,
+        instance: str = INSTANCE,
         credentials: Optional[CredentialsType] = None,
         max_origins_per_page: Optional[int] = None,
         max_pages: Optional[int] = None,
@@ -47,8 +48,8 @@ class DlangLister(StatelessLister[DlangListerPage]):
         super().__init__(
             scheduler=scheduler,
             credentials=credentials,
-            instance=self.INSTANCE,
-            url=self.PACKAGES_DUMP_URL,
+            instance=instance,
+            url=self.PACKAGES_DUMP_URL_PATTERN.format(url=url),
             max_origins_per_page=max_origins_per_page,
             max_pages=max_pages,
             enable_origins=enable_origins,

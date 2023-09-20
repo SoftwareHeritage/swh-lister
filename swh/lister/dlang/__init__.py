@@ -22,7 +22,7 @@ Origins retrieving strategy
 ---------------------------
 
 To build a list of origins we make a GET request to an `http api endpoint`_ that returns
-a Json array of objects.
+a JSON-formatted array of objects.
 The origin url for each package is constructed with the information of corresponding
 `repository` entry which represents Git based projects hosted on Github, GitLab or
 Bitbucket.
