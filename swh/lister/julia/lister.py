@@ -5,6 +5,8 @@
 
 import logging
 from pathlib import Path
+import shutil
+import tempfile
 from typing import Any, Iterator, List, Optional, Tuple
 
 from dulwich import porcelain
@@ -31,7 +33,7 @@ class JuliaLister(StatelessLister[JuliaListerPage]):
     REPO_URL = (
         "https://github.com/JuliaRegistries/General.git"  # Julia General Registry
     )
-    REPO_PATH = Path("/tmp/General")
+    REPO_PATH = Path(tempfile.mkdtemp("General"))
     REGISTRY_PATH = REPO_PATH / "Registry.toml"
 
     def __init__(
@@ -93,3 +95,9 @@ class JuliaLister(StatelessLister[JuliaListerPage]):
                 url=package_info["repo"],
                 last_update=None,
             )
+
+    def finalize(self) -> None:
+        # Rm tmp directory REPO_PATH
+        if self.REPO_PATH.exists():
+            shutil.rmtree(self.REPO_PATH)
+        assert not self.REPO_PATH.exists()
