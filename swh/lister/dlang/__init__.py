@@ -14,7 +14,7 @@ and C-like syntax.
 The `Dlang`_ lister list origins from its packages manager registry `DUB`_.
 
 The registry provides an `http api endpoint`_ that helps in getting the packages index
-with name, url, versions and dates.
+with name,  url, versions and dates.
 
 As of July 2023 `DUB`_ list 2364 package names.
 
