@@ -37,8 +37,9 @@ class JuliaLister(StatelessLister[JuliaListerPage]):
     def __init__(
         self,
         scheduler: SchedulerInterface,
+        url: str = REPO_URL,
+        instance: str = INSTANCE,
         credentials: Optional[CredentialsType] = None,
-        url: Optional[str] = None,
         max_origins_per_page: Optional[int] = None,
         max_pages: Optional[int] = None,
         enable_origins: bool = True,
@@ -46,8 +47,8 @@ class JuliaLister(StatelessLister[JuliaListerPage]):
         super().__init__(
             scheduler=scheduler,
             credentials=credentials,
-            instance=self.INSTANCE,
-            url=url or self.REPO_URL,
+            instance=instance,
+            url=url,
             max_origins_per_page=max_origins_per_page,
             max_pages=max_pages,
             enable_origins=enable_origins,
