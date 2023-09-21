@@ -64,9 +64,9 @@ class JuliaLister(StatelessLister[JuliaListerPage]):
     def get_pages(self) -> Iterator[JuliaListerPage]:
         """Yield an iterator which returns 'page'
 
-        It uses the api endpoint provided by `https://registry.julia.io/packages`
-        to get a list of package names with an origin url that corresponds to Git
-        repository.
+        To build a list of origins the `Julia General registry` Git
+        repository is cloned to get a `Registry.toml` file, an index file of
+        packages directories.
 
         There is only one page that list all origins urls.
         """
@@ -76,7 +76,11 @@ class JuliaLister(StatelessLister[JuliaListerPage]):
         yield registry["packages"].items()
 
     def get_origins_from_page(self, page: JuliaListerPage) -> Iterator[ListedOrigin]:
-        """Iterate on all pages and yield ListedOrigin instances"""
+        """Iterate on all pages and yield ListedOrigin instances
+
+        Each directory of the Git repository have a `Package.toml` file from
+        where we get the Git repository url for each package.
+        """
         assert self.lister_obj.id is not None
         assert self.REPO_PATH.exists()
 

@@ -24,8 +24,8 @@ packaged releases using the Github release system.
 
 As of July 2023 `Julia General registry`_ list 9714 packages names.
 
-Origins retrieving strategy
----------------------------
+Origins retrieval strategy
+--------------------------
 
 To build a list of origins we clone the `Julia General registry`_ Git repository, then
 read the `Registry.toml`_ file to get the path to packages directories.
