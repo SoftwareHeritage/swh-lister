@@ -130,6 +130,12 @@ class GitwebLister(StatelessLister[Repositories]):
         urls = []
         for row in bs.find_all("tr", {"class": "metadata_url"}):
             url = row.contents[-1].string.strip()
+            for scheme in ("http", "https", "git"):
+                # remove any string prefix before origin
+                pos = url.find(f"{scheme}://")
+                if pos != -1:
+                    url = url[pos:]
+                    break
 
             if "," in url:
                 urls_ = [s.strip() for s in url.split(",") if s]

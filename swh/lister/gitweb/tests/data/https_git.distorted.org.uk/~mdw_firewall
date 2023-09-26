@@ -43,8 +43,8 @@ summary | <a href="https://git.distorted.org.uk/~mdw/firewall/shortlog">shortlog
 <tr id="metadata_desc"><td>description</td><td>Firewall scripts for distorted.org.uk.</td></tr>
 <tr id="metadata_owner"><td>owner</td><td>Mark Wooding</td></tr>
 <tr id="metadata_lchange"><td>last change</td><td><span class="datetime">Thu, 16 Mar 2023 18:09:32 +0000</span> (18:09 +0000)</td></tr>
-<tr class="metadata_url"><td>URL</td><td>https://git.distorted.org.uk/~mdw/firewall</td></tr>
-<tr class="metadata_url"><td></td><td>git://git.distorted.org.uk/~mdw/firewall</td></tr>
+<tr class="metadata_url"><td>URL</td><td>fallback: https://git.distorted.org.uk/~mdw/firewall</td></tr>
+<tr class="metadata_url"><td></td><td>fast: git://git.distorted.org.uk/~mdw/firewall</td></tr>
 </table>
 <div class="header">
 <a class="title" href="https://git.distorted.org.uk/~mdw/firewall/shortlog">shortlog</a>
