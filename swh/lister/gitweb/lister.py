@@ -167,13 +167,9 @@ def try_to_determine_git_repository(repository_url: str) -> Optional[str]:
     """
     result = None
     parsed_url = urlparse(repository_url)
-    params = parse_qs(parsed_url.query).get("p")
-    if params:
-        repo = params[0]
-        if repo and repo.endswith(";a=summary"):
-            repo = repo.rstrip(";a=summary")
-
-        result = f"git://{parsed_url.netloc}/{repo}"
+    repo = parse_qs(parsed_url.query, separator=";").get("p")
+    if repo:
+        result = f"git://{parsed_url.netloc}/{repo[0]}"
     return result
 
 

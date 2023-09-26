@@ -138,6 +138,10 @@ def test_lister_gitweb_get_origin_from_repo_failing(
             "https://git.shadowcat.co.uk?p=File-Slurp.git;a=summary",
             "git://git.shadowcat.co.uk/File-Slurp.git",
         ),
+        (
+            "https://git.example.org?p=baaaa;a=summary",
+            "git://git.example.org/baaaa",
+        ),
         ("https://domain.org/foobar", None),
     ],
 )
