@@ -36,6 +36,7 @@ class GitwebLister(StatelessLister[Repositories]):
         scheduler: SchedulerInterface,
         url: Optional[str] = None,
         instance: Optional[str] = None,
+        base_git_url: Optional[str] = None,
         credentials: Optional[CredentialsType] = None,
         max_origins_per_page: Optional[int] = None,
         max_pages: Optional[int] = None,
@@ -44,11 +45,14 @@ class GitwebLister(StatelessLister[Repositories]):
         """Lister class for Gitweb repositories.
 
         Args:
-            url: (Optional) Root URL of the Gitweb instance, i.e. url of the index of
+            url: Root URL of the Gitweb instance, i.e. url of the index of
                 published git repositories on this instance. Defaults to
                 :file:`https://{instance}` if unset.
             instance: Name of gitweb instance. Defaults to url's network location
                 if unset.
+            base_git_url: Base URL to clone a git project hosted on the Gitweb instance,
+                should only be used if the clone URLs cannot be found when scraping project
+                page or cannot be easily derived from the root URL of the instance
 
         """
         super().__init__(
@@ -63,6 +67,7 @@ class GitwebLister(StatelessLister[Repositories]):
 
         self.session.headers.update({"Accept": "application/html"})
         self.instance_scheme = urlparse(url).scheme
+        self.base_git_url = base_git_url
 
     def _get_and_parse(self, url: str) -> BeautifulSoup:
         """Get the given url and parse the retrieved HTML using BeautifulSoup"""
@@ -144,7 +149,7 @@ class GitwebLister(StatelessLister[Repositories]):
                 urls.append(url)
 
         if not urls:
-            repo = try_to_determine_git_repository(repository_url)
+            repo = try_to_determine_git_repository(repository_url, self.base_git_url)
             if not repo:
                 logger.debug("No git urls found on %s", repository_url)
             return repo
@@ -165,7 +170,9 @@ class GitwebLister(StatelessLister[Repositories]):
         return origin_url
 
 
-def try_to_determine_git_repository(repository_url: str) -> Optional[str]:
+def try_to_determine_git_repository(
+    repository_url: str, base_git_url: Optional[str] = None
+) -> Optional[str]:
     """Some gitweb instances does not advertise the git urls.
 
     This heuristic works on instances demonstrating this behavior.
@@ -175,7 +182,10 @@ def try_to_determine_git_repository(repository_url: str) -> Optional[str]:
     parsed_url = urlparse(repository_url)
     repo = parse_qs(parsed_url.query, separator=";").get("p")
     if repo:
-        result = f"git://{parsed_url.netloc}/{repo[0]}"
+        if base_git_url:
+            result = f"{base_git_url.rstrip('/')}/{repo[0]}"
+        else:
+            result = f"git://{parsed_url.netloc}/{repo[0]}"
     return result
 
 

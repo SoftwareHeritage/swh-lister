@@ -128,25 +128,42 @@ def test_lister_gitweb_get_origin_from_repo_failing(
 
 
 @pytest.mark.parametrize(
-    "url,expected_repo",
+    "url,base_git_url,expected_repo",
     [
         (
             "https://git.shadowcat.co.uk?p=urisagit/gitosis-admin.git",
+            None,
             "git://git.shadowcat.co.uk/urisagit/gitosis-admin.git",
         ),
         (
             "https://git.shadowcat.co.uk?p=File-Slurp.git;a=summary",
+            None,
             "git://git.shadowcat.co.uk/File-Slurp.git",
         ),
         (
             "https://git.example.org?p=baaaa;a=summary",
+            None,
             "git://git.example.org/baaaa",
         ),
-        ("https://domain.org/foobar", None),
+        (
+            "https://domain.org/foobar",
+            None,
+            None,
+        ),
+        (
+            "https://gitweb.example.org?p=project.git;a=summary",
+            "https://example.org",
+            "https://example.org/project.git",
+        ),
+        (
+            "https://example.org?p=project.git;a=summary",
+            "https://example.org/git/",
+            "https://example.org/git/project.git",
+        ),
     ],
 )
-def test_try_to_determine_git_repository(url, expected_repo):
-    assert try_to_determine_git_repository(url) == expected_repo
+def test_try_to_determine_git_repository(url, base_git_url, expected_repo):
+    assert try_to_determine_git_repository(url, base_git_url) == expected_repo
 
 
 def test_parse_last_update():
