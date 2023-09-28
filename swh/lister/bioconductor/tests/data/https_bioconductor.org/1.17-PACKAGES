@@ -1,0 +1,13 @@
+Package: affylmGUI
+Version: 1.4.0
+Depends: limma, tcltk, affy
+Suggests: tkrplot, affyPLM, R2HTML, xtable
+
+Package: affypdnn
+Version: 1.4.0
+Depends: R (>= 1.9.0), affy (>= 1.5), affydata, hgu95av2probe
+
+Package: affyPLM
+Version: 1.6.0
+Depends: R (>= 2.0.0), affy (>= 1.5.0), affydata, Biobase, methods,
+        gcrma

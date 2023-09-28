@@ -1,0 +1,162 @@
+{
+    "annotation": {
+        "Package": "annotation",
+        "Version": "1.24.1",
+        "Depends": [
+            "R (>= 3.3.0)",
+            "VariantAnnotation",
+            "AnnotationHub",
+            "Organism.dplyr",
+            "TxDb.Hsapiens.UCSC.hg19.knownGene",
+            "TxDb.Hsapiens.UCSC.hg38.knownGene",
+            "TxDb.Mmusculus.UCSC.mm10.ensGene",
+            "org.Hs.eg.db",
+            "org.Mm.eg.db",
+            "Homo.sapiens",
+            "BSgenome.Hsapiens.UCSC.hg19",
+            "biomaRt",
+            "BSgenome",
+            "TxDb.Athaliana.BioMart.plantsmart22"
+        ],
+        "Suggests": [
+            "knitr",
+            "rmarkdown",
+            "BiocStyle"
+        ],
+        "License": "Artistic-2.0",
+        "MD5sum": "4cb4db8807acb2e164985636091faa93",
+        "NeedsCompilation": "no",
+        "Title": "Genomic Annotation Resources",
+        "Description": "Annotation resources make up a significant proportion of the Bioconductor project. And there are also a diverse set of online resources available which are accessed using specific packages.  This walkthrough will describe the most popular of these resources and give some high level examples on how to use them.",
+        "biocViews": [
+            "AnnotationWorkflow",
+            "Workflow"
+        ],
+        "Author": "Marc RJ Carlson [aut], Herve Pages [aut], Sonali Arora [aut], Valerie Obenchain [aut], Martin Morgan [aut], Bioconductor Package Maintainer [cre]",
+        "Maintainer": "Bioconductor Package Maintainer <maintainer@bioconductor.org>",
+        "URL": "http://bioconductor.org/help/workflows/annotation/Annotation_Resources/",
+        "VignetteBuilder": "knitr",
+        "git_url": "https://git.bioconductor.org/packages/annotation",
+        "git_branch": "RELEASE_3_17",
+        "git_last_commit": "4568557",
+        "git_last_commit_date": "2023-06-28",
+        "Date/Publication": "2023-06-30",
+        "source.ver": "src/contrib/annotation_1.24.1.tar.gz",
+        "vignettes": [
+            "vignettes/annotation/inst/doc/Annotating_Genomic_Ranges.html",
+            "vignettes/annotation/inst/doc/Annotation_Resources.html"
+        ],
+        "vignetteTitles": [
+            "Annotating Genomic Ranges",
+            "Genomic Annotation Resources"
+        ],
+        "hasREADME": false,
+        "hasNEWS": false,
+        "hasINSTALL": false,
+        "hasLICENSE": false,
+        "Rfiles": [
+            "vignettes/annotation/inst/doc/Annotating_Genomic_Ranges.R",
+            "vignettes/annotation/inst/doc/Annotation_Resources.R"
+        ],
+        "dependencyCount": "144",
+        "Rank": 8
+    },
+    "arrays": {
+        "Package": "arrays",
+        "Version": "1.26.0",
+        "Depends": [
+            "R (>= 3.0.0)"
+        ],
+        "Suggests": [
+            "affy",
+            "limma",
+            "hgfocuscdf",
+            "knitr",
+            "rmarkdown",
+            "BiocStyle"
+        ],
+        "License": "Artistic-2.0",
+        "MD5sum": "009ef917ebc047246b8c62c48e02a237",
+        "NeedsCompilation": "no",
+        "Title": "Using Bioconductor for Microarray Analysis",
+        "Description": "Using Bioconductor for Microarray Analysis workflow",
+        "biocViews": [
+            "BasicWorkflow",
+            "Workflow"
+        ],
+        "Author": "Bioconductor Package Maintainer [aut, cre]",
+        "Maintainer": "Bioconductor Package Maintainer <maintainer@bioconductor.org>",
+        "VignetteBuilder": "knitr",
+        "git_url": "https://git.bioconductor.org/packages/arrays",
+        "git_branch": "RELEASE_3_17",
+        "git_last_commit": "9981a8c",
+        "git_last_commit_date": "2023-04-25",
+        "Date/Publication": "2023-04-28",
+        "source.ver": "src/contrib/arrays_1.26.0.tar.gz",
+        "vignettes": [
+            "vignettes/arrays/inst/doc/arrays.html"
+        ],
+        "vignetteTitles": [
+            "Using Bioconductor for Microarray Analysis"
+        ],
+        "hasREADME": false,
+        "hasNEWS": false,
+        "hasINSTALL": false,
+        "hasLICENSE": false,
+        "Rfiles": [
+            "vignettes/arrays/inst/doc/arrays.R"
+        ],
+        "dependencyCount": "0",
+        "Rank": 13
+    },
+    "maEndToEnd": {
+        "Package": "maEndToEnd",
+        "Version": "2.20.0",
+        "Depends": [
+            "R (>= 3.5.0)",
+            "Biobase",
+            "oligoClasses",
+            "ArrayExpress",
+            "pd.hugene.1.0.st.v1",
+            "hugene10sttranscriptcluster.db",
+            "oligo",
+            "arrayQualityMetrics",
+            "limma",
+            "topGO",
+            "ReactomePA",
+            "clusterProfiler",
+            "gplots",
+            "ggplot2",
+            "geneplotter",
+            "pheatmap",
+            "RColorBrewer",
+            "dplyr",
+            "tidyr",
+            "stringr",
+            "matrixStats",
+            "genefilter",
+            "openxlsx",
+            "Rgraphviz",
+            "enrichplot"
+        ],
+        "Suggests": [
+            "BiocStyle",
+            "knitr",
+            "devtools",
+            "rmarkdown"
+        ],
+        "License": "MIT + file LICENSE",
+        "NeedsCompilation": "no",
+        "Title": "An end to end workflow for differential gene expression using Affymetrix microarrays",
+        "Description": "In this article, we walk through an end-to-end Affymetrix microarray differential expression workflow using Bioconductor packages. This workflow is directly applicable to current \"Gene\" type arrays, e.g. the HuGene or MoGene arrays, but can easily be adapted to similar platforms. The data analyzed here is a typical clinical microarray data set that compares inflamed and non-inflamed colon tissue in two disease subtypes. For each disease, the differential gene expression between inflamed- and non-inflamed colon tissue was analyzed. We will start from the raw data CEL files, show how to import them into a Bioconductor ExpressionSet, perform quality control and normalization and finally differential gene expression (DE) analysis, followed by some enrichment analysis.",
+        "biocViews": [
+            "GeneExpressionWorkflow",
+            "Workflow"
+        ],
+        "Author": "Bernd Klaus [aut], Stefanie Reisenauer [aut, cre]",
+        "Maintainer": "Stefanie Reisenauer <steffi.reisenauer@tum.de>",
+        "URL": "https://www.bioconductor.org/help/workflows/",
+        "VignetteBuilder": "knitr",
+        "Rank": 10
+    }
+}

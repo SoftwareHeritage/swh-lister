@@ -93,6 +93,7 @@ setup(
         lister.stagit=swh.lister.stagit:register
         lister.tuleap=swh.lister.tuleap:register
         lister.maven=swh.lister.maven:register
+        lister.bioconductor=swh.lister.bioconductor:register
     """,
     classifiers=[
         "Programming Language :: Python :: 3",

@@ -1,0 +1,12 @@
+Package: ABarray
+Version: 1.8.0
+Depends: Biobase, multtest, tcltk
+Suggests: limma, LPE
+
+Package: AnnotationDbi
+Version: 1.2.2
+Depends: R (>= 2.7.0), methods, utils, Biobase (>= 1.17.0), DBI (>=
+        0.2-4), RSQLite (>= 0.6-4)
+Imports: methods, utils, Biobase, DBI, RSQLite
+Suggests: hgu95av2.db, hgu95av2, GO.db, GO, human.db0, mouse.db0,
+        rat.db0, fly.db0, yeast.db0, arabidopsis.db0

@@ -28,6 +28,7 @@ following Python modules:
 - `swh.lister.pypi`
 - `swh.lister.rpm`
 - `swh.lister.tuleap`
+- `swh.lister.bioconductor`
 
 Dependencies
 ------------

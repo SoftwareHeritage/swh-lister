@@ -1,0 +1,553 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" dir="ltr" lang="en-US"
+prefix="og: http://ogp.me/ns#">
+  <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Language" content="en-us" />
+  <meta name="robots" content="all" />
+
+
+
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-WJMEEH1J58"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-WJMEEH1J58');
+</script>
+
+
+
+
+    <script type="text/javascript" src="/js/jquery.js"></script>
+
+
+  <script src="/js/jquery.tools.min.js"></script>
+
+
+
+  <title>Bioconductor - Release Announcements</title>
+  <link rel="stylesheet" type="text/css" href="/style/bioconductor.css" media="screen" />
+  <link rel="SHORTCUT ICON" type="image/x-icon" href="/favicon.ico" />
+  <link rel="ICON" type="image/x-icon" href="/favicon.ico" />
+  <script type="text/javascript" src="/js/bioconductor.js"></script>
+
+  <script type="text/javascript" src="/js/jquery.corner.js"></script>
+  <script type="text/javascript" src="/js/jquery.timeago.js"></script>
+  <script type="text/javascript" src="/js/bioc-style.js"></script>
+  <script type="text/javascript" src="/js/versions.js"></script>
+
+</head>
+
+  <body>
+    <a name="top"></a>
+
+<!-- a few hooks for screen readers -->
+<a href="#site-navigation" title="Jump to site nav"></a>
+
+<a href="#section-navigation" title="Jump to section nav"></a>
+
+<a href="#site-map" title="Jump to site map"></a>
+
+
+    <div id="SiteContainer" class="SiteContainer">
+
+      <div id="PageContent" class="PageContent WithRightRail">
+
+
+
+
+	  <div id="PageBreadcrumbs" class="PageBreadcrumbs">
+  <ul>
+
+
+
+
+
+        <li><a href="/">Home</a></li>
+
+
+
+
+
+        <li><a href="/about/">About</a></li>
+
+
+
+
+        <li>Release Announcements</li>
+
+
+  </ul>
+</div>
+
+
+
+
+
+
+
+	<h1 id="bioconductor-releases">Bioconductor releases</h1>
+
+<p>Each <em>Bioconductor</em> release is designed to work with a specific
+version of <em>R</em>. The following table summarizes the relationship, and
+links to packages designed to work with the corresponding <em>R</em> /
+<em>Bioconductor</em> version.</p>
+
+<p><em>Bioconductor</em> versions are linked to their release announcement (when
+available). Release announcements summarize new package additions,
+updates to existing packages, and package removals.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: left">Release</th>
+      <th style="text-align: left">Date</th>
+      <th style="text-align: right">Software packages</th>
+      <th style="text-align: left">R</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: left"><a href="/news/bioc_3_17_release">3.17</a></td>
+      <td style="text-align: left">April 26, 2023</td>
+      <td style="text-align: right"><a href="/packages/3.17/">2230</a></td>
+      <td style="text-align: left">4.3</td>
+    </tr>
+    <tr>
+      <td style="text-align: left"><a href="/news/bioc_3_16_release">3.16</a></td>
+      <td style="text-align: left">November 2, 2022</td>
+      <td style="text-align: right"><a href="/packages/3.16/">2183</a></td>
+      <td style="text-align: left">4.2</td>
+    </tr>
+    <tr>
+      <td style="text-align: left"><a href="/news/bioc_3_15_release">3.15</a></td>
+      <td style="text-align: left">April 27, 2022</td>
+      <td style="text-align: right"><a href="/packages/3.15/">2140</a></td>
+      <td style="text-align: left">4.2</td>
+    </tr>
+    <tr>
+      <td style="text-align: left"><a href="/news/bioc_3_14_release">3.14</a></td>
+      <td style="text-align: left">October 27, 2021</td>
+      <td style="text-align: right"><a href="/packages/3.14/">2083</a></td>
+      <td style="text-align: left">4.1</td>
+    </tr>
+    <tr>
+      <td style="text-align: left"><a href="/news/bioc_3_13_release">3.13</a></td>
+      <td style="text-align: left">May 20, 2021</td>
+      <td style="text-align: right"><a href="/packages/3.13/">2042</a></td>
+      <td style="text-align: left">4.1</td>
+    </tr>
+    <tr>
+      <td style="text-align: left"><a href="/news/bioc_3_12_release">3.12</a></td>
+      <td style="text-align: left">October 28, 2020</td>
+      <td style="text-align: right"><a href="/packages/3.12/">1974</a></td>
+      <td style="text-align: left">4.0</td>
+    </tr>
+    <tr>
+      <td style="text-align: left"><a href="/news/bioc_3_11_release">3.11</a></td>
+      <td style="text-align: left">April 28, 2020</td>
+      <td style="text-align: right"><a href="/packages/3.11/">1903</a></td>
+      <td style="text-align: left">4.0</td>
+    </tr>
+    <tr>
+      <td style="text-align: left"><a href="/news/bioc_3_10_release">3.10</a></td>
+      <td style="text-align: left">October 30, 2019</td>
+      <td style="text-align: right"><a href="/packages/3.10/">1823</a></td>
+      <td style="text-align: left">3.6</td>
+    </tr>
+    <tr>
+      <td style="text-align: left"><a href="/news/bioc_3_9_release">3.9</a></td>
+      <td style="text-align: left">May 3, 2019</td>
+      <td style="text-align: right"><a href="/packages/3.9/">1741</a></td>
+      <td style="text-align: left">3.6</td>
+    </tr>
+    <tr>
+      <td style="text-align: left"><a href="/news/bioc_3_8_release">3.8</a></td>
+      <td style="text-align: left">October 31, 2018</td>
+      <td style="text-align: right"><a href="/packages/3.8/">1649</a></td>
+      <td style="text-align: left">3.5</td>
+    </tr>
+    <tr>
+      <td style="text-align: left"><a href="/news/bioc_3_7_release">3.7</a></td>
+      <td style="text-align: left">May 1, 2018</td>
+      <td style="text-align: right"><a href="/packages/3.7/">1560</a></td>
+      <td style="text-align: left">3.5</td>
+    </tr>
+    <tr>
+      <td style="text-align: left"><a href="/news/bioc_3_6_release">3.6</a></td>
+      <td style="text-align: left">October 31, 2017</td>
+      <td style="text-align: right"><a href="/packages/3.6/">1473</a></td>
+      <td style="text-align: left">3.4</td>
+    </tr>
+    <tr>
+      <td style="text-align: left"><a href="/news/bioc_3_5_release">3.5</a></td>
+      <td style="text-align: left">April 25, 2017</td>
+      <td style="text-align: right"><a href="/packages/3.5/">1383</a></td>
+      <td style="text-align: left">3.4</td>
+    </tr>
+    <tr>
+      <td style="text-align: left"><a href="/news/bioc_3_4_release">3.4</a></td>
+      <td style="text-align: left">October 18, 2016</td>
+      <td style="text-align: right"><a href="/packages/3.4/">1296</a></td>
+      <td style="text-align: left">3.3</td>
+    </tr>
+    <tr>
+      <td style="text-align: left"><a href="/news/bioc_3_3_release">3.3</a></td>
+      <td style="text-align: left">May 4, 2016</td>
+      <td style="text-align: right"><a href="/packages/3.3/">1211</a></td>
+      <td style="text-align: left">3.3</td>
+    </tr>
+    <tr>
+      <td style="text-align: left"><a href="/news/bioc_3_2_release">3.2</a></td>
+      <td style="text-align: left">October 14, 2015</td>
+      <td style="text-align: right"><a href="/packages/3.2/">1104</a></td>
+      <td style="text-align: left">3.2</td>
+    </tr>
+    <tr>
+      <td style="text-align: left"><a href="/news/bioc_3_1_release">3.1</a></td>
+      <td style="text-align: left">April 17, 2015</td>
+      <td style="text-align: right"><a href="/packages/3.1/">1024</a></td>
+      <td style="text-align: left">3.2</td>
+    </tr>
+    <tr>
+      <td style="text-align: left"><a href="/news/bioc_3_0_release">3.0</a></td>
+      <td style="text-align: left">October 14, 2014</td>
+      <td style="text-align: right"><a href="/packages/3.0/">934</a></td>
+      <td style="text-align: left">3.1</td>
+    </tr>
+    <tr>
+      <td style="text-align: left"><a href="/news/bioc_2_14_release">2.14</a></td>
+      <td style="text-align: left">April 14, 2014</td>
+      <td style="text-align: right"><a href="/packages/2.14/">824</a></td>
+      <td style="text-align: left">3.1</td>
+    </tr>
+    <tr>
+      <td style="text-align: left"><a href="/news/bioc_2_13_release">2.13</a></td>
+      <td style="text-align: left">October 15, 2013</td>
+      <td style="text-align: right"><a href="/packages/2.13/">749</a></td>
+      <td style="text-align: left">3.0</td>
+    </tr>
+    <tr>
+      <td style="text-align: left"><a href="/news/bioc_2_12_release">2.12</a></td>
+      <td style="text-align: left">April 4, 2013</td>
+      <td style="text-align: right"><a href="/packages/2.12/">671</a></td>
+      <td style="text-align: left">3.0</td>
+    </tr>
+    <tr>
+      <td style="text-align: left"><a href="/news/bioc_2_11_release">2.11</a></td>
+      <td style="text-align: left">October 3, 2012</td>
+      <td style="text-align: right"><a href="/packages/2.11/">610</a></td>
+      <td style="text-align: left">2.15</td>
+    </tr>
+    <tr>
+      <td style="text-align: left"><a href="/news/bioc_2_10_release">2.10</a></td>
+      <td style="text-align: left">April 2, 2012</td>
+      <td style="text-align: right"><a href="/packages/2.10/">554</a></td>
+      <td style="text-align: left">2.15</td>
+    </tr>
+    <tr>
+      <td style="text-align: left"><a href="/news/bioc_2_9_release">2.9</a></td>
+      <td style="text-align: left">November 1, 2011</td>
+      <td style="text-align: right"><a href="/packages/2.9/">517</a></td>
+      <td style="text-align: left">2.14</td>
+    </tr>
+    <tr>
+      <td style="text-align: left"><a href="/news/bioc_2_8_release">2.8</a></td>
+      <td style="text-align: left">April 14, 2011</td>
+      <td style="text-align: right"><a href="/packages/2.8/">466</a></td>
+      <td style="text-align: left">2.13</td>
+    </tr>
+    <tr>
+      <td style="text-align: left"><a href="/news/bioc_2_7_release">2.7</a></td>
+      <td style="text-align: left">October 18, 2010</td>
+      <td style="text-align: right"><a href="/packages/2.7/">418</a></td>
+      <td style="text-align: left">2.12</td>
+    </tr>
+    <tr>
+      <td style="text-align: left"><a href="/news/bioc_2_6_release">2.6</a></td>
+      <td style="text-align: left">April 23, 2010</td>
+      <td style="text-align: right"><a href="/packages/2.6/">389</a></td>
+      <td style="text-align: left">2.11</td>
+    </tr>
+    <tr>
+      <td style="text-align: left"><a href="/news/bioc_2_5_release">2.5</a></td>
+      <td style="text-align: left">October 28, 2009</td>
+      <td style="text-align: right"><a href="/packages/2.5/">352</a></td>
+      <td style="text-align: left">2.10</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">2.4</td>
+      <td style="text-align: left">April 21, 2009</td>
+      <td style="text-align: right"><a href="/packages/2.4/BiocViews.html">320</a></td>
+      <td style="text-align: left">2.9</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">2.3</td>
+      <td style="text-align: left">October 22, 2008</td>
+      <td style="text-align: right"><a href="/packages/2.3/BiocViews.html">294</a></td>
+      <td style="text-align: left">2.8</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">2.2</td>
+      <td style="text-align: left">May 1, 2008</td>
+      <td style="text-align: right"><a href="/packages/2.2/BiocViews.html">260</a></td>
+      <td style="text-align: left">2.7</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">2.1</td>
+      <td style="text-align: left">October 8, 2007</td>
+      <td style="text-align: right"><a href="/packages/2.1/BiocViews.html">233</a></td>
+      <td style="text-align: left">2.6</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">2.0</td>
+      <td style="text-align: left">April 26, 2007</td>
+      <td style="text-align: right"><a href="/packages/2.0/BiocViews.html">214</a></td>
+      <td style="text-align: left">2.5</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">1.9</td>
+      <td style="text-align: left">October 4, 2006</td>
+      <td style="text-align: right"><a href="/packages/1.9/BiocViews.html">188</a></td>
+      <td style="text-align: left">2.4</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">1.8</td>
+      <td style="text-align: left">April 27, 2006</td>
+      <td style="text-align: right"><a href="/packages/1.8/BiocViews.html">172</a></td>
+      <td style="text-align: left">2.3</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">1.7</td>
+      <td style="text-align: left">October 14, 2005</td>
+      <td style="text-align: right"><a href="/packages/bioc/1.7/src/contrib/html/">141</a></td>
+      <td style="text-align: left">2.2</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">1.6</td>
+      <td style="text-align: left">May 18, 2005</td>
+      <td style="text-align: right"><a href="/packages/bioc/1.6/src/contrib/html/">123</a></td>
+      <td style="text-align: left">2.1</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">1.5</td>
+      <td style="text-align: left">October 25, 2004</td>
+      <td style="text-align: right"><a href="/packages/bioc/1.5/src/contrib/html/">100</a></td>
+      <td style="text-align: left">2.0</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">1.4</td>
+      <td style="text-align: left">May 17, 2004</td>
+      <td style="text-align: right">81</td>
+      <td style="text-align: left">1.9</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">1.3</td>
+      <td style="text-align: left">October 30, 2003</td>
+      <td style="text-align: right">49</td>
+      <td style="text-align: left">1.8</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">1.2</td>
+      <td style="text-align: left">May 29, 2003</td>
+      <td style="text-align: right">30</td>
+      <td style="text-align: left">1.7</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">1.1</td>
+      <td style="text-align: left">November 19, 2002</td>
+      <td style="text-align: right">20</td>
+      <td style="text-align: left">1.6</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">1.0</td>
+      <td style="text-align: left">May 1, 2002</td>
+      <td style="text-align: right">15</td>
+      <td style="text-align: left">1.5</td>
+    </tr>
+  </tbody>
+</table>
+
+
+
+	  </div>
+	  <div id="RightRail" class="RightRail">
+	  <a name="section-navigation"></a> <!-- accessibility anchor -->
+
+
+    <ul class="section_nav">
+      <li><a href="/about/community-advisory-board/">Advisory Board -- Community</a></li>
+    </ul>
+
+    <ul class="section_nav">
+      <li><a href="/about/scientific-advisory-board/">Advisory Board -- Scientific</a></li>
+    </ul>
+
+    <ul class="section_nav">
+      <li><a href="/about/technical-advisory-board/">Advisory Board -- Technical</a></li>
+    </ul>
+
+    <ul class="section_nav">
+      <li><a href="/about/annual-reports/">Annual Reports</a></li>
+    </ul>
+
+    <ul class="section_nav">
+      <li><a href="/about/awards/">BiocAwards</a></li>
+    </ul>
+
+    <ul class="section_nav">
+      <li><a href="/about/code-of-conduct/">Code of Conduct Policy</a></li>
+    </ul>
+
+    <ul class="section_nav">
+      <li><a href="/about/core-team/">Core Team</a></li>
+    </ul>
+
+    <ul class="section_nav">
+      <li><a href="/about/european-bioconductor-society/">European Bioconductor Society</a></li>
+    </ul>
+
+    <ul class="section_nav">
+      <li><a href="/about/logo/">Logos</a></li>
+    </ul>
+
+    <ul class="section_nav">
+      <li><a href="/about/mirrors/">Mirrors</a></li>
+    </ul>
+
+    <ul class="section_nav">
+      <li><a href="/about/package-reviewers/">Package Reviewers</a></li>
+    </ul>
+
+    <ul class="section_nav">
+      <li><a href="/about/related-projects/">Related Projects</a></li>
+    </ul>
+
+    <ul class="section_nav">
+      <li><a href="/about/release-announcements/">Release Announcements</a></li>
+    </ul>
+
+    <ul class="section_nav">
+      <li><a href="/about/removed-packages/">Removed Packages</a></li>
+    </ul>
+
+
+
+
+
+
+      </div>
+
+      <div id="SiteGlobalFooter" class="SiteGlobalFooter">
+
+  <span class="global_footer_logo_bc noprint"><img src="/images/logo_global_footer_bioconductor.gif" height="51" width="154" alt=""/></span>
+
+  <div class="attribution_copyright">
+    <p>Contact us: <a href="https://support.bioconductor.org/">support.bioconductor.org</a></p>
+    <p>Copyright &copy; 2003 - 2023, Bioconductor</p>
+  </div>
+
+  <a name="site-map"></a> <!-- accessibility anchor -->
+  <ul class="footer_nav_list noprint">
+    <li class="footer_nav_list_element footer_nav_list_element_0">
+      <b><a href="/index.html">Home</a></b>
+    </li>
+    <li class="footer_nav_list_element footer_nav_list_element_1">
+      <ul>
+        <li><b><a href="/install/index.html">Install</a></b></li>
+        <li><a href="/install/index.html#install-R">Install R</a></li>
+        <li><a href="/install/index.html#find-bioconductor-packages">Find Bioconductor Packages</a></li>
+        <li><a href="/install/index.html#install-bioconductor-packages">Install Bioconductor Packages</a></li>
+        <li><a href="/install/index.html#update-bioconductor-packages">Update Bioconductor Packages</a></li>
+      </ul>
+    </li>
+    <li class="footer_nav_list_element footer_nav_list_element_2">
+      <ul>
+        <li><b><a href="/help/index.html">Help</a></b></li>
+        <li><a href="/packages/release/workflows/">Workflows</a></li>
+        <li><a href="/help/package-vignettes/">Package Vignettes</a></li>
+        <li><a href="/help/faq/">FAQ</a></li>
+        <li><a href="/help/support/">Support</a></li>
+        <li><a href="http://cran.r-project.org/">Using R</a></li>
+        <li><a href="/help/course-materials/">Courses</a></li>
+        <li><a href="/help/publications/">Publications</a></li>
+        <li><a href="/help/docker/">Docker Images</a></li>
+        <li><a href="https://anvil.bioconductor.org/">Bioc in AnVIL</a></li>
+        <li><a href="/help/community/">Community Resources</a></li>
+
+      </ul>
+    </li>
+    <li class="footer_nav_list_element footer_nav_list_element_3">
+      <ul>
+        <li><b><a href="/developers/index.html">Developers</a></b></li>
+		<li><a href="https://contributions.bioconductor.org/develop-overview.html">Package Guidelines</a></li>
+		<li><a href="https://contributions.bioconductor.org/submission-overview.html">Package Submission</a></li>
+		<li><a href="/developers/release-schedule/">Release Schedule</a></li>
+		<li><a href="https://contributions.bioconductor.org/git-version-control.html">Source Control</a></li>
+      </ul>
+    </li>
+    <li class="footer_nav_list_element footer_nav_list_element_4">
+      <ul>
+        <li><b><a href="/about/index.html">About</a></b></li>
+        <li><a href="/about/annual-reports/">Annual Reports</a></li>
+        <li><a href="/about/core-team/">Core Team</a></li>
+        <li><a href="/about/mirrors/">Mirrors</a></li>
+        <li><a href="/about/related-projects/">Related Projects</a></li>
+        <li><a href="/about/code-of-conduct/">Code of Conduct</a></li>
+     </ul>
+    </li>
+  </ul>
+  <br style="clear:both"/>
+  &nbsp;
+
+</div>
+
+
+<div id="SiteMasthead" class="SiteMasthead">
+
+  <a name="site-navigation"></a> <!-- accessibility anchor -->
+
+  <span class="logo_vanity_bar noprint"></span>
+
+  <a href="/">
+	<img src="/images/logo_bioconductor.gif" border="0" class="masthead_logo" height="78" width="260" alt="Bioconductor - open source software for bioinformatics"/>
+  </a>
+
+  <div id="SiteMastheadRight" class="SiteMastheadRight">
+    <div id="SiteMastheadRightBackground" class="SiteMastheadRightBackground">
+
+      <a name="site-search"></a> <!-- accessibility anchor -->
+      <form class="site_search" id="search_form" method="GET"
+            action="/help/search/index.html">
+        Search: <input id="q" name="q" />
+      </form>
+
+      <ul class="masthead_nav noprint">
+        <li class="masthead_nav_element" id="masthead_nav_element_1">
+          <a href="/">Home</a>
+        </li>
+        <li class="masthead_nav_element" id="masthead_nav_element_2">
+          <a href="/install/">Install</a>
+        </li>
+        <li class="masthead_nav_element" id="masthead_nav_element_3">
+          <a href="/help/">Help</a>
+        </li>
+        <li class="masthead_nav_element" id="masthead_nav_element_4">
+          <a href="/developers/">Developers</a>
+        </li>
+        <li class="masthead_nav_element" id="masthead_nav_element_5">
+          <a href="/about/">About</a>
+        </li>
+      </ul>
+
+    </div>
+  </div>
+
+</div>
+
+    </div>
+  </body>
+</html>
