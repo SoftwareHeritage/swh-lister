@@ -12,7 +12,7 @@ cd tmp_dir/General/
 
 touch Registry.toml
 
-echo -e '''name = "General"
+echo -e 'name = "General"
 uuid = "23338594-aafe-5451-b93e-139f81909106"
 repo = "https://github.com/JuliaRegistries/General.git"
 
@@ -24,7 +24,7 @@ testing. We nevertheless encourage documentation, testing and
 some amount of consideration when choosing package names.
 """
 
-[packages]''' > Registry.toml
+[packages]' > Registry.toml
 
 # Init as a git repository
 git init
@@ -36,17 +36,17 @@ mkdir -p F/Fable
 touch F/Fable/Package.toml
 touch F/Fable/Versions.toml
 
-echo -e '''name = "Fable"
+echo -e 'name = "Fable"
 uuid = "a3ea4736-0a3b-4c29-ac8a-20364318a635"
 repo = "https://github.com/leios/Fable.jl.git"
-''' > F/Fable/Package.toml
+' > F/Fable/Package.toml
 
-echo -e '''["0.0.1"]
+echo -e '["0.0.1"]
 git-tree-sha1 = "d98ef9a5309f0ec8caaf34bf4cefaf1f1ca525e8"
 
 ["0.0.2"]
 git-tree-sha1 = "65301af3ab06b04cf8a52cd43b06222bab5249c2"
-''' > F/Fable/Versions.toml
+' > F/Fable/Versions.toml
 
 echo 'a3ea4736-0a3b-4c29-ac8a-20364318a635 = { name = "Fable", path = "F/Fable" }' >> Registry.toml
 
@@ -58,12 +58,12 @@ mkdir -p O/Oscar
 touch O/Oscar/Package.toml
 touch O/Oscar/Versions.toml
 
-echo -e '''name = "Oscar"
+echo -e 'name = "Oscar"
 uuid = "f1435218-dba5-11e9-1e4d-f1a5fab5fc13"
 repo = "https://github.com/oscar-system/Oscar.jl.git"
-''' > O/Oscar/Package.toml
+' > O/Oscar/Package.toml
 
-echo -e '''["0.2.0"]
+echo -e '["0.2.0"]
 git-tree-sha1 = "cda489ed50fbd625d245655ce6e5858c3c21ce12"
 
 ["0.3.0"]
@@ -128,7 +128,7 @@ git-tree-sha1 = "7618e3ba2e9b2ea43ad5d2c809e726a8a9e6e7b1"
 
 ["0.12.1"]
 git-tree-sha1 = "59619a31c56c9e61b5dabdbd339e30c227c5d13d"
-''' > O/Oscar/Versions.toml
+' > O/Oscar/Versions.toml
 
 echo 'f1435218-dba5-11e9-1e4d-f1a5fab5fc13 = { name = "Oscar", path = "O/Oscar" }' >> Registry.toml
 
