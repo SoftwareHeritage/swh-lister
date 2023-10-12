@@ -14,6 +14,24 @@ expected_origins = [
 ]
 
 
+def test_julia_get_registry_repository(datadir, tmp_path, swh_scheduler):
+    archive_path = Path(datadir, "fake-julia-registry-repository.tar.gz")
+    repo_url = prepare_repository_from_archive(archive_path, "General", tmp_path)
+
+    lister = JuliaLister(url=repo_url, scheduler=swh_scheduler)
+    assert not lister.REPO_PATH.exists()
+
+    lister.get_registry_repository()
+    assert lister.REPO_PATH.exists()
+    # ensure get_registry_repository is idempotent
+    lister.get_registry_repository()
+    assert lister.REPO_PATH.exists()
+
+    # ensure the repository is deleted once the lister has run
+    lister.run()
+    assert not lister.REPO_PATH.exists()
+
+
 def test_julia_lister(datadir, tmp_path, swh_scheduler):
     archive_path = Path(datadir, "fake-julia-registry-repository.tar.gz")
     repo_url = prepare_repository_from_archive(archive_path, "General", tmp_path)

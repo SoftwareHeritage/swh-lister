@@ -33,7 +33,7 @@ class JuliaLister(StatelessLister[JuliaListerPage]):
     REPO_URL = (
         "https://github.com/JuliaRegistries/General.git"  # Julia General Registry
     )
-    REPO_PATH = Path(tempfile.mkdtemp("General"))
+    REPO_PATH = Path(tempfile.mkdtemp(), "General")
     REGISTRY_PATH = REPO_PATH / "Registry.toml"
 
     def __init__(
@@ -58,10 +58,10 @@ class JuliaLister(StatelessLister[JuliaListerPage]):
 
     def get_registry_repository(self) -> None:
         """Get Julia General Registry Git repository up to date on disk"""
-        if self.REPO_PATH.exists():
-            porcelain.pull(self.REPO_PATH, remote_location=self.url)
-        else:
+        try:
             porcelain.clone(source=self.url, target=self.REPO_PATH)
+        except FileExistsError:
+            porcelain.pull(self.REPO_PATH, remote_location=self.url)
 
     def get_pages(self) -> Iterator[JuliaListerPage]:
         """Yield an iterator which returns 'page'
