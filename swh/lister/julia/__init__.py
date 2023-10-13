@@ -28,9 +28,9 @@ Origins retrieval strategy
 --------------------------
 
 To build a list of origins we clone the `Julia General registry`_ Git repository, then
-read the `Registry.toml`_ file to get the path to packages directories.
-Each directory have a `Package.toml` file from where we get the Git repository url for
-a package.
+walk through commits with the help of `Dulwich`_ to detect commit related to a new package
+or a new version of a package. For each of those commits we get the path to `Package.toml`
+file from where we get the Git repository url for a package.
 
 Page listing
 ------------
@@ -40,7 +40,12 @@ There is only one page listing all origins url.
 Origins from page
 -----------------
 
-The lister is stateless and yields all origins url from one page.
+The lister yields all origins url from one page.
+
+Each time the lister is executed, the HEAD commit id of `Julia General registry`_
+is stored as ``state.last_seen_commit`` and used on next run to retrieve new origins
+since the last commit.
+
 Each url corresponds to the Git url of the package repository.
 
 Running tests
@@ -71,6 +76,7 @@ You can follow lister execution by displaying logs of swh-lister service::
 .. _JuliaHub: https://juliahub.com/
 .. _Julia Packages: https://julialang.org/packages/
 .. _Registry.toml: https://github.com/JuliaRegistries/General/blob/master/Registry.toml
+.. _Dulwich: https://www.dulwich.io/
 """  # noqa: B950
 
 

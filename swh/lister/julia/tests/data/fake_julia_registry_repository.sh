@@ -27,6 +27,9 @@ some amount of consideration when choosing package names.
 [packages]' > Registry.toml
 
 # Init as a git repository
+# Force author and commit date to be the same
+export GIT_AUTHOR_DATE='2001-01-01T17:18:19+00:00'
+export GIT_COMMITTER_DATE=$GIT_AUTHOR_DATE
 git init
 git add .
 git commit -m "Init fake Julia registry repository for tests purpose"
@@ -50,6 +53,8 @@ git-tree-sha1 = "65301af3ab06b04cf8a52cd43b06222bab5249c2"
 
 echo 'a3ea4736-0a3b-4c29-ac8a-20364318a635 = { name = "Fable", path = "F/Fable" }' >> Registry.toml
 
+export GIT_AUTHOR_DATE='2001-01-02T17:18:19+00:00'
+export GIT_COMMITTER_DATE=$GIT_AUTHOR_DATE
 git add .
 git commit -m "New package: Fable v0.0.2"
 
@@ -132,16 +137,60 @@ git-tree-sha1 = "59619a31c56c9e61b5dabdbd339e30c227c5d13d"
 
 echo 'f1435218-dba5-11e9-1e4d-f1a5fab5fc13 = { name = "Oscar", path = "O/Oscar" }' >> Registry.toml
 
+export GIT_AUTHOR_DATE='2001-01-03T17:18:19+00:00'
+export GIT_COMMITTER_DATE=$GIT_AUTHOR_DATE
 git add .
 git commit -m "New package: Oscar v0.12.1"
 
 # Save some space
 rm .git/hooks/*.sample
 
-# Archive
+# First Archive
 cd ../
-tar -czf fake-julia-registry-repository.tar.gz General
-mv fake-julia-registry-repository.tar.gz ../
+tar -czf fake-julia-registry-repository_0.tar.gz General
+mv fake-julia-registry-repository_0.tar.gz ../
+
+# Add some more commits and build a second archive for incremental tests purpose
+cd General
+echo '
+
+["0.13.0"]
+git-tree-sha1 = "c090495f818a063ed23d2d911fe74cc4358b5351"
+' >> O/Oscar/Versions.toml
+
+# New version, replace previous uuid with a new one
+sed -i -e 's/f1435218-dba5-11e9-1e4d-f1a5fab5fc13/a3ea4736-0a3b-4c29-ac8a-20364318a635/g' Registry.toml
+
+export GIT_AUTHOR_DATE='2001-01-04T17:18:19+00:00'
+export GIT_COMMITTER_DATE=$GIT_AUTHOR_DATE
+git add .
+git commit -m "New version: Oscar v0.13.0"
+
+mkdir -p V/VulkanSpec
+
+touch V/VulkanSpec/Package.toml
+touch V/VulkanSpec/Versions.toml
+
+echo 'name = "VulkanSpec"
+uuid = "99a7788f-8f0f-454f-8f6c-c6cf389551ae"
+repo = "https://github.com/serenity4/VulkanSpec.jl.git"
+' > V/VulkanSpec/Package.toml
+
+echo '["0.1.0"]
+git-tree-sha1 = "b5fef67130191c797007a1484f4dc6bfc840caa2"
+' > V/VulkanSpec/Versions.toml
+
+echo '99a7788f-8f0f-454f-8f6c-c6cf389551ae = { name = "VulkanSpec", path = "V/VulkanSpec" }' >> Registry.toml
+
+export GIT_AUTHOR_DATE='2001-01-05T17:18:19+00:00'
+export GIT_COMMITTER_DATE=$GIT_AUTHOR_DATE
+git add .
+git commit -m "New package: VulkanSpec v0.1.0"
+
+# Second Archive
+cd ../
+tar -czf fake-julia-registry-repository_1.tar.gz General
+mv fake-julia-registry-repository_1.tar.gz ../
 
 # Clean up tmp_dir
 cd ../
