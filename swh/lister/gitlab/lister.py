@@ -56,6 +56,7 @@ def _if_rate_limited(retry_state) -> bool:
         exc = attempt.exception()
         return (
             isinstance(exc, HTTPError)
+            and exc.response is not None
             and exc.response.status_code == codes.forbidden
             and int(exc.response.headers.get("RateLimit-Remaining", "0")) == 0
         ) or is_retryable_exception(exc)

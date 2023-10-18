@@ -125,7 +125,7 @@ class BitbucketLister(Lister[BitbucketListerState, List[Dict[str, Any]]]):
                 body = self.http_request(self.url, params=self.url_params).json()
                 yield body["values"]
             except HTTPError as e:
-                if e.response.status_code == 500:
+                if e.response is not None and e.response.status_code == 500:
                     logger.warning(
                         "URL %s is buggy (error 500), skip it and get next page.",
                         e.response.url,

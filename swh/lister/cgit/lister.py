@@ -160,6 +160,7 @@ class CGitLister(StatelessLister[Repositories]):
         try:
             bs = self._get_and_parse(repository_url)
         except HTTPError as e:
+            assert e.response is not None
             logger.warning(
                 "Unexpected HTTP status code %s on %s",
                 e.response.status_code,

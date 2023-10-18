@@ -127,6 +127,7 @@ class BioconductorLister(Lister[BioconductorListerState, BioconductorListerPage]
                     packages_txt = self.http_request(url).text
                     packages = self.parse_packages(packages_txt)
                 except HTTPError as e:
+                    assert e.response is not None
                     logger.debug(
                         "Skipping page since got %s response for %s",
                         e.response.status_code,

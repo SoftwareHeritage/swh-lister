@@ -135,7 +135,8 @@ class GogsLister(Lister[GogsListerState, GogsListerPage]):
             response = self.http_request(url, params=params)
         except HTTPError as http_error:
             if (
-                http_error.response.status_code == 500
+                http_error.response is not None
+                and http_error.response.status_code == 500
             ):  # Temporary hack for skipping fatal repos (T4423)
                 url_parts = urlparse(url)
                 query: Dict[str, Any] = dict(parse_qsl(url_parts.query))
