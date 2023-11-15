@@ -55,7 +55,7 @@ must be configured by following the instructions below (please note that you hav
 
 Minimalistic configuration shared by all listers to add in file `~/.config/swh/listers.yml`:
 
-```lang=yml
+```yaml
 scheduler:
   cls: 'remote'
   args:
