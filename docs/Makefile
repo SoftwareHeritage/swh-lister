@@ -1,1 +1,1 @@
-include ../../swh-docs/Makefile.sphinx
+include swh-docs/Makefile.sphinx

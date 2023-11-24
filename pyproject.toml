@@ -1,3 +1,89 @@
+[project]
+name = "swh.lister"
+authors = [
+    {name="Software Heritage developers", email="swh-devel@inria.fr"},
+]
+
+description = "Software Heritage lister"
+readme = {file = "README.rst", content-type = "text/x-rst"}
+requires-python = ">=3.7"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
+    "Operating System :: OS Independent",
+    "Development Status :: 5 - Production/Stable",
+]
+dynamic = ["version", "dependencies", "optional-dependencies"]
+
+[tool.setuptools.packages.find]
+include = ["swh.*"]
+
+[tool.setuptools.dynamic]
+dependencies = {file = ["requirements.txt", "requirements-swh.txt"]}
+
+[tool.setuptools.dynamic.optional-dependencies]
+testing = {file = ["requirements-test.txt"]}
+
+[project.entry-points."swh.cli.subcommands"]
+"swh.lister" = "swh.lister.cli"
+
+[project.entry-points."swh.workers"]
+"swh.lister.arch" = "swh.lister.arch:register"
+"swh.lister.aur" = "swh.lister.aur:register"
+"swh.lister.bitbucket" = "swh.lister.bitbucket:register"
+"swh.lister.bower" = "swh.lister.bower:register"
+"swh.lister.cgit" = "swh.lister.cgit:register"
+"swh.lister.conda" = "swh.lister.conda:register"
+"swh.lister.cpan" = "swh.lister.cpan:register"
+"swh.lister.cran" = "swh.lister.cran:register"
+"swh.lister.crates" = "swh.lister.crates:register"
+"swh.lister.debian" = "swh.lister.debian:register"
+"swh.lister.dlang" = "swh.lister.dlang:register"
+"swh.lister.gitea" = "swh.lister.gitea:register"
+"swh.lister.github" = "swh.lister.github:register"
+"swh.lister.gitiles" = "swh.lister.gitiles:register"
+"swh.lister.gitlab" = "swh.lister.gitlab:register"
+"swh.lister.gitweb" = "swh.lister.gitweb:register"
+"swh.lister.gnu" = "swh.lister.gnu:register"
+"swh.lister.golang" = "swh.lister.golang:register"
+"swh.lister.gogs" = "swh.lister.gogs:register"
+"swh.lister.hackage" = "swh.lister.hackage:register"
+"swh.lister.hex" = "swh.lister.hex:register"
+"swh.lister.julia" = "swh.lister.julia:register"
+"swh.lister.launchpad" = "swh.lister.launchpad:register"
+"swh.lister.nixguix" = "swh.lister.nixguix:register"
+"swh.lister.npm" = "swh.lister.npm:register"
+"swh.lister.nuget" = "swh.lister.nuget:register"
+"swh.lister.opam" = "swh.lister.opam:register"
+"swh.lister.packagist" = "swh.lister.packagist:register"
+"swh.lister.pagure" = "swh.lister.pagure:register"
+"swh.lister.phabricator" = "swh.lister.phabricator:register"
+"swh.lister.pubdev" = "swh.lister.pubdev:register"
+"swh.lister.puppet" = "swh.lister.puppet:register"
+"swh.lister.pypi" = "swh.lister.pypi:register"
+"swh.lister.rpm" = "swh.lister.rpm:register"
+"swh.lister.rubygems" = "swh.lister.rubygems:register"
+"swh.lister.sourceforge" = "swh.lister.sourceforge:register"
+"swh.lister.stagit" = "swh.lister.stagit:register"
+"swh.lister.tuleap" = "swh.lister.tuleap:register"
+"swh.lister.maven" = "swh.lister.maven:register"
+"swh.lister.bioconductor" = "swh.lister.bioconductor:register"
+
+[project.urls]
+"Homepage" = "https://gitlab.softwareheritage.org/swh/devel/swh-lister"
+"Bug Reports" = "https://gitlab.softwareheritage.org/swh/devel/swh-lister/-/issues"
+"Funding" = "https://www.softwareheritage.org/donate"
+"Documentation" = "https://docs.softwareheritage.org/devel/swh-lister/"
+"Source" = "https://gitlab.softwareheritage.org/swh/devel/swh-lister.git"
+
+[build-system]
+requires = ["setuptools", "setuptools-scm"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools_scm]
+fallback_version = "0.0.1"
+
 [tool.black]
 target-version = ['py37']
 

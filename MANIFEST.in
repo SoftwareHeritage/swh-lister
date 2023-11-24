@@ -1,8 +1,0 @@
-include Makefile
-include README
-include requirements*.txt
-include version.txt
-include conftest.py
-include swh/lister/cran/list_all_packages.R
-recursive-include swh/lister/*/tests/data/ *
-recursive-include swh py.typed
