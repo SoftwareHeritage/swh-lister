@@ -30,6 +30,9 @@ repos:
         exclude: ^(swh/lister/.*/tests/data/.*)$
         args: [-L crate]
         stages: [commit]
+      - id: codespell
+        name: Check commit message spelling
+        stages: [commit-msg]
 
   - repo: local
     hooks:
