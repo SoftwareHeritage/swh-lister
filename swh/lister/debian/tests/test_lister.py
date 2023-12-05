@@ -62,7 +62,6 @@ def _init_test(
     debian_sources: Dict[Suite, SourcesText],
     requests_mock,
 ) -> Tuple[DebianLister, DebianSuitePkgSrcInfo]:
-
     lister = DebianLister(
         scheduler=swh_scheduler,
         url=_mirror_url,
@@ -104,7 +103,6 @@ def _check_listed_origins(
     suite_pkg_info: DebianSuitePkgSrcInfo,
     lister_previous_state: Dict[PkgName, Set[PkgVersion]],
 ) -> Set[DebianOrigin]:
-
     scheduler_origins = swh_scheduler.get_listed_origins(lister.lister_obj.id).results
 
     origin_urls = set()
@@ -208,7 +206,6 @@ def test_lister_debian_updated_packages(
     lister_previous_state: Dict[PkgName, Set[PkgVersion]] = {}
 
     for idx, suites in enumerate(suites_params):
-
         sources = {suite: debian_sources[suite] for suite in suites}
 
         lister, suite_pkg_info = _init_test(swh_scheduler, sources, requests_mock)

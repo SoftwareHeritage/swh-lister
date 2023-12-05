@@ -111,7 +111,6 @@ class CratesLister(Lister[CratesListerState, CratesListerPage]):
         """
 
         with tempfile.TemporaryDirectory() as tmpdir:
-
             file_name = self.DB_DUMP_URL.split("/")[-1]
             archive_path = Path(tmpdir) / file_name
 

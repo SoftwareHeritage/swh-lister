@@ -39,7 +39,6 @@ def _match_request(request):
 def test_pubdev_lister_skip_package(
     datadir, requests_mock_datadir, swh_scheduler, requests_mock
 ):
-
     requests_mock.get(
         "https://pub.dev/api/packages/Autolinker",
         status_code=404,

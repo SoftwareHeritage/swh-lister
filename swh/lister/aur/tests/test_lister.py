@@ -102,7 +102,6 @@ expected_origins = [
 
 
 def test_aur_lister(datadir, swh_scheduler, requests_mock):
-
     lister = AurLister(scheduler=swh_scheduler)
 
     packages_index_filename = "packages-meta-v1.json.gz"

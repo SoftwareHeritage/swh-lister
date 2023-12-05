@@ -77,7 +77,6 @@ def _mock_launchpad(mocker, launchpad_response, launchpad_bzr_response=None):
 
 def _check_listed_origins(scheduler_origins, launchpad_response, vcs_type="git"):
     for repo in launchpad_response:
-
         filtered_origins = [
             o for o in scheduler_origins if o.url == origin(vcs_type, repo)
         ]

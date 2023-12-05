@@ -98,7 +98,6 @@ class GogsLister(Lister[GogsListerState, GogsListerPage]):
 
         self.api_token = api_token
         if self.api_token is None:
-
             if len(self.credentials) > 0:
                 cred = random.choice(self.credentials)
                 username = cred.get("username")
@@ -128,7 +127,6 @@ class GogsLister(Lister[GogsListerState, GogsListerPage]):
     def page_request(
         self, url: str, params: Dict[str, Any]
     ) -> Tuple[Dict[str, Any], Dict[str, Any]]:
-
         logger.debug("Fetching URL %s with params %s", url, params)
 
         try:

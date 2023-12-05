@@ -88,7 +88,6 @@ class NugetLister(Lister[NugetListerState, NugetListerPage]):
 
         assert "items" in index
         for page in index["items"]:
-
             assert page["@id"]
             assert page["commitTimeStamp"]
 

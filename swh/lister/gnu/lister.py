@@ -69,7 +69,6 @@ class GNULister(StatelessLister[GNUPageType]):
         artifacts = self.gnu_tree.artifacts
 
         for project_name, project_info in page.items():
-
             origin_url = project_info["url"]
             last_update = iso8601.parse_date(project_info["time_modified"])
 

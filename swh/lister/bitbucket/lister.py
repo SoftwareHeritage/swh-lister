@@ -110,7 +110,6 @@ class BitbucketLister(Lister[BitbucketListerState, List[Dict[str, Any]]]):
             self.session.auth = (username, password)
 
     def get_pages(self) -> Iterator[List[Dict[str, Any]]]:
-
         last_repo_cdate: str = "1970-01-01"
         if (
             self.incremental

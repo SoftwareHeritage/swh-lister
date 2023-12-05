@@ -99,7 +99,6 @@ class NewForgeLister(Lister[NewForgeListerState, NewForgeListerPage]):
         assert self.lister_obj.id is not None
 
         for element in page:
-
             yield ListedOrigin(
                 # Required. Should use this value.
                 lister_id=self.lister_obj.id,

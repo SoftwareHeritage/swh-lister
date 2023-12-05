@@ -265,7 +265,6 @@ def test_lister_cgit_get_pages_with_pages_and_retry(
     url = "https://git.tizen/cgit/"
 
     with open(os.path.join(datadir, "https_git.tizen/cgit,ofs=50"), "rb") as page:
-
         requests_mock.get(
             f"{url}?ofs=50",
             [

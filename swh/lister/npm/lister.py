@@ -106,7 +106,6 @@ class NpmLister(Lister[NpmListerState, List[Dict[str, Any]]]):
             last_package_id = str(self.state.last_seq)
 
         while True:
-
             response = self.http_request(
                 self.url, params=self.request_params(last_package_id)
             )

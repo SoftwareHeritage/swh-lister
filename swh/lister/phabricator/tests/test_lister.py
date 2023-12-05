@@ -69,7 +69,6 @@ def test_lister_url_param(swh_scheduler):
         f"{FORGE_BASE_URL}/{API_REPOSITORY_PATH}",
         f"{FORGE_BASE_URL}/{API_REPOSITORY_PATH}/",
     ):
-
         lister = PhabricatorLister(
             scheduler=swh_scheduler, url=FORGE_BASE_URL, instance="swh", api_token="foo"
         )

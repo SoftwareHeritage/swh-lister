@@ -123,7 +123,6 @@ def test_puppet_lister(datadir, requests_mock_datadir, swh_scheduler):
 
 
 def test_puppet_lister_incremental(datadir, requests_mock_datadir, swh_scheduler):
-
     # First run
     lister = PuppetLister(scheduler=swh_scheduler)
     res = lister.run()

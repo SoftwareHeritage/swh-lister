@@ -96,7 +96,6 @@ class HexLister(Lister[HexListerState, HexListerPage]):
         assert self.lister_obj.id is not None
 
         for pkg in page:
-
             yield ListedOrigin(
                 lister_id=self.lister_obj.id,
                 visit_type=self.VISIT_TYPE,

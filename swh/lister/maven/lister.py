@@ -319,7 +319,6 @@ class MavenLister(Lister[MavenListerState, RepoPage]):
         )
 
     def get_origins_from_page(self, page: RepoPage) -> Iterator[ListedOrigin]:
-
         """Convert a page of Maven repositories into a list of ListedOrigins."""
         if page["type"] == "scm":
             listed_origin = self.get_scm(page)

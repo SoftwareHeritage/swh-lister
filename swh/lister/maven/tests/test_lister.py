@@ -340,7 +340,6 @@ def test_maven_list_http_error_artifacts(
 
 
 def test_maven_lister_null_mtime(swh_scheduler, requests_mock, maven_index_null_mtime):
-
     requests_mock.get(INDEX_URL, content=maven_index_null_mtime)
 
     # Run the lister.

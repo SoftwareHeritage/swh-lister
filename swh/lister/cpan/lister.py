@@ -104,7 +104,6 @@ class CpanLister(StatelessLister[CpanListerPage]):
 
     def process_release_page(self, page: List[Dict[str, Any]]):
         for entry in page:
-
             if "_source" not in entry or not all(
                 k in entry["_source"].keys() for k in self.REQUIRED_DOC_FIELDS
             ):

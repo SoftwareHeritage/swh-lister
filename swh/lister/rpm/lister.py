@@ -217,7 +217,6 @@ class RPMLister(Lister[RPMListerState, RPMPageType]):
 
         # iterate on each package's metadata
         for pkg_metadata in repo:
-
             if pkg_metadata.arch != "src":
                 # not a source package, skip it
                 continue
