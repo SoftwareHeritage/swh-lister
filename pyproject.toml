@@ -40,6 +40,7 @@ testing = {file = ["requirements-test.txt"]}
 "swh.lister.crates" = "swh.lister.crates:register"
 "swh.lister.debian" = "swh.lister.debian:register"
 "swh.lister.dlang" = "swh.lister.dlang:register"
+"swh.lister.elm" = "swh.lister.elm:register"
 "swh.lister.gitea" = "swh.lister.gitea:register"
 "swh.lister.github" = "swh.lister.github:register"
 "swh.lister.gitiles" = "swh.lister.gitiles:register"
