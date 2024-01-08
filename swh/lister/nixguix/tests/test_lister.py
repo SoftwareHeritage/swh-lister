@@ -225,6 +225,10 @@ def test_lister_nixguix_ok(datadir, swh_scheduler, requests_mock):
         "https://api.github.com/repos/trie/trie",
         [{"json": {"html_url": "https://github.com/trie/trie.git"}}],
     )
+    requests_mock.get(
+        "https://api.github.com/repos/supercollider/supercollider",
+        [{"json": {"html_url": "https://github.com/supercollider/supercollider"}}],
+    )
     requests_mock.head(
         "http://git.marmaro.de/?p=mmh;a=snapshot;h=431604647f89d5aac7b199a7883e98e56e4ccf9e;sf=tgz",
         headers={"Content-Type": "application/gzip; charset=ISO-8859-1"},
@@ -314,7 +318,7 @@ def test_lister_nixguix_ok(datadir, swh_scheduler, requests_mock):
     # 3 origins have their recursive hash mentioned, they are sent both as vcs and as
     # specific vcs directory to ingest. So they are duplicated with visit_type 'git' and
     # 'git-checkout', 'svn' and 'svn-export', 'hg' and 'hg-checkout'.
-    expected_nb_dictincts_origins = expected_nb_origins - 3
+    expected_nb_dictincts_origins = expected_nb_origins - 4
 
     # 1 page read is 1 origin
     assert listed_result == ListerStats(
@@ -333,6 +337,7 @@ def test_lister_nixguix_ok(datadir, swh_scheduler, requests_mock):
         "https://example.org/rgerganov/footswitch",
         "https://hg.sr.ht/~olly/yoyo",
         "svn://svn.savannah.gnu.org/apl/trunk",
+        "https://github.com/supercollider/supercollider",
     ]:
         duplicated_visit_types.extend(
             [
@@ -342,7 +347,7 @@ def test_lister_nixguix_ok(datadir, swh_scheduler, requests_mock):
             ]
         )
 
-    assert len(duplicated_visit_types) == 6
+    assert len(duplicated_visit_types) == 8
     assert set(duplicated_visit_types) == {
         "git",
         "git-checkout",
@@ -361,6 +366,10 @@ def test_lister_nixguix_ok(datadir, swh_scheduler, requests_mock):
 
         if listed_origin.visit_type in {"git-checkout", "svn-export", "hg-checkout"}:
             assert listed_origin.extra_loader_arguments["ref"] is not None
+            if listed_origin.url == "https://github.com/supercollider/supercollider":
+                assert listed_origin.extra_loader_arguments["submodules"] is True
+            else:
+                assert "submodules" not in listed_origin.extra_loader_arguments
 
         mapping_visit_types[listed_origin.visit_type] += 1
 

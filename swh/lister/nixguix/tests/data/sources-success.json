@@ -2,17 +2,23 @@
   "sources": [
     {
       "type": "url",
-      "urls": [ "https://github.com/owner-1/repository-1/revision-1.tgz" ],
+      "urls": [
+        "https://github.com/owner-1/repository-1/revision-1.tgz"
+      ],
       "integrity": "sha256-3vm2Nt+O4zHf3Ovd/qsv1gKTEUwodX9FLxlrQdry0zs="
     },
     {
       "type": "url",
-      "urls": [ "https://github.com/owner-3/repository-1/revision-1.tar" ],
+      "urls": [
+        "https://github.com/owner-3/repository-1/revision-1.tar"
+      ],
       "integrity": "sha256-3vm2Nt+O4zHf3Ovd/qsv1gKTEUwodX9FLxlrQdry0zs="
     },
     {
       "type": "url",
-      "urls": [ "https://example.com/file.txt" ],
+      "urls": [
+        "https://example.com/file.txt"
+      ],
       "integrity": "sha256-Q0copBCnj1b8G1iZw1k0NuYasMcx6QctleltspAgXlM="
     },
     {
@@ -99,7 +105,9 @@
     },
     {
       "type": "url",
-      "urls": ["svn://svn.code.sf.net/p/acme-crossass/code-0/trunk"],
+      "urls": [
+        "svn://svn.code.sf.net/p/acme-crossass/code-0/trunk"
+      ],
       "integrity": "sha256-VifIQ+UEVMKJ+cNS+Xxusazinr5Cgu1lmGuhqj/5Mpk="
     },
     {
@@ -311,6 +319,15 @@
       "outputHashAlgo": "sha256",
       "outputHashMode": "recursive",
       "svn_revision": "1550"
+    },
+    {
+      "type": "git",
+      "git_url": "https://github.com/supercollider/supercollider",
+      "integrity": "sha256-YSXpITazkV/IqMquPfj0hC7oRS2yH399IFJU4qmyd7Y=",
+      "outputHashAlgo": "sha256",
+      "outputHashMode": "recursive",
+      "git_ref": "Version-3.13.0",
+      "submodule": true
     }
   ],
   "version": "1",

@@ -111,6 +111,8 @@ class Artifact:
     """Checksum layout mode to provide to loaders (e.g. nar, standard, ...)"""
     ref: Optional[str]
     """Optional reference on the artifact (git commit, branch, svn commit, tag, ...)"""
+    submodules: bool
+    """Indicates if submodules should be retrieved for a git-checkout visit type"""
 
 
 @dataclass
@@ -472,6 +474,7 @@ class NixGuixLister(StatelessLister[PageResult]):
                         checksum_layout=MAPPING_CHECKSUM_LAYOUT[outputHashMode],
                         visit_type=VCS_ARTIFACT_TYPE_TO_VISIT_TYPE[artifact_type],
                         ref=plain_ref,
+                        submodules=artifact.get("submodule", False),
                     )
 
             elif artifact_type == "url":
@@ -605,6 +608,7 @@ class NixGuixLister(StatelessLister[PageResult]):
                     checksum_layout=MAPPING_CHECKSUM_LAYOUT[outputHashMode],
                     visit_type="tarball-directory" if is_tar else "content",
                     ref=None,
+                    submodules=False,
                 )
             else:
                 logger.warning(
@@ -626,13 +630,15 @@ class NixGuixLister(StatelessLister[PageResult]):
     def artifact_to_listed_origin(self, artifact: Artifact) -> Iterator[ListedOrigin]:
         """Given an artifact (tarball, file), yield one ListedOrigin."""
         assert self.lister_obj.id is not None
-        loader_arguments = {
+        loader_arguments: Dict[str, Any] = {
             "checksums": artifact.checksums,
             "checksum_layout": artifact.checksum_layout.value,
             "fallback_urls": artifact.fallback_urls,
         }
         if artifact.ref:
             loader_arguments["ref"] = artifact.ref
+        if artifact.submodules:
+            loader_arguments["submodules"] = artifact.submodules
         yield ListedOrigin(
             lister_id=self.lister_obj.id,
             url=artifact.origin,
