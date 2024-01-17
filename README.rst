@@ -12,35 +12,32 @@ platforms or package managers. As these operations are quite similar, this
 package provides a set of Python modules abstracting common software origins
 listing behaviors.
 
-It also provides several lister implementations, contained in the
-following Python modules:
+It also provides several lister implementations, contained in the Python
+``swh.lister.*`` modules. See `this documentation
+<https://docs.softwareheritage.org/user/listers.html>`_ for the list of
+supported listers.
 
-- ``swh.lister.bitbucket``
-- ``swh.lister.cgit``
-- ``swh.lister.cran``
-- ``swh.lister.debian``
-- ``swh.lister.gitea``
-- ``swh.lister.github``
-- ``swh.lister.gitlab``
-- ``swh.lister.gnu``
-- ``swh.lister.gogs``
-- ``swh.lister.golang``
-- ``swh.lister.hex``
-- ``swh.lister.launchpad``
-- ``swh.lister.maven``
-- ``swh.lister.npm``
-- ``swh.lister.packagist``
-- ``swh.lister.phabricator``
-- ``swh.lister.pypi``
-- ``swh.lister.rpm``
-- ``swh.lister.tuleap``
-- ``swh.lister.bioconductor``
 
 Dependencies
 ------------
 
-All required dependencies can be found in the ``requirements*.txt`` files
+All required python dependencies can be found in the ``requirements*.txt`` files
 located at the root of the repository.
+
+In order to be able to run all the listers (and thus execute the tests), some
+tools must be available on your system, namely:
+
+- ``opam``
+- ``tar``
+- ``psql``
+
+On a Debian-like system, you may use:
+
+.. code-block: console
+
+   $ sudo apt update
+   $ sudo apt install opam tar postgresql-client-common
+
 
 Local deployment
 ----------------
