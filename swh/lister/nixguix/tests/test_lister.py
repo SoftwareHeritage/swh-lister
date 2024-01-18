@@ -24,7 +24,7 @@ from swh.lister.nixguix.lister import (
     ArtifactWithoutExtension,
     NixGuixLister,
     is_tarball,
-    url_endswith,
+    url_contains_tarball_filename,
 )
 from swh.lister.pattern import ListerStats
 
@@ -65,7 +65,7 @@ def test_url_endswith(name, expected_result):
     """It should detect whether url or query params of the urls ends with extensions"""
     urlparsed = urlparse(f"https://example.org/{name}")
     assert (
-        url_endswith(
+        url_contains_tarball_filename(
             urlparsed,
             TARBALL_EXTENSIONS + DEFAULT_EXTENSIONS_TO_IGNORE,
             raise_when_no_extension=False,
@@ -81,7 +81,7 @@ def test_url_endswith_raise(name):
     """It should raise when the tested url has no extension"""
     urlparsed = urlparse(f"https://example.org/{name}")
     with pytest.raises(ArtifactWithoutExtension):
-        url_endswith(urlparsed, ["unimportant"])
+        url_contains_tarball_filename(urlparsed, ["unimportant"])
 
 
 @pytest.mark.parametrize(
@@ -98,12 +98,15 @@ def test_is_tarball_simple(tarballs):
 
 
 @pytest.mark.parametrize(
-    "query_param",
-    ["file", "f", "url", "name", "anykeyreally"],
+    "url",
+    [
+        "https://example.org/download/one.tar.gz/other/path/parts",
+        "https://example.org/download.php?foo=bar&file=one.tar.gz",
+    ],
 )
-def test_is_tarball_not_so_simple(query_param):
-    """More involved check on tarball should discriminate between tarball and file"""
-    url = f"https://example.org/download.php?foo=bar&{query_param}=one.tar.gz"
+def test_is_tarball_not_so_simple(url):
+    """Detect tarball URL when filename is not in the last path parts or
+    in a query parameter"""
     is_tar, origin = is_tarball([url])
     assert is_tar is True
     assert origin == url

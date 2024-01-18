@@ -144,10 +144,11 @@ POSSIBLE_TARBALL_MIMETYPES = tuple(MIMETYPE_TO_ARCHIVE_FORMAT.keys())
 PATTERN_VERSION = re.compile(r"(v*[0-9]+[.])([0-9]+[.]*)+")
 
 
-def url_endswith(
+def url_contains_tarball_filename(
     urlparsed, extensions: List[str], raise_when_no_extension: bool = True
 ) -> bool:
-    """Determine whether urlparsed ends with one of the extensions passed as parameter.
+    """Determine whether urlparsed contains a tarball filename ending with one of the
+    extensions passed as parameter, path parts and query parameters are checked.
 
     This also account for the edge case of a filename with only a version as name (so no
     extension in the end.)
@@ -158,11 +159,15 @@ def url_endswith(
 
     """
     paths = [Path(p) for (_, p) in [("_", urlparsed.path)] + parse_qsl(urlparsed.query)]
-    if raise_when_no_extension and not any(path.suffix != "" for path in paths):
-        raise ArtifactWithoutExtension
-    match = any(path.suffix.endswith(tuple(extensions)) for path in paths)
+    match = any(
+        path_part.endswith(tuple(extensions))
+        for path in paths
+        for path_part in path.parts
+    )
     if match:
         return match
+    if raise_when_no_extension and not any(path.suffix != "" for path in paths):
+        raise ArtifactWithoutExtension
     # Some false negative can happen (e.g. https://<netloc>/path/0.1.5)), so make sure
     # to catch those
     name = Path(urlparsed.path).name
@@ -214,7 +219,7 @@ def is_tarball(
         urlparsed = urlparse(url)
         if urlparsed.scheme not in ("http", "https", "ftp"):
             raise ArtifactNatureMistyped(f"Mistyped artifact '{url}'")
-        return url_endswith(urlparsed, TARBALL_EXTENSIONS)
+        return url_contains_tarball_filename(urlparsed, TARBALL_EXTENSIONS)
 
     # Check all urls and as soon as an url allows the nature detection, this stops.
     exceptions_to_raise = []
@@ -283,7 +288,7 @@ def is_tarball(
                             break
 
                     return (
-                        url_endswith(
+                        url_contains_tarball_filename(
                             urlparse(filename),
                             TARBALL_EXTENSIONS,
                             raise_when_no_extension=False,
@@ -585,7 +590,7 @@ class NixGuixLister(StatelessLister[PageResult]):
                 # Let's check and filter it out if it is to be ignored (if possible).
                 # Some origin urls may not have extension at this point (e.g
                 # http://git.marmaro.de/?p=mmh;a=snp;h=<id>;sf=tgz), let them through.
-                if url_endswith(
+                if url_contains_tarball_filename(
                     urlparse(origin),
                     self.extensions_to_ignore,
                     raise_when_no_extension=False,
