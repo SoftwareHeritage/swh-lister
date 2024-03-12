@@ -1,0 +1,44 @@
+{
+  "sources": [
+    {
+      "type": "svn",
+      "svn_url": "svn://www.tug.org/texlive/tags/texlive-2023.0/Master/texmf-dist/",
+      "svn_files": [
+        "bibtex/bib/oberdiek/",
+        "doc/latex/oberdiek/",
+        "source/latex/oberdiek/",
+        "tex/generic/oberdiek/",
+        "tex/latex/oberdiek/"
+      ],
+      "integrity": "sha256-n9ZrKjR0JYOsbFtKby7UWykYjVY0f1hgInyR3DNbpro=",
+      "outputHashAlgo": "sha256",
+      "outputHashMode": "recursive",
+      "svn_revision": 66594
+    },
+    {
+      "type": "svn",
+      "svn_url": "svn://www.tug.org/texlive/tags/texlive-2023.0/Master/texmf-dist/",
+      "svn_files": [
+        "fonts/source/public/knuth-lib/",
+        "fonts/tfm/public/knuth-lib/",
+        "tex/generic/knuth-lib/",
+        "tex/plain/knuth-lib/"
+      ],
+      "integrity": "sha256-it3vOYZ4VrsXcBY6QSeIuHsNcoQkZsWP7aYaC8j4iDY=",
+      "outputHashAlgo": "sha256",
+      "outputHashMode": "recursive",
+      "svn_revision": 66594
+    },
+    {
+      "type": "svn",
+      "svn_url": "svn://www.tug.org/texlive/tags/texlive-2023.0/Master/texmf-dist/",
+      "svn_files": [
+        "doc/latex/etdipa/"
+      ],
+      "integrity": "sha256-H25frh/nt438g8lsUCcfNuytvPrBrkYIpEEpqq4q48o=",
+      "outputHashAlgo": "sha256",
+      "outputHashMode": "recursive",
+      "svn_revision": 66594
+    }
+  ]
+}

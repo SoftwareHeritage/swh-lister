@@ -113,6 +113,9 @@ class Artifact:
     """Optional reference on the artifact (git commit, branch, svn commit, tag, ...)"""
     submodules: bool
     """Indicates if submodules should be retrieved for a git-checkout visit type"""
+    svn_paths: Optional[List[str]]
+    """Optional list of paths for the svn-export loader, only those will be exported
+    and loaded into the archive"""
 
 
 @dataclass
@@ -472,14 +475,23 @@ class NixGuixLister(StatelessLister[PageResult]):
                     if not checksums:
                         continue
 
+                    origin_url = plain_url
+                    svn_paths = artifact.get("svn_files")
+                    if svn_paths:
+                        # as multiple svn-export visit types can use the same base svn URL
+                        # we modify the origin URL to ensure it is unique by appending the
+                        # NAR hash value as a query parameter
+                        origin_url += f"?nar={integrity}"
+
                     yield ArtifactType.ARTIFACT, Artifact(
-                        origin=plain_url,
+                        origin=origin_url,
                         fallback_urls=[],
                         checksums=checksums,
                         checksum_layout=MAPPING_CHECKSUM_LAYOUT[outputHashMode],
                         visit_type=VCS_ARTIFACT_TYPE_TO_VISIT_TYPE[artifact_type],
                         ref=plain_ref,
                         submodules=artifact.get("submodule", False),
+                        svn_paths=svn_paths,
                     )
 
             elif artifact_type == "url":
@@ -614,6 +626,7 @@ class NixGuixLister(StatelessLister[PageResult]):
                     visit_type="tarball-directory" if is_tar else "content",
                     ref=None,
                     submodules=False,
+                    svn_paths=None,
                 )
             else:
                 logger.warning(
@@ -644,6 +657,10 @@ class NixGuixLister(StatelessLister[PageResult]):
             loader_arguments["ref"] = artifact.ref
         if artifact.submodules:
             loader_arguments["submodules"] = artifact.submodules
+        if artifact.svn_paths:
+            # extract the base svn url from the modified origin URL (see get_pages method)
+            loader_arguments["svn_url"] = artifact.origin.rsplit("?", maxsplit=1)[0]
+            loader_arguments["svn_paths"] = artifact.svn_paths
         yield ListedOrigin(
             lister_id=self.lister_obj.id,
             url=artifact.origin,

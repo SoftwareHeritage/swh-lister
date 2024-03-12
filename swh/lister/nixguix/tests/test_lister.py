@@ -457,3 +457,37 @@ def test_lister_nixguix_fail(datadir, swh_scheduler, requests_mock):
 
     scheduler_origins = swh_scheduler.get_listed_origins(lister.lister_obj.id).results
     assert len(scheduler_origins) == 0
+
+
+def test_lister_nixguix_svn_export_sub_trees(datadir, swh_scheduler, requests_mock):
+    """NixGuixLister should handle svn-export visit types exporting a subset of
+    a subversion source tree (e.g. Tex Live packages for Guix)"""
+    url = SOURCES["guix"]["manifest"]
+    origin_upstream = SOURCES["guix"]["repo"]
+    lister = NixGuixLister(swh_scheduler, url=url, origin_upstream=origin_upstream)
+
+    response = page_response(datadir, "texlive")
+    requests_mock.get(url, [{"json": response}])
+
+    listed_result = lister.run()
+
+    assert listed_result == ListerStats(pages=7, origins=5)
+
+    scheduler_origins = {
+        origin.url: origin
+        for origin in lister.scheduler.get_listed_origins(lister.lister_obj.id).results
+    }
+
+    for source in response["sources"]:
+        svn_url = source["svn_url"]
+        origin_url = f"{source['svn_url']}?nar={source['integrity']}"
+        assert origin_url in scheduler_origins
+        assert "svn_url" in scheduler_origins[origin_url].extra_loader_arguments
+        assert (
+            scheduler_origins[origin_url].extra_loader_arguments["svn_url"] == svn_url
+        )
+        assert "svn_paths" in scheduler_origins[origin_url].extra_loader_arguments
+        assert (
+            scheduler_origins[origin_url].extra_loader_arguments["svn_paths"]
+            == source["svn_files"]
+        )
