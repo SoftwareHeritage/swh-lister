@@ -1,10 +1,9 @@
-# Copyright (C) 2023 The Software Heritage developers
+# Copyright (C) 2023-2024 The Software Heritage developers
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
 
 from datetime import datetime, timezone
 import logging
-import re
 from typing import Any, Dict, Iterator, List, Optional
 from urllib.parse import urlparse
 
@@ -73,15 +72,19 @@ class StagitLister(StatelessLister[Repositories]):
 
         page_results = []
 
-        for tr in bs_idx.find("table", {"id": re.compile("index")}).find_all("tr"):
-            link = tr.find("a")
+        index_table = bs_idx.select_one("table#index")
+        if index_table is None:
+            return
+
+        for tr in index_table.select("tr"):
+            link = tr.select_one("a")
             if not link:
                 continue
 
-            repo_description_url = self.url + "/" + link["href"]
+            repo_description_url = self.url + "/" + link.attrs["href"]
 
             # This retrieves the date in format "%Y-%m-%d %H:%M"
-            tds = tr.find_all("td")
+            tds = tr.select("td")
             last_update = tds[-1].text if tds and tds[-1] else None
 
             page_results.append(
@@ -122,10 +125,14 @@ class StagitLister(StatelessLister[Repositories]):
             return None
 
         urls = [
-            td.find("a")["href"]
-            for row in bs.find_all("tr", {"class": "url"})
-            for td in row.find_all("td")
-            if td.text.startswith("git clone")
+            a.attrs["href"]
+            for a in [
+                td.select_one("a")
+                for row in bs.select("tr.url")
+                for td in row.select("td")
+                if td.text.startswith("git clone")
+            ]
+            if a is not None
         ]
 
         if not urls:

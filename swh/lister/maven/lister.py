@@ -1,4 +1,4 @@
-# Copyright (C) 2021-2022 The Software Heritage developers
+# Copyright (C) 2021-2024 The Software Heritage developers
 # See the AUTHORS file at the top-level directory of this distribution
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
@@ -226,32 +226,22 @@ class MavenLister(Lister[MavenListerState, RepoPage]):
         logger.info("Found %s poms.", len(out_pom))
 
         # Now fetch pom files and scan them for scm info.
-
-        logger.info("Fetching poms..")
+        logger.info("Fetching poms ...")
         for pom_url in out_pom:
             try:
                 response = self.http_request(pom_url)
                 parsed_pom = BeautifulSoup(response.content, "xml")
-                project = parsed_pom.find("project")
-                if project is None:
-                    continue
-                scm = project.find("scm")
-                if scm is not None:
-                    connection = scm.find("connection")
-                    if connection is not None:
-                        artifact_metadata_d = {
-                            "type": "scm",
-                            "doc": out_pom[pom_url],
-                            "url": connection.text,
-                        }
-                        logger.debug(
-                            "* Yielding pom %s: %s", pom_url, artifact_metadata_d
-                        )
-                        yield artifact_metadata_d
-                    else:
-                        logger.debug("No scm.connection in pom %s", pom_url)
+                connection = parsed_pom.select_one("project scm connection")
+                if connection is not None:
+                    artifact_metadata_d = {
+                        "type": "scm",
+                        "doc": out_pom[pom_url],
+                        "url": connection.text,
+                    }
+                    logger.debug("* Yielding pom %s: %s", pom_url, artifact_metadata_d)
+                    yield artifact_metadata_d
                 else:
-                    logger.debug("No scm in pom %s", pom_url)
+                    logger.debug("No project.scm.connection in pom %s", pom_url)
             except requests.HTTPError:
                 logger.warning(
                     "POM info page could not be fetched, skipping project '%s'",

@@ -1,4 +1,4 @@
-# Copyright (C) 2022-2023  The Software Heritage developers
+# Copyright (C) 2022-2024  The Software Heritage developers
 # See the AUTHORS file at the top-level directory of this distribution
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
@@ -128,10 +128,10 @@ class ArchLister(StatelessLister[ArchListerPage]):
         )
         response = self.http_request(url)
         soup = BeautifulSoup(response.text, "html.parser")
-        links = soup.find_all("a", href=True)
+        links = soup.select("a[href]")
 
         # drop the first line (used to go to up directory)
-        if links[0].attrs["href"] == "../":
+        if links and links[0].attrs["href"] == "../":
             links.pop(0)
 
         versions = []
@@ -156,26 +156,28 @@ class ArchLister(StatelessLister[ArchListerPage]):
                     arch = m.group("arch")
                     version = m.group("version")
 
-                # Extract last_modified and an approximate file size
+                # Extract last_modified date
+                last_modified = None
                 raw_text = link.next_sibling
-                raw_text_rex = re.compile(
-                    r"^(?P<last_modified>\d+-\w+-\d+ \d\d:\d\d)\s+.*$"
-                )
-                s = raw_text_rex.search(raw_text.strip())
-                if s is None:
-                    logger.error(
-                        "Can not find a match for 'last_modified' in '%(raw_text)s'",
-                        dict(raw_text=raw_text),
+                if raw_text:
+                    raw_text_rex = re.compile(
+                        r"^(?P<last_modified>\d+-\w+-\d+ \d\d:\d\d)\s+.*$"
                     )
-                else:
-                    values = s.groups()
-                    assert values and len(values) == 1
-                    last_modified_str = values[0]
+                    s = raw_text_rex.search(raw_text.text.strip())
+                    if s is None:
+                        logger.error(
+                            "Can not find a match for 'last_modified' in '%(raw_text)s'",
+                            dict(raw_text=raw_text),
+                        )
+                    else:
+                        values = s.groups()
+                        assert values and len(values) == 1
+                        last_modified_str = values[0]
 
-                # format as expected
-                last_modified = datetime.datetime.strptime(
-                    last_modified_str, "%d-%b-%Y %H:%M"
-                ).isoformat()
+                    # format as expected
+                    last_modified = datetime.datetime.strptime(
+                        last_modified_str, "%d-%b-%Y %H:%M"
+                    ).isoformat()
 
                 # link url is relative, format a canonical one
                 url = self.ARCH_PACKAGE_DOWNLOAD_URL_PATTERN.format(

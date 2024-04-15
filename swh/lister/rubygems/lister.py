@@ -1,4 +1,4 @@
-# Copyright (C) 2022-2023  The Software Heritage developers
+# Copyright (C) 2022-2024  The Software Heritage developers
 # See the AUTHORS file at the top-level directory of this distribution
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
@@ -82,8 +82,8 @@ class RubyGemsLister(StatelessLister[RubyGemsListerPage]):
     def get_latest_dump_file(self) -> str:
         response = self.http_request(self.RUBY_GEMS_POSTGRES_DUMP_LIST_URL)
         xml = BeautifulSoup(response.content, "xml")
-        contents = xml.find_all("Contents")
-        return contents[-1].find("Key").text
+        contents = xml.select("Contents")
+        return contents[-1].select("Key")[0].text
 
     def create_rubygems_db(
         self, postgresql: Postgresql

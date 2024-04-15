@@ -3,6 +3,7 @@ pytest >= 8.1
 pytest-mock
 requests_mock
 swh-scheduler[testing]
+types-beautifulsoup4
 types-click
 types-pyyaml
 types-requests

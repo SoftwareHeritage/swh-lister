@@ -146,7 +146,7 @@ class NugetLister(Lister[NugetListerState, NugetListerPage]):
                 )
                 continue
             xml = BeautifulSoup(res_metadata.content, "xml")
-            repo = xml.find("repository")
+            repo = xml.select_one("repository")
             if repo and "url" in repo.attrs and "type" in repo.attrs:
                 vcs_url = repo.attrs["url"]
                 vcs_type = repo.attrs["type"]

@@ -1,10 +1,9 @@
-# Copyright (C) 2019-2023 The Software Heritage developers
+# Copyright (C) 2019-2024 The Software Heritage developers
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
 
 from datetime import datetime, timezone
 import logging
-import re
 from typing import Any, Dict, Iterator, List, Optional
 from urllib.parse import urljoin, urlparse
 
@@ -95,14 +94,16 @@ class CGitLister(StatelessLister[Repositories]):
 
             page_results = []
 
-            for tr in bs_idx.find("div", {"class": "content"}).find_all(
-                "tr", {"class": ""}
-            ):
-                repository_link = tr.find("a")["href"]
+            for tr in bs_idx.select("div.content tr:not([class])"):
+                repository_link = tr.select_one("a")
+
+                if repository_link is None:
+                    continue
+
                 repo_url = None
                 git_url = None
 
-                base_url = urljoin(self.url, repository_link).strip("/")
+                base_url = urljoin(self.url, repository_link.attrs["href"]).strip("/")
                 if self.base_git_url:  # mapping provided
                     # computing git url
                     git_url = base_url.replace(self.url, self.base_git_url)
@@ -111,7 +112,7 @@ class CGitLister(StatelessLister[Repositories]):
                     # the git url (cf. self.get_origins_from_page)
                     repo_url = base_url
 
-                span = tr.find("span", {"class": re.compile("age-")})
+                span = tr.select_one('span[class^="age-"]')
                 last_updated_date = span.get("title") if span else None
 
                 page_results.append(
@@ -125,12 +126,14 @@ class CGitLister(StatelessLister[Repositories]):
             yield page_results
 
             try:
-                pager = bs_idx.find("ul", {"class": "pager"})
-
-                current_page = pager.find("a", {"class": "current"})
-                if current_page:
-                    next_page = current_page.parent.next_sibling.a["href"]
-                    next_page = urljoin(self.url, next_page)
+                next_page_li = bs_idx.select_one(
+                    "ul.pager li:has(> a.current) + li:has(> a)"
+                )
+                next_page = (
+                    urljoin(self.url, next_page_li.select("a")[0].attrs["href"])
+                    if next_page_li
+                    else None
+                )
             except (AttributeError, KeyError):
                 # no pager, or no next page
                 next_page = None
@@ -169,27 +172,26 @@ class CGitLister(StatelessLister[Repositories]):
             return None
 
         # check if we are on the summary tab, if not, go to this tab
-        tab = bs.find("table", {"class": "tabs"})
-        if tab:
-            summary_a = tab.find("a", string="summary")
-            if summary_a:
-                summary_url = urljoin(repository_url, summary_a["href"]).strip("/")
+        summary_a = bs.select_one('table.tabs a:-soup-contains("summary")')
+        if summary_a:
+            summary_path = summary_a.attrs["href"]
+            summary_url = urljoin(repository_url, summary_path).strip("/")
 
-                if summary_url != repository_url:
-                    logger.debug(
-                        "%s : Active tab is not the summary, trying to load the summary page",
-                        repository_url,
-                    )
-                    return self._get_origin_from_repository_url(summary_url)
-            else:
-                logger.debug("No summary tab found on %s", repository_url)
+            if summary_url != repository_url:
+                logger.debug(
+                    "%s : Active tab is not the summary, trying to load the summary page",
+                    repository_url,
+                )
+                return self._get_origin_from_repository_url(summary_url)
+        else:
+            logger.debug("No summary tab found on %s", repository_url)
 
         # origin urls are listed on the repository page
         # TODO check if forcing https is better or not ?
         # <link rel='vcs-git' href='git://...' title='...'/>
         # <link rel='vcs-git' href='http://...' title='...'/>
         # <link rel='vcs-git' href='https://...' title='...'/>
-        urls = [x["href"] for x in bs.find_all("a", {"rel": "vcs-git"})]
+        urls = [x.attrs["href"] for x in bs.select('a[rel="vcs-git"]')]
 
         if not urls:
             logger.debug("No git urls found on %s", repository_url)

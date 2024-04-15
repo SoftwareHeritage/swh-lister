@@ -1,10 +1,9 @@
-# Copyright (C) 2023 The Software Heritage developers
+# Copyright (C) 2023-2024 The Software Heritage developers
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
 
 from datetime import datetime, timezone
 import logging
-import re
 from typing import Any, Dict, Iterator, List, Optional
 from urllib.parse import parse_qs, urljoin, urlparse
 
@@ -80,14 +79,12 @@ class GitwebLister(StatelessLister[Repositories]):
 
         page_results = []
 
-        for tr in bs_idx.find("table", {"class": re.compile("project_list")}).find_all(
-            "tr"
-        ):
-            link = tr.find("a")
+        for tr in bs_idx.select("table.project_list tr"):
+            link = tr.select_one("a")
             if not link:
                 continue
 
-            repo_url = urljoin(self.url, link["href"]).strip("/")
+            repo_url = urljoin(self.url, link.attrs["href"]).strip("/")
 
             # Skip this description page which is listed but won't yield any origins to list
             if repo_url.endswith("?o=descr"):
@@ -95,7 +92,7 @@ class GitwebLister(StatelessLister[Repositories]):
 
             # This retrieves the date interval in natural language (e.g. '9 years ago')
             # to actual python datetime interval so we can derive last update
-            span = tr.find("td", {"class": re.compile("age.*")})
+            span = tr.select_one('td[class^="age"]')
             page_results.append(
                 {"url": repo_url, "last_update_interval": span.text if span else None}
             )
@@ -134,8 +131,8 @@ class GitwebLister(StatelessLister[Repositories]):
             return None
 
         urls = []
-        for row in bs.find_all("tr", {"class": "metadata_url"}):
-            url = row.contents[-1].string.strip()
+        for row in bs.select("tr.metadata_url"):
+            url = row.select("td")[-1].text.strip()
             for scheme in ("http", "https", "git"):
                 # remove any string prefix before origin
                 pos = url.find(f"{scheme}://")
