@@ -189,7 +189,7 @@ def test_is_tarball_complex_with_location_result(
     is_tar, origin = is_tarball(urls, requests)
     assert is_tar == expected_result
     if is_tar:
-        assert origin == fallback_url
+        assert origin == url
 
 
 @pytest.mark.parametrize(

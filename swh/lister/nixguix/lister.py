@@ -262,9 +262,7 @@ def is_tarball(
             if location:  # It's not always present
                 logger.debug("Location: %s", location)
                 try:
-                    # FIXME: location is also returned as it's considered the true
-                    # origin, true enough?
-                    return _is_tarball(location), location
+                    return _is_tarball(location), url
                 except ArtifactWithoutExtension:
                     logger.warning(
                         "Still cannot detect extension through location <%s>...",
