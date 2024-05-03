@@ -4,6 +4,8 @@
 
 
 def register():
+    from datetime import timedelta
+
     from .lister import NpmLister
 
     return {
@@ -11,9 +13,9 @@ def register():
         "task_modules": ["%s.tasks" % __name__],
         "task_types": {
             "list-npm-full": {
-                "default_interval": "7 days",
-                "min_interval": "7 days",
-                "max_interval": "7 days",
+                "default_interval": timedelta(days=7),
+                "min_interval": timedelta(days=7),
+                "max_interval": timedelta(days=7),
             },
         },
     }

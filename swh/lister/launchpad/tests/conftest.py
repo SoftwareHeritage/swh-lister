@@ -1,9 +1,9 @@
-# Copyright (C) 2020  The Software Heritage developers
+# Copyright (C) 2020-2024  The Software Heritage developers
 # See the AUTHORS file at the top-level directory of this distribution
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
 
-from datetime import datetime
+from datetime import datetime, timedelta
 import json
 import os
 from unittest.mock import patch
@@ -11,6 +11,7 @@ from unittest.mock import patch
 import pytest
 
 from swh.lister import get_lister
+from swh.scheduler.model import TaskType
 
 
 @pytest.fixture
@@ -45,12 +46,12 @@ def lister_launchpad(datadir, lister_db_url, engine, swh_scheduler):
         lister = get_lister("launchpad", db_url=lister_db_url)
 
     lister.scheduler.create_task_type(
-        {
-            "type": "load-git",
-            "description": "Load git repository",
-            "backend_name": "swh.loader.git.tasks.UpdateGitRepository",
-            "default_interval": "1 day",
-        }
+        TaskType(
+            type="load-git",
+            description="Load git repository",
+            backend_name="swh.loader.git.tasks.UpdateGitRepository",
+            default_interval=timedelta(days=1),
+        )
     )
 
     return lister
