@@ -1,16 +1,19 @@
 beautifulsoup4
+breezy >= 3.3.1, < 3.3.5 # use versions with available binary wheels
 dateparser
 dulwich
 iso8601
 launchpadlib
 looseversion
 lxml
+mercurial
 psycopg2
 pyreadr
 python_debian
 repomd
 requests
 setuptools
+subvertpy
 tenacity >= 8.4.2
 testing.postgresql
 toml

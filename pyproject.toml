@@ -34,6 +34,7 @@ testing = {file = ["requirements-test.txt"]}
 "lister.bioconductor" = "swh.lister.bioconductor:register"
 "lister.bitbucket" = "swh.lister.bitbucket:register"
 "lister.bower" = "swh.lister.bower:register"
+"lister.save-bulk" = "swh.lister.save_bulk:register"
 "lister.cgit" = "swh.lister.cgit:register"
 "lister.conda" = "swh.lister.conda:register"
 "lister.cpan" = "swh.lister.cpan:register"

@@ -49,6 +49,10 @@ lister_args = {
     "stagit": {
         "url": "https://git.codemadness.org",
     },
+    "save-bulk": {
+        "url": "https://example.org/origins/list/",
+        "instance": "example.org",
+    },
 }
 
 
