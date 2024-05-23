@@ -1,4 +1,4 @@
-# Copyright (C) 2022 The Software Heritage developers
+# Copyright (C) 2022-2024 The Software Heritage developers
 # See the AUTHORS file at the top-level directory of this distribution
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
@@ -19,14 +19,16 @@ from swh.lister.nixguix.lister import (
     DEFAULT_EXTENSIONS_TO_IGNORE,
     POSSIBLE_TARBALL_MIMETYPES,
     VCS_ARTIFACT_TYPE_TO_VISIT_TYPE,
-    ArtifactNatureMistyped,
-    ArtifactNatureUndetected,
-    ArtifactWithoutExtension,
     NixGuixLister,
     is_tarball,
     url_contains_tarball_filename,
 )
 from swh.lister.pattern import ListerStats
+from swh.lister.utils import (
+    ArtifactNatureMistyped,
+    ArtifactNatureUndetected,
+    ArtifactWithoutExtension,
+)
 
 logger = logging.getLogger(__name__)
 
