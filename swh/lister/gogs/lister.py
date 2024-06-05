@@ -1,4 +1,4 @@
-# Copyright (C) 2023  The Software Heritage developers
+# Copyright (C) 2024  The Software Heritage developers
 # See the AUTHORS file at the top-level directory of this distribution
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
@@ -45,7 +45,6 @@ def _parse_page_id(url: Optional[str]) -> int:
 
 
 class GogsLister(Lister[GogsListerState, GogsListerPage]):
-
     """List origins from the Gogs
 
     Gogs API documentation: https://github.com/gogs/docs-api
@@ -125,10 +124,8 @@ class GogsLister(Lister[GogsListerState, GogsListerPage]):
         return asdict(state)
 
     def page_request(
-        self, url: str, params: Dict[str, Any]
+        self, url: str, params: Optional[Dict[str, Any]] = None
     ) -> Tuple[Dict[str, Any], Dict[str, Any]]:
-        logger.debug("Fetching URL %s with params %s", url, params)
-
         try:
             response = self.http_request(url, params=params)
         except HTTPError as http_error:
@@ -177,7 +174,12 @@ class GogsLister(Lister[GogsListerState, GogsListerPage]):
             yield GogsListerPage(repos=repos, next_link=next_link)
 
             if next_link is not None:
-                body, links = self.page_request(next_link, self.query_params)
+                parsed_url = urlparse(next_link)
+                query_params = {**self.query_params, **parse_qs(parsed_url.query)}
+                next_link = parsed_url._replace(
+                    query=urlencode(query_params, doseq=True)
+                ).geturl()
+                body, links = self.page_request(next_link)
 
     def get_origins_from_page(self, page: GogsListerPage) -> Iterator[ListedOrigin]:
         """Convert a page of Gogs repositories into a list of ListedOrigins"""

@@ -1,4 +1,4 @@
-# Copyright (C) 2022-2023  The Software Heritage developers
+# Copyright (C) 2022-2024  The Software Heritage developers
 # See the AUTHORS file at the top-level directory of this distribution
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
@@ -7,6 +7,7 @@ import json
 from pathlib import Path
 from typing import List
 from unittest.mock import Mock
+from urllib.parse import parse_qs, urlparse
 
 import pytest
 from requests import HTTPError
@@ -144,6 +145,13 @@ def test_gogs_full_listing(
     assert (
         lister.get_state_from_scheduler().last_seen_next_link == P3
     )  # P3 didn't provide any next link so it remains the last_seen_next_link
+
+    # check each query parameter has a single instance in Gogs API URLs
+    for request in requests_mock.request_history:
+        assert all(
+            len(values) == 1
+            for values in parse_qs(urlparse(request.url).query).values()
+        )
 
 
 def test_gogs_auth_instance(
