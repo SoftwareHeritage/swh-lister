@@ -1,4 +1,4 @@
-# Copyright (C) 2023 The Software Heritage developers
+# Copyright (C) 2023-2024 The Software Heritage developers
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
 
@@ -103,8 +103,6 @@ def test_lister_gitiles_get_pages_with_pages_and_retry(
         )
 
         lister_gitiles = GitilesLister(swh_scheduler, url=url)
-
-        mocker.patch.object(lister_gitiles.http_request.retry, "sleep")
 
         pages: List[str] = list(lister_gitiles.get_pages())
         assert len(pages) == 7

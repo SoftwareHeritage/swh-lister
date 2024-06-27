@@ -1,4 +1,4 @@
-# Copyright (C) 2020-2022  The Software Heritage developers
+# Copyright (C) 2020-2024  The Software Heritage developers
 # See the AUTHORS file at the top-level directory of this distribution
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
@@ -234,8 +234,6 @@ def test_launchpad_lister_raise_during_listing(
     swh_scheduler, mocker, launchpad_response1, launchpad_bzr_response
 ):
     lister = LaunchpadLister(scheduler=swh_scheduler)
-    # Exponential retries take a long time, so stub time.sleep
-    mocker.patch.object(lister._page_request.retry, "sleep")
 
     mock_getRepositories, mock_getBranches = _mock_launchpad(
         mocker,

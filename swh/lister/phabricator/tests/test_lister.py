@@ -1,4 +1,4 @@
-# Copyright (C) 2019-2022  The Software Heritage developers
+# Copyright (C) 2019-2024  The Software Heritage developers
 # See the AUTHORS file at the top-level directory of this distribution
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
@@ -25,11 +25,6 @@ def phabricator_repositories_page2(datadir):
     return json.loads(
         Path(datadir, "phabricator_api_repositories_page2.json").read_text()
     )
-
-
-@pytest.fixture(autouse=True)
-def retry_sleep_mock(mocker):
-    mocker.patch.object(PhabricatorLister.http_request.retry, "sleep")
 
 
 def test_get_repo_url(phabricator_repositories_page1):

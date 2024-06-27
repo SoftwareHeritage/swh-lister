@@ -1,4 +1,4 @@
-# Copyright (C) 2018-2022 The Software Heritage developers
+# Copyright (C) 2018-2024 The Software Heritage developers
 # See the AUTHORS file at the top-level directory of this distribution
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
@@ -33,11 +33,6 @@ def npm_incremental_listing_page1(datadir):
 @pytest.fixture
 def npm_incremental_listing_page2(datadir):
     return json.loads(Path(datadir, "npm_incremental_page2.json").read_text())
-
-
-@pytest.fixture(autouse=True)
-def retry_sleep_mock(mocker):
-    mocker.patch.object(NpmLister.http_request.retry, "sleep")
 
 
 def _check_listed_npm_packages(lister, packages, scheduler_origins):

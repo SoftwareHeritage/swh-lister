@@ -1,4 +1,4 @@
-# Copyright (C) 2022-2023  The Software Heritage developers
+# Copyright (C) 2022-2024  The Software Heritage developers
 # See the AUTHORS file at the top-level directory of this distribution
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
@@ -97,10 +97,7 @@ def _generate_responses(datadir, requests_mock):
     requests_mock.get(GolangLister.GOLANG_MODULES_INDEX_URL, responses)
 
 
-def test_golang_lister(swh_scheduler, mocker, requests_mock, datadir):
-    # Exponential retries take a long time, so stub time.sleep
-    mocked_sleep = mocker.patch.object(GolangLister.http_request.retry, "sleep")
-
+def test_golang_lister(swh_scheduler, mocker, requests_mock, datadir, mock_sleep):
     # first listing, should return one origin per package
     lister = GolangLister(scheduler=swh_scheduler)
 
@@ -126,7 +123,7 @@ def test_golang_lister(swh_scheduler, mocker, requests_mock, datadir):
 
     # Test `time.sleep` is called with exponential retries
     assert_sleep_calls(
-        mocker, mocked_sleep, [1, WAIT_EXP_BASE, 1, WAIT_EXP_BASE, 1, WAIT_EXP_BASE]
+        mocker, mock_sleep, [1, WAIT_EXP_BASE, 1, WAIT_EXP_BASE, 1, WAIT_EXP_BASE]
     )
 
     # doing it all again (without incremental) should give us the same result

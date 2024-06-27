@@ -1,4 +1,4 @@
-# Copyright (C) 2017-2022 The Software Heritage developers
+# Copyright (C) 2017-2024 The Software Heritage developers
 # See the AUTHORS file at the top-level directory of this distribution
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
@@ -212,7 +212,9 @@ def test_lister_gitlab_incremental(swh_scheduler, requests_mock, datadir):
         assert listed_origin.last_update is not None
 
 
-def test_lister_gitlab_rate_limit(swh_scheduler, requests_mock, datadir, mocker):
+def test_lister_gitlab_rate_limit(
+    swh_scheduler, requests_mock, datadir, mocker, mock_sleep
+):
     """Gitlab lister supports rate-limit"""
     instance = "gite.lirmm.fr"
     url = api_url(instance)
@@ -240,9 +242,6 @@ def test_lister_gitlab_rate_limit(swh_scheduler, requests_mock, datadir, mocker)
         additional_matcher=_match_request,
     )
 
-    # To avoid this test being too slow, we mock sleep within the retry behavior
-    mock_sleep = mocker.patch.object(lister.get_page_result.retry, "sleep")
-
     listed_result = lister.run()
 
     expected_nb_origins = len(response1) + len(response2)
@@ -253,7 +252,7 @@ def test_lister_gitlab_rate_limit(swh_scheduler, requests_mock, datadir, mocker)
 
 @pytest.mark.parametrize("status_code", [502, 503, 520])
 def test_lister_gitlab_http_errors(
-    swh_scheduler, requests_mock, datadir, mocker, status_code
+    swh_scheduler, requests_mock, datadir, mocker, status_code, mock_sleep
 ):
     """Gitlab lister should retry requests when encountering HTTP 50x errors"""
     instance = "gite.lirmm.fr"
@@ -280,9 +279,6 @@ def test_lister_gitlab_http_errors(
         ],
         additional_matcher=_match_request,
     )
-
-    # To avoid this test being too slow, we mock sleep within the retry behavior
-    mock_sleep = mocker.patch.object(lister.get_page_result.retry, "sleep")
 
     listed_result = lister.run()
 

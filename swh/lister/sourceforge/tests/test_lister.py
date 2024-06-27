@@ -1,4 +1,4 @@
-# Copyright (C) 2021-2023 The Software Heritage developers
+# Copyright (C) 2021-2024 The Software Heritage developers
 # See the AUTHORS file at the top-level directory of this distribution
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
@@ -367,11 +367,10 @@ def test_sourceforge_lister_incremental(swh_scheduler, requests_mock, datadir, m
     _check_listed_origins(lister, swh_scheduler)
 
 
-def test_sourceforge_lister_retry(swh_scheduler, requests_mock, mocker, datadir):
+def test_sourceforge_lister_retry(
+    swh_scheduler, requests_mock, mocker, datadir, mock_sleep
+):
     lister = SourceForgeLister(scheduler=swh_scheduler)
-
-    # Exponential retries take a long time, so stub time.sleep
-    mocked_sleep = mocker.patch.object(lister.http_request.retry, "sleep")
 
     requests_mock.get(
         MAIN_SITEMAP_URL,
@@ -431,17 +430,14 @@ def test_sourceforge_lister_retry(swh_scheduler, requests_mock, mocker, datadir)
     _check_listed_origins(lister, swh_scheduler)
 
     # Test `time.sleep` is called with exponential retries
-    assert_sleep_calls(mocker, mocked_sleep, [1, WAIT_EXP_BASE, 1, 1])
+    assert_sleep_calls(mocker, mock_sleep, [1, WAIT_EXP_BASE, 1, 1])
 
 
 @pytest.mark.parametrize("status_code", [500, 503, 504, 403, 404])
 def test_sourceforge_lister_http_error(
-    swh_scheduler, requests_mock, status_code, mocker
+    swh_scheduler, requests_mock, status_code, mocker, mock_sleep
 ):
     lister = SourceForgeLister(scheduler=swh_scheduler)
-
-    # Exponential retries take a long time, so stub time.sleep
-    mocked_sleep = mocker.patch.object(lister.http_request.retry, "sleep")
 
     requests_mock.get(MAIN_SITEMAP_URL, status_code=status_code)
 
@@ -452,7 +448,7 @@ def test_sourceforge_lister_http_error(
     if status_code >= 500:
         exp_retries = [1.0, 10.0, 100.0, 1000.0]
 
-    assert_sleep_calls(mocker, mocked_sleep, exp_retries)
+    assert_sleep_calls(mocker, mock_sleep, exp_retries)
 
 
 @pytest.mark.parametrize("status_code", [500, 503, 504, 403, 404])
@@ -460,8 +456,6 @@ def test_sourceforge_lister_project_error(
     datadir, swh_scheduler, requests_mock, status_code, mocker
 ):
     lister = SourceForgeLister(scheduler=swh_scheduler)
-    # Exponential retries take a long time, so stub time.sleep
-    mocker.patch.object(lister.http_request.retry, "sleep")
 
     requests_mock.get(
         MAIN_SITEMAP_URL,

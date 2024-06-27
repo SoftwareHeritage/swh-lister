@@ -10,6 +10,6 @@ python_debian
 repomd
 requests
 setuptools
-tenacity >= 6.2
+tenacity >= 8.4.2
 testing.postgresql
 toml

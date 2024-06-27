@@ -1,4 +1,4 @@
-# Copyright (C) 2019-2023 The Software Heritage developers
+# Copyright (C) 2019-2024 The Software Heritage developers
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
 
@@ -275,8 +275,6 @@ def test_lister_cgit_get_pages_with_pages_and_retry(
         )
 
         lister_cgit = CGitLister(swh_scheduler, url=url)
-
-        mocker.patch.object(lister_cgit.http_request.retry, "sleep")
 
         repos: List[List[str]] = list(lister_cgit.get_pages())
         flattened_repos = sum(repos, [])

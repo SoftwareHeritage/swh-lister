@@ -1,4 +1,4 @@
-# Copyright (C) 2021-2022 The Software Heritage developers
+# Copyright (C) 2021-2024 The Software Heritage developers
 # See the AUTHORS file at the top-level directory of this distribution
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
@@ -78,11 +78,6 @@ def maven_index_null_mtime(datadir) -> bytes:
 @pytest.fixture(autouse=True)
 def network_requests_mock(requests_mock, requests_mock_datadir, maven_index_full):
     requests_mock.get(INDEX_URL, content=maven_index_full)
-
-
-@pytest.fixture(autouse=True)
-def retry_sleep_mock(mocker):
-    mocker.patch.object(MavenLister.http_request.retry, "sleep")
 
 
 def test_maven_full_listing(swh_scheduler):

@@ -1,4 +1,4 @@
-# Copyright (C) 2021-2022 The Software Heritage developers
+# Copyright (C) 2021-2024 The Software Heritage developers
 # See the AUTHORS file at the top-level directory of this distribution
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
@@ -90,11 +90,6 @@ def tuleap_repo_3(datadir) -> Tuple[str, Dict[str, str], List[RepoPage], List[st
         )
     origin_urls = [r["uri"] for r in page_results]
     return text, headers, page_results, origin_urls
-
-
-@pytest.fixture(autouse=True)
-def retry_sleep_mock(mocker):
-    mocker.patch.object(TuleapLister.http_request.retry, "sleep")
 
 
 def check_listed_origins(lister_urls: List[str], scheduler_origins: List[ListedOrigin]):

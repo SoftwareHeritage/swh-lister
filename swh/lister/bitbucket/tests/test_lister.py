@@ -1,4 +1,4 @@
-# Copyright (C) 2017-2023 The Software Heritage developers
+# Copyright (C) 2017-2024 The Software Heritage developers
 # See the AUTHORS file at the top-level directory of this distribution
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
@@ -109,8 +109,6 @@ def test_bitbucket_lister_rate_limit_hit(
 
     lister = BitbucketLister(scheduler=swh_scheduler, page_size=10)
 
-    mocker.patch.object(lister.http_request.retry, "sleep")
-
     stats = lister.run()
 
     assert stats.pages == 2
@@ -199,8 +197,6 @@ def test_bitbucket_lister_buggy_page(
     )
 
     lister = BitbucketLister(scheduler=swh_scheduler, page_size=10)
-
-    mocker.patch.object(lister.http_request.retry, "sleep")
 
     stats = lister.run()
 
