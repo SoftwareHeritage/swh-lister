@@ -52,6 +52,7 @@ def check_origin_4321(swh_scheduler: SchedulerInterface, lister: Lister) -> None
     assert origin_4321.last_update == datetime.datetime(
         2018, 11, 8, 13, 16, 24, tzinfo=datetime.timezone.utc
     )
+    assert origin_4321.is_fork is not None
 
 
 def check_origin_5555(swh_scheduler: SchedulerInterface, lister: Lister) -> None:

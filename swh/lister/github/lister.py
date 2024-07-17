@@ -183,6 +183,7 @@ class GitHubLister(Lister[GitHubListerState, List[Dict[str, Any]]]):
                 url=repo["html_url"],
                 visit_type="git",
                 last_update=pushed_at,
+                is_fork=repo.get("fork"),
             )
 
     def commit_page(self, page: List[Dict[str, Any]]):

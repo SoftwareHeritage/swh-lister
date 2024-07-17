@@ -1,4 +1,2 @@
-swh.core[db] >= 2.22.0
-swh.scheduler >= 2.3.0
-
-
+swh.core[db] >= 3.4.0
+swh.scheduler >= 2.4.0
