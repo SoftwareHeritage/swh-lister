@@ -26,6 +26,14 @@ expected_origins = [
                 "filename": "rand-0.1.2.crate",
                 "url": "https://static.crates.io/crates/rand/rand-0.1.2.crate",
             },
+            {
+                "version": "0.1.3-experimental",
+                "checksums": {
+                    "sha256": "d879626d5babe4ca6c4ec953d712e28d939672b325a4f9352f28ca3c82568a15",  # noqa: B950
+                },
+                "filename": "rand-0.1.3-experimental.crate",
+                "url": "https://static.crates.io/crates/rand/rand-0.1.3-experimental.crate",
+            },
         ],
         "crates_metadata": [
             {
@@ -36,6 +44,11 @@ expected_origins = [
             {
                 "version": "0.1.2",
                 "last_update": "2017-11-30 03:14:27.545115",
+                "yanked": False,
+            },
+            {
+                "version": "0.1.3-experimental",
+                "last_update": "2017-11-30 05:24:37.146115",
                 "yanked": False,
             },
         ],

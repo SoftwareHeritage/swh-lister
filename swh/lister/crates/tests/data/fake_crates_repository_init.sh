@@ -17,6 +17,7 @@ echo -e '''created_at,description,documentation,downloads,homepage,id,max_upload
 ''' > data/crates.csv
 
 echo -e '''checksum,crate_id,crate_size,created_at,downloads,features,id,license,links,num,published_by,updated_at,yanked
+d879626d5babe4ca6c4ec953d712e28d939672b325a4f9352f28ca3c82568a15,1339,,2014-12-18 06:56:46.88489,845,{},1321,MIT/Apache-2.0,,0.1.3-experimental,,2017-11-30 05:24:37.146115,f
 398952a2f6cd1d22bc1774fd663808e32cf36add0280dee5cdd84a8fff2db944,2233,,2015-05-27 23:19:16.848643,1961,{},10855,MIT/Apache-2.0,,0.1.0,,2017-11-30 03:37:17.449539,f
 343bd0171ee23346506db6f4c64525de6d72f0e8cc533f83aea97f3e7488cbf9,545,,2014-12-18 06:56:46.88489,845,{},1321,MIT/Apache-2.0,,0.1.2,,2017-11-30 02:29:20.01125,f
 6e229ed392842fa93c1d76018d197b7e1b74250532bafb37b0e1d121a92d4cf7,1339,,2015-02-03 11:15:19.001762,8211,{},4371,MIT/Apache-2.0,,0.1.2,,2017-11-30 03:14:27.545115,f

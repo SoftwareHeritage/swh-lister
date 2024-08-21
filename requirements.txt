@@ -3,6 +3,7 @@ dateparser
 dulwich
 iso8601
 launchpadlib
+looseversion
 lxml
 psycopg2
 pyreadr

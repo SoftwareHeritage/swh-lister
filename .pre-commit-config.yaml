@@ -32,6 +32,7 @@ repos:
         stages: [commit]
       - id: codespell
         name: Check commit message spelling
+        args: [-L crate]
         stages: [commit-msg]
 
   - repo: local

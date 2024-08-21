@@ -15,7 +15,7 @@ from typing import Any, Dict, Iterator, List, Optional
 from urllib.parse import urlparse
 
 import iso8601
-from packaging.version import parse as parse_version
+from looseversion import LooseVersion2
 
 from swh.scheduler.interface import SchedulerInterface
 from swh.scheduler.model import ListedOrigin
@@ -201,7 +201,7 @@ class CratesLister(Lister[CratesListerState, CratesListerPage]):
         for name, item in dataset.items():
             page = []
             # sort crate versions
-            versions: list = sorted(item["versions"].keys(), key=parse_version)
+            versions = sorted(item["versions"].keys(), key=LooseVersion2)
 
             for version in versions:
                 v = item["versions"][version]
