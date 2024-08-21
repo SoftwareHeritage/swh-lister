@@ -1,8 +1,10 @@
-# Copyright (C) 2022  The Software Heritage developers
+# Copyright (C) 2022-2024  The Software Heritage developers
 # See the AUTHORS file at the top-level directory of this distribution
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
+
 import iso8601
+import pytest
 
 from swh.lister.crates.lister import CratesLister, CratesListerState
 
@@ -250,3 +252,16 @@ def test_crates_lister_incremental_nothing_new(
 
     assert res.pages == 0
     assert res.origins == 0
+
+
+def test_crates_lister_error_when_processing_crate(
+    swh_scheduler, requests_mock_datadir, mocker
+):
+    """Lister state should not be recorded to scheduler is an error occurred
+    when processing crate data."""
+    lister = CratesLister(scheduler=swh_scheduler)
+    mocker.patch.object(lister, "page_entry_dict").side_effect = IndexError()
+    with pytest.raises(IndexError):
+        lister.run()
+
+    assert lister.get_state_from_scheduler().index_last_update is None

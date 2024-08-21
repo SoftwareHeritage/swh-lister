@@ -82,6 +82,7 @@ class CratesLister(Lister[CratesListerState, CratesListerPage]):
             enable_origins=enable_origins,
         )
         self.index_metadata: Dict[str, str] = {}
+        self.all_crates_processed = False
 
     def state_from_dict(self, d: Dict[str, Any]) -> CratesListerState:
         index_last_update = d.get("index_last_update")
@@ -210,6 +211,7 @@ class CratesLister(Lister[CratesListerState, CratesListerPage]):
                 page.append(self.page_entry_dict(v))
 
             yield page
+        self.all_crates_processed = True
 
     def get_origins_from_page(self, page: CratesListerPage) -> Iterator[ListedOrigin]:
         """Iterate on all crate pages and yield ListedOrigin instances."""
@@ -255,8 +257,7 @@ class CratesLister(Lister[CratesListerState, CratesListerPage]):
         )
 
     def finalize(self) -> None:
-        last: datetime = iso8601.parse_date(self.index_metadata["timestamp"])
-
-        if not self.state.index_last_update:
+        if not self.state.index_last_update and self.all_crates_processed:
+            last = iso8601.parse_date(self.index_metadata["timestamp"])
             self.state.index_last_update = last
             self.updated = True
