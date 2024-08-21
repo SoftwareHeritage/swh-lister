@@ -131,7 +131,7 @@ class CratesLister(Lister[CratesListerState, CratesListerPage]):
                         members_to_extract.append(member)
                 tf.extractall(members=members_to_extract, path=db_dump_path)
 
-            csv.field_size_limit(1000000)
+            csv.field_size_limit(10000000)
 
             (crates_csv_path,) = list(db_dump_path.glob("*/data/crates.csv"))
             (versions_csv_path,) = list(db_dump_path.glob("*/data/versions.csv"))
