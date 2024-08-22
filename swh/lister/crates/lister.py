@@ -1,4 +1,4 @@
-# Copyright (C) 2022-2023  The Software Heritage developers
+# Copyright (C) 2022-2024  The Software Heritage developers
 # See the AUTHORS file at the top-level directory of this distribution
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
@@ -17,6 +17,7 @@ from urllib.parse import urlparse
 import iso8601
 from looseversion import LooseVersion2
 
+from swh.core.utils import grouper
 from swh.scheduler.interface import SchedulerInterface
 from swh.scheduler.model import ListedOrigin
 
@@ -25,7 +26,7 @@ from ..pattern import CredentialsType, Lister
 logger = logging.getLogger(__name__)
 
 # Aliasing the page results returned by `get_pages` method from the lister.
-CratesListerPage = List[Dict[str, Any]]
+CratesListerPage = List[List[Dict[str, Any]]]
 
 
 @dataclass
@@ -198,17 +199,21 @@ class CratesLister(Lister[CratesListerState, CratesListerPage]):
 
         logger.debug("Found %s crates in crates_index", len(dataset))
 
-        # Each entry from dataset will correspond to a page
-        for name, item in dataset.items():
+        # a page contains up to 1000 crates with versions info
+        for crates in grouper(dataset.items(), 1000):
             page = []
-            # sort crate versions
-            versions = sorted(item["versions"].keys(), key=LooseVersion2)
+            for name, item in crates:
+                crate_versions = []
+                # sort crate versions
+                versions = sorted(item["versions"].keys(), key=LooseVersion2)
 
-            for version in versions:
-                v = item["versions"][version]
-                v["name"] = name
-                v["version"] = version
-                page.append(self.page_entry_dict(v))
+                for version in versions:
+                    v = item["versions"][version]
+                    v["name"] = name
+                    v["version"] = version
+                    crate_versions.append(self.page_entry_dict(v))
+
+                page.append(crate_versions)
 
             yield page
         self.all_crates_processed = True
@@ -217,44 +222,45 @@ class CratesLister(Lister[CratesListerState, CratesListerPage]):
         """Iterate on all crate pages and yield ListedOrigin instances."""
         assert self.lister_obj.id is not None
 
-        url = self.CRATE_URL_PATTERN.format(crate=page[0]["name"])
-        last_update = page[0]["last_update"]
+        for crate_versions in page:
+            url = self.CRATE_URL_PATTERN.format(crate=crate_versions[0]["name"])
+            last_update = crate_versions[0]["last_update"]
 
-        artifacts = []
-        crates_metadata = []
+            artifacts = []
+            crates_metadata = []
 
-        for entry in page:
-            # Build an artifact entry following original-artifacts-json specification
-            # https://docs.softwareheritage.org/devel/swh-storage/extrinsic-metadata-specification.html#original-artifacts-json  # noqa: B950
-            artifacts.append(
-                {
-                    "version": entry["version"],
-                    "filename": entry["filename"],
-                    "url": entry["crate_file"],
-                    "checksums": {
-                        "sha256": entry["checksum"],
-                    },
-                }
+            for entry in crate_versions:
+                # Build an artifact entry following original-artifacts-json specification
+                # https://docs.softwareheritage.org/devel/swh-storage/extrinsic-metadata-specification.html#original-artifacts-json  # noqa: B950
+                artifacts.append(
+                    {
+                        "version": entry["version"],
+                        "filename": entry["filename"],
+                        "url": entry["crate_file"],
+                        "checksums": {
+                            "sha256": entry["checksum"],
+                        },
+                    }
+                )
+
+                crates_metadata.append(
+                    {
+                        "version": entry["version"],
+                        "yanked": entry["yanked"],
+                        "last_update": entry["last_update"],
+                    }
+                )
+
+            yield ListedOrigin(
+                lister_id=self.lister_obj.id,
+                visit_type=self.VISIT_TYPE,
+                url=url,
+                last_update=iso8601.parse_date(last_update),
+                extra_loader_arguments={
+                    "artifacts": artifacts,
+                    "crates_metadata": crates_metadata,
+                },
             )
-
-            crates_metadata.append(
-                {
-                    "version": entry["version"],
-                    "yanked": entry["yanked"],
-                    "last_update": entry["last_update"],
-                }
-            )
-
-        yield ListedOrigin(
-            lister_id=self.lister_obj.id,
-            visit_type=self.VISIT_TYPE,
-            url=url,
-            last_update=iso8601.parse_date(last_update),
-            extra_loader_arguments={
-                "artifacts": artifacts,
-                "crates_metadata": crates_metadata,
-            },
-        )
 
     def finalize(self) -> None:
         if not self.state.index_last_update and self.all_crates_processed:

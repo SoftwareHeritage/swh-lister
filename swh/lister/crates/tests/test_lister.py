@@ -175,7 +175,7 @@ def test_crates_lister(datadir, tmp_path, swh_scheduler, requests_mock_datadir):
     lister = CratesLister(scheduler=swh_scheduler)
     res = lister.run()
 
-    assert res.pages == 3
+    assert res.pages == 1
     assert res.origins == 3
 
     scheduler_origins = swh_scheduler.get_listed_origins(lister.lister_obj.id).results
@@ -205,7 +205,7 @@ def test_crates_lister_incremental(
     lister = CratesLister(scheduler=swh_scheduler)
     first = lister.run()
 
-    assert first.pages == 3
+    assert first.pages == 1
     assert first.origins == 3
 
     second = lister.run()
