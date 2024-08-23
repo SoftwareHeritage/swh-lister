@@ -227,7 +227,6 @@ class CratesLister(Lister[CratesListerState, CratesListerPage]):
             last_update = crate_versions[0]["last_update"]
 
             artifacts = []
-            crates_metadata = []
 
             for entry in crate_versions:
                 # Build an artifact entry following original-artifacts-json specification
@@ -243,14 +242,6 @@ class CratesLister(Lister[CratesListerState, CratesListerPage]):
                     }
                 )
 
-                crates_metadata.append(
-                    {
-                        "version": entry["version"],
-                        "yanked": entry["yanked"],
-                        "last_update": entry["last_update"],
-                    }
-                )
-
             yield ListedOrigin(
                 lister_id=self.lister_obj.id,
                 visit_type=self.VISIT_TYPE,
@@ -258,7 +249,6 @@ class CratesLister(Lister[CratesListerState, CratesListerPage]):
                 last_update=iso8601.parse_date(last_update),
                 extra_loader_arguments={
                     "artifacts": artifacts,
-                    "crates_metadata": crates_metadata,
                 },
             )
 

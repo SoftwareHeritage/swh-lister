@@ -37,23 +37,6 @@ expected_origins = [
                 "url": "https://static.crates.io/crates/rand/rand-0.1.3-experimental.crate",
             },
         ],
-        "crates_metadata": [
-            {
-                "version": "0.1.1",
-                "last_update": "2017-11-30 03:33:14.186028",
-                "yanked": False,
-            },
-            {
-                "version": "0.1.2",
-                "last_update": "2017-11-30 03:14:27.545115",
-                "yanked": False,
-            },
-            {
-                "version": "0.1.3-experimental",
-                "last_update": "2017-11-30 05:24:37.146115",
-                "yanked": False,
-            },
-        ],
     },
     {
         "url": "https://crates.io/crates/regex",
@@ -91,28 +74,6 @@ expected_origins = [
                 "url": "https://static.crates.io/crates/regex/regex-0.1.3.crate",
             },
         ],
-        "crates_metadata": [
-            {
-                "version": "0.1.0",
-                "last_update": "2017-11-30 02:51:27.240551",
-                "yanked": False,
-            },
-            {
-                "version": "0.1.1",
-                "last_update": "2017-11-30 03:03:20.143103",
-                "yanked": False,
-            },
-            {
-                "version": "0.1.2",
-                "last_update": "2017-11-30 02:29:20.01125",
-                "yanked": False,
-            },
-            {
-                "version": "0.1.3",
-                "last_update": "2017-11-30 02:26:59.236947",
-                "yanked": False,
-            },
-        ],
     },
     {
         "url": "https://crates.io/crates/regex-syntax",
@@ -124,13 +85,6 @@ expected_origins = [
                 },
                 "filename": "regex-syntax-0.1.0.crate",
                 "url": "https://static.crates.io/crates/regex-syntax/regex-syntax-0.1.0.crate",  # noqa: B950
-            },
-        ],
-        "crates_metadata": [
-            {
-                "version": "0.1.0",
-                "last_update": "2017-11-30 03:37:17.449539",
-                "yanked": False,
             },
         ],
     },
@@ -146,13 +100,6 @@ expected_origins_incremental = {
             "checksums": {
                 "sha256": "ad29a609b6bcd67fee905812e544992d216af9d755757c05ed2d0e15a74c6ecc"
             },
-        }
-    ],
-    "crates_metadata": [
-        {
-            "version": "1.0.12",
-            "yanked": False,
-            "last_update": "2022-08-15 13:52:11.642129",
         }
     ],
 }
@@ -185,7 +132,6 @@ def test_crates_lister(datadir, tmp_path, swh_scheduler, requests_mock_datadir):
             scheduled.visit_type,
             scheduled.url,
             scheduled.extra_loader_arguments["artifacts"],
-            scheduled.extra_loader_arguments["crates_metadata"],
         )
         for scheduled in sorted(scheduler_origins, key=lambda scheduled: scheduled.url)
     ] == [
@@ -193,7 +139,6 @@ def test_crates_lister(datadir, tmp_path, swh_scheduler, requests_mock_datadir):
             "crates",
             expected["url"],
             expected["artifacts"],
-            expected["crates_metadata"],
         )
         for expected in sorted(expected_origins, key=lambda expected: expected["url"])
     ]
