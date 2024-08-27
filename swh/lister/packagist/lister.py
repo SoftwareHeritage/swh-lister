@@ -47,7 +47,7 @@ class PackagistLister(Lister[PackagistListerState, PackagistPageType]):
 
     For each package, its metadata are retrieved using Packagist API endpoints
     whose responses are served from static files, which are guaranteed to be
-    efficient on the Packagist side (no dymamic queries).
+    efficient on the Packagist side (no dynamic queries).
     Furthermore, subsequent listing will send the "If-Modified-Since" HTTP
     header to only retrieve packages metadata updated since the previous listing
     operation in order to save bandwidth and return only origins which might have

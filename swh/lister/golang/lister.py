@@ -73,9 +73,9 @@ class GolangLister(Lister[GolangStateType, GolangPageType]):
 
     def state_to_dict(self, state: GolangStateType) -> Dict[str, Any]:
         return {
-            "last_seen": state.last_seen.isoformat()
-            if state.last_seen is not None
-            else None
+            "last_seen": (
+                state.last_seen.isoformat() if state.last_seen is not None else None
+            )
         }
 
     def finalize(self):
@@ -135,7 +135,7 @@ class GolangLister(Lister[GolangStateType, GolangPageType]):
             # The index returns packages whose timestamp are greater or
             # equal to the date provided as parameter, which will create
             # an infinite loop if not stopped here.
-            return [], since
+            return
         if since is not None:
             self.state.last_seen = since
 
@@ -143,7 +143,7 @@ class GolangLister(Lister[GolangStateType, GolangPageType]):
             yield page
             page, since = self.get_single_page(since=since)
             if since == self.state.last_seen:
-                return [], since
+                return
             if since is not None:
                 self.state.last_seen = since
 
