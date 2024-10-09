@@ -1,10 +1,11 @@
-# Copyright (C) 2020-2023  The Software Heritage developers
+# Copyright (C) 2020-2024  The Software Heritage developers
 # See the AUTHORS file at the top-level directory of this distribution
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
 
 from __future__ import annotations
 
+import copy
 from dataclasses import dataclass
 import logging
 from typing import Any, Dict, Generic, Iterable, Iterator, List, Optional, Set, TypeVar
@@ -20,6 +21,7 @@ from swh.core.retry import http_retry
 from swh.core.utils import grouper
 from swh.scheduler import get_scheduler, model
 from swh.scheduler.interface import SchedulerInterface
+from swh.scheduler.utils import utcnow
 
 from . import USER_AGENT_TEMPLATE
 from .utils import is_valid_origin_url
@@ -247,8 +249,7 @@ class Lister(Generic[StateType, PageType]):
                     break
         finally:
             self.finalize()
-            if self.updated:
-                self.set_state_in_scheduler()
+            self.set_state_in_scheduler()
 
         return full_stats
 
@@ -262,19 +263,26 @@ class Lister(Generic[StateType, PageType]):
           the state retrieved from the scheduler backend
         """
         self.lister_obj = self.scheduler.get_or_create_lister(
-            name=self.LISTER_NAME, instance_name=self.instance
+            name=self.LISTER_NAME,
+            instance_name=self.instance,
         )
-        return self.state_from_dict(self.lister_obj.current_state)
+        return self.state_from_dict(copy.deepcopy(self.lister_obj.current_state))
 
-    def set_state_in_scheduler(self) -> None:
+    def set_state_in_scheduler(self, force: bool = False) -> None:
         """Update the state in the scheduler backend from the state of the current
         instance.
+
+        Args:
+            force: Update lister state even when lister has ``updated`` attribute
+                set to :const:`False`, this is useful for tests
 
         Raises:
           swh.scheduler.exc.StaleData: in case of a race condition between
             concurrent listers (from :meth:`swh.scheduler.Scheduler.update_lister`).
         """
-        self.lister_obj.current_state = self.state_to_dict(self.state)
+        if self.updated or force:
+            self.lister_obj.current_state = self.state_to_dict(self.state)
+        self.lister_obj.last_listing_finished_at = utcnow()
         self.lister_obj = self.scheduler.update_lister(self.lister_obj)
 
     # State management to/from the scheduler

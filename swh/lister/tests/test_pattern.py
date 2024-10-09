@@ -1,4 +1,4 @@
-# Copyright (C) 2020-2021  The Software Heritage developers
+# Copyright (C) 2020-2024  The Software Heritage developers
 # See the AUTHORS file at the top-level directory of this distribution
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
@@ -151,20 +151,33 @@ def test_run(swh_scheduler):
 
     update_date = lister.lister_obj.updated
 
+    assert lister.lister_obj.last_listing_finished_at is None
+
     run_result = lister.run()
 
     assert run_result.pages == 2
     assert run_result.origins == 20
 
     stored_lister = swh_scheduler.get_or_create_lister(
-        name="test-pattern-lister", instance_name="example.com"
+        name=lister.lister_obj.name, instance_name=lister.lister_obj.instance_name
     )
 
     # Check that the finalize operation happened
     assert stored_lister.updated > update_date
     assert stored_lister.current_state["updated"] == "yes"
+    assert stored_lister.last_listing_finished_at is not None
+
+    last_listing_finished_at = stored_lister.last_listing_finished_at
 
     check_listed_origins(swh_scheduler, lister, stored_lister)
+
+    lister.run()
+
+    stored_lister = swh_scheduler.get_or_create_lister(
+        name=lister.lister_obj.name, instance_name=lister.lister_obj.instance_name
+    )
+
+    assert stored_lister.last_listing_finished_at > last_listing_finished_at
 
 
 class InstantiableStatelessLister(pattern.StatelessLister[PageType]):

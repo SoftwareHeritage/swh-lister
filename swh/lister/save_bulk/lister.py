@@ -413,4 +413,5 @@ class SaveBulkLister(Lister[SaveBulkListerState, SaveBulkListerPage]):
                 # update scheduler state at each rejected origin to get feedback
                 # using Web API before end of listing
                 self.state.rejected_origins = list(self.rejected_origins)
+                self.updated = True
                 self.set_state_in_scheduler()
