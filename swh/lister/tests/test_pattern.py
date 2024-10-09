@@ -189,6 +189,7 @@ def test_stateless_instantiation(swh_scheduler):
         scheduler=swh_scheduler,
         url="https://example.com",
         instance="example.com",
+        first_visits_queue_prefix="test",
     )
 
     # check the lister was registered in the scheduler backend
@@ -197,6 +198,7 @@ def test_stateless_instantiation(swh_scheduler):
     )
     assert stored_lister == lister.lister_obj
     assert stored_lister.current_state == {}
+    assert stored_lister.first_visits_queue_prefix == "test"
     assert lister.state is None
 
     with pytest.raises(NotImplementedError):

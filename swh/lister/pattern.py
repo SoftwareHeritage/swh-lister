@@ -115,6 +115,7 @@ class Lister(Generic[StateType, PageType]):
         enable_origins: bool = True,
         with_github_session: bool = False,
         record_batch_size: int = 1000,
+        first_visits_queue_prefix: Optional[str] = None,
     ):
         if not self.LISTER_NAME:
             raise ValueError("Must set the LISTER_NAME attribute on Lister classes")
@@ -138,6 +139,7 @@ class Lister(Generic[StateType, PageType]):
             self.instance = instance
         else:
             self.instance = urlparse(self.url).netloc
+        self.first_visits_queue_prefix = first_visits_queue_prefix
 
         self.scheduler = scheduler
 
@@ -265,6 +267,7 @@ class Lister(Generic[StateType, PageType]):
         self.lister_obj = self.scheduler.get_or_create_lister(
             name=self.LISTER_NAME,
             instance_name=self.instance,
+            first_visits_queue_prefix=self.first_visits_queue_prefix,
         )
         return self.state_from_dict(copy.deepcopy(self.lister_obj.current_state))
 
