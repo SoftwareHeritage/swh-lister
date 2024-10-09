@@ -97,6 +97,9 @@ def test_bulk_lister_valid_origins(swh_scheduler, requests_mock, mocker):
         scheduler=swh_scheduler,
         per_page=PER_PAGE,
     )
+
+    assert lister_bulk.first_visits_queue_prefix == "save_bulk"
+
     stats = lister_bulk.run()
 
     expected_nb_origins = len(SUBMITTED_ORIGINS)

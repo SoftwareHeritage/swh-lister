@@ -289,6 +289,7 @@ class SaveBulkLister(Lister[SaveBulkListerState, SaveBulkListerPage]):
             max_origins_per_page=max_origins_per_page,
             max_pages=max_pages,
             enable_origins=enable_origins,
+            first_visits_queue_prefix="save_bulk",
         )
         self.rejected_origins: Set[RejectedOrigin] = set()
         self.per_page = per_page
