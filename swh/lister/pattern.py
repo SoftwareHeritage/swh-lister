@@ -251,7 +251,7 @@ class Lister(Generic[StateType, PageType]):
                     break
         finally:
             self.finalize()
-            self.set_state_in_scheduler()
+            self.set_state_in_scheduler(with_listing_finished_date=True)
 
         return full_stats
 
@@ -271,21 +271,26 @@ class Lister(Generic[StateType, PageType]):
         )
         return self.state_from_dict(copy.deepcopy(self.lister_obj.current_state))
 
-    def set_state_in_scheduler(self, force: bool = False) -> None:
+    def set_state_in_scheduler(
+        self, with_listing_finished_date: bool = False, force_state: bool = False
+    ) -> None:
         """Update the state in the scheduler backend from the state of the current
         instance.
 
         Args:
-            force: Update lister state even when lister has ``updated`` attribute
+            with_listing_finished_date: Update the ``last_listing_finished_at`` column
+                value for the lister in scheduler database if set to const:`True`.
+            force_state: Update lister state even when lister has ``updated`` attribute
                 set to :const:`False`, this is useful for tests
 
         Raises:
           swh.scheduler.exc.StaleData: in case of a race condition between
             concurrent listers (from :meth:`swh.scheduler.Scheduler.update_lister`).
         """
-        if self.updated or force:
+        if self.updated or force_state:
             self.lister_obj.current_state = self.state_to_dict(self.state)
-        self.lister_obj.last_listing_finished_at = utcnow()
+        if with_listing_finished_date:
+            self.lister_obj.last_listing_finished_at = utcnow()
         self.lister_obj = self.scheduler.update_lister(self.lister_obj)
 
     # State management to/from the scheduler

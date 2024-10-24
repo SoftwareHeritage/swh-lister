@@ -133,6 +133,9 @@ def test_bulk_lister_not_found_origins(swh_scheduler, requests_mock, mocker):
         scheduler=swh_scheduler,
         per_page=PER_PAGE,
     )
+
+    set_state_in_scheduler = mocker.spy(lister_bulk, "set_state_in_scheduler")
+
     stats = lister_bulk.run()
 
     assert stats == ListerStats(pages=len(SUBMITTED_ORIGINS) // PER_PAGE, origins=0)
@@ -162,6 +165,12 @@ def test_bulk_lister_not_found_origins(swh_scheduler, requests_mock, mocker):
         )
     )
 
+    # check scheduler state is updated at each not found origin
+    # plus at the end of the listing process to set the termination date
+    expected_calls = [mocker.call()] * len(SUBMITTED_ORIGINS)
+    expected_calls.append(mocker.call(with_listing_finished_date=True))
+    assert set_state_in_scheduler.mock_calls == expected_calls
+
 
 def test_bulk_lister_connection_errors(swh_scheduler, requests_mock, mocker):
     requests_mock.head(
@@ -178,6 +187,9 @@ def test_bulk_lister_connection_errors(swh_scheduler, requests_mock, mocker):
         scheduler=swh_scheduler,
         per_page=PER_PAGE,
     )
+
+    set_state_in_scheduler = mocker.spy(lister_bulk, "set_state_in_scheduler")
+
     stats = lister_bulk.run()
 
     assert stats == ListerStats(pages=len(SUBMITTED_ORIGINS) // PER_PAGE, origins=0)
@@ -206,6 +218,12 @@ def test_bulk_lister_connection_errors(swh_scheduler, requests_mock, mocker):
             key=attrgetter("origin_url"),
         )
     )
+
+    # check scheduler state is updated at each origin connection error
+    # plus at the end of the listing process to set the termination date
+    expected_calls = [mocker.call()] * len(SUBMITTED_ORIGINS)
+    expected_calls.append(mocker.call(with_listing_finished_date=True))
+    assert set_state_in_scheduler.mock_calls == expected_calls
 
 
 def test_bulk_lister_invalid_origins(swh_scheduler, requests_mock, mocker):
@@ -236,6 +254,9 @@ def test_bulk_lister_invalid_origins(swh_scheduler, requests_mock, mocker):
         scheduler=swh_scheduler,
         per_page=PER_PAGE,
     )
+
+    set_state_in_scheduler = mocker.spy(lister_bulk, "set_state_in_scheduler")
+
     stats = lister_bulk.run()
 
     assert stats == ListerStats(pages=len(SUBMITTED_ORIGINS) // PER_PAGE, origins=1)
@@ -264,3 +285,10 @@ def test_bulk_lister_invalid_origins(swh_scheduler, requests_mock, mocker):
             key=attrgetter("origin_url"),
         )
     )
+
+    # check scheduler state is updated at each invalid origin
+    # plus at the end of the listing process to set the termination date
+    expected_calls = [mocker.call()] * (len(SUBMITTED_ORIGINS) - 1)
+    expected_calls.append(mocker.call(with_listing_finished_date=True))
+
+    assert set_state_in_scheduler.mock_calls == expected_calls

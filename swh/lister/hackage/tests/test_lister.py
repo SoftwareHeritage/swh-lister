@@ -133,7 +133,7 @@ def test_hackage_lister_incremental(swh_scheduler, requests_mock, datadir):
     lister = HackageLister(scheduler=swh_scheduler)
     # force lister.last_listing_date to not being 'now'
     lister.state.last_listing_date = iso8601.parse_date("2022-08-26T02:27:45.073759Z")
-    lister.set_state_in_scheduler(force=True)
+    lister.set_state_in_scheduler(force_state=True)
     assert lister.get_state_from_scheduler() == HackageListerState(
         last_listing_date=iso8601.parse_date("2022-08-26T02:27:45.073759Z")
     )
@@ -157,7 +157,7 @@ def test_hackage_lister_incremental(swh_scheduler, requests_mock, datadir):
     lister.state.last_listing_date = iso8601.parse_date(
         "2022-09-30T08:00:34.348551203Z"
     )
-    lister.set_state_in_scheduler(force=True)
+    lister.set_state_in_scheduler(force_state=True)
     assert lister.get_state_from_scheduler() == HackageListerState(
         last_listing_date=iso8601.parse_date("2022-09-30T08:00:34.348551203Z")
     )
