@@ -213,3 +213,10 @@ class GitHubLister(Lister[GitHubListerState, List[Dict[str, Any]]]):
         # the current run is higher than that stored in the database.
         if self.state.last_seen_id > scheduler_state.last_seen_id:
             self.updated = True
+
+    def set_state_in_scheduler(
+        self, with_listing_finished_date: bool = False, force_state: bool = False
+    ) -> None:
+        # github range lister should not override shared incremental lister state
+        if not self.relisting:
+            super().set_state_in_scheduler(with_listing_finished_date, force_state)

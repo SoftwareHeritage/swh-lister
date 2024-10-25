@@ -135,6 +135,7 @@ def test_relister(swh_scheduler, caplog, requests_mocker) -> None:
     # Check that the relisting mode hasn't touched the stored state.
     lister_data = get_lister_data(swh_scheduler)
     assert lister_data.current_state == {"last_seen_id": 123}
+    assert lister_data.last_listing_finished_at is None
 
 
 def test_anonymous_ratelimit(
