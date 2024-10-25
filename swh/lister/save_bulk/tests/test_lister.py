@@ -165,9 +165,9 @@ def test_bulk_lister_not_found_origins(swh_scheduler, requests_mock, mocker):
         )
     )
 
-    # check scheduler state is updated at each not found origin
+    # check scheduler state is updated after each page
     # plus at the end of the listing process to set the termination date
-    expected_calls = [mocker.call()] * len(SUBMITTED_ORIGINS)
+    expected_calls = [mocker.call()] * stats.pages
     expected_calls.append(mocker.call(with_listing_finished_date=True))
     assert set_state_in_scheduler.mock_calls == expected_calls
 
@@ -219,9 +219,9 @@ def test_bulk_lister_connection_errors(swh_scheduler, requests_mock, mocker):
         )
     )
 
-    # check scheduler state is updated at each origin connection error
+    # check scheduler state is updated after each page
     # plus at the end of the listing process to set the termination date
-    expected_calls = [mocker.call()] * len(SUBMITTED_ORIGINS)
+    expected_calls = [mocker.call()] * stats.pages
     expected_calls.append(mocker.call(with_listing_finished_date=True))
     assert set_state_in_scheduler.mock_calls == expected_calls
 
@@ -286,9 +286,9 @@ def test_bulk_lister_invalid_origins(swh_scheduler, requests_mock, mocker):
         )
     )
 
-    # check scheduler state is updated at each invalid origin
+    # check scheduler state is updated after each page
     # plus at the end of the listing process to set the termination date
-    expected_calls = [mocker.call()] * (len(SUBMITTED_ORIGINS) - 1)
+    expected_calls = [mocker.call()] * stats.pages
     expected_calls.append(mocker.call(with_listing_finished_date=True))
 
     assert set_state_in_scheduler.mock_calls == expected_calls
