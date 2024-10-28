@@ -212,7 +212,7 @@ def test_lister_cgit_instantiation_with_credentials(
 def test_lister_cgit_from_configfile(swh_scheduler_config, mocker):
     load_from_envvar = mocker.patch("swh.lister.pattern.load_from_envvar")
     load_from_envvar.return_value = {
-        "scheduler": {"cls": "local", **swh_scheduler_config},
+        "scheduler": {"cls": "postgresql", **swh_scheduler_config},
         "url": "https://git.tizen/cgit/",
         "instance": "tizen",
         "credentials": {},

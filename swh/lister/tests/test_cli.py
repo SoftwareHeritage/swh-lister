@@ -70,7 +70,7 @@ def test_get_lister(swh_scheduler_config):
     for lister_name in SUPPORTED_LISTERS:
         lst = get_lister(
             lister_name,
-            scheduler={"cls": "local", **swh_scheduler_config},
+            scheduler={"cls": "postgresql", **swh_scheduler_config},
             **lister_args.get(lister_name, {}),
         )
         assert hasattr(lst, "run")

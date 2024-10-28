@@ -90,7 +90,7 @@ def _check_listed_origins(scheduler_origins, launchpad_response, vcs_type="git")
 def test_lister_from_configfile(swh_scheduler_config, mocker):
     load_from_envvar = mocker.patch("swh.lister.pattern.load_from_envvar")
     load_from_envvar.return_value = {
-        "scheduler": {"cls": "local", **swh_scheduler_config},
+        "scheduler": {"cls": "postgresql", **swh_scheduler_config},
         "credentials": {},
     }
     lister = LaunchpadLister.from_configfile()
