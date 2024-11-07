@@ -336,7 +336,7 @@ class SourceForgeLister(Lister[SourceForgeListerState, SourceForgeListerPage]):
 
         try:
             res = self.http_request(endpoint).json()
-        except (requests.HTTPError, ConnectionError):
+        except (requests.HTTPError, requests.exceptions.ConnectionError):
             # We've already logged in `http_request`
             return []
 
@@ -358,7 +358,7 @@ class SourceForgeLister(Lister[SourceForgeListerState, SourceForgeListerPage]):
                 cvs_info_url = f"http://{project}.cvs.sourceforge.net"
                 try:
                     response = self.http_request(cvs_info_url)
-                except (requests.HTTPError, ConnectionError):
+                except (requests.HTTPError, requests.exceptions.ConnectionError):
                     logger.warning(
                         "CVS info page could not be fetched, skipping project '%s'",
                         project,
@@ -420,7 +420,7 @@ class SourceForgeLister(Lister[SourceForgeListerState, SourceForgeListerPage]):
                                     )
                                 )
                         continue
-                except (requests.HTTPError, ConnectionError):
+                except (requests.HTTPError, requests.exceptions.ConnectionError):
                     logger.warning(
                         "Bazaar repository page could not be fetched, skipping project '%s'",
                         project,
