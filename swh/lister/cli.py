@@ -1,4 +1,4 @@
-# Copyright (C) 2018-2021  The Software Heritage developers
+# Copyright (C) 2018-2024  The Software Heritage developers
 # See the AUTHORS file at the top-level directory of this distribution
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
@@ -72,10 +72,10 @@ def run(ctx, lister, options):
     if "scheduler" not in config:
         logger.warning(
             "No scheduler configuration detected, using a temporary instance "
-            "with postgresql backend instead."
+            "with a memory backend instead."
         )
 
-        config["scheduler"] = {"cls": "temporary"}
+        config["scheduler"] = {"cls": "memory"}
 
     print(get_lister(lister, **config).run())
 
