@@ -7,7 +7,7 @@ launchpadlib
 looseversion
 lxml
 mercurial
-psycopg2
+psycopg
 pyreadr
 python_debian
 repomd

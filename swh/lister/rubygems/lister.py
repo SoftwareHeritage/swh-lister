@@ -15,7 +15,7 @@ import tempfile
 from typing import Any, Dict, Iterator, Optional, Tuple
 
 from bs4 import BeautifulSoup
-import psycopg2
+import psycopg
 from testing.postgresql import Postgresql
 
 from swh.scheduler.interface import SchedulerInterface
@@ -87,20 +87,18 @@ class RubyGemsLister(StatelessLister[RubyGemsListerPage]):
 
     def create_rubygems_db(
         self, postgresql: Postgresql
-    ) -> Tuple[str, psycopg2._psycopg.connection]:
+    ) -> Tuple[str, psycopg.Connection[Any]]:
         logger.debug("Creating rubygems database")
 
         db_dsn = postgresql.dsn()
         db_url = postgresql.url().replace(db_dsn["database"], self.DB_NAME)
-        db = psycopg2.connect(**db_dsn)
-        db.set_isolation_level(psycopg2.extensions.ISOLATION_LEVEL_AUTOCOMMIT)
+        db = psycopg.connect(autocommit=True, conninfo=postgresql.url())
         with db.cursor() as cursor:
             cursor.execute(f"CREATE DATABASE {self.DB_NAME}")
 
         db_dsn["database"] = self.DB_NAME
 
-        db = psycopg2.connect(**db_dsn)
-        db.set_isolation_level(psycopg2.extensions.ISOLATION_LEVEL_AUTOCOMMIT)
+        db = psycopg.connect(conninfo=db_url, autocommit=True)
         with db.cursor() as cursor:
             cursor.execute("CREATE EXTENSION IF NOT EXISTS hstore")
 
