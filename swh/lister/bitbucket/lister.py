@@ -124,16 +124,18 @@ class BitbucketLister(Lister[BitbucketListerState, List[Dict[str, Any]]]):
                 body = self.http_request(self.url, params=self.url_params).json()
                 yield body["values"]
             except HTTPError as e:
-                if e.response is not None and e.response.status_code == 500:
+                if e.response is not None and e.response.status_code >= 500:
                     logger.warning(
-                        "URL %s is buggy (error 500), skip it and get next page.",
+                        "URL %s is buggy (error %s), skip it and get next page.",
                         e.response.url,
+                        e.response.status_code,
                     )
                     body = self.http_request(
                         self.url,
                         params={
                             "pagelen": self.url_params["pagelen"],
                             "fields": "next",
+                            "after": last_repo_cdate,
                         },
                     ).json()
 

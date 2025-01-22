@@ -190,7 +190,8 @@ def test_bitbucket_lister_buggy_page(
         BitbucketLister.API_URL,
         [
             {"json": bb_api_repositories_page1, "status_code": 200},
-            *[{"json": None, "status_code": 500}] * MAX_NUMBER_ATTEMPTS,
+            *[{"json": None, "status_code": 500}] * (MAX_NUMBER_ATTEMPTS - 1),
+            {"json": None, "status_code": 504},
             {"json": {"next": bb_api_repositories_page1["next"]}, "status_code": 200},
             {"json": bb_api_repositories_page2, "status_code": 200},
         ],
