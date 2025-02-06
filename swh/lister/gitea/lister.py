@@ -13,10 +13,10 @@ logger = logging.getLogger(__name__)
 class GiteaLister(GogsLister):
     """List origins from Gitea.
 
-    Gitea API documentation: https://try.gitea.io/api/swagger
+    Gitea API documentation: https://gitea.com/api/swagger
 
     The API does pagination and provides navigation URLs through the 'Link' header.
     The default value for page size is the maximum value observed on the instances
-    accessible at https://try.gitea.io/api/v1/ and https://codeberg.org/api/v1/."""
+    accessible at https://gitea.com/api/v1/ and https://codeberg.org/api/v1/."""
 
     LISTER_NAME = "gitea"

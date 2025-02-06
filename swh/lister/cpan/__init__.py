@@ -58,10 +58,10 @@ You can follow lister execution by displaying logs of swh-lister service::
 .. _cpan.org: https://cpan.org/
 .. _metacpan.org: https://metacpan.org/
 .. _http api endpoint: https://explorer.metacpan.org/?url=/release/
-.. _search: https://github.com/metacpan/metacpan-api/blob/master/docs/API-docs.md#search-without-constraints  # noqa: B950
+.. _search: https://github.com/metacpan/metacpan-api/blob/master/docs/API-docs.md#search-without-constraints
 
 
-"""
+"""  # noqa: B950
 
 
 def register():

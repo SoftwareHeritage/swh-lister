@@ -62,7 +62,7 @@ You can follow lister execution by displaying logs of swh-lister service::
 
 .. _Dlang: https://dlang.org/
 .. _DUB: https://code.dlang.org/
-.. _http api endpoint: https://code.dlang.org/api/packages/dump"
+.. _http api endpoint: https://code.dlang.org/api/packages/dump
 """
 
 

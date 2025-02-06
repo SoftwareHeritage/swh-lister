@@ -374,7 +374,7 @@ More about listers
 
 See current implemented listers as examples (GitHub_, Bitbucket_, CGit_, GitLab_ ).
 
-.. _GitHub: https://forge.softwareheritage.org/source/swh-lister/browse/master/swh/lister/github/lister.py
-.. _Bitbucket: https://forge.softwareheritage.org/source/swh-lister/browse/master/swh/lister/bitbucket/lister.py
-.. _CGit: https://forge.softwareheritage.org/source/swh-lister/browse/master/swh/lister/cgit/lister.py
-.. _GitLab: https://forge.softwareheritage.org/source/swh-lister/browse/master/swh/lister/gitlab/lister.py
+.. _GitHub: https://gitlab.softwareheritage.org/swh/devel/swh-lister/-/blob/master/swh/lister/github/lister.py
+.. _Bitbucket: https://gitlab.softwareheritage.org/swh/devel/swh-lister/-/blob/master/swh/lister/bitbucket/lister.py
+.. _CGit: https://gitlab.softwareheritage.org/swh/devel/swh-lister/-/blob/master/swh/lister/cgit/lister.py
+.. _GitLab: https://gitlab.softwareheritage.org/swh/devel/swh-lister/-/blob/master/swh/lister/gitlab/lister.py

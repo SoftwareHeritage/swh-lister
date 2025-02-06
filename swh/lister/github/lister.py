@@ -52,7 +52,7 @@ class GitHubLister(Lister[GitHubListerState, List[Dict[str, Any]]]):
     When the credentials aren't set in the lister config, the lister can run in
     anonymous mode too (e.g. for testing purposes).
 
-    .. _abuse rate limit policy: https://developer.github.com/v3/guides/best-practices-for-integrators/#dealing-with-abuse-rate-limits
+    .. _abuse rate limit policy: https://developer.github.com/v3/guides/best-practices-for-integrators/#handle-rate-limit-errors-appropriately
 
 
     Args:
