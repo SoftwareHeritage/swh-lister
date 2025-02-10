@@ -356,8 +356,9 @@ def test_maven_lister_null_mtime(swh_scheduler, requests_mock, maven_index_null_
 
 
 def test_maven_list_pom_bad_encoding(swh_scheduler, requests_mock):
-    """should continue listing when failing to decode pom file."""
-    # Test failure of pom parsing by reencoding a UTF-8 pom file to a not expected one
+    """should successfully parse a pom file with unexpected encoding
+    (beautifulsoup4 >= 4.13)."""
+    # Test pom parsing by reencoding a UTF-8 pom file to a not expected one
     requests_mock.get(
         URL_POM_1,
         content=requests.get(URL_POM_1).content.decode("utf-8").encode("utf-32"),
@@ -367,10 +368,14 @@ def test_maven_list_pom_bad_encoding(swh_scheduler, requests_mock):
 
     lister.run()
 
-    # If the maven_index_full step succeeded but not the pom parsing step,
-    # then we get only one maven-jar origin and one git origin.
+    # we should get one maven-jar origin and two git origins.
     scheduler_origins = swh_scheduler.get_listed_origins(lister.lister_obj.id).results
-    assert len(scheduler_origins) == 2
+    assert len(scheduler_origins) == 3
+
+    # git origin parsed from pom file with unexpected encoding
+    assert ("https://github.com/aldialimucaj/sprova4j", "git") in [
+        (o.url, o.visit_type) for o in scheduler_origins
+    ]
 
 
 def test_maven_list_pom_multi_byte_encoding(swh_scheduler, requests_mock, datadir):
