@@ -45,11 +45,11 @@ def origins_list_requests_mock(requests_mock):
     nb_pages = len(SUBMITTED_ORIGINS) // PER_PAGE
     for i in range(nb_pages):
         requests_mock.get(
-            f"{URL}?page={i+1}&per_page={PER_PAGE}",
+            f"{URL}?page={i + 1}&per_page={PER_PAGE}",
             json=SUBMITTED_ORIGINS[i * PER_PAGE : (i + 1) * PER_PAGE],
         )
     requests_mock.get(
-        f"{URL}?page={nb_pages+1}&per_page={PER_PAGE}",
+        f"{URL}?page={nb_pages + 1}&per_page={PER_PAGE}",
         json=[],
     )
 
