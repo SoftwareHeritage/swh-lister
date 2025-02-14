@@ -11,7 +11,7 @@ from typing import Any, Dict, Iterator, Optional
 from urllib.parse import urljoin
 
 from bs4 import BeautifulSoup
-import lxml
+from lxml import etree
 import requests
 
 from swh.scheduler.interface import SchedulerInterface
@@ -247,7 +247,7 @@ class MavenLister(Lister[MavenListerState, RepoPage]):
                     "POM info page could not be fetched, skipping project '%s'",
                     pom_url,
                 )
-            except lxml.etree.Error as error:
+            except etree.Error as error:
                 logger.info("Could not parse POM %s XML: %s.", pom_url, error)
 
     def get_scm(self, page: RepoPage) -> Optional[ListedOrigin]:

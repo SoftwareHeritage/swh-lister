@@ -13,7 +13,7 @@ from xml.etree import ElementTree
 
 from bs4 import BeautifulSoup
 import iso8601
-import lxml
+from lxml import etree
 import requests
 
 from swh.core.api.classes import stream_results
@@ -402,8 +402,8 @@ class SourceForgeLister(Lister[SourceForgeListerState, SourceForgeListerPage]):
                         # If a bzr project has multiple branches, we need to extract their
                         # names from the repository landing page and create one listed origin
                         # per branch
-                        parser = lxml.etree.HTMLParser()
-                        tree = lxml.etree.fromstring(response.text, parser)
+                        parser = etree.HTMLParser()
+                        tree = etree.fromstring(response.text, parser)
 
                         # Get all tds with class 'autcell'
                         tds = tree.xpath(".//td[contains(@class, 'autcell')]")
