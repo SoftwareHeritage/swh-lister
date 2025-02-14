@@ -1,10 +1,14 @@
+celery-types
 pandas
+pandas-stubs
 pytest >= 8.1
 pytest-mock
 requests_mock
 swh-scheduler[testing] >= 2.7.0
 types-beautifulsoup4
 types-click
+types-dateparser
 types-pyyaml
 types-requests
 types-toml
+types-lxml
