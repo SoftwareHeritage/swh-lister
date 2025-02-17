@@ -133,7 +133,6 @@ def network_requests_mock(datadir, requests_mock):
     )
 
 
-@pytest.mark.db
 def test_rubygems_lister(swh_scheduler, expected_listed_origins):
     lister = RubyGemsLister(scheduler=swh_scheduler)
     res = lister.run()
