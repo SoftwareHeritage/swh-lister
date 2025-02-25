@@ -1,18 +1,17 @@
-# Copyright (C) 2018-2022  The Software Heritage developers
+# Copyright (C) 2018-2025  The Software Heritage developers
 # See the AUTHORS file at the top-level directory of this distribution
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
 
+from importlib.metadata import PackageNotFoundError, entry_points, version
 import logging
-
-import pkg_resources
 
 logger = logging.getLogger(__name__)
 
 
 try:
-    __version__ = pkg_resources.get_distribution("swh.lister").version
-except pkg_resources.DistributionNotFound:
+    __version__ = version("swh-lister")
+except PackageNotFoundError:
     __version__ = "devel"
 
 USER_AGENT_TEMPLATE = (
@@ -22,7 +21,7 @@ USER_AGENT_TEMPLATE = (
 
 LISTERS = {
     entry_point.name.split(".", 1)[1]: entry_point
-    for entry_point in pkg_resources.iter_entry_points("swh.workers")
+    for entry_point in entry_points().select(group="swh.workers")
     if entry_point.name.split(".", 1)[0] == "lister"
 }
 
