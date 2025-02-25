@@ -1,4 +1,4 @@
-# Copyright (C) 2019-2023  The Software Heritage developers
+# Copyright (C) 2019-2025  The Software Heritage developers
 # See the AUTHORS file at the top-level directory of this distribution
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
@@ -7,7 +7,7 @@ from dataclasses import dataclass
 from datetime import datetime, timezone
 import logging
 from random import shuffle
-from typing import Any, Dict, Iterator, List, Optional
+from typing import Any, Dict, Iterable, Iterator, List, Optional
 
 import iso8601
 import requests
@@ -21,7 +21,7 @@ from ..pattern import CredentialsType, Lister
 
 logger = logging.getLogger(__name__)
 
-PackagistPageType = List[str]
+PackagistPageType = Iterable[str]
 
 
 class NotModifiedSinceLastVisit(ValueError):
