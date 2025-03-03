@@ -61,7 +61,7 @@ class GNUTree:
         for directory in raw_data["contents"]:
             if directory["name"] not in self.top_level_directories:
                 continue
-            infos = directory["contents"]
+            infos = directory.get("contents", [])
             for info in infos:
                 if info["type"] == "directory":
                     package_url = "%s/%s/%s/" % (
@@ -69,7 +69,9 @@ class GNUTree:
                         directory["name"],
                         info["name"],
                     )
-                    package_artifacts = find_artifacts(info["contents"], package_url)
+                    package_artifacts = find_artifacts(
+                        info.get("contents", []), package_url
+                    )
                     if package_artifacts != []:
                         repo_details = {
                             "name": info["name"],
@@ -146,7 +148,7 @@ def find_artifacts(
         # It will recursively check for artifacts in all sub-folders
         elif filetype == "directory":
             tarballs_in_dir = find_artifacts(
-                info_file["contents"], url + filename + "/"
+                info_file.get("contents", []), url + filename + "/"
             )
             artifacts.extend(tarballs_in_dir)
 

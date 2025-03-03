@@ -69,5 +69,6 @@
         {"type":"file","name":"xboard-4.2.5.tar.gz","size":1055502,"time":"1008466945"},
         {"type":"file","name":"xboard-4.2.6.tar.gz","size":1057625,"time":"1012641715"},
         {"type":"file","name":"xboard-4.2.7.tar.gz","size":1318110,"time":"1070057764"}
-      ]}
+      ]},
+      {"type":"directory","name":"no-contents","size":4096,"time":"1254860068"}
 ]
