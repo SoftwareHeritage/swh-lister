@@ -200,6 +200,8 @@ class DebianLister(Lister[DebianListerState, DebianPageType]):
                     sum_name = "md5sum"
                 if field_ in src_pkg:
                     for entry in src_pkg[field_]:
+                        if "name" not in entry:
+                            continue
                         name = entry["name"]
                         files[name]["name"] = name
                         files[name]["size"] = int(entry["size"], 10)
