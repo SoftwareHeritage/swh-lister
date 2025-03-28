@@ -4,7 +4,7 @@ pandas-stubs
 pytest >= 8.1
 pytest-mock
 requests_mock
-swh-scheduler[testing] >= 3.0.0
+swh.scheduler[pytest] >= 3.1.0
 types-beautifulsoup4
 types-click
 types-dateparser
