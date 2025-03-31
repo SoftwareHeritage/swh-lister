@@ -1,17 +1,23 @@
-# Copyright (C) 2021-2024 The Software Heritage developers
+# Copyright (C) 2021-2025 The Software Heritage developers
 # See the AUTHORS file at the top-level directory of this distribution
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
 
 from dataclasses import asdict, dataclass
 from datetime import datetime, timezone
+import gzip
 import logging
+import os
 import re
-from typing import Any, Dict, Iterator, Optional
+import shutil
+import subprocess
+import tempfile
+from typing import Any, Dict, Iterator, List, Optional
 from urllib.parse import urljoin
 
 from bs4 import BeautifulSoup
 from lxml import etree
+import ndjson
 import requests
 
 from swh.scheduler.interface import SchedulerInterface
@@ -21,7 +27,7 @@ from ..pattern import CredentialsType, Lister
 
 logger = logging.getLogger(__name__)
 
-RepoPage = Dict[str, Any]
+RepoPage = Optional[Dict[str, Any]]
 
 SUPPORTED_SCM_TYPES = ("git", "svn", "hg", "cvs", "bzr")
 
@@ -50,7 +56,14 @@ class MavenLister(Lister[MavenListerState, RepoPage]):
     the source code of artifacts and links to their scm repository.
 
     This lister yields origins of types: git/svn/hg or whatever the Artifacts
-    use as repository type, plus maven types for the maven loader (tgz, jar)."""
+    use as repository type, plus maven types for the maven loader (tarball, source jar).
+
+    The lister relies on the use of the maven index exporter tool allowing to
+    convert the binary content of a maven repository index to NDJSON format
+    (https://gitlab.softwareheritage.org/swh/devel/fixtures/maven-index-exporter).
+    To be able to execute the tool, Java runtime environment >= 17 must be available
+    in the lister execution environment.
+    """
 
     LISTER_NAME = "maven"
 
@@ -58,13 +71,16 @@ class MavenLister(Lister[MavenListerState, RepoPage]):
         self,
         scheduler: SchedulerInterface,
         url: str,
-        index_url: str,
+        # keep no longer used parameter for backward compatibility of
+        # existing lister tasks in scheduler database
+        index_url: Optional[str] = None,
         instance: Optional[str] = None,
         credentials: CredentialsType = None,
         max_origins_per_page: Optional[int] = None,
         max_pages: Optional[int] = None,
         enable_origins: bool = True,
         incremental: bool = True,
+        with_github_session=True,
     ):
         """Lister class for Maven repositories.
 
@@ -72,17 +88,15 @@ class MavenLister(Lister[MavenListerState, RepoPage]):
             url: main URL of the Maven repository, i.e. url of the base index
                 used to fetch maven artifacts. For Maven central use
                 https://repo1.maven.org/maven2/
-            index_url: the URL to download the exported text indexes from.
-                Would typically be a local host running the export docker image.
-                See README.md in this directory for more information.
             instance: Name of maven instance. Defaults to url's network location
                 if unset.
-            incremental: bool, defaults to True. Defines if incremental listing
+            incremental: defaults to :const:`True`. Defines if incremental listing
                 is activated or not.
-
+            with_github_session: defaults to :const:`True`. Defines if canonical
+                URL for extracted github repository should be retrieved with the
+                GitHub REST API.
         """
         self.BASE_URL = url
-        self.INDEX_URL = index_url
         self.incremental = incremental
 
         super().__init__(
@@ -90,7 +104,7 @@ class MavenLister(Lister[MavenListerState, RepoPage]):
             credentials=credentials,
             url=url,
             instance=instance,
-            with_github_session=True,
+            with_github_session=with_github_session,
             max_origins_per_page=max_origins_per_page,
             max_pages=max_pages,
             enable_origins=enable_origins,
@@ -98,7 +112,11 @@ class MavenLister(Lister[MavenListerState, RepoPage]):
 
         self.session.headers.update({"Accept": "application/json"})
 
-        self.jar_origins: Dict[str, ListedOrigin] = {}
+        self.jar_origin: Optional[ListedOrigin] = None
+        self.jar_origin_docs: List[int] = []
+        self.last_origin_url: Optional[str] = None
+        self.last_seen_doc = self.state.last_seen_doc
+        self.last_seen_pom = self.state.last_seen_pom
 
     def state_from_dict(self, d: Dict[str, Any]) -> MavenListerState:
         return MavenListerState(**d)
@@ -129,67 +147,53 @@ class MavenLister(Lister[MavenListerState, RepoPage]):
         #   ...
         # ]
 
-        # Download the main text index file.
-        logger.info("Downloading computed index from %s.", self.INDEX_URL)
-        assert self.INDEX_URL is not None
-        try:
-            response = self.http_request(self.INDEX_URL, stream=True)
-        except requests.HTTPError:
-            logger.error("Index %s not found, stopping", self.INDEX_URL)
-            raise
-
-        # Prepare regexes to parse index exports.
-
-        # Parse doc id.
-        # Example line: "doc 13"
-        re_doc = re.compile(r"^doc (?P<doc>\d+)$")
-
-        # Parse gid, aid, version, classifier, extension.
-        # Example line: "    value al.aldi|sprova4j|0.1.0|sources|jar"
-        re_val = re.compile(
-            r"^\s{4}value (?P<gid>[^|]+)\|(?P<aid>[^|]+)\|(?P<version>[^|]+)\|"
-            + r"(?P<classifier>[^|]+)\|(?P<ext>[^|]+)$"
-        )
-
-        # Parse last modification time.
-        # Example line: "    value jar|1626109619335|14316|2|2|0|jar"
-        re_time = re.compile(
-            r"^\s{4}value ([^|]+)\|(?P<mtime>[^|]+)\|([^|]+)\|([^|]+)\|([^|]+)"
-            + r"\|([^|]+)\|([^|]+)$"
-        )
-
-        # Read file line by line and process it
         out_pom: Dict = {}
-        jar_src: Dict = {}
-        doc_id: int = 0
-        jar_src["doc"] = None
-        url_src = None
 
-        iterator = response.iter_lines(chunk_size=1024)
-        for line_bytes in iterator:
-            # Read the index text export and get URLs and SCMs.
-            line = line_bytes.decode(errors="ignore")
-            m_doc = re_doc.match(line)
-            if m_doc is not None:
-                doc_id = int(m_doc.group("doc"))
-                # jar_src["doc"] contains the id of the current document, whatever
-                # its type (scm or jar).
-                jar_src["doc"] = doc_id
-            else:
-                m_val = re_val.match(line)
-                if m_val is not None:
-                    (gid, aid, version, classifier, ext) = m_val.groups()
+        with tempfile.TemporaryDirectory() as tmpdir:
+
+            work_dir = os.path.join(tmpdir, "work")
+            publish_dir = os.path.join(tmpdir, "publish")
+            os.makedirs(work_dir, exist_ok=True)
+            os.makedirs(publish_dir, exist_ok=True)
+
+            # Execute maven index exporter tool to dump maven repository
+            # index to NDJSON format
+            subprocess.check_call(
+                [
+                    "python3",
+                    "/opt/maven-index-exporter/run_full_export.py",
+                    "--base-url",
+                    self.BASE_URL,
+                    "--work-dir",
+                    work_dir,
+                    "--publish-dir",
+                    publish_dir,
+                ],
+            )
+
+            # Remove no longer needed files to save some disk space
+            shutil.rmtree(work_dir)
+
+            # Read NDJSON file line by line and process it, documents are sorted
+            # by groupId and artifactId so every versions of a given maven package
+            # are processed sequentially.
+            with gzip.open(
+                os.path.join(publish_dir, "maven-index-export.ndjson.gz"),
+                mode="rt",
+                encoding="utf-8",
+                errors="ignore",
+            ) as f:
+                reader = ndjson.reader(f)
+                for entry in reader:
+                    doc_id = entry["doc"]
+                    gid, aid, version, classifier, ext = entry["u"].split("|")
                     ext = ext.strip()
                     path = "/".join(gid.split("."))
                     if classifier == "NA" and ext.lower() == "pom":
-                        # If incremental mode, we don't record any line that is
-                        # before our last recorded doc id.
-                        if (
-                            self.incremental
-                            and self.state
-                            and self.state.last_seen_pom
-                            and self.state.last_seen_pom >= doc_id
-                        ):
+                        # Store pom file URL to extract SCM URLs at end of listing
+                        # process.If incremental mode, we don't record any pom file
+                        # that is before our last recorded doc id.
+                        if self.incremental and self.last_seen_pom >= doc_id:
                             continue
                         url_path = f"{path}/{aid}/{version}/{aid}-{version}.{ext}"
                         url_pom = urljoin(
@@ -200,32 +204,31 @@ class MavenLister(Lister[MavenListerState, RepoPage]):
                     elif (
                         classifier.lower() == "sources" or ("src" in classifier)
                     ) and ext.lower() in ("zip", "jar"):
+                        # Yield maven source package info
                         url_path = (
                             f"{path}/{aid}/{version}/{aid}-{version}-{classifier}.{ext}"
                         )
                         url_src = urljoin(self.BASE_URL, url_path)
-                        jar_src["gid"] = gid
-                        jar_src["aid"] = aid
-                        jar_src["version"] = version
-                else:
-                    m_time = re_time.match(line)
-                    if m_time is not None and url_src is not None:
-                        time = m_time.group("mtime")
-                        jar_src["time"] = int(time)
+                        m_time = entry["i"].split("|")[1]
                         artifact_metadata_d = {
                             "type": "maven",
                             "url": url_src,
-                            **jar_src,
+                            "doc": doc_id,
+                            "gid": gid,
+                            "aid": aid,
+                            "version": version,
+                            "time": int(m_time),
                         }
                         logger.debug(
                             "* Yielding jar %s: %s", url_src, artifact_metadata_d
                         )
                         yield artifact_metadata_d
-                        url_src = None
 
-        logger.info("Found %s poms.", len(out_pom))
+        # Notify that maven index listing has finished
+        yield None
 
         # Now fetch pom files and scan them for scm info.
+        logger.info("Found %s poms.", len(out_pom))
         logger.info("Fetching poms ...")
         for pom_url in out_pom:
             try:
@@ -268,7 +271,7 @@ class MavenLister(Lister[MavenListerState, RepoPage]):
 
         """
 
-        assert page["type"] == "scm"
+        assert page and page["type"] == "scm"
         visit_type: Optional[str] = None
         url: Optional[str] = None
         m_scm = re.match(r"^scm:(?P<type>[^:]+):(?P<url>.*)$", page["url"])
@@ -285,8 +288,7 @@ class MavenLister(Lister[MavenListerState, RepoPage]):
         else:
             return None
 
-        if url and visit_type == "git":
-            assert self.github_session is not None
+        if self.github_session and url and visit_type == "git":
             # Non-github urls will be returned as is, github ones will be canonical ones
             url = self.github_session.get_canonical_url(url)
 
@@ -310,11 +312,18 @@ class MavenLister(Lister[MavenListerState, RepoPage]):
 
     def get_origins_from_page(self, page: RepoPage) -> Iterator[ListedOrigin]:
         """Convert a page of Maven repositories into a list of ListedOrigins."""
-        if page["type"] == "scm":
+        if page is None:
+            # maven index listing has finished, yield last ListedOrigin if any
+            if self.jar_origin and (
+                not self.incremental
+                or (any(doc > self.last_seen_doc for doc in self.jar_origin_docs))
+            ):
+                yield self.jar_origin
+        elif page["type"] == "scm":
             listed_origin = self.get_scm(page)
             if listed_origin:
                 yield listed_origin
-        else:
+        elif page["type"] == "maven":
             # Origin is gathering source archives:
             last_update_dt = None
             last_update_iso = ""
@@ -338,39 +347,43 @@ class MavenLister(Lister[MavenListerState, RepoPage]):
                 "base_url": self.BASE_URL,
             }
 
-            if origin_url not in self.jar_origins:
-                # Create ListedOrigin instance if we did not see that origin yet
+            if origin_url != self.last_origin_url:
+                # All versions of a given maven package have been processed,
+                # current ListedOrigin can be yielded
+                if self.jar_origin and (
+                    not self.incremental
+                    # In incremental mode, yield maven origin only if it has new
+                    # versions since last listing
+                    or (any(doc > self.last_seen_doc for doc in self.jar_origin_docs))
+                ):
+                    yield self.jar_origin
+
+                # Keep track of maven index documents ids for package versions
+                self.jar_origin_docs = [page["doc"]]
+
+                # Create ListedOrigin instance for newly seen maven package
                 assert self.lister_obj.id is not None
-                jar_origin = ListedOrigin(
+                self.jar_origin = ListedOrigin(
                     lister_id=self.lister_obj.id,
                     url=origin_url,
                     visit_type=page["type"],
                     last_update=last_update_dt,
                     extra_loader_arguments={"artifacts": [artifact]},
                 )
-                self.jar_origins[origin_url] = jar_origin
-            else:
-                # Update list of source artifacts for that origin otherwise
-                jar_origin = self.jar_origins[origin_url]
-                artifacts = jar_origin.extra_loader_arguments["artifacts"]
+            elif self.jar_origin:
+                # Update list of source artifacts for the current ListedOrigin
+                artifacts = self.jar_origin.extra_loader_arguments["artifacts"]
                 if artifact not in artifacts:
                     artifacts.append(artifact)
+                    self.jar_origin_docs.append(page["doc"])
+                if (
+                    self.jar_origin.last_update
+                    and last_update_dt
+                    and last_update_dt > self.jar_origin.last_update
+                ):
+                    self.jar_origin.last_update = last_update_dt
 
-            if (
-                jar_origin.last_update
-                and last_update_dt
-                and last_update_dt > jar_origin.last_update
-            ):
-                jar_origin.last_update = last_update_dt
-
-            if not self.incremental or (
-                self.state and page["doc"] > self.state.last_seen_doc
-            ):
-                # Yield origin with updated source artifacts, multiple instances of
-                # ListedOrigin for the same origin URL but with different artifacts
-                # list will be sent to the scheduler but it will deduplicate them and
-                # take the latest one to upsert in database
-                yield jar_origin
+            self.last_origin_url = origin_url
 
     def commit_page(self, page: RepoPage) -> None:
         """Update currently stored state using the latest listed doc.
@@ -381,9 +394,17 @@ class MavenLister(Lister[MavenListerState, RepoPage]):
         if self.incremental and self.state:
             # We need to differentiate the two state counters according
             # to the type of origin.
-            if page["type"] == "maven" and page["doc"] > self.state.last_seen_doc:
+            if (
+                page
+                and page["type"] == "maven"
+                and page["doc"] > self.state.last_seen_doc
+            ):
                 self.state.last_seen_doc = page["doc"]
-            elif page["type"] == "scm" and page["doc"] > self.state.last_seen_pom:
+            elif (
+                page
+                and page["type"] == "scm"
+                and page["doc"] > self.state.last_seen_pom
+            ):
                 self.state.last_seen_doc = page["doc"]
                 self.state.last_seen_pom = page["doc"]
 
@@ -397,9 +418,8 @@ class MavenLister(Lister[MavenListerState, RepoPage]):
             last_seen_doc = self.state.last_seen_doc
             last_seen_pom = self.state.last_seen_pom
 
-            scheduler_state = self.get_state_from_scheduler()
             if last_seen_doc and last_seen_pom:
-                if (scheduler_state.last_seen_doc < last_seen_doc) or (
-                    scheduler_state.last_seen_pom < last_seen_pom
+                if (self.last_seen_doc < last_seen_doc) or (
+                    self.last_seen_pom < last_seen_pom
                 ):
                     self.updated = True

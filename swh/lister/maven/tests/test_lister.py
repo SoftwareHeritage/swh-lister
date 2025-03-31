@@ -1,9 +1,11 @@
-# Copyright (C) 2021-2024 The Software Heritage developers
+# Copyright (C) 2021-2025 The Software Heritage developers
 # See the AUTHORS file at the top-level directory of this distribution
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
 
+import os
 from pathlib import Path
+import subprocess
 
 import iso8601
 import pytest
@@ -61,42 +63,44 @@ LIST_SRC_DATA = (
 
 
 @pytest.fixture
-def maven_index_full(datadir) -> bytes:
-    return Path(datadir, "http_indexes", "export_full.fld").read_bytes()
+def maven_index_full_publish_dir(datadir):
+    return os.path.join(datadir, "export_full")
 
 
 @pytest.fixture
-def maven_index_incr_first(datadir) -> bytes:
-    return Path(datadir, "http_indexes", "export_incr_first.fld").read_bytes()
+def maven_index_incr_first_publish_dir(datadir):
+    return os.path.join(datadir, "export_incr_first")
 
 
 @pytest.fixture
-def maven_index_null_mtime(datadir) -> bytes:
-    return Path(datadir, "http_indexes", "export_null_mtime.fld").read_bytes()
+def maven_index_null_mtime_publish_dir(datadir):
+    return os.path.join(datadir, "export_null_mtime")
 
 
-@pytest.fixture(autouse=True)
-def network_requests_mock(requests_mock, requests_mock_datadir, maven_index_full):
-    requests_mock.get(INDEX_URL, content=maven_index_full)
+def mock_maven_index_exporter(mocker, publish_dir):
+    mocker.patch("tempfile.TemporaryDirectory.__enter__").return_value = publish_dir
+    mocker.patch("subprocess.check_call")
 
 
-def test_maven_full_listing(swh_scheduler):
+def test_maven_full_listing(swh_scheduler, mocker, maven_index_full_publish_dir):
     """Covers full listing of multiple pages, checking page results and listed
     origins, statelessness."""
+
+    mock_maven_index_exporter(mocker, maven_index_full_publish_dir)
 
     # Run the lister.
     lister = MavenLister(
         scheduler=swh_scheduler,
         url=MVN_URL,
         instance="maven.org",
-        index_url=INDEX_URL,
         incremental=False,
     )
 
     stats = lister.run()
+    print(stats)
 
     # Start test checks.
-    assert stats.pages == 5
+    assert stats.pages == 6
 
     scheduler_origins = swh_scheduler.get_listed_origins(lister.lister_obj.id).results
     origin_urls = [origin.url for origin in scheduler_origins]
@@ -120,17 +124,21 @@ def test_maven_full_listing(swh_scheduler):
 
 def test_maven_full_listing_malformed(
     swh_scheduler,
+    requests_mock_datadir,
     requests_mock,
     datadir,
+    mocker,
+    maven_index_full_publish_dir,
 ):
     """Covers full listing of multiple pages, checking page results with a malformed
     scm entry in pom."""
+
+    mock_maven_index_exporter(mocker, maven_index_full_publish_dir)
 
     lister = MavenLister(
         scheduler=swh_scheduler,
         url=MVN_URL,
         instance="maven.org",
-        index_url=INDEX_URL,
         incremental=False,
     )
 
@@ -143,7 +151,8 @@ def test_maven_full_listing_malformed(
     stats = lister.run()
 
     # Start test checks.
-    assert stats.pages == 5
+    assert stats.origins == 3
+    assert stats.pages == 6
 
     scheduler_origins = swh_scheduler.get_listed_origins(lister.lister_obj.id).results
     origin_urls = [origin.url for origin in scheduler_origins]
@@ -167,17 +176,21 @@ def test_maven_full_listing_malformed(
 
 def test_maven_ignore_invalid_url(
     swh_scheduler,
+    requests_mock_datadir,
     requests_mock,
     datadir,
+    mocker,
+    maven_index_full_publish_dir,
 ):
     """Covers full listing of multiple pages, checking page results with a malformed
     scm entry in pom."""
+
+    mock_maven_index_exporter(mocker, maven_index_full_publish_dir)
 
     lister = MavenLister(
         scheduler=swh_scheduler,
         url=MVN_URL,
         instance="maven.org",
-        index_url=INDEX_URL,
         incremental=False,
     )
 
@@ -190,7 +203,7 @@ def test_maven_ignore_invalid_url(
     stats = lister.run()
 
     # Start test checks.
-    assert stats.pages == 5
+    assert stats.pages == 6
 
     scheduler_origins = swh_scheduler.get_listed_origins(lister.lister_obj.id).results
     origin_urls = [origin.url for origin in scheduler_origins]
@@ -214,23 +227,23 @@ def test_maven_ignore_invalid_url(
 
 def test_maven_incremental_listing(
     swh_scheduler,
-    requests_mock,
-    maven_index_full,
-    maven_index_incr_first,
+    requests_mock_datadir,
+    mocker,
+    maven_index_full_publish_dir,
+    maven_index_incr_first_publish_dir,
 ):
     """Covers full listing of multiple pages, checking page results and listed
     origins, with a second updated run for statefulness."""
+
+    # Setup test
+    mock_maven_index_exporter(mocker, maven_index_incr_first_publish_dir)
 
     lister = MavenLister(
         scheduler=swh_scheduler,
         url=MVN_URL,
         instance="maven.org",
-        index_url=INDEX_URL,
         incremental=True,
     )
-
-    # Set up test.
-    requests_mock.get(INDEX_URL, content=maven_index_incr_first)
 
     # Then run the lister.
     stats = lister.run()
@@ -238,12 +251,13 @@ def test_maven_incremental_listing(
     # Start test checks.
     assert lister.incremental
     assert lister.updated
-    assert stats.pages == 2
+    assert stats.pages == 3
+    assert stats.origins == 2
 
     scheduler_origins = swh_scheduler.get_listed_origins(lister.lister_obj.id).results
     origin_urls = [origin.url for origin in scheduler_origins]
 
-    # 1 git origins + 1 maven origin with 1 release (one per jar)
+    # 1 git origins + 1 maven origin with 1 release
     assert set(origin_urls) == {ORIGIN_GIT, ORIGIN_SRC}
     assert len(origin_urls) == len(set(origin_urls))
 
@@ -253,12 +267,14 @@ def test_maven_incremental_listing(
             assert last_update_src == origin.last_update
             assert origin.extra_loader_arguments["artifacts"] == [LIST_SRC_DATA[0]]
 
+    # Setup test
+    mock_maven_index_exporter(mocker, maven_index_full_publish_dir)
+
     # Second execution of the lister, incremental mode
     lister = MavenLister(
         scheduler=swh_scheduler,
         url=MVN_URL,
         instance="maven.org",
-        index_url=INDEX_URL,
         incremental=True,
     )
 
@@ -267,20 +283,19 @@ def test_maven_incremental_listing(
     assert scheduler_state.last_seen_doc == 1
     assert scheduler_state.last_seen_pom == 1
 
-    # Set up test.
-    requests_mock.get(INDEX_URL, content=maven_index_full)
-
     # Then run the lister.
     stats = lister.run()
 
     # Start test checks.
     assert lister.incremental
     assert lister.updated
-    assert stats.pages == 4
+    assert stats.pages == 5
+    assert stats.origins == 2
 
     scheduler_origins = swh_scheduler.get_listed_origins(lister.lister_obj.id).results
     origin_urls = [origin.url for origin in scheduler_origins]
 
+    # 2 git origins + same maven origin as previously but with a new release
     assert set(origin_urls) == {ORIGIN_SRC, ORIGIN_GIT, ORIGIN_GIT_INCR}
     assert len(origin_urls) == len(set(origin_urls))
 
@@ -297,13 +312,17 @@ def test_maven_incremental_listing(
     assert scheduler_state.last_seen_pom == 4
 
 
-@pytest.mark.parametrize("http_code", [400, 404, 500, 502])
-def test_maven_list_http_error_on_index_read(swh_scheduler, requests_mock, http_code):
-    """should stop listing if the lister fails to retrieve the main index url."""
+def test_maven_list_index_export_error(swh_scheduler, mocker):
+    """should stop listing if the maven index exporter tool failed."""
 
-    lister = MavenLister(scheduler=swh_scheduler, url=MVN_URL, index_url=INDEX_URL)
-    requests_mock.get(INDEX_URL, status_code=http_code)
-    with pytest.raises(requests.HTTPError):  # listing cannot continues so stop
+    mocker.patch("subprocess.check_call").side_effect = subprocess.CalledProcessError(
+        returncode=1, cmd=["python3", "/opt/maven-index-exporter/run_full_export.py"]
+    )
+
+    lister = MavenLister(scheduler=swh_scheduler, url=MVN_URL)
+    with pytest.raises(
+        subprocess.CalledProcessError
+    ):  # listing cannot continues so stop
         lister.run()
 
     scheduler_origins = swh_scheduler.get_listed_origins(lister.lister_obj.id).results
@@ -315,8 +334,12 @@ def test_maven_list_http_error_artifacts(
     swh_scheduler,
     requests_mock,
     http_code,
+    mocker,
+    maven_index_full_publish_dir,
+    requests_mock_datadir,
 ):
     """should continue listing when failing to retrieve artifacts."""
+    mock_maven_index_exporter(mocker, maven_index_full_publish_dir)
     # Test failure of artefacts retrieval.
     requests_mock.get(URL_POM_1, status_code=http_code)
 
@@ -334,30 +357,38 @@ def test_maven_list_http_error_artifacts(
     assert len(origin_urls) == len(set(origin_urls))
 
 
-def test_maven_lister_null_mtime(swh_scheduler, requests_mock, maven_index_null_mtime):
-    requests_mock.get(INDEX_URL, content=maven_index_null_mtime)
+def test_maven_lister_null_mtime(
+    swh_scheduler, mocker, maven_index_null_mtime_publish_dir
+):
+    mock_maven_index_exporter(mocker, maven_index_null_mtime_publish_dir)
 
     # Run the lister.
     lister = MavenLister(
         scheduler=swh_scheduler,
         url=MVN_URL,
         instance="maven.org",
-        index_url=INDEX_URL,
         incremental=False,
     )
 
     stats = lister.run()
 
     # Start test checks.
-    assert stats.pages == 1
+    assert stats.pages == 2
     scheduler_origins = swh_scheduler.get_listed_origins(lister.lister_obj.id).results
     assert len(scheduler_origins) == 1
     assert scheduler_origins[0].last_update is None
 
 
-def test_maven_list_pom_bad_encoding(swh_scheduler, requests_mock):
+def test_maven_list_pom_bad_encoding(
+    swh_scheduler,
+    requests_mock_datadir,
+    requests_mock,
+    mocker,
+    maven_index_full_publish_dir,
+):
     """should successfully parse a pom file with unexpected encoding
     (beautifulsoup4 >= 4.13)."""
+    mock_maven_index_exporter(mocker, maven_index_full_publish_dir)
     # Test pom parsing by reencoding a UTF-8 pom file to a not expected one
     requests_mock.get(
         URL_POM_1,
@@ -378,9 +409,17 @@ def test_maven_list_pom_bad_encoding(swh_scheduler, requests_mock):
     ]
 
 
-def test_maven_list_pom_multi_byte_encoding(swh_scheduler, requests_mock, datadir):
+def test_maven_list_pom_multi_byte_encoding(
+    swh_scheduler,
+    requests_mock_datadir,
+    requests_mock,
+    datadir,
+    mocker,
+    maven_index_full_publish_dir,
+):
     """should parse POM file with multi-byte encoding."""
 
+    mock_maven_index_exporter(mocker, maven_index_full_publish_dir)
     # replace pom file with a multi-byte encoding one
     requests_mock.get(
         URL_POM_1, content=Path(datadir, "citrus-parent-3.0.7.pom").read_bytes()

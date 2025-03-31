@@ -114,6 +114,7 @@ module = [
     "launchpadlib.*",
     "lazr.*",
     "mercurial.*",
+    "ndjson.*",
     "pyreadr.*",
     "subvertpy.*",
     "repomd.*",
