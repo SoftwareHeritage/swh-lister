@@ -81,6 +81,7 @@ class MavenLister(Lister[MavenListerState, RepoPage]):
         enable_origins: bool = True,
         incremental: bool = True,
         with_github_session=True,
+        process_pom_files: bool = True,
     ):
         """Lister class for Maven repositories.
 
@@ -117,6 +118,7 @@ class MavenLister(Lister[MavenListerState, RepoPage]):
         self.last_origin_url: Optional[str] = None
         self.last_seen_doc = self.state.last_seen_doc
         self.last_seen_pom = self.state.last_seen_pom
+        self.process_pom_files = process_pom_files
 
     def state_from_dict(self, d: Dict[str, Any]) -> MavenListerState:
         return MavenListerState(**d)
@@ -189,7 +191,11 @@ class MavenLister(Lister[MavenListerState, RepoPage]):
                     gid, aid, version, classifier, ext = entry["u"].split("|")
                     ext = ext.strip()
                     path = "/".join(gid.split("."))
-                    if classifier == "NA" and ext.lower() == "pom":
+                    if (
+                        self.process_pom_files
+                        and classifier == "NA"
+                        and ext.lower() == "pom"
+                    ):
                         # Store pom file URL to extract SCM URLs at end of listing
                         # process.If incremental mode, we don't record any pom file
                         # that is before our last recorded doc id.
@@ -227,31 +233,34 @@ class MavenLister(Lister[MavenListerState, RepoPage]):
         # Notify that maven index listing has finished
         yield None
 
-        # Now fetch pom files and scan them for scm info.
-        logger.info("Found %s poms.", len(out_pom))
-        logger.info("Fetching poms ...")
-        for pom_url in out_pom:
-            try:
-                response = self.http_request(pom_url)
-                parsed_pom = BeautifulSoup(response.content, "xml")
-                connection = parsed_pom.select_one("project scm connection")
-                if connection is not None:
-                    artifact_metadata_d = {
-                        "type": "scm",
-                        "doc": out_pom[pom_url],
-                        "url": connection.text,
-                    }
-                    logger.debug("* Yielding pom %s: %s", pom_url, artifact_metadata_d)
-                    yield artifact_metadata_d
-                else:
-                    logger.debug("No project.scm.connection in pom %s", pom_url)
-            except requests.HTTPError:
-                logger.warning(
-                    "POM info page could not be fetched, skipping project '%s'",
-                    pom_url,
-                )
-            except etree.Error as error:
-                logger.info("Could not parse POM %s XML: %s.", pom_url, error)
+        if self.process_pom_files:
+            # Now fetch pom files and scan them for scm info.
+            logger.info("Found %s poms.", len(out_pom))
+            logger.info("Fetching poms ...")
+            for pom_url in out_pom:
+                try:
+                    response = self.http_request(pom_url)
+                    parsed_pom = BeautifulSoup(response.content, "xml")
+                    connection = parsed_pom.select_one("project scm connection")
+                    if connection is not None:
+                        artifact_metadata_d = {
+                            "type": "scm",
+                            "doc": out_pom[pom_url],
+                            "url": connection.text,
+                        }
+                        logger.debug(
+                            "* Yielding pom %s: %s", pom_url, artifact_metadata_d
+                        )
+                        yield artifact_metadata_d
+                    else:
+                        logger.debug("No project.scm.connection in pom %s", pom_url)
+                except requests.HTTPError:
+                    logger.warning(
+                        "POM info page could not be fetched, skipping project '%s'",
+                        pom_url,
+                    )
+                except etree.Error as error:
+                    logger.info("Could not parse POM %s XML: %s.", pom_url, error)
 
     def get_scm(self, page: RepoPage) -> Optional[ListedOrigin]:
         """Retrieve scm origin out of the page information. Only called when type of the
