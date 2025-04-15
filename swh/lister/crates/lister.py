@@ -1,4 +1,4 @@
-# Copyright (C) 2022-2024  The Software Heritage developers
+# Copyright (C) 2022-2025  The Software Heritage developers
 # See the AUTHORS file at the top-level directory of this distribution
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
@@ -18,6 +18,7 @@ import iso8601
 from looseversion import LooseVersion2
 
 from swh.core.utils import grouper
+from swh.model.hashutil import HASH_BLOCK_SIZE
 from swh.scheduler.interface import SchedulerInterface
 from swh.scheduler.model import ListedOrigin
 
@@ -119,7 +120,7 @@ class CratesLister(Lister[CratesListerState, CratesListerPage]):
             # Download the Db dump
             with self.http_request(self.DB_DUMP_URL, stream=True) as res:
                 with open(archive_path, "wb") as out_file:
-                    for chunk in res.iter_content(chunk_size=1024):
+                    for chunk in res.iter_content(chunk_size=HASH_BLOCK_SIZE):
                         out_file.write(chunk)
 
             # Extract the Db dump
