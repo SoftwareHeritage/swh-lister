@@ -1,0 +1,80 @@
+{
+    "took": 2,
+    "_shards": {
+        "failed": 0,
+        "total": 3,
+        "successful": 3
+    },
+    "timed_out": false,
+    "hits": {
+        "total": 5,
+        "max_score": 8.980023,
+        "hits": [
+            {
+                "_type": "author",
+                "_score": 8.980023,
+                "_index": "author_01",
+                "_id": "KIMOTO",
+                "_source": {
+                    "updated": "2024-10-01T17:42:20",
+                    "name": "Yuki Kimoto",
+                    "pauseid": "KIMOTO",
+                    "email": "kimoto.yuki@gmail.com",
+                    "is_pause_custodial_account": false,
+                    "asciiname": ""
+                }
+            },
+            {
+                "_type": "author",
+                "_index": "author_01",
+                "_score": 9.030897,
+                "_source": {
+                    "asciiname": "",
+                    "is_pause_custodial_account": false,
+                    "email": "kryde@cpan.org",
+                    "pauseid": "KRYDE",
+                    "name": "Kevin Ryde",
+                    "updated": "2024-10-01T17:41:11"
+                },
+                "_id": "KRYDE"
+            },
+            {
+                "_score": 9.003029,
+                "_index": "author_01",
+                "_id": "MITHALDU",
+                "_source": {
+                    "updated": "2024-10-01T17:41:40",
+                    "name": "Christian Walde",
+                    "pauseid": "MITHALDU",
+                    "email": "walde.christian@gmail.com"
+                }
+            },
+            {
+                "_source": {
+                    "name": "Robin Bank",
+                    "pauseid": "ROBINBANK",
+                    "email": "robinbank@cpan.org",
+                    "updated": "2024-10-01T17:40:52",
+                    "is_pause_custodial_account": false
+                },
+                "_type": "author",
+                "_index": "author_01",
+                "_id": "ROBINBANK",
+                "_score": 9.028618
+            },
+            {
+                "_type" : "author",
+                "_id" : "FELIPE",
+                "_source" : {
+                   "pauseid" : "FELIPE",
+                   "is_pause_custodial_account" : false,
+                   "email" : "felipe@cpan.org",
+                   "updated" : "2024-10-01T17:41:56",
+                   "name" : "Felipe Gasper"
+                },
+                "_score" : 9.003029,
+                "_index" : "author_01"
+             }
+        ]
+    }
+}

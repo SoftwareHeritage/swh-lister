@@ -1,0 +1,572 @@
+{
+    "https://metacpan.org/dist/Call-Context": {
+        "artifacts": [
+            {
+                "url": "https://cpan.metacpan.org/authors/id/F/FE/FELIPE/Call-Context-0.03-TRIAL1.tar.gz",
+                "length": 10738,
+                "version": "0.03-TRIAL1",
+                "filename": "Call-Context-0.03-TRIAL1.tar.gz",
+                "checksums": {
+                    "sha256": "82aa854d6ae68342b58361b089c7f480b5b75e94f0c85c1d311f8cace1bfadea"
+                }
+            },
+            {
+                "url": "https://cpan.metacpan.org/authors/id/F/FE/FELIPE/Call-Context-0.01.tar.gz",
+                "length": 10019,
+                "version": "0.01",
+                "filename": "Call-Context-0.01.tar.gz",
+                "checksums": {
+                    "sha256": "21bf762ef5b3cbf1047192c2a3c499e9bd315b11e5530bd133856cdf87187b24"
+                }
+            },
+            {
+                "url": "https://cpan.metacpan.org/authors/id/F/FE/FELIPE/Call-Context-0.02.tar.gz",
+                "length": 10046,
+                "version": "0.02",
+                "filename": "Call-Context-0.02.tar.gz",
+                "checksums": {
+                    "sha256": "b80d977f1df0e08bda2808124cd7218ad83f802e1a54aa258e17748ff5c02a0a"
+                }
+            },
+            {
+                "url": "https://cpan.metacpan.org/authors/id/F/FE/FELIPE/Call-Context-0.03-TRIAL2.tar.gz",
+                "length": 10741,
+                "version": "0.03-TRIAL2",
+                "filename": "Call-Context-0.03-TRIAL2.tar.gz",
+                "checksums": {
+                    "sha256": "4ca799d81fc96a774f4f315c38eb3e53616322c332d47f1e3f756814b5bf4b5e"
+                }
+            },
+            {
+                "url": "https://cpan.metacpan.org/authors/id/F/FE/FELIPE/Call-Context-0.03.tar.gz",
+                "length": 10730,
+                "version": "0.03",
+                "filename": "Call-Context-0.03.tar.gz",
+                "checksums": {
+                    "sha256": "0ee6bf46bc72755adb7a6b08e79d12e207de5f7809707b3c353b58cb2f0b5a26"
+                }
+            }
+        ],
+        "api_base_url": "https://fastapi.metacpan.org/v1",
+        "module_metadata": [
+            {
+                "date": "2018-10-25T03:47:31",
+                "name": "Call-Context",
+                "author": "Felipe Gasper <felipe@cpan.org>",
+                "version": "0.03-TRIAL1",
+                "cpan_author": "FELIPE",
+                "release_name": "Call-Context-0.03-TRIAL1"
+            },
+            {
+                "date": "2016-11-12T23:12:54",
+                "name": "Call-Context",
+                "author": "Felipe Gasper <felipe@cpan.org>",
+                "version": "0.01",
+                "cpan_author": "FELIPE",
+                "release_name": "Call-Context-0.01"
+            },
+            {
+                "date": "2016-11-13T01:07:43",
+                "name": "Call-Context",
+                "author": "Felipe Gasper <felipe@cpan.org>",
+                "version": "0.02",
+                "cpan_author": "FELIPE",
+                "release_name": "Call-Context-0.02"
+            },
+            {
+                "date": "2018-10-26T13:56:41",
+                "name": "Call-Context",
+                "author": "Felipe Gasper <felipe@cpan.org>",
+                "version": "0.03-TRIAL2",
+                "cpan_author": "FELIPE",
+                "release_name": "Call-Context-0.03-TRIAL2"
+            },
+            {
+                "date": "2018-10-27T00:20:13",
+                "name": "Call-Context",
+                "author": "Felipe Gasper <felipe@cpan.org>",
+                "version": "0.03",
+                "cpan_author": "FELIPE",
+                "release_name": "Call-Context-0.03"
+            }
+        ]
+    },
+    "https://metacpan.org/dist/Compiler": {
+        "artifacts": [
+            {
+                "url": "https://cpan.metacpan.org/authors/id/M/MI/MICB/Compiler-a3.tar.gz",
+                "length": 89134,
+                "version": "a3",
+                "filename": "Compiler-a3.tar.gz",
+                "checksums": {
+                    "sha256": "a19fa7e735ea3406dfeb9c72f35fb2b64fda1e8035ce6ba0fabc15ce1c1e2f41"
+                }
+            },
+            {
+                "url": "https://cpan.metacpan.org/authors/id/M/MI/MICB/Compiler-a2.tar.gz",
+                "length": 85123,
+                "version": "a2",
+                "filename": "Compiler-a2.tar.gz",
+                "checksums": {
+                    "sha256": "def01b544d23c76ec19cc2288a3295b39abcdbdea6dbded5b7fe6d17cd4525de"
+                }
+            },
+            {
+                "url": "https://cpan.metacpan.org/authors/id/M/MI/MICB/Compiler-a1.tar.gz",
+                "length": 61093,
+                "version": "a1",
+                "filename": "Compiler-a1.tar.gz",
+                "checksums": {
+                    "sha256": "b1f7afd4fa8825adf2c17a0cbd8706484e6d2da5294786a5e6e49c205708ee41"
+                }
+            }
+        ],
+        "api_base_url": "https://fastapi.metacpan.org/v1",
+        "module_metadata": [
+            {
+                "date": "1996-09-02T14:04:00",
+                "name": "Compiler",
+                "author": "MICB",
+                "version": "a3",
+                "cpan_author": "MICB",
+                "release_name": "Compiler-a3"
+            },
+            {
+                "date": "1996-08-22T14:30:00",
+                "name": "Compiler",
+                "author": "MICB",
+                "version": "a2",
+                "cpan_author": "MICB",
+                "release_name": "Compiler-a2"
+            },
+            {
+                "date": "1996-05-13T11:39:00",
+                "name": "Compiler",
+                "author": "MICB",
+                "version": "a1",
+                "cpan_author": "MICB",
+                "release_name": "Compiler-a1"
+            }
+        ]
+    },
+    "https://metacpan.org/dist/DBIx-Custom": {
+        "artifacts": [
+            {
+                "url": "https://cpan.metacpan.org/authors/id/K/KI/KIMOTO/DBIx-Custom-0.1619.tar.gz",
+                "length": 27195,
+                "version": "0.1619",
+                "filename": "DBIx-Custom-0.1619.tar.gz",
+                "checksums": {
+                    "sha256": "83c295343f48ebc03029139082345c93527ffe5831820f99e4a72ee67ef186a5"
+                }
+            },
+            {
+                "url": "https://cpan.metacpan.org/authors/id/K/KI/KIMOTO/DBIx-Custom-0.1401.tar.gz",
+                "length": 22711,
+                "version": "0.1401",
+                "filename": "DBIx-Custom-0.1401.tar.gz",
+                "checksums": {
+                    "sha256": "004be1d48b6819941b3cb3c53bf457799d811348e0bb15e7cf18211505637aba"
+                }
+            },
+            {
+                "url": "https://cpan.metacpan.org/authors/id/K/KI/KIMOTO/DBIx-Custom-0.1301.tar.gz",
+                "length": 22655,
+                "version": "0.1301",
+                "filename": "DBIx-Custom-0.1301.tar.gz",
+                "checksums": {
+                    "sha256": "6b39e3ad2bc98f06af3a75c96cd8c056a25f7501ed216a375472c8fe7bbb72be"
+                }
+            },
+            {
+                "url": "https://cpan.metacpan.org/authors/id/K/KI/KIMOTO/DBIx-Custom-0.1602.tar.gz",
+                "length": 18999,
+                "version": "0.1602",
+                "filename": "DBIx-Custom-0.1602.tar.gz",
+                "checksums": {
+                    "sha256": "7a7e18514e171a6c55ef4c8aef92bd548b15ffd7dec4c1fdc83c276a032f6b8a"
+                }
+            },
+            {
+                "url": "https://cpan.metacpan.org/authors/id/K/KI/KIMOTO/DBIx-Custom-0.1641.tar.gz",
+                "length": 40480,
+                "version": "0.1641",
+                "filename": "DBIx-Custom-0.1641.tar.gz",
+                "checksums": {
+                    "sha256": "940412af9b7faf4c946a5e4d57ca52e5b704e49c4d7d0aa5ecb6d2286477ebc6"
+                }
+            },
+            {
+                "url": "https://cpan.metacpan.org/authors/id/K/KI/KIMOTO/DBIx-Custom-0.1646.tar.gz",
+                "length": 46577,
+                "version": "0.1646",
+                "filename": "DBIx-Custom-0.1646.tar.gz",
+                "checksums": {
+                    "sha256": "7f729311e3e22d36b158e62b42ab2fbd29f08eabd57206e235db939d1ae57d24"
+                }
+            }
+        ],
+        "api_base_url": "https://fastapi.metacpan.org/v1",
+        "module_metadata": [
+            {
+                "date": "2010-10-20T15:01:35",
+                "name": "DBIx-Custom",
+                "author": "Yuki Kimoto <kimoto.yuki@gmail.com>",
+                "version": "0.1619",
+                "cpan_author": "KIMOTO",
+                "release_name": "DBIx-Custom-0.1619"
+            },
+            {
+                "date": "2010-05-01T23:29:22",
+                "name": "DBIx-Custom",
+                "author": "Yuki Kimoto <kimoto.yuki@gmail.com>",
+                "version": "0.1401",
+                "cpan_author": "KIMOTO",
+                "release_name": "DBIx-Custom-0.1401"
+            },
+            {
+                "date": "2010-05-01T13:02:19",
+                "name": "DBIx-Custom",
+                "author": "Yuki Kimoto <kimoto.yuki@gmail.com>",
+                "version": "0.1301",
+                "cpan_author": "KIMOTO",
+                "release_name": "DBIx-Custom-0.1301"
+            },
+            {
+                "date": "2010-06-25T12:11:33",
+                "name": "DBIx-Custom",
+                "author": "Yuki Kimoto <kimoto.yuki@gmail.com>",
+                "version": "0.1602",
+                "cpan_author": "KIMOTO",
+                "release_name": "DBIx-Custom-0.1602"
+            },
+            {
+                "date": "2011-01-27T05:19:14",
+                "name": "DBIx-Custom",
+                "author": "Yuki Kimoto <kimoto.yuki@gmail.com>",
+                "version": "0.1641",
+                "cpan_author": "KIMOTO",
+                "release_name": "DBIx-Custom-0.1641"
+            },
+            {
+                "date": "2011-02-18T17:48:52",
+                "name": "DBIx-Custom",
+                "author": "Yuki Kimoto <kimoto.yuki@gmail.com>",
+                "version": "0.1646",
+                "cpan_author": "KIMOTO",
+                "release_name": "DBIx-Custom-0.1646"
+            }
+        ]
+    },
+    "https://metacpan.org/dist/DBIx-Custom-Basic": {
+        "artifacts": [
+            {
+                "url": "https://cpan.metacpan.org/authors/id/K/KI/KIMOTO/DBIx-Custom-Basic-0.0101.tar.gz",
+                "length": 3409,
+                "version": "0.0101",
+                "filename": "DBIx-Custom-Basic-0.0101.tar.gz",
+                "checksums": {
+                    "sha256": "86f68b2d0789934aa6b0202345e9807c5b650f8030b55d0d669ef25293fa3f1f"
+                }
+            }
+        ],
+        "api_base_url": "https://fastapi.metacpan.org/v1",
+        "module_metadata": [
+            {
+                "date": "2009-11-08T04:18:30",
+                "name": "DBIx-Custom-Basic",
+                "author": "Yuki Kimoto <kimoto.yuki@gmail.com>",
+                "version": "0.0101",
+                "cpan_author": "KIMOTO",
+                "release_name": "DBIx-Custom-Basic-0.0101"
+            }
+        ]
+    },
+    "https://metacpan.org/dist/DBIx-Custom-SQLite": {
+        "artifacts": [
+            {
+                "url": "https://cpan.metacpan.org/authors/id/K/KI/KIMOTO/DBIx-Custom-SQLite-0.0101.tar.gz",
+                "length": 3927,
+                "version": "0.0101",
+                "filename": "DBIx-Custom-SQLite-0.0101.tar.gz",
+                "checksums": {
+                    "sha256": "0af123551dff95f9654f4fbc24e945c5d6481b92e67b8e03ca91ef4c83088cc7"
+                }
+            }
+        ],
+        "api_base_url": "https://fastapi.metacpan.org/v1",
+        "module_metadata": [
+            {
+                "date": "2009-11-08T04:20:31",
+                "name": "DBIx-Custom-SQLite",
+                "author": "Yuki Kimoto <kimoto.yuki@gmail.com>",
+                "version": "0.0101",
+                "cpan_author": "KIMOTO",
+                "release_name": "DBIx-Custom-SQLite-0.0101"
+            }
+        ]
+    },
+    "https://metacpan.org/dist/Dist-Zilla-Plugin-ProgCriticTests": {
+        "artifacts": [
+            {
+                "url": "https://cpan.metacpan.org/authors/id/M/MI/MITHALDU/Dist-Zilla-Plugin-ProgCriticTests-1.101580-TRIAL.tar.gz",
+                "length": 16918,
+                "version": "1.101580",
+                "filename": "Dist-Zilla-Plugin-ProgCriticTests-1.101580-TRIAL.tar.gz",
+                "checksums": {
+                    "sha256": "ef8c92d0fc55551392a6daeee20a1c13a3ee1bcd0fcacf611cbc2a6cc503f401"
+                }
+            }
+        ],
+        "api_base_url": "https://fastapi.metacpan.org/v1",
+        "module_metadata": [
+            {
+                "date": "2010-06-07T14:43:36",
+                "name": "Dist-Zilla-Plugin-ProgCriticTests",
+                "author": "Christian Walde <walde.christian@gmail.com>",
+                "version": "1.101580",
+                "cpan_author": "MITHALDU",
+                "release_name": "Dist-Zilla-Plugin-ProgCriticTests-1.101580-TRIAL"
+            }
+        ]
+    },
+    "https://metacpan.org/dist/Net-Rapidshare": {
+        "artifacts": [
+            {
+                "url": "https://cpan.metacpan.org/authors/id/M/MI/MITHUN/Net-Rapidshare-v0.04.tar.gz",
+                "length": 15068,
+                "version": "v0.04",
+                "filename": "Net-Rapidshare-v0.04.tar.gz",
+                "checksums": {
+                    "sha256": "f01456a8f8c2b6806a8dd041cf848f330884573d363b28c8b3ff12e837fa8f4f"
+                }
+            },
+            {
+                "url": "https://cpan.metacpan.org/authors/id/M/MI/MITHUN/Net-Rapidshare-v0.05.tgz",
+                "length": 15971,
+                "version": "v0.05",
+                "filename": "Net-Rapidshare-v0.05.tgz",
+                "checksums": {
+                    "sha256": "e1128d3b35616530d9722d0fe3f5f0e343fd914bc8f9c0df55c1a9ad6c7402fe"
+                }
+            },
+            {
+                "url": "https://cpan.metacpan.org/authors/id/M/MI/MITHUN/Net-Rapidshare-v0.0.1.tar.gz",
+                "length": 15161,
+                "version": "v0.0.1",
+                "filename": "Net-Rapidshare-v0.0.1.tar.gz",
+                "checksums": {
+                    "sha256": "990de0a72753fa182e7a5867e55fd6755375b71280bb7e5b3a5f07c4de8af905"
+                }
+            }
+        ],
+        "api_base_url": "https://fastapi.metacpan.org/v1",
+        "module_metadata": [
+            {
+                "date": "2009-07-28T05:57:26",
+                "name": "Net-Rapidshare",
+                "author": "MITHUN",
+                "version": "v0.04",
+                "cpan_author": "MITHUN",
+                "release_name": "Net-Rapidshare-v0.04"
+            },
+            {
+                "date": "2009-12-21T00:29:48",
+                "name": "Net-Rapidshare",
+                "author": "MITHUN",
+                "version": "v0.05",
+                "cpan_author": "MITHUN",
+                "release_name": "Net-Rapidshare-v0.05"
+            },
+            {
+                "date": "2009-07-18T22:56:38",
+                "name": "Net-Rapidshare",
+                "author": "MITHUN",
+                "version": "v0.0.1",
+                "cpan_author": "MITHUN",
+                "release_name": "Net-Rapidshare-v0.0.1"
+            }
+        ]
+    },
+    "https://metacpan.org/dist/UDPServersAndClients": {
+        "artifacts": [
+            {
+                "url": "https://cpan.metacpan.org/authors/id/R/RO/ROBINBANK/UDPServersAndClients.zip",
+                "length": 5576,
+                "version": "0",
+                "filename": "UDPServersAndClients.zip",
+                "checksums": {
+                    "sha256": "763da87c32e65cc7ff72d70a503b4e9497f6b506c174b82c97671af8667c1922"
+                }
+            }
+        ],
+        "api_base_url": "https://fastapi.metacpan.org/v1",
+        "module_metadata": [
+            {
+                "date": "2006-04-20T00:03:25",
+                "name": "UDPServersAndClients",
+                "author": "Robin Bank <robinbank@cpan.org>",
+                "version": "0",
+                "cpan_author": "ROBINBANK",
+                "release_name": "UDPServersAndClients"
+            }
+        ]
+    },
+    "https://metacpan.org/dist/Validator-Custom": {
+        "artifacts": [
+            {
+                "url": "https://cpan.metacpan.org/authors/id/K/KI/KIMOTO/Validator-Custom-0.1207.tar.gz",
+                "length": 16985,
+                "version": "0.1207",
+                "filename": "Validator-Custom-0.1207.tar.gz",
+                "checksums": {
+                    "sha256": "f599da2ecc17ac74443628eb84233ee6b25b204511f83ea778dad9efd0f558e0"
+                }
+            },
+            {
+                "url": "https://cpan.metacpan.org/authors/id/K/KI/KIMOTO/Validator-Custom-0.1210.tar.gz",
+                "length": 17608,
+                "version": "0.1210",
+                "filename": "Validator-Custom-0.1210.tar.gz",
+                "checksums": {
+                    "sha256": "f7240f7793ced2952701f0ed28ecf43c07cc2fa4549cc505831eceb8424cba4a"
+                }
+            },
+            {
+                "url": "https://cpan.metacpan.org/authors/id/K/KI/KIMOTO/Validator-Custom-0.1208.tar.gz",
+                "length": 17489,
+                "version": "0.1208",
+                "filename": "Validator-Custom-0.1208.tar.gz",
+                "checksums": {
+                    "sha256": "e33a860b026cad852eb919da4a3645007b47e5f414eb7272534b10cee279b52b"
+                }
+            },
+            {
+                "url": "https://cpan.metacpan.org/authors/id/K/KI/KIMOTO/Validator-Custom-0.1204.tar.gz",
+                "length": 13256,
+                "version": "0.1204",
+                "filename": "Validator-Custom-0.1204.tar.gz",
+                "checksums": {
+                    "sha256": "40800b3d92cebc09967b61725cecdd05de2b04649f095e3034c5dd82f3d4ad89"
+                }
+            },
+            {
+                "url": "https://cpan.metacpan.org/authors/id/K/KI/KIMOTO/Validator-Custom-0.1203.tar.gz",
+                "length": 12572,
+                "version": "0.1203",
+                "filename": "Validator-Custom-0.1203.tar.gz",
+                "checksums": {
+                    "sha256": "028a0b41c152c585143167464bed2ac6b6680c8006aa80867f9a8faa4ca5efe7"
+                }
+            }
+        ],
+        "api_base_url": "https://fastapi.metacpan.org/v1",
+        "module_metadata": [
+            {
+                "date": "2010-07-28T13:42:23",
+                "name": "Validator-Custom",
+                "author": "Yuki Kimoto <kimoto.yuki@gmail.com>",
+                "version": "0.1207",
+                "cpan_author": "KIMOTO",
+                "release_name": "Validator-Custom-0.1207"
+            },
+            {
+                "date": "2010-08-14T01:41:56",
+                "name": "Validator-Custom",
+                "author": "Yuki Kimoto <kimoto.yuki@gmail.com>",
+                "version": "0.1210",
+                "cpan_author": "KIMOTO",
+                "release_name": "Validator-Custom-0.1210"
+            },
+            {
+                "date": "2010-07-28T23:00:52",
+                "name": "Validator-Custom",
+                "author": "Yuki Kimoto <kimoto.yuki@gmail.com>",
+                "version": "0.1208",
+                "cpan_author": "KIMOTO",
+                "release_name": "Validator-Custom-0.1208"
+            },
+            {
+                "date": "2010-07-08T13:14:23",
+                "name": "Validator-Custom",
+                "author": "Yuki Kimoto <kimoto.yuki@gmail.com>",
+                "version": "0.1204",
+                "cpan_author": "KIMOTO",
+                "release_name": "Validator-Custom-0.1204"
+            },
+            {
+                "date": "2010-07-07T13:29:41",
+                "name": "Validator-Custom",
+                "author": "Yuki Kimoto <kimoto.yuki@gmail.com>",
+                "version": "0.1203",
+                "cpan_author": "KIMOTO",
+                "release_name": "Validator-Custom-0.1203"
+            }
+        ]
+    },
+    "https://metacpan.org/dist/Validator-Custom-Ext-Mojolicious": {
+        "artifacts": [
+            {
+                "url": "https://cpan.metacpan.org/authors/id/K/KI/KIMOTO/Validator-Custom-Ext-Mojolicious-0.0103.tar.gz",
+                "length": 4190,
+                "version": "0.0103",
+                "filename": "Validator-Custom-Ext-Mojolicious-0.0103.tar.gz",
+                "checksums": {
+                    "sha256": "0911fe6ae65f9173c6eb68b6116600552b088939b94881be3c7275344b1cbdce"
+                }
+            },
+            {
+                "url": "https://cpan.metacpan.org/authors/id/K/KI/KIMOTO/Validator-Custom-Ext-Mojolicious-0.0102.tar.gz",
+                "length": 4257,
+                "version": "0.0102",
+                "filename": "Validator-Custom-Ext-Mojolicious-0.0102.tar.gz",
+                "checksums": {
+                    "sha256": "a88d01504353223f7a3cb0d6a240debb9c6d6155858f1048a19007c3b366beed"
+                }
+            }
+        ],
+        "api_base_url": "https://fastapi.metacpan.org/v1",
+        "module_metadata": [
+            {
+                "date": "2010-01-16T14:51:11",
+                "name": "Validator-Custom-Ext-Mojolicious",
+                "author": "Yuki Kimoto <kimoto.yuki@gmail.com>",
+                "version": "0.0103",
+                "cpan_author": "KIMOTO",
+                "release_name": "Validator-Custom-Ext-Mojolicious-0.0103"
+            },
+            {
+                "date": "2010-01-15T14:07:24",
+                "name": "Validator-Custom-Ext-Mojolicious",
+                "author": "Yuki Kimoto <kimoto.yuki@gmail.com>",
+                "version": "0.0102",
+                "cpan_author": "KIMOTO",
+                "release_name": "Validator-Custom-Ext-Mojolicious-0.0102"
+            }
+        ]
+    },
+    "https://metacpan.org/dist/math-image": {
+        "artifacts": [
+            {
+                "url": "https://cpan.metacpan.org/authors/id/K/KR/KRYDE/math-image-46.tar.gz",
+                "length": 533502,
+                "version": "46",
+                "filename": "math-image-46.tar.gz",
+                "checksums": {
+                    "sha256": "6bd988e3959feb1071d3b9953d16e723af66bdb7b5440ea17add8709d95f20fa"
+                }
+            }
+        ],
+        "api_base_url": "https://fastapi.metacpan.org/v1",
+        "module_metadata": [
+            {
+                "date": "2011-03-02T00:46:14",
+                "name": "math-image",
+                "author": "Kevin Ryde <kryde@cpan.org>",
+                "version": "46",
+                "cpan_author": "KRYDE",
+                "release_name": "math-image-46"
+            }
+        ]
+    }
+}

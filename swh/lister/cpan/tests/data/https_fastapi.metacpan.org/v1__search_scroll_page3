@@ -77,7 +77,21 @@
         "_id": "8H7BRLllDoyILyqsjjV8sqkBpQY",
         "_index": "cpan_v1_01",
         "_score": 13.572314
-      }
+      },
+      {
+        "_id" : "MICB",
+        "_score" : 9.003029,
+        "_source" : {
+           "email" : "micb@cpan.org",
+           "asciiname" : "",
+           "is_pause_custodial_account" : false,
+           "updated" : "2024-10-01T17:41:55",
+           "name" : "Malcolm Beattie",
+           "pauseid" : "MICB"
+        },
+        "_type" : "author",
+        "_index" : "author_01"
+     }
     ],
     "total": 3
   },

@@ -1,4 +1,4 @@
-# Copyright (C) 2022-2023  The Software Heritage developers
+# Copyright (C) 2022-2025  The Software Heritage developers
 # See the AUTHORS file at the top-level directory of this distribution
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
@@ -74,7 +74,7 @@ class CpanLister(StatelessLister[CpanListerPage]):
         "distribution",
         "version",
     ]
-    OPTIONAL_DOC_FIELDS = ["date", "author", "stat.size", "name", "metadata.author"]
+    OPTIONAL_DOC_FIELDS = ["date", "author", "stat.size", "name"]
     ORIGIN_URL_PATTERN = "https://metacpan.org/dist/{module_name}"
 
     def __init__(
@@ -101,6 +101,40 @@ class CpanLister(StatelessLister[CpanListerPage]):
         self.module_metadata: Dict[str, List[Dict[str, Any]]] = defaultdict(list)
         self.release_dates: Dict[str, List[datetime]] = defaultdict(list)
         self.module_names: Set[str] = set()
+        self.author_fullname: Dict[str, str] = {}
+
+    def fetch_author_fullnames(self):
+        endpoint = f"{self.API_BASE_URL}/author/_search"
+        scrollendpoint = f"{self.API_BASE_URL}/_search/scroll"
+        size = 1000
+
+        def process_authors_page(authors):
+            for author in authors:
+                pauseid = get_field_value(author, "pauseid")
+                name = get_field_value(author, "name")
+                email = get_field_value(author, "email")
+                self.author_fullname[pauseid] = f"{name} <{email}>"
+
+        res = self.http_request(
+            endpoint,
+            params={
+                "_source": ["pauseid", "name", "email"],
+                "size": size,
+                "scroll": "1m",
+            },
+        )
+        data = res.json()["hits"]["hits"]
+        process_authors_page(data)
+
+        scroll_id = res.json().get("_scroll_id")
+
+        while data and scroll_id:
+            scroll_res = self.http_request(
+                scrollendpoint, params={"scroll": "1m", "scroll_id": scroll_id}
+            )
+            data = scroll_res.json()["hits"]["hits"]
+            scroll_id = scroll_res.json()["_scroll_id"]
+            process_authors_page(data)
 
     def process_release_page(self, page: List[Dict[str, Any]]):
         for entry in page:
@@ -120,7 +154,6 @@ class CpanLister(StatelessLister[CpanListerPage]):
             module_date = get_field_value(entry, "date")
             module_size = get_field_value(entry, "stat.size")
             module_author = get_field_value(entry, "author")
-            module_author_fullname = get_field_value(entry, "metadata.author")
             release_name = get_field_value(entry, "name")
 
             module_version = get_module_version(
@@ -142,11 +175,7 @@ class CpanLister(StatelessLister[CpanListerPage]):
                     "name": module_name,
                     "version": module_version,
                     "cpan_author": module_author,
-                    "author": (
-                        module_author_fullname
-                        if module_author_fullname not in (None, "", "unknown")
-                        else module_author
-                    ),
+                    "author": self.author_fullname.get(module_author, module_author),
                     "date": module_date,
                     "release_name": release_name,
                 }
@@ -158,6 +187,8 @@ class CpanLister(StatelessLister[CpanListerPage]):
 
     def get_pages(self) -> Iterator[CpanListerPage]:
         """Yield an iterator which returns 'page'"""
+
+        self.fetch_author_fullnames()
 
         endpoint = f"{self.API_BASE_URL}/release/_search"
         scrollendpoint = f"{self.API_BASE_URL}/_search/scroll"
