@@ -1,4 +1,4 @@
-# Copyright (C) 2018-2023 the Software Heritage developers
+# Copyright (C) 2018-2025 the Software Heritage developers
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
 
@@ -6,11 +6,10 @@ from dataclasses import asdict, dataclass
 import logging
 from typing import Any, Dict, Iterator, List, Optional
 
-import iso8601
-
 from swh.lister.pattern import CredentialsType, Lister
 from swh.scheduler.interface import SchedulerInterface
 from swh.scheduler.model import ListedOrigin
+from swh.scheduler.utils import utcnow
 
 logger = logging.getLogger(__name__)
 
@@ -24,7 +23,8 @@ class NpmListerState:
 
 class NpmLister(Lister[NpmListerState, List[Dict[str, Any]]]):
     """
-    List all packages hosted on the npm registry.
+    List packages referenced by the changes API of the npm registry
+    by last modification order.
 
     The lister is based on the npm replication API powered by a
     CouchDB database (https://docs.couchdb.org/en/stable/api/database/).
@@ -34,25 +34,23 @@ class NpmLister(Lister[NpmListerState, List[Dict[str, Any]]]):
         page_size: number of packages info to return per page when querying npm API
         incremental: defines if incremental listing should be used, in that case
             only modified or new packages since last incremental listing operation
-            will be returned, otherwise all packages will be listed in lexicographical
-            order
-
+            will be returned, otherwise all packages referenced by the NPM changes
+            API will be listed in last modification order
     """
 
     LISTER_NAME = "npm"
     INSTANCE = "npm"
 
-    API_BASE_URL = "https://replicate.npmjs.com"
-    API_INCREMENTAL_LISTING_URL = f"{API_BASE_URL}/_changes"
-    API_FULL_LISTING_URL = f"{API_BASE_URL}/_all_docs"
+    NPM_API_BASE_URL = "https://replicate.npmjs.com"
+    NPM_API_CHANGES_URL = f"{NPM_API_BASE_URL}/_changes"
     PACKAGE_URL_TEMPLATE = "https://www.npmjs.com/package/{package_name}"
 
     def __init__(
         self,
         scheduler: SchedulerInterface,
-        url: str = API_FULL_LISTING_URL,
+        url: str = NPM_API_CHANGES_URL,
         instance: str = INSTANCE,
-        page_size: int = 1000,
+        page_size: int = 10000,
         incremental: bool = False,
         credentials: CredentialsType = None,
         max_origins_per_page: Optional[int] = None,
@@ -70,16 +68,8 @@ class NpmLister(Lister[NpmListerState, List[Dict[str, Any]]]):
         )
 
         self.page_size = page_size
-        if not incremental:
-            # in full listing mode, first package in each page corresponds to the one
-            # provided as the startkey query parameter value, so we increment the page
-            # size by one to avoid double package processing
-            self.page_size += 1
-        else:
-            self.url = self.API_INCREMENTAL_LISTING_URL
         self.incremental = incremental
-
-        self.session.headers.update({"Accept": "application/json"})
+        self.listing_date = utcnow()
 
     def state_from_dict(self, d: Dict[str, Any]) -> NpmListerState:
         return NpmListerState(**d)
@@ -87,46 +77,36 @@ class NpmLister(Lister[NpmListerState, List[Dict[str, Any]]]):
     def state_to_dict(self, state: NpmListerState) -> Dict[str, Any]:
         return asdict(state)
 
-    def request_params(self, last_package_id: str) -> Dict[str, Any]:
+    def request_params(self, last_seq: str) -> Dict[str, Any]:
         # include package JSON document to get its last update date
-        params = {"limit": self.page_size, "include_docs": "true"}
-        if self.incremental:
-            params["since"] = last_package_id
-        else:
-            params["startkey"] = last_package_id
+        params: Dict[str, Any] = {"limit": self.page_size}
+        params["since"] = last_seq
         return params
 
     def get_pages(self) -> Iterator[List[Dict[str, Any]]]:
-        last_package_id: str = "0" if self.incremental else '""'
+        last_seq: str = "0"
         if (
             self.incremental
             and self.state is not None
             and self.state.last_seq is not None
         ):
-            last_package_id = str(self.state.last_seq)
+            last_seq = str(self.state.last_seq)
 
         while True:
-            response = self.http_request(
-                self.url, params=self.request_params(last_package_id)
-            )
+            response = self.http_request(self.url, params=self.request_params(last_seq))
 
             data = response.json()
-            page = data["results"] if self.incremental else data["rows"]
+            page = data["results"]
 
             if not page:
                 break
 
-            if self.incremental or len(page) < self.page_size:
-                yield page
-            else:
-                yield page[:-1]
+            yield page
 
             if len(page) < self.page_size:
                 break
 
-            last_package_id = (
-                str(page[-1]["seq"]) if self.incremental else f'"{page[-1]["id"]}"'
-            )
+            last_seq = str(page[-1]["seq"])
 
     def get_origins_from_page(
         self, page: List[Dict[str, Any]]
@@ -135,26 +115,13 @@ class NpmLister(Lister[NpmListerState, List[Dict[str, Any]]]):
         assert self.lister_obj.id is not None
 
         for package in page:
-            # no source code to archive here
-            if not package["doc"].get("versions", {}):
+            if package.get("deleted"):
                 continue
-
-            package_name = package["doc"]["name"]
-            package_latest_version = (
-                package["doc"].get("dist-tags", {}).get("latest", "")
-            )
-
-            last_update = None
-            if package_latest_version in package["doc"].get("time", {}):
-                last_update = iso8601.parse_date(
-                    package["doc"]["time"][package_latest_version]
-                )
-
             yield ListedOrigin(
                 lister_id=self.lister_obj.id,
-                url=self.PACKAGE_URL_TEMPLATE.format(package_name=package_name),
+                url=self.PACKAGE_URL_TEMPLATE.format(package_name=package["id"]),
                 visit_type="npm",
-                last_update=last_update,
+                last_update=self.listing_date,
             )
 
     def commit_page(self, page: List[Dict[str, Any]]):

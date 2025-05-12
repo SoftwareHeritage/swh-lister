@@ -1,0 +1,18 @@
+{
+  "results": [{
+      "seq": 1,
+      "id": "overlay-fishnet",
+      "changes": [{
+        "rev": "1-ae6eba8bb1a34b9d57d7285f097c5c9f"
+      }]
+    },
+    {
+      "seq": 2,
+      "id": "shopping_site_detect",
+      "changes": [{
+        "rev": "1-c62a780cdd9865b06b1e4eb0e6552560"
+      }]
+    }
+  ],
+  "last_seq": 2
+}
