@@ -18,6 +18,7 @@ from bs4 import BeautifulSoup
 import psycopg
 from testing.postgresql import Postgresql
 
+from swh.model.hashutil import HASH_BLOCK_SIZE
 from swh.scheduler.interface import SchedulerInterface
 from swh.scheduler.model import ListedOrigin
 
@@ -118,7 +119,7 @@ class RubyGemsLister(StatelessLister[RubyGemsListerPage]):
             )
             dump_file = os.path.join(temp_dir, "rubygems_dump.tar")
             with open(dump_file, "wb") as dump:
-                for chunk in response.iter_content(chunk_size=1024):
+                for chunk in response.iter_content(chunk_size=HASH_BLOCK_SIZE):
                     dump.write(chunk)
 
             with tarfile.open(dump_file) as dump_tar:
