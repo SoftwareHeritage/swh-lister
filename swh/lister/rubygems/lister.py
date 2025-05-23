@@ -50,7 +50,7 @@ class RubyGemsLister(StatelessLister[RubyGemsListerPage]):
         f"{RUBY_GEMS_POSTGRES_DUMP_BASE_URL}?prefix=production/public_postgresql"
     )
 
-    RUBY_GEM_DOWNLOAD_URL_PATTERN = "https://rubygems.org/downloads/{gem}-{version}.gem"
+    RUBY_GEM_DOWNLOAD_URL_PATTERN = "https://rubygems.org/downloads/{gem_fullname}.gem"
     RUBY_GEM_ORIGIN_URL_PATTERN = "https://rubygems.org/gems/{gem}"
     RUBY_GEM_EXTRINSIC_METADATA_URL_PATTERN = (
         "https://rubygems.org/api/v2/rubygems/{gem}/versions/{version}.json"
@@ -162,20 +162,21 @@ class RubyGemsLister(StatelessLister[RubyGemsListerPage]):
             self.populate_rubygems_db(db_url)
 
             with db.cursor() as cursor:
-                cursor.execute("SELECT id, name from rubygems")
+                cursor.execute("SELECT id, name FROM rubygems")
                 for gem_id, gem_name in cursor.fetchall():
                     logger.debug("Processing gem named %s", gem_name)
                     with db.cursor() as cursor_v:
                         cursor_v.execute(
-                            "SELECT authors, built_at, number, sha256, size from versions "
-                            "where rubygem_id = %s",
+                            "SELECT authors, built_at, full_name, number, sha256, size "
+                            "FROM versions "
+                            "WHERE rubygem_id = %s",
                             (gem_id,),
                         )
                         versions = [
                             {
                                 "number": number,
                                 "url": self.RUBY_GEM_DOWNLOAD_URL_PATTERN.format(
-                                    gem=gem_name, version=number
+                                    gem_fullname=full_name
                                 ),
                                 "date": built_at.replace(tzinfo=timezone.utc),
                                 "authors": authors,
@@ -186,7 +187,14 @@ class RubyGemsLister(StatelessLister[RubyGemsListerPage]):
                                 ),
                                 "size": size,
                             }
-                            for authors, built_at, number, sha256, size in cursor_v.fetchall()
+                            for (
+                                authors,
+                                built_at,
+                                full_name,
+                                number,
+                                sha256,
+                                size,
+                            ) in cursor_v.fetchall()
                         ]
                         if versions:
                             yield {
