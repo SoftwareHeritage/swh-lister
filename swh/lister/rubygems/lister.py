@@ -170,7 +170,7 @@ class RubyGemsLister(StatelessLister[RubyGemsListerPage]):
                         cursor_v.execute(
                             "SELECT authors, built_at, full_name, number, sha256, size "
                             "FROM versions "
-                            "WHERE rubygem_id = %s",
+                            "WHERE rubygem_id = %s AND yanked_at IS NULL",
                             (gem_id,),
                         )
                         versions = [
