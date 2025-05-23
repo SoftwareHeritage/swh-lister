@@ -1,4 +1,4 @@
-# Copyright (C) 2020-2024  The Software Heritage developers
+# Copyright (C) 2020-2025  The Software Heritage developers
 # See the AUTHORS file at the top-level directory of this distribution
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
@@ -18,7 +18,6 @@ from tenacity.before_sleep import before_sleep_log
 from swh.core.config import load_from_envvar
 from swh.core.github.utils import GitHubSession
 from swh.core.retry import http_retry
-from swh.core.utils import grouper
 from swh.scheduler import get_scheduler, model
 from swh.scheduler.interface import SchedulerInterface
 from swh.scheduler.utils import utcnow
@@ -220,14 +219,18 @@ class Lister(Generic[StateType, PageType]):
         self.recorded_origins = set()
 
         try:
+            origins: List[model.ListedOrigin] = []
             for page in self.get_pages():
                 full_stats.pages += 1
-                origins = []
-                for origin in self.get_origins_from_page(page):
+                for i, origin in enumerate(self.get_origins_from_page(page)):
                     origins.append(origin)
+                    if len(origins) == self.record_batch_size:
+                        self.send_origins(origins)
+                        origins.clear()
+
                     if (
                         self.max_origins_per_page
-                        and len(origins) == self.max_origins_per_page
+                        and (i + 1) == self.max_origins_per_page
                     ):
                         logger.info(
                             "Max origins per page set to %s and reached, "
@@ -236,23 +239,18 @@ class Lister(Generic[StateType, PageType]):
                         )
                         break
 
-                if not self.enable_origins:
-                    logger.info(
-                        "Disabling origins before sending them to the scheduler"
-                    )
-                    origins = [attr.evolve(origin, enabled=False) for origin in origins]
-                sent_origins = self.send_origins(origins)
-                self.recorded_origins.update(sent_origins)
-                full_stats.origins = len(self.recorded_origins)
                 self.commit_page(page)
 
                 if self.max_pages and full_stats.pages >= self.max_pages:
                     logger.info("Reached page limit of %s, terminating", self.max_pages)
                     break
         finally:
+            if origins:
+                self.send_origins(origins)
             self.finalize()
             self.set_state_in_scheduler(with_listing_finished_date=True)
 
+        full_stats.origins = len(self.recorded_origins)
         return full_stats
 
     def get_state_from_scheduler(self) -> StateType:
@@ -364,17 +362,21 @@ class Lister(Generic[StateType, PageType]):
           the list of origin URLs recorded in scheduler database
         """
         recorded_origins: List[str] = []
-        for origins in grouper(origins, n=self.record_batch_size):
-            valid_origins = []
-            for origin in origins:
-                if is_valid_origin_url(origin.url):
-                    valid_origins.append(origin)
-                else:
-                    logger.warning("Skipping invalid origin: %s", origin.url)
-
-            logger.debug("Record valid %s origins in the scheduler", len(valid_origins))
-            ret = self.scheduler.record_listed_origins(valid_origins)
-            recorded_origins.extend(origin.url for origin in ret)
+        valid_origins = []
+        for origin in origins:
+            if is_valid_origin_url(origin.url):
+                valid_origins.append(origin)
+            else:
+                logger.warning("Skipping invalid origin: %s", origin.url)
+        if not self.enable_origins:
+            logger.info("Disabling origins before sending them to the scheduler")
+            valid_origins = [
+                attr.evolve(origin, enabled=False) for origin in valid_origins
+            ]
+        logger.debug("Record valid %s origins in the scheduler", len(valid_origins))
+        ret = self.scheduler.record_listed_origins(valid_origins)
+        recorded_origins.extend(origin.url for origin in ret)
+        self.recorded_origins.update(recorded_origins)
 
         return recorded_origins
 

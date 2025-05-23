@@ -1,9 +1,8 @@
-# Copyright (C) 2020-2024  The Software Heritage developers
+# Copyright (C) 2020-2025  The Software Heritage developers
 # See the AUTHORS file at the top-level directory of this distribution
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
 
-from itertools import tee
 from typing import TYPE_CHECKING, Any, Dict, Iterator, List
 
 import pytest
@@ -364,17 +363,7 @@ def test_lister_send_origins_with_stream_is_flushed_regularly(
         record_batch_size=batch_size,
     )
 
-    def iterate_origins(lister: pattern.Lister) -> Iterator[ListedOrigin]:
-        """Basic origin iteration to ease testing."""
-        for page in lister.get_pages():
-            for origin in lister.get_origins_from_page(page):
-                yield origin
+    spy = mocker.spy(swh_scheduler, "record_listed_origins")
+    result = lister.run()
 
-    all_origins, iterator_origins = tee(iterate_origins(lister))
-
-    spy = mocker.spy(lister, "scheduler")
-    lister.send_origins(iterator_origins)
-
-    expected_nb_origins = len(list(all_origins))
-
-    assert len(spy.method_calls) == expected_nb_origins / batch_size
+    assert spy.call_count == result.origins / batch_size
