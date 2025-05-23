@@ -47,13 +47,11 @@ def expected_listed_origins():
                 "rubygem_metadata": [
                     {
                         "date": "2016-11-05T00:00:00+00:00",
-                        "authors": "Gemma Gotch",
                         "version": "0.0.2",
                         "extrinsic_metadata_url": "https://rubygems.org/api/v2/rubygems/haar_joke/versions/0.0.2.json",
                     },
                     {
                         "date": "2016-07-23T00:00:00+00:00",
-                        "authors": "Gemma Gotch",
                         "version": "0.0.1",
                         "extrinsic_metadata_url": "https://rubygems.org/api/v2/rubygems/haar_joke/versions/0.0.1.json",
                     },
@@ -97,19 +95,16 @@ def expected_listed_origins():
                 "rubygem_metadata": [
                     {
                         "date": "2014-11-14T00:00:00+00:00",
-                        "authors": "E Alexander Liedtke",
                         "version": "0.0.2",
                         "extrinsic_metadata_url": "https://rubygems.org/api/v2/rubygems/l33tify/versions/0.0.2.json",
                     },
                     {
                         "date": "2014-11-14T00:00:00+00:00",
-                        "authors": "E Alexander Liedtke",
                         "version": "0.0.3",
                         "extrinsic_metadata_url": "https://rubygems.org/api/v2/rubygems/l33tify/versions/0.0.3.json",
                     },
                     {
                         "date": "2014-11-14T00:00:00+00:00",
-                        "authors": "E Alexander Liedtke",
                         "version": "0.0.1",
                         "extrinsic_metadata_url": "https://rubygems.org/api/v2/rubygems/l33tify/versions/0.0.1.json",
                     },

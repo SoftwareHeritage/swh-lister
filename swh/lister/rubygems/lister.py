@@ -168,7 +168,7 @@ class RubyGemsLister(StatelessLister[RubyGemsListerPage]):
                     logger.debug("Processing gem named %s", gem_name)
                     with db.cursor() as cursor_v:
                         cursor_v.execute(
-                            "SELECT authors, built_at, full_name, number, sha256, size "
+                            "SELECT built_at, full_name, number, sha256, size "
                             "FROM versions "
                             "WHERE rubygem_id = %s AND yanked_at IS NULL",
                             (gem_id,),
@@ -180,7 +180,6 @@ class RubyGemsLister(StatelessLister[RubyGemsListerPage]):
                                     gem_fullname=full_name
                                 ),
                                 "date": built_at.replace(tzinfo=timezone.utc),
-                                "authors": authors,
                                 "sha256": (
                                     base64.decodebytes(sha256.encode()).hex()
                                     if sha256
@@ -189,7 +188,6 @@ class RubyGemsLister(StatelessLister[RubyGemsListerPage]):
                                 "size": size,
                             }
                             for (
-                                authors,
                                 built_at,
                                 full_name,
                                 number,
@@ -224,7 +222,6 @@ class RubyGemsLister(StatelessLister[RubyGemsListerPage]):
                 {
                     "version": version["number"],
                     "date": version["date"].isoformat(),
-                    "authors": version["authors"],
                     "extrinsic_metadata_url": (
                         self.RUBY_GEM_EXTRINSIC_METADATA_URL_PATTERN.format(
                             gem=page["name"], version=version["number"]
