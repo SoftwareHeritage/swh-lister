@@ -1,4 +1,4 @@
-# Copyright (C) 2023  The Software Heritage developers
+# Copyright (C) 2023-2025  The Software Heritage developers
 # See the AUTHORS file at the top-level directory of this distribution
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
@@ -9,6 +9,7 @@ from typing import Any, Dict, Iterator, Optional, Set
 
 from swh.scheduler.interface import SchedulerInterface
 from swh.scheduler.model import ListedOrigin
+from swh.scheduler.utils import utcnow
 
 from ..pattern import CredentialsType, Lister
 
@@ -60,6 +61,7 @@ class ElmLister(Lister[ElmListerState, ElmListerPage]):
         )
         self.all_packages_count: int = 0
         self.session.headers.update({"Accept": "application/json"})
+        self.listing_date = utcnow()
 
     def state_from_dict(self, d: Dict[str, Any]) -> ElmListerState:
         return ElmListerState(**d)
@@ -105,7 +107,7 @@ class ElmLister(Lister[ElmListerState, ElmListerPage]):
                 lister_id=self.lister_obj.id,
                 visit_type=self.VISIT_TYPE,
                 url=repo_url,
-                last_update=None,
+                last_update=self.listing_date,
             )
 
     def finalize(self) -> None:
