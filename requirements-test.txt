@@ -6,7 +6,6 @@ pytest-mock
 requests_mock
 swh.scheduler[pytest] >= 3.1.0
 types-beautifulsoup4
-types-click
 types-dateparser
 types-pyyaml
 types-requests
