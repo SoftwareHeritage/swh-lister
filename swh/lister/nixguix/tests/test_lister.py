@@ -61,6 +61,7 @@ def page_response(datadir, instance: str = "success") -> List[Dict]:
         ("v1.2.3", False),  # with raise_when_no_extension is False
         ("2048-game-20151026.1233", False),
         ("v2048-game-20151026.1233", False),
+        ("v2048-game-20151026.nexe", False),
     ],
 )
 def test_url_endswith(name, expected_result):

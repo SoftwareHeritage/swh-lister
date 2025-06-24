@@ -40,16 +40,16 @@ logger = logging.getLogger(__name__)
 
 # By default, ignore binary files and archives containing binaries
 DEFAULT_EXTENSIONS_TO_IGNORE = [
-    "AppImage",
-    "bin",
-    "exe",
-    "iso",
-    "linux64",
-    "msi",
-    "png",
-    "dic",
-    "deb",
-    "rpm",
+    ".AppImage",
+    ".bin",
+    ".exe",
+    ".iso",
+    ".linux64",
+    ".msi",
+    ".png",
+    ".dic",
+    ".deb",
+    ".rpm",
 ]
 
 
