@@ -50,6 +50,7 @@ DEFAULT_EXTENSIONS_TO_IGNORE = [
     ".dic",
     ".deb",
     ".rpm",
+    ".nupkg",
 ]
 
 
@@ -419,10 +420,15 @@ class NixGuixLister(StatelessLister[PageResult]):
                 # Let's check and filter it out if it is to be ignored (if possible).
                 # Some origin urls may not have extension at this point (e.g
                 # http://git.marmaro.de/?p=mmh;a=snp;h=<id>;sf=tgz), let them through.
-                if url_contains_tarball_filename(
-                    urlparse(origin),
-                    self.extensions_to_ignore,
-                    raise_when_no_extension=False,
+                parsed_url = urlparse(origin)
+                if (
+                    url_contains_tarball_filename(
+                        parsed_url,
+                        self.extensions_to_ignore,
+                        raise_when_no_extension=False,
+                    )
+                    # ignore nuget URLs as these archives contains binaries not source code
+                    or parsed_url.netloc == "www.nuget.org"
                 ):
                     logger.warning(
                         "Skipping artifact <%s>: 'file' artifact of type <%s> is"
