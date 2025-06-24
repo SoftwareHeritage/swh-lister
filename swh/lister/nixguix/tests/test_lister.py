@@ -220,6 +220,13 @@ def test_is_tarball_complex_with_content_type_result(
         assert origin == url
 
 
+def test_is_tarball_last_resort_url_fetch(requests_mock_datadir, requests_mock):
+    url = "https://ftpmirror.gnu.org/readline/readline-7.0-patches/readline70-005"
+    requests_mock.head(url)
+    is_tar, _ = is_tarball([url], requests)
+    assert is_tar is False
+
+
 def test_lister_nixguix_ok(datadir, swh_scheduler, requests_mock):
     """NixGuixLister should list all origins per visit type"""
     url = SOURCES["guix"]["manifest"]

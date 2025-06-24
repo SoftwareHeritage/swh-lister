@@ -10,6 +10,7 @@ mercurial
 psycopg
 pyreadr
 python_debian
+python-magic
 repomd
 requests
 setuptools

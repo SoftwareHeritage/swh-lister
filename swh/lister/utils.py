@@ -1,4 +1,4 @@
-# Copyright (C) 2018-2024 the Software Heritage developers
+# Copyright (C) 2018-2025 the Software Heritage developers
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
 
@@ -9,6 +9,7 @@ import re
 from typing import Any, Iterator, List, Optional, Tuple
 from urllib.parse import parse_qsl, urlparse
 
+import magic
 from requests.exceptions import ConnectionError, InvalidSchema, SSLError
 
 from swh.core.tarball import MIMETYPE_TO_ARCHIVE_FORMAT
@@ -116,6 +117,13 @@ POSSIBLE_TARBALL_MIMETYPES = tuple(MIMETYPE_TO_ARCHIVE_FORMAT.keys())
 
 
 PATTERN_VERSION = re.compile(r"(v*[0-9]+[.])([0-9]+[.]*)+")
+
+
+def _check_content_type(content_type: str, origin: str) -> Tuple[bool, str]:
+    logger.debug("Content-Type: %s", content_type)
+    if content_type == "application/json" or content_type.startswith("text/"):
+        return False, origin
+    return content_type.startswith(POSSIBLE_TARBALL_MIMETYPES), origin
 
 
 def url_contains_tarball_filename(
@@ -241,13 +249,6 @@ def is_tarball(
 
             origin = urls[0]
 
-            content_type = response.headers.get("Content-Type")
-            if content_type:
-                logger.debug("Content-Type: %s", content_type)
-                if content_type == "application/json":
-                    return False, origin
-                return content_type.startswith(POSSIBLE_TARBALL_MIMETYPES), origin
-
             content_disposition = response.headers.get("Content-Disposition")
             if content_disposition:
                 logger.debug("Content-Disposition: %s", content_disposition)
@@ -266,6 +267,23 @@ def is_tarball(
                         ),
                         origin,
                     )
+
+            content_type = response.headers.get("Content-Type")
+            if content_type:
+                return _check_content_type(content_type, origin)
+
+            # last resort, fetch URL content and detect its mimetype
+            try:
+                logger.debug("Fetching URL %s to detect mime type", url)
+                response = request.get(url, stream=True)
+                response.raise_for_status()
+            except Exception as e:
+                logger.debug("Could not fetch URL %s: %s", url, str(e))
+                pass
+            else:
+                data = next(response.iter_content(chunk_size=4096))
+                mimetype = magic.from_buffer(data, mime=True)
+                return _check_content_type(mimetype, origin)
 
     if len(exceptions_to_raise) > 0:
         raise exceptions_to_raise[0]
