@@ -1,4 +1,4 @@
-# Copyright (C) 2022-2024 The Software Heritage developers
+# Copyright (C) 2022-2025 The Software Heritage developers
 # See the AUTHORS file at the top-level directory of this distribution
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
@@ -222,6 +222,7 @@ def test_lister_nixguix_ok(datadir, swh_scheduler, requests_mock):
     url = SOURCES["guix"]["manifest"]
     origin_upstream = SOURCES["guix"]["repo"]
     lister = NixGuixLister(swh_scheduler, url=url, origin_upstream=origin_upstream)
+    assert "User-Agent" in lister.session.headers
 
     response = page_response(datadir, "success")
     requests_mock.get(

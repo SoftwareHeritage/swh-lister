@@ -1,4 +1,4 @@
-# Copyright (C) 2020-2024  The Software Heritage developers
+# Copyright (C) 2020-2025  The Software Heritage developers
 # See the AUTHORS file at the top-level directory of this distribution
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
@@ -24,8 +24,6 @@ import random
 import re
 from typing import Any, Dict, Iterator, List, Optional, Tuple, Union
 from urllib.parse import urlparse
-
-import requests
 
 from swh.core.tarball import MIMETYPE_TO_ARCHIVE_FORMAT
 from swh.lister.pattern import CredentialsType, StatelessLister
@@ -210,8 +208,6 @@ class NixGuixLister(StatelessLister[PageResult]):
         # maybe add an assert on those specific urls?
         self.origin_upstream = origin_upstream
         self.extensions_to_ignore = DEFAULT_EXTENSIONS_TO_IGNORE + extensions_to_ignore
-
-        self.session = requests.Session()
 
     def build_artifact(
         self, artifact_url: str, artifact_type: str
