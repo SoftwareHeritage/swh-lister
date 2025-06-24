@@ -29,31 +29,32 @@ LISTERS = {
 SUPPORTED_LISTERS = list(LISTERS)
 
 TARBALL_EXTENSIONS = [
-    "crate",
-    "gem",
-    "jar",
-    "love",  # zip
-    "zip",
-    "tar",
-    "gz",
-    "tgz",
-    "tbz",
-    "bz2",
-    "bzip2",
-    "lzma",
-    "lz",
-    "txz",
-    "xz",
-    "z",
-    "Z",
-    "7z",
-    "oxt",  # zip
-    "pak",  # zip
-    "war",  # zip
-    "whl",  # zip
-    "vsix",  # zip
-    "VSIXPackage",  # zip
-    "zst",
+    ".crate",
+    ".gem",
+    ".jar",
+    ".love",  # zip
+    ".zip",
+    ".tar",
+    ".tar.gz",
+    ".tgz",
+    ".tbz",
+    ".tbz2",
+    ".bz2",
+    ".bzip2",
+    ".tar.lzma",
+    ".tar.lz",
+    ".txz",
+    ".tar.xz",
+    ".tar.z",
+    ".tar.Z",
+    ".7z",
+    ".oxt",  # zip
+    ".pak",  # zip
+    ".war",  # zip
+    ".whl",  # zip
+    ".vsix",  # zip
+    ".VSIXPackage",  # zip
+    ".tar.zst",
 ]
 """Tarball recognition pattern"""
 

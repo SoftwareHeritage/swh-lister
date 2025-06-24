@@ -255,7 +255,7 @@ PATTERN = r"""
     # software name.
     (?P<software_name2>.+?)
 )
-(?P<extension>(?:\.(?:{extensions}))+)
+(?P<extension>(?:(?:{extensions}))+)
 $
 """.format(
     extensions="|".join(TARBALL_EXTENSIONS),

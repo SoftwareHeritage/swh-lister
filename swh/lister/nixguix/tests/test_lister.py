@@ -122,6 +122,8 @@ def test_is_tarball_not_so_simple(url):
         ["abc.c", "other.c"],
         ["one.scm?foo=bar", "two.scm?foo=bar"],
         ["config.nix", "flakes.nix"],
+        ["file.gz"],
+        ["file.otar"],
     ],
 )
 def test_is_tarball_simple_not_tarball(files):
