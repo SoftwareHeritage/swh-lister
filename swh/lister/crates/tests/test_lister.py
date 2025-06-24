@@ -1,4 +1,4 @@
-# Copyright (C) 2022-2024  The Software Heritage developers
+# Copyright (C) 2022-2025  The Software Heritage developers
 # See the AUTHORS file at the top-level directory of this distribution
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
@@ -122,7 +122,7 @@ def test_crates_lister(datadir, tmp_path, swh_scheduler, requests_mock_datadir):
     lister = CratesLister(scheduler=swh_scheduler)
     res = lister.run()
 
-    assert res.pages == 1
+    assert res.pages == 3
     assert res.origins == 3
 
     scheduler_origins = swh_scheduler.get_listed_origins(lister.lister_obj.id).results
@@ -150,9 +150,10 @@ def test_crates_lister_incremental(
     lister = CratesLister(scheduler=swh_scheduler)
     first = lister.run()
 
-    assert first.pages == 1
+    assert first.pages == 3
     assert first.origins == 3
 
+    lister = CratesLister(scheduler=swh_scheduler)
     second = lister.run()
 
     assert second.pages == 1
