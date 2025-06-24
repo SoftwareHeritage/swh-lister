@@ -134,7 +134,14 @@ def test_is_tarball_simple_not_tarball(files):
     assert origin == urls[0]
 
 
-def test_is_tarball_complex_with_no_result(requests_mock):
+def _mock_head_redirects(mocker, redirect_url, status_code=200):
+    response = requests.Response()
+    response.url = redirect_url
+    response.status_code = 200
+    mocker.patch.object(requests, "head").return_value = response
+
+
+def test_is_tarball_complex_with_no_result(requests_mock, mocker):
     """Complex tarball detection without proper information should fail."""
     # No extension, this won't detect immediately the nature of the url
     url = "https://example.org/crates/package/download"
@@ -157,9 +164,7 @@ def test_is_tarball_complex_with_no_result(requests_mock):
 
     with pytest.raises(ArtifactNatureUndetected):
         fallback_url = "https://example.org/mirror/crates/package/download"
-        requests_mock.head(
-            url, headers={"location": fallback_url}  # still no extension, cannot detect
-        )
+        _mock_head_redirects(mocker, fallback_url)
         is_tarball(urls, requests)
 
     with pytest.raises(ArtifactNatureMistyped):
@@ -167,9 +172,7 @@ def test_is_tarball_complex_with_no_result(requests_mock):
 
     with pytest.raises(ArtifactNatureMistyped):
         fallback_url = "foo://example.org/unsupported-scheme"
-        requests_mock.head(
-            url, headers={"location": fallback_url}  # still no extension, cannot detect
-        )
+        _mock_head_redirects(mocker, fallback_url)
         is_tarball(urls, requests)
 
 
@@ -181,7 +184,7 @@ def test_is_tarball_complex_with_no_result(requests_mock):
     ],
 )
 def test_is_tarball_complex_with_location_result(
-    requests_mock, fallback_url, expected_result
+    requests_mock, fallback_url, expected_result, mocker
 ):
     """Complex tarball detection with information should detect artifact nature"""
     # No extension, this won't detect immediately the nature of the url
@@ -189,7 +192,7 @@ def test_is_tarball_complex_with_location_result(
     urls = [url]
 
     # One scenario where the url renders a location with a proper extension
-    requests_mock.head(url, headers={"location": fallback_url})
+    _mock_head_redirects(mocker, fallback_url)
     is_tar, origin = is_tarball(urls, requests)
     assert is_tar == expected_result
     if is_tar:
@@ -240,12 +243,6 @@ def test_lister_nixguix_ok(datadir, swh_scheduler, requests_mock):
     requests_mock.head(
         "http://git.marmaro.de/?p=mmh;a=snapshot;h=431604647f89d5aac7b199a7883e98e56e4ccf9e;sf=tgz",
         headers={"Content-Type": "application/gzip; charset=ISO-8859-1"},
-    )
-    requests_mock.head(
-        "https://crates.io/api/v1/crates/syntect/4.6.0/download",
-        headers={
-            "Location": "https://static.crates.io/crates/syntect/syntect-4.6.0.crate"
-        },
     )
     requests_mock.head(
         "https://codeload.github.com/fifengine/fifechan/tar.gz/0.1.5",

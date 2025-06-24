@@ -188,13 +188,6 @@
       "inferredFetcher": "unclassified"
     },
     {
-      "type": "url",
-      "urls": [
-        "https://crates.io/api/v1/crates/syntect/4.6.0/download"
-      ],
-      "integrity": "sha256-iyCBW76A7gvgbmlXRQqEEYX89pD+AXjxTXegXOLKoDE="
-    },
-    {
       "outputHash": "0x5l2pn4x92734k6i2wcjbn2klmwgkiqaajvxadh35k74dgnyh18",
       "outputHashAlgo": "sha256",
       "outputHashMode": "flat",

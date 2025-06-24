@@ -214,7 +214,7 @@ def is_tarball(
             )
 
             try:
-                response = request.head(url)
+                response = request.head(url, allow_redirects=True)
             except (InvalidSchema, SSLError, ConnectionError):
                 exc = ArtifactNatureUndetected(
                     f"Cannot determine artifact type from url <{url}>"
@@ -229,11 +229,10 @@ def is_tarball(
                 exceptions_to_raise.append(exc)
                 continue
 
-            location = response.headers.get("Location")
-            if location:  # It's not always present
-                logger.debug("Location: %s", location)
+            if response.url != url:
+                logger.debug("Location: %s", response.url)
                 try:
-                    return _is_tarball(location), url
+                    return _is_tarball(response.url), url
                 except ArtifactWithoutExtension:
                     logger.warning(
                         "Still cannot detect extension through location <%s>...",
