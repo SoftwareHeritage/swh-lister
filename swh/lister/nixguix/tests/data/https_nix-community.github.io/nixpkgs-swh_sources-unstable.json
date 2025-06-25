@@ -1,0 +1,70 @@
+{
+    "sources": [
+        {
+            "nixStorePath": "/nix/store/hrb18kdxw1326jvnx19vfhwrlsdpgv87-spock-0.2.tar.gz",
+            "outputHashAlgo": "sha256",
+            "outputHashMode": "flat",
+            "type": "url",
+            "urls": [ "https://code.call-cc.org/egg-tarballs/5/spock/spock-0.2.tar.gz" ],
+            "integrity": "sha256-Q8qu+Ad5NynHHZqXx/B0FrmLFcsWUWBnPUNct+zpJ1Q=",
+            "narinfo": "StorePath: /nix/store/hrb18kdxw1326jvnx19vfhwrlsdpgv87-spock-0.2.tar.gz\nURL: nar/17nljnjscrw5rm920rk0imc0s3hrnv44fw06nf9g9z5qb670krkd.nar.xz\nCompression: xz\nFileHash: sha256:17nljnjscrw5rm920rk0imc0s3hrnv44fw06nf9g9z5qb670krkd\nFileSize: 66272\nNarHash: sha256:12x5zs0ry2k4dnyadkvhrk4ni2w8ghjs9a9187xic5slc7m1yiqz\nNarSize: 66208\nReferences: \nDeriver: qp536cng8lwbndzk1jpfqbn81d88zdcv-spock-0.2.tar.gz.drv\nSig: cache.nixos.org-1:yoH9HWDF+eM1CcHl0XLZJjwKeRq5ya8a3G6nhIqDzaNsLC4nTGGXoVTPB3faKr7dBz1GDcSm7b/mSmNLdYsbDA==\nCA: fixed:sha256:0m17x7nbfp237mkn0l8nrcaqpf8nfkqcg5ws3p3jjdvr0zwaxjj3\n",
+            "last_modified": "Thu, 06 Apr 2023 10:18:10 GMT"
+        },
+        {
+            "nixStorePath": "/nix/store/xxa14kz17zn8bbzams2mga4wjlfj1jj9-source",
+            "outputHashAlgo": "sha256",
+            "outputHashMode": "recursive",
+            "postFetch": "unpackDir=\"$TMPDIR/unpack\"\nmkdir \"$unpackDir\"\ncd \"$unpackDir\"\n\nrenamed=\"$TMPDIR/download.tar.gz\"\nmv \"$downloadedFile\" \"$renamed\"\nunpackFile \"$renamed\"\nchmod -R +w \"$unpackDir\"\nif [ $(ls -A \"$unpackDir\" | wc -l) != 1 ]; then\n  echo \"error: zip file must contain a single file or directory.\"\n  echo \"hint: Pass stripRoot=false; to fetchzip to assume flat list of files.\"\n  exit 1\nfi\nfn=$(cd \"$unpackDir\" && ls -A)\nif [ -f \"$unpackDir/$fn\" ]; then\n  mkdir $out\nfi\nmv \"$unpackDir/$fn\" \"$out\"\n\n\nchmod 755 \"$out\"\n",
+            "type": "url",
+            "urls": [ "https://github.com/zhanhb/cidr-merger/archive/v1.1.3.tar.gz" ],
+            "integrity": "sha256-Kb+89VP7JhBrTE4MM3H/dqoIBgDLnVhKqkgHdymYCgk=",
+            "narinfo": "StorePath: /nix/store/xxa14kz17zn8bbzams2mga4wjlfj1jj9-source\nURL: nar/1x1cwjdkc6c3xhjwr3zj8ss2lya68az064nzkqhqjnb5njfjc4z4.nar.xz\nCompression: xz\nFileHash: sha256:1x1cwjdkc6c3xhjwr3zj8ss2lya68az064nzkqhqjnb5njfjc4z4\nFileSize: 18324\nNarHash: sha256:028ak0lpf1s8m955i7fb0030iaknzxqk632f9imi09pvagsvrgr9\nNarSize: 106240\nReferences: \nDeriver: h9104bvifn86ky7xdpsw6rxfiy7cfbx4-source.drv\nSig: cache.nixos.org-1:AIOV2vAXTJAZQns95LY4XIYePI6w5vLbaFnePIwGSq42aaBxRhejv2sk2oQvAL+WwYuBDOCr3rMaPmbxOkVGCw==\nCA: fixed:r:sha256:028ak0lpf1s8m955i7fb0030iaknzxqk632f9imi09pvagsvrgr9\n",
+            "last_modified": "Tue, 24 Oct 2023 13:00:34 GMT"
+        },
+        {
+            "nixStorePath": "/nix/store/4al9kj13wqj8ssxkblr7x9d524q49575-source",
+            "outputHashAlgo": "sha256",
+            "outputHashMode": "recursive",
+            "submodule": true,
+            "type": "git",
+            "integrity": "sha256-q4L7qoxE0udR6I8gXsc19IAB+wH7YRjgbIGOsdUXzgs=",
+            "git_url": "https://github.com/krrishnarraj/clpeak.git",
+            "git_ref": "refs/tags/1.1.5",
+            "narinfo": "StorePath: /nix/store/4al9kj13wqj8ssxkblr7x9d524q49575-source\nURL: nar/1i1sxax8n06ykl8v2fixsz0p1l0p8n9c0xqlmr8b5j2wszisnr65.nar.xz\nCompression: xz\nFileHash: sha256:1i1sxax8n06ykl8v2fixsz0p1l0p8n9c0xqlmr8b5j2wszisnr65\nFileSize: 313852\nNarHash: sha256:02yf2zav33l1dkh1hqgv07xh307l6p3mw84gx18yglj4ijmgp0mb\nNarSize: 1361920\nReferences: \nDeriver: ph3q7f97mpyranmpvnpq3di1hxcj26nx-source.drv\nSig: cache.nixos.org-1:nWyLMcNLWbcOCKKJKGQQI3vuWfDAC6ogjPGPJwTiOJH8F9phOfLVdWFTgE3n9Hd91w//+wZcKpPDbyk19Wr0CQ==\nCA: fixed:r:sha256:02yf2zav33l1dkh1hqgv07xh307l6p3mw84gx18yglj4ijmgp0mb\n",
+            "last_modified": "Sat, 14 Jun 2025 06:47:32 GMT"
+        },
+        {
+            "nixStorePath": "/nix/store/dvrx54bbzkjjrgb14gk6pq4g1j5xy6hw-code-r816",
+            "outputHashAlgo": "sha256",
+            "outputHashMode": "recursive",
+            "type": "svn",
+            "integrity": "sha256-DqZBIydEc/GCznGiDm/NsgDQ02DMORyOJIYupmueq0o=",
+            "svn_url": "https://svn.code.sf.net/p/ctags/code/trunk",
+            "svn_revision": 816,
+            "narinfo": "StorePath: /nix/store/dvrx54bbzkjjrgb14gk6pq4g1j5xy6hw-code-r816\nURL: nar/0a11mnhr8bjrk18qji5rqm4lplhpj5nr8535qik4ys1jgwqy5pwr.nar.xz\nCompression: xz\nFileHash: sha256:0a11mnhr8bjrk18qji5rqm4lplhpj5nr8535qik4ys1jgwqy5pwr\nFileSize: 441776\nNarHash: sha256:0jmbkrmscbl64j71qffcc39x005jrmphx8kirs1g2ws44wil39hf\nNarSize: 2278224\nReferences: \nDeriver: 59rrvs63lyshm1924sx1jcnxfl7v2xr3-code-r816.drv\nSig: cache.nixos.org-1:/jU6bTWJ+9g7//hkGU73DQbWH/rnUG0DgalJnoEEnMCzXa2X/55N7V5BkSl+/cb8pcyEGW6DvK/zoRSuWz3cCA==\n",
+            "last_modified": "Sun, 02 Jul 2023 02:46:14 GMT"
+        },
+        {
+            "nixStorePath": "/nix/store/awnx5abfz209i4whnp7qrhka2va0makg-hg-archive",
+            "outputHashAlgo": "sha256",
+            "outputHashMode": "recursive",
+            "type": "hg",
+            "integrity": "sha256-0gCUSdg3HR3YeIbOByEBCZh2zGlYur6DeCOzUM53fdc=",
+            "hg_url": "http://hg.code.sf.net/p/enblend/code",
+            "hg_changeset": "0f423c72e51872698fe2985ca3bd453961ffe4e0",
+            "narinfo": "StorePath: /nix/store/awnx5abfz209i4whnp7qrhka2va0makg-hg-archive\nURL: nar/0yzmyxfgahxg4180i3fh7m6znzi33ls0hj1djsngq2ixpzlk1kjq.nar.xz\nCompression: xz\nFileHash: sha256:0yzmyxfgahxg4180i3fh7m6znzi33ls0hj1djsngq2ixpzlk1kjq\nFileSize: 500092\nNarHash: sha256:1mvxfz751cr3g21vxfjqd767d60904hhgkl6g3c1s79pv14r806j\nNarSize: 2936536\nReferences: \nDeriver: 9bzq3li131cf15p22pzdc03sy8bnbfwa-hg-archive.drv\nSig: cache.nixos.org-1:7le1BpZaGrPP40E+vgdm/343iLxZxrEj+iozsrA9wjo2Rb7WmiTB9y0Y+BmXtIeA4X6TRQlxbaCvajuJdQMcDQ==\nCA: fixed:r:sha256:1mvxfz751cr3g21vxfjqd767d60904hhgkl6g3c1s79pv14r806j\n",
+            "last_modified": "Mon, 04 Jun 2018 07:44:58 GMT"
+        },
+        {
+            "nixStorePath": "/nix/store/4ajsb623amfxwrpwnj4yx8drj7h65ba1-initalize-mutexes.patch",
+            "outputHashAlgo": "sha256",
+            "outputHashMode": "flat",
+            "postFetch": "tmpfile=\"$TMPDIR/patch\"\n\nif [ ! -s \"$out\" ]; then\n  echo \"error: Fetched patch file '$out' is empty!\" 1>&2\n  exit 1\nfi\n\nset +e\ncat < \"$out\" > \"$tmpfile\"\nif [ $? -ne 0 ] || [ ! -s \"$tmpfile\" ]; then\n    echo 'Failed to decode patch with command \"'cat'\"' >&2\n    echo 'Fetched file was (limited to 128 bytes):' >&2\n    od -A x -t x1z -v -N 128 \"$out\" >&2\n    exit 1\nfi\nset -e\nmv \"$tmpfile\" \"$out\"\n\nlsdiff \\\n   \\\n  \"$out\" \\\n| sort -u | sed -e 's/[*?]/\\\\&/g' \\\n| xargs -I{} --delimiter='\\n' \\\n  filterdiff \\\n  --include={} \\\n  --strip=0 \\\n   \\\n  --clean \"$out\" > \"$tmpfile\"\n\nif [ ! -s \"$tmpfile\" ]; then\n  echo \"error: Normalized patch '$tmpfile' is empty (while the fetched file was not)!\" 1>&2\n  echo \"Did you maybe fetch a HTML representation of a patch instead of a raw patch?\" 1>&2\n  echo \"Fetched file was:\" 1>&2\n  cat \"$out\" 1>&2\n  exit 1\nfi\n\nfilterdiff \\\n  -p1 \\\n   \\\n   \\\n  \"$tmpfile\" > \"$out\"\n\nif [ ! -s \"$out\" ]; then\n  echo \"error: Filtered patch '$out' is empty (while the original patch file was not)!\" 1>&2\n  echo \"Check your includes and excludes.\" 1>&2\n  echo \"Normalized patch file was:\" 1>&2\n  cat \"$tmpfile\" 1>&2\n  exit 1\nfi\n",
+            "type": "url",
+            "urls": [ "https://github.com/grame-cncm/faustlive/commit/fdd46b12202def9731b9ed2f6363287af16be892.patch" ],
+            "integrity": "sha256-yH95Y4Jbqgs8siE9rtutmu5C2sNZwQMJzCgDYqNBDj4=",
+            "narinfo": "StorePath: /nix/store/4ajsb623amfxwrpwnj4yx8drj7h65ba1-initalize-mutexes.patch\nURL: nar/1wqj4lhjl3skcgzj3ciqjxcgxmzwypl6xfl5gyxnvvimqh6vjcqz.nar.xz\nCompression: xz\nFileHash: sha256:1wqj4lhjl3skcgzj3ciqjxcgxmzwypl6xfl5gyxnvvimqh6vjcqz\nFileSize: 332\nNarHash: sha256:163iszxmsyxn21w2vkqq5bcl3vy2pb8hdfl0y1rgz6wrbczmv2rc\nNarSize: 640\nReferences: \nDeriver: dxk9129y0qaq0hhhx7p6vh5a142plm3c-initalize-mutexes.patch.drv\nSig: cache.nixos.org-1:QHTe9mqrjR3z3ZQQha/OAfDzmqIJ7W/QRUFIxlCHF6ZPC3nvfZTD9rqZpQLORltnA0JUXt0MIXqa+Du00GAoAg==\nCA: fixed:sha256:0ghf86in40r8rh4h7harqgd45vlsmpdswg91n8y0pajvh9ipjzy8\n",
+            "last_modified": "Sat, 27 Jan 2024 12:45:59 GMT"
+        }
+    ]
+}

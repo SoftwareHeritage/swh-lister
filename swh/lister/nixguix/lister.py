@@ -18,6 +18,10 @@ Artifacts can be of types:
 import base64
 import binascii
 from dataclasses import dataclass
+from datetime import datetime
+import email.parser
+import email.policy
+from email.utils import parsedate_to_datetime
 from enum import Enum
 import logging
 import random
@@ -95,6 +99,11 @@ class Artifact:
     svn_paths: Optional[List[str]]
     """Optional list of paths for the svn-export loader, only those will be exported
     and loaded into the archive"""
+    extrinsic_metadata: Dict[str, Any]
+    """Extrinsic metadata for the artifact as found in the JSON file consumed by the
+    lister describing more precisely what is archived"""
+    last_update: Optional[datetime]
+    """"Optional last update date for the artifact"""
 
 
 @dataclass
@@ -149,6 +158,12 @@ VCS_ARTIFACT_TYPE_TO_VISIT_TYPE = {
 }
 """Mapping between the vcs artifact type to the loader's visit type."""
 
+_narinfo_parser = email.parser.HeaderParser(policy=email.policy.strict)  # type: ignore[arg-type]
+
+
+def _parse_narinfo(narinfo: str) -> Dict[str, str]:
+    return dict(_narinfo_parser.parsestr(narinfo))
+
 
 class NixGuixLister(StatelessLister[PageResult]):
     """List Guix or Nix sources out of a public json manifest.
@@ -193,6 +208,7 @@ class NixGuixLister(StatelessLister[PageResult]):
         # canonicalize urls, can be turned off during docker runs
         canonicalize: bool = True,
         extensions_to_ignore: List[str] = [],
+        nixos_cache_url: str = "https://cache.nixos.org",
         **kwargs: Any,
     ):
         super().__init__(
@@ -209,6 +225,7 @@ class NixGuixLister(StatelessLister[PageResult]):
         # maybe add an assert on those specific urls?
         self.origin_upstream = origin_upstream
         self.extensions_to_ignore = DEFAULT_EXTENSIONS_TO_IGNORE + extensions_to_ignore
+        self.nixos_cache_url = nixos_cache_url
 
     def build_artifact(
         self, artifact_url: str, artifact_type: str
@@ -267,6 +284,68 @@ class NixGuixLister(StatelessLister[PageResult]):
 
         for artifact in sources:
             artifact_type = artifact["type"]
+            if "narinfo" in artifact and artifact["narinfo"] != "404":
+                # special processing for NixOS packages if source code is available
+                # for download from the nix remote HTTP cache
+                integrity = artifact["integrity"]
+                outputHashMode = artifact["outputHashMode"]
+
+                # parse nar info, compute nar archive URL and execute heuristics
+                # to determine source artifact type: tarball or regular file
+                narinfo = _parse_narinfo(artifact["narinfo"])
+                artifact["narinfo"] = narinfo
+                origin = f"{self.nixos_cache_url}/{narinfo['URL']}"
+                if integrity is None or not outputHashMode:
+                    logger.warning(
+                        "Skipping url <%s>: missing integrity or outputHashMode field",
+                        origin,
+                    )
+                    continue
+                try:
+                    tarball = (
+                        artifact["type"] != "url"
+                        or outputHashMode == "recursive"
+                        or is_tarball(artifact["urls"], self.session)[0]
+                    )
+                except ArtifactNatureUndetected:
+                    logger.warning(
+                        "Skipping url <%s>: undetected remote artifact type",
+                        artifact["urls"][0],
+                    )
+                    continue
+                except ArtifactNatureMistyped:
+                    logger.warning(
+                        "Mistyped url <%s>: skipping artifact", artifact["urls"][0]
+                    )
+                    continue
+
+                failure_log_if_any = (
+                    f"Skipping url: <{origin}>: integrity computation failure "
+                    f"for <{artifact}>"
+                )
+                checksums = self.convert_integrity_to_checksums(
+                    integrity, failure_log=failure_log_if_any
+                )
+                if not checksums:
+                    continue
+                yield ArtifactType.ARTIFACT, Artifact(
+                    origin=origin,
+                    fallback_urls=[],
+                    checksums=checksums,
+                    checksum_layout=MAPPING_CHECKSUM_LAYOUT[outputHashMode],
+                    visit_type="tarball-directory" if tarball else "content",
+                    ref=None,
+                    submodules=False,
+                    svn_paths=None,
+                    extrinsic_metadata=artifact,
+                    last_update=(
+                        parsedate_to_datetime(artifact["last_modified"])
+                        if "last_modified" in artifact
+                        else None
+                    ),
+                )
+                continue
+
             if artifact_type in VCS_SUPPORTED:
                 # This can output up to 2 origins of type
                 # - vcs
@@ -310,6 +389,8 @@ class NixGuixLister(StatelessLister[PageResult]):
                         ref=plain_ref,
                         submodules=artifact.get("submodule", False),
                         svn_paths=svn_paths,
+                        extrinsic_metadata=artifact,
+                        last_update=None,
                     )
 
             elif artifact_type == "url":
@@ -450,6 +531,8 @@ class NixGuixLister(StatelessLister[PageResult]):
                     ref=None,
                     submodules=False,
                     svn_paths=None,
+                    extrinsic_metadata=artifact,
+                    last_update=None,
                 )
             else:
                 logger.warning(
@@ -484,11 +567,13 @@ class NixGuixLister(StatelessLister[PageResult]):
             # extract the base svn url from the modified origin URL (see get_pages method)
             loader_arguments["svn_url"] = artifact.origin.rsplit("?", maxsplit=1)[0]
             loader_arguments["svn_paths"] = artifact.svn_paths
+        loader_arguments["extrinsic_metadata"] = artifact.extrinsic_metadata
         yield ListedOrigin(
             lister_id=self.lister_obj.id,
             url=artifact.origin,
             visit_type=artifact.visit_type,
             extra_loader_arguments=loader_arguments,
+            last_update=artifact.last_update,
         )
 
     def get_origins_from_page(

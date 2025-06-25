@@ -6,6 +6,8 @@
 from collections import defaultdict
 import json
 import logging
+from operator import itemgetter
+import os
 from pathlib import Path
 from typing import Dict, List
 from urllib.parse import urlparse
@@ -502,3 +504,149 @@ def test_lister_nixguix_svn_export_sub_trees(datadir, swh_scheduler, requests_mo
             scheduler_origins[origin_url].extra_loader_arguments["svn_paths"]
             == source["svn_files"]
         )
+
+
+@pytest.fixture
+def expected_nixpkgs_origins(datadir):
+    with open(
+        os.path.join(datadir, "expected_nixpkgs_origins.json"), "r"
+    ) as expected_origins:
+        return json.load(expected_origins)
+
+
+def test_lister_nixguix_list_nixpkgs(
+    requests_mock_datadir, swh_scheduler, expected_nixpkgs_origins
+):
+    url = SOURCES["nixpkgs"]["manifest"]
+    origin_upstream = SOURCES["nixpkgs"]["repo"]
+    lister = NixGuixLister(swh_scheduler, url=url, origin_upstream=origin_upstream)
+
+    listed_result = lister.run()
+
+    assert listed_result == ListerStats(pages=7, origins=7)
+
+    scheduler_origins = [
+        {
+            "origin_url": origin.url,
+            "visit_type": origin.visit_type,
+            "extra_loader_arguments": origin.extra_loader_arguments,
+            "last_update": (
+                origin.last_update.isoformat() if origin.last_update else None
+            ),
+        }
+        for origin in lister.scheduler.get_listed_origins(lister.lister_obj.id).results
+    ]
+
+    key = itemgetter("origin_url", "visit_type")
+    assert sorted(scheduler_origins, key=key) == sorted(
+        expected_nixpkgs_origins, key=key
+    )
+
+
+def test_lister_nixguix_list_nixpkgs_nixos_cache_misses(
+    requests_mock_datadir, swh_scheduler, requests_mock, expected_nixpkgs_origins
+):
+    url = SOURCES["nixpkgs"]["manifest"]
+    origin_upstream = SOURCES["nixpkgs"]["repo"]
+    lister = NixGuixLister(swh_scheduler, url=url, origin_upstream=origin_upstream)
+
+    sources_json = requests.get(url).json()
+    for source in sources_json["sources"]:
+        if any(
+            store_hash in source["nixStorePath"]
+            for store_hash in (
+                "hrb18kdxw1326jvnx19vfhwrlsdpgv87",
+                "dvrx54bbzkjjrgb14gk6pq4g1j5xy6hw",
+            )
+        ):
+            source["narinfo"] = "404"
+            del source["last_modified"]
+
+    requests_mock.get(url, [{"json": sources_json}])
+
+    listed_result = lister.run()
+
+    assert listed_result == ListerStats(pages=8, origins=7)
+
+    scheduler_origins = [
+        {
+            "origin_url": origin.url,
+            "visit_type": origin.visit_type,
+            "extra_loader_arguments": origin.extra_loader_arguments,
+            "last_update": (
+                origin.last_update.isoformat() if origin.last_update else None
+            ),
+        }
+        for origin in lister.scheduler.get_listed_origins(lister.lister_obj.id).results
+    ]
+
+    expected_nixpkgs_origins = [
+        origin
+        for origin in expected_nixpkgs_origins
+        if not origin["origin_url"].endswith(
+            (
+                "17nljnjscrw5rm920rk0imc0s3hrnv44fw06nf9g9z5qb670krkd.nar.xz",
+                "0a11mnhr8bjrk18qji5rqm4lplhpj5nr8535qik4ys1jgwqy5pwr.nar.xz",
+            )
+        )
+    ]
+
+    expected_nixpkgs_origins += [
+        {
+            "origin_url": "https://code.call-cc.org/egg-tarballs/5/spock/spock-0.2.tar.gz",
+            "visit_type": "tarball-directory",
+            "extra_loader_arguments": {
+                "checksums": {
+                    "sha256": "43caaef807793729c71d9a97c7f07416b98b15cb165160673d435cb7ece92754"
+                },
+                "fallback_urls": [],
+                "checksum_layout": "standard",
+                "extrinsic_metadata": {
+                    "type": "url",
+                    "urls": [
+                        "https://code.call-cc.org/egg-tarballs/5/spock/spock-0.2.tar.gz"
+                    ],
+                    "integrity": "sha256-Q8qu+Ad5NynHHZqXx/B0FrmLFcsWUWBnPUNct+zpJ1Q=",
+                    "nixStorePath": "/nix/store/hrb18kdxw1326jvnx19vfhwrlsdpgv87-spock-0.2.tar.gz",  # noqa
+                    "outputHashAlgo": "sha256",
+                    "outputHashMode": "flat",
+                    "narinfo": "404",
+                },
+            },
+            "last_update": None,
+        },
+        {
+            "origin_url": "https://svn.code.sf.net/p/ctags/code/trunk",
+            "visit_type": "svn",
+            "extra_loader_arguments": {},
+            "last_update": None,
+        },
+        {
+            "origin_url": "https://svn.code.sf.net/p/ctags/code/trunk",
+            "visit_type": "svn-export",
+            "extra_loader_arguments": {
+                "ref": 816,
+                "checksums": {
+                    "sha256": "0ea64123274473f182ce71a20e6fcdb200d0d360cc391c8e24862ea66b9eab4a"
+                },
+                "fallback_urls": [],
+                "checksum_layout": "nar",
+                "extrinsic_metadata": {
+                    "type": "svn",
+                    "svn_url": "https://svn.code.sf.net/p/ctags/code/trunk",
+                    "integrity": "sha256-DqZBIydEc/GCznGiDm/NsgDQ02DMORyOJIYupmueq0o=",
+                    "nixStorePath": "/nix/store/dvrx54bbzkjjrgb14gk6pq4g1j5xy6hw-code-r816",
+                    "svn_revision": 816,
+                    "outputHashAlgo": "sha256",
+                    "outputHashMode": "recursive",
+                    "narinfo": "404",
+                },
+            },
+            "last_update": None,
+        },
+    ]
+
+    key = itemgetter("origin_url", "visit_type")
+    assert sorted(scheduler_origins, key=key) == sorted(
+        expected_nixpkgs_origins, key=key
+    )
