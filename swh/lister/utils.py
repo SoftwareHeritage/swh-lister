@@ -201,6 +201,14 @@ def is_tarball(
         urlparsed = urlparse(url)
         if urlparsed.scheme not in ("http", "https", "ftp"):
             raise ArtifactNatureMistyped(f"Mistyped artifact '{url}'")
+        if (
+            urlparsed.netloc == "crates.io"
+            and urlparsed.path.startswith("/api/v1/crates/")
+            and urlparsed.path.endswith("/download")
+        ):
+            # special case for crate download URL to avoid an extra HTTP request
+            # to detect it as tarball as guix has a lot of crate packages
+            return True
         return url_contains_tarball_filename(urlparsed, TARBALL_EXTENSIONS)
 
     # Check all urls and as soon as an url allows the nature detection, this stops.

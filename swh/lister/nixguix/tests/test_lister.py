@@ -105,6 +105,7 @@ def test_is_tarball_simple(tarballs):
     [
         "https://example.org/download/one.tar.gz/other/path/parts",
         "https://example.org/download.php?foo=bar&file=one.tar.gz",
+        "https://crates.io/api/v1/crates/foo/1.0.0/download",
     ],
 )
 def test_is_tarball_not_so_simple(url):
