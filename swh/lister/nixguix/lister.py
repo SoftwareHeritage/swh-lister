@@ -268,17 +268,6 @@ class NixGuixLister(StatelessLister[PageResult]):
         raw_data = response.json()
         yield ArtifactType.VCS, VCS(origin=self.origin_upstream, type="git")
 
-        # grep '"type"' guix-sources.json | sort | uniq
-        #       "type": false                             <<<<<<<<< noise
-        #       "type": "git",
-        #       "type": "hg",
-        #       "type": "no-origin",                      <<<<<<<<< noise
-        #       "type": "svn",
-        #       "type": "url",
-
-        # grep '"type"' nixpkgs-sources-unstable.json | sort | uniq
-        #  "type": "url",
-
         sources = raw_data["sources"]
         random.shuffle(sources)
 
