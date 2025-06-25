@@ -30,6 +30,7 @@ from typing import Any, Dict, Iterator, List, Optional, Tuple, Union
 from urllib.parse import urlparse
 
 from swh.core.tarball import MIMETYPE_TO_ARCHIVE_FORMAT
+from swh.lister import TARBALL_EXTENSIONS
 from swh.lister.pattern import CredentialsType, StatelessLister
 from swh.lister.utils import (
     ArtifactNatureMistyped,
@@ -294,6 +295,7 @@ class NixGuixLister(StatelessLister[PageResult]):
                         fixed_url = url
                     urls.append(fixed_url)
 
+                origin_urls = urls
                 origin, *fallback_urls = urls
 
                 # Let's check and filter it out if it is to be ignored (if possible).
@@ -337,6 +339,42 @@ class NixGuixLister(StatelessLister[PageResult]):
                         origin,
                     )
                     continue
+            else:
+                for vcs_url_field in ("git_url", "svn_url", "hg_url"):
+                    if vcs_url_field in artifact:
+                        origin = artifact[vcs_url_field]
+                        origin_urls = [origin]
+                        break
+
+            try:
+                is_tar, origin = (
+                    (True, origin)
+                    if (artifact["type"] != "url" or outputHashMode == "recursive")
+                    else is_tarball(origin_urls, self.session)
+                )
+            except ArtifactNatureUndetected:
+                logger.warning(
+                    "Skipping url <%s>: undetected remote artifact type",
+                    artifact["urls"][0],
+                )
+                continue
+            except ArtifactNatureMistyped:
+                logger.warning(
+                    "Mistyped url <%s>: trying to deal with it properly", origin
+                )
+                urlparsed = urlparse(origin)
+                artifact_type = urlparsed.scheme
+
+                if artifact_type in VCS_SUPPORTED:
+                    built_artifact = self.build_artifact(origin, artifact_type)
+                    if not built_artifact:
+                        continue
+                    yield built_artifact
+                else:
+                    logger.warning(
+                        "Skipping url <%s>: undetected remote artifact type", origin
+                    )
+                continue
 
             if "narinfo" in artifact and artifact["narinfo"] != "404":
                 # special processing for NixOS packages if source code is available
@@ -351,23 +389,6 @@ class NixGuixLister(StatelessLister[PageResult]):
                     logger.warning(
                         "Skipping url <%s>: missing integrity or outputHashMode field",
                         origin,
-                    )
-                    continue
-                try:
-                    tarball = (
-                        artifact["type"] != "url"
-                        or outputHashMode == "recursive"
-                        or is_tarball(artifact["urls"], self.session)[0]
-                    )
-                except ArtifactNatureUndetected:
-                    logger.warning(
-                        "Skipping url <%s>: undetected remote artifact type",
-                        artifact["urls"][0],
-                    )
-                    continue
-                except ArtifactNatureMistyped:
-                    logger.warning(
-                        "Mistyped url <%s>: skipping artifact", artifact["urls"][0]
                     )
                     continue
 
@@ -385,7 +406,7 @@ class NixGuixLister(StatelessLister[PageResult]):
                     fallback_urls=[],
                     checksums=checksums,
                     checksum_layout=MAPPING_CHECKSUM_LAYOUT[outputHashMode],
-                    visit_type="tarball-directory" if tarball else "content",
+                    visit_type="tarball-directory" if is_tar else "content",
                     ref=None,
                     submodules=False,
                     svn_paths=None,
@@ -452,32 +473,6 @@ class NixGuixLister(StatelessLister[PageResult]):
                     yield built_artifact
                     continue
 
-                # Checks urls for the artifact nature of the origin
-                try:
-                    is_tar, origin = is_tarball(urls, self.session)
-                except ArtifactNatureMistyped:
-                    logger.warning(
-                        "Mistyped url <%s>: trying to deal with it properly", origin
-                    )
-                    urlparsed = urlparse(origin)
-                    artifact_type = urlparsed.scheme
-
-                    if artifact_type in VCS_SUPPORTED:
-                        built_artifact = self.build_artifact(origin, artifact_type)
-                        if not built_artifact:
-                            continue
-                        yield built_artifact
-                    else:
-                        logger.warning(
-                            "Skipping url <%s>: undetected remote artifact type", origin
-                        )
-                    continue
-                except ArtifactNatureUndetected:
-                    logger.warning(
-                        "Skipping url <%s>: undetected remote artifact type", origin
-                    )
-                    continue
-
                 failure_log_if_any = (
                     f"Skipping url: <{origin}>: integrity computation failure "
                     f"for <{artifact}>"
@@ -497,7 +492,12 @@ class NixGuixLister(StatelessLister[PageResult]):
                 # - "recursive": The hash is computed over the NAR archive dump of the
                 #       output (i.e., the result of `nix-store --dump`). In this case,
                 #       the output can be anything, including a directory tree.
-                if not is_tar and outputHashMode == "recursive":
+                if (
+                    not url_contains_tarball_filename(
+                        parsed_url, TARBALL_EXTENSIONS, raise_when_no_extension=False
+                    )
+                    and outputHashMode == "recursive"
+                ):
                     # T4608: Cannot deal with those properly yet as some can be missing
                     # 'critical' information about how to recompute the hash (e.g. fs
                     # layout, executable bit, ...)
