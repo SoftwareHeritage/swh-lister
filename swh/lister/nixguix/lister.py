@@ -273,6 +273,47 @@ class NixGuixLister(StatelessLister[PageResult]):
 
         for artifact in sources:
             artifact_type = artifact["type"]
+            origin_urls = artifact.get("urls")
+            if artifact_type == "url" and not origin_urls:
+                # Nothing to fetch
+                logger.warning("Skipping url <%s>: empty artifact", artifact)
+                continue
+            elif origin_urls:
+                # Deal with urls with empty scheme (basic fallback to http)
+                urls = []
+                for url in origin_urls:
+                    urlparsed = urlparse(url)
+                    if urlparsed.scheme == "" and not re.match(r"^\w+@[^/]+:", url):
+                        logger.warning("Missing scheme for <%s>: fallback to http", url)
+                        fixed_url = f"http://{url}"
+                    else:
+                        fixed_url = url
+                    urls.append(fixed_url)
+
+                origin, *fallback_urls = urls
+
+                # Let's check and filter it out if it is to be ignored (if possible).
+                # Some origin urls may not have extension at this point (e.g
+                # http://git.marmaro.de/?p=mmh;a=snp;h=<id>;sf=tgz), let them through.
+                parsed_url = urlparse(origin)
+                if artifact_type == "url" and (
+                    url_contains_tarball_filename(
+                        parsed_url,
+                        self.extensions_to_ignore,
+                        raise_when_no_extension=False,
+                    )
+                    # ignore nuget URLs as the archives contains binaries not source code
+                    or parsed_url.netloc == "www.nuget.org"
+                ):
+                    logger.warning(
+                        "Skipping artifact <%s>: 'file' artifact of type <%s> is"
+                        " ignored due to lister configuration. It should ignore"
+                        " origins with extension [%s]",
+                        origin,
+                        artifact_type,
+                        ",".join(self.extensions_to_ignore),
+                    )
+                    continue
             if "narinfo" in artifact and artifact["narinfo"] != "404":
                 # special processing for NixOS packages if source code is available
                 # for download from the nix remote HTTP cache
@@ -383,27 +424,6 @@ class NixGuixLister(StatelessLister[PageResult]):
                     )
 
             elif artifact_type == "url":
-                # It's either a tarball or a file
-                origin_urls = artifact.get("urls")
-                if not origin_urls:
-                    # Nothing to fetch
-                    logger.warning("Skipping url <%s>: empty artifact", artifact)
-                    continue
-
-                assert origin_urls is not None
-
-                # Deal with urls with empty scheme (basic fallback to http)
-                urls = []
-                for url in origin_urls:
-                    urlparsed = urlparse(url)
-                    if urlparsed.scheme == "" and not re.match(r"^\w+@[^/]+:", url):
-                        logger.warning("Missing scheme for <%s>: fallback to http", url)
-                        fixed_url = f"http://{url}"
-                    else:
-                        fixed_url = url
-                    urls.append(fixed_url)
-
-                origin, *fallback_urls = urls
 
                 if origin.endswith(".git"):
                     built_artifact = self.build_artifact(origin, "git")
@@ -481,32 +501,6 @@ class NixGuixLister(StatelessLister[PageResult]):
                         " missing information to properly check its integrity",
                         artifact,
                         artifact_type,
-                    )
-                    continue
-
-                # At this point plenty of heuristics happened and we should have found
-                # the right origin and its nature.
-
-                # Let's check and filter it out if it is to be ignored (if possible).
-                # Some origin urls may not have extension at this point (e.g
-                # http://git.marmaro.de/?p=mmh;a=snp;h=<id>;sf=tgz), let them through.
-                parsed_url = urlparse(origin)
-                if (
-                    url_contains_tarball_filename(
-                        parsed_url,
-                        self.extensions_to_ignore,
-                        raise_when_no_extension=False,
-                    )
-                    # ignore nuget URLs as these archives contains binaries not source code
-                    or parsed_url.netloc == "www.nuget.org"
-                ):
-                    logger.warning(
-                        "Skipping artifact <%s>: 'file' artifact of type <%s> is"
-                        " ignored due to lister configuration. It should ignore"
-                        " origins with extension [%s]",
-                        origin,
-                        artifact_type,
-                        ",".join(self.extensions_to_ignore),
                     )
                     continue
 
