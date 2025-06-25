@@ -274,6 +274,10 @@ class NixGuixLister(StatelessLister[PageResult]):
         for artifact in sources:
             artifact_type = artifact["type"]
             origin_urls = artifact.get("urls")
+            outputHash = artifact.get("outputHash")
+            outputHashMode = artifact.get("outputHashMode", "flat")
+            integrity = artifact.get("integrity")
+
             if artifact_type == "url" and not origin_urls:
                 # Nothing to fetch
                 logger.warning("Skipping url <%s>: empty artifact", artifact)
@@ -314,11 +318,29 @@ class NixGuixLister(StatelessLister[PageResult]):
                         ",".join(self.extensions_to_ignore),
                     )
                     continue
+
+                if integrity is None and outputHash is None:
+                    logger.warning(
+                        "Skipping url <%s>: missing integrity and outputHash field",
+                        origin,
+                    )
+                    continue
+
+                # Falls back to outputHash field if integrity is missing
+                if integrity is None and outputHash:
+                    # We'll deal with outputHash as integrity field
+                    integrity = outputHash
+
+                if integrity is None or not outputHashMode:
+                    logger.warning(
+                        "Skipping url <%s>: missing integrity or outputHashMode field",
+                        origin,
+                    )
+                    continue
+
             if "narinfo" in artifact and artifact["narinfo"] != "404":
                 # special processing for NixOS packages if source code is available
                 # for download from the nix remote HTTP cache
-                integrity = artifact["integrity"]
-                outputHashMode = artifact["outputHashMode"]
 
                 # parse nar info, compute nar archive URL and execute heuristics
                 # to determine source artifact type: tarball or regular file
@@ -389,8 +411,6 @@ class NixGuixLister(StatelessLister[PageResult]):
                 # Now, if we have also specific reference on the vcs, we want to ingest
                 # a specific directory with nar hashes
                 plain_ref = artifact.get(VCS_KEYS_MAPPING[artifact_type]["ref"])
-                outputHashMode = artifact.get("outputHashMode", "flat")
-                integrity = artifact.get("integrity")
                 if plain_ref and integrity and outputHashMode == "recursive":
                     failure_log_if_any = (
                         f"Skipping url: <{plain_url}>: integrity computation failure "
@@ -431,20 +451,6 @@ class NixGuixLister(StatelessLister[PageResult]):
                         continue
                     yield built_artifact
                     continue
-
-                outputHash = artifact.get("outputHash")
-                integrity = artifact.get("integrity")
-                if integrity is None and outputHash is None:
-                    logger.warning(
-                        "Skipping url <%s>: missing integrity and outputHash field",
-                        origin,
-                    )
-                    continue
-
-                # Falls back to outputHash field if integrity is missing
-                if integrity is None and outputHash:
-                    # We'll deal with outputHash as integrity field
-                    integrity = outputHash
 
                 # Checks urls for the artifact nature of the origin
                 try:
@@ -491,7 +497,6 @@ class NixGuixLister(StatelessLister[PageResult]):
                 # - "recursive": The hash is computed over the NAR archive dump of the
                 #       output (i.e., the result of `nix-store --dump`). In this case,
                 #       the output can be anything, including a directory tree.
-                outputHashMode = artifact.get("outputHashMode", "flat")
                 if not is_tar and outputHashMode == "recursive":
                     # T4608: Cannot deal with those properly yet as some can be missing
                     # 'critical' information about how to recompute the hash (e.g. fs
