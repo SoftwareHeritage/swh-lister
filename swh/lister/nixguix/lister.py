@@ -339,12 +339,19 @@ class NixGuixLister(StatelessLister[PageResult]):
                         origin,
                     )
                     continue
-            else:
+            elif artifact_type in ("git", "hg", "svn"):
                 for vcs_url_field in ("git_url", "svn_url", "hg_url"):
                     if vcs_url_field in artifact:
                         origin = artifact[vcs_url_field]
                         origin_urls = [origin]
                         break
+            else:
+                logger.warning(
+                    "Skipping artifact <%s>: unsupported type %s",
+                    artifact,
+                    artifact_type,
+                )
+                continue
 
             try:
                 is_tar, origin = (
@@ -521,12 +528,6 @@ class NixGuixLister(StatelessLister[PageResult]):
                     svn_paths=None,
                     extrinsic_metadata=artifact,
                     last_update=None,
-                )
-            else:
-                logger.warning(
-                    "Skipping artifact <%s>: unsupported type %s",
-                    artifact,
-                    artifact_type,
                 )
 
     def vcs_to_listed_origin(self, artifact: VCS) -> Iterator[ListedOrigin]:
