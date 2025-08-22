@@ -1,4 +1,4 @@
-# Copyright (C) 2023  The Software Heritage developers
+# Copyright (C) 2023-2025  The Software Heritage developers
 # See the AUTHORS file at the top-level directory of this distribution
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
@@ -9,7 +9,7 @@ import logging
 from pathlib import Path
 import shutil
 import tempfile
-from typing import Any, Dict, Iterator, Optional
+from typing import Any, Dict, Iterator, Optional, Tuple
 
 from dulwich import porcelain
 from dulwich.repo import Repo
@@ -25,7 +25,7 @@ from ..pattern import CredentialsType, Lister
 logger = logging.getLogger(__name__)
 
 # Aliasing the page results returned by `get_pages` method from the lister.
-JuliaListerPage = Dict[str, Any]
+JuliaListerPage = Tuple[str, str]
 
 
 @dataclass
@@ -81,7 +81,7 @@ class JuliaLister(Lister[JuliaListerState, JuliaListerPage]):
     def state_to_dict(self, state: JuliaListerState) -> Dict[str, Any]:
         return asdict(state)
 
-    def get_origin_data(self, entry: WalkEntry) -> Dict[str, Any]:
+    def get_origin_data(self, entry: WalkEntry) -> Tuple[str, str]:
         """
         Given an entry object parse its commit message and other attributes
         to detect if the commit is valid to describe a new package or
@@ -122,9 +122,9 @@ class JuliaLister(Lister[JuliaListerState, JuliaListerPage]):
                     entry.commit.commit_time,
                     tz=datetime.timezone.utc,
                 ).isoformat()
-                return {f"{origin}": last_update}
+                return (origin, last_update)
 
-        return {}
+        return ("", "")
 
     def get_pages(self) -> Iterator[JuliaListerPage]:
         """Yield an iterator which returns 'page'
@@ -152,11 +152,8 @@ class JuliaLister(Lister[JuliaListerState, JuliaListerPage]):
             walker = repo.get_walker(since=last.commit_time, exclude=[last.id])
 
         assert walker
-        packages = {}
         for entry in walker:
-            packages.update(self.get_origin_data(entry=entry))
-
-        yield packages
+            yield self.get_origin_data(entry=entry)
 
     def get_origins_from_page(self, page: JuliaListerPage) -> Iterator[ListedOrigin]:
         """Iterate on all pages and yield ListedOrigin instances
@@ -166,13 +163,13 @@ class JuliaLister(Lister[JuliaListerState, JuliaListerPage]):
         """
         assert self.lister_obj.id is not None
 
-        for origin, last_update in page.items():
-            last_update = iso8601.parse_date(last_update)
+        origin, last_update = page
+        if origin:
             yield ListedOrigin(
                 lister_id=self.lister_obj.id,
                 visit_type=self.VISIT_TYPE,
                 url=origin,
-                last_update=last_update,
+                last_update=iso8601.parse_date(last_update),
             )
 
     def finalize(self) -> None:

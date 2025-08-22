@@ -83,7 +83,7 @@ def test_julia_lister_incremental(datadir, tmp_path, swh_scheduler):
 
     # First run
     res = lister.run()
-    assert res.pages == 1
+    assert res.pages == 3
     assert res.origins == len(expected_origins_0)
     assert lister.state.last_seen_commit == expected_last_seen_commit
 
@@ -119,7 +119,7 @@ def test_julia_lister_incremental(datadir, tmp_path, swh_scheduler):
     # Second run
     res = lister.run()
     assert lister.state.last_seen_commit == new_expected_last_seen_commit
-    assert res.pages == 1
+    assert res.pages == 2
     # One new package, one new version
     assert res.origins == len(expected_origins_1)
 
@@ -144,7 +144,7 @@ def test_julia_lister_incremental_no_changes(datadir, tmp_path, swh_scheduler):
 
     # First run
     res = lister.run()
-    assert res.pages == 1
+    assert res.pages == 3
     assert res.origins == len(expected_origins_0)
     assert expected_last_seen_commit is not None
     assert lister.state.last_seen_commit == expected_last_seen_commit
@@ -160,6 +160,6 @@ def test_julia_lister_incremental_no_changes(datadir, tmp_path, swh_scheduler):
     # Second run
     res = lister.run()
     assert lister.state.last_seen_commit == expected_last_seen_commit
-    assert res.pages == 1
+    assert res.pages == 0
     # Nothing new
     assert res.origins == 0
