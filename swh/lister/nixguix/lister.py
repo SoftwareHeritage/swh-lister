@@ -57,6 +57,7 @@ DEFAULT_EXTENSIONS_TO_IGNORE = [
     ".rpm",
     ".nupkg",
 ]
+"""By default, ignore binary files and archives containing binaries."""
 
 
 class ChecksumLayout(Enum):
@@ -170,28 +171,36 @@ class NixGuixLister(StatelessLister[PageResult]):
     """List Guix or Nix sources out of a public json manifest.
 
     This lister can output:
-    - unique tarball (.tar.gz, .tbz2, ...)
-    - vcs repositories (e.g. git, hg, svn)
-    - unique file (.lisp, .py, ...)
 
-    In the case of vcs repositories, if a reference is provided (``git_ref``,
+    * unique tarball URLs (.tar.gz, .tbz2, ...)
+    * VCS repositories (e.g. git, hg, svn)
+    * unique file URLs (.lisp, .py, ...)
+
+    In the case of VCS repositories, if a reference is provided (``git_ref``,
     ``svn_revision`` or ``hg_changeset`` with a specific ``outputHashMode``
-    ``recursive``), this provides one more origin to ingest as 'directory'. The
-    DirectoryLoader will then be in charge to ingest the origin (checking the associated
-    ``integrity`` field first).
+    set to ``recursive``), this provides one more origin to ingest as a directory.
+    The :class:`swh.loader.git.directory.GitCheckoutLoader`,
+    :class:`swh.loader.mercurial.directory.HgCheckoutLoader` and
+    :class:`swh.loader.svn.directory.SvnExportLoader` classes will then be in
+    charge to ingest the origin as a directory (checking the associated ``integrity``
+    field first).
 
-    Note that, no `last_update` is available in either manifest (``guix`` or
-    ``nixpkgs``), so listed_origins do not have it set.
+    Note that no ``last_update`` is available in ``guix`` manifest so listed origins
+    do not have it set.
 
-    For `url` types artifacts, this tries to determine the artifact's nature, tarball or
-    file. It first tries to compute out of the "url" extension. In case of no extension,
-    it fallbacks to (HEAD) query the url to retrieve the origin out of the `Location`
-    response header, and then checks the extension again.
+    For URL type artifacts, this tries to determine the artifact's nature, tarball or
+    file. It first tries to compute out of the URL extension. In case of no extension,
+    it fallbacks to ``HEAD`` query the URL to retrieve the origin out of the ``Location``
+    response header, and then checks the extension again. As a last resort, a few bytes
+    will be downloaded from the artifact URL to detect its nature from its mime type.
+    The :class:`swh.loader.core.loader.ContentLoader` and
+    :class:`swh.loader.core.loader.TarballDirectoryLoader` classes will then be
+    in charge to ingest the origin (checking the associated ``integrity`` field
+    first).
 
-    Optionally, when the `extension_to_ignore` parameter is provided, it extends the
-    default extensions to ignore (`DEFAULT_EXTENSIONS_TO_IGNORE`) with those passed.
+    Optionally, when the ``extension_to_ignore`` parameter is provided, it extends the
+    default extensions to ignore (:const:`DEFAULT_EXTENSIONS_TO_IGNORE`) with those passed.
     This can be optionally used to filter some more binary files detected in the wild.
-
     """
 
     LISTER_NAME = "nixguix"
