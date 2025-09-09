@@ -14,7 +14,6 @@ import requests
 from swh.lister.maven.lister import MavenLister
 
 MVN_URL = "https://repo1.maven.org/maven2/"  # main maven repo url
-INDEX_URL = "http://indexes/export.fld"  # index directory url
 
 URL_POM_1 = MVN_URL + "al/aldi/sprova4j/0.1.0/sprova4j-0.1.0.pom"
 URL_POM_2 = MVN_URL + "al/aldi/sprova4j/0.1.1/sprova4j-0.1.1.pom"
@@ -97,7 +96,6 @@ def test_maven_full_listing(swh_scheduler, mocker, maven_index_full_publish_dir)
     )
 
     stats = lister.run()
-    print(stats)
 
     # Start test checks.
     assert stats.pages == 6
@@ -343,7 +341,7 @@ def test_maven_list_http_error_artifacts(
     # Test failure of artefacts retrieval.
     requests_mock.get(URL_POM_1, status_code=http_code)
 
-    lister = MavenLister(scheduler=swh_scheduler, url=MVN_URL, index_url=INDEX_URL)
+    lister = MavenLister(scheduler=swh_scheduler, url=MVN_URL)
 
     # on artifacts though, that raises but continue listing
     lister.run()
@@ -395,7 +393,7 @@ def test_maven_list_pom_bad_encoding(
         content=requests.get(URL_POM_1).content.decode("utf-8").encode("utf-32"),
     )
 
-    lister = MavenLister(scheduler=swh_scheduler, url=MVN_URL, index_url=INDEX_URL)
+    lister = MavenLister(scheduler=swh_scheduler, url=MVN_URL)
 
     lister.run()
 
@@ -425,7 +423,7 @@ def test_maven_list_pom_multi_byte_encoding(
         URL_POM_1, content=Path(datadir, "citrus-parent-3.0.7.pom").read_bytes()
     )
 
-    lister = MavenLister(scheduler=swh_scheduler, url=MVN_URL, index_url=INDEX_URL)
+    lister = MavenLister(scheduler=swh_scheduler, url=MVN_URL)
 
     lister.run()
 
