@@ -97,13 +97,13 @@ class MavenLister(Lister[MavenListerState, RepoPage]):
                 URL for extracted github repository should be retrieved with the
                 GitHub REST API.
         """
-        self.BASE_URL = url
+        self.BASE_URL = url.rstrip("/") + "/"
         self.incremental = incremental
 
         super().__init__(
             scheduler=scheduler,
             credentials=credentials,
-            url=url,
+            url=self.BASE_URL,
             instance=instance,
             with_github_session=with_github_session,
             max_origins_per_page=max_origins_per_page,

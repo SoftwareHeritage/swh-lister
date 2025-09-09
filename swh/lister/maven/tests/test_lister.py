@@ -81,7 +81,10 @@ def mock_maven_index_exporter(mocker, publish_dir):
     mocker.patch("subprocess.check_call")
 
 
-def test_maven_full_listing(swh_scheduler, mocker, maven_index_full_publish_dir):
+@pytest.mark.parametrize("mvn_url", [MVN_URL, MVN_URL.rstrip("/")])
+def test_maven_full_listing(
+    swh_scheduler, mocker, maven_index_full_publish_dir, mvn_url
+):
     """Covers full listing of multiple pages, checking page results and listed
     origins, statelessness."""
 
@@ -90,7 +93,7 @@ def test_maven_full_listing(swh_scheduler, mocker, maven_index_full_publish_dir)
     # Run the lister.
     lister = MavenLister(
         scheduler=swh_scheduler,
-        url=MVN_URL,
+        url=mvn_url,
         instance="maven.org",
         incremental=False,
     )
