@@ -392,48 +392,54 @@ class NixGuixLister(StatelessLister[PageResult]):
                     )
                 continue
 
-            if "narinfo" in artifact and artifact["narinfo"] != "404":
+            if "narinfo" in artifact:
                 # special processing for NixOS packages if source code is available
                 # for download from the nix remote HTTP cache
 
                 # parse nar info, compute nar archive URL and execute heuristics
                 # to determine source artifact type: tarball or regular file
-                narinfo = _parse_narinfo(artifact["narinfo"])
-                artifact["narinfo"] = narinfo
-                origin = f"{self.nixos_cache_url}/{narinfo['URL']}"
-                if integrity is None or not outputHashMode:
-                    logger.warning(
-                        "Skipping url <%s>: missing integrity or outputHashMode field",
-                        origin,
+                try:
+                    narinfo = _parse_narinfo(artifact["narinfo"])
+                except Exception:
+                    # narinfo is not parsable, artifact cannot be fetched from nix cache
+                    # so upstream content or tarball will be used instead
+                    pass
+                else:
+                    artifact["narinfo"] = narinfo
+                    origin = f"{self.nixos_cache_url}/{narinfo['URL']}"
+                    if integrity is None or not outputHashMode:
+                        logger.warning(
+                            "Skipping url <%s>: missing integrity or outputHashMode field",
+                            origin,
+                        )
+                        continue
+
+                    failure_log_if_any = (
+                        f"Skipping url: <{origin}>: integrity computation failure "
+                        f"for <{artifact}>"
+                    )
+                    checksums = self.convert_integrity_to_checksums(
+                        integrity, failure_log=failure_log_if_any
+                    )
+                    if not checksums:
+                        continue
+                    yield ArtifactType.ARTIFACT, Artifact(
+                        origin=origin,
+                        fallback_urls=[],
+                        checksums=checksums,
+                        checksum_layout=MAPPING_CHECKSUM_LAYOUT[outputHashMode],
+                        visit_type="tarball-directory" if is_tar else "content",
+                        ref=None,
+                        submodules=False,
+                        svn_paths=None,
+                        extrinsic_metadata=artifact,
+                        last_update=(
+                            parsedate_to_datetime(artifact["last_modified"])
+                            if "last_modified" in artifact
+                            else None
+                        ),
                     )
                     continue
-
-                failure_log_if_any = (
-                    f"Skipping url: <{origin}>: integrity computation failure "
-                    f"for <{artifact}>"
-                )
-                checksums = self.convert_integrity_to_checksums(
-                    integrity, failure_log=failure_log_if_any
-                )
-                if not checksums:
-                    continue
-                yield ArtifactType.ARTIFACT, Artifact(
-                    origin=origin,
-                    fallback_urls=[],
-                    checksums=checksums,
-                    checksum_layout=MAPPING_CHECKSUM_LAYOUT[outputHashMode],
-                    visit_type="tarball-directory" if is_tar else "content",
-                    ref=None,
-                    submodules=False,
-                    svn_paths=None,
-                    extrinsic_metadata=artifact,
-                    last_update=(
-                        parsedate_to_datetime(artifact["last_modified"])
-                        if "last_modified" in artifact
-                        else None
-                    ),
-                )
-                continue
 
             if artifact_type in VCS_SUPPORTED:
                 # This can output up to 2 origins of type
