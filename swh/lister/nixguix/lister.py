@@ -571,7 +571,9 @@ class NixGuixLister(StatelessLister[PageResult]):
             # extract the base svn url from the modified origin URL (see get_pages method)
             loader_arguments["svn_url"] = artifact.origin.rsplit("?", maxsplit=1)[0]
             loader_arguments["svn_paths"] = artifact.svn_paths
-        loader_arguments["extrinsic_metadata"] = artifact.extrinsic_metadata
+        if artifact.visit_type not in VCS_ARTIFACT_TYPE_TO_VISIT_TYPE.values():
+            # only content and tarball-directory visit type support extrinsic_metadata parameter
+            loader_arguments["extrinsic_metadata"] = artifact.extrinsic_metadata
         yield ListedOrigin(
             lister_id=self.lister_obj.id,
             url=artifact.origin,
