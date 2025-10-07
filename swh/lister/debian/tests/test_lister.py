@@ -39,7 +39,6 @@ from swh.scheduler.interface import SchedulerInterface
 _mirror_url = "http://deb.debian.org/debian"
 _suites = ["stretch", "buster", "bullseye"]
 _components = ["main", "foo"]
-_last_modified = {}
 
 SourcesText = str
 
@@ -61,7 +60,7 @@ def _init_test(
     swh_scheduler: SchedulerInterface,
     debian_sources: Dict[Suite, SourcesText],
     requests_mock,
-) -> Tuple[DebianLister, DebianSuitePkgSrcInfo]:
+) -> Tuple[DebianLister, DebianSuitePkgSrcInfo, Dict[str, str]]:
     lister = DebianLister(
         scheduler=swh_scheduler,
         url=_mirror_url,
@@ -70,16 +69,16 @@ def _init_test(
     )
 
     suite_pkg_info: DebianSuitePkgSrcInfo = {}
+    last_modified = {}
 
     for i, (suite, sources) in enumerate(debian_sources.items()):
         # ensure to generate a different date for each suite
-        last_modified = formatdate(timeval=datetime.now().timestamp() + i, usegmt=True)
+        last_modified_ = formatdate(timeval=datetime.now().timestamp() + i, usegmt=True)
         suite_pkg_info[suite] = defaultdict(list)
         for pkg_src in Sources.iter_paragraphs(sources):
             suite_pkg_info[suite][pkg_src["Package"]].append(pkg_src)
             # backup package last update date
-            global _last_modified
-            _last_modified[pkg_src["Package"]] = last_modified
+            last_modified[pkg_src["Package"]] = last_modified_
 
         for idx_url, compression in lister.debian_index_urls(suite, _components[0]):
             if compression:
@@ -88,13 +87,13 @@ def _init_test(
                 requests_mock.get(
                     idx_url,
                     text=sources,
-                    headers={"Last-Modified": last_modified},
+                    headers={"Last-Modified": last_modified_},
                 )
 
         for idx_url, _ in lister.debian_index_urls(suite, _components[1]):
             requests_mock.get(idx_url, status_code=404)
 
-    return lister, suite_pkg_info
+    return lister, suite_pkg_info, last_modified
 
 
 def _check_listed_origins(
@@ -102,6 +101,7 @@ def _check_listed_origins(
     lister: DebianLister,
     suite_pkg_info: DebianSuitePkgSrcInfo,
     lister_previous_state: Dict[PkgName, Set[PkgVersion]],
+    last_modified: Dict[str, str],
 ) -> Set[DebianOrigin]:
     scheduler_origins = swh_scheduler.get_listed_origins(lister.lister_obj.id).results
 
@@ -133,7 +133,7 @@ def _check_listed_origins(
 
                     assert filtered_origins
                     expected_last_update = parsedate_to_datetime(
-                        _last_modified[pkg_src["Package"]]
+                        last_modified[pkg_src["Package"]]
                     )
                     assert filtered_origins[0].last_update == expected_last_update
                     packages = filtered_origins[0].extra_loader_arguments["packages"]
@@ -167,12 +167,18 @@ def test_lister_debian_all_suites(
     """
     Simulate a full listing of main component packages for all debian suites.
     """
-    lister, suite_pkg_info = _init_test(swh_scheduler, debian_sources, requests_mock)
+    lister, suite_pkg_info, last_modified = _init_test(
+        swh_scheduler, debian_sources, requests_mock
+    )
 
     stats = lister.run()
 
     origin_urls = _check_listed_origins(
-        swh_scheduler, lister, suite_pkg_info, lister_previous_state={}
+        swh_scheduler,
+        lister,
+        suite_pkg_info,
+        lister_previous_state={},
+        last_modified=last_modified,
     )
 
     assert stats.pages == len(_suites) * len(_components)
@@ -208,7 +214,9 @@ def test_lister_debian_updated_packages(
     for idx, suites in enumerate(suites_params):
         sources = {suite: debian_sources[suite] for suite in suites}
 
-        lister, suite_pkg_info = _init_test(swh_scheduler, sources, requests_mock)
+        lister, suite_pkg_info, last_modified = _init_test(
+            swh_scheduler, sources, requests_mock
+        )
 
         stats = lister.run()
 
@@ -217,6 +225,7 @@ def test_lister_debian_updated_packages(
             lister,
             suite_pkg_info,
             lister_previous_state=lister_previous_state,
+            last_modified=last_modified,
         )
 
         assert stats.pages == len(sources) * len(_components)
