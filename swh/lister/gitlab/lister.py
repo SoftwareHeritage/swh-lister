@@ -225,7 +225,7 @@ class GitLabLister(Lister[GitLabListerState, PageResult]):
                 self.ignored_project_prefixes
             ):
                 continue
-            visit_type = repo.get("vcs_type", "git")
+            visit_type: str = repo.get("vcs_type", "git")
             visit_type = VCS_MAPPING.get(visit_type, visit_type)
             yield ListedOrigin(
                 lister_id=self.lister_obj.id,

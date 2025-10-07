@@ -160,7 +160,7 @@ VCS_ARTIFACT_TYPE_TO_VISIT_TYPE = {
 }
 """Mapping between the vcs artifact type to the loader's visit type."""
 
-_narinfo_parser = email.parser.HeaderParser(policy=email.policy.strict)  # type: ignore[arg-type]
+_narinfo_parser = email.parser.HeaderParser(policy=email.policy.strict)
 
 
 def _parse_narinfo(narinfo: str) -> Dict[str, str]:

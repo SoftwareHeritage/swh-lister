@@ -12,6 +12,7 @@ import tempfile
 from typing import Any, Dict, Iterator, Optional, Tuple
 
 from dulwich import porcelain
+from dulwich.objects import Commit
 from dulwich.repo import Repo
 from dulwich.walk import WalkEntry
 import iso8601
@@ -101,7 +102,7 @@ class JuliaLister(Lister[JuliaListerState, JuliaListerPage]):
         ):
             package_toml = None
             for change in entry.changes():
-                if change and hasattr(change, "new"):
+                if change and hasattr(change, "new") and change.new is not None:
                     if change.new.path.endswith(b"/Package.toml"):
                         package_toml = self.REPO_PATH / change.new.path.decode()
                         break
@@ -149,6 +150,7 @@ class JuliaLister(Lister[JuliaListerState, JuliaListerPage]):
             walker = repo.get_walker()
         else:
             last = repo[self.state.last_seen_commit.encode()]
+            assert isinstance(last, Commit)
             walker = repo.get_walker(since=last.commit_time, exclude=[last.id])
 
         assert walker
