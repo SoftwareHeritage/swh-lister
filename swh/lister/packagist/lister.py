@@ -3,11 +3,13 @@
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
 
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from dataclasses import dataclass
 from datetime import datetime, timezone
+from email.utils import parsedate_to_datetime
 import logging
 from random import shuffle
-from typing import Any, Dict, Iterable, Iterator, List, Optional
+from typing import Any, Dict, Iterable, Iterator, List, Optional, Tuple
 
 import iso8601
 import requests
@@ -80,13 +82,15 @@ class PackagistLister(Lister[PackagistListerState, PackagistPageType]):
         max_pages: Optional[int] = None,
         enable_origins: bool = True,
         record_batch_size: int = 1000,
+        with_github_session: bool = True,
+        max_workers: int = 10,
     ):
         super().__init__(
             scheduler=scheduler,
             url=url,
             instance=instance,
             credentials=credentials,
-            with_github_session=True,
+            with_github_session=with_github_session,
             max_origins_per_page=max_origins_per_page,
             max_pages=max_pages,
             enable_origins=enable_origins,
@@ -94,7 +98,8 @@ class PackagistLister(Lister[PackagistListerState, PackagistPageType]):
         )
 
         self.session.headers.update({"Accept": "application/json"})
-        self.listing_date = datetime.now().astimezone(tz=timezone.utc)
+        self.listing_date = datetime.now(tz=timezone.utc)
+        self.executor = ThreadPoolExecutor(max_workers=max_workers)
 
     def state_from_dict(self, d: Dict[str, Any]) -> PackagistListerState:
         last_listing_date = d.get("last_listing_date")
@@ -109,7 +114,7 @@ class PackagistLister(Lister[PackagistListerState, PackagistPageType]):
             d["last_listing_date"] = last_listing_date.isoformat()
         return d
 
-    def api_request(self, url: str) -> Dict:
+    def api_request(self, url: str, check_last_modified: bool = False) -> Dict:
         """Execute api request to packagist server.
 
         Raise:
@@ -119,13 +124,26 @@ class PackagistLister(Lister[PackagistListerState, PackagistPageType]):
             The json result in case of a 200, an empty response otherwise.
 
         """
-        response = self.http_request(url)
+        response = self.http_request(
+            url, method="HEAD" if check_last_modified else "GET"
+        )
         # response is empty when status code is 304
         status_code = response.status_code
-        if status_code == 200:
-            return response.json()
-        elif status_code == 304:
+        if status_code == 304:
             raise NotModifiedSinceLastVisit(url)
+        elif check_last_modified and status_code == 200:
+            if (
+                self.state.last_listing_date is not None
+                and "last-modified" in response.headers
+            ):
+                last_modified = parsedate_to_datetime(
+                    response.headers["last-modified"]
+                ).astimezone(timezone.utc)
+                if last_modified < self.state.last_listing_date:
+                    raise NotModifiedSinceLastVisit(url)
+            return self.http_request(url).json()
+        elif status_code == 200:
+            return response.json()
         else:
             return {}
 
@@ -150,7 +168,10 @@ class PackagistLister(Lister[PackagistListerState, PackagistPageType]):
         """
         try:
             metadata_url = package_url_format.format(package_name=package_name)
-            metadata = self.api_request(metadata_url)
+            metadata = self.api_request(
+                metadata_url,
+                check_last_modified=self.state.last_listing_date is not None,
+            )
             packages = metadata.get("packages", {})
             format_json = metadata.get("minified")
             if not packages:
@@ -175,7 +196,9 @@ class PackagistLister(Lister[PackagistListerState, PackagistPageType]):
             # been removed), skip it and process next package
             return None
 
-    def _get_metadata_for_package(self, package_name: str) -> Optional[List[Dict]]:
+    def _get_metadata_for_package(
+        self, package_name: str
+    ) -> Tuple[str, Optional[List[Dict]]]:
         """Tentatively retrieve metadata information from a package name.
 
         This tries out in order the following pages:
@@ -193,12 +216,20 @@ class PackagistLister(Lister[PackagistListerState, PackagistPageType]):
 
         """
         for package_url_format in self.PACKAGIST_PACKAGE_URL_FORMATS:
-            meta_info = self._get_metadata_from_page(package_url_format, package_name)
-            # If information, return it immediately, otherwise fallback to the next
-            if meta_info:
-                return meta_info
-
-        return None
+            try:
+                meta_info = self._get_metadata_from_page(
+                    package_url_format, package_name
+                )
+                if meta_info:
+                    # If information, return it immediately, otherwise fallback to the next
+                    return package_name, meta_info
+            except NotModifiedSinceLastVisit:
+                # Package was not modified server side since the last visit, we skip it
+                logger.debug(
+                    "Package %s was not modified since last listing", package_name
+                )
+                return package_name, None
+        return package_name, None
 
     def get_origins_from_page(self, page: PackagistPageType) -> Iterator[ListedOrigin]:
         """
@@ -217,13 +248,11 @@ class PackagistLister(Lister[PackagistListerState, PackagistPageType]):
         # to ensure origins will not be listed multiple times
         origin_urls = set()
 
-        for package_name in page:
-            try:
-                versions_info = self._get_metadata_for_package(package_name)
-            except NotModifiedSinceLastVisit:
-                # Package was not modified server side since the last visit, we skip it
-                continue
-
+        for future in as_completed(
+            self.executor.submit(self._get_metadata_for_package, package_name)
+            for package_name in page
+        ):
+            package_name, versions_info = future.result()
             if versions_info is None:
                 # No info on package, we skip it
                 continue
@@ -253,10 +282,9 @@ class PackagistLister(Lister[PackagistListerState, PackagistPageType]):
             if visit_type is None or origin_url is None or origin_url in origin_urls:
                 continue
 
-            if visit_type == "git":
+            if visit_type == "git" and self.github_session:
                 # Non-github urls will be returned as is, github ones will be canonical
                 # ones
-                assert self.github_session is not None
                 try:
                     origin_url = (
                         self.github_session.get_canonical_url(origin_url) or origin_url
