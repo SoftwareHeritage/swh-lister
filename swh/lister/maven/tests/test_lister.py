@@ -83,7 +83,7 @@ def mock_maven_index_exporter(mocker, publish_dir):
 
 @pytest.mark.parametrize("mvn_url", [MVN_URL, MVN_URL.rstrip("/")])
 def test_maven_full_listing(
-    swh_scheduler, mocker, maven_index_full_publish_dir, mvn_url
+    swh_scheduler, mocker, maven_index_full_publish_dir, mvn_url, requests_mock_datadir
 ):
     """Covers full listing of multiple pages, checking page results and listed
     origins, statelessness."""
