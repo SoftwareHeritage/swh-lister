@@ -160,6 +160,31 @@ def test_packagist_lister_missing_metadata(swh_scheduler, requests_mock, datadir
     assert stats.origins == 0
 
 
+def test_packagist_lister_missing_source_metadata(
+    swh_scheduler, requests_mock, datadir
+):
+    lister = PackagistLister(scheduler=swh_scheduler)
+    package_name = "ljjackson/linnworks"
+    requests_mock.get(
+        lister.PACKAGIST_PACKAGES_LIST_URL, json={"packageNames": [package_name]}
+    )
+    for format_url in lister.PACKAGIST_PACKAGE_URL_FORMATS:
+        url = format_url.format(package_name=package_name)
+        metadata = _package_metadata(datadir, package_name)
+        metadata["packages"][package_name][0]["source"] = None
+        requests_mock.get(
+            url,
+            additional_matcher=_request_without_if_modified_since,
+            status_code=200,
+            json=metadata,
+        )
+
+    stats = lister.run()
+
+    assert stats.pages == 1
+    assert stats.origins == 0
+
+
 def test_packagist_lister_empty_metadata(swh_scheduler, requests_mock, datadir):
     lister = PackagistLister(scheduler=swh_scheduler)
     requests_mock.get(lister.PACKAGIST_PACKAGES_LIST_URL, json=_packages_list)

@@ -263,11 +263,14 @@ class PackagistLister(Lister[PackagistListerState, PackagistPageType]):
 
             # extract origin url for package, vcs type and latest release date
             for version_info in versions_info:
-                origin_url = version_info.get("source", {}).get("url", "")
+                source = version_info.get("source")
+                if not isinstance(source, dict):
+                    continue
+                origin_url = source.get("url", "")
                 if not origin_url:
                     continue
                 # can be git, hg or svn
-                visit_type = version_info.get("source", {}).get("type", "")
+                visit_type = source.get("type", "")
                 dist_time_str = version_info.get("time", "")
                 if not dist_time_str:
                     continue
