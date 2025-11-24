@@ -71,10 +71,7 @@ class BioconductorLister(Lister[BioconductorListerState, BioconductorListerPage]
             record_batch_size=record_batch_size,
         )
 
-        if releases is None:
-            self.releases = self.fetch_versions()
-        else:
-            self.releases = releases
+        self.releases = releases
 
         self.categories = categories or [
             "bioc",
@@ -102,6 +99,8 @@ class BioconductorLister(Lister[BioconductorListerState, BioconductorListerPage]
 
     def get_pages(self) -> Iterator[BioconductorListerPage]:
         """Return an iterator for each page. Every page is a (release, category) pair."""
+        if self.releases is None:
+            self.releases = self.fetch_versions()
         for release in self.releases:
             if version.parse(release) < version.parse("1.8"):
                 # only bioc category existed before 1.8

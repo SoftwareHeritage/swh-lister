@@ -263,7 +263,7 @@ def test_bioconductor_lister_http_error(
 
 def test_bioconductor_fetch_versions(swh_scheduler: SchedulerInterface):
     lister = BioconductorLister(scheduler=swh_scheduler)
-    assert lister.releases == [
+    assert lister.fetch_versions() == [
         "1.5",
         "1.6",
         "1.7",
