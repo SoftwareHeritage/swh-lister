@@ -47,7 +47,6 @@ class JuliaLister(Lister[JuliaListerState, JuliaListerPage]):
     REPO_URL = (
         "https://github.com/JuliaRegistries/General.git"  # Julia General Registry
     )
-    REPO_PATH = Path(tempfile.mkdtemp(), "General")
 
     def __init__(
         self,
@@ -58,6 +57,9 @@ class JuliaLister(Lister[JuliaListerState, JuliaListerPage]):
         max_origins_per_page: Optional[int] = None,
         max_pages: Optional[int] = None,
         enable_origins: bool = True,
+        # if not provided, a temporary directory is used to clone the
+        # git repository of Julia packages
+        git_repo_path: Optional[str] = None,
     ):
         super().__init__(
             scheduler=scheduler,
@@ -69,17 +71,23 @@ class JuliaLister(Lister[JuliaListerState, JuliaListerPage]):
             enable_origins=enable_origins,
         )
 
+        self.remove_git_repo = git_repo_path is None
+        if git_repo_path is not None:
+            self.repo_path = Path(git_repo_path)
+        else:
+            self.repo_path = Path(tempfile.mkdtemp(), "General")
+
     def get_registry_repository(self) -> None:
         """Get Julia General Registry Git repository up to date on disk"""
         try:
             porcelain.clone(
                 source=self.url,
-                target=self.REPO_PATH,
+                target=self.repo_path,
                 errstream=porcelain.NoneStream(),
             )
         except FileExistsError:
             porcelain.pull(
-                self.REPO_PATH,
+                self.repo_path,
                 remote_location=self.url,
                 errstream=porcelain.NoneStream(),
             )
@@ -112,16 +120,16 @@ class JuliaLister(Lister[JuliaListerState, JuliaListerPage]):
             for change in entry.changes():
                 if change and hasattr(change, "new") and change.new is not None:
                     if change.new.path.endswith(b"/Package.toml"):
-                        package_toml = self.REPO_PATH / change.new.path.decode()
+                        package_toml = self.repo_path / change.new.path.decode()
                         break
                     elif change.new.path.endswith(b"/Versions.toml"):
-                        versions_path = self.REPO_PATH / change.new.path.decode()
+                        versions_path = self.repo_path / change.new.path.decode()
                         if versions_path.exists():
                             package_path, _ = change.new.path.decode().split(
                                 "Versions.toml"
                             )
                             package_toml = (
-                                self.REPO_PATH / package_path / "Package.toml"
+                                self.repo_path / package_path / "Package.toml"
                             )
                             break
 
@@ -149,9 +157,9 @@ class JuliaLister(Lister[JuliaListerState, JuliaListerPage]):
         """
         # Clone the repository
         self.get_registry_repository()
-        assert self.REPO_PATH.exists()
+        assert self.repo_path.exists()
 
-        repo = Repo(str(self.REPO_PATH))
+        repo = Repo(str(self.repo_path))
 
         # Detect commits related to new package and new versions since last_seen_commit
         if not self.state.last_seen_commit:
@@ -184,10 +192,9 @@ class JuliaLister(Lister[JuliaListerState, JuliaListerPage]):
 
     def finalize(self) -> None:
         # Get Git HEAD commit hash
-        repo = Repo(str(self.REPO_PATH))
+        repo = Repo(str(self.repo_path))
         self.state.last_seen_commit = repo.head().decode("ascii")
         self.updated = True
-        # Rm tmp directory REPO_PATH
-        if self.REPO_PATH.exists():
-            shutil.rmtree(self.REPO_PATH)
-        assert not self.REPO_PATH.exists()
+        # Rm tmp directory repo_path
+        if self.repo_path.exists() and self.remove_git_repo:
+            shutil.rmtree(self.repo_path)

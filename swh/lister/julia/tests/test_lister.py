@@ -27,25 +27,23 @@ def test_julia_get_registry_repository(datadir, tmp_path, swh_scheduler):
     repo_url = prepare_repository_from_archive(archive_path, "General", tmp_path)
 
     lister = JuliaLister(url=repo_url, scheduler=swh_scheduler)
-    assert not lister.REPO_PATH.exists()
+    assert not lister.repo_path.exists()
 
     lister.get_registry_repository()
-    assert lister.REPO_PATH.exists()
+    assert lister.repo_path.exists()
     # ensure get_registry_repository is idempotent
     lister.get_registry_repository()
-    assert lister.REPO_PATH.exists()
+    assert lister.repo_path.exists()
 
     # ensure the repository is deleted once the lister has run
     lister.run()
-    assert not lister.REPO_PATH.exists()
+    assert not lister.repo_path.exists()
 
 
 def test_julia_lister(datadir, tmp_path, swh_scheduler):
     archive_path = Path(datadir, "fake-julia-registry-repository_0.tar.gz")
     repo_url = prepare_repository_from_archive(archive_path, "General", tmp_path)
     lister = JuliaLister(url=repo_url, scheduler=swh_scheduler)
-    lister.REPO_PATH = Path(tmp_path, "General")
-    lister.REGISTRY_PATH = lister.REPO_PATH / "Registry.toml"
 
     res = lister.run()
     assert res.origins == len(expected_origins_0)
@@ -70,12 +68,15 @@ def test_julia_lister_incremental(datadir, tmp_path, swh_scheduler):
     archive_path = Path(datadir, "fake-julia-registry-repository_0.tar.gz")
     repo_url = prepare_repository_from_archive(archive_path, "General", tmp_path)
 
+    git_repo_path = Path(tmp_path, "General")
+
     # Prepare first run
-    lister = JuliaLister(url=repo_url, scheduler=swh_scheduler)
-    lister.REPO_PATH = Path(tmp_path, "General")
-    lister.REGISTRY_PATH = lister.REPO_PATH / "Registry.toml"
+    lister = JuliaLister(
+        url=repo_url, scheduler=swh_scheduler, git_repo_path=git_repo_path
+    )
+
     # Latest Git commit hash expected
-    with porcelain.open_repo_closing(lister.REPO_PATH) as r:
+    with porcelain.open_repo_closing(lister.repo_path) as r:
         expected_last_seen_commit = r.head().decode("ascii")
 
     assert expected_last_seen_commit is not None
@@ -105,13 +106,13 @@ def test_julia_lister_incremental(datadir, tmp_path, swh_scheduler):
     archive_path = Path(datadir, "fake-julia-registry-repository_1.tar.gz")
     repo_url = prepare_repository_from_archive(archive_path, "General", tmp_path)
 
-    lister = JuliaLister(url=repo_url, scheduler=swh_scheduler)
-    lister.REPO_PATH = Path(tmp_path, "General")
-    lister.REGISTRY_PATH = lister.REPO_PATH / "Registry.toml"
+    lister = JuliaLister(
+        url=repo_url, scheduler=swh_scheduler, git_repo_path=git_repo_path
+    )
 
     assert lister.state.last_seen_commit == expected_last_seen_commit
 
-    with porcelain.open_repo_closing(lister.REPO_PATH) as repo:
+    with porcelain.open_repo_closing(lister.repo_path) as repo:
         new_expected_last_seen_commit = repo.head().decode("ascii")
 
     assert expected_last_seen_commit != new_expected_last_seen_commit
@@ -131,12 +132,13 @@ def test_julia_lister_incremental(datadir, tmp_path, swh_scheduler):
 def test_julia_lister_incremental_no_changes(datadir, tmp_path, swh_scheduler):
     archive_path = Path(datadir, "fake-julia-registry-repository_0.tar.gz")
     repo_url = prepare_repository_from_archive(archive_path, "General", tmp_path)
-    lister = JuliaLister(url=repo_url, scheduler=swh_scheduler)
-    lister.REPO_PATH = Path(tmp_path, "General")
-    lister.REGISTRY_PATH = lister.REPO_PATH / "Registry.toml"
+    git_repo_path = Path(tmp_path, "General")
+    lister = JuliaLister(
+        url=repo_url, scheduler=swh_scheduler, git_repo_path=git_repo_path
+    )
 
     # Latest Git commit hash expected
-    with porcelain.open_repo_closing(lister.REPO_PATH) as r:
+    with porcelain.open_repo_closing(lister.repo_path) as r:
         expected_last_seen_commit = r.head().decode("ascii")
 
     assert expected_last_seen_commit is not None
@@ -154,7 +156,9 @@ def test_julia_lister_incremental_no_changes(datadir, tmp_path, swh_scheduler):
 
     # Prepare second run, repository state is the same as the one of the first run
     repo_url = prepare_repository_from_archive(archive_path, "General", tmp_path)
-    lister = JuliaLister(url=repo_url, scheduler=swh_scheduler)
+    lister = JuliaLister(
+        url=repo_url, scheduler=swh_scheduler, git_repo_path=git_repo_path
+    )
     assert lister.state.last_seen_commit == expected_last_seen_commit
 
     # Second run
