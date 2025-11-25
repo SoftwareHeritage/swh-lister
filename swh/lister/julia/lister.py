@@ -72,9 +72,17 @@ class JuliaLister(Lister[JuliaListerState, JuliaListerPage]):
     def get_registry_repository(self) -> None:
         """Get Julia General Registry Git repository up to date on disk"""
         try:
-            porcelain.clone(source=self.url, target=self.REPO_PATH)
+            porcelain.clone(
+                source=self.url,
+                target=self.REPO_PATH,
+                errstream=porcelain.NoneStream(),
+            )
         except FileExistsError:
-            porcelain.pull(self.REPO_PATH, remote_location=self.url)
+            porcelain.pull(
+                self.REPO_PATH,
+                remote_location=self.url,
+                errstream=porcelain.NoneStream(),
+            )
 
     def state_from_dict(self, d: Dict[str, Any]) -> JuliaListerState:
         return JuliaListerState(**d)
