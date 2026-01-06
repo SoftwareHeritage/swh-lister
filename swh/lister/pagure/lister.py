@@ -47,7 +47,8 @@ class PagureLister(StatelessLister[ProjectsPage]):
 
         self.per_page = per_page
         self.session.headers.update({"Accept": "application/json"})
-        self.url = f"{self.url}{self.API_PROJECTS_ENDPOINT}"
+        self.base_url = self.url
+        self.url = f"{self.base_url}{self.API_PROJECTS_ENDPOINT}"
 
     def get_pages(self) -> Iterator[ProjectsPage]:
         url_projects = self.url
@@ -65,7 +66,7 @@ class PagureLister(StatelessLister[ProjectsPage]):
         for project in projects:
             yield ListedOrigin(
                 lister_id=self.lister_obj.id,
-                url=project["full_url"],
+                url=f"{self.base_url}/{project['fullname']}",
                 visit_type="git",
                 last_update=datetime.fromtimestamp(
                     int(project["date_modified"])

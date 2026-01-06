@@ -12,7 +12,7 @@
   },
   "pagination": {
     "first": "https://pagure.io/api/0/projects?per_page=2&page=1",
-    "last": "https://pagure.io/api/0/projects?per_page=2&page=2",
+    "last": "https://pagure.io/api/0/projects?per_page=2&page=3",
     "next": "https://pagure.io/api/0/projects?per_page=2&page=2",
     "page": 1,
     "pages": 4921,

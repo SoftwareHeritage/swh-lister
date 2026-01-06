@@ -11,6 +11,7 @@ expected_origins = {
     "https://pagure.io/10291-testing",
     "https://pagure.io/neuro-sig/20190909-OSB-workshop-presentation",
     "https://pagure.io/neuro-sig/2019-flock-neurofedora",
+    "https://pagure.io/forks/neuro-sig/2019-flock-neurofedora",
 }
 
 
@@ -21,8 +22,8 @@ def test_pagure_lister(requests_mock_datadir, swh_scheduler, params):
     lister = PagureLister(**params, scheduler=swh_scheduler, per_page=2)
     res = lister.run()
 
-    assert res.pages == 2
-    assert res.origins == 3
+    assert res.pages == 3
+    assert res.origins == 4
 
     scheduler_origins = swh_scheduler.get_listed_origins(lister.lister_obj.id).results
 
