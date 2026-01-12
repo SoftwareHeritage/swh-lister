@@ -21,10 +21,6 @@ from swh.scheduler.model import ListedOrigin
 logger = logging.getLogger(__name__)
 
 
-# Some instance provides hg_git type which can be ingested as hg origins
-VCS_MAPPING = {"hg_git": "hg"}
-
-
 @dataclass
 class GitLabListerState:
     """State of the GitLabLister"""
@@ -97,11 +93,12 @@ class GitLabLister(Lister[GitLabListerState, PageResult]):
 
     """
 
+    LISTER_NAME = "gitlab"
+
     def __init__(
         self,
         scheduler,
         url: Optional[str] = None,
-        name: Optional[str] = "gitlab",
         instance: Optional[str] = None,
         credentials: Optional[CredentialsType] = None,
         max_origins_per_page: Optional[int] = None,
@@ -110,8 +107,6 @@ class GitLabLister(Lister[GitLabListerState, PageResult]):
         incremental: bool = False,
         ignored_project_prefixes: Optional[List[str]] = None,
     ):
-        if name is not None:
-            self.LISTER_NAME = name
         super().__init__(
             scheduler=scheduler,
             # if url is not provided, url will be built in the `build_url` method
@@ -216,6 +211,9 @@ class GitLabLister(Lister[GitLabListerState, PageResult]):
             yield page_result
             next_page = page_result.next_page
 
+    def _get_visit_type(self, repo: Repository) -> str:
+        return "git"
+
     def get_origins_from_page(self, page_result: PageResult) -> Iterator[ListedOrigin]:
         assert self.lister_obj.id is not None
 
@@ -225,8 +223,7 @@ class GitLabLister(Lister[GitLabListerState, PageResult]):
                 self.ignored_project_prefixes
             ):
                 continue
-            visit_type: str = repo.get("vcs_type", "git")
-            visit_type = VCS_MAPPING.get(visit_type, visit_type)
+            visit_type: str = self._get_visit_type(repo)
             yield ListedOrigin(
                 lister_id=self.lister_obj.id,
                 url=repo["http_url_to_repo"],

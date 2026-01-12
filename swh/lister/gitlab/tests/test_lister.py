@@ -3,7 +3,6 @@
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
 
-import functools
 import json
 import logging
 from pathlib import Path
@@ -25,8 +24,11 @@ def api_url(instance: str) -> str:
     return f"https://{instance}/api/v4"
 
 
-def _match_request(request, lister_name="gitlab"):
-    return request.headers.get("User-Agent") == USER_AGENT_TEMPLATE % lister_name
+def _match_request(request):
+    return (
+        request.headers.get("User-Agent")
+        == USER_AGENT_TEMPLATE % GitLabLister.LISTER_NAME
+    )
 
 
 def test_lister_gitlab_fail_to_instantiate(swh_scheduler):
@@ -66,42 +68,6 @@ def test_lister_gitlab(datadir, swh_scheduler, requests_mock):
 
     for listed_origin in scheduler_origins:
         assert listed_origin.visit_type == "git"
-        assert listed_origin.url.startswith(f"https://{instance}")
-        assert listed_origin.last_update is not None
-
-
-def test_lister_gitlab_heptapod(datadir, swh_scheduler, requests_mock):
-    """Heptapod lister happily lists hg, hg_git as hg and git origins"""
-    name = "heptapod"
-    instance = "foss.heptapod.net"
-    lister = GitLabLister(
-        swh_scheduler, url=api_url(instance), name=name, instance=instance
-    )
-    assert lister.LISTER_NAME == name
-
-    response = gitlab_page_response(datadir, instance, 1)
-
-    requests_mock.get(
-        lister.page_url(),
-        [{"json": response}],
-        additional_matcher=functools.partial(_match_request, lister_name="heptapod"),
-    )
-
-    listed_result = lister.run()
-    expected_nb_origins = len(response)
-
-    for entry in response:
-        assert entry["vcs_type"] in ("hg", "hg_git")
-
-    assert listed_result == ListerStats(pages=1, origins=expected_nb_origins)
-
-    scheduler_origins = lister.scheduler.get_listed_origins(
-        lister.lister_obj.id
-    ).results
-    assert len(scheduler_origins) == expected_nb_origins
-
-    for listed_origin in scheduler_origins:
-        assert listed_origin.visit_type == "hg"
         assert listed_origin.url.startswith(f"https://{instance}")
         assert listed_origin.last_update is not None
 
