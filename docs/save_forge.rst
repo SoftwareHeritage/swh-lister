@@ -36,7 +36,7 @@ For example:
 
    $ swh scheduler --config-file /etc/softwareheritage/scheduler.yml \
      task add --policy oneshot \
-     list-gitea-full url=https://codeberg.org/api/v1/ limit=100
+     list-gitea-full url=https://demo.gitea.com/api/v1/ limit=100
    INFO:swh.core.config:Loading config file /etc/softwareheritage/scheduler.yml
    Created 1 tasks
 
@@ -48,7 +48,7 @@ For example:
      Args:
      Keyword args:
        limit: 100
-       url: 'https://codeberg.org/api/v1/'
+       url: 'https://demo.gitea.com/api/v1/'
 
 .. _register-task-type:
 

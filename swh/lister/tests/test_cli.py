@@ -17,7 +17,7 @@ lister_args = {
         "api_token": "bogus",
     },
     "gitea": {
-        "instance": "try.gitea.io",
+        "instance": "demo.gitea.com",
     },
     "tuleap": {
         "url": "https://tuleap.net",

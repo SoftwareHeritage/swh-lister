@@ -21,7 +21,7 @@ def test_full_listing(lister, swh_scheduler_celery_app, swh_scheduler_celery_wor
     lister.from_configfile.return_value = lister
     lister.run.return_value = ListerStats(pages=10, origins=500)
 
-    kwargs = dict(url="https://try.gitea.io/api/v1")
+    kwargs = dict(url="https://demo.gitea.com/api/v1")
     res = swh_scheduler_celery_app.send_task(
         "swh.lister.gitea.tasks.FullGiteaRelister",
         kwargs=kwargs,
@@ -42,8 +42,8 @@ def test_full_listing_params(
     lister.run.return_value = ListerStats(pages=10, origins=500)
 
     kwargs = dict(
-        url="https://0xacab.org/api/v4",
-        instance="0xacab",
+        url="https://demo.gitea.com/api/v1",
+        instance="demo.gitea.com",
         api_token="test",
         page_size=50,
     )

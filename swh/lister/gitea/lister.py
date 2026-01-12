@@ -17,6 +17,6 @@ class GiteaLister(GogsLister):
 
     The API does pagination and provides navigation URLs through the 'Link' header.
     The default value for page size is the maximum value observed on the instances
-    accessible at https://gitea.com/api/v1/ and https://codeberg.org/api/v1/."""
+    accessible at https://gitea.com/api/v1/ and https://demo.gitea.com/api/v1/."""
 
     LISTER_NAME = "gitea"
