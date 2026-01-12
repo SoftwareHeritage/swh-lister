@@ -19,6 +19,9 @@ lister_args = {
     "gitea": {
         "instance": "demo.gitea.com",
     },
+    "forgejo": {
+        "instance": "try.next.forgejo.org",
+    },
     "tuleap": {
         "url": "https://tuleap.net",
     },
