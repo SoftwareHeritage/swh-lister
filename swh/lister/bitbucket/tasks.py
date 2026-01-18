@@ -11,24 +11,24 @@ from .lister import BitbucketLister
 
 @shared_task(name=__name__ + ".IncrementalBitBucketLister")
 def list_bitbucket_incremental(
-    page_size: Optional[int] = None,
     username: Optional[str] = None,
     password: Optional[str] = None,
+    **lister_args,
 ):
-    """Incremental listing of the public Bitbucket repositories."""
-    lister = BitbucketLister.from_configfile(page_size=page_size, incremental=True)
+    """Incremental listing of Bitbucket repositories."""
+    lister = BitbucketLister.from_configfile(incremental=True, **lister_args)
     lister.set_credentials(username, password)
     return lister.run().dict()
 
 
 @shared_task(name=__name__ + ".FullBitBucketRelister")
 def list_bitbucket_full(
-    page_size: Optional[int] = None,
     username: Optional[str] = None,
     password: Optional[str] = None,
+    **lister_args,
 ):
-    """Full listing of the public Bitbucket repositories."""
-    lister = BitbucketLister.from_configfile(page_size=page_size, incremental=False)
+    """Full listing of Bitbucket repositories."""
+    lister = BitbucketLister.from_configfile(incremental=False, **lister_args)
     lister.set_credentials(username, password)
     return lister.run().dict()
 

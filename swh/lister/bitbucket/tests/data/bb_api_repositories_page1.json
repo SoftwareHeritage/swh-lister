@@ -8,9 +8,11 @@
       "links": {
         "clone": [
           {
+            "name": "https",
             "href": "https://bitbucket.org/opensymphony/xwork.git"
           },
           {
+            "name": "ssh",
             "href": "git@bitbucket.org:opensymphony/xwork.git"
           }
         ]
@@ -24,9 +26,11 @@
       "links": {
         "clone": [
           {
+            "name": "https",
             "href": "https://bitbucket.org/opensymphony/webwork.git"
           },
           {
+            "name": "ssh",
             "href": "git@bitbucket.org:opensymphony/webwork.git"
           }
         ]
@@ -40,9 +44,11 @@
       "links": {
         "clone": [
           {
+            "name": "https",
             "href": "https://bitbucket.org/opensymphony/propertyset.git"
           },
           {
+            "name": "ssh",
             "href": "git@bitbucket.org:opensymphony/propertyset.git"
           }
         ]
@@ -56,9 +62,11 @@
       "links": {
         "clone": [
           {
+            "name": "https",
             "href": "https://bitbucket.org/opensymphony/quartz.git"
           },
           {
+            "name": "ssh",
             "href": "git@bitbucket.org:opensymphony/quartz.git"
           }
         ]
@@ -72,9 +80,11 @@
       "links": {
         "clone": [
           {
+            "name": "https",
             "href": "https://bitbucket.org/jwalton/opup.git"
           },
           {
+            "name": "ssh",
             "href": "git@bitbucket.org:jwalton/opup.git"
           }
         ]
@@ -88,9 +98,11 @@
       "links": {
         "clone": [
           {
+            "name": "https",
             "href": "https://bitbucket.org/jwalton/git-scripts.git"
           },
           {
+            "name": "ssh",
             "href": "git@bitbucket.org:jwalton/git-scripts.git"
           }
         ]
@@ -104,9 +116,11 @@
       "links": {
         "clone": [
           {
+            "name": "https",
             "href": "https://bitbucket.org/evzijst/git-tests.git"
           },
           {
+            "name": "ssh",
             "href": "git@bitbucket.org:evzijst/git-tests.git"
           }
         ]
@@ -120,9 +134,11 @@
       "links": {
         "clone": [
           {
+            "name": "https",
             "href": "https://bitbucket.org/brodie/libgit2.git"
           },
           {
+            "name": "ssh",
             "href": "git@bitbucket.org:brodie/libgit2.git"
           }
         ]
@@ -136,9 +152,11 @@
       "links": {
         "clone": [
           {
+            "name": "https",
             "href": "https://bitbucket.org/evzijst/git.git"
           },
           {
+            "name": "ssh",
             "href": "git@bitbucket.org:evzijst/git.git"
           }
         ]
@@ -152,14 +170,16 @@
       "links": {
         "clone": [
           {
+            "name": "https",
             "href": "https://bitbucket.org/atlassian_tutorial/streams-jira-delete-issue-plugin.git"
           },
           {
+            "name": "ssh",
             "href": "git@bitbucket.org:atlassian_tutorial/streams-jira-delete-issue-plugin.git"
           }
         ]
       }
     }
   ],
-  "next": "https://api.bitbucket.org/2.0/repositories?pagelen=10&fields=next%2Cvalues.links.clone.href%2Cvalues.scm%2Cvalues.updated_on%2Cvalues.created_on&after=2011-09-03T12%3A33%3A16.028393%2B00%3A00"
+  "next": "https://api.bitbucket.org/2.0/repositories?pagelen=10&fields=next%2Cvalues.is_private%2Cvalues.scm%2Cvalues.links.clone%2Cvalues.updated_on%2Cvalues.created_on%2C&after=2011-09-03T12%3A33%3A16.028393%2B00%3A00"
 }

@@ -6,11 +6,13 @@
 from datetime import datetime
 import json
 import os
+from pathlib import Path
+from typing import Dict, List
 
 import pytest
 
 from swh.core.retry import MAX_NUMBER_ATTEMPTS
-from swh.lister.bitbucket.lister import BitbucketLister
+from swh.lister.bitbucket.lister import BitbucketCloudLister, BitbucketServerLister
 
 
 @pytest.fixture
@@ -44,15 +46,15 @@ def test_bitbucket_incremental_lister(
 ):
     """Simple Bitbucket listing with two pages containing 10 origins"""
 
+    lister = BitbucketCloudLister(scheduler=swh_scheduler, page_size=10)
+
     requests_mock.get(
-        BitbucketLister.API_URL,
+        lister.api_url,
         [
             {"json": bb_api_repositories_page1},
             {"json": bb_api_repositories_page2},
         ],
     )
-
-    lister = BitbucketLister(scheduler=swh_scheduler, page_size=10)
 
     # First listing
     stats = lister.run()
@@ -78,7 +80,7 @@ def test_bitbucket_incremental_lister(
     url_params["after"] = last_repo_cdate
 
     lister.session.request.assert_called_once_with(
-        "GET", lister.API_URL, params=url_params
+        "GET", lister.api_url, params=url_params
     )
 
     all_origins = (
@@ -97,8 +99,10 @@ def test_bitbucket_lister_rate_limit_hit(
 ):
     """Simple Bitbucket listing with two pages containing 10 origins"""
 
+    lister = BitbucketCloudLister(scheduler=swh_scheduler, page_size=10)
+
     requests_mock.get(
-        BitbucketLister.API_URL,
+        lister.api_url,
         [
             {"json": bb_api_repositories_page1, "status_code": 200},
             {"json": None, "status_code": 429},
@@ -106,8 +110,6 @@ def test_bitbucket_lister_rate_limit_hit(
             {"json": bb_api_repositories_page2, "status_code": 200},
         ],
     )
-
-    lister = BitbucketLister(scheduler=swh_scheduler, page_size=10)
 
     stats = lister.run()
 
@@ -125,8 +127,14 @@ def test_bitbucket_full_lister(
 ):
     """Simple Bitbucket listing with two pages containing 10 origins"""
 
+    credentials = {"bitbucket": {"bitbucket.org": [{"username": "u", "password": "p"}]}}
+    lister = BitbucketCloudLister(
+        scheduler=swh_scheduler, page_size=10, incremental=True, credentials=credentials
+    )
+    assert lister.session.auth is not None
+
     requests_mock.get(
-        BitbucketLister.API_URL,
+        lister.api_url,
         [
             {"json": bb_api_repositories_page1},
             {"json": bb_api_repositories_page2},
@@ -134,12 +142,6 @@ def test_bitbucket_full_lister(
             {"json": bb_api_repositories_page2},
         ],
     )
-
-    credentials = {"bitbucket": {"bitbucket": [{"username": "u", "password": "p"}]}}
-    lister = BitbucketLister(
-        scheduler=swh_scheduler, page_size=10, incremental=True, credentials=credentials
-    )
-    assert lister.session.auth is not None
 
     # First do a incremental run to have an initial lister state
     stats = lister.run()
@@ -155,7 +157,9 @@ def test_bitbucket_full_lister(
     last_page2_repo["created_on"] = datetime.now().isoformat()
     last_page2_repo["updated_on"] = datetime.now().isoformat()
 
-    lister = BitbucketLister(scheduler=swh_scheduler, page_size=10, incremental=False)
+    lister = BitbucketCloudLister(
+        scheduler=swh_scheduler, page_size=10, incremental=False
+    )
     assert lister.session.auth is None
 
     stats = lister.run()
@@ -186,8 +190,10 @@ def test_bitbucket_lister_buggy_page(
     bb_api_repositories_page1,
     bb_api_repositories_page2,
 ):
+    lister = BitbucketCloudLister(scheduler=swh_scheduler, page_size=10)
+
     requests_mock.get(
-        BitbucketLister.API_URL,
+        lister.api_url,
         [
             {"json": bb_api_repositories_page1, "status_code": 200},
             *[{"json": None, "status_code": 500}] * (MAX_NUMBER_ATTEMPTS - 1),
@@ -196,8 +202,6 @@ def test_bitbucket_lister_buggy_page(
             {"json": bb_api_repositories_page2, "status_code": 200},
         ],
     )
-
-    lister = BitbucketLister(scheduler=swh_scheduler, page_size=10)
 
     stats = lister.run()
 
@@ -209,3 +213,54 @@ def test_bitbucket_lister_buggy_page(
         requests_mock.request_history[MAX_NUMBER_ATTEMPTS + 2].url
         == bb_api_repositories_page1["next"]
     )
+
+
+def bitbucket_server_page_response(datadir, instance: str, id_after: int) -> List[Dict]:
+    """Return list of repositories (out of test dataset)"""
+    datapath = Path(datadir, f"https_{instance}", f"api_response_page{id_after}.json")
+    return json.loads(datapath.read_text()) if datapath.exists() else []
+
+
+def test_bitbucket_server_lister(swh_scheduler, requests_mock, mocker, datadir):
+    """Simple Bitbucket Server/DC listing with two pages containing 3 origins"""
+
+    instance = "git.ecmwf.int"
+
+    lister = BitbucketServerLister(
+        scheduler=swh_scheduler,
+        instance=instance,
+        page_size=3,
+    )
+
+    assert lister.api_url == f"https://{instance}/rest/api/1.0/repos"
+
+    response1 = bitbucket_server_page_response(datadir, instance, 1)
+    response2 = bitbucket_server_page_response(datadir, instance, 2)
+
+    requests_mock.get(
+        lister.page_url(),
+        [
+            {"json": response1},
+        ],
+    )
+
+    requests_mock.get(
+        lister.page_url(1),
+        [
+            {"json": response2},
+        ],
+    )
+
+    stats = lister.run()
+
+    assert stats.pages == 2
+    assert stats.origins == 6
+
+    scheduler_origins = swh_scheduler.get_listed_origins(lister.lister_obj.id).results
+
+    # 6 because scheduler upserts based on (id, type, url)
+    assert len(scheduler_origins) == 6
+
+    all_origins = response1["values"] + response2["values"]
+
+    _check_listed_origins(lister.get_origins_from_page(all_origins), scheduler_origins)

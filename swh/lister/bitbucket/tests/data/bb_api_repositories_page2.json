@@ -8,9 +8,11 @@
       "links": {
         "clone": [
           {
+            "name": "https",
             "href": "https://bitbucket.org/puffnfresh/jreversepro.git"
           },
           {
+            "name": "ssh",
             "href": "git@bitbucket.org:puffnfresh/jreversepro.git"
           }
         ]
@@ -24,9 +26,11 @@
       "links": {
         "clone": [
           {
+            "name": "https",
             "href": "https://bitbucket.org/mrdon/jira4-compat.git"
           },
           {
+            "name": "ssh",
             "href": "git@bitbucket.org:mrdon/jira4-compat.git"
           }
         ]
@@ -40,9 +44,11 @@
       "links": {
         "clone": [
           {
+            "name": "https",
             "href": "https://bitbucket.org/rmanalan/chrome-confluence-activity-stream.git"
           },
           {
+            "name": "ssh",
             "href": "git@bitbucket.org:rmanalan/chrome-confluence-activity-stream.git"
           }
         ]
@@ -56,9 +62,11 @@
       "links": {
         "clone": [
           {
+            "name": "https",
             "href": "https://bitbucket.org/tarkasteve/anode.git"
           },
           {
+            "name": "ssh",
             "href": "git@bitbucket.org:tarkasteve/anode.git"
           }
         ]
@@ -72,9 +80,11 @@
       "links": {
         "clone": [
           {
+            "name": "https",
             "href": "https://bitbucket.org/jschumacher/pac-release-plugin.git"
           },
           {
+            "name": "ssh",
             "href": "git@bitbucket.org:jschumacher/pac-release-plugin.git"
           }
         ]
@@ -88,9 +98,11 @@
       "links": {
         "clone": [
           {
+            "name": "https",
             "href": "https://bitbucket.org/jwalton/metadata-confluence-plugin.git"
           },
           {
+            "name": "ssh",
             "href": "git@bitbucket.org:jwalton/metadata-confluence-plugin.git"
           }
         ]
@@ -104,9 +116,11 @@
       "links": {
         "clone": [
           {
+            "name": "https",
             "href": "https://bitbucket.org/detkin/coffee-script.git"
           },
           {
+            "name": "ssh",
             "href": "git@bitbucket.org:detkin/coffee-script.git"
           }
         ]
@@ -120,9 +134,11 @@
       "links": {
         "clone": [
           {
+            "name": "https",
             "href": "https://bitbucket.org/christo/taleo-link-fix.git"
           },
           {
+            "name": "ssh",
             "href": "git@bitbucket.org:christo/taleo-link-fix.git"
           }
         ]
@@ -136,9 +152,11 @@
       "links": {
         "clone": [
           {
+            "name": "https",
             "href": "https://bitbucket.org/rmanalan/bdoc.git"
           },
           {
+            "name": "ssh",
             "href": "git@bitbucket.org:rmanalan/bdoc.git"
           }
         ]
@@ -152,9 +170,11 @@
       "links": {
         "clone": [
           {
+            "name": "https",
             "href": "https://bitbucket.org/mirror/git.git"
           },
           {
+            "name": "ssh",
             "href": "git@bitbucket.org:mirror/git.git"
           }
         ]

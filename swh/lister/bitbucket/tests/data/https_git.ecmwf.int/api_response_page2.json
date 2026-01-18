@@ -1,0 +1,184 @@
+{
+  "size": 3,
+  "limit": 3,
+  "isLastPage": false,
+  "values": [
+    {
+      "slug": "fortran-openacc",
+      "id": 3848,
+      "name": "fortran-openacc",
+      "description": "test openacc constructs for physics arrays",
+      "hierarchyId": "127fe29eca9c2f9afe72",
+      "scmId": "git",
+      "state": "AVAILABLE",
+      "statusMessage": "Available",
+      "forkable": true,
+      "project": {
+        "key": "~DAOM",
+        "id": 387,
+        "name": "Olivier Marsden",
+        "type": "PERSONAL",
+        "owner": {
+          "name": "daom",
+          "emailAddress": "olivier.marsden@ecmwf.int",
+          "active": true,
+          "displayName": "Olivier Marsden",
+          "id": 23392,
+          "slug": "daom",
+          "type": "NORMAL",
+          "links": {
+            "self": [
+              {
+                "href": "https://git.ecmwf.int/users/daom"
+              }
+            ]
+          }
+        },
+        "links": {
+          "self": [
+            {
+              "href": "https://git.ecmwf.int/users/daom"
+            }
+          ]
+        }
+      },
+      "public": true,
+      "archived": false,
+      "links": {
+        "clone": [
+          {
+            "href": "ssh://git@git.ecmwf.int/~daom/fortran-openacc.git",
+            "name": "ssh"
+          },
+          {
+            "href": "https://git.ecmwf.int/scm/~daom/fortran-openacc.git",
+            "name": "http"
+          }
+        ],
+        "self": [
+          {
+            "href": "https://git.ecmwf.int/users/daom/repos/fortran-openacc/browse"
+          }
+        ]
+      }
+    },
+    {
+      "slug": "physics-layout",
+      "id": 1873,
+      "name": "physics-layout",
+      "hierarchyId": "33f76986da9f66596928",
+      "scmId": "git",
+      "state": "AVAILABLE",
+      "statusMessage": "Available",
+      "forkable": true,
+      "project": {
+        "key": "~DAOM",
+        "id": 387,
+        "name": "Olivier Marsden",
+        "type": "PERSONAL",
+        "owner": {
+          "name": "daom",
+          "emailAddress": "olivier.marsden@ecmwf.int",
+          "active": true,
+          "displayName": "Olivier Marsden",
+          "id": 23392,
+          "slug": "daom",
+          "type": "NORMAL",
+          "links": {
+            "self": [
+              {
+                "href": "https://git.ecmwf.int/users/daom"
+              }
+            ]
+          }
+        },
+        "links": {
+          "self": [
+            {
+              "href": "https://git.ecmwf.int/users/daom"
+            }
+          ]
+        }
+      },
+      "public": true,
+      "archived": false,
+      "links": {
+        "clone": [
+          {
+            "href": "https://git.ecmwf.int/scm/~daom/physics-layout.git",
+            "name": "http"
+          },
+          {
+            "href": "ssh://git@git.ecmwf.int/~daom/physics-layout.git",
+            "name": "ssh"
+          }
+        ],
+        "self": [
+          {
+            "href": "https://git.ecmwf.int/users/daom/repos/physics-layout/browse"
+          }
+        ]
+      }
+    },
+    {
+      "slug": "eda_monitoring",
+      "id": 7819,
+      "name": "EDA_monitoring",
+      "description": "EDA monitoring suite, contains at the moment:\r\n- suite for monitoring wavelet standard deviations, results get uploaded to confluence",
+      "hierarchyId": "c4d6b2038bb1182bb54f",
+      "scmId": "git",
+      "state": "AVAILABLE",
+      "statusMessage": "Available",
+      "forkable": true,
+      "project": {
+        "key": "~ECM3692",
+        "id": 2427,
+        "name": "Mikael Kaandorp",
+        "type": "PERSONAL",
+        "owner": {
+          "name": "ecm3692",
+          "emailAddress": "mikael.kaandorp@ecmwf.int",
+          "active": true,
+          "displayName": "Mikael Kaandorp",
+          "id": 235642,
+          "slug": "ecm3692",
+          "type": "NORMAL",
+          "links": {
+            "self": [
+              {
+                "href": "https://git.ecmwf.int/users/ecm3692"
+              }
+            ]
+          }
+        },
+        "links": {
+          "self": [
+            {
+              "href": "https://git.ecmwf.int/users/ecm3692"
+            }
+          ]
+        }
+      },
+      "public": true,
+      "archived": false,
+      "links": {
+        "clone": [
+          {
+            "href": "ssh://git@git.ecmwf.int/~ecm3692/eda_monitoring.git",
+            "name": "ssh"
+          },
+          {
+            "href": "https://git.ecmwf.int/scm/~ecm3692/eda_monitoring.git",
+            "name": "http"
+          }
+        ],
+        "self": [
+          {
+            "href": "https://git.ecmwf.int/users/ecm3692/repos/eda_monitoring/browse"
+          }
+        ]
+      }
+    }
+  ],
+  "start": 3
+}

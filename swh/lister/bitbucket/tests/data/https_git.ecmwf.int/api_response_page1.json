@@ -1,0 +1,141 @@
+{
+  "size": 3,
+  "limit": 3,
+  "isLastPage": false,
+  "values": [
+    {
+      "slug": "geff",
+      "id": 1218,
+      "name": "geff",
+      "hierarchyId": "e322d50fe317319202d9",
+      "scmId": "git",
+      "state": "AVAILABLE",
+      "statusMessage": "Available",
+      "forkable": true,
+      "project": {
+        "key": "CEMSF",
+        "id": 904,
+        "name": "CEMS-fire",
+        "description": "Repository for utility and documentations related to the CEMS Fire forecast",
+        "public": false,
+        "type": "NORMAL",
+        "links": {
+          "self": [
+            {
+              "href": "https://git.ecmwf.int/projects/CEMSF"
+            }
+          ]
+        }
+      },
+      "public": true,
+      "archived": false,
+      "links": {
+        "clone": [
+          {
+            "href": "ssh://git@git.ecmwf.int/cemsf/geff.git",
+            "name": "ssh"
+          },
+          {
+            "href": "https://git.ecmwf.int/scm/cemsf/geff.git",
+            "name": "http"
+          }
+        ],
+        "self": [
+          {
+            "href": "https://git.ecmwf.int/projects/CEMSF/repos/geff/browse"
+          }
+        ]
+      }
+    },
+    {
+      "slug": "efas_netcdf_tool",
+      "id": 2514,
+      "name": "EFAS_NetCDF_Tool",
+      "hierarchyId": "402a1b337008601dbdec",
+      "scmId": "git",
+      "state": "AVAILABLE",
+      "statusMessage": "Available",
+      "forkable": true,
+      "project": {
+        "key": "CEFL",
+        "id": 243,
+        "name": "CEMS-Floods",
+        "description": "EFAS project repository",
+        "public": false,
+        "type": "NORMAL",
+        "links": {
+          "self": [
+            {
+              "href": "https://git.ecmwf.int/projects/CEFL"
+            }
+          ]
+        }
+      },
+      "public": true,
+      "archived": false,
+      "links": {
+        "clone": [
+          {
+            "href": "ssh://git@git.ecmwf.int/cefl/efas_netcdf_tool.git",
+            "name": "ssh"
+          },
+          {
+            "href": "https://git.ecmwf.int/scm/cefl/efas_netcdf_tool.git",
+            "name": "http"
+          }
+        ],
+        "self": [
+          {
+            "href": "https://git.ecmwf.int/projects/CEFL/repos/efas_netcdf_tool/browse"
+          }
+        ]
+      }
+    },
+    {
+      "slug": "checker",
+      "id": 1025,
+      "name": "checker",
+      "hierarchyId": "efe71ace7daf8b545d8d",
+      "scmId": "git",
+      "state": "AVAILABLE",
+      "statusMessage": "Available",
+      "forkable": true,
+      "project": {
+        "key": "CDS",
+        "id": 730,
+        "name": "Copernicus Climate Data Store",
+        "description": "Source code for CDS",
+        "public": false,
+        "type": "NORMAL",
+        "links": {
+          "self": [
+            {
+              "href": "https://git.ecmwf.int/projects/CDS"
+            }
+          ]
+        }
+      },
+      "public": true,
+      "archived": false,
+      "links": {
+        "clone": [
+          {
+            "href": "https://git.ecmwf.int/scm/cds/checker.git",
+            "name": "http"
+          },
+          {
+            "href": "ssh://git@git.ecmwf.int/cds/checker.git",
+            "name": "ssh"
+          }
+        ],
+        "self": [
+          {
+            "href": "https://git.ecmwf.int/projects/CDS/repos/checker/browse"
+          }
+        ]
+      }
+    }
+  ],
+  "start": 0,
+  "nextPageStart": 3
+}
