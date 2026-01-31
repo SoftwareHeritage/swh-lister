@@ -1,4 +1,4 @@
-# Copyright (C) 2019-2020  The Software Heritage developers
+# Copyright (C) 2019-2026  The Software Heritage developers
 # See the AUTHORS file at the top-level directory of this distribution
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
@@ -32,7 +32,7 @@ def test_task_lister_gitlab(
     mock_lister.from_configfile.return_value = mock_lister
     mock_lister.run.return_value = ListerStats(pages=10, origins=200)
 
-    kwargs = dict(url="https://gitweb.torproject.org/")
+    kwargs = dict(url="https://gitlab.torproject.org/")
     res = swh_scheduler_celery_app.send_task(
         f"swh.lister.gitlab.tasks.{task_name}",
         kwargs=kwargs,

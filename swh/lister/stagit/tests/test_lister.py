@@ -1,4 +1,4 @@
-# Copyright (C) 2023-2024  The Software Heritage developers
+# Copyright (C) 2023-2026  The Software Heritage developers
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
 
@@ -50,7 +50,7 @@ def test_lister_stagit_get_pages(requests_mock_datadir, swh_scheduler):
 
 
 def test_lister_stagit_run(requests_mock_datadir, swh_scheduler):
-    """Gitweb lister nominal listing case."""
+    """stagit lister nominal listing case."""
 
     url = MAIN_INSTANCE_URL
     lister_stagit = StagitLister(swh_scheduler, url=url)

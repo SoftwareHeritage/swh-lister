@@ -1,4 +1,4 @@
-# Copyright (C) 2023  The Software Heritage developers
+# Copyright (C) 2023-2026  The Software Heritage developers
 # See the AUTHORS file at the top-level directory of this distribution
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
@@ -6,20 +6,23 @@
 from swh.lister.pattern import ListerStats
 
 
-def test_gitweb_lister_task(
+def test_stagit_lister_task(
     swh_scheduler_celery_app, swh_scheduler_celery_worker, mocker
 ):
-    # setup the mocked GitwebLister
-    lister = mocker.patch("swh.lister.gitweb.tasks.GitwebLister")
+    # setup the mocked StagitLister
+    lister = mocker.patch("swh.lister.stagit.tasks.StagitLister")
     lister.from_configfile.return_value = lister
     lister.run.return_value = ListerStats(pages=10, origins=500)
 
     kwargs = dict(
-        url="https://git.gentoo.org/", instance="kernel", base_git_url=None, max_pages=1
+        url="https://codemadness.org/git/",
+        instance="codemadness.org/git/",
+        base_git_url=None,
+        max_pages=1,
     )
 
     res = swh_scheduler_celery_app.send_task(
-        "swh.lister.gitweb.tasks.GitwebListerTask",
+        "swh.lister.stagit.tasks.StagitListerTask",
         kwargs=kwargs,
     )
     assert res
