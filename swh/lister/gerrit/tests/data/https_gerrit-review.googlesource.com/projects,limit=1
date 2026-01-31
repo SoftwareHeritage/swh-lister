@@ -1,0 +1,2 @@
+)]}'
+{"Core-Plugins":{"id":"Core-Plugins","name":"Core-Plugins","parent":"Public-Plugins","description":"Parent project for core plugins in Gerrit.","state":"ACTIVE","web_links":[{"name":"Gitiles","tooltip":"Open in Gitiles","image_url":"https://git-scm.com/favicon.ico","url":"https://gerrit.googlesource.com/Core-Plugins"}],"_more_projects":true}}

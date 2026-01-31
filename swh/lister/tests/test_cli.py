@@ -1,4 +1,4 @@
-# Copyright (C) 2019-2023  The Software Heritage developers
+# Copyright (C) 2019-2026  The Software Heritage developers
 # See the AUTHORS file at the top-level directory of this distribution
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
@@ -16,6 +16,7 @@ lister_args = {
         "url": "https://forge.softwareheritage.org/api/diffusion.repository.search",
         "api_token": "bogus",
     },
+    "gerrit": {"instance": "gerrit-review.googlesource.com"},
     "gitea": {
         "instance": "demo.gitea.com",
     },

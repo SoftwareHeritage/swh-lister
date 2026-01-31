@@ -44,6 +44,7 @@ testing = {file = ["requirements-test.txt"]}
 "lister.dlang" = "swh.lister.dlang:register"
 "lister.elm" = "swh.lister.elm:register"
 "lister.forgejo" = "swh.lister.forgejo:register"
+"lister.gerrit" = "swh.lister.gerrit:register"
 "lister.gitea" = "swh.lister.gitea:register"
 "lister.github" = "swh.lister.github:register"
 "lister.gitiles" = "swh.lister.gitiles:register"

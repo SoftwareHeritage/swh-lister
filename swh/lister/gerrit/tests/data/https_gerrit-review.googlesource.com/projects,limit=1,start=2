@@ -1,0 +1,2 @@
+)]}'
+{"Public-Plugins":{"id":"Public-Plugins","name":"Public-Plugins","parent":"Public-Projects","description":"Parent project for plugins/*","state":"ACTIVE","web_links":[{"name":"Gitiles","tooltip":"Open in Gitiles","image_url":"https://git-scm.com/favicon.ico","url":"https://gerrit.googlesource.com/Public-Plugins"}],"_more_projects":true}}

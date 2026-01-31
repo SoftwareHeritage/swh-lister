@@ -1,0 +1,2 @@
+)]}'
+{"Public-Projects":{"id":"Public-Projects","name":"Public-Projects","parent":"All-Projects","description":"Parent project enabling Anonymous Users read","state":"ACTIVE","web_links":[{"name":"Gitiles","tooltip":"Open in Gitiles","image_url":"https://git-scm.com/favicon.ico","url":"https://gerrit.googlesource.com/Public-Projects"}]}}

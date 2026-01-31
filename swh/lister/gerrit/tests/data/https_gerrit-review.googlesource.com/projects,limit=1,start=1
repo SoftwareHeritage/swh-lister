@@ -1,0 +1,2 @@
+)]}'
+{"Public-Documentation":{"id":"Public-Documentation","name":"Public-Documentation","parent":"Public-Projects","description":"Parent project for Gerrit documentation-related projects (homepage, summits, etc)","state":"ACTIVE","web_links":[{"name":"Gitiles","tooltip":"Open in Gitiles","image_url":"https://git-scm.com/favicon.ico","url":"https://gerrit.googlesource.com/Public-Documentation"}],"_more_projects":true}}
