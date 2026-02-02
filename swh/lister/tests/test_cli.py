@@ -41,6 +41,7 @@ lister_args = {
         "instance": "try.gogs.io",
         "api_token": "secret",
     },
+    "grokmirror": {"instance": "git.kernel.org"},
     "nixguix": {
         "url": "https://guix.gnu.org/sources.json",
         "origin_upstream": "https://git.savannah.gnu.org/cgit/guix.git/",
