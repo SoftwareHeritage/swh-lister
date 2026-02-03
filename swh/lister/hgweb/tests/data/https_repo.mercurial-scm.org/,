@@ -1,0 +1,120 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-US">
+<head>
+<link rel="icon" href="/static/hgicon.png" type="image/png" />
+<meta name="robots" content="index, nofollow" />
+<link rel="stylesheet" href="/static/style-paper.css" type="text/css" />
+<script type="text/javascript" src="/static/mercurial.js"></script>
+
+<title>Mercurial repositories index</title>
+</head>
+<body>
+
+<div class="container">
+<div class="menu">
+<a href="https://mercurial-scm.org/">
+<img src="/static/hglogo.png" width=75 height=90 border=0 alt="mercurial" /></a>
+</div>
+<div class="main">
+<h2 class="breadcrumb"><a href="/">Mercurial</a> </h2>
+
+<table class="bigtable">
+    <thead>
+    <tr>
+        <th><a href="?sort=name">Name</a></th>
+        <th><a href="?sort=description">Description</a></th>
+        <th><a href="?sort=contact">Contact</a></th>
+        <th><a href="?sort=lastchange">Last modified</a></th>
+        <th>&nbsp;</th>
+        <th>&nbsp;</th>
+    </tr>
+    </thead>
+    <tbody class="stripes2">
+
+<tr>
+<td><a href="/evolve/">evolve</a></td>
+<td>Mutable history for Mercurial</td>
+<td>&#117;&#110;&#107;&#110;&#111;&#119;&#110;</td>
+<td class="age">Thu, 29 Jan 2026 19:42:44 +0000</td>
+<td class="indexlinks"><a href="/evolve/archive/tip.zip">&nbsp;&darr;zip</a><a href="/evolve/archive/tip.tar.gz">&nbsp;&darr;gz</a><a href="/evolve/archive/tip.tar.bz2">&nbsp;&darr;bz2</a></td>
+<td>
+<a href="/evolve/atom-log" title="subscribe to repository atom feed">
+<img class="atom-logo" src="/static/feed-icon-14x14.png" alt="subscribe to repository atom feed">
+</a>
+</td>
+</tr>
+
+<tr>
+<td><a href="/hello/">hello</a></td>
+<td>unknown</td>
+<td>&#117;&#110;&#107;&#110;&#111;&#119;&#110;</td>
+<td class="age">Wed, 10 May 2023 15:17:15 +0000</td>
+<td class="indexlinks"></td>
+<td>
+<a href="/hello/atom-log" title="subscribe to repository atom feed">
+<img class="atom-logo" src="/static/feed-icon-14x14.png" alt="subscribe to repository atom feed">
+</a>
+</td>
+</tr>
+
+<tr>
+<td><a href="/hg/">Mercurial</a></td>
+<td>Scalable distributed version control system</td>
+<td>&#77;&#101;&#114;&#99;&#117;&#114;&#105;&#97;&#108;&#32;&#100;&#101;&#118;&#101;&#108;&#111;&#112;&#101;&#114;&#115;&#32;&#60;&#109;&#101;&#114;&#99;&#117;&#114;&#105;&#97;&#108;&#45;&#100;&#101;&#118;&#101;&#108;&#64;&#109;&#101;&#114;&#99;&#117;&#114;&#105;&#97;&#108;&#45;&#115;&#99;&#109;&#46;&#111;&#114;&#103;&#62;</td>
+<td class="age">Thu, 29 Jan 2026 17:46:07 +0000</td>
+<td class="indexlinks"><a href="/hg/archive/tip.zip">&nbsp;&darr;zip</a><a href="/hg/archive/tip.tar.gz">&nbsp;&darr;gz</a><a href="/hg/archive/tip.tar.bz2">&nbsp;&darr;bz2</a></td>
+<td>
+<a href="/hg/atom-log" title="subscribe to repository atom feed">
+<img class="atom-logo" src="/static/feed-icon-14x14.png" alt="subscribe to repository atom feed">
+</a>
+</td>
+</tr>
+
+<tr>
+<td><a href="/hg-stable/">Mercurial (stable branch)</a></td>
+<td>Scalable distributed version control system</td>
+<td>&#77;&#101;&#114;&#99;&#117;&#114;&#105;&#97;&#108;&#32;&#100;&#101;&#118;&#101;&#108;&#111;&#112;&#101;&#114;&#115;&#32;&#60;&#109;&#101;&#114;&#99;&#117;&#114;&#105;&#97;&#108;&#45;&#100;&#101;&#118;&#101;&#108;&#64;&#109;&#101;&#114;&#99;&#117;&#114;&#105;&#97;&#108;&#45;&#115;&#99;&#109;&#46;&#111;&#114;&#103;&#62;</td>
+<td class="age">Thu, 29 Jan 2026 17:16:39 +0000</td>
+<td class="indexlinks"></td>
+<td>
+<a href="/hg-stable/atom-log" title="subscribe to repository atom feed">
+<img class="atom-logo" src="/static/feed-icon-14x14.png" alt="subscribe to repository atom feed">
+</a>
+</td>
+</tr>
+
+<tr>
+<td><a href="/hg-website/">hg-website</a></td>
+<td>The website of the Mercurial project</td>
+<td>&#77;&#101;&#114;&#99;&#117;&#114;&#105;&#97;&#108;&#32;&#100;&#101;&#118;&#101;&#108;&#111;&#112;&#101;&#114;&#115;&#32;&#60;&#109;&#101;&#114;&#99;&#117;&#114;&#105;&#97;&#108;&#45;&#100;&#101;&#118;&#101;&#108;&#64;&#109;&#101;&#114;&#99;&#117;&#114;&#105;&#97;&#108;&#45;&#115;&#99;&#109;&#46;&#111;&#114;&#103;&#62;</td>
+<td class="age">Tue, 14 Jun 2022 22:55:43 +0000</td>
+<td class="indexlinks"></td>
+<td>
+<a href="/hg-website/atom-log" title="subscribe to repository atom feed">
+<img class="atom-logo" src="/static/feed-icon-14x14.png" alt="subscribe to repository atom feed">
+</a>
+</td>
+</tr>
+
+<tr>
+<td><a href="/python-hglib/">python-hglib</a></td>
+<td>"Python library to interface with Mercurial's command server"</td>
+<td>&#77;&#101;&#114;&#99;&#117;&#114;&#105;&#97;&#108;&#32;&#100;&#101;&#118;&#101;&#108;&#111;&#112;&#101;&#114;&#115;&#32;&#60;&#109;&#101;&#114;&#99;&#117;&#114;&#105;&#97;&#108;&#45;&#100;&#101;&#118;&#101;&#108;&#64;&#109;&#101;&#114;&#99;&#117;&#114;&#105;&#97;&#108;&#45;&#115;&#99;&#109;&#46;&#111;&#114;&#103;&#62;</td>
+<td class="age">Tue, 18 Jun 2024 00:16:03 +0000</td>
+<td class="indexlinks"><a href="/python-hglib/archive/tip.zip">&nbsp;&darr;zip</a><a href="/python-hglib/archive/tip.tar.gz">&nbsp;&darr;gz</a><a href="/python-hglib/archive/tip.tar.bz2">&nbsp;&darr;bz2</a></td>
+<td>
+<a href="/python-hglib/atom-log" title="subscribe to repository atom feed">
+<img class="atom-logo" src="/static/feed-icon-14x14.png" alt="subscribe to repository atom feed">
+</a>
+</td>
+</tr>
+
+    </tbody>
+</table>
+</div>
+</div>
+
+
+</body>
+</html>
+

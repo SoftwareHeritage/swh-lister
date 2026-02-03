@@ -1,0 +1,560 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-US" lang="en-US">
+<head>
+<link rel="icon" href="/static/hgicon.png" type="image/png" />
+<meta name="robots" content="index, nofollow"/>
+<link rel="stylesheet" href="/static/style-gitweb.css" type="text/css" />
+<script type="text/javascript" src="/static/mercurial.js"></script>
+
+<title>Mercurial repositories index</title>
+</head>
+<body>
+
+<div class="page_header">
+    <a href="https://mercurial-scm.org/" title="Mercurial" style="float: right;">Mercurial</a>
+    <a href="/">Mercurial</a> &gt; <a href="/pyams">pyams</a>
+</div>
+
+<table cellspacing="0">
+    <tr>
+        <td><a href="?sort=name">Name</a></td>
+        <td><a href="?sort=description">Description</a></td>
+        <td><a href="?sort=contact">Contact</a></td>
+        <td><a href="?sort=lastchange">Last modified</a></td>
+        <td>&nbsp;</td>
+        <td>&nbsp;</td>
+    </tr>
+
+<tr class="parity0">
+<td>
+<a class="list" href="/pyams/myams/">
+<b>myams</b>
+</a>
+</td>
+<td>unknown</td>
+<td>&#117;&#110;&#107;&#110;&#111;&#119;&#110;</td>
+<td class="age">Fri, 29 Jan 2021 13:29:04 +0100</td>
+<td class="indexlinks"></td>
+<td><div class="rss_logo">
+<a href="/pyams/myams/rss-log">RSS</a> <a href="/pyams/myams/atom-log">Atom</a>
+</div>
+</td>
+</tr>
+
+<tr class="parity1">
+<td>
+<a class="list" href="/pyams/pyams_alchemy/">
+<b>pyams_alchemy</b>
+</a>
+</td>
+<td>unknown</td>
+<td>&#117;&#110;&#107;&#110;&#111;&#119;&#110;</td>
+<td class="age">Mon, 29 Jun 2020 21:35:06 +0100</td>
+<td class="indexlinks"></td>
+<td><div class="rss_logo">
+<a href="/pyams/pyams_alchemy/rss-log">RSS</a> <a href="/pyams/pyams_alchemy/atom-log">Atom</a>
+</div>
+</td>
+</tr>
+
+<tr class="parity0">
+<td>
+<a class="list" href="/pyams/pyams_apm/">
+<b>pyams_apm</b>
+</a>
+</td>
+<td>unknown</td>
+<td>&#117;&#110;&#107;&#110;&#111;&#119;&#110;</td>
+<td class="age">Wed, 01 Jul 2020 11:37:33 +0100</td>
+<td class="indexlinks"></td>
+<td><div class="rss_logo">
+<a href="/pyams/pyams_apm/rss-log">RSS</a> <a href="/pyams/pyams_apm/atom-log">Atom</a>
+</div>
+</td>
+</tr>
+
+<tr class="parity1">
+<td>
+<a class="list" href="/pyams/pyams_cache/">
+<b>pyams_cache</b>
+</a>
+</td>
+<td>unknown</td>
+<td>&#117;&#110;&#107;&#110;&#111;&#119;&#110;</td>
+<td class="age">Wed, 05 Dec 2018 12:47:27 +0100</td>
+<td class="indexlinks"></td>
+<td><div class="rss_logo">
+<a href="/pyams/pyams_cache/rss-log">RSS</a> <a href="/pyams/pyams_cache/atom-log">Atom</a>
+</div>
+</td>
+</tr>
+
+<tr class="parity0">
+<td>
+<a class="list" href="/pyams/pyams_catalog/">
+<b>pyams_catalog</b>
+</a>
+</td>
+<td>unknown</td>
+<td>&#117;&#110;&#107;&#110;&#111;&#119;&#110;</td>
+<td class="age">Wed, 26 Jun 2019 10:12:37 +0100</td>
+<td class="indexlinks"></td>
+<td><div class="rss_logo">
+<a href="/pyams/pyams_catalog/rss-log">RSS</a> <a href="/pyams/pyams_catalog/atom-log">Atom</a>
+</div>
+</td>
+</tr>
+
+<tr class="parity1">
+<td>
+<a class="list" href="/pyams/pyams_content/">
+<b>pyams_content</b>
+</a>
+</td>
+<td>unknown</td>
+<td>&#117;&#110;&#107;&#110;&#111;&#119;&#110;</td>
+<td class="age">Fri, 26 Mar 2021 16:34:09 +0100</td>
+<td class="indexlinks"></td>
+<td><div class="rss_logo">
+<a href="/pyams/pyams_content/rss-log">RSS</a> <a href="/pyams/pyams_content/atom-log">Atom</a>
+</div>
+</td>
+</tr>
+
+<tr class="parity0">
+<td>
+<a class="list" href="/pyams/pyams_content_es/">
+<b>pyams_content_es</b>
+</a>
+</td>
+<td>unknown</td>
+<td>&#117;&#110;&#107;&#110;&#111;&#119;&#110;</td>
+<td class="age">Wed, 27 Jan 2021 16:15:27 +0100</td>
+<td class="indexlinks"></td>
+<td><div class="rss_logo">
+<a href="/pyams/pyams_content_es/rss-log">RSS</a> <a href="/pyams/pyams_content_es/atom-log">Atom</a>
+</div>
+</td>
+</tr>
+
+<tr class="parity1">
+<td>
+<a class="list" href="/pyams/pyams_default_theme/">
+<b>pyams_default_theme</b>
+</a>
+</td>
+<td>unknown</td>
+<td>&#117;&#110;&#107;&#110;&#111;&#119;&#110;</td>
+<td class="age">Thu, 04 Feb 2021 10:41:21 +0100</td>
+<td class="indexlinks"></td>
+<td><div class="rss_logo">
+<a href="/pyams/pyams_default_theme/rss-log">RSS</a> <a href="/pyams/pyams_default_theme/atom-log">Atom</a>
+</div>
+</td>
+</tr>
+
+<tr class="parity0">
+<td>
+<a class="list" href="/pyams/pyams_file/">
+<b>pyams_file</b>
+</a>
+</td>
+<td>unknown</td>
+<td>&#117;&#110;&#107;&#110;&#111;&#119;&#110;</td>
+<td class="age">Fri, 07 May 2021 13:35:21 +0100</td>
+<td class="indexlinks"></td>
+<td><div class="rss_logo">
+<a href="/pyams/pyams_file/rss-log">RSS</a> <a href="/pyams/pyams_file/atom-log">Atom</a>
+</div>
+</td>
+</tr>
+
+<tr class="parity1">
+<td>
+<a class="list" href="/pyams/pyams_form/">
+<b>pyams_form</b>
+</a>
+</td>
+<td>unknown</td>
+<td>&#117;&#110;&#107;&#110;&#111;&#119;&#110;</td>
+<td class="age">Thu, 27 May 2021 13:15:07 +0100</td>
+<td class="indexlinks"></td>
+<td><div class="rss_logo">
+<a href="/pyams/pyams_form/rss-log">RSS</a> <a href="/pyams/pyams_form/atom-log">Atom</a>
+</div>
+</td>
+</tr>
+
+<tr class="parity0">
+<td>
+<a class="list" href="/pyams/pyams_gis/">
+<b>pyams_gis</b>
+</a>
+</td>
+<td>unknown</td>
+<td>&#117;&#110;&#107;&#110;&#111;&#119;&#110;</td>
+<td class="age">Fri, 26 Mar 2021 16:32:00 +0100</td>
+<td class="indexlinks"></td>
+<td><div class="rss_logo">
+<a href="/pyams/pyams_gis/rss-log">RSS</a> <a href="/pyams/pyams_gis/atom-log">Atom</a>
+</div>
+</td>
+</tr>
+
+<tr class="parity1">
+<td>
+<a class="list" href="/pyams/pyams_i18n/">
+<b>pyams_i18n</b>
+</a>
+</td>
+<td>unknown</td>
+<td>&#117;&#110;&#107;&#110;&#111;&#119;&#110;</td>
+<td class="age">Fri, 22 Feb 2019 12:40:24 +0100</td>
+<td class="indexlinks"></td>
+<td><div class="rss_logo">
+<a href="/pyams/pyams_i18n/rss-log">RSS</a> <a href="/pyams/pyams_i18n/atom-log">Atom</a>
+</div>
+</td>
+</tr>
+
+<tr class="parity0">
+<td>
+<a class="list" href="/pyams/pyams_ldap/">
+<b>pyams_ldap</b>
+</a>
+</td>
+<td>unknown</td>
+<td>&#117;&#110;&#107;&#110;&#111;&#119;&#110;</td>
+<td class="age">Fri, 18 Jan 2019 15:37:29 +0100</td>
+<td class="indexlinks"></td>
+<td><div class="rss_logo">
+<a href="/pyams/pyams_ldap/rss-log">RSS</a> <a href="/pyams/pyams_ldap/atom-log">Atom</a>
+</div>
+</td>
+</tr>
+
+<tr class="parity1">
+<td>
+<a class="list" href="/pyams/pyams_mail/">
+<b>pyams_mail</b>
+</a>
+</td>
+<td>unknown</td>
+<td>&#117;&#110;&#107;&#110;&#111;&#119;&#110;</td>
+<td class="age">Wed, 05 Dec 2018 12:47:05 +0100</td>
+<td class="indexlinks"></td>
+<td><div class="rss_logo">
+<a href="/pyams/pyams_mail/rss-log">RSS</a> <a href="/pyams/pyams_mail/atom-log">Atom</a>
+</div>
+</td>
+</tr>
+
+<tr class="parity0">
+<td>
+<a class="list" href="/pyams/pyams_media/">
+<b>pyams_media</b>
+</a>
+</td>
+<td>unknown</td>
+<td>&#117;&#110;&#107;&#110;&#111;&#119;&#110;</td>
+<td class="age">Mon, 28 Sep 2020 15:07:30 +0100</td>
+<td class="indexlinks"></td>
+<td><div class="rss_logo">
+<a href="/pyams/pyams_media/rss-log">RSS</a> <a href="/pyams/pyams_media/atom-log">Atom</a>
+</div>
+</td>
+</tr>
+
+<tr class="parity1">
+<td>
+<a class="list" href="/pyams/pyams_notify/">
+<b>pyams_notify</b>
+</a>
+</td>
+<td>unknown</td>
+<td>&#117;&#110;&#107;&#110;&#111;&#119;&#110;</td>
+<td class="age">Mon, 20 Jul 2020 13:07:32 +0100</td>
+<td class="indexlinks"></td>
+<td><div class="rss_logo">
+<a href="/pyams/pyams_notify/rss-log">RSS</a> <a href="/pyams/pyams_notify/atom-log">Atom</a>
+</div>
+</td>
+</tr>
+
+<tr class="parity0">
+<td>
+<a class="list" href="/pyams/pyams_notify_ws/">
+<b>pyams_notify_ws</b>
+</a>
+</td>
+<td>unknown</td>
+<td>&#117;&#110;&#107;&#110;&#111;&#119;&#110;</td>
+<td class="age">Wed, 26 Jun 2019 18:00:57 +0100</td>
+<td class="indexlinks"></td>
+<td><div class="rss_logo">
+<a href="/pyams/pyams_notify_ws/rss-log">RSS</a> <a href="/pyams/pyams_notify_ws/atom-log">Atom</a>
+</div>
+</td>
+</tr>
+
+<tr class="parity1">
+<td>
+<a class="list" href="/pyams/pyams_pagelet/">
+<b>pyams_pagelet</b>
+</a>
+</td>
+<td>unknown</td>
+<td>&#117;&#110;&#107;&#110;&#111;&#119;&#110;</td>
+<td class="age">Mon, 20 Jul 2020 14:22:52 +0100</td>
+<td class="indexlinks"></td>
+<td><div class="rss_logo">
+<a href="/pyams/pyams_pagelet/rss-log">RSS</a> <a href="/pyams/pyams_pagelet/atom-log">Atom</a>
+</div>
+</td>
+</tr>
+
+<tr class="parity0">
+<td>
+<a class="list" href="/pyams/pyams_portal/">
+<b>pyams_portal</b>
+</a>
+</td>
+<td>unknown</td>
+<td>&#117;&#110;&#107;&#110;&#111;&#119;&#110;</td>
+<td class="age">Wed, 25 Aug 2021 16:33:55 +0100</td>
+<td class="indexlinks"></td>
+<td><div class="rss_logo">
+<a href="/pyams/pyams_portal/rss-log">RSS</a> <a href="/pyams/pyams_portal/atom-log">Atom</a>
+</div>
+</td>
+</tr>
+
+<tr class="parity1">
+<td>
+<a class="list" href="/pyams/pyams_scheduler/">
+<b>pyams_scheduler</b>
+</a>
+</td>
+<td>unknown</td>
+<td>&#117;&#110;&#107;&#110;&#111;&#119;&#110;</td>
+<td class="age">Tue, 12 Jan 2021 13:46:31 +0100</td>
+<td class="indexlinks"></td>
+<td><div class="rss_logo">
+<a href="/pyams/pyams_scheduler/rss-log">RSS</a> <a href="/pyams/pyams_scheduler/atom-log">Atom</a>
+</div>
+</td>
+</tr>
+
+<tr class="parity0">
+<td>
+<a class="list" href="/pyams/pyams_security/">
+<b>pyams_security</b>
+</a>
+</td>
+<td>unknown</td>
+<td>&#117;&#110;&#107;&#110;&#111;&#119;&#110;</td>
+<td class="age">Tue, 12 Jan 2021 13:47:27 +0100</td>
+<td class="indexlinks"></td>
+<td><div class="rss_logo">
+<a href="/pyams/pyams_security/rss-log">RSS</a> <a href="/pyams/pyams_security/atom-log">Atom</a>
+</div>
+</td>
+</tr>
+
+<tr class="parity1">
+<td>
+<a class="list" href="/pyams/pyams_sequence/">
+<b>pyams_sequence</b>
+</a>
+</td>
+<td>unknown</td>
+<td>&#117;&#110;&#107;&#110;&#111;&#119;&#110;</td>
+<td class="age">Mon, 20 Jul 2020 14:23:54 +0100</td>
+<td class="indexlinks"></td>
+<td><div class="rss_logo">
+<a href="/pyams/pyams_sequence/rss-log">RSS</a> <a href="/pyams/pyams_sequence/atom-log">Atom</a>
+</div>
+</td>
+</tr>
+
+<tr class="parity0">
+<td>
+<a class="list" href="/pyams/pyams_skin/">
+<b>pyams_skin</b>
+</a>
+</td>
+<td>unknown</td>
+<td>&#117;&#110;&#107;&#110;&#111;&#119;&#110;</td>
+<td class="age">Fri, 06 Aug 2021 15:35:42 +0100</td>
+<td class="indexlinks"></td>
+<td><div class="rss_logo">
+<a href="/pyams/pyams_skin/rss-log">RSS</a> <a href="/pyams/pyams_skin/atom-log">Atom</a>
+</div>
+</td>
+</tr>
+
+<tr class="parity1">
+<td>
+<a class="list" href="/pyams/pyams_template/">
+<b>pyams_template</b>
+</a>
+</td>
+<td>unknown</td>
+<td>&#117;&#110;&#107;&#110;&#111;&#119;&#110;</td>
+<td class="age">Mon, 20 Jul 2020 14:22:47 +0100</td>
+<td class="indexlinks"></td>
+<td><div class="rss_logo">
+<a href="/pyams/pyams_template/rss-log">RSS</a> <a href="/pyams/pyams_template/atom-log">Atom</a>
+</div>
+</td>
+</tr>
+
+<tr class="parity0">
+<td>
+<a class="list" href="/pyams/pyams_thesaurus/">
+<b>pyams_thesaurus</b>
+</a>
+</td>
+<td>unknown</td>
+<td>&#117;&#110;&#107;&#110;&#111;&#119;&#110;</td>
+<td class="age">Thu, 27 May 2021 13:16:57 +0100</td>
+<td class="indexlinks"></td>
+<td><div class="rss_logo">
+<a href="/pyams/pyams_thesaurus/rss-log">RSS</a> <a href="/pyams/pyams_thesaurus/atom-log">Atom</a>
+</div>
+</td>
+</tr>
+
+<tr class="parity1">
+<td>
+<a class="list" href="/pyams/pyams_user_guide/">
+<b>pyams_user_guide</b>
+</a>
+</td>
+<td>unknown</td>
+<td>&#117;&#110;&#107;&#110;&#111;&#119;&#110;</td>
+<td class="age">Fri, 28 Dec 2018 15:56:11 +0100</td>
+<td class="indexlinks"></td>
+<td><div class="rss_logo">
+<a href="/pyams/pyams_user_guide/rss-log">RSS</a> <a href="/pyams/pyams_user_guide/atom-log">Atom</a>
+</div>
+</td>
+</tr>
+
+<tr class="parity0">
+<td>
+<a class="list" href="/pyams/pyams_utils/">
+<b>pyams_utils</b>
+</a>
+</td>
+<td>unknown</td>
+<td>&#117;&#110;&#107;&#110;&#111;&#119;&#110;</td>
+<td class="age">Fri, 06 Aug 2021 15:34:49 +0100</td>
+<td class="indexlinks"></td>
+<td><div class="rss_logo">
+<a href="/pyams/pyams_utils/rss-log">RSS</a> <a href="/pyams/pyams_utils/atom-log">Atom</a>
+</div>
+</td>
+</tr>
+
+<tr class="parity1">
+<td>
+<a class="list" href="/pyams/pyams_viewlet/">
+<b>pyams_viewlet</b>
+</a>
+</td>
+<td>unknown</td>
+<td>&#117;&#110;&#107;&#110;&#111;&#119;&#110;</td>
+<td class="age">Wed, 25 Aug 2021 13:12:21 +0100</td>
+<td class="indexlinks"></td>
+<td><div class="rss_logo">
+<a href="/pyams/pyams_viewlet/rss-log">RSS</a> <a href="/pyams/pyams_viewlet/atom-log">Atom</a>
+</div>
+</td>
+</tr>
+
+<tr class="parity0">
+<td>
+<a class="list" href="/pyams/pyams_workflow/">
+<b>pyams_workflow</b>
+</a>
+</td>
+<td>unknown</td>
+<td>&#117;&#110;&#107;&#110;&#111;&#119;&#110;</td>
+<td class="age">Fri, 06 Aug 2021 15:44:48 +0100</td>
+<td class="indexlinks"></td>
+<td><div class="rss_logo">
+<a href="/pyams/pyams_workflow/rss-log">RSS</a> <a href="/pyams/pyams_workflow/atom-log">Atom</a>
+</div>
+</td>
+</tr>
+
+<tr class="parity1">
+<td>
+<a class="list" href="/pyams/pyams_zmi/">
+<b>pyams_zmi</b>
+</a>
+</td>
+<td>unknown</td>
+<td>&#117;&#110;&#107;&#110;&#111;&#119;&#110;</td>
+<td class="age">Tue, 13 Jul 2021 07:35:41 +0100</td>
+<td class="indexlinks"></td>
+<td><div class="rss_logo">
+<a href="/pyams/pyams_zmi/rss-log">RSS</a> <a href="/pyams/pyams_zmi/atom-log">Atom</a>
+</div>
+</td>
+</tr>
+
+<tr class="parity0">
+<td>
+<a class="list" href="/pyams/pyams_zmq/">
+<b>pyams_zmq</b>
+</a>
+</td>
+<td>unknown</td>
+<td>&#117;&#110;&#107;&#110;&#111;&#119;&#110;</td>
+<td class="age">Thu, 28 Nov 2019 19:52:51 +0100</td>
+<td class="indexlinks"></td>
+<td><div class="rss_logo">
+<a href="/pyams/pyams_zmq/rss-log">RSS</a> <a href="/pyams/pyams_zmq/atom-log">Atom</a>
+</div>
+</td>
+</tr>
+
+<tr class="parity1">
+<td>
+<a class="list" href="/pyams/pyams_zodbbrowser/">
+<b>pyams_zodbbrowser</b>
+</a>
+</td>
+<td>unknown</td>
+<td>&#117;&#110;&#107;&#110;&#111;&#119;&#110;</td>
+<td class="age">Sat, 02 Feb 2019 10:51:21 +0100</td>
+<td class="indexlinks"></td>
+<td><div class="rss_logo">
+<a href="/pyams/pyams_zodbbrowser/rss-log">RSS</a> <a href="/pyams/pyams_zodbbrowser/atom-log">Atom</a>
+</div>
+</td>
+</tr>
+
+<tr class="parity0">
+<td>
+<a class="list" href="/pyams/scaffolds/">
+<b>scaffolds/</b>
+</a>
+</td>
+<td></td>
+<td></td>
+<td class="age">Wed, 05 Dec 2018 10:39:42 +0100</td>
+<td class="indexlinks"></td>
+<td>
+</td>
+</tr>
+
+</table>
+<div class="page_footer">
+
+</div>
+</body>
+</html>

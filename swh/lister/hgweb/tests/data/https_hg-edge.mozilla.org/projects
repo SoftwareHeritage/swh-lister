@@ -1,0 +1,376 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-US" lang="en-US">
+<head>
+<link rel="icon" href="/static/5b6e8298d035/hgicon.png" type="image/png" />
+<meta name="robots" content="index, nofollow"/>
+<link rel="stylesheet" href="/static/5b6e8298d035/style-gitweb.css" type="text/css" />
+
+<style type="text/css">
+div.feed {
+  float: right;
+}
+a img {
+  border-width: 0px;
+}
+div.log_link {
+  width: 80px;
+  background-color: white;
+}
+
+div.log_body {
+  padding-left: 96px;
+}
+</style>
+<script type="text/javascript" src="/static/5b6e8298d035/mercurial.js"></script>
+
+<meta property="og:image" content="/static/5b6e8298d035/moz-logo-bw-rgb.svg"/>
+<meta property="og:type" content="website"/>
+
+<title>Mercurial repositories index</title>
+
+<meta property="og:title" content="hg.mozilla.org index" />
+<meta property="og:url" content="/projects/" />
+<meta property="og:description" content="hg.mozilla.org repository index" />
+
+</head>
+<body>
+
+<div class="page_header">
+    <div class="logo">
+        <a href="https://firefox-source-docs.mozilla.org/contributing/vcs/mercurial.html">
+            <img src="/static/5b6e8298d035/moz-logo-bw-rgb.svg" alt="mercurial" />
+        </a>
+    </div>
+    <a href="/">Mercurial</a>
+</div>
+
+<table cellspacing="0">
+    <tr>
+        <td><a href="?sort=name">Name</a></td>
+        <td><a href="?sort=description">Description</a></td>
+        <td><a href="?sort=lastchange">Last modified</a></td>
+        <td>&nbsp;</td>
+        <td>&nbsp;</td>
+    </tr>
+
+<tr class="parity0">
+<td>
+<a class="list" href="/projects/ash/">
+<b>ash</b>
+</a>
+</td>
+<td>unknown</td>
+<td class="age">at 2023-01-19T01:41:50+00:00</td>
+<td class="indexlinks"> <a href="/projects/ash/archive/tip.zip">zip</a> </td>
+<td><div class="rss_logo">
+<a href="/projects/ash/rss-log">RSS</a> <a href="/projects/ash/atom-log">Atom</a>
+</div>
+</td>
+</tr>
+
+<tr class="parity1">
+<td>
+<a class="list" href="/projects/birch/">
+<b>birch</b>
+</a>
+</td>
+<td>unknown</td>
+<td class="age">at 2023-07-20T16:58:30+00:00</td>
+<td class="indexlinks"> <a href="/projects/birch/archive/tip.zip">zip</a> </td>
+<td><div class="rss_logo">
+<a href="/projects/birch/rss-log">RSS</a> <a href="/projects/birch/atom-log">Atom</a>
+</div>
+</td>
+</tr>
+
+<tr class="parity0">
+<td>
+<a class="list" href="/projects/cedar/">
+<b>cedar</b>
+</a>
+</td>
+<td>unknown</td>
+<td class="age">at 2025-09-18T01:07:27+00:00</td>
+<td class="indexlinks"> <a href="/projects/cedar/archive/tip.zip">zip</a> </td>
+<td><div class="rss_logo">
+<a href="/projects/cedar/rss-log">RSS</a> <a href="/projects/cedar/atom-log">Atom</a>
+</div>
+</td>
+</tr>
+
+<tr class="parity1">
+<td>
+<a class="list" href="/projects/comm-l10n/">
+<b>comm-l10n</b>
+</a>
+</td>
+<td>unknown</td>
+<td class="age">at 2024-09-25T13:26:54+00:00</td>
+<td class="indexlinks"> <a href="/projects/comm-l10n/archive/tip.zip">zip</a> </td>
+<td><div class="rss_logo">
+<a href="/projects/comm-l10n/rss-log">RSS</a> <a href="/projects/comm-l10n/atom-log">Atom</a>
+</div>
+</td>
+</tr>
+
+<tr class="parity0">
+<td>
+<a class="list" href="/projects/comm-strings-quarantine/">
+<b>comm-strings-quarantine</b>
+</a>
+</td>
+<td>unknown</td>
+<td class="age">at 2024-09-28T12:12:00+00:00</td>
+<td class="indexlinks"> <a href="/projects/comm-strings-quarantine/archive/tip.zip">zip</a> </td>
+<td><div class="rss_logo">
+<a href="/projects/comm-strings-quarantine/rss-log">RSS</a> <a href="/projects/comm-strings-quarantine/atom-log">Atom</a>
+</div>
+</td>
+</tr>
+
+<tr class="parity1">
+<td>
+<a class="list" href="/projects/cypress/">
+<b>cypress</b>
+</a>
+</td>
+<td>unknown</td>
+<td class="age">at 2025-11-17T14:55:40+00:00</td>
+<td class="indexlinks"> <a href="/projects/cypress/archive/tip.zip">zip</a> </td>
+<td><div class="rss_logo">
+<a href="/projects/cypress/rss-log">RSS</a> <a href="/projects/cypress/atom-log">Atom</a>
+</div>
+</td>
+</tr>
+
+<tr class="parity0">
+<td>
+<a class="list" href="/projects/elm/">
+<b>elm</b>
+</a>
+</td>
+<td>unknown</td>
+<td class="age">at 2026-02-04T17:24:57+00:00</td>
+<td class="indexlinks"> <a href="/projects/elm/archive/tip.zip">zip</a> </td>
+<td><div class="rss_logo">
+<a href="/projects/elm/rss-log">RSS</a> <a href="/projects/elm/atom-log">Atom</a>
+</div>
+</td>
+</tr>
+
+<tr class="parity1">
+<td>
+<a class="list" href="/projects/holly/">
+<b>holly</b>
+</a>
+</td>
+<td>unknown</td>
+<td class="age">at 2025-12-16T11:54:58+00:00</td>
+<td class="indexlinks"> <a href="/projects/holly/archive/tip.zip">zip</a> </td>
+<td><div class="rss_logo">
+<a href="/projects/holly/rss-log">RSS</a> <a href="/projects/holly/atom-log">Atom</a>
+</div>
+</td>
+</tr>
+
+<tr class="parity0">
+<td>
+<a class="list" href="/projects/jamun/">
+<b>jamun</b>
+</a>
+</td>
+<td>unknown</td>
+<td class="age">at 2022-03-16T21:12:37+00:00</td>
+<td class="indexlinks"> <a href="/projects/jamun/archive/tip.zip">zip</a> </td>
+<td><div class="rss_logo">
+<a href="/projects/jamun/rss-log">RSS</a> <a href="/projects/jamun/atom-log">Atom</a>
+</div>
+</td>
+</tr>
+
+<tr class="parity1">
+<td>
+<a class="list" href="/projects/larch/">
+<b>larch</b>
+</a>
+</td>
+<td>unknown</td>
+<td class="age">at 2025-07-10T09:48:19+00:00</td>
+<td class="indexlinks"> <a href="/projects/larch/archive/tip.zip">zip</a> </td>
+<td><div class="rss_logo">
+<a href="/projects/larch/rss-log">RSS</a> <a href="/projects/larch/atom-log">Atom</a>
+</div>
+</td>
+</tr>
+
+<tr class="parity0">
+<td>
+<a class="list" href="/projects/maple/">
+<b>maple</b>
+</a>
+</td>
+<td>unknown</td>
+<td class="age">at 2026-01-27T22:53:35+00:00</td>
+<td class="indexlinks"> <a href="/projects/maple/archive/tip.zip">zip</a> </td>
+<td><div class="rss_logo">
+<a href="/projects/maple/rss-log">RSS</a> <a href="/projects/maple/atom-log">Atom</a>
+</div>
+</td>
+</tr>
+
+<tr class="parity1">
+<td>
+<a class="list" href="/projects/nspr/">
+<b>nspr</b>
+</a>
+</td>
+<td>unknown</td>
+<td class="age">at 2026-01-16T13:14:18+00:00</td>
+<td class="indexlinks"> <a href="/projects/nspr/archive/tip.zip">zip</a> </td>
+<td><div class="rss_logo">
+<a href="/projects/nspr/rss-log">RSS</a> <a href="/projects/nspr/atom-log">Atom</a>
+</div>
+</td>
+</tr>
+
+<tr class="parity0">
+<td>
+<a class="list" href="/projects/nss/">
+<b>nss</b>
+</a>
+</td>
+<td>unknown</td>
+<td class="age">at 2026-02-02T19:13:24+00:00</td>
+<td class="indexlinks"> <a href="/projects/nss/archive/tip.zip">zip</a> </td>
+<td><div class="rss_logo">
+<a href="/projects/nss/rss-log">RSS</a> <a href="/projects/nss/atom-log">Atom</a>
+</div>
+</td>
+</tr>
+
+<tr class="parity1">
+<td>
+<a class="list" href="/projects/nss-try/">
+<b>nss-try</b>
+</a>
+</td>
+<td>unknown</td>
+<td class="age">at 2026-01-23T17:35:31+00:00</td>
+<td class="indexlinks"> <a href="/projects/nss-try/archive/tip.zip">zip</a> </td>
+<td><div class="rss_logo">
+<a href="/projects/nss-try/rss-log">RSS</a> <a href="/projects/nss-try/atom-log">Atom</a>
+</div>
+</td>
+</tr>
+
+<tr class="parity0">
+<td>
+<a class="list" href="/projects/oak/">
+<b>oak</b>
+</a>
+</td>
+<td>unknown</td>
+<td class="age">at 2026-01-30T03:36:57+00:00</td>
+<td class="indexlinks"> <a href="/projects/oak/archive/tip.zip">zip</a> </td>
+<td><div class="rss_logo">
+<a href="/projects/oak/rss-log">RSS</a> <a href="/projects/oak/atom-log">Atom</a>
+</div>
+</td>
+</tr>
+
+<tr class="parity1">
+<td>
+<a class="list" href="/projects/pine/">
+<b>pine</b>
+</a>
+</td>
+<td>unknown</td>
+<td class="age">at 2025-04-02T20:34:53+00:00</td>
+<td class="indexlinks"> <a href="/projects/pine/archive/tip.zip">zip</a> </td>
+<td><div class="rss_logo">
+<a href="/projects/pine/rss-log">RSS</a> <a href="/projects/pine/atom-log">Atom</a>
+</div>
+</td>
+</tr>
+
+<tr class="parity0">
+<td>
+<a class="list" href="/projects/pine-stable/">
+<b>pine-stable</b>
+</a>
+</td>
+<td>unknown</td>
+<td class="age">at 2023-02-20T17:43:31+00:00</td>
+<td class="indexlinks"> <a href="/projects/pine-stable/archive/tip.zip">zip</a> </td>
+<td><div class="rss_logo">
+<a href="/projects/pine-stable/rss-log">RSS</a> <a href="/projects/pine-stable/atom-log">Atom</a>
+</div>
+</td>
+</tr>
+
+<tr class="parity1">
+<td>
+<a class="list" href="/projects/toolchains/">
+<b>toolchains</b>
+</a>
+</td>
+<td>unknown</td>
+<td class="age">at 2026-01-02T01:44:25+00:00</td>
+<td class="indexlinks"> <a href="/projects/toolchains/archive/tip.zip">zip</a> </td>
+<td><div class="rss_logo">
+<a href="/projects/toolchains/rss-log">RSS</a> <a href="/projects/toolchains/atom-log">Atom</a>
+</div>
+</td>
+</tr>
+
+</table>
+&nbsp;
+&nbsp;
+&nbsp;
+<div class="title">
+     Repository Layout
+</div>
+<table cellspacing="0">
+    <tr>
+        <td><a href="/">/</a></td>
+        <td>Mozilla top level repositories</td>
+    </tr>
+    <tr>
+        <td><a href="/build">build</a></td>
+        <td>Build team projects</td>
+    </tr>
+    <tr>
+        <td><a href="/conduit-testing">conduit-testing</a></td>
+        <td>Test repos that integrate with lower environments</td>
+    </tr>
+    <tr>
+        <td><a href="/experimental">experimental</a></td>
+        <td>Playground for version control wizards</td>
+    </tr>
+    <tr>
+        <td><a href="/hgcustom">hgcustom</a></td>
+        <td>Mercurial customizations</td>
+    </tr>
+    <tr>
+        <td><a href="/integration">integration</a></td>
+        <td>Source code integration work</td>
+    </tr>
+    <tr>
+        <td><a href="/projects">projects</a></td>
+        <td>Miscellaneous project repositories</td>
+    </tr>
+    <tr>
+        <td><a href="/releases">releases</a></td>
+        <td>Release branches (use releases/l10n-branchname for l10n repos)</td>
+    </tr>
+    <tr>
+        <td><a href="/SeaMonkey">SeaMonkey</a></td>
+        <td>The SeaMonkey Project</td>
+    </tr>
+</table>
+<div class="page_footer">
+
+</div>
+</body>
+</html>

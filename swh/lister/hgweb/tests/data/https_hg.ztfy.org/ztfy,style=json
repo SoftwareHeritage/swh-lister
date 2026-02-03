@@ -1,0 +1,35 @@
+{
+"entries": [{
+"name": "ztfy.alchemy",
+"url": "/ztfy/ztfy.alchemy/",
+"description": "unknown",
+"contact": "unknown",
+"lastchange": [1759938881, -3600],
+"isdirectory": false,
+"labels": []
+}, {
+"name": "ztfy.baseskin",
+"url": "/ztfy/ztfy.baseskin/",
+"description": "unknown",
+"contact": "unknown",
+"lastchange": [1580469458, -3600],
+"isdirectory": false,
+"labels": []
+}, {
+"name": "ztfy.myams",
+"url": "/ztfy/ztfy.myams/",
+"description": "unknown",
+"contact": "unknown",
+"lastchange": [1705316950, -3600],
+"isdirectory": false,
+"labels": []
+}, {
+"name": "ztfy.utils",
+"url": "/ztfy/ztfy.utils/",
+"description": "unknown",
+"contact": "unknown",
+"lastchange": [1706103742, -3600],
+"isdirectory": false,
+"labels": []
+}]
+}

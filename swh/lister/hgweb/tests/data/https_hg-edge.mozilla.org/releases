@@ -1,0 +1,1036 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-US" lang="en-US">
+<head>
+<link rel="icon" href="/static/5b6e8298d035/hgicon.png" type="image/png" />
+<meta name="robots" content="index, nofollow"/>
+<link rel="stylesheet" href="/static/5b6e8298d035/style-gitweb.css" type="text/css" />
+
+<style type="text/css">
+div.feed {
+  float: right;
+}
+a img {
+  border-width: 0px;
+}
+div.log_link {
+  width: 80px;
+  background-color: white;
+}
+
+div.log_body {
+  padding-left: 96px;
+}
+</style>
+<script type="text/javascript" src="/static/5b6e8298d035/mercurial.js"></script>
+
+<meta property="og:image" content="/static/5b6e8298d035/moz-logo-bw-rgb.svg"/>
+<meta property="og:type" content="website"/>
+
+<title>Mercurial repositories index</title>
+
+<meta property="og:title" content="hg.mozilla.org index" />
+<meta property="og:url" content="/releases/" />
+<meta property="og:description" content="hg.mozilla.org repository index" />
+
+</head>
+<body>
+
+<div class="page_header">
+    <div class="logo">
+        <a href="https://firefox-source-docs.mozilla.org/contributing/vcs/mercurial.html">
+            <img src="/static/5b6e8298d035/moz-logo-bw-rgb.svg" alt="mercurial" />
+        </a>
+    </div>
+    <a href="/">Mercurial</a>
+</div>
+
+<table cellspacing="0">
+    <tr>
+        <td><a href="?sort=name">Name</a></td>
+        <td><a href="?sort=description">Description</a></td>
+        <td><a href="?sort=lastchange">Last modified</a></td>
+        <td>&nbsp;</td>
+        <td>&nbsp;</td>
+    </tr>
+
+<tr class="parity0">
+<td>
+<a class="list" href="/releases/b2g-ota/">
+<b>b2g-ota</b>
+</a>
+</td>
+<td>Firefox gecko for OTA</td>
+<td class="age">at 2016-03-25T11:07:00+00:00</td>
+<td class="indexlinks"> <a href="/releases/b2g-ota/archive/tip.zip">zip</a> </td>
+<td><div class="rss_logo">
+<a href="/releases/b2g-ota/rss-log">RSS</a> <a href="/releases/b2g-ota/atom-log">Atom</a>
+</div>
+</td>
+</tr>
+
+<tr class="parity1">
+<td>
+<a class="list" href="/releases/comm-aurora/">
+<b>comm-aurora</b>
+</a>
+</td>
+<td>Thunderbird and SeaMonkey aurora channel</td>
+<td class="age">at 2017-05-06T10:02:47+00:00</td>
+<td class="indexlinks"> <a href="/releases/comm-aurora/archive/tip.zip">zip</a> </td>
+<td><div class="rss_logo">
+<a href="/releases/comm-aurora/rss-log">RSS</a> <a href="/releases/comm-aurora/atom-log">Atom</a>
+</div>
+</td>
+</tr>
+
+<tr class="parity0">
+<td>
+<a class="list" href="/releases/comm-beta/">
+<b>comm-beta</b>
+</a>
+</td>
+<td>Thunderbird and SeaMonkey beta channel</td>
+<td class="age">at 2026-02-05T09:06:34+00:00</td>
+<td class="indexlinks"> <a href="/releases/comm-beta/archive/tip.zip">zip</a> </td>
+<td><div class="rss_logo">
+<a href="/releases/comm-beta/rss-log">RSS</a> <a href="/releases/comm-beta/atom-log">Atom</a>
+</div>
+</td>
+</tr>
+
+<tr class="parity1">
+<td>
+<a class="list" href="/releases/comm-esr10/">
+<b>comm-esr10</b>
+</a>
+</td>
+<td>Thunderbird Extended Support Release 10</td>
+<td class="age">at 2013-01-05T14:11:43+00:00</td>
+<td class="indexlinks"> <a href="/releases/comm-esr10/archive/tip.zip">zip</a> </td>
+<td><div class="rss_logo">
+<a href="/releases/comm-esr10/rss-log">RSS</a> <a href="/releases/comm-esr10/atom-log">Atom</a>
+</div>
+</td>
+</tr>
+
+<tr class="parity0">
+<td>
+<a class="list" href="/releases/comm-esr17/">
+<b>comm-esr17</b>
+</a>
+</td>
+<td>Thunderbird Extended Support Release 17</td>
+<td class="age">at 2013-11-18T16:14:06+00:00</td>
+<td class="indexlinks"> <a href="/releases/comm-esr17/archive/tip.zip">zip</a> </td>
+<td><div class="rss_logo">
+<a href="/releases/comm-esr17/rss-log">RSS</a> <a href="/releases/comm-esr17/atom-log">Atom</a>
+</div>
+</td>
+</tr>
+
+<tr class="parity1">
+<td>
+<a class="list" href="/releases/comm-esr24/">
+<b>comm-esr24</b>
+</a>
+</td>
+<td>Thunderbird Extended Support Release 24</td>
+<td class="age">at 2014-09-24T04:53:58+00:00</td>
+<td class="indexlinks"> <a href="/releases/comm-esr24/archive/tip.zip">zip</a> </td>
+<td><div class="rss_logo">
+<a href="/releases/comm-esr24/rss-log">RSS</a> <a href="/releases/comm-esr24/atom-log">Atom</a>
+</div>
+</td>
+</tr>
+
+<tr class="parity0">
+<td>
+<a class="list" href="/releases/comm-esr31/">
+<b>comm-esr31</b>
+</a>
+</td>
+<td>Thunderbird Extended Support Release 31</td>
+<td class="age">at 2015-07-14T13:14:50+00:00</td>
+<td class="indexlinks"> <a href="/releases/comm-esr31/archive/tip.zip">zip</a> </td>
+<td><div class="rss_logo">
+<a href="/releases/comm-esr31/rss-log">RSS</a> <a href="/releases/comm-esr31/atom-log">Atom</a>
+</div>
+</td>
+</tr>
+
+<tr class="parity1">
+<td>
+<a class="list" href="/releases/comm-esr38/">
+<b>comm-esr38</b>
+</a>
+</td>
+<td>Thunderbird Extended Support Release 38</td>
+<td class="age">at 2016-05-28T10:02:56+00:00</td>
+<td class="indexlinks"> <a href="/releases/comm-esr38/archive/tip.zip">zip</a> </td>
+<td><div class="rss_logo">
+<a href="/releases/comm-esr38/rss-log">RSS</a> <a href="/releases/comm-esr38/atom-log">Atom</a>
+</div>
+</td>
+</tr>
+
+<tr class="parity0">
+<td>
+<a class="list" href="/releases/comm-esr45/">
+<b>comm-esr45</b>
+</a>
+</td>
+<td>Thunderbird Extended Support Release 45</td>
+<td class="age">at 2017-06-09T10:18:43+00:00</td>
+<td class="indexlinks"> <a href="/releases/comm-esr45/archive/tip.zip">zip</a> </td>
+<td><div class="rss_logo">
+<a href="/releases/comm-esr45/rss-log">RSS</a> <a href="/releases/comm-esr45/atom-log">Atom</a>
+</div>
+</td>
+</tr>
+
+<tr class="parity1">
+<td>
+<a class="list" href="/releases/comm-esr52/">
+<b>comm-esr52</b>
+</a>
+</td>
+<td>Thunderbird Extended Support Release 52</td>
+<td class="age">at 2019-08-11T12:08:20+00:00</td>
+<td class="indexlinks"> <a href="/releases/comm-esr52/archive/tip.zip">zip</a> </td>
+<td><div class="rss_logo">
+<a href="/releases/comm-esr52/rss-log">RSS</a> <a href="/releases/comm-esr52/atom-log">Atom</a>
+</div>
+</td>
+</tr>
+
+<tr class="parity0">
+<td>
+<a class="list" href="/releases/comm-esr60/">
+<b>comm-esr60</b>
+</a>
+</td>
+<td>Thunderbird Extended Support Release 60</td>
+<td class="age">at 2019-12-12T19:07:37+00:00</td>
+<td class="indexlinks"> <a href="/releases/comm-esr60/archive/tip.zip">zip</a> </td>
+<td><div class="rss_logo">
+<a href="/releases/comm-esr60/rss-log">RSS</a> <a href="/releases/comm-esr60/atom-log">Atom</a>
+</div>
+</td>
+</tr>
+
+<tr class="parity1">
+<td>
+<a class="list" href="/releases/comm-esr68/">
+<b>comm-esr68</b>
+</a>
+</td>
+<td>Thunderbird Extended Support Release 68</td>
+<td class="age">at 2020-10-13T18:08:59+00:00</td>
+<td class="indexlinks"> <a href="/releases/comm-esr68/archive/tip.zip">zip</a> </td>
+<td><div class="rss_logo">
+<a href="/releases/comm-esr68/rss-log">RSS</a> <a href="/releases/comm-esr68/atom-log">Atom</a>
+</div>
+</td>
+</tr>
+
+<tr class="parity0">
+<td>
+<a class="list" href="/releases/comm-esr78/">
+<b>comm-esr78</b>
+</a>
+</td>
+<td>Thunderbird Extended Support Release 78</td>
+<td class="age">at 2021-10-04T16:43:25+00:00</td>
+<td class="indexlinks"> <a href="/releases/comm-esr78/archive/tip.zip">zip</a> </td>
+<td><div class="rss_logo">
+<a href="/releases/comm-esr78/rss-log">RSS</a> <a href="/releases/comm-esr78/atom-log">Atom</a>
+</div>
+</td>
+</tr>
+
+<tr class="parity1">
+<td>
+<a class="list" href="/releases/comm-esr91/">
+<b>comm-esr91</b>
+</a>
+</td>
+<td>Thunderbird Extended Support Release 91</td>
+<td class="age">at 2022-09-19T15:02:38+00:00</td>
+<td class="indexlinks"> <a href="/releases/comm-esr91/archive/tip.zip">zip</a> </td>
+<td><div class="rss_logo">
+<a href="/releases/comm-esr91/rss-log">RSS</a> <a href="/releases/comm-esr91/atom-log">Atom</a>
+</div>
+</td>
+</tr>
+
+<tr class="parity0">
+<td>
+<a class="list" href="/releases/comm-esr102/">
+<b>comm-esr102</b>
+</a>
+</td>
+<td>Thunderbird Extended Support Release 102</td>
+<td class="age">at 2023-09-12T20:01:48+00:00</td>
+<td class="indexlinks"> <a href="/releases/comm-esr102/archive/tip.zip">zip</a> </td>
+<td><div class="rss_logo">
+<a href="/releases/comm-esr102/rss-log">RSS</a> <a href="/releases/comm-esr102/atom-log">Atom</a>
+</div>
+</td>
+</tr>
+
+<tr class="parity1">
+<td>
+<a class="list" href="/releases/comm-esr115/">
+<b>comm-esr115</b>
+</a>
+</td>
+<td>Thunderbird Extended Support Release 115</td>
+<td class="age">at 2024-12-12T15:42:00+00:00</td>
+<td class="indexlinks"> <a href="/releases/comm-esr115/archive/tip.zip">zip</a> </td>
+<td><div class="rss_logo">
+<a href="/releases/comm-esr115/rss-log">RSS</a> <a href="/releases/comm-esr115/atom-log">Atom</a>
+</div>
+</td>
+</tr>
+
+<tr class="parity0">
+<td>
+<a class="list" href="/releases/comm-esr128/">
+<b>comm-esr128</b>
+</a>
+</td>
+<td>Thunderbird Extended Support Release 128</td>
+<td class="age">at 2025-08-19T20:19:42+00:00</td>
+<td class="indexlinks"> <a href="/releases/comm-esr128/archive/tip.zip">zip</a> </td>
+<td><div class="rss_logo">
+<a href="/releases/comm-esr128/rss-log">RSS</a> <a href="/releases/comm-esr128/atom-log">Atom</a>
+</div>
+</td>
+</tr>
+
+<tr class="parity1">
+<td>
+<a class="list" href="/releases/comm-esr140/">
+<b>comm-esr140</b>
+</a>
+</td>
+<td>Thunderbird Extended Support Release 140</td>
+<td class="age">at 2026-01-27T18:26:48+00:00</td>
+<td class="indexlinks"> <a href="/releases/comm-esr140/archive/tip.zip">zip</a> </td>
+<td><div class="rss_logo">
+<a href="/releases/comm-esr140/rss-log">RSS</a> <a href="/releases/comm-esr140/atom-log">Atom</a>
+</div>
+</td>
+</tr>
+
+<tr class="parity0">
+<td>
+<a class="list" href="/releases/comm-release/">
+<b>comm-release</b>
+</a>
+</td>
+<td>Released versions of Thunderbird, Seamonkey, etc.</td>
+<td class="age">at 2026-01-28T16:51:53+00:00</td>
+<td class="indexlinks"> <a href="/releases/comm-release/archive/tip.zip">zip</a> </td>
+<td><div class="rss_logo">
+<a href="/releases/comm-release/rss-log">RSS</a> <a href="/releases/comm-release/atom-log">Atom</a>
+</div>
+</td>
+</tr>
+
+<tr class="parity1">
+<td>
+<a class="list" href="/releases/firefox-hotfixes/">
+<b>firefox-hotfixes</b>
+</a>
+</td>
+<td>unknown</td>
+<td class="age">at 2018-01-08T23:18:57+00:00</td>
+<td class="indexlinks"> <a href="/releases/firefox-hotfixes/archive/tip.zip">zip</a> </td>
+<td><div class="rss_logo">
+<a href="/releases/firefox-hotfixes/rss-log">RSS</a> <a href="/releases/firefox-hotfixes/atom-log">Atom</a>
+</div>
+</td>
+</tr>
+
+<tr class="parity0">
+<td>
+<a class="list" href="/releases/mobile-5.0/">
+<b>mobile-5.0</b>
+</a>
+</td>
+<td>unknown</td>
+<td class="age">at 2011-06-15T22:53:14+00:00</td>
+<td class="indexlinks"> <a href="/releases/mobile-5.0/archive/tip.zip">zip</a> </td>
+<td><div class="rss_logo">
+<a href="/releases/mobile-5.0/rss-log">RSS</a> <a href="/releases/mobile-5.0/atom-log">Atom</a>
+</div>
+</td>
+</tr>
+
+<tr class="parity1">
+<td>
+<a class="list" href="/releases/mozilla-1.9.1/">
+<b>mozilla-1.9.1</b>
+</a>
+</td>
+<td>Branch development on Firefox 3.5 and Gecko 1.9.1.</td>
+<td class="age">at 2011-07-05T21:29:35+00:00</td>
+<td class="indexlinks"> <a href="/releases/mozilla-1.9.1/archive/tip.zip">zip</a> </td>
+<td><div class="rss_logo">
+<a href="/releases/mozilla-1.9.1/rss-log">RSS</a> <a href="/releases/mozilla-1.9.1/atom-log">Atom</a>
+</div>
+</td>
+</tr>
+
+<tr class="parity0">
+<td>
+<a class="list" href="/releases/mozilla-1.9.2/">
+<b>mozilla-1.9.2</b>
+</a>
+</td>
+<td>Branch development on Firefox 3.6 and Gecko 1.9.2.</td>
+<td class="age">at 2013-01-08T04:54:48+00:00</td>
+<td class="indexlinks"> <a href="/releases/mozilla-1.9.2/archive/tip.zip">zip</a> </td>
+<td><div class="rss_logo">
+<a href="/releases/mozilla-1.9.2/rss-log">RSS</a> <a href="/releases/mozilla-1.9.2/atom-log">Atom</a>
+</div>
+</td>
+</tr>
+
+<tr class="parity1">
+<td>
+<a class="list" href="/releases/mozilla-2.0/">
+<b>mozilla-2.0</b>
+</a>
+</td>
+<td>Branch development on Firefox 4.0 and Gecko 2.0.</td>
+<td class="age">at 2011-06-28T13:37:26+00:00</td>
+<td class="indexlinks"> <a href="/releases/mozilla-2.0/archive/tip.zip">zip</a> </td>
+<td><div class="rss_logo">
+<a href="/releases/mozilla-2.0/rss-log">RSS</a> <a href="/releases/mozilla-2.0/atom-log">Atom</a>
+</div>
+</td>
+</tr>
+
+<tr class="parity0">
+<td>
+<a class="list" href="/releases/mozilla-2.1/">
+<b>mozilla-2.1</b>
+</a>
+</td>
+<td>Branch development on Gecko 2.1</td>
+<td class="age">at 2011-04-15T21:56:57+00:00</td>
+<td class="indexlinks"> <a href="/releases/mozilla-2.1/archive/tip.zip">zip</a> </td>
+<td><div class="rss_logo">
+<a href="/releases/mozilla-2.1/rss-log">RSS</a> <a href="/releases/mozilla-2.1/atom-log">Atom</a>
+</div>
+</td>
+</tr>
+
+<tr class="parity1">
+<td>
+<a class="list" href="/releases/mozilla-aurora/">
+<b>mozilla-aurora</b>
+</a>
+</td>
+<td>Firefox Aurora Channel development</td>
+<td class="age">at 2017-05-15T13:57:33+00:00</td>
+<td class="indexlinks"> <a href="/releases/mozilla-aurora/archive/tip.zip">zip</a> </td>
+<td><div class="rss_logo">
+<a href="/releases/mozilla-aurora/rss-log">RSS</a> <a href="/releases/mozilla-aurora/atom-log">Atom</a>
+</div>
+</td>
+</tr>
+
+<tr class="parity0">
+<td>
+<a class="list" href="/releases/mozilla-beta/">
+<b>mozilla-beta</b>
+</a>
+</td>
+<td>Firefox Beta channel development</td>
+<td class="age">at 2026-02-05T09:03:59+00:00</td>
+<td class="indexlinks"> <a href="/releases/mozilla-beta/archive/tip.zip">zip</a> </td>
+<td><div class="rss_logo">
+<a href="/releases/mozilla-beta/rss-log">RSS</a> <a href="/releases/mozilla-beta/atom-log">Atom</a>
+</div>
+</td>
+</tr>
+
+<tr class="parity1">
+<td>
+<a class="list" href="/releases/mozilla-b2g18/">
+<b>mozilla-b2g18</b>
+</a>
+</td>
+<td>Firefox gecko 18 for b2g</td>
+<td class="age">at 2015-01-29T05:44:17+00:00</td>
+<td class="indexlinks"> <a href="/releases/mozilla-b2g18/archive/tip.zip">zip</a> </td>
+<td><div class="rss_logo">
+<a href="/releases/mozilla-b2g18/rss-log">RSS</a> <a href="/releases/mozilla-b2g18/atom-log">Atom</a>
+</div>
+</td>
+</tr>
+
+<tr class="parity0">
+<td>
+<a class="list" href="/releases/mozilla-b2g18_v1_0_0/">
+<b>mozilla-b2g18_v1_0_0</b>
+</a>
+</td>
+<td>Firefox gecko 18 for b2g</td>
+<td class="age">at 2015-01-29T05:45:07+00:00</td>
+<td class="indexlinks"> <a href="/releases/mozilla-b2g18_v1_0_0/archive/tip.zip">zip</a> </td>
+<td><div class="rss_logo">
+<a href="/releases/mozilla-b2g18_v1_0_0/rss-log">RSS</a> <a href="/releases/mozilla-b2g18_v1_0_0/atom-log">Atom</a>
+</div>
+</td>
+</tr>
+
+<tr class="parity1">
+<td>
+<a class="list" href="/releases/mozilla-b2g18_v1_0_1/">
+<b>mozilla-b2g18_v1_0_1</b>
+</a>
+</td>
+<td>Firefox gecko 18 for b2g</td>
+<td class="age">at 2015-01-29T05:45:50+00:00</td>
+<td class="indexlinks"> <a href="/releases/mozilla-b2g18_v1_0_1/archive/tip.zip">zip</a> </td>
+<td><div class="rss_logo">
+<a href="/releases/mozilla-b2g18_v1_0_1/rss-log">RSS</a> <a href="/releases/mozilla-b2g18_v1_0_1/atom-log">Atom</a>
+</div>
+</td>
+</tr>
+
+<tr class="parity0">
+<td>
+<a class="list" href="/releases/mozilla-b2g18_v1_1_0_hd/">
+<b>mozilla-b2g18_v1_1_0_hd</b>
+</a>
+</td>
+<td>Firefox gecko 18 for b2g</td>
+<td class="age">at 2014-04-28T19:28:52+00:00</td>
+<td class="indexlinks"> <a href="/releases/mozilla-b2g18_v1_1_0_hd/archive/tip.zip">zip</a> </td>
+<td><div class="rss_logo">
+<a href="/releases/mozilla-b2g18_v1_1_0_hd/rss-log">RSS</a> <a href="/releases/mozilla-b2g18_v1_1_0_hd/atom-log">Atom</a>
+</div>
+</td>
+</tr>
+
+<tr class="parity1">
+<td>
+<a class="list" href="/releases/mozilla-b2g26_v1_2/">
+<b>mozilla-b2g26_v1_2</b>
+</a>
+</td>
+<td>Firefox gecko 26 for b2g</td>
+<td class="age">at 2015-01-29T05:47:43+00:00</td>
+<td class="indexlinks"> <a href="/releases/mozilla-b2g26_v1_2/archive/tip.zip">zip</a> </td>
+<td><div class="rss_logo">
+<a href="/releases/mozilla-b2g26_v1_2/rss-log">RSS</a> <a href="/releases/mozilla-b2g26_v1_2/atom-log">Atom</a>
+</div>
+</td>
+</tr>
+
+<tr class="parity0">
+<td>
+<a class="list" href="/releases/mozilla-b2g26_v1_2f/">
+<b>mozilla-b2g26_v1_2f</b>
+</a>
+</td>
+<td>unknown</td>
+<td class="age">at 2015-01-29T05:48:19+00:00</td>
+<td class="indexlinks"> <a href="/releases/mozilla-b2g26_v1_2f/archive/tip.zip">zip</a> </td>
+<td><div class="rss_logo">
+<a href="/releases/mozilla-b2g26_v1_2f/rss-log">RSS</a> <a href="/releases/mozilla-b2g26_v1_2f/atom-log">Atom</a>
+</div>
+</td>
+</tr>
+
+<tr class="parity1">
+<td>
+<a class="list" href="/releases/mozilla-b2g28_v1_3/">
+<b>mozilla-b2g28_v1_3</b>
+</a>
+</td>
+<td>Firefox gecko 28 for b2g</td>
+<td class="age">at 2015-01-29T05:49:08+00:00</td>
+<td class="indexlinks"> <a href="/releases/mozilla-b2g28_v1_3/archive/tip.zip">zip</a> </td>
+<td><div class="rss_logo">
+<a href="/releases/mozilla-b2g28_v1_3/rss-log">RSS</a> <a href="/releases/mozilla-b2g28_v1_3/atom-log">Atom</a>
+</div>
+</td>
+</tr>
+
+<tr class="parity0">
+<td>
+<a class="list" href="/releases/mozilla-b2g28_v1_3t/">
+<b>mozilla-b2g28_v1_3t</b>
+</a>
+</td>
+<td>Firefox gecko 28 for b2g</td>
+<td class="age">at 2015-01-29T05:49:47+00:00</td>
+<td class="indexlinks"> <a href="/releases/mozilla-b2g28_v1_3t/archive/tip.zip">zip</a> </td>
+<td><div class="rss_logo">
+<a href="/releases/mozilla-b2g28_v1_3t/rss-log">RSS</a> <a href="/releases/mozilla-b2g28_v1_3t/atom-log">Atom</a>
+</div>
+</td>
+</tr>
+
+<tr class="parity1">
+<td>
+<a class="list" href="/releases/mozilla-b2g30_v1_4/">
+<b>mozilla-b2g30_v1_4</b>
+</a>
+</td>
+<td>Firefox gecko 30 for b2g</td>
+<td class="age">at 2015-05-11T19:32:21+00:00</td>
+<td class="indexlinks"> <a href="/releases/mozilla-b2g30_v1_4/archive/tip.zip">zip</a> </td>
+<td><div class="rss_logo">
+<a href="/releases/mozilla-b2g30_v1_4/rss-log">RSS</a> <a href="/releases/mozilla-b2g30_v1_4/atom-log">Atom</a>
+</div>
+</td>
+</tr>
+
+<tr class="parity0">
+<td>
+<a class="list" href="/releases/mozilla-b2g32_v2_0/">
+<b>mozilla-b2g32_v2_0</b>
+</a>
+</td>
+<td>Firefox gecko 32 for b2g</td>
+<td class="age">at 2015-07-29T14:13:21+00:00</td>
+<td class="indexlinks"> <a href="/releases/mozilla-b2g32_v2_0/archive/tip.zip">zip</a> </td>
+<td><div class="rss_logo">
+<a href="/releases/mozilla-b2g32_v2_0/rss-log">RSS</a> <a href="/releases/mozilla-b2g32_v2_0/atom-log">Atom</a>
+</div>
+</td>
+</tr>
+
+<tr class="parity1">
+<td>
+<a class="list" href="/releases/mozilla-b2g32_v2_0m/">
+<b>mozilla-b2g32_v2_0m</b>
+</a>
+</td>
+<td>unknown</td>
+<td class="age">at 2015-07-29T14:15:10+00:00</td>
+<td class="indexlinks"> <a href="/releases/mozilla-b2g32_v2_0m/archive/tip.zip">zip</a> </td>
+<td><div class="rss_logo">
+<a href="/releases/mozilla-b2g32_v2_0m/rss-log">RSS</a> <a href="/releases/mozilla-b2g32_v2_0m/atom-log">Atom</a>
+</div>
+</td>
+</tr>
+
+<tr class="parity0">
+<td>
+<a class="list" href="/releases/mozilla-b2g34_v2_1/">
+<b>mozilla-b2g34_v2_1</b>
+</a>
+</td>
+<td>Firefox gecko 32 for b2g</td>
+<td class="age">at 2015-07-29T14:04:59+00:00</td>
+<td class="indexlinks"> <a href="/releases/mozilla-b2g34_v2_1/archive/tip.zip">zip</a> </td>
+<td><div class="rss_logo">
+<a href="/releases/mozilla-b2g34_v2_1/rss-log">RSS</a> <a href="/releases/mozilla-b2g34_v2_1/atom-log">Atom</a>
+</div>
+</td>
+</tr>
+
+<tr class="parity1">
+<td>
+<a class="list" href="/releases/mozilla-b2g34_v2_1s/">
+<b>mozilla-b2g34_v2_1s</b>
+</a>
+</td>
+<td>unknown</td>
+<td class="age">at 2015-09-18T19:34:26+00:00</td>
+<td class="indexlinks"> <a href="/releases/mozilla-b2g34_v2_1s/archive/tip.zip">zip</a> </td>
+<td><div class="rss_logo">
+<a href="/releases/mozilla-b2g34_v2_1s/rss-log">RSS</a> <a href="/releases/mozilla-b2g34_v2_1s/atom-log">Atom</a>
+</div>
+</td>
+</tr>
+
+<tr class="parity0">
+<td>
+<a class="list" href="/releases/mozilla-b2g37_v2_2/">
+<b>mozilla-b2g37_v2_2</b>
+</a>
+</td>
+<td>Firefox gecko 37 for b2g</td>
+<td class="age">at 2016-01-04T10:25:40+00:00</td>
+<td class="indexlinks"> <a href="/releases/mozilla-b2g37_v2_2/archive/tip.zip">zip</a> </td>
+<td><div class="rss_logo">
+<a href="/releases/mozilla-b2g37_v2_2/rss-log">RSS</a> <a href="/releases/mozilla-b2g37_v2_2/atom-log">Atom</a>
+</div>
+</td>
+</tr>
+
+<tr class="parity1">
+<td>
+<a class="list" href="/releases/mozilla-b2g37_v2_2r/">
+<b>mozilla-b2g37_v2_2r</b>
+</a>
+</td>
+<td>Firefox gecko 37 for b2g</td>
+<td class="age">at 2016-01-04T10:23:30+00:00</td>
+<td class="indexlinks"> <a href="/releases/mozilla-b2g37_v2_2r/archive/tip.zip">zip</a> </td>
+<td><div class="rss_logo">
+<a href="/releases/mozilla-b2g37_v2_2r/rss-log">RSS</a> <a href="/releases/mozilla-b2g37_v2_2r/atom-log">Atom</a>
+</div>
+</td>
+</tr>
+
+<tr class="parity0">
+<td>
+<a class="list" href="/releases/mozilla-b2g44_v2_5/">
+<b>mozilla-b2g44_v2_5</b>
+</a>
+</td>
+<td>Firefox gecko 44 for b2g</td>
+<td class="age">at 2016-04-21T08:26:54+00:00</td>
+<td class="indexlinks"> <a href="/releases/mozilla-b2g44_v2_5/archive/tip.zip">zip</a> </td>
+<td><div class="rss_logo">
+<a href="/releases/mozilla-b2g44_v2_5/rss-log">RSS</a> <a href="/releases/mozilla-b2g44_v2_5/atom-log">Atom</a>
+</div>
+</td>
+</tr>
+
+<tr class="parity1">
+<td>
+<a class="list" href="/releases/mozilla-esr10/">
+<b>mozilla-esr10</b>
+</a>
+</td>
+<td>Firefox Extended Support Release 10</td>
+<td class="age">at 2015-01-29T00:22:33+00:00</td>
+<td class="indexlinks"> <a href="/releases/mozilla-esr10/archive/tip.zip">zip</a> </td>
+<td><div class="rss_logo">
+<a href="/releases/mozilla-esr10/rss-log">RSS</a> <a href="/releases/mozilla-esr10/atom-log">Atom</a>
+</div>
+</td>
+</tr>
+
+<tr class="parity0">
+<td>
+<a class="list" href="/releases/mozilla-esr17/">
+<b>mozilla-esr17</b>
+</a>
+</td>
+<td>Firefox Extended Support Release 17</td>
+<td class="age">at 2015-01-29T00:57:33+00:00</td>
+<td class="indexlinks"> <a href="/releases/mozilla-esr17/archive/tip.zip">zip</a> </td>
+<td><div class="rss_logo">
+<a href="/releases/mozilla-esr17/rss-log">RSS</a> <a href="/releases/mozilla-esr17/atom-log">Atom</a>
+</div>
+</td>
+</tr>
+
+<tr class="parity1">
+<td>
+<a class="list" href="/releases/mozilla-esr24/">
+<b>mozilla-esr24</b>
+</a>
+</td>
+<td>Firefox Extended Support Release 24</td>
+<td class="age">at 2015-01-29T02:51:41+00:00</td>
+<td class="indexlinks"> <a href="/releases/mozilla-esr24/archive/tip.zip">zip</a> </td>
+<td><div class="rss_logo">
+<a href="/releases/mozilla-esr24/rss-log">RSS</a> <a href="/releases/mozilla-esr24/atom-log">Atom</a>
+</div>
+</td>
+</tr>
+
+<tr class="parity0">
+<td>
+<a class="list" href="/releases/mozilla-esr31/">
+<b>mozilla-esr31</b>
+</a>
+</td>
+<td>Firefox Extended Support Release 31</td>
+<td class="age">at 2015-07-14T20:18:17+00:00</td>
+<td class="indexlinks"> <a href="/releases/mozilla-esr31/archive/tip.zip">zip</a> </td>
+<td><div class="rss_logo">
+<a href="/releases/mozilla-esr31/rss-log">RSS</a> <a href="/releases/mozilla-esr31/atom-log">Atom</a>
+</div>
+</td>
+</tr>
+
+<tr class="parity1">
+<td>
+<a class="list" href="/releases/mozilla-esr38/">
+<b>mozilla-esr38</b>
+</a>
+</td>
+<td>Firefox Extended Support Release 38</td>
+<td class="age">at 2016-05-03T12:47:45+00:00</td>
+<td class="indexlinks"> <a href="/releases/mozilla-esr38/archive/tip.zip">zip</a> </td>
+<td><div class="rss_logo">
+<a href="/releases/mozilla-esr38/rss-log">RSS</a> <a href="/releases/mozilla-esr38/atom-log">Atom</a>
+</div>
+</td>
+</tr>
+
+<tr class="parity0">
+<td>
+<a class="list" href="/releases/mozilla-esr45/">
+<b>mozilla-esr45</b>
+</a>
+</td>
+<td>Firefox Extended Support Release 45</td>
+<td class="age">at 2017-06-13T15:39:50+00:00</td>
+<td class="indexlinks"> <a href="/releases/mozilla-esr45/archive/tip.zip">zip</a> </td>
+<td><div class="rss_logo">
+<a href="/releases/mozilla-esr45/rss-log">RSS</a> <a href="/releases/mozilla-esr45/atom-log">Atom</a>
+</div>
+</td>
+</tr>
+
+<tr class="parity1">
+<td>
+<a class="list" href="/releases/mozilla-esr52/">
+<b>mozilla-esr52</b>
+</a>
+</td>
+<td>Firefox Extended Support Release 52</td>
+<td class="age">at 2019-07-15T16:17:08+00:00</td>
+<td class="indexlinks"> <a href="/releases/mozilla-esr52/archive/tip.zip">zip</a> </td>
+<td><div class="rss_logo">
+<a href="/releases/mozilla-esr52/rss-log">RSS</a> <a href="/releases/mozilla-esr52/atom-log">Atom</a>
+</div>
+</td>
+</tr>
+
+<tr class="parity0">
+<td>
+<a class="list" href="/releases/mozilla-esr60/">
+<b>mozilla-esr60</b>
+</a>
+</td>
+<td>Firefox Extended Support Release 60</td>
+<td class="age">at 2019-10-31T08:19:43+00:00</td>
+<td class="indexlinks"> <a href="/releases/mozilla-esr60/archive/tip.zip">zip</a> </td>
+<td><div class="rss_logo">
+<a href="/releases/mozilla-esr60/rss-log">RSS</a> <a href="/releases/mozilla-esr60/atom-log">Atom</a>
+</div>
+</td>
+</tr>
+
+<tr class="parity1">
+<td>
+<a class="list" href="/releases/mozilla-esr68/">
+<b>mozilla-esr68</b>
+</a>
+</td>
+<td>Firefox Extended Support Release 68</td>
+<td class="age">at 2020-09-22T16:17:46+00:00</td>
+<td class="indexlinks"> <a href="/releases/mozilla-esr68/archive/tip.zip">zip</a> </td>
+<td><div class="rss_logo">
+<a href="/releases/mozilla-esr68/rss-log">RSS</a> <a href="/releases/mozilla-esr68/atom-log">Atom</a>
+</div>
+</td>
+</tr>
+
+<tr class="parity0">
+<td>
+<a class="list" href="/releases/mozilla-esr78/">
+<b>mozilla-esr78</b>
+</a>
+</td>
+<td>Firefox Extended Support Release 78</td>
+<td class="age">at 2021-11-02T14:41:45+00:00</td>
+<td class="indexlinks"> <a href="/releases/mozilla-esr78/archive/tip.zip">zip</a> </td>
+<td><div class="rss_logo">
+<a href="/releases/mozilla-esr78/rss-log">RSS</a> <a href="/releases/mozilla-esr78/atom-log">Atom</a>
+</div>
+</td>
+</tr>
+
+<tr class="parity1">
+<td>
+<a class="list" href="/releases/mozilla-esr91/">
+<b>mozilla-esr91</b>
+</a>
+</td>
+<td>Firefox Extended Support Release 91</td>
+<td class="age">at 2022-09-15T15:48:07+00:00</td>
+<td class="indexlinks"> <a href="/releases/mozilla-esr91/archive/tip.zip">zip</a> </td>
+<td><div class="rss_logo">
+<a href="/releases/mozilla-esr91/rss-log">RSS</a> <a href="/releases/mozilla-esr91/atom-log">Atom</a>
+</div>
+</td>
+</tr>
+
+<tr class="parity0">
+<td>
+<a class="list" href="/releases/mozilla-esr102/">
+<b>mozilla-esr102</b>
+</a>
+</td>
+<td>Firefox Extended Support Release 102</td>
+<td class="age">at 2023-09-14T13:27:35+00:00</td>
+<td class="indexlinks"> <a href="/releases/mozilla-esr102/archive/tip.zip">zip</a> </td>
+<td><div class="rss_logo">
+<a href="/releases/mozilla-esr102/rss-log">RSS</a> <a href="/releases/mozilla-esr102/atom-log">Atom</a>
+</div>
+</td>
+</tr>
+
+<tr class="parity1">
+<td>
+<a class="list" href="/releases/mozilla-esr115/">
+<b>mozilla-esr115</b>
+</a>
+</td>
+<td>Firefox Extended Support Release 115</td>
+<td class="age">at 2026-02-04T14:33:02+00:00</td>
+<td class="indexlinks"> <a href="/releases/mozilla-esr115/archive/tip.zip">zip</a> </td>
+<td><div class="rss_logo">
+<a href="/releases/mozilla-esr115/rss-log">RSS</a> <a href="/releases/mozilla-esr115/atom-log">Atom</a>
+</div>
+</td>
+</tr>
+
+<tr class="parity0">
+<td>
+<a class="list" href="/releases/mozilla-esr128/">
+<b>mozilla-esr128</b>
+</a>
+</td>
+<td>Firefox Extended Support Release 128</td>
+<td class="age">at 2025-09-08T12:34:45+00:00</td>
+<td class="indexlinks"> <a href="/releases/mozilla-esr128/archive/tip.zip">zip</a> </td>
+<td><div class="rss_logo">
+<a href="/releases/mozilla-esr128/rss-log">RSS</a> <a href="/releases/mozilla-esr128/atom-log">Atom</a>
+</div>
+</td>
+</tr>
+
+<tr class="parity1">
+<td>
+<a class="list" href="/releases/mozilla-esr140/">
+<b>mozilla-esr140</b>
+</a>
+</td>
+<td>Firefox Extended Support Release 140</td>
+<td class="age">at 2026-02-04T14:01:49+00:00</td>
+<td class="indexlinks"> <a href="/releases/mozilla-esr140/archive/tip.zip">zip</a> </td>
+<td><div class="rss_logo">
+<a href="/releases/mozilla-esr140/rss-log">RSS</a> <a href="/releases/mozilla-esr140/atom-log">Atom</a>
+</div>
+</td>
+</tr>
+
+<tr class="parity0">
+<td>
+<a class="list" href="/releases/mozilla-release/">
+<b>mozilla-release</b>
+</a>
+</td>
+<td>Released versions of Firefox</td>
+<td class="age">at 2026-02-05T04:09:51+00:00</td>
+<td class="indexlinks"> <a href="/releases/mozilla-release/archive/tip.zip">zip</a> </td>
+<td><div class="rss_logo">
+<a href="/releases/mozilla-release/rss-log">RSS</a> <a href="/releases/mozilla-release/atom-log">Atom</a>
+</div>
+</td>
+</tr>
+
+<tr class="parity1">
+<td>
+<a class="list" href="/releases/mozilla-mobile-5.0/">
+<b>mozilla-mobile-5.0</b>
+</a>
+</td>
+<td>unknown</td>
+<td class="age">at 2011-06-15T23:04:17+00:00</td>
+<td class="indexlinks"> <a href="/releases/mozilla-mobile-5.0/archive/tip.zip">zip</a> </td>
+<td><div class="rss_logo">
+<a href="/releases/mozilla-mobile-5.0/rss-log">RSS</a> <a href="/releases/mozilla-mobile-5.0/atom-log">Atom</a>
+</div>
+</td>
+</tr>
+
+<tr class="parity0">
+<td>
+<a class="list" href="/releases/mozilla-mobile-6.0/">
+<b>mozilla-mobile-6.0</b>
+</a>
+</td>
+<td>unknown</td>
+<td class="age">at 2011-07-06T17:02:55+00:00</td>
+<td class="indexlinks"> <a href="/releases/mozilla-mobile-6.0/archive/tip.zip">zip</a> </td>
+<td><div class="rss_logo">
+<a href="/releases/mozilla-mobile-6.0/rss-log">RSS</a> <a href="/releases/mozilla-mobile-6.0/atom-log">Atom</a>
+</div>
+</td>
+</tr>
+
+<tr class="parity1">
+<td>
+<a class="list" href="/releases/mobile-6.0/">
+<b>mobile-6.0</b>
+</a>
+</td>
+<td>unknown</td>
+<td class="age">at 2011-07-06T16:03:38+00:00</td>
+<td class="indexlinks"> <a href="/releases/mobile-6.0/archive/tip.zip">zip</a> </td>
+<td><div class="rss_logo">
+<a href="/releases/mobile-6.0/rss-log">RSS</a> <a href="/releases/mobile-6.0/atom-log">Atom</a>
+</div>
+</td>
+</tr>
+
+</table>
+&nbsp;
+&nbsp;
+&nbsp;
+<div class="title">
+     Repository Layout
+</div>
+<table cellspacing="0">
+    <tr>
+        <td><a href="/">/</a></td>
+        <td>Mozilla top level repositories</td>
+    </tr>
+    <tr>
+        <td><a href="/build">build</a></td>
+        <td>Build team projects</td>
+    </tr>
+    <tr>
+        <td><a href="/conduit-testing">conduit-testing</a></td>
+        <td>Test repos that integrate with lower environments</td>
+    </tr>
+    <tr>
+        <td><a href="/experimental">experimental</a></td>
+        <td>Playground for version control wizards</td>
+    </tr>
+    <tr>
+        <td><a href="/hgcustom">hgcustom</a></td>
+        <td>Mercurial customizations</td>
+    </tr>
+    <tr>
+        <td><a href="/integration">integration</a></td>
+        <td>Source code integration work</td>
+    </tr>
+    <tr>
+        <td><a href="/projects">projects</a></td>
+        <td>Miscellaneous project repositories</td>
+    </tr>
+    <tr>
+        <td><a href="/releases">releases</a></td>
+        <td>Release branches (use releases/l10n-branchname for l10n repos)</td>
+    </tr>
+    <tr>
+        <td><a href="/SeaMonkey">SeaMonkey</a></td>
+        <td>The SeaMonkey Project</td>
+    </tr>
+</table>
+<div class="page_footer">
+
+</div>
+</body>
+</html>

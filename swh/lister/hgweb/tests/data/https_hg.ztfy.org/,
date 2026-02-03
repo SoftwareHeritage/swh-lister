@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-US" lang="en-US">
+<head>
+<link rel="icon" href="/static/hgicon.png" type="image/png" />
+<meta name="robots" content="index, nofollow"/>
+<link rel="stylesheet" href="/static/style-gitweb.css" type="text/css" />
+<script type="text/javascript" src="/static/mercurial.js"></script>
+
+<title>Mercurial repositories index</title>
+</head>
+<body>
+
+<div class="page_header">
+    <a href="https://mercurial-scm.org/" title="Mercurial" style="float: right;">Mercurial</a>
+    <a href="/">Mercurial</a>
+</div>
+
+<table cellspacing="0">
+    <tr>
+        <td><a href="?sort=name">Name</a></td>
+        <td><a href="?sort=description">Description</a></td>
+        <td><a href="?sort=contact">Contact</a></td>
+        <td><a href="?sort=lastchange">Last modified</a></td>
+        <td>&nbsp;</td>
+        <td>&nbsp;</td>
+    </tr>
+
+<tr class="parity0">
+<td>
+<a class="list" href="/pyams/">
+<b>pyams/</b>
+</a>
+</td>
+<td></td>
+<td></td>
+<td class="age">Wed, 15 Jul 2020 14:03:29 +0100</td>
+<td class="indexlinks"></td>
+<td>
+</td>
+</tr>
+
+<tr class="parity1">
+<td>
+<a class="list" href="/ztfy/">
+<b>ztfy/</b>
+</a>
+</td>
+<td></td>
+<td></td>
+<td class="age">Wed, 08 Oct 2025 15:26:38 +0100</td>
+<td class="indexlinks"></td>
+<td>
+</td>
+</tr>
+
+</table>
+<div class="page_footer">
+
+</div>
+</body>
+</html>

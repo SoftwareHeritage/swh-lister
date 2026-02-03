@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-US" lang="en-US">
+<head>
+<link rel="icon" href="/static/5b6e8298d035/hgicon.png" type="image/png" />
+<meta name="robots" content="index, nofollow"/>
+<link rel="stylesheet" href="/static/5b6e8298d035/style-gitweb.css" type="text/css" />
+
+<style type="text/css">
+div.feed {
+  float: right;
+}
+a img {
+  border-width: 0px;
+}
+div.log_link {
+  width: 80px;
+  background-color: white;
+}
+
+div.log_body {
+  padding-left: 96px;
+}
+</style>
+<script type="text/javascript" src="/static/5b6e8298d035/mercurial.js"></script>
+
+<meta property="og:image" content="/static/5b6e8298d035/moz-logo-bw-rgb.svg"/>
+<meta property="og:type" content="website"/>
+
+<title>Mercurial repositories index</title>
+
+<meta property="og:title" content="hg.mozilla.org index" />
+<meta property="og:url" content="/integration/" />
+<meta property="og:description" content="hg.mozilla.org repository index" />
+
+</head>
+<body>
+
+<div class="page_header">
+    <div class="logo">
+        <a href="https://firefox-source-docs.mozilla.org/contributing/vcs/mercurial.html">
+            <img src="/static/5b6e8298d035/moz-logo-bw-rgb.svg" alt="mercurial" />
+        </a>
+    </div>
+    <a href="/">Mercurial</a>
+</div>
+
+<table cellspacing="0">
+    <tr>
+        <td><a href="?sort=name">Name</a></td>
+        <td><a href="?sort=description">Description</a></td>
+        <td><a href="?sort=lastchange">Last modified</a></td>
+        <td>&nbsp;</td>
+        <td>&nbsp;</td>
+    </tr>
+
+<tr class="parity0">
+<td>
+<a class="list" href="/integration/autoland/">
+<b>autoland</b>
+</a>
+</td>
+<td>Landing queue for Firefox</td>
+<td class="age">at 2026-02-05T10:00:14+00:00</td>
+<td class="indexlinks"> <a href="/integration/autoland/archive/tip.zip">zip</a> </td>
+<td><div class="rss_logo">
+<a href="/integration/autoland/rss-log">RSS</a> <a href="/integration/autoland/atom-log">Atom</a>
+</div>
+</td>
+</tr>
+
+<tr class="parity1">
+<td>
+<a class="list" href="/integration/b2g-inbound/">
+<b>b2g-inbound</b>
+</a>
+</td>
+<td>Where B2G bugs were formerly introduced before they were merged into <a href="../mozilla-central">mozilla-central</a></td>
+<td class="age">at 2016-04-04T13:43:23+00:00</td>
+<td class="indexlinks"> <a href="/integration/b2g-inbound/archive/tip.zip">zip</a> </td>
+<td><div class="rss_logo">
+<a href="/integration/b2g-inbound/rss-log">RSS</a> <a href="/integration/b2g-inbound/atom-log">Atom</a>
+</div>
+</td>
+</tr>
+
+<tr class="parity0">
+<td>
+<a class="list" href="/integration/fx-team/">
+<b>fx-team</b>
+</a>
+</td>
+<td>Where Firefox bugs are introduced before they are merged into <a href="../mozilla-central">mozilla-central</a></td>
+<td class="age">at 2016-10-31T19:01:06+00:00</td>
+<td class="indexlinks"> <a href="/integration/fx-team/archive/tip.zip">zip</a> </td>
+<td><div class="rss_logo">
+<a href="/integration/fx-team/rss-log">RSS</a> <a href="/integration/fx-team/atom-log">Atom</a>
+</div>
+</td>
+</tr>
+
+<tr class="parity1">
+<td>
+<a class="list" href="/integration/mozilla-inbound/">
+<b>mozilla-inbound</b>
+</a>
+</td>
+<td>Where Gecko bugs are introduced before they are merged into <a href="../mozilla-central">mozilla-central</a></td>
+<td class="age">at 2019-11-19T11:31:37+00:00</td>
+<td class="indexlinks"> <a href="/integration/mozilla-inbound/archive/tip.zip">zip</a> </td>
+<td><div class="rss_logo">
+<a href="/integration/mozilla-inbound/rss-log">RSS</a> <a href="/integration/mozilla-inbound/atom-log">Atom</a>
+</div>
+</td>
+</tr>
+
+</table>
+&nbsp;
+&nbsp;
+&nbsp;
+<div class="title">
+     Repository Layout
+</div>
+<table cellspacing="0">
+    <tr>
+        <td><a href="/">/</a></td>
+        <td>Mozilla top level repositories</td>
+    </tr>
+    <tr>
+        <td><a href="/build">build</a></td>
+        <td>Build team projects</td>
+    </tr>
+    <tr>
+        <td><a href="/conduit-testing">conduit-testing</a></td>
+        <td>Test repos that integrate with lower environments</td>
+    </tr>
+    <tr>
+        <td><a href="/experimental">experimental</a></td>
+        <td>Playground for version control wizards</td>
+    </tr>
+    <tr>
+        <td><a href="/hgcustom">hgcustom</a></td>
+        <td>Mercurial customizations</td>
+    </tr>
+    <tr>
+        <td><a href="/integration">integration</a></td>
+        <td>Source code integration work</td>
+    </tr>
+    <tr>
+        <td><a href="/projects">projects</a></td>
+        <td>Miscellaneous project repositories</td>
+    </tr>
+    <tr>
+        <td><a href="/releases">releases</a></td>
+        <td>Release branches (use releases/l10n-branchname for l10n repos)</td>
+    </tr>
+    <tr>
+        <td><a href="/SeaMonkey">SeaMonkey</a></td>
+        <td>The SeaMonkey Project</td>
+    </tr>
+</table>
+<div class="page_footer">
+
+</div>
+</body>
+</html>

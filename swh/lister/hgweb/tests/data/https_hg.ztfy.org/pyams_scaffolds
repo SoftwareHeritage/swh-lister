@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-US" lang="en-US">
+<head>
+<link rel="icon" href="/static/hgicon.png" type="image/png" />
+<meta name="robots" content="index, nofollow"/>
+<link rel="stylesheet" href="/static/style-gitweb.css" type="text/css" />
+<script type="text/javascript" src="/static/mercurial.js"></script>
+
+<title>Mercurial repositories index</title>
+</head>
+<body>
+
+<div class="page_header">
+    <a href="https://mercurial-scm.org/" title="Mercurial" style="float: right;">Mercurial</a>
+    <a href="/">Mercurial</a> &gt; <a href="/pyams">pyams</a> &gt; <a href="/pyams/scaffolds">scaffolds</a>
+</div>
+
+<table cellspacing="0">
+    <tr>
+        <td><a href="?sort=name">Name</a></td>
+        <td><a href="?sort=description">Description</a></td>
+        <td><a href="?sort=contact">Contact</a></td>
+        <td><a href="?sort=lastchange">Last modified</a></td>
+        <td>&nbsp;</td>
+        <td>&nbsp;</td>
+    </tr>
+
+<tr class="parity0">
+<td>
+<a class="list" href="/pyams/scaffolds/pyams/">
+<b>pyams</b>
+</a>
+</td>
+<td>unknown</td>
+<td>&#117;&#110;&#107;&#110;&#111;&#119;&#110;</td>
+<td class="age">Fri, 26 Jul 2019 10:49:16 +0100</td>
+<td class="indexlinks"></td>
+<td><div class="rss_logo">
+<a href="/pyams/scaffolds/pyams/rss-log">RSS</a> <a href="/pyams/scaffolds/pyams/atom-log">Atom</a>
+</div>
+</td>
+</tr>
+
+<tr class="parity1">
+<td>
+<a class="list" href="/pyams/scaffolds/pyams_notify/">
+<b>pyams_notify</b>
+</a>
+</td>
+<td>unknown</td>
+<td>&#117;&#110;&#107;&#110;&#111;&#119;&#110;</td>
+<td class="age">Thu, 20 Jun 2019 11:54:31 +0100</td>
+<td class="indexlinks"></td>
+<td><div class="rss_logo">
+<a href="/pyams/scaffolds/pyams_notify/rss-log">RSS</a> <a href="/pyams/scaffolds/pyams_notify/atom-log">Atom</a>
+</div>
+</td>
+</tr>
+
+<tr class="parity0">
+<td>
+<a class="list" href="/pyams/scaffolds/pyams_package/">
+<b>pyams_package</b>
+</a>
+</td>
+<td>unknown</td>
+<td>&#117;&#110;&#107;&#110;&#111;&#119;&#110;</td>
+<td class="age">Wed, 05 Dec 2018 10:39:35 +0100</td>
+<td class="indexlinks"></td>
+<td><div class="rss_logo">
+<a href="/pyams/scaffolds/pyams_package/rss-log">RSS</a> <a href="/pyams/scaffolds/pyams_package/atom-log">Atom</a>
+</div>
+</td>
+</tr>
+
+<tr class="parity1">
+<td>
+<a class="list" href="/pyams/scaffolds/zeo_server/">
+<b>zeo_server</b>
+</a>
+</td>
+<td>unknown</td>
+<td>&#117;&#110;&#107;&#110;&#111;&#119;&#110;</td>
+<td class="age">Wed, 05 Dec 2018 12:47:29 +0100</td>
+<td class="indexlinks"></td>
+<td><div class="rss_logo">
+<a href="/pyams/scaffolds/zeo_server/rss-log">RSS</a> <a href="/pyams/scaffolds/zeo_server/atom-log">Atom</a>
+</div>
+</td>
+</tr>
+
+</table>
+<div class="page_footer">
+
+</div>
+</body>
+</html>

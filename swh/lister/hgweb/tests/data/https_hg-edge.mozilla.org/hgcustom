@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-US" lang="en-US">
+<head>
+<link rel="icon" href="/static/5b6e8298d035/hgicon.png" type="image/png" />
+<meta name="robots" content="index, nofollow"/>
+<link rel="stylesheet" href="/static/5b6e8298d035/style-gitweb.css" type="text/css" />
+
+<style type="text/css">
+div.feed {
+  float: right;
+}
+a img {
+  border-width: 0px;
+}
+div.log_link {
+  width: 80px;
+  background-color: white;
+}
+
+div.log_body {
+  padding-left: 96px;
+}
+</style>
+<script type="text/javascript" src="/static/5b6e8298d035/mercurial.js"></script>
+
+<meta property="og:image" content="/static/5b6e8298d035/moz-logo-bw-rgb.svg"/>
+<meta property="og:type" content="website"/>
+
+<title>Mercurial repositories index</title>
+
+<meta property="og:title" content="hg.mozilla.org index" />
+<meta property="og:url" content="/hgcustom/" />
+<meta property="og:description" content="hg.mozilla.org repository index" />
+
+</head>
+<body>
+
+<div class="page_header">
+    <div class="logo">
+        <a href="https://firefox-source-docs.mozilla.org/contributing/vcs/mercurial.html">
+            <img src="/static/5b6e8298d035/moz-logo-bw-rgb.svg" alt="mercurial" />
+        </a>
+    </div>
+    <a href="/">Mercurial</a>
+</div>
+
+<table cellspacing="0">
+    <tr>
+        <td><a href="?sort=name">Name</a></td>
+        <td><a href="?sort=description">Description</a></td>
+        <td><a href="?sort=lastchange">Last modified</a></td>
+        <td>&nbsp;</td>
+        <td>&nbsp;</td>
+    </tr>
+
+<tr class="parity0">
+<td>
+<a class="list" href="/hgcustom/hg_templates/">
+<b>hg_templates</b>
+</a>
+</td>
+<td>Mozilla hgweb custom templates.</td>
+<td class="age">at 2014-09-08T18:33:26+00:00</td>
+<td class="indexlinks"> <a href="/hgcustom/hg_templates/archive/tip.zip">zip</a> </td>
+<td><div class="rss_logo">
+<a href="/hgcustom/hg_templates/rss-log">RSS</a> <a href="/hgcustom/hg_templates/atom-log">Atom</a>
+</div>
+</td>
+</tr>
+
+<tr class="parity1">
+<td>
+<a class="list" href="/hgcustom/hghooks/">
+<b>hghooks</b>
+</a>
+</td>
+<td>Various hg hooks</td>
+<td class="age">at 2014-08-12T15:21:54+00:00</td>
+<td class="indexlinks"> <a href="/hgcustom/hghooks/archive/tip.zip">zip</a> </td>
+<td><div class="rss_logo">
+<a href="/hgcustom/hghooks/rss-log">RSS</a> <a href="/hgcustom/hghooks/atom-log">Atom</a>
+</div>
+</td>
+</tr>
+
+<tr class="parity0">
+<td>
+<a class="list" href="/hgcustom/hgscripts/">
+<b>hgscripts</b>
+</a>
+</td>
+<td>Mozilla IT hg repo management scripts</td>
+<td class="age">at 2016-03-31T22:41:07+00:00</td>
+<td class="indexlinks"> <a href="/hgcustom/hgscripts/archive/tip.zip">zip</a> </td>
+<td><div class="rss_logo">
+<a href="/hgcustom/hgscripts/rss-log">RSS</a> <a href="/hgcustom/hgscripts/atom-log">Atom</a>
+</div>
+</td>
+</tr>
+
+<tr class="parity1">
+<td>
+<a class="list" href="/hgcustom/library_overrides/">
+<b>library_overrides</b>
+</a>
+</td>
+<td>Mozilla custom library monkeypatchings.</td>
+<td class="age">at 2015-04-28T23:04:24+00:00</td>
+<td class="indexlinks"> <a href="/hgcustom/library_overrides/archive/tip.zip">zip</a> </td>
+<td><div class="rss_logo">
+<a href="/hgcustom/library_overrides/rss-log">RSS</a> <a href="/hgcustom/library_overrides/atom-log">Atom</a>
+</div>
+</td>
+</tr>
+
+<tr class="parity0">
+<td>
+<a class="list" href="/hgcustom/pushlog/">
+<b>pushlog</b>
+</a>
+</td>
+<td>Various hg and hgweb improvements: JSON output, graphical repository browser, and pushlog-display hook.</td>
+<td class="age">at 2014-09-29T18:15:23+00:00</td>
+<td class="indexlinks"> <a href="/hgcustom/pushlog/archive/tip.zip">zip</a> </td>
+<td><div class="rss_logo">
+<a href="/hgcustom/pushlog/rss-log">RSS</a> <a href="/hgcustom/pushlog/atom-log">Atom</a>
+</div>
+</td>
+</tr>
+
+<tr class="parity1">
+<td>
+<a class="list" href="/hgcustom/version-control-tools/">
+<b>version-control-tools</b>
+</a>
+</td>
+<td>Mozilla version control infrastructure and customizations to version control tools</td>
+<td class="age">at 2026-01-22T21:45:59+00:00</td>
+<td class="indexlinks"> <a href="/hgcustom/version-control-tools/archive/tip.zip">zip</a> </td>
+<td><div class="rss_logo">
+<a href="/hgcustom/version-control-tools/rss-log">RSS</a> <a href="/hgcustom/version-control-tools/atom-log">Atom</a>
+</div>
+</td>
+</tr>
+
+</table>
+&nbsp;
+&nbsp;
+&nbsp;
+<div class="title">
+     Repository Layout
+</div>
+<table cellspacing="0">
+    <tr>
+        <td><a href="/">/</a></td>
+        <td>Mozilla top level repositories</td>
+    </tr>
+    <tr>
+        <td><a href="/build">build</a></td>
+        <td>Build team projects</td>
+    </tr>
+    <tr>
+        <td><a href="/conduit-testing">conduit-testing</a></td>
+        <td>Test repos that integrate with lower environments</td>
+    </tr>
+    <tr>
+        <td><a href="/experimental">experimental</a></td>
+        <td>Playground for version control wizards</td>
+    </tr>
+    <tr>
+        <td><a href="/hgcustom">hgcustom</a></td>
+        <td>Mercurial customizations</td>
+    </tr>
+    <tr>
+        <td><a href="/integration">integration</a></td>
+        <td>Source code integration work</td>
+    </tr>
+    <tr>
+        <td><a href="/projects">projects</a></td>
+        <td>Miscellaneous project repositories</td>
+    </tr>
+    <tr>
+        <td><a href="/releases">releases</a></td>
+        <td>Release branches (use releases/l10n-branchname for l10n repos)</td>
+    </tr>
+    <tr>
+        <td><a href="/SeaMonkey">SeaMonkey</a></td>
+        <td>The SeaMonkey Project</td>
+    </tr>
+</table>
+<div class="page_footer">
+
+</div>
+</body>
+</html>

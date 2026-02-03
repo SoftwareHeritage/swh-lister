@@ -1,0 +1,51 @@
+{
+"entries": [{
+"name": "evolve",
+"url": "/evolve/",
+"description": "Mutable history for Mercurial",
+"contact": "unknown",
+"lastchange": [1769715764, 0],
+"isdirectory": false,
+"labels": []
+}, {
+"name": "hello",
+"url": "/hello/",
+"description": "unknown",
+"contact": "unknown",
+"lastchange": [1683731835, 0],
+"isdirectory": false,
+"labels": []
+}, {
+"name": "Mercurial",
+"url": "/hg/",
+"description": "Scalable distributed version control system",
+"contact": "Mercurial developers \u003cmercurial-devel@mercurial-scm.org\u003e",
+"lastchange": [1769708767, 0],
+"isdirectory": false,
+"labels": []
+}, {
+"name": "Mercurial (stable branch)",
+"url": "/hg-stable/",
+"description": "Scalable distributed version control system",
+"contact": "Mercurial developers \u003cmercurial-devel@mercurial-scm.org\u003e",
+"lastchange": [1769706999, 0],
+"isdirectory": false,
+"labels": []
+}, {
+"name": "hg-website",
+"url": "/hg-website/",
+"description": "The website of the Mercurial project",
+"contact": "Mercurial developers \u003cmercurial-devel@mercurial-scm.org\u003e",
+"lastchange": [1655247343, 0],
+"isdirectory": false,
+"labels": []
+}, {
+"name": "python-hglib",
+"url": "/python-hglib/",
+"description": "\"Python library to interface with Mercurial's command server\"",
+"contact": "Mercurial developers \u003cmercurial-devel@mercurial-scm.org\u003e",
+"lastchange": [1718669763, 0],
+"isdirectory": false,
+"labels": []
+}]
+}

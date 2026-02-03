@@ -1,0 +1,35 @@
+{
+"entries": [{
+"name": "pyams",
+"url": "/pyams/scaffolds/pyams/",
+"description": "unknown",
+"contact": "unknown",
+"lastchange": [1564134556, -3600],
+"isdirectory": false,
+"labels": []
+}, {
+"name": "pyams_notify",
+"url": "/pyams/scaffolds/pyams_notify/",
+"description": "unknown",
+"contact": "unknown",
+"lastchange": [1561028071, -3600],
+"isdirectory": false,
+"labels": []
+}, {
+"name": "pyams_package",
+"url": "/pyams/scaffolds/pyams_package/",
+"description": "unknown",
+"contact": "unknown",
+"lastchange": [1544002775, -3600],
+"isdirectory": false,
+"labels": []
+}, {
+"name": "zeo_server",
+"url": "/pyams/scaffolds/zeo_server/",
+"description": "unknown",
+"contact": "unknown",
+"lastchange": [1544010449, -3600],
+"isdirectory": false,
+"labels": []
+}]
+}

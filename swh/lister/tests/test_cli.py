@@ -51,6 +51,7 @@ lister_args = {
     "gitweb": {
         "url": "https://git.distorted.org.uk/~mdw/",
     },
+    "hgweb": {"instance": "repo.mercurial-scm.org"},
     "gitiles": {
         "instance": "gerrit.googlesource.com",
     },

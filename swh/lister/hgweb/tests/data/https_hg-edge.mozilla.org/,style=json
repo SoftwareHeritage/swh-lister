@@ -1,0 +1,45 @@
+{
+"entries": [{
+"name": "comm-central",
+"description": "Current Thunderbird, SeaMonkey and calendar development. Releases branch off of this repository.",
+"contact": "unknown",
+"lastchange": [1770275516, 0],
+"labels": []
+}, {
+"name": "comm-unified",
+"description": "History of all Thunderbird repos in chronological order",
+"contact": "unknown",
+"lastchange": [1770282447, 0],
+"labels": []
+}, {
+"name": "mozilla-build",
+"description": "MozillaBuild is a meta-installer that provides everything needed to build Mozilla on Windows, sans Visual C++.",
+"contact": "unknown",
+"lastchange": [1760651879, 0],
+"labels": []
+}, {
+"name": "mozilla-central",
+"description": "Current Firefox and Gecko development. Releases branch off of this repository. Also known as \"Trunk\"",
+"contact": "unknown",
+"lastchange": [1770282457, 0],
+"labels": []
+}, {
+"name": "mozilla-unified",
+"description": "History of all Firefox repos in chronological order",
+"contact": "unknown",
+"lastchange": [1770282429, 0],
+"labels": []
+}, {
+"name": "try",
+"description": "Push here to test changes before landing",
+"contact": "unknown",
+"lastchange": [1770283333, 0],
+"labels": []
+}, {
+"name": "try-comm-central",
+"description": "Push here to test Thunderbird changes before landing",
+"contact": "unknown",
+"lastchange": [1770266216, 0],
+"labels": []
+}]
+}
