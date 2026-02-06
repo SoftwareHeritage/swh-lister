@@ -54,6 +54,7 @@ testing = {file = ["requirements-test.txt"]}
 "lister.gogs" = "swh.lister.gogs:register"
 "lister.golang" = "swh.lister.golang:register"
 "lister.hackage" = "swh.lister.hackage:register"
+"lister.heptapod" = "swh.lister.heptapod:register"
 "lister.hex" = "swh.lister.hex:register"
 "lister.julia" = "swh.lister.julia:register"
 "lister.launchpad" = "swh.lister.launchpad:register"
