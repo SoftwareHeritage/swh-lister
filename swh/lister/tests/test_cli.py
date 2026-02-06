@@ -23,6 +23,9 @@ lister_args = {
     "forgejo": {
         "instance": "try.next.forgejo.org",
     },
+    "heptapod": {
+        "instance": "foss.heptapod.net",
+    },
     "tuleap": {
         "url": "https://tuleap.net",
     },
