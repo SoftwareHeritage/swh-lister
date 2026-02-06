@@ -1,5 +1,5 @@
 beautifulsoup4 >= 4.13.3
-breezy >= 3.3.12
+breezy >= 3.3.12, != 3.3.21
 dateparser
 dulwich
 iso8601
