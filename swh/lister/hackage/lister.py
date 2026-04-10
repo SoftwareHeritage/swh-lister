@@ -1,4 +1,4 @@
-# Copyright (C) 2022-2023  The Software Heritage developers
+# Copyright (C) 2022-2026  The Software Heritage developers
 # See the AUTHORS file at the top-level directory of this distribution
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
@@ -63,6 +63,12 @@ class HackageLister(Lister[HackageListerState, HackageListerPage]):
         # (50 as of august 2022)
         self.page_size: int = 50
         self.listing_date = datetime.now().astimezone(tz=timezone.utc)
+
+        # Ensure to prefix User-Agent by curl/ to bypass CSRF protection checks
+        # and avoid 403 HTTP responses
+        user_agent = self.session.headers.get("User-Agent", "")
+        assert type(user_agent) is str
+        self.session.headers.update({"User-Agent": f"curl/{user_agent}"})
 
     def state_from_dict(self, d: Dict[str, Any]) -> HackageListerState:
         last_listing_date = d.get("last_listing_date")
