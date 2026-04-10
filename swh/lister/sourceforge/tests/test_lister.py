@@ -1,4 +1,4 @@
-# Copyright (C) 2021-2024  The Software Heritage developers
+# Copyright (C) 2021-2026  The Software Heritage developers
 # See the AUTHORS file at the top-level directory of this distribution
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
@@ -445,7 +445,7 @@ def test_sourceforge_lister_http_error(
         lister.run()
 
     exp_retries = []
-    if status_code >= 500:
+    if status_code != 404:
         exp_retries = [1.0, 10.0, 100.0, 1000.0]
 
     assert_sleep_calls(mocker, mock_sleep, exp_retries)

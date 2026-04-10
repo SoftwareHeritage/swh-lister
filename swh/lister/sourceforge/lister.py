@@ -1,4 +1,4 @@
-# Copyright (C) 2021-2024  The Software Heritage developers
+# Copyright (C) 2021-2026  The Software Heritage developers
 # See the AUTHORS file at the top-level directory of this distribution
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
@@ -17,6 +17,7 @@ from lxml import etree
 import requests
 
 from swh.core.api.classes import stream_results
+from swh.core.retry import is_retryable_exception, retry_if_exception
 from swh.scheduler.interface import SchedulerInterface
 from swh.scheduler.model import ListedOrigin
 
@@ -50,6 +51,22 @@ SubSitemapNameT = str
 ProjectNameT = str
 # SourceForge only offers day-level granularity, which is good enough for our purposes
 LastModifiedT = datetime.date
+
+
+def retryable_exception(e: Exception) -> bool:
+    # sourceforge API returns a javascript challenge when rate limit is reached
+    # and HTTP response code is 403 in that case
+    is_403_error = (
+        isinstance(e, requests.HTTPError)
+        and e.response is not None
+        and e.response.status_code == 403
+    )
+
+    return is_retryable_exception(e) or is_403_error
+
+
+def retry_policy(retry_state) -> bool:
+    return retry_if_exception(retry_state, retryable_exception)
 
 
 @dataclass
@@ -160,6 +177,11 @@ class SourceForgeLister(Lister[SourceForgeListerState, SourceForgeListerPage]):
                 k: v.isoformat() for k, v in state.empty_projects.items()
             },
         }
+
+    def http_request(self, url: str, method="GET", **kwargs) -> requests.Response:
+        return super().http_request.retry_with(retry=retry_policy)(
+            self, url, method, **kwargs
+        )
 
     def projects_last_modified(self) -> ProjectsLastModifiedCache:
         if not self.incremental:
