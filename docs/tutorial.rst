@@ -356,8 +356,9 @@ There are also a few files that need to be modified outside of the lister direct
         ..."""
 
 * :file:`/swh/lister/tests/test_cli.py` to get a default set of parameters in scheduler-related tests.
-* :file:`/README.md` to reference the new lister.
 * :file:`/CONTRIBUTORS` to add your name.
+* `swh-web code <https://gitlab.softwareheritage.org/swh/devel/swh-web/-/blob/master/FORGES.rst>`_ for multi-instance forges.
+* `this documentation <https://docs.softwareheritage.org/user/listers.html>`_ to reference the new lister.
 
 Testing your lister
 -------------------

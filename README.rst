@@ -45,12 +45,8 @@ Local deployment
 Lister configuration
 ++++++++++++++++++++
 
-Each lister implemented so far by Software Heritage (``bitbucket``, ``cgit``,
-``cran``, ``debian``, ``gitea``, ``github``, ``gitlab``, ``gnu``, ``golang``,
-``launchpad``, ``npm``, ``packagist``, ``phabricator``, ``pypi``, ``tuleap``,
-``maven``, ``forgejo``) must be configured by following the instructions below
-(please note that you have to replace ``<lister_name>`` by one of the lister names
-introduced above).
+Each lister must be configured by following the instructions below
+(please note that you have to replace ``<lister_name>`` by the lister name).
 
 Preparation steps
 ~~~~~~~~~~~~~~~~~
