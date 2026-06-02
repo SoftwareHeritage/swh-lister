@@ -1,4 +1,4 @@
-# Copyright (C) 2024  The Software Heritage developers
+# Copyright (C) 2024-2026  The Software Heritage developers
 # See the AUTHORS file at the top-level directory of this distribution
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
@@ -56,13 +56,15 @@ class GogsLister(Lister[GogsListerState, GogsListerPage]):
     of the 'Link' header. The default value for page size ('limit') is 10 but the
     maximum allowed value is 50.
 
-    Api can usually be found at the location: https://<host>/api/v1/repos/search
+    The API can be found at the location: <base_url>/api/v1/repos/search
 
     """
 
     LISTER_NAME = "gogs"
 
     VISIT_TYPE = "git"
+
+    API_BASE = "api/v1"
 
     REPO_LIST_PATH = "repos/search"
 
@@ -78,6 +80,10 @@ class GogsLister(Lister[GogsListerState, GogsListerPage]):
         max_pages: Optional[int] = None,
         enable_origins: bool = True,
     ):
+        # FIXME: remove once the scheduler database is updated
+        if url is not None and url.endswith(f"/{self.API_BASE}"):
+            url = url.removesuffix(self.API_BASE)
+
         super().__init__(
             scheduler=scheduler,
             credentials=credentials,
@@ -87,6 +93,8 @@ class GogsLister(Lister[GogsListerState, GogsListerPage]):
             max_pages=max_pages,
             enable_origins=enable_origins,
         )
+
+        self.api_url = f"{self.url.removesuffix('/')}/{self.API_BASE}"
 
         self.query_params: Dict[str, Any] = {
             "limit": page_size,
@@ -111,11 +119,6 @@ class GogsLister(Lister[GogsListerState, GogsListerPage]):
             logger.warning(
                 "No authentication token set in configuration, using anonymous mode"
             )
-
-    def build_url(self, instance: str) -> str:
-        "Build gogs url out of the instance."
-        prefix_url = super().build_url(instance)
-        return f"{prefix_url}/api/v1/"
 
     def state_from_dict(self, d: Dict[str, Any]) -> GogsListerState:
         return GogsListerState(**d)
@@ -156,7 +159,7 @@ class GogsLister(Lister[GogsListerState, GogsListerPage]):
             page_id = _parse_page_id(self.state.last_seen_next_link)
 
         # base with trailing slash, path without leading slash for urljoin
-        next_link: Optional[str] = urljoin(self.url, self.REPO_LIST_PATH)
+        next_link: Optional[str] = urljoin(f"{self.api_url}/", self.REPO_LIST_PATH)
         assert next_link is not None
 
         body, links = self.page_request(

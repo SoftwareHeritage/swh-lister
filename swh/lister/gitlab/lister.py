@@ -1,4 +1,4 @@
-# Copyright (C) 2018-2023  The Software Heritage developers
+# Copyright (C) 2018-2026  The Software Heritage developers
 # See the AUTHORS file at the top-level directory of this distribution
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
@@ -84,16 +84,17 @@ class GitLabLister(Lister[GitLabListerState, PageResult]):
 
     Args:
         scheduler: a scheduler instance
-        url: the api v4 url of the gitlab instance to visit (e.g.
-          https://gitlab.com/api/v4/)
+        url: the URL of the GitLab instance to visit (e.g. https://gitlab.com/)
         instance: a specific instance name (e.g. gitlab, tor, git-kernel, ...),
-            url network location will be used if not provided
+            URL network location will be used if not provided
         incremental: defines if incremental listing is activated or not
         ignored_project_prefixes: List of prefixes of project paths to ignore
 
     """
 
     LISTER_NAME = "gitlab"
+
+    API_BASE = "api/v4"
 
     def __init__(
         self,
@@ -107,16 +108,22 @@ class GitLabLister(Lister[GitLabListerState, PageResult]):
         incremental: bool = False,
         ignored_project_prefixes: Optional[List[str]] = None,
     ):
+        # FIXME: remove once the scheduler database is updated
+        if url is not None and url.endswith(f"/{self.API_BASE}"):
+            url = url.removesuffix(self.API_BASE)
+
         super().__init__(
             scheduler=scheduler,
-            # if url is not provided, url will be built in the `build_url` method
-            url=url.rstrip("/") if url else None,
+            url=url,
             instance=instance,
             credentials=credentials,
             max_origins_per_page=max_origins_per_page,
             max_pages=max_pages,
             enable_origins=enable_origins,
         )
+
+        self.api_url = f"{self.url.removesuffix('/')}/{self.API_BASE}"
+
         self.incremental = incremental
         self.last_page: Optional[str] = None
         self.per_page = 100
@@ -134,11 +141,6 @@ class GitLabLister(Lister[GitLabListerState, PageResult]):
             api_token = cred["password"]
             if api_token:
                 self.session.headers["Authorization"] = f"Bearer {api_token}"
-
-    def build_url(self, instance: str) -> str:
-        """Build gitlab api url."""
-        prefix_url = super().build_url(instance)
-        return f"{prefix_url}/api/v4"
 
     def state_from_dict(self, d: Dict[str, Any]) -> GitLabListerState:
         return GitLabListerState(**d)
@@ -196,7 +198,7 @@ class GitLabLister(Lister[GitLabListerState, PageResult]):
         }
         if id_after is not None:
             parameters["id_after"] = str(id_after)
-        return f"{self.url}/projects?{urlencode(parameters)}"
+        return f"{self.api_url}/projects?{urlencode(parameters)}"
 
     def get_pages(self) -> Iterator[PageResult]:
         next_page: Optional[str]

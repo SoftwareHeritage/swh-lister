@@ -1,4 +1,4 @@
-# Copyright (C) 2017-2026 The Software Heritage developers
+# Copyright (C) 2017-2026  The Software Heritage developers
 # See the AUTHORS file at the top-level directory of this distribution
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
@@ -15,9 +15,10 @@ from swh.lister.forgejo.lister import ForgejoLister
 from swh.lister.gogs.lister import GogsListerPage
 from swh.scheduler.model import ListedOrigin
 
-TRYFORGEJO_URL = "https://try.next.forgejo.org/api/v1/"
-TRYFORGEJO_P1_URL = TRYFORGEJO_URL + "repos/search?limit=3&page=1"
-TRYFORGEJO_P2_URL = TRYFORGEJO_URL + "repos/search?limit=3&page=2"
+TRYFORGEJO_URL = "https://try.next.forgejo.org/"
+TRYFORGEJO_API_URL = TRYFORGEJO_URL + ForgejoLister.API_BASE
+TRYFORGEJO_P1_URL = TRYFORGEJO_API_URL + "/repos/search?limit=3&page=1"
+TRYFORGEJO_P2_URL = TRYFORGEJO_API_URL + "/repos/search?limit=3&page=2"
 
 
 @pytest.fixture
@@ -129,7 +130,7 @@ def test_forgejo_auth_instance(swh_scheduler, requests_mock, tryforgejo_p1):
     p1_text, p1_headers, _, _ = tryforgejo_p1
     p1_headers["Link"] = p1_headers["Link"].replace("next", "")  # only 1 page
 
-    base_url = TRYFORGEJO_URL + lister.REPO_LIST_PATH
+    base_url = TRYFORGEJO_API_URL + "/" + lister.REPO_LIST_PATH
     requests_mock.get(base_url, text=p1_text, headers=p1_headers)
 
     # now check the lister runs without error
@@ -149,7 +150,7 @@ def test_forgejo_list_http_error(
     p1_text, p1_headers, _, p1_origin_urls = tryforgejo_p1
     p3_text, p3_headers, _, p3_origin_urls = tryforgejo_p2
 
-    base_url = TRYFORGEJO_URL + lister.REPO_LIST_PATH
+    base_url = TRYFORGEJO_API_URL + "/" + lister.REPO_LIST_PATH
     requests_mock.get(
         base_url,
         [

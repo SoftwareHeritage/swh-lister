@@ -90,11 +90,11 @@ Examples:
 
    $ swh --log-level DEBUG lister -C ~/.config/swh/listers.yml run --lister cran
 
-   $ swh --log-level DEBUG lister -C ~/.config/swh/listers.yml run --lister gitea url=https://demo.gitea.com/api/v1/
+   $ swh --log-level DEBUG lister -C ~/.config/swh/listers.yml run --lister gitea url=https://demo.gitea.com/
 
    $ swh --log-level DEBUG lister -C ~/.config/swh/listers.yml run --lister forgejo url=https://try.next.forgejo.org/
 
-   $ swh --log-level DEBUG lister -C ~/.config/swh/listers.yml run --lister gitlab url=https://salsa.debian.org/api/v4/
+   $ swh --log-level DEBUG lister -C ~/.config/swh/listers.yml run --lister gitlab url=https://salsa.debian.org/
 
    $ swh --log-level DEBUG lister -C ~/.config/swh/listers.yml run --lister npm
 

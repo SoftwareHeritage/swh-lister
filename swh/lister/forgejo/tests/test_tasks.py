@@ -1,4 +1,4 @@
-# Copyright (C) 2020-2026 The Software Heritage developers
+# Copyright (C) 2020-2026  The Software Heritage developers
 # See the AUTHORS file at the top-level directory of this distribution
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
@@ -21,7 +21,7 @@ def test_full_listing(lister, swh_scheduler_celery_app, swh_scheduler_celery_wor
     lister.from_configfile.return_value = lister
     lister.run.return_value = ListerStats(pages=10, origins=500)
 
-    kwargs = dict(url="https://try.next.forgejo.org/api/v1")
+    kwargs = dict(url="https://try.next.forgejo.org/")
     res = swh_scheduler_celery_app.send_task(
         "swh.lister.forgejo.tasks.FullForgejoRelister",
         kwargs=kwargs,
@@ -42,7 +42,7 @@ def test_full_listing_params(
     lister.run.return_value = ListerStats(pages=10, origins=500)
 
     kwargs = dict(
-        url="https://try.next.forgejo.org/api/v1",
+        url="https://try.next.forgejo.org/",
         instance="try.next.forgejo.org",
         api_token="test",
         page_size=50,

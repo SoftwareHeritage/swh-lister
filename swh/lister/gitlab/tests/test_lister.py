@@ -1,4 +1,4 @@
-# Copyright (C) 2017-2024  The Software Heritage developers
+# Copyright (C) 2017-2026  The Software Heritage developers
 # See the AUTHORS file at the top-level directory of this distribution
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
@@ -20,10 +20,6 @@ from swh.lister.tests.utils import assert_sleep_calls
 logger = logging.getLogger(__name__)
 
 
-def api_url(instance: str) -> str:
-    return f"https://{instance}/api/v4"
-
-
 def _match_request(request):
     return (
         request.headers.get("User-Agent")
@@ -34,7 +30,7 @@ def _match_request(request):
 def test_lister_gitlab_fail_to_instantiate(swh_scheduler):
     """Build a lister without its url nor its instance should raise"""
     # while instantiating a gitlab lister is fine with the url or the instance...
-    assert GitLabLister(swh_scheduler, url="https://gitlab.com/api/v4") is not None
+    assert GitLabLister(swh_scheduler, url="https://gitlab.com/") is not None
     assert GitLabLister(swh_scheduler, instance="gitlab.fr") is not None
 
     # ... It will raise without any of those
@@ -47,7 +43,7 @@ def test_lister_gitlab(datadir, swh_scheduler, requests_mock):
     instance = "gitlab.com"
     lister = GitLabLister(swh_scheduler, instance=instance)
 
-    assert lister.url == api_url(instance)
+    assert lister.url == f"https://{instance}"
 
     response = gitlab_page_response(datadir, instance, 1)
 
@@ -68,7 +64,7 @@ def test_lister_gitlab(datadir, swh_scheduler, requests_mock):
 
     for listed_origin in scheduler_origins:
         assert listed_origin.visit_type == "git"
-        assert listed_origin.url.startswith(f"https://{instance}")
+        assert listed_origin.url.startswith(f"https://{instance}/")
         assert listed_origin.last_update is not None
 
 
@@ -81,7 +77,8 @@ def gitlab_page_response(datadir, instance: str, id_after: int) -> List[Dict]:
 def test_lister_gitlab_with_pages(swh_scheduler, requests_mock, datadir):
     """Gitlab lister supports pagination"""
     instance = "gite.lirmm.fr"
-    lister = GitLabLister(swh_scheduler, url=api_url(instance))
+    url = f"https://{instance}/"
+    lister = GitLabLister(swh_scheduler, url=url)
 
     response1 = gitlab_page_response(datadir, instance, 1)
     response2 = gitlab_page_response(datadir, instance, 2)
@@ -110,14 +107,14 @@ def test_lister_gitlab_with_pages(swh_scheduler, requests_mock, datadir):
 
     for listed_origin in scheduler_origins:
         assert listed_origin.visit_type == "git"
-        assert listed_origin.url.startswith(f"https://{instance}")
+        assert listed_origin.url.startswith(f"https://{instance}/")
         assert listed_origin.last_update is not None
 
 
 def test_lister_gitlab_incremental(swh_scheduler, requests_mock, datadir):
     """Gitlab lister supports incremental visits"""
     instance = "gite.lirmm.fr"
-    url = api_url(instance)
+    url = f"https://{instance}/"
     lister = GitLabLister(swh_scheduler, url=url, instance=instance, incremental=True)
 
     url_page1 = lister.page_url()
@@ -174,7 +171,7 @@ def test_lister_gitlab_incremental(swh_scheduler, requests_mock, datadir):
 
     for listed_origin in scheduler_origins:
         assert listed_origin.visit_type == "git"
-        assert listed_origin.url.startswith(f"https://{instance}")
+        assert listed_origin.url.startswith(f"https://{instance}/")
         assert listed_origin.last_update is not None
 
 
@@ -183,7 +180,7 @@ def test_lister_gitlab_rate_limit(
 ):
     """Gitlab lister supports rate-limit"""
     instance = "gite.lirmm.fr"
-    url = api_url(instance)
+    url = f"https://{instance}/"
     lister = GitLabLister(swh_scheduler, url=url, instance=instance)
 
     url_page1 = lister.page_url()
@@ -222,7 +219,7 @@ def test_lister_gitlab_http_errors(
 ):
     """Gitlab lister should retry requests when encountering HTTP 50x errors"""
     instance = "gite.lirmm.fr"
-    url = api_url(instance)
+    url = f"https://{instance}/"
     lister = GitLabLister(swh_scheduler, url=url, instance=instance)
 
     url_page1 = lister.page_url()
@@ -257,7 +254,7 @@ def test_lister_gitlab_http_errors(
 def test_lister_gitlab_http_error_500(swh_scheduler, requests_mock, datadir):
     """Gitlab lister should skip buggy URL and move to next page."""
     instance = "gite.lirmm.fr"
-    url = api_url(instance)
+    url = f"https://{instance}/"
     lister = GitLabLister(swh_scheduler, url=url, instance=instance)
 
     url_page1 = lister.page_url()
@@ -297,7 +294,7 @@ def test_lister_gitlab_credentials(swh_scheduler):
     credentials = {
         "gitlab": {instance: [{"username": "user", "password": "api-token"}]}
     }
-    url = api_url(instance)
+    url = "https://gitlab.com/"
     lister = GitLabLister(
         scheduler=swh_scheduler, url=url, instance=instance, credentials=credentials
     )
@@ -307,17 +304,16 @@ def test_lister_gitlab_credentials(swh_scheduler):
 @pytest.mark.parametrize(
     "url",
     [
-        api_url("gitlab").rstrip("/"),
-        api_url("gitlab"),
+        "https://gitlab.com",
+        "https://gitlab.com/",
     ],
 )
 def test_lister_gitlab_url_computation(url, swh_scheduler):
     lister = GitLabLister(scheduler=swh_scheduler, url=url)
-    assert not lister.url.endswith("/")
 
     page_url = lister.page_url()
     # ensure the generated url contains the separated /
-    assert page_url.startswith(f"{lister.url}/projects")
+    assert page_url.startswith(f"{lister.api_url}/projects?")
 
 
 @pytest.mark.parametrize(
@@ -338,7 +334,7 @@ def test_lister_gitlab_ignored_project_prefixes(datadir, swh_scheduler, requests
     instance = "gitlab.com"
     lister = GitLabLister(
         swh_scheduler,
-        url=api_url(instance),
+        url=f"https://{instance}/",
         instance=instance,
         ignored_project_prefixes=["jonan/"],
     )
@@ -363,6 +359,6 @@ def test_lister_gitlab_ignored_project_prefixes(datadir, swh_scheduler, requests
 
     for listed_origin in scheduler_origins:
         assert listed_origin.visit_type == "git"
-        assert listed_origin.url.startswith(f"https://{instance}")
+        assert listed_origin.url.startswith(f"https://{instance}/")
         assert not listed_origin.url.startswith(f"https://{instance}/jonan/")
         assert listed_origin.last_update is not None

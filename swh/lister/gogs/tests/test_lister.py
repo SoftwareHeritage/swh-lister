@@ -1,4 +1,4 @@
-# Copyright (C) 2022-2024  The Software Heritage developers
+# Copyright (C) 2022-2026  The Software Heritage developers
 # See the AUTHORS file at the top-level directory of this distribution
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
@@ -15,11 +15,13 @@ from requests import HTTPError
 from swh.lister.gogs.lister import GogsLister, GogsListerPage, _parse_page_id
 from swh.scheduler.model import ListedOrigin
 
-TRY_GOGS_URL = "https://try.gogs.io/api/v1/"
+TRY_GOGS_INSTANCE_URL = "https://try.gogs.io"
+TRY_GOGS_URL = TRY_GOGS_INSTANCE_URL + "/"
+TRY_GOGS_API_URL = TRY_GOGS_URL + GogsLister.API_BASE
 
 
 def try_gogs_page(n: int):
-    return TRY_GOGS_URL + GogsLister.REPO_LIST_PATH + f"?q=_&page={n}&limit=3"
+    return f"{TRY_GOGS_API_URL}/{GogsLister.REPO_LIST_PATH}?q=_&page={n}&limit=3"
 
 
 P1 = try_gogs_page(1)
@@ -103,7 +105,7 @@ def check_listed_origins(lister_urls: List[str], scheduler_origins: List[ListedO
 def test_lister_gogs_fail_to_instantiate(swh_scheduler):
     """Build a lister without its url nor its instance should raise"""
     # while instantiating a gogs lister is fine with the url or the instance...
-    assert GogsLister(swh_scheduler, url="https://try.gogs.io/api/v1") is not None
+    assert GogsLister(swh_scheduler, url=TRY_GOGS_URL) is not None
     assert GogsLister(swh_scheduler, instance="try.gogs.io") is not None
 
     # ... It will raise without any of those
@@ -116,7 +118,7 @@ def test_gogs_full_listing(
 ):
     kwargs = dict(instance="try.gogs.io", page_size=3, api_token="secret")
     lister = GogsLister(scheduler=swh_scheduler, **kwargs)
-    assert lister.url == TRY_GOGS_URL
+    assert lister.url == TRY_GOGS_INSTANCE_URL
 
     lister.get_origins_from_page: Mock = mocker.spy(lister, "get_origins_from_page")
 
@@ -206,7 +208,7 @@ def test_gogs_list_http_error(
     p1_text, p1_headers, _, p1_origin_urls = trygogs_p1
     p3_text, p3_headers, _, p3_origin_urls = trygogs_p3_last
 
-    base_url = TRY_GOGS_URL + lister.REPO_LIST_PATH
+    base_url = TRY_GOGS_API_URL + "/" + lister.REPO_LIST_PATH
     requests_mock.get(
         base_url,
         [
@@ -296,7 +298,7 @@ def test_gogs_incremental_lister(
     query_params["page"] = page_id
 
     lister.session.request.assert_called_once_with(
-        "GET", TRY_GOGS_URL + lister.REPO_LIST_PATH, params=query_params
+        "GET", TRY_GOGS_API_URL + "/" + lister.REPO_LIST_PATH, params=query_params
     )
 
     # All the 9 origins (3 pages) should be passed on to the scheduler:

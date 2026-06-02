@@ -1,4 +1,4 @@
-# Copyright (C) 2021-2022  The Software Heritage developers
+# Copyright (C) 2021-2026  The Software Heritage developers
 # See the AUTHORS file at the top-level directory of this distribution
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
@@ -37,7 +37,8 @@ class NewForgeLister(Lister[NewForgeListerState, NewForgeListerPage]):
     VISIT_TYPE = ""
 
     # Instance URLs include the hostname and the common path prefix of processed URLs
-    EXAMPLE_BASE_URL = "https://netloc/api/v1/"
+    EXAMPLE_BASE_URL = "https://netloc/basepath/"
+    EXAMPLE_API_BASE = "api/v1"
     # Path of a specific resource to process, to join the base URL with
     EXAMPLE_PATH = "origins/list"
 

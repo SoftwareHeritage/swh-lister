@@ -1,4 +1,4 @@
-# Copyright (C) 2020-2025  The Software Heritage developers
+# Copyright (C) 2020-2026  The Software Heritage developers
 # See the AUTHORS file at the top-level directory of this distribution
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
@@ -174,17 +174,8 @@ class Lister(Generic[StateType, PageType]):
 
     def build_url(self, instance: str) -> str:
         """Optionally build the forge url to list. When the url is not provided in the
-        constructor, this method is called. This should compute the actual url to use to
-        list the forge.
-
-        This is particularly useful for forges which uses an api. This simplifies the
-        cli calls to use. They should then only provide the instance (its domain).
-
-        For example:
-        - gitlab: https://{instance}/api/v4
-        - gitea: https://{instance}/api/v1
-        - ...
-
+        constructor, this method is called. This should compute the base URL used when
+        constructing URLs related to the forge, including any API URLs needed.
         """
         scheme = urlparse(instance).scheme
         if scheme:
