@@ -145,7 +145,7 @@ class HgwebLister(StatelessLister[Repositories]):
                         age = tr.select_one('td[class="age"]')
                         # remove Mozilla timestamp prefix
                         # https://hg-edge.mozilla.org/hgcustom/version-control-tools/file/tip/hgtemplates/gitweb_mozilla/map#l336
-                        age_text = age.text.strip().removeprefix("at ") if age else None
+                        age_text = age.text.strip().removeprefix("at ") if age else ""
                         try:
                             # Default templates use RFC 822 dates
                             # https://foss.heptapod.net/mercurial/mercurial-devel/-/blob/branch/default/mercurial/templates/monoblue/map#L288
