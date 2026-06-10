@@ -119,7 +119,7 @@ class HackageLister(Lister[HackageListerState, HackageListerPage]):
 
         if data.get("pageContents"):
             nb_entries: int = data["numberOfResults"]
-            (nb_pages, remainder) = divmod(nb_entries, self.page_size)
+            nb_pages, remainder = divmod(nb_entries, self.page_size)
             if remainder:
                 nb_pages += 1
             # First page
