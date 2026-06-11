@@ -17,7 +17,6 @@ def test_grokmirror_lister_task(
     kwargs = dict(
         url="https://git.kernel.org/",
         instance="git.kernel.org",
-        base_git_url=None,
         max_pages=1,
     )
 

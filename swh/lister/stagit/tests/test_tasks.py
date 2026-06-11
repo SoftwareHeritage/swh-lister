@@ -17,7 +17,6 @@ def test_stagit_lister_task(
     kwargs = dict(
         url="https://codemadness.org/git/",
         instance="codemadness.org/git/",
-        base_git_url=None,
         max_pages=1,
     )
 

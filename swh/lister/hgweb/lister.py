@@ -35,7 +35,6 @@ class HgwebLister(StatelessLister[Repositories]):
         scheduler: SchedulerInterface,
         url: Optional[str] = None,
         instance: Optional[str] = None,
-        base_git_url: Optional[str] = None,
         credentials: Optional[CredentialsType] = None,
         max_origins_per_page: Optional[int] = None,
         max_pages: Optional[int] = None,
