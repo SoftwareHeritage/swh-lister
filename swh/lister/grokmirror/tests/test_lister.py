@@ -41,7 +41,7 @@ def test_lister_grokmirror_run(requests_mock_datadir, swh_scheduler):
 
     stats = lister.run()
 
-    expected_nb_origins = 6
+    expected_nb_origins = 7
     assert stats == ListerStats(pages=1, origins=expected_nb_origins)
 
     # test page parsing
@@ -52,7 +52,6 @@ def test_lister_grokmirror_run(requests_mock_datadir, swh_scheduler):
     for listed_origin in scheduler_origins:
         assert listed_origin.visit_type == "git"
         assert listed_origin.url.startswith(INSTANCE_URL)
-        assert listed_origin.last_update is not None
 
     # test user agent content
     for request in requests_mock_datadir.request_history:

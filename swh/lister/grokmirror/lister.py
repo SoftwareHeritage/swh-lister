@@ -134,8 +134,11 @@ class GrokmirrorLister(Lister[GrokmirrorListerState, Repositories]):
                 )
 
             if reference := meta.get("reference"):
+
+                reference_url = urljoin(self.url, reference)
+
                 kwargs["is_fork"] = bool(reference)
-                kwargs["forked_from_url"] = urljoin(self.url, reference)
+                kwargs["forked_from_url"] = reference_url
 
             yield ListedOrigin(
                 lister_id=self.lister_obj.id,
@@ -143,6 +146,14 @@ class GrokmirrorLister(Lister[GrokmirrorListerState, Repositories]):
                 visit_type="git",
                 **kwargs,
             )
+
+            if reference and reference not in repositories:
+
+                yield ListedOrigin(
+                    lister_id=self.lister_obj.id,
+                    url=reference_url,
+                    visit_type="git",
+                )
 
             for symlink in meta.get("symlinks", []):
 
