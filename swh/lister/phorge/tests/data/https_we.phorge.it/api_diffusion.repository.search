@@ -1,0 +1,3364 @@
+{
+  "result": {
+    "data": [
+      {
+        "id": 1,
+        "type": "REPO",
+        "phid": "PHID-REPO-u65xr6am6s7ofdkhorfk",
+        "fields": {
+          "name": "Phorge",
+          "vcs": "git",
+          "callsign": "P",
+          "shortName": "phorge",
+          "status": "active",
+          "isHosted": true,
+          "isImporting": false,
+          "almanacServicePHID": null,
+          "refRules": {
+            "fetchRules": [],
+            "trackRules": [
+              "master",
+              "stable"
+            ],
+            "permanentRefRules": [
+              "master",
+              "stable"
+            ]
+          },
+          "defaultBranch": "master",
+          "description": {
+            "raw": ""
+          },
+          "spacePHID": null,
+          "dateCreated": 1623278861,
+          "dateModified": 1719488857,
+          "policy": {
+            "view": "public",
+            "edit": "admin",
+            "diffusion.push": "PHID-PROJ-pstljzqpnkljguwskn2c"
+          }
+        },
+        "attachments": {
+          "uris": {
+            "uris": [
+              {
+                "id": "31",
+                "type": "RURI",
+                "phid": "PHID-RURI-ivol5ahusrwjxkj4wwoy",
+                "fields": {
+                  "repositoryPHID": "PHID-REPO-u65xr6am6s7ofdkhorfk",
+                  "uri": {
+                    "raw": "https://github.com/phorgeit/phorge.git",
+                    "display": "https://github.com/phorgeit/phorge.git",
+                    "effective": "https://github.com/phorgeit/phorge.git",
+                    "normalized": "github.com/phorgeit/phorge"
+                  },
+                  "io": {
+                    "raw": "mirror",
+                    "default": "none",
+                    "effective": "mirror"
+                  },
+                  "display": {
+                    "raw": "always",
+                    "default": "never",
+                    "effective": "always"
+                  },
+                  "credentialPHID": "PHID-CDTL-5rgldmcvrxsou2iggh4p",
+                  "disabled": false,
+                  "builtin": {
+                    "protocol": null,
+                    "identifier": null
+                  },
+                  "dateCreated": "1662492618",
+                  "dateModified": "1692597812"
+                }
+              },
+              {
+                "id": "10",
+                "type": "RURI",
+                "phid": "PHID-RURI-k37tbpwixd55smwu6r7u",
+                "fields": {
+                  "repositoryPHID": "PHID-REPO-u65xr6am6s7ofdkhorfk",
+                  "uri": {
+                    "raw": "https://github.com/phacility/phabricator.git",
+                    "display": "https://github.com/phacility/phabricator.git",
+                    "effective": "https://github.com/phacility/phabricator.git",
+                    "normalized": "github.com/phacility/phabricator"
+                  },
+                  "io": {
+                    "raw": "none",
+                    "default": "none",
+                    "effective": "none"
+                  },
+                  "display": {
+                    "raw": "default",
+                    "default": "never",
+                    "effective": "never"
+                  },
+                  "credentialPHID": null,
+                  "disabled": true,
+                  "builtin": {
+                    "protocol": null,
+                    "identifier": null
+                  },
+                  "dateCreated": "1623279224",
+                  "dateModified": "1623283544"
+                }
+              },
+              {
+                "id": "6",
+                "type": "RURI",
+                "phid": "PHID-RURI-oakglcbbzqs3ewkwqax6",
+                "fields": {
+                  "repositoryPHID": "PHID-REPO-u65xr6am6s7ofdkhorfk",
+                  "uri": {
+                    "raw": "https://id",
+                    "display": "https://we.phorge.it/diffusion/1/phorge.git",
+                    "effective": "https://we.phorge.it/diffusion/1/phorge.git",
+                    "normalized": "<base-uri>/diffusion/1"
+                  },
+                  "io": {
+                    "raw": "default",
+                    "default": "readwrite",
+                    "effective": "readwrite"
+                  },
+                  "display": {
+                    "raw": "default",
+                    "default": "never",
+                    "effective": "never"
+                  },
+                  "credentialPHID": null,
+                  "disabled": false,
+                  "builtin": {
+                    "protocol": "https",
+                    "identifier": "id"
+                  },
+                  "dateCreated": "1623278861",
+                  "dateModified": "1623278861"
+                }
+              },
+              {
+                "id": "5",
+                "type": "RURI",
+                "phid": "PHID-RURI-wycgvnsj7pe5d6yakwil",
+                "fields": {
+                  "repositoryPHID": "PHID-REPO-u65xr6am6s7ofdkhorfk",
+                  "uri": {
+                    "raw": "https://shortname",
+                    "display": "https://we.phorge.it/source/phorge.git",
+                    "effective": "https://we.phorge.it/source/phorge.git",
+                    "normalized": "<base-uri>/source/phorge"
+                  },
+                  "io": {
+                    "raw": "default",
+                    "default": "readwrite",
+                    "effective": "readwrite"
+                  },
+                  "display": {
+                    "raw": "default",
+                    "default": "always",
+                    "effective": "always"
+                  },
+                  "credentialPHID": null,
+                  "disabled": false,
+                  "builtin": {
+                    "protocol": "https",
+                    "identifier": "shortname"
+                  },
+                  "dateCreated": "1623278861",
+                  "dateModified": "1623278861"
+                }
+              },
+              {
+                "id": "4",
+                "type": "RURI",
+                "phid": "PHID-RURI-o7ftnzr5y25cfuotb6jd",
+                "fields": {
+                  "repositoryPHID": "PHID-REPO-u65xr6am6s7ofdkhorfk",
+                  "uri": {
+                    "raw": "https://callsign",
+                    "display": "https://we.phorge.it/diffusion/P/phorge.git",
+                    "effective": "https://we.phorge.it/diffusion/P/phorge.git",
+                    "normalized": "<base-uri>/diffusion/P"
+                  },
+                  "io": {
+                    "raw": "default",
+                    "default": "readwrite",
+                    "effective": "readwrite"
+                  },
+                  "display": {
+                    "raw": "default",
+                    "default": "never",
+                    "effective": "never"
+                  },
+                  "credentialPHID": null,
+                  "disabled": false,
+                  "builtin": {
+                    "protocol": "https",
+                    "identifier": "callsign"
+                  },
+                  "dateCreated": "1623278861",
+                  "dateModified": "1623278861"
+                }
+              },
+              {
+                "id": "3",
+                "type": "RURI",
+                "phid": "PHID-RURI-rb2pxmlirodv3shsv3pm",
+                "fields": {
+                  "repositoryPHID": "PHID-REPO-u65xr6am6s7ofdkhorfk",
+                  "uri": {
+                    "raw": "ssh://id",
+                    "display": "ssh://git@we.phorge.it/diffusion/1/phorge.git",
+                    "effective": "ssh://git@we.phorge.it/diffusion/1/phorge.git",
+                    "normalized": "<base-uri>/diffusion/1"
+                  },
+                  "io": {
+                    "raw": "default",
+                    "default": "readwrite",
+                    "effective": "readwrite"
+                  },
+                  "display": {
+                    "raw": "default",
+                    "default": "never",
+                    "effective": "never"
+                  },
+                  "credentialPHID": null,
+                  "disabled": false,
+                  "builtin": {
+                    "protocol": "ssh",
+                    "identifier": "id"
+                  },
+                  "dateCreated": "1623278861",
+                  "dateModified": "1623278861"
+                }
+              },
+              {
+                "id": "2",
+                "type": "RURI",
+                "phid": "PHID-RURI-ln67byfavma5bp353dhs",
+                "fields": {
+                  "repositoryPHID": "PHID-REPO-u65xr6am6s7ofdkhorfk",
+                  "uri": {
+                    "raw": "ssh://shortname",
+                    "display": "ssh://git@we.phorge.it/source/phorge.git",
+                    "effective": "ssh://git@we.phorge.it/source/phorge.git",
+                    "normalized": "<base-uri>/source/phorge"
+                  },
+                  "io": {
+                    "raw": "default",
+                    "default": "readwrite",
+                    "effective": "readwrite"
+                  },
+                  "display": {
+                    "raw": "default",
+                    "default": "always",
+                    "effective": "always"
+                  },
+                  "credentialPHID": null,
+                  "disabled": false,
+                  "builtin": {
+                    "protocol": "ssh",
+                    "identifier": "shortname"
+                  },
+                  "dateCreated": "1623278861",
+                  "dateModified": "1623278861"
+                }
+              },
+              {
+                "id": "1",
+                "type": "RURI",
+                "phid": "PHID-RURI-nlhtc4j3zmuu55j6dfd2",
+                "fields": {
+                  "repositoryPHID": "PHID-REPO-u65xr6am6s7ofdkhorfk",
+                  "uri": {
+                    "raw": "ssh://callsign",
+                    "display": "ssh://git@we.phorge.it/diffusion/P/phorge.git",
+                    "effective": "ssh://git@we.phorge.it/diffusion/P/phorge.git",
+                    "normalized": "<base-uri>/diffusion/P"
+                  },
+                  "io": {
+                    "raw": "default",
+                    "default": "readwrite",
+                    "effective": "readwrite"
+                  },
+                  "display": {
+                    "raw": "default",
+                    "default": "never",
+                    "effective": "never"
+                  },
+                  "credentialPHID": null,
+                  "disabled": false,
+                  "builtin": {
+                    "protocol": "ssh",
+                    "identifier": "callsign"
+                  },
+                  "dateCreated": "1623278861",
+                  "dateModified": "1623278861"
+                }
+              }
+            ]
+          }
+        }
+      },
+      {
+        "id": 2,
+        "type": "REPO",
+        "phid": "PHID-REPO-wqq2xnvfxdwfaum32kbk",
+        "fields": {
+          "name": "Arcanist",
+          "vcs": "git",
+          "callsign": "ARC",
+          "shortName": "arcanist",
+          "status": "active",
+          "isHosted": true,
+          "isImporting": false,
+          "almanacServicePHID": null,
+          "refRules": {
+            "fetchRules": [],
+            "trackRules": [],
+            "permanentRefRules": []
+          },
+          "defaultBranch": "master",
+          "description": {
+            "raw": ""
+          },
+          "spacePHID": "PHID-SPCE-gk6zkj2aq67qferqtnow",
+          "dateCreated": 1623373099,
+          "dateModified": 1695215521,
+          "policy": {
+            "view": "public",
+            "edit": "admin",
+            "diffusion.push": "PHID-PROJ-pstljzqpnkljguwskn2c"
+          }
+        },
+        "attachments": {
+          "uris": {
+            "uris": [
+              {
+                "id": "30",
+                "type": "RURI",
+                "phid": "PHID-RURI-tmbjxkcbysqtpjv33gp2",
+                "fields": {
+                  "repositoryPHID": "PHID-REPO-wqq2xnvfxdwfaum32kbk",
+                  "uri": {
+                    "raw": "https://github.com/phorgeit/arcanist.git",
+                    "display": "https://github.com/phorgeit/arcanist.git",
+                    "effective": "https://github.com/phorgeit/arcanist.git",
+                    "normalized": "github.com/phorgeit/arcanist"
+                  },
+                  "io": {
+                    "raw": "mirror",
+                    "default": "none",
+                    "effective": "mirror"
+                  },
+                  "display": {
+                    "raw": "always",
+                    "default": "never",
+                    "effective": "always"
+                  },
+                  "credentialPHID": "PHID-CDTL-5rgldmcvrxsou2iggh4p",
+                  "disabled": false,
+                  "builtin": {
+                    "protocol": null,
+                    "identifier": null
+                  },
+                  "dateCreated": "1662492386",
+                  "dateModified": "1695215521"
+                }
+              },
+              {
+                "id": "20",
+                "type": "RURI",
+                "phid": "PHID-RURI-gpcyvk5yfua2tq63ek2l",
+                "fields": {
+                  "repositoryPHID": "PHID-REPO-wqq2xnvfxdwfaum32kbk",
+                  "uri": {
+                    "raw": "https://github.com/phacility/arcanist.git",
+                    "display": "https://github.com/phacility/arcanist.git",
+                    "effective": "https://github.com/phacility/arcanist.git",
+                    "normalized": "github.com/phacility/arcanist"
+                  },
+                  "io": {
+                    "raw": "none",
+                    "default": "none",
+                    "effective": "none"
+                  },
+                  "display": {
+                    "raw": "default",
+                    "default": "never",
+                    "effective": "never"
+                  },
+                  "credentialPHID": null,
+                  "disabled": true,
+                  "builtin": {
+                    "protocol": null,
+                    "identifier": null
+                  },
+                  "dateCreated": "1623373344",
+                  "dateModified": "1623374292"
+                }
+              },
+              {
+                "id": "16",
+                "type": "RURI",
+                "phid": "PHID-RURI-xw53en2pamaq5g2o7wpg",
+                "fields": {
+                  "repositoryPHID": "PHID-REPO-wqq2xnvfxdwfaum32kbk",
+                  "uri": {
+                    "raw": "https://id",
+                    "display": "https://we.phorge.it/diffusion/2/arcanist.git",
+                    "effective": "https://we.phorge.it/diffusion/2/arcanist.git",
+                    "normalized": "<base-uri>/diffusion/2"
+                  },
+                  "io": {
+                    "raw": "default",
+                    "default": "readwrite",
+                    "effective": "readwrite"
+                  },
+                  "display": {
+                    "raw": "default",
+                    "default": "never",
+                    "effective": "never"
+                  },
+                  "credentialPHID": null,
+                  "disabled": false,
+                  "builtin": {
+                    "protocol": "https",
+                    "identifier": "id"
+                  },
+                  "dateCreated": "1623373099",
+                  "dateModified": "1623373099"
+                }
+              },
+              {
+                "id": "15",
+                "type": "RURI",
+                "phid": "PHID-RURI-lts3uqh4aifczg26mlys",
+                "fields": {
+                  "repositoryPHID": "PHID-REPO-wqq2xnvfxdwfaum32kbk",
+                  "uri": {
+                    "raw": "https://shortname",
+                    "display": "https://we.phorge.it/source/arcanist.git",
+                    "effective": "https://we.phorge.it/source/arcanist.git",
+                    "normalized": "<base-uri>/source/arcanist"
+                  },
+                  "io": {
+                    "raw": "default",
+                    "default": "readwrite",
+                    "effective": "readwrite"
+                  },
+                  "display": {
+                    "raw": "default",
+                    "default": "always",
+                    "effective": "always"
+                  },
+                  "credentialPHID": null,
+                  "disabled": false,
+                  "builtin": {
+                    "protocol": "https",
+                    "identifier": "shortname"
+                  },
+                  "dateCreated": "1623373099",
+                  "dateModified": "1623373099"
+                }
+              },
+              {
+                "id": "14",
+                "type": "RURI",
+                "phid": "PHID-RURI-xqpk2mpawimpconwmva4",
+                "fields": {
+                  "repositoryPHID": "PHID-REPO-wqq2xnvfxdwfaum32kbk",
+                  "uri": {
+                    "raw": "https://callsign",
+                    "display": "https://we.phorge.it/diffusion/ARC/arcanist.git",
+                    "effective": "https://we.phorge.it/diffusion/ARC/arcanist.git",
+                    "normalized": "<base-uri>/diffusion/ARC"
+                  },
+                  "io": {
+                    "raw": "default",
+                    "default": "readwrite",
+                    "effective": "readwrite"
+                  },
+                  "display": {
+                    "raw": "default",
+                    "default": "never",
+                    "effective": "never"
+                  },
+                  "credentialPHID": null,
+                  "disabled": false,
+                  "builtin": {
+                    "protocol": "https",
+                    "identifier": "callsign"
+                  },
+                  "dateCreated": "1623373099",
+                  "dateModified": "1623373099"
+                }
+              },
+              {
+                "id": "13",
+                "type": "RURI",
+                "phid": "PHID-RURI-yu6fkoqsufjkm2hohbct",
+                "fields": {
+                  "repositoryPHID": "PHID-REPO-wqq2xnvfxdwfaum32kbk",
+                  "uri": {
+                    "raw": "ssh://secure.phorge.it:2222/diffusion/2/arcanist.git",
+                    "display": "ssh://git@we.phorge.it/diffusion/2/arcanist.git",
+                    "effective": "ssh://git@we.phorge.it/diffusion/2/arcanist.git",
+                    "normalized": "<base-uri>/diffusion/2"
+                  },
+                  "io": {
+                    "raw": "none",
+                    "default": "readwrite",
+                    "effective": "none"
+                  },
+                  "display": {
+                    "raw": "default",
+                    "default": "never",
+                    "effective": "never"
+                  },
+                  "credentialPHID": null,
+                  "disabled": false,
+                  "builtin": {
+                    "protocol": "ssh",
+                    "identifier": "id"
+                  },
+                  "dateCreated": "1623373099",
+                  "dateModified": "1623373329"
+                }
+              },
+              {
+                "id": "12",
+                "type": "RURI",
+                "phid": "PHID-RURI-aoxthbv4qy7tmz4oqsvi",
+                "fields": {
+                  "repositoryPHID": "PHID-REPO-wqq2xnvfxdwfaum32kbk",
+                  "uri": {
+                    "raw": "ssh://shortname",
+                    "display": "ssh://git@we.phorge.it/source/arcanist.git",
+                    "effective": "ssh://git@we.phorge.it/source/arcanist.git",
+                    "normalized": "<base-uri>/source/arcanist"
+                  },
+                  "io": {
+                    "raw": "default",
+                    "default": "readwrite",
+                    "effective": "readwrite"
+                  },
+                  "display": {
+                    "raw": "default",
+                    "default": "always",
+                    "effective": "always"
+                  },
+                  "credentialPHID": null,
+                  "disabled": false,
+                  "builtin": {
+                    "protocol": "ssh",
+                    "identifier": "shortname"
+                  },
+                  "dateCreated": "1623373099",
+                  "dateModified": "1623373099"
+                }
+              },
+              {
+                "id": "11",
+                "type": "RURI",
+                "phid": "PHID-RURI-2f3fwa74hbgrwx6i7qml",
+                "fields": {
+                  "repositoryPHID": "PHID-REPO-wqq2xnvfxdwfaum32kbk",
+                  "uri": {
+                    "raw": "ssh://secure.phorge.it:2222/diffusion/ARC/arcanist.git",
+                    "display": "ssh://git@we.phorge.it/diffusion/ARC/arcanist.git",
+                    "effective": "ssh://git@we.phorge.it/diffusion/ARC/arcanist.git",
+                    "normalized": "<base-uri>/diffusion/ARC"
+                  },
+                  "io": {
+                    "raw": "default",
+                    "default": "readwrite",
+                    "effective": "readwrite"
+                  },
+                  "display": {
+                    "raw": "default",
+                    "default": "never",
+                    "effective": "never"
+                  },
+                  "credentialPHID": null,
+                  "disabled": false,
+                  "builtin": {
+                    "protocol": "ssh",
+                    "identifier": "callsign"
+                  },
+                  "dateCreated": "1623373099",
+                  "dateModified": "1623374301"
+                }
+              }
+            ]
+          }
+        }
+      },
+      {
+        "id": 3,
+        "type": "REPO",
+        "phid": "PHID-REPO-uf4yw52lcv4kvfqnluf5",
+        "fields": {
+          "name": "Home Page",
+          "vcs": "git",
+          "callsign": "HP",
+          "shortName": "Home",
+          "status": "inactive",
+          "isHosted": true,
+          "isImporting": false,
+          "almanacServicePHID": null,
+          "refRules": {
+            "fetchRules": [],
+            "trackRules": [],
+            "permanentRefRules": []
+          },
+          "defaultBranch": "master",
+          "description": {
+            "raw": "Deprecated - contents of `www.phorge.it` is now served by R10."
+          },
+          "spacePHID": "PHID-SPCE-gk6zkj2aq67qferqtnow",
+          "dateCreated": 1657655822,
+          "dateModified": 1760774073,
+          "policy": {
+            "view": "public",
+            "edit": "admin",
+            "diffusion.push": "PHID-PROJ-pstljzqpnkljguwskn2c"
+          }
+        },
+        "attachments": {
+          "uris": {
+            "uris": [
+              {
+                "id": "26",
+                "type": "RURI",
+                "phid": "PHID-RURI-zclwahsixbje4mrtdp6o",
+                "fields": {
+                  "repositoryPHID": "PHID-REPO-uf4yw52lcv4kvfqnluf5",
+                  "uri": {
+                    "raw": "https://id",
+                    "display": "https://we.phorge.it/diffusion/3/Home.git",
+                    "effective": "https://we.phorge.it/diffusion/3/Home.git",
+                    "normalized": "<base-uri>/diffusion/3"
+                  },
+                  "io": {
+                    "raw": "default",
+                    "default": "readwrite",
+                    "effective": "readwrite"
+                  },
+                  "display": {
+                    "raw": "default",
+                    "default": "never",
+                    "effective": "never"
+                  },
+                  "credentialPHID": null,
+                  "disabled": false,
+                  "builtin": {
+                    "protocol": "https",
+                    "identifier": "id"
+                  },
+                  "dateCreated": "1657655822",
+                  "dateModified": "1657655822"
+                }
+              },
+              {
+                "id": "25",
+                "type": "RURI",
+                "phid": "PHID-RURI-eviywbjujseipisokmhi",
+                "fields": {
+                  "repositoryPHID": "PHID-REPO-uf4yw52lcv4kvfqnluf5",
+                  "uri": {
+                    "raw": "https://shortname",
+                    "display": "https://we.phorge.it/source/Home.git",
+                    "effective": "https://we.phorge.it/source/Home.git",
+                    "normalized": "<base-uri>/source/Home"
+                  },
+                  "io": {
+                    "raw": "default",
+                    "default": "readwrite",
+                    "effective": "readwrite"
+                  },
+                  "display": {
+                    "raw": "default",
+                    "default": "always",
+                    "effective": "always"
+                  },
+                  "credentialPHID": null,
+                  "disabled": false,
+                  "builtin": {
+                    "protocol": "https",
+                    "identifier": "shortname"
+                  },
+                  "dateCreated": "1657655822",
+                  "dateModified": "1657655822"
+                }
+              },
+              {
+                "id": "24",
+                "type": "RURI",
+                "phid": "PHID-RURI-vqmz3vq4kmxvlwpihvdq",
+                "fields": {
+                  "repositoryPHID": "PHID-REPO-uf4yw52lcv4kvfqnluf5",
+                  "uri": {
+                    "raw": "https://callsign",
+                    "display": "https://we.phorge.it/diffusion/HP/Home.git",
+                    "effective": "https://we.phorge.it/diffusion/HP/Home.git",
+                    "normalized": "<base-uri>/diffusion/HP"
+                  },
+                  "io": {
+                    "raw": "default",
+                    "default": "readwrite",
+                    "effective": "readwrite"
+                  },
+                  "display": {
+                    "raw": "default",
+                    "default": "never",
+                    "effective": "never"
+                  },
+                  "credentialPHID": null,
+                  "disabled": false,
+                  "builtin": {
+                    "protocol": "https",
+                    "identifier": "callsign"
+                  },
+                  "dateCreated": "1657655822",
+                  "dateModified": "1657655822"
+                }
+              },
+              {
+                "id": "23",
+                "type": "RURI",
+                "phid": "PHID-RURI-a5yehcfhrjrefiwejfvm",
+                "fields": {
+                  "repositoryPHID": "PHID-REPO-uf4yw52lcv4kvfqnluf5",
+                  "uri": {
+                    "raw": "ssh://id",
+                    "display": "ssh://git@we.phorge.it/diffusion/3/Home.git",
+                    "effective": "ssh://git@we.phorge.it/diffusion/3/Home.git",
+                    "normalized": "<base-uri>/diffusion/3"
+                  },
+                  "io": {
+                    "raw": "default",
+                    "default": "readwrite",
+                    "effective": "readwrite"
+                  },
+                  "display": {
+                    "raw": "default",
+                    "default": "never",
+                    "effective": "never"
+                  },
+                  "credentialPHID": null,
+                  "disabled": false,
+                  "builtin": {
+                    "protocol": "ssh",
+                    "identifier": "id"
+                  },
+                  "dateCreated": "1657655822",
+                  "dateModified": "1657655822"
+                }
+              },
+              {
+                "id": "22",
+                "type": "RURI",
+                "phid": "PHID-RURI-2eufdg5tq32unrhjc5gu",
+                "fields": {
+                  "repositoryPHID": "PHID-REPO-uf4yw52lcv4kvfqnluf5",
+                  "uri": {
+                    "raw": "ssh://shortname",
+                    "display": "ssh://git@we.phorge.it/source/Home.git",
+                    "effective": "ssh://git@we.phorge.it/source/Home.git",
+                    "normalized": "<base-uri>/source/Home"
+                  },
+                  "io": {
+                    "raw": "default",
+                    "default": "readwrite",
+                    "effective": "readwrite"
+                  },
+                  "display": {
+                    "raw": "default",
+                    "default": "always",
+                    "effective": "always"
+                  },
+                  "credentialPHID": null,
+                  "disabled": false,
+                  "builtin": {
+                    "protocol": "ssh",
+                    "identifier": "shortname"
+                  },
+                  "dateCreated": "1657655822",
+                  "dateModified": "1657655822"
+                }
+              },
+              {
+                "id": "21",
+                "type": "RURI",
+                "phid": "PHID-RURI-2gmttfglr4swj3mimtoi",
+                "fields": {
+                  "repositoryPHID": "PHID-REPO-uf4yw52lcv4kvfqnluf5",
+                  "uri": {
+                    "raw": "ssh://callsign",
+                    "display": "ssh://git@we.phorge.it/diffusion/HP/Home.git",
+                    "effective": "ssh://git@we.phorge.it/diffusion/HP/Home.git",
+                    "normalized": "<base-uri>/diffusion/HP"
+                  },
+                  "io": {
+                    "raw": "default",
+                    "default": "readwrite",
+                    "effective": "readwrite"
+                  },
+                  "display": {
+                    "raw": "default",
+                    "default": "never",
+                    "effective": "never"
+                  },
+                  "credentialPHID": null,
+                  "disabled": false,
+                  "builtin": {
+                    "protocol": "ssh",
+                    "identifier": "callsign"
+                  },
+                  "dateCreated": "1657655822",
+                  "dateModified": "1657655822"
+                }
+              }
+            ]
+          }
+        }
+      },
+      {
+        "id": 4,
+        "type": "REPO",
+        "phid": "PHID-REPO-m2lretrli7fvjukzkxm3",
+        "fields": {
+          "name": "Gopher Burrow",
+          "vcs": "git",
+          "callsign": null,
+          "shortName": null,
+          "status": "active",
+          "isHosted": true,
+          "isImporting": false,
+          "almanacServicePHID": null,
+          "refRules": {
+            "fetchRules": [],
+            "trackRules": [],
+            "permanentRefRules": []
+          },
+          "defaultBranch": "master",
+          "description": {
+            "raw": "Loose collection of tools related to Phorge.\n\n#gopher_burrow"
+          },
+          "spacePHID": "PHID-SPCE-gk6zkj2aq67qferqtnow",
+          "dateCreated": 1683360303,
+          "dateModified": 1744972600,
+          "policy": {
+            "view": "public",
+            "edit": "admin",
+            "diffusion.push": "PHID-PROJ-f53sbcawpg6qferhwjfu"
+          }
+        },
+        "attachments": {
+          "uris": {
+            "uris": [
+              {
+                "id": "37",
+                "type": "RURI",
+                "phid": "PHID-RURI-d2pgonojcunta3ws3qzd",
+                "fields": {
+                  "repositoryPHID": "PHID-REPO-m2lretrli7fvjukzkxm3",
+                  "uri": {
+                    "raw": "https://id",
+                    "display": "https://we.phorge.it/diffusion/4/gopher-burrow.git",
+                    "effective": "https://we.phorge.it/diffusion/4/gopher-burrow.git",
+                    "normalized": "<base-uri>/diffusion/4"
+                  },
+                  "io": {
+                    "raw": "default",
+                    "default": "readwrite",
+                    "effective": "readwrite"
+                  },
+                  "display": {
+                    "raw": "default",
+                    "default": "always",
+                    "effective": "always"
+                  },
+                  "credentialPHID": null,
+                  "disabled": false,
+                  "builtin": {
+                    "protocol": "https",
+                    "identifier": "id"
+                  },
+                  "dateCreated": "1683360303",
+                  "dateModified": "1683360303"
+                }
+              },
+              {
+                "id": "34",
+                "type": "RURI",
+                "phid": "PHID-RURI-tkrnr2ec5b7r2whxdtx5",
+                "fields": {
+                  "repositoryPHID": "PHID-REPO-m2lretrli7fvjukzkxm3",
+                  "uri": {
+                    "raw": "ssh://id",
+                    "display": "ssh://git@we.phorge.it/diffusion/4/gopher-burrow.git",
+                    "effective": "ssh://git@we.phorge.it/diffusion/4/gopher-burrow.git",
+                    "normalized": "<base-uri>/diffusion/4"
+                  },
+                  "io": {
+                    "raw": "default",
+                    "default": "readwrite",
+                    "effective": "readwrite"
+                  },
+                  "display": {
+                    "raw": "default",
+                    "default": "always",
+                    "effective": "always"
+                  },
+                  "credentialPHID": null,
+                  "disabled": false,
+                  "builtin": {
+                    "protocol": "ssh",
+                    "identifier": "id"
+                  },
+                  "dateCreated": "1683360303",
+                  "dateModified": "1683360303"
+                }
+              }
+            ]
+          }
+        }
+      },
+      {
+        "id": 5,
+        "type": "REPO",
+        "phid": "PHID-REPO-otr6kcmuojb3pm7rnvdb",
+        "fields": {
+          "name": "Diagrams",
+          "vcs": "git",
+          "callsign": null,
+          "shortName": "diagrams",
+          "status": "active",
+          "isHosted": true,
+          "isImporting": false,
+          "almanacServicePHID": null,
+          "refRules": {
+            "fetchRules": [],
+            "trackRules": [],
+            "permanentRefRules": []
+          },
+          "defaultBranch": "master",
+          "description": {
+            "raw": "A draw.io integration in Phorge\n\n#diagrams_extension "
+          },
+          "spacePHID": "PHID-SPCE-gk6zkj2aq67qferqtnow",
+          "dateCreated": 1688496873,
+          "dateModified": 1688542127,
+          "policy": {
+            "view": "public",
+            "edit": "admin",
+            "diffusion.push": "PHID-PROJ-tjqmlykdb2pqeilp5uvl"
+          }
+        },
+        "attachments": {
+          "uris": {
+            "uris": [
+              {
+                "id": "46",
+                "type": "RURI",
+                "phid": "PHID-RURI-x2o5sqdn2mk636a33d5s",
+                "fields": {
+                  "repositoryPHID": "PHID-REPO-otr6kcmuojb3pm7rnvdb",
+                  "uri": {
+                    "raw": "https://id",
+                    "display": "https://we.phorge.it/diffusion/5/diagrams.git",
+                    "effective": "https://we.phorge.it/diffusion/5/diagrams.git",
+                    "normalized": "<base-uri>/diffusion/5"
+                  },
+                  "io": {
+                    "raw": "default",
+                    "default": "readwrite",
+                    "effective": "readwrite"
+                  },
+                  "display": {
+                    "raw": "default",
+                    "default": "never",
+                    "effective": "never"
+                  },
+                  "credentialPHID": null,
+                  "disabled": false,
+                  "builtin": {
+                    "protocol": "https",
+                    "identifier": "id"
+                  },
+                  "dateCreated": "1688496873",
+                  "dateModified": "1688496873"
+                }
+              },
+              {
+                "id": "45",
+                "type": "RURI",
+                "phid": "PHID-RURI-wntqctt3ptcq5lvrnk5x",
+                "fields": {
+                  "repositoryPHID": "PHID-REPO-otr6kcmuojb3pm7rnvdb",
+                  "uri": {
+                    "raw": "https://shortname",
+                    "display": "https://we.phorge.it/source/diagrams.git",
+                    "effective": "https://we.phorge.it/source/diagrams.git",
+                    "normalized": "<base-uri>/source/diagrams"
+                  },
+                  "io": {
+                    "raw": "default",
+                    "default": "readwrite",
+                    "effective": "readwrite"
+                  },
+                  "display": {
+                    "raw": "default",
+                    "default": "always",
+                    "effective": "always"
+                  },
+                  "credentialPHID": null,
+                  "disabled": false,
+                  "builtin": {
+                    "protocol": "https",
+                    "identifier": "shortname"
+                  },
+                  "dateCreated": "1688496873",
+                  "dateModified": "1688496873"
+                }
+              },
+              {
+                "id": "43",
+                "type": "RURI",
+                "phid": "PHID-RURI-l4qwfhgzi3qk7kfvyhb5",
+                "fields": {
+                  "repositoryPHID": "PHID-REPO-otr6kcmuojb3pm7rnvdb",
+                  "uri": {
+                    "raw": "ssh://id",
+                    "display": "ssh://git@we.phorge.it/diffusion/5/diagrams.git",
+                    "effective": "ssh://git@we.phorge.it/diffusion/5/diagrams.git",
+                    "normalized": "<base-uri>/diffusion/5"
+                  },
+                  "io": {
+                    "raw": "default",
+                    "default": "readwrite",
+                    "effective": "readwrite"
+                  },
+                  "display": {
+                    "raw": "default",
+                    "default": "never",
+                    "effective": "never"
+                  },
+                  "credentialPHID": null,
+                  "disabled": false,
+                  "builtin": {
+                    "protocol": "ssh",
+                    "identifier": "id"
+                  },
+                  "dateCreated": "1688496873",
+                  "dateModified": "1688496873"
+                }
+              },
+              {
+                "id": "42",
+                "type": "RURI",
+                "phid": "PHID-RURI-closb45w4gvjr6awww2r",
+                "fields": {
+                  "repositoryPHID": "PHID-REPO-otr6kcmuojb3pm7rnvdb",
+                  "uri": {
+                    "raw": "ssh://shortname",
+                    "display": "ssh://git@we.phorge.it/source/diagrams.git",
+                    "effective": "ssh://git@we.phorge.it/source/diagrams.git",
+                    "normalized": "<base-uri>/source/diagrams"
+                  },
+                  "io": {
+                    "raw": "default",
+                    "default": "readwrite",
+                    "effective": "readwrite"
+                  },
+                  "display": {
+                    "raw": "default",
+                    "default": "always",
+                    "effective": "always"
+                  },
+                  "credentialPHID": null,
+                  "disabled": false,
+                  "builtin": {
+                    "protocol": "ssh",
+                    "identifier": "shortname"
+                  },
+                  "dateCreated": "1688496873",
+                  "dateModified": "1688496873"
+                }
+              }
+            ]
+          }
+        }
+      },
+      {
+        "id": 6,
+        "type": "REPO",
+        "phid": "PHID-REPO-iqg6b5khrwkc667o6zxk",
+        "fields": {
+          "name": "Semi Structured",
+          "vcs": "git",
+          "callsign": null,
+          "shortName": "semi-structured",
+          "status": "active",
+          "isHosted": true,
+          "isImporting": false,
+          "almanacServicePHID": null,
+          "refRules": {
+            "fetchRules": [],
+            "trackRules": [],
+            "permanentRefRules": []
+          },
+          "defaultBranch": "master",
+          "description": {
+            "raw": "An extension that allows storing and managing objects that are not fully defined, and allowing the definition to easily evolve over time."
+          },
+          "spacePHID": "PHID-SPCE-gk6zkj2aq67qferqtnow",
+          "dateCreated": 1689706398,
+          "dateModified": 1780553841,
+          "policy": {
+            "view": "public",
+            "edit": "admin",
+            "diffusion.push": "PHID-PROJ-oa7cegwmtgk42r277igv"
+          }
+        },
+        "attachments": {
+          "uris": {
+            "uris": [
+              {
+                "id": "55",
+                "type": "RURI",
+                "phid": "PHID-RURI-d3i4ycwc2x62lgrmqnyf",
+                "fields": {
+                  "repositoryPHID": "PHID-REPO-iqg6b5khrwkc667o6zxk",
+                  "uri": {
+                    "raw": "https://id",
+                    "display": "https://we.phorge.it/diffusion/6/semi-structured.git",
+                    "effective": "https://we.phorge.it/diffusion/6/semi-structured.git",
+                    "normalized": "<base-uri>/diffusion/6"
+                  },
+                  "io": {
+                    "raw": "default",
+                    "default": "readwrite",
+                    "effective": "readwrite"
+                  },
+                  "display": {
+                    "raw": "default",
+                    "default": "never",
+                    "effective": "never"
+                  },
+                  "credentialPHID": null,
+                  "disabled": false,
+                  "builtin": {
+                    "protocol": "https",
+                    "identifier": "id"
+                  },
+                  "dateCreated": "1689706398",
+                  "dateModified": "1689706398"
+                }
+              },
+              {
+                "id": "54",
+                "type": "RURI",
+                "phid": "PHID-RURI-wxwqcf3if5ullsch24pu",
+                "fields": {
+                  "repositoryPHID": "PHID-REPO-iqg6b5khrwkc667o6zxk",
+                  "uri": {
+                    "raw": "https://shortname",
+                    "display": "https://we.phorge.it/source/semi-structured.git",
+                    "effective": "https://we.phorge.it/source/semi-structured.git",
+                    "normalized": "<base-uri>/source/semi-structured"
+                  },
+                  "io": {
+                    "raw": "default",
+                    "default": "readwrite",
+                    "effective": "readwrite"
+                  },
+                  "display": {
+                    "raw": "default",
+                    "default": "always",
+                    "effective": "always"
+                  },
+                  "credentialPHID": null,
+                  "disabled": false,
+                  "builtin": {
+                    "protocol": "https",
+                    "identifier": "shortname"
+                  },
+                  "dateCreated": "1689706398",
+                  "dateModified": "1689706398"
+                }
+              },
+              {
+                "id": "52",
+                "type": "RURI",
+                "phid": "PHID-RURI-c7femxkx5kcaqspjjjq2",
+                "fields": {
+                  "repositoryPHID": "PHID-REPO-iqg6b5khrwkc667o6zxk",
+                  "uri": {
+                    "raw": "ssh://id",
+                    "display": "ssh://git@we.phorge.it/diffusion/6/semi-structured.git",
+                    "effective": "ssh://git@we.phorge.it/diffusion/6/semi-structured.git",
+                    "normalized": "<base-uri>/diffusion/6"
+                  },
+                  "io": {
+                    "raw": "default",
+                    "default": "readwrite",
+                    "effective": "readwrite"
+                  },
+                  "display": {
+                    "raw": "default",
+                    "default": "never",
+                    "effective": "never"
+                  },
+                  "credentialPHID": null,
+                  "disabled": false,
+                  "builtin": {
+                    "protocol": "ssh",
+                    "identifier": "id"
+                  },
+                  "dateCreated": "1689706398",
+                  "dateModified": "1689706398"
+                }
+              },
+              {
+                "id": "51",
+                "type": "RURI",
+                "phid": "PHID-RURI-zxcbsw5u3y55m6ujjk7u",
+                "fields": {
+                  "repositoryPHID": "PHID-REPO-iqg6b5khrwkc667o6zxk",
+                  "uri": {
+                    "raw": "ssh://shortname",
+                    "display": "ssh://git@we.phorge.it/source/semi-structured.git",
+                    "effective": "ssh://git@we.phorge.it/source/semi-structured.git",
+                    "normalized": "<base-uri>/source/semi-structured"
+                  },
+                  "io": {
+                    "raw": "default",
+                    "default": "readwrite",
+                    "effective": "readwrite"
+                  },
+                  "display": {
+                    "raw": "default",
+                    "default": "always",
+                    "effective": "always"
+                  },
+                  "credentialPHID": null,
+                  "disabled": false,
+                  "builtin": {
+                    "protocol": "ssh",
+                    "identifier": "shortname"
+                  },
+                  "dateCreated": "1689706398",
+                  "dateModified": "1689706398"
+                }
+              }
+            ]
+          }
+        }
+      },
+      {
+        "id": 7,
+        "type": "REPO",
+        "phid": "PHID-REPO-27xlryompkpxenx7z6ey",
+        "fields": {
+          "name": "arc-vscode",
+          "vcs": "git",
+          "callsign": null,
+          "shortName": "arc-vscode",
+          "status": "active",
+          "isHosted": false,
+          "isImporting": false,
+          "almanacServicePHID": null,
+          "refRules": {
+            "fetchRules": [],
+            "trackRules": [],
+            "permanentRefRules": []
+          },
+          "defaultBranch": "master",
+          "description": {
+            "raw": "A VSCode extension for working with Arcanist\n\nhttps://marketplace.visualstudio.com/items?itemName=avive.arcanist\nhttps://open-vsx.org/extension/avive/arcanist"
+          },
+          "spacePHID": "PHID-SPCE-gk6zkj2aq67qferqtnow",
+          "dateCreated": 1689797436,
+          "dateModified": 1757836939,
+          "policy": {
+            "view": "public",
+            "edit": "admin",
+            "diffusion.push": "PHID-PROJ-t4pcxstwcghx7ffmy73k"
+          }
+        },
+        "attachments": {
+          "uris": {
+            "uris": [
+              {
+                "id": "69",
+                "type": "RURI",
+                "phid": "PHID-RURI-2sksm6coc644hd3sgnub",
+                "fields": {
+                  "repositoryPHID": "PHID-REPO-27xlryompkpxenx7z6ey",
+                  "uri": {
+                    "raw": "git@github.com:avivey/arc-vscode.git",
+                    "display": "git@github.com:avivey/arc-vscode.git",
+                    "effective": "git@github.com:avivey/arc-vscode.git",
+                    "normalized": "github.com/avivey/arc-vscode"
+                  },
+                  "io": {
+                    "raw": "none",
+                    "default": "none",
+                    "effective": "none"
+                  },
+                  "display": {
+                    "raw": "always",
+                    "default": "never",
+                    "effective": "always"
+                  },
+                  "credentialPHID": null,
+                  "disabled": false,
+                  "builtin": {
+                    "protocol": null,
+                    "identifier": null
+                  },
+                  "dateCreated": "1689798026",
+                  "dateModified": "1689798026"
+                }
+              },
+              {
+                "id": "68",
+                "type": "RURI",
+                "phid": "PHID-RURI-xo7chhfitjuufoxk7l55",
+                "fields": {
+                  "repositoryPHID": "PHID-REPO-27xlryompkpxenx7z6ey",
+                  "uri": {
+                    "raw": "https://github.com/avivey/arc-vscode.git",
+                    "display": "https://github.com/avivey/arc-vscode.git",
+                    "effective": "https://github.com/avivey/arc-vscode.git",
+                    "normalized": "github.com/avivey/arc-vscode"
+                  },
+                  "io": {
+                    "raw": "observe",
+                    "default": "none",
+                    "effective": "observe"
+                  },
+                  "display": {
+                    "raw": "default",
+                    "default": "never",
+                    "effective": "never"
+                  },
+                  "credentialPHID": null,
+                  "disabled": false,
+                  "builtin": {
+                    "protocol": null,
+                    "identifier": null
+                  },
+                  "dateCreated": "1689797573",
+                  "dateModified": "1689797573"
+                }
+              },
+              {
+                "id": "64",
+                "type": "RURI",
+                "phid": "PHID-RURI-2nqylu5suzii3ljagsum",
+                "fields": {
+                  "repositoryPHID": "PHID-REPO-27xlryompkpxenx7z6ey",
+                  "uri": {
+                    "raw": "https://we.phorge.it/diffusion/7/arc-vscode.git",
+                    "display": "https://we.phorge.it/diffusion/7/arc-vscode.git",
+                    "effective": "https://we.phorge.it/diffusion/7/arc-vscode.git",
+                    "normalized": "<base-uri>/diffusion/7"
+                  },
+                  "io": {
+                    "raw": "read",
+                    "default": "read",
+                    "effective": "read"
+                  },
+                  "display": {
+                    "raw": "default",
+                    "default": "never",
+                    "effective": "never"
+                  },
+                  "credentialPHID": null,
+                  "disabled": false,
+                  "builtin": {
+                    "protocol": "https",
+                    "identifier": "id"
+                  },
+                  "dateCreated": "1689797436",
+                  "dateModified": "1689797555"
+                }
+              },
+              {
+                "id": "63",
+                "type": "RURI",
+                "phid": "PHID-RURI-lmzt46jck3aw7mn2rfpm",
+                "fields": {
+                  "repositoryPHID": "PHID-REPO-27xlryompkpxenx7z6ey",
+                  "uri": {
+                    "raw": "https://shortname",
+                    "display": "https://we.phorge.it/source/arc-vscode.git",
+                    "effective": "https://we.phorge.it/source/arc-vscode.git",
+                    "normalized": "<base-uri>/source/arc-vscode"
+                  },
+                  "io": {
+                    "raw": "default",
+                    "default": "read",
+                    "effective": "read"
+                  },
+                  "display": {
+                    "raw": "default",
+                    "default": "always",
+                    "effective": "always"
+                  },
+                  "credentialPHID": null,
+                  "disabled": false,
+                  "builtin": {
+                    "protocol": "https",
+                    "identifier": "shortname"
+                  },
+                  "dateCreated": "1689797436",
+                  "dateModified": "1689797436"
+                }
+              },
+              {
+                "id": "61",
+                "type": "RURI",
+                "phid": "PHID-RURI-ve4i5efdmyvtin2ufhfj",
+                "fields": {
+                  "repositoryPHID": "PHID-REPO-27xlryompkpxenx7z6ey",
+                  "uri": {
+                    "raw": "ssh://git@we.phorge.it/diffusion/7/arc-vscode.git",
+                    "display": "ssh://git@we.phorge.it/diffusion/7/arc-vscode.git",
+                    "effective": "ssh://git@we.phorge.it/diffusion/7/arc-vscode.git",
+                    "normalized": "<base-uri>/diffusion/7"
+                  },
+                  "io": {
+                    "raw": "read",
+                    "default": "read",
+                    "effective": "read"
+                  },
+                  "display": {
+                    "raw": "default",
+                    "default": "never",
+                    "effective": "never"
+                  },
+                  "credentialPHID": null,
+                  "disabled": false,
+                  "builtin": {
+                    "protocol": "ssh",
+                    "identifier": "id"
+                  },
+                  "dateCreated": "1689797436",
+                  "dateModified": "1689797564"
+                }
+              },
+              {
+                "id": "60",
+                "type": "RURI",
+                "phid": "PHID-RURI-vsunjbaw73lwbvbm6uco",
+                "fields": {
+                  "repositoryPHID": "PHID-REPO-27xlryompkpxenx7z6ey",
+                  "uri": {
+                    "raw": "ssh://shortname",
+                    "display": "ssh://git@we.phorge.it/source/arc-vscode.git",
+                    "effective": "ssh://git@we.phorge.it/source/arc-vscode.git",
+                    "normalized": "<base-uri>/source/arc-vscode"
+                  },
+                  "io": {
+                    "raw": "default",
+                    "default": "read",
+                    "effective": "read"
+                  },
+                  "display": {
+                    "raw": "default",
+                    "default": "always",
+                    "effective": "always"
+                  },
+                  "credentialPHID": null,
+                  "disabled": false,
+                  "builtin": {
+                    "protocol": "ssh",
+                    "identifier": "shortname"
+                  },
+                  "dateCreated": "1689797436",
+                  "dateModified": "1689797436"
+                }
+              }
+            ]
+          }
+        }
+      },
+      {
+        "id": 8,
+        "type": "REPO",
+        "phid": "PHID-REPO-vqswfuwkhzlcbailishz",
+        "fields": {
+          "name": "dev-env",
+          "vcs": "git",
+          "callsign": "DEVENV",
+          "shortName": "dev-env",
+          "status": "active",
+          "isHosted": true,
+          "isImporting": false,
+          "almanacServicePHID": null,
+          "refRules": {
+            "fetchRules": [],
+            "trackRules": [],
+            "permanentRefRules": []
+          },
+          "defaultBranch": "main",
+          "description": {
+            "raw": "A docker-compose configuration to get a local development environment for phorge/arcanist"
+          },
+          "spacePHID": "PHID-SPCE-gk6zkj2aq67qferqtnow",
+          "dateCreated": 1690000295,
+          "dateModified": 1690000408,
+          "policy": {
+            "view": "public",
+            "edit": "admin",
+            "diffusion.push": "PHID-PROJ-hv7htm24dpvrlfpr6t3f"
+          }
+        },
+        "attachments": {
+          "uris": {
+            "uris": [
+              {
+                "id": "75",
+                "type": "RURI",
+                "phid": "PHID-RURI-6tbxflrjvwxa4crw7dop",
+                "fields": {
+                  "repositoryPHID": "PHID-REPO-vqswfuwkhzlcbailishz",
+                  "uri": {
+                    "raw": "https://id",
+                    "display": "https://we.phorge.it/diffusion/8/dev-env.git",
+                    "effective": "https://we.phorge.it/diffusion/8/dev-env.git",
+                    "normalized": "<base-uri>/diffusion/8"
+                  },
+                  "io": {
+                    "raw": "default",
+                    "default": "readwrite",
+                    "effective": "readwrite"
+                  },
+                  "display": {
+                    "raw": "default",
+                    "default": "never",
+                    "effective": "never"
+                  },
+                  "credentialPHID": null,
+                  "disabled": false,
+                  "builtin": {
+                    "protocol": "https",
+                    "identifier": "id"
+                  },
+                  "dateCreated": "1690000295",
+                  "dateModified": "1690000295"
+                }
+              },
+              {
+                "id": "74",
+                "type": "RURI",
+                "phid": "PHID-RURI-yo2sbp4hit5x3yrgzp4k",
+                "fields": {
+                  "repositoryPHID": "PHID-REPO-vqswfuwkhzlcbailishz",
+                  "uri": {
+                    "raw": "https://shortname",
+                    "display": "https://we.phorge.it/source/dev-env.git",
+                    "effective": "https://we.phorge.it/source/dev-env.git",
+                    "normalized": "<base-uri>/source/dev-env"
+                  },
+                  "io": {
+                    "raw": "default",
+                    "default": "readwrite",
+                    "effective": "readwrite"
+                  },
+                  "display": {
+                    "raw": "default",
+                    "default": "always",
+                    "effective": "always"
+                  },
+                  "credentialPHID": null,
+                  "disabled": false,
+                  "builtin": {
+                    "protocol": "https",
+                    "identifier": "shortname"
+                  },
+                  "dateCreated": "1690000295",
+                  "dateModified": "1690000295"
+                }
+              },
+              {
+                "id": "73",
+                "type": "RURI",
+                "phid": "PHID-RURI-wesrcknld34gsv6s7l6f",
+                "fields": {
+                  "repositoryPHID": "PHID-REPO-vqswfuwkhzlcbailishz",
+                  "uri": {
+                    "raw": "https://callsign",
+                    "display": "https://we.phorge.it/diffusion/DEVENV/dev-env.git",
+                    "effective": "https://we.phorge.it/diffusion/DEVENV/dev-env.git",
+                    "normalized": "<base-uri>/diffusion/DEVENV"
+                  },
+                  "io": {
+                    "raw": "default",
+                    "default": "readwrite",
+                    "effective": "readwrite"
+                  },
+                  "display": {
+                    "raw": "default",
+                    "default": "never",
+                    "effective": "never"
+                  },
+                  "credentialPHID": null,
+                  "disabled": false,
+                  "builtin": {
+                    "protocol": "https",
+                    "identifier": "callsign"
+                  },
+                  "dateCreated": "1690000295",
+                  "dateModified": "1690000295"
+                }
+              },
+              {
+                "id": "72",
+                "type": "RURI",
+                "phid": "PHID-RURI-ccoxlbjs5cun6koia27x",
+                "fields": {
+                  "repositoryPHID": "PHID-REPO-vqswfuwkhzlcbailishz",
+                  "uri": {
+                    "raw": "ssh://id",
+                    "display": "ssh://git@we.phorge.it/diffusion/8/dev-env.git",
+                    "effective": "ssh://git@we.phorge.it/diffusion/8/dev-env.git",
+                    "normalized": "<base-uri>/diffusion/8"
+                  },
+                  "io": {
+                    "raw": "default",
+                    "default": "readwrite",
+                    "effective": "readwrite"
+                  },
+                  "display": {
+                    "raw": "default",
+                    "default": "never",
+                    "effective": "never"
+                  },
+                  "credentialPHID": null,
+                  "disabled": false,
+                  "builtin": {
+                    "protocol": "ssh",
+                    "identifier": "id"
+                  },
+                  "dateCreated": "1690000295",
+                  "dateModified": "1690000295"
+                }
+              },
+              {
+                "id": "71",
+                "type": "RURI",
+                "phid": "PHID-RURI-purc7ubek5bz2x6k67z2",
+                "fields": {
+                  "repositoryPHID": "PHID-REPO-vqswfuwkhzlcbailishz",
+                  "uri": {
+                    "raw": "ssh://shortname",
+                    "display": "ssh://git@we.phorge.it/source/dev-env.git",
+                    "effective": "ssh://git@we.phorge.it/source/dev-env.git",
+                    "normalized": "<base-uri>/source/dev-env"
+                  },
+                  "io": {
+                    "raw": "default",
+                    "default": "readwrite",
+                    "effective": "readwrite"
+                  },
+                  "display": {
+                    "raw": "default",
+                    "default": "always",
+                    "effective": "always"
+                  },
+                  "credentialPHID": null,
+                  "disabled": false,
+                  "builtin": {
+                    "protocol": "ssh",
+                    "identifier": "shortname"
+                  },
+                  "dateCreated": "1690000295",
+                  "dateModified": "1690000295"
+                }
+              },
+              {
+                "id": "70",
+                "type": "RURI",
+                "phid": "PHID-RURI-qfhwyqzorzmwkxkpncru",
+                "fields": {
+                  "repositoryPHID": "PHID-REPO-vqswfuwkhzlcbailishz",
+                  "uri": {
+                    "raw": "ssh://callsign",
+                    "display": "ssh://git@we.phorge.it/diffusion/DEVENV/dev-env.git",
+                    "effective": "ssh://git@we.phorge.it/diffusion/DEVENV/dev-env.git",
+                    "normalized": "<base-uri>/diffusion/DEVENV"
+                  },
+                  "io": {
+                    "raw": "default",
+                    "default": "readwrite",
+                    "effective": "readwrite"
+                  },
+                  "display": {
+                    "raw": "default",
+                    "default": "never",
+                    "effective": "never"
+                  },
+                  "credentialPHID": null,
+                  "disabled": false,
+                  "builtin": {
+                    "protocol": "ssh",
+                    "identifier": "callsign"
+                  },
+                  "dateCreated": "1690000295",
+                  "dateModified": "1690000295"
+                }
+              }
+            ]
+          }
+        }
+      },
+      {
+        "id": 9,
+        "type": "REPO",
+        "phid": "PHID-REPO-5puspmeevdo33s7mnbhy",
+        "fields": {
+          "name": "QR Stickers",
+          "vcs": "git",
+          "callsign": "QR",
+          "shortName": "qr-stickers",
+          "status": "active",
+          "isHosted": true,
+          "isImporting": false,
+          "almanacServicePHID": null,
+          "refRules": {
+            "fetchRules": [],
+            "trackRules": [],
+            "permanentRefRules": []
+          },
+          "defaultBranch": "master",
+          "description": {
+            "raw": "This extension adds a Print QR button to tasks to print that on a thermal printer.\n\n\n#qr_codes_extension "
+          },
+          "spacePHID": "PHID-SPCE-gk6zkj2aq67qferqtnow",
+          "dateCreated": 1690785120,
+          "dateModified": 1690785346,
+          "policy": {
+            "view": "public",
+            "edit": "admin",
+            "diffusion.push": "PHID-PROJ-o74srjlyzfdx2binrm5b"
+          }
+        },
+        "attachments": {
+          "uris": {
+            "uris": [
+              {
+                "id": "84",
+                "type": "RURI",
+                "phid": "PHID-RURI-ovibhs5jqpiyzjv42gkj",
+                "fields": {
+                  "repositoryPHID": "PHID-REPO-5puspmeevdo33s7mnbhy",
+                  "uri": {
+                    "raw": "https://id",
+                    "display": "https://we.phorge.it/diffusion/9/qr-stickers.git",
+                    "effective": "https://we.phorge.it/diffusion/9/qr-stickers.git",
+                    "normalized": "<base-uri>/diffusion/9"
+                  },
+                  "io": {
+                    "raw": "default",
+                    "default": "readwrite",
+                    "effective": "readwrite"
+                  },
+                  "display": {
+                    "raw": "default",
+                    "default": "never",
+                    "effective": "never"
+                  },
+                  "credentialPHID": null,
+                  "disabled": false,
+                  "builtin": {
+                    "protocol": "https",
+                    "identifier": "id"
+                  },
+                  "dateCreated": "1690785120",
+                  "dateModified": "1690785120"
+                }
+              },
+              {
+                "id": "83",
+                "type": "RURI",
+                "phid": "PHID-RURI-kwjrrhv6go4tttfiwvap",
+                "fields": {
+                  "repositoryPHID": "PHID-REPO-5puspmeevdo33s7mnbhy",
+                  "uri": {
+                    "raw": "https://shortname",
+                    "display": "https://we.phorge.it/source/qr-stickers.git",
+                    "effective": "https://we.phorge.it/source/qr-stickers.git",
+                    "normalized": "<base-uri>/source/qr-stickers"
+                  },
+                  "io": {
+                    "raw": "default",
+                    "default": "readwrite",
+                    "effective": "readwrite"
+                  },
+                  "display": {
+                    "raw": "default",
+                    "default": "always",
+                    "effective": "always"
+                  },
+                  "credentialPHID": null,
+                  "disabled": false,
+                  "builtin": {
+                    "protocol": "https",
+                    "identifier": "shortname"
+                  },
+                  "dateCreated": "1690785120",
+                  "dateModified": "1690785120"
+                }
+              },
+              {
+                "id": "82",
+                "type": "RURI",
+                "phid": "PHID-RURI-uyrmympk4qyfwaonmrw5",
+                "fields": {
+                  "repositoryPHID": "PHID-REPO-5puspmeevdo33s7mnbhy",
+                  "uri": {
+                    "raw": "https://callsign",
+                    "display": "https://we.phorge.it/diffusion/QR/qr-stickers.git",
+                    "effective": "https://we.phorge.it/diffusion/QR/qr-stickers.git",
+                    "normalized": "<base-uri>/diffusion/QR"
+                  },
+                  "io": {
+                    "raw": "default",
+                    "default": "readwrite",
+                    "effective": "readwrite"
+                  },
+                  "display": {
+                    "raw": "default",
+                    "default": "never",
+                    "effective": "never"
+                  },
+                  "credentialPHID": null,
+                  "disabled": false,
+                  "builtin": {
+                    "protocol": "https",
+                    "identifier": "callsign"
+                  },
+                  "dateCreated": "1690785120",
+                  "dateModified": "1690785120"
+                }
+              },
+              {
+                "id": "81",
+                "type": "RURI",
+                "phid": "PHID-RURI-hru3yoakqtmm2ksjmo7i",
+                "fields": {
+                  "repositoryPHID": "PHID-REPO-5puspmeevdo33s7mnbhy",
+                  "uri": {
+                    "raw": "ssh://id",
+                    "display": "ssh://git@we.phorge.it/diffusion/9/qr-stickers.git",
+                    "effective": "ssh://git@we.phorge.it/diffusion/9/qr-stickers.git",
+                    "normalized": "<base-uri>/diffusion/9"
+                  },
+                  "io": {
+                    "raw": "default",
+                    "default": "readwrite",
+                    "effective": "readwrite"
+                  },
+                  "display": {
+                    "raw": "default",
+                    "default": "never",
+                    "effective": "never"
+                  },
+                  "credentialPHID": null,
+                  "disabled": false,
+                  "builtin": {
+                    "protocol": "ssh",
+                    "identifier": "id"
+                  },
+                  "dateCreated": "1690785120",
+                  "dateModified": "1690785120"
+                }
+              },
+              {
+                "id": "80",
+                "type": "RURI",
+                "phid": "PHID-RURI-nfrrlopvdgkgnfaci6cu",
+                "fields": {
+                  "repositoryPHID": "PHID-REPO-5puspmeevdo33s7mnbhy",
+                  "uri": {
+                    "raw": "ssh://shortname",
+                    "display": "ssh://git@we.phorge.it/source/qr-stickers.git",
+                    "effective": "ssh://git@we.phorge.it/source/qr-stickers.git",
+                    "normalized": "<base-uri>/source/qr-stickers"
+                  },
+                  "io": {
+                    "raw": "default",
+                    "default": "readwrite",
+                    "effective": "readwrite"
+                  },
+                  "display": {
+                    "raw": "default",
+                    "default": "always",
+                    "effective": "always"
+                  },
+                  "credentialPHID": null,
+                  "disabled": false,
+                  "builtin": {
+                    "protocol": "ssh",
+                    "identifier": "shortname"
+                  },
+                  "dateCreated": "1690785120",
+                  "dateModified": "1690785120"
+                }
+              },
+              {
+                "id": "79",
+                "type": "RURI",
+                "phid": "PHID-RURI-o6aikkazbosgyd4e5idw",
+                "fields": {
+                  "repositoryPHID": "PHID-REPO-5puspmeevdo33s7mnbhy",
+                  "uri": {
+                    "raw": "ssh://callsign",
+                    "display": "ssh://git@we.phorge.it/diffusion/QR/qr-stickers.git",
+                    "effective": "ssh://git@we.phorge.it/diffusion/QR/qr-stickers.git",
+                    "normalized": "<base-uri>/diffusion/QR"
+                  },
+                  "io": {
+                    "raw": "default",
+                    "default": "readwrite",
+                    "effective": "readwrite"
+                  },
+                  "display": {
+                    "raw": "default",
+                    "default": "never",
+                    "effective": "never"
+                  },
+                  "credentialPHID": null,
+                  "disabled": false,
+                  "builtin": {
+                    "protocol": "ssh",
+                    "identifier": "callsign"
+                  },
+                  "dateCreated": "1690785120",
+                  "dateModified": "1690785120"
+                }
+              }
+            ]
+          }
+        }
+      },
+      {
+        "id": 10,
+        "type": "REPO",
+        "phid": "PHID-REPO-jp5qjexmqf7q56dako2q",
+        "fields": {
+          "name": "PhorgeIt Extension",
+          "vcs": "git",
+          "callsign": null,
+          "shortName": "phorge-it-ext",
+          "status": "active",
+          "isHosted": true,
+          "isImporting": false,
+          "almanacServicePHID": null,
+          "refRules": {
+            "fetchRules": [],
+            "trackRules": [],
+            "permanentRefRules": []
+          },
+          "defaultBranch": "master",
+          "description": {
+            "raw": "A Phorge extension that is intended for the PhorgeIt community website."
+          },
+          "spacePHID": "PHID-SPCE-gk6zkj2aq67qferqtnow",
+          "dateCreated": 1705144797,
+          "dateModified": 1705145367,
+          "policy": {
+            "view": "public",
+            "edit": "admin",
+            "diffusion.push": "PHID-PROJ-pstljzqpnkljguwskn2c"
+          }
+        },
+        "attachments": {
+          "uris": {
+            "uris": [
+              {
+                "id": "93",
+                "type": "RURI",
+                "phid": "PHID-RURI-rg4wjplwkjicowgfvmu6",
+                "fields": {
+                  "repositoryPHID": "PHID-REPO-jp5qjexmqf7q56dako2q",
+                  "uri": {
+                    "raw": "https://id",
+                    "display": "https://we.phorge.it/diffusion/10/phorge-it-ext.git",
+                    "effective": "https://we.phorge.it/diffusion/10/phorge-it-ext.git",
+                    "normalized": "<base-uri>/diffusion/10"
+                  },
+                  "io": {
+                    "raw": "default",
+                    "default": "readwrite",
+                    "effective": "readwrite"
+                  },
+                  "display": {
+                    "raw": "default",
+                    "default": "never",
+                    "effective": "never"
+                  },
+                  "credentialPHID": null,
+                  "disabled": false,
+                  "builtin": {
+                    "protocol": "https",
+                    "identifier": "id"
+                  },
+                  "dateCreated": "1705144797",
+                  "dateModified": "1705144797"
+                }
+              },
+              {
+                "id": "92",
+                "type": "RURI",
+                "phid": "PHID-RURI-war367mc3vllcdfixpho",
+                "fields": {
+                  "repositoryPHID": "PHID-REPO-jp5qjexmqf7q56dako2q",
+                  "uri": {
+                    "raw": "https://shortname",
+                    "display": "https://we.phorge.it/source/phorge-it-ext.git",
+                    "effective": "https://we.phorge.it/source/phorge-it-ext.git",
+                    "normalized": "<base-uri>/source/phorge-it-ext"
+                  },
+                  "io": {
+                    "raw": "default",
+                    "default": "readwrite",
+                    "effective": "readwrite"
+                  },
+                  "display": {
+                    "raw": "default",
+                    "default": "always",
+                    "effective": "always"
+                  },
+                  "credentialPHID": null,
+                  "disabled": false,
+                  "builtin": {
+                    "protocol": "https",
+                    "identifier": "shortname"
+                  },
+                  "dateCreated": "1705144797",
+                  "dateModified": "1705144797"
+                }
+              },
+              {
+                "id": "90",
+                "type": "RURI",
+                "phid": "PHID-RURI-guaanuszqldgsxw67dxy",
+                "fields": {
+                  "repositoryPHID": "PHID-REPO-jp5qjexmqf7q56dako2q",
+                  "uri": {
+                    "raw": "ssh://id",
+                    "display": "ssh://git@we.phorge.it/diffusion/10/phorge-it-ext.git",
+                    "effective": "ssh://git@we.phorge.it/diffusion/10/phorge-it-ext.git",
+                    "normalized": "<base-uri>/diffusion/10"
+                  },
+                  "io": {
+                    "raw": "default",
+                    "default": "readwrite",
+                    "effective": "readwrite"
+                  },
+                  "display": {
+                    "raw": "default",
+                    "default": "never",
+                    "effective": "never"
+                  },
+                  "credentialPHID": null,
+                  "disabled": false,
+                  "builtin": {
+                    "protocol": "ssh",
+                    "identifier": "id"
+                  },
+                  "dateCreated": "1705144797",
+                  "dateModified": "1705144797"
+                }
+              },
+              {
+                "id": "89",
+                "type": "RURI",
+                "phid": "PHID-RURI-zzf4ujda5wrq7oba2t6w",
+                "fields": {
+                  "repositoryPHID": "PHID-REPO-jp5qjexmqf7q56dako2q",
+                  "uri": {
+                    "raw": "ssh://shortname",
+                    "display": "ssh://git@we.phorge.it/source/phorge-it-ext.git",
+                    "effective": "ssh://git@we.phorge.it/source/phorge-it-ext.git",
+                    "normalized": "<base-uri>/source/phorge-it-ext"
+                  },
+                  "io": {
+                    "raw": "default",
+                    "default": "readwrite",
+                    "effective": "readwrite"
+                  },
+                  "display": {
+                    "raw": "default",
+                    "default": "always",
+                    "effective": "always"
+                  },
+                  "credentialPHID": null,
+                  "disabled": false,
+                  "builtin": {
+                    "protocol": "ssh",
+                    "identifier": "shortname"
+                  },
+                  "dateCreated": "1705144797",
+                  "dateModified": "1705144797"
+                }
+              }
+            ]
+          }
+        }
+      },
+      {
+        "id": 11,
+        "type": "REPO",
+        "phid": "PHID-REPO-3jp7boiwtrb6tjqc24ar",
+        "fields": {
+          "name": "Phorge-RTL",
+          "vcs": "git",
+          "callsign": null,
+          "shortName": "phorge-rtl",
+          "status": "active",
+          "isHosted": true,
+          "isImporting": false,
+          "almanacServicePHID": null,
+          "refRules": {
+            "fetchRules": [],
+            "trackRules": [],
+            "permanentRefRules": []
+          },
+          "defaultBranch": "master",
+          "description": {
+            "raw": "Minimal extension for supporting RTL content.\nAlso example for CSS in extension."
+          },
+          "spacePHID": "PHID-SPCE-gk6zkj2aq67qferqtnow",
+          "dateCreated": 1708168166,
+          "dateModified": 1708168398,
+          "policy": {
+            "view": "public",
+            "edit": "admin",
+            "diffusion.push": "PHID-PROJ-hv7htm24dpvrlfpr6t3f"
+          }
+        },
+        "attachments": {
+          "uris": {
+            "uris": [
+              {
+                "id": "102",
+                "type": "RURI",
+                "phid": "PHID-RURI-cs6sreaxxncbo67452k6",
+                "fields": {
+                  "repositoryPHID": "PHID-REPO-3jp7boiwtrb6tjqc24ar",
+                  "uri": {
+                    "raw": "https://id",
+                    "display": "https://we.phorge.it/diffusion/11/phorge-rtl.git",
+                    "effective": "https://we.phorge.it/diffusion/11/phorge-rtl.git",
+                    "normalized": "<base-uri>/diffusion/11"
+                  },
+                  "io": {
+                    "raw": "default",
+                    "default": "readwrite",
+                    "effective": "readwrite"
+                  },
+                  "display": {
+                    "raw": "default",
+                    "default": "never",
+                    "effective": "never"
+                  },
+                  "credentialPHID": null,
+                  "disabled": false,
+                  "builtin": {
+                    "protocol": "https",
+                    "identifier": "id"
+                  },
+                  "dateCreated": "1708168166",
+                  "dateModified": "1708168166"
+                }
+              },
+              {
+                "id": "101",
+                "type": "RURI",
+                "phid": "PHID-RURI-oho5dyhpsckr2yqkp66t",
+                "fields": {
+                  "repositoryPHID": "PHID-REPO-3jp7boiwtrb6tjqc24ar",
+                  "uri": {
+                    "raw": "https://shortname",
+                    "display": "https://we.phorge.it/source/phorge-rtl.git",
+                    "effective": "https://we.phorge.it/source/phorge-rtl.git",
+                    "normalized": "<base-uri>/source/phorge-rtl"
+                  },
+                  "io": {
+                    "raw": "default",
+                    "default": "readwrite",
+                    "effective": "readwrite"
+                  },
+                  "display": {
+                    "raw": "default",
+                    "default": "always",
+                    "effective": "always"
+                  },
+                  "credentialPHID": null,
+                  "disabled": false,
+                  "builtin": {
+                    "protocol": "https",
+                    "identifier": "shortname"
+                  },
+                  "dateCreated": "1708168166",
+                  "dateModified": "1708168166"
+                }
+              },
+              {
+                "id": "99",
+                "type": "RURI",
+                "phid": "PHID-RURI-yawurkdmetrc4d6yhq35",
+                "fields": {
+                  "repositoryPHID": "PHID-REPO-3jp7boiwtrb6tjqc24ar",
+                  "uri": {
+                    "raw": "ssh://id",
+                    "display": "ssh://git@we.phorge.it/diffusion/11/phorge-rtl.git",
+                    "effective": "ssh://git@we.phorge.it/diffusion/11/phorge-rtl.git",
+                    "normalized": "<base-uri>/diffusion/11"
+                  },
+                  "io": {
+                    "raw": "default",
+                    "default": "readwrite",
+                    "effective": "readwrite"
+                  },
+                  "display": {
+                    "raw": "default",
+                    "default": "never",
+                    "effective": "never"
+                  },
+                  "credentialPHID": null,
+                  "disabled": false,
+                  "builtin": {
+                    "protocol": "ssh",
+                    "identifier": "id"
+                  },
+                  "dateCreated": "1708168166",
+                  "dateModified": "1708168166"
+                }
+              },
+              {
+                "id": "98",
+                "type": "RURI",
+                "phid": "PHID-RURI-57wnoeaohwkwqzhfdk3w",
+                "fields": {
+                  "repositoryPHID": "PHID-REPO-3jp7boiwtrb6tjqc24ar",
+                  "uri": {
+                    "raw": "ssh://shortname",
+                    "display": "ssh://git@we.phorge.it/source/phorge-rtl.git",
+                    "effective": "ssh://git@we.phorge.it/source/phorge-rtl.git",
+                    "normalized": "<base-uri>/source/phorge-rtl"
+                  },
+                  "io": {
+                    "raw": "default",
+                    "default": "readwrite",
+                    "effective": "readwrite"
+                  },
+                  "display": {
+                    "raw": "default",
+                    "default": "always",
+                    "effective": "always"
+                  },
+                  "credentialPHID": null,
+                  "disabled": false,
+                  "builtin": {
+                    "protocol": "ssh",
+                    "identifier": "shortname"
+                  },
+                  "dateCreated": "1708168166",
+                  "dateModified": "1708168166"
+                }
+              }
+            ]
+          }
+        }
+      },
+      {
+        "id": 12,
+        "type": "REPO",
+        "phid": "PHID-REPO-v4c4isnqovko57zycwvz",
+        "fields": {
+          "name": "Test Stuff",
+          "vcs": "git",
+          "callsign": null,
+          "shortName": null,
+          "status": "active",
+          "isHosted": true,
+          "isImporting": false,
+          "almanacServicePHID": null,
+          "refRules": {
+            "fetchRules": [],
+            "trackRules": [],
+            "permanentRefRules": []
+          },
+          "defaultBranch": "master",
+          "description": {
+            "raw": "repo for testing some Phorge things"
+          },
+          "spacePHID": "PHID-SPCE-gk6zkj2aq67qferqtnow",
+          "dateCreated": 1709565805,
+          "dateModified": 1709566083,
+          "policy": {
+            "view": "public",
+            "edit": "admin",
+            "diffusion.push": "PHID-PROJ-hv7htm24dpvrlfpr6t3f"
+          }
+        },
+        "attachments": {
+          "uris": {
+            "uris": [
+              {
+                "id": "111",
+                "type": "RURI",
+                "phid": "PHID-RURI-6jgtwssmntexbnzaf6mw",
+                "fields": {
+                  "repositoryPHID": "PHID-REPO-v4c4isnqovko57zycwvz",
+                  "uri": {
+                    "raw": "https://id",
+                    "display": "https://we.phorge.it/diffusion/12/test-stuff.git",
+                    "effective": "https://we.phorge.it/diffusion/12/test-stuff.git",
+                    "normalized": "<base-uri>/diffusion/12"
+                  },
+                  "io": {
+                    "raw": "default",
+                    "default": "readwrite",
+                    "effective": "readwrite"
+                  },
+                  "display": {
+                    "raw": "default",
+                    "default": "always",
+                    "effective": "always"
+                  },
+                  "credentialPHID": null,
+                  "disabled": false,
+                  "builtin": {
+                    "protocol": "https",
+                    "identifier": "id"
+                  },
+                  "dateCreated": "1709565805",
+                  "dateModified": "1709565805"
+                }
+              },
+              {
+                "id": "108",
+                "type": "RURI",
+                "phid": "PHID-RURI-uk5t5oiqyoh4tuzo5pok",
+                "fields": {
+                  "repositoryPHID": "PHID-REPO-v4c4isnqovko57zycwvz",
+                  "uri": {
+                    "raw": "ssh://id",
+                    "display": "ssh://git@we.phorge.it/diffusion/12/test-stuff.git",
+                    "effective": "ssh://git@we.phorge.it/diffusion/12/test-stuff.git",
+                    "normalized": "<base-uri>/diffusion/12"
+                  },
+                  "io": {
+                    "raw": "default",
+                    "default": "readwrite",
+                    "effective": "readwrite"
+                  },
+                  "display": {
+                    "raw": "default",
+                    "default": "always",
+                    "effective": "always"
+                  },
+                  "credentialPHID": null,
+                  "disabled": false,
+                  "builtin": {
+                    "protocol": "ssh",
+                    "identifier": "id"
+                  },
+                  "dateCreated": "1709565805",
+                  "dateModified": "1709565805"
+                }
+              }
+            ]
+          }
+        }
+      },
+      {
+        "id": 13,
+        "type": "REPO",
+        "phid": "PHID-REPO-3qtcbmunfor6yxzoxgoo",
+        "fields": {
+          "name": "DeepClone",
+          "vcs": "git",
+          "callsign": null,
+          "shortName": null,
+          "status": "active",
+          "isHosted": true,
+          "isImporting": false,
+          "almanacServicePHID": null,
+          "refRules": {
+            "fetchRules": [],
+            "trackRules": [],
+            "permanentRefRules": []
+          },
+          "defaultBranch": "main",
+          "description": {
+            "raw": "An extension that allows you to clone a task and all it's siblings.\n\nAlso contains a good example of how to use the devcontainer setup by @willson556"
+          },
+          "spacePHID": "PHID-SPCE-gk6zkj2aq67qferqtnow",
+          "dateCreated": 1710921508,
+          "dateModified": 1710926418,
+          "policy": {
+            "view": "public",
+            "edit": "admin",
+            "diffusion.push": "PHID-PROJ-vhkmid6zm6ozoumwb55o"
+          }
+        },
+        "attachments": {
+          "uris": {
+            "uris": [
+              {
+                "id": "120",
+                "type": "RURI",
+                "phid": "PHID-RURI-kfu2ycxrp3dtxpbhffaa",
+                "fields": {
+                  "repositoryPHID": "PHID-REPO-3qtcbmunfor6yxzoxgoo",
+                  "uri": {
+                    "raw": "https://id",
+                    "display": "https://we.phorge.it/diffusion/13/deepclone.git",
+                    "effective": "https://we.phorge.it/diffusion/13/deepclone.git",
+                    "normalized": "<base-uri>/diffusion/13"
+                  },
+                  "io": {
+                    "raw": "default",
+                    "default": "readwrite",
+                    "effective": "readwrite"
+                  },
+                  "display": {
+                    "raw": "default",
+                    "default": "always",
+                    "effective": "always"
+                  },
+                  "credentialPHID": null,
+                  "disabled": false,
+                  "builtin": {
+                    "protocol": "https",
+                    "identifier": "id"
+                  },
+                  "dateCreated": "1710921508",
+                  "dateModified": "1710921508"
+                }
+              },
+              {
+                "id": "117",
+                "type": "RURI",
+                "phid": "PHID-RURI-gllte7w4s2ubo7iapij7",
+                "fields": {
+                  "repositoryPHID": "PHID-REPO-3qtcbmunfor6yxzoxgoo",
+                  "uri": {
+                    "raw": "ssh://id",
+                    "display": "ssh://git@we.phorge.it/diffusion/13/deepclone.git",
+                    "effective": "ssh://git@we.phorge.it/diffusion/13/deepclone.git",
+                    "normalized": "<base-uri>/diffusion/13"
+                  },
+                  "io": {
+                    "raw": "default",
+                    "default": "readwrite",
+                    "effective": "readwrite"
+                  },
+                  "display": {
+                    "raw": "default",
+                    "default": "always",
+                    "effective": "always"
+                  },
+                  "credentialPHID": null,
+                  "disabled": false,
+                  "builtin": {
+                    "protocol": "ssh",
+                    "identifier": "id"
+                  },
+                  "dateCreated": "1710921508",
+                  "dateModified": "1710921508"
+                }
+              }
+            ]
+          }
+        }
+      },
+      {
+        "id": 14,
+        "type": "REPO",
+        "phid": "PHID-REPO-cf5w3736tviqhuw3w6oh",
+        "fields": {
+          "name": "Gantt Charts",
+          "vcs": "git",
+          "callsign": null,
+          "shortName": "GanttCharts",
+          "status": "active",
+          "isHosted": true,
+          "isImporting": false,
+          "almanacServicePHID": null,
+          "refRules": {
+            "fetchRules": [],
+            "trackRules": [],
+            "permanentRefRules": []
+          },
+          "defaultBranch": "main",
+          "description": {
+            "raw": "Renders with the help of [frappe gantt](https://frappe.io/gantt) an editable Gantt chart."
+          },
+          "spacePHID": "PHID-SPCE-gk6zkj2aq67qferqtnow",
+          "dateCreated": 1712724526,
+          "dateModified": 1712724705,
+          "policy": {
+            "view": "public",
+            "edit": "admin",
+            "diffusion.push": "PHID-PROJ-5w3suyevpwyxaq3dfkeu"
+          }
+        },
+        "attachments": {
+          "uris": {
+            "uris": [
+              {
+                "id": "129",
+                "type": "RURI",
+                "phid": "PHID-RURI-vvkwn3lpgh4usvpy36u5",
+                "fields": {
+                  "repositoryPHID": "PHID-REPO-cf5w3736tviqhuw3w6oh",
+                  "uri": {
+                    "raw": "https://id",
+                    "display": "https://we.phorge.it/diffusion/14/GanttCharts.git",
+                    "effective": "https://we.phorge.it/diffusion/14/GanttCharts.git",
+                    "normalized": "<base-uri>/diffusion/14"
+                  },
+                  "io": {
+                    "raw": "default",
+                    "default": "readwrite",
+                    "effective": "readwrite"
+                  },
+                  "display": {
+                    "raw": "default",
+                    "default": "never",
+                    "effective": "never"
+                  },
+                  "credentialPHID": null,
+                  "disabled": false,
+                  "builtin": {
+                    "protocol": "https",
+                    "identifier": "id"
+                  },
+                  "dateCreated": "1712724526",
+                  "dateModified": "1712724526"
+                }
+              },
+              {
+                "id": "128",
+                "type": "RURI",
+                "phid": "PHID-RURI-dyxsxw3mlk5wbzdjvtop",
+                "fields": {
+                  "repositoryPHID": "PHID-REPO-cf5w3736tviqhuw3w6oh",
+                  "uri": {
+                    "raw": "https://shortname",
+                    "display": "https://we.phorge.it/source/GanttCharts.git",
+                    "effective": "https://we.phorge.it/source/GanttCharts.git",
+                    "normalized": "<base-uri>/source/GanttCharts"
+                  },
+                  "io": {
+                    "raw": "default",
+                    "default": "readwrite",
+                    "effective": "readwrite"
+                  },
+                  "display": {
+                    "raw": "default",
+                    "default": "always",
+                    "effective": "always"
+                  },
+                  "credentialPHID": null,
+                  "disabled": false,
+                  "builtin": {
+                    "protocol": "https",
+                    "identifier": "shortname"
+                  },
+                  "dateCreated": "1712724526",
+                  "dateModified": "1712724526"
+                }
+              },
+              {
+                "id": "126",
+                "type": "RURI",
+                "phid": "PHID-RURI-u6jwirvhrienofolnhfk",
+                "fields": {
+                  "repositoryPHID": "PHID-REPO-cf5w3736tviqhuw3w6oh",
+                  "uri": {
+                    "raw": "ssh://id",
+                    "display": "ssh://git@we.phorge.it/diffusion/14/GanttCharts.git",
+                    "effective": "ssh://git@we.phorge.it/diffusion/14/GanttCharts.git",
+                    "normalized": "<base-uri>/diffusion/14"
+                  },
+                  "io": {
+                    "raw": "default",
+                    "default": "readwrite",
+                    "effective": "readwrite"
+                  },
+                  "display": {
+                    "raw": "default",
+                    "default": "never",
+                    "effective": "never"
+                  },
+                  "credentialPHID": null,
+                  "disabled": false,
+                  "builtin": {
+                    "protocol": "ssh",
+                    "identifier": "id"
+                  },
+                  "dateCreated": "1712724526",
+                  "dateModified": "1712724526"
+                }
+              },
+              {
+                "id": "125",
+                "type": "RURI",
+                "phid": "PHID-RURI-6ffemzfkgrdmwawdlxso",
+                "fields": {
+                  "repositoryPHID": "PHID-REPO-cf5w3736tviqhuw3w6oh",
+                  "uri": {
+                    "raw": "ssh://shortname",
+                    "display": "ssh://git@we.phorge.it/source/GanttCharts.git",
+                    "effective": "ssh://git@we.phorge.it/source/GanttCharts.git",
+                    "normalized": "<base-uri>/source/GanttCharts"
+                  },
+                  "io": {
+                    "raw": "default",
+                    "default": "readwrite",
+                    "effective": "readwrite"
+                  },
+                  "display": {
+                    "raw": "default",
+                    "default": "always",
+                    "effective": "always"
+                  },
+                  "credentialPHID": null,
+                  "disabled": false,
+                  "builtin": {
+                    "protocol": "ssh",
+                    "identifier": "shortname"
+                  },
+                  "dateCreated": "1712724526",
+                  "dateModified": "1712724526"
+                }
+              }
+            ]
+          }
+        }
+      },
+      {
+        "id": 15,
+        "type": "REPO",
+        "phid": "PHID-REPO-2qdyy6hnv7uimxypzouc",
+        "fields": {
+          "name": "Phorge Status Checker",
+          "vcs": "git",
+          "callsign": null,
+          "shortName": "phorge-status-checker",
+          "status": "active",
+          "isHosted": true,
+          "isImporting": false,
+          "almanacServicePHID": null,
+          "refRules": {
+            "fetchRules": [],
+            "trackRules": [],
+            "permanentRefRules": []
+          },
+          "defaultBranch": "master",
+          "description": {
+            "raw": "Scripts to run client-side to check the status of a Phorge install"
+          },
+          "spacePHID": "PHID-SPCE-gk6zkj2aq67qferqtnow",
+          "dateCreated": 1752435525,
+          "dateModified": 1752435728,
+          "policy": {
+            "view": "public",
+            "edit": "admin",
+            "diffusion.push": "PHID-PROJ-hv7htm24dpvrlfpr6t3f"
+          }
+        },
+        "attachments": {
+          "uris": {
+            "uris": [
+              {
+                "id": "138",
+                "type": "RURI",
+                "phid": "PHID-RURI-zfjbdjxwp3i2kkjnkmb5",
+                "fields": {
+                  "repositoryPHID": "PHID-REPO-2qdyy6hnv7uimxypzouc",
+                  "uri": {
+                    "raw": "https://id",
+                    "display": "https://we.phorge.it/diffusion/15/phorge-status-checker.git",
+                    "effective": "https://we.phorge.it/diffusion/15/phorge-status-checker.git",
+                    "normalized": "<base-uri>/diffusion/15"
+                  },
+                  "io": {
+                    "raw": "default",
+                    "default": "readwrite",
+                    "effective": "readwrite"
+                  },
+                  "display": {
+                    "raw": "default",
+                    "default": "never",
+                    "effective": "never"
+                  },
+                  "credentialPHID": null,
+                  "disabled": false,
+                  "builtin": {
+                    "protocol": "https",
+                    "identifier": "id"
+                  },
+                  "dateCreated": "1752435525",
+                  "dateModified": "1752435525"
+                }
+              },
+              {
+                "id": "137",
+                "type": "RURI",
+                "phid": "PHID-RURI-au3j5uijw7b5265gd3qu",
+                "fields": {
+                  "repositoryPHID": "PHID-REPO-2qdyy6hnv7uimxypzouc",
+                  "uri": {
+                    "raw": "https://shortname",
+                    "display": "https://we.phorge.it/source/phorge-status-checker.git",
+                    "effective": "https://we.phorge.it/source/phorge-status-checker.git",
+                    "normalized": "<base-uri>/source/phorge-status-checker"
+                  },
+                  "io": {
+                    "raw": "default",
+                    "default": "readwrite",
+                    "effective": "readwrite"
+                  },
+                  "display": {
+                    "raw": "default",
+                    "default": "always",
+                    "effective": "always"
+                  },
+                  "credentialPHID": null,
+                  "disabled": false,
+                  "builtin": {
+                    "protocol": "https",
+                    "identifier": "shortname"
+                  },
+                  "dateCreated": "1752435525",
+                  "dateModified": "1752435525"
+                }
+              },
+              {
+                "id": "135",
+                "type": "RURI",
+                "phid": "PHID-RURI-l3yv3eboy4ggtz6litui",
+                "fields": {
+                  "repositoryPHID": "PHID-REPO-2qdyy6hnv7uimxypzouc",
+                  "uri": {
+                    "raw": "ssh://id",
+                    "display": "ssh://git@we.phorge.it/diffusion/15/phorge-status-checker.git",
+                    "effective": "ssh://git@we.phorge.it/diffusion/15/phorge-status-checker.git",
+                    "normalized": "<base-uri>/diffusion/15"
+                  },
+                  "io": {
+                    "raw": "default",
+                    "default": "readwrite",
+                    "effective": "readwrite"
+                  },
+                  "display": {
+                    "raw": "default",
+                    "default": "never",
+                    "effective": "never"
+                  },
+                  "credentialPHID": null,
+                  "disabled": false,
+                  "builtin": {
+                    "protocol": "ssh",
+                    "identifier": "id"
+                  },
+                  "dateCreated": "1752435525",
+                  "dateModified": "1752435525"
+                }
+              },
+              {
+                "id": "134",
+                "type": "RURI",
+                "phid": "PHID-RURI-4cqtob6mcsgtuud3ma2y",
+                "fields": {
+                  "repositoryPHID": "PHID-REPO-2qdyy6hnv7uimxypzouc",
+                  "uri": {
+                    "raw": "ssh://shortname",
+                    "display": "ssh://git@we.phorge.it/source/phorge-status-checker.git",
+                    "effective": "ssh://git@we.phorge.it/source/phorge-status-checker.git",
+                    "normalized": "<base-uri>/source/phorge-status-checker"
+                  },
+                  "io": {
+                    "raw": "default",
+                    "default": "readwrite",
+                    "effective": "readwrite"
+                  },
+                  "display": {
+                    "raw": "default",
+                    "default": "always",
+                    "effective": "always"
+                  },
+                  "credentialPHID": null,
+                  "disabled": false,
+                  "builtin": {
+                    "protocol": "ssh",
+                    "identifier": "shortname"
+                  },
+                  "dateCreated": "1752435525",
+                  "dateModified": "1752435525"
+                }
+              }
+            ]
+          }
+        }
+      },
+      {
+        "id": 16,
+        "type": "REPO",
+        "phid": "PHID-REPO-2moolodunj73mgcpnolu",
+        "fields": {
+          "name": "phorge-vscode",
+          "vcs": "git",
+          "callsign": null,
+          "shortName": "phorge-vscode",
+          "status": "active",
+          "isHosted": true,
+          "isImporting": false,
+          "almanacServicePHID": null,
+          "refRules": {
+            "fetchRules": [],
+            "trackRules": [],
+            "permanentRefRules": []
+          },
+          "defaultBranch": "master",
+          "description": {
+            "raw": "A vscode/codium extension for developing Phorge and Phorge Extensions."
+          },
+          "spacePHID": "PHID-SPCE-gk6zkj2aq67qferqtnow",
+          "dateCreated": 1761934276,
+          "dateModified": 1761936841,
+          "policy": {
+            "view": "public",
+            "edit": "admin",
+            "diffusion.push": "PHID-PROJ-hv7htm24dpvrlfpr6t3f"
+          }
+        },
+        "attachments": {
+          "uris": {
+            "uris": [
+              {
+                "id": "151",
+                "type": "RURI",
+                "phid": "PHID-RURI-urdpjtykjfckkbzglkz3",
+                "fields": {
+                  "repositoryPHID": "PHID-REPO-2moolodunj73mgcpnolu",
+                  "uri": {
+                    "raw": "https://github.com/phorgeit/phorge-vscode.git",
+                    "display": "https://github.com/phorgeit/phorge-vscode.git",
+                    "effective": "https://github.com/phorgeit/phorge-vscode.git",
+                    "normalized": "github.com/phorgeit/phorge-vscode"
+                  },
+                  "io": {
+                    "raw": "mirror",
+                    "default": "none",
+                    "effective": "mirror"
+                  },
+                  "display": {
+                    "raw": "default",
+                    "default": "never",
+                    "effective": "never"
+                  },
+                  "credentialPHID": "PHID-CDTL-5rgldmcvrxsou2iggh4p",
+                  "disabled": false,
+                  "builtin": {
+                    "protocol": null,
+                    "identifier": null
+                  },
+                  "dateCreated": "1761936629",
+                  "dateModified": "1761936641"
+                }
+              },
+              {
+                "id": "147",
+                "type": "RURI",
+                "phid": "PHID-RURI-h5s4dm4xummjuayseokw",
+                "fields": {
+                  "repositoryPHID": "PHID-REPO-2moolodunj73mgcpnolu",
+                  "uri": {
+                    "raw": "https://id",
+                    "display": "https://we.phorge.it/diffusion/16/phorge-vscode.git",
+                    "effective": "https://we.phorge.it/diffusion/16/phorge-vscode.git",
+                    "normalized": "<base-uri>/diffusion/16"
+                  },
+                  "io": {
+                    "raw": "default",
+                    "default": "readwrite",
+                    "effective": "readwrite"
+                  },
+                  "display": {
+                    "raw": "default",
+                    "default": "never",
+                    "effective": "never"
+                  },
+                  "credentialPHID": null,
+                  "disabled": false,
+                  "builtin": {
+                    "protocol": "https",
+                    "identifier": "id"
+                  },
+                  "dateCreated": "1761934276",
+                  "dateModified": "1761934276"
+                }
+              },
+              {
+                "id": "146",
+                "type": "RURI",
+                "phid": "PHID-RURI-bizuzug6jql3twwb7sm3",
+                "fields": {
+                  "repositoryPHID": "PHID-REPO-2moolodunj73mgcpnolu",
+                  "uri": {
+                    "raw": "https://shortname",
+                    "display": "https://we.phorge.it/source/phorge-vscode.git",
+                    "effective": "https://we.phorge.it/source/phorge-vscode.git",
+                    "normalized": "<base-uri>/source/phorge-vscode"
+                  },
+                  "io": {
+                    "raw": "default",
+                    "default": "readwrite",
+                    "effective": "readwrite"
+                  },
+                  "display": {
+                    "raw": "default",
+                    "default": "always",
+                    "effective": "always"
+                  },
+                  "credentialPHID": null,
+                  "disabled": false,
+                  "builtin": {
+                    "protocol": "https",
+                    "identifier": "shortname"
+                  },
+                  "dateCreated": "1761934276",
+                  "dateModified": "1761934276"
+                }
+              },
+              {
+                "id": "144",
+                "type": "RURI",
+                "phid": "PHID-RURI-qn6mnrvtl4ckufbpfgg7",
+                "fields": {
+                  "repositoryPHID": "PHID-REPO-2moolodunj73mgcpnolu",
+                  "uri": {
+                    "raw": "ssh://id",
+                    "display": "ssh://git@we.phorge.it/diffusion/16/phorge-vscode.git",
+                    "effective": "ssh://git@we.phorge.it/diffusion/16/phorge-vscode.git",
+                    "normalized": "<base-uri>/diffusion/16"
+                  },
+                  "io": {
+                    "raw": "default",
+                    "default": "readwrite",
+                    "effective": "readwrite"
+                  },
+                  "display": {
+                    "raw": "default",
+                    "default": "never",
+                    "effective": "never"
+                  },
+                  "credentialPHID": null,
+                  "disabled": false,
+                  "builtin": {
+                    "protocol": "ssh",
+                    "identifier": "id"
+                  },
+                  "dateCreated": "1761934276",
+                  "dateModified": "1761934276"
+                }
+              },
+              {
+                "id": "143",
+                "type": "RURI",
+                "phid": "PHID-RURI-5gxn53rocu6gho56slas",
+                "fields": {
+                  "repositoryPHID": "PHID-REPO-2moolodunj73mgcpnolu",
+                  "uri": {
+                    "raw": "ssh://shortname",
+                    "display": "ssh://git@we.phorge.it/source/phorge-vscode.git",
+                    "effective": "ssh://git@we.phorge.it/source/phorge-vscode.git",
+                    "normalized": "<base-uri>/source/phorge-vscode"
+                  },
+                  "io": {
+                    "raw": "default",
+                    "default": "readwrite",
+                    "effective": "readwrite"
+                  },
+                  "display": {
+                    "raw": "default",
+                    "default": "always",
+                    "effective": "always"
+                  },
+                  "credentialPHID": null,
+                  "disabled": false,
+                  "builtin": {
+                    "protocol": "ssh",
+                    "identifier": "shortname"
+                  },
+                  "dateCreated": "1761934276",
+                  "dateModified": "1761934276"
+                }
+              }
+            ]
+          }
+        }
+      },
+      {
+        "id": 17,
+        "type": "REPO",
+        "phid": "PHID-REPO-2n2dbrbhngfi5pxvjhxu",
+        "fields": {
+          "name": "Extension Store",
+          "vcs": "git",
+          "callsign": null,
+          "shortName": "store",
+          "status": "active",
+          "isHosted": true,
+          "isImporting": false,
+          "almanacServicePHID": null,
+          "refRules": {
+            "fetchRules": [],
+            "trackRules": [],
+            "permanentRefRules": []
+          },
+          "defaultBranch": "master",
+          "description": {
+            "raw": "An implementation for the Extension Store (T16272)."
+          },
+          "spacePHID": "PHID-SPCE-gk6zkj2aq67qferqtnow",
+          "dateCreated": 1764091220,
+          "dateModified": 1764091340,
+          "policy": {
+            "view": "public",
+            "edit": "admin",
+            "diffusion.push": "PHID-PROJ-pstljzqpnkljguwskn2c"
+          }
+        },
+        "attachments": {
+          "uris": {
+            "uris": [
+              {
+                "id": "157",
+                "type": "RURI",
+                "phid": "PHID-RURI-bdmvwcwktf74ewgo6oeg",
+                "fields": {
+                  "repositoryPHID": "PHID-REPO-2n2dbrbhngfi5pxvjhxu",
+                  "uri": {
+                    "raw": "https://id",
+                    "display": "https://we.phorge.it/diffusion/17/store.git",
+                    "effective": "https://we.phorge.it/diffusion/17/store.git",
+                    "normalized": "<base-uri>/diffusion/17"
+                  },
+                  "io": {
+                    "raw": "default",
+                    "default": "readwrite",
+                    "effective": "readwrite"
+                  },
+                  "display": {
+                    "raw": "default",
+                    "default": "never",
+                    "effective": "never"
+                  },
+                  "credentialPHID": null,
+                  "disabled": false,
+                  "builtin": {
+                    "protocol": "https",
+                    "identifier": "id"
+                  },
+                  "dateCreated": "1764091220",
+                  "dateModified": "1764091220"
+                }
+              },
+              {
+                "id": "156",
+                "type": "RURI",
+                "phid": "PHID-RURI-6hfip3bgnvhmgtvy2ldb",
+                "fields": {
+                  "repositoryPHID": "PHID-REPO-2n2dbrbhngfi5pxvjhxu",
+                  "uri": {
+                    "raw": "https://shortname",
+                    "display": "https://we.phorge.it/source/store.git",
+                    "effective": "https://we.phorge.it/source/store.git",
+                    "normalized": "<base-uri>/source/store"
+                  },
+                  "io": {
+                    "raw": "default",
+                    "default": "readwrite",
+                    "effective": "readwrite"
+                  },
+                  "display": {
+                    "raw": "default",
+                    "default": "always",
+                    "effective": "always"
+                  },
+                  "credentialPHID": null,
+                  "disabled": false,
+                  "builtin": {
+                    "protocol": "https",
+                    "identifier": "shortname"
+                  },
+                  "dateCreated": "1764091220",
+                  "dateModified": "1764091220"
+                }
+              },
+              {
+                "id": "154",
+                "type": "RURI",
+                "phid": "PHID-RURI-dtzrsqy37evtod7ljxia",
+                "fields": {
+                  "repositoryPHID": "PHID-REPO-2n2dbrbhngfi5pxvjhxu",
+                  "uri": {
+                    "raw": "ssh://id",
+                    "display": "ssh://git@we.phorge.it/diffusion/17/store.git",
+                    "effective": "ssh://git@we.phorge.it/diffusion/17/store.git",
+                    "normalized": "<base-uri>/diffusion/17"
+                  },
+                  "io": {
+                    "raw": "default",
+                    "default": "readwrite",
+                    "effective": "readwrite"
+                  },
+                  "display": {
+                    "raw": "default",
+                    "default": "never",
+                    "effective": "never"
+                  },
+                  "credentialPHID": null,
+                  "disabled": false,
+                  "builtin": {
+                    "protocol": "ssh",
+                    "identifier": "id"
+                  },
+                  "dateCreated": "1764091220",
+                  "dateModified": "1764091220"
+                }
+              },
+              {
+                "id": "153",
+                "type": "RURI",
+                "phid": "PHID-RURI-ovslhvo7it35zco7vuof",
+                "fields": {
+                  "repositoryPHID": "PHID-REPO-2n2dbrbhngfi5pxvjhxu",
+                  "uri": {
+                    "raw": "ssh://shortname",
+                    "display": "ssh://git@we.phorge.it/source/store.git",
+                    "effective": "ssh://git@we.phorge.it/source/store.git",
+                    "normalized": "<base-uri>/source/store"
+                  },
+                  "io": {
+                    "raw": "default",
+                    "default": "readwrite",
+                    "effective": "readwrite"
+                  },
+                  "display": {
+                    "raw": "default",
+                    "default": "always",
+                    "effective": "always"
+                  },
+                  "credentialPHID": null,
+                  "disabled": false,
+                  "builtin": {
+                    "protocol": "ssh",
+                    "identifier": "shortname"
+                  },
+                  "dateCreated": "1764091220",
+                  "dateModified": "1764091220"
+                }
+              }
+            ]
+          }
+        }
+      },
+      {
+        "id": 18,
+        "type": "REPO",
+        "phid": "PHID-REPO-xue7hkf3jn4fo6lj3a4r",
+        "fields": {
+          "name": "Phorge Dev Assistance ",
+          "vcs": "git",
+          "callsign": null,
+          "shortName": "devassist",
+          "status": "active",
+          "isHosted": true,
+          "isImporting": false,
+          "almanacServicePHID": null,
+          "refRules": {
+            "fetchRules": [],
+            "trackRules": [],
+            "permanentRefRules": []
+          },
+          "defaultBranch": "master",
+          "description": {
+            "raw": "Extension to make Developing Phorge (and extensions) a little easier"
+          },
+          "spacePHID": "PHID-SPCE-gk6zkj2aq67qferqtnow",
+          "dateCreated": 1779542710,
+          "dateModified": 1779542925,
+          "policy": {
+            "view": "public",
+            "edit": "admin",
+            "diffusion.push": "PHID-PROJ-hv7htm24dpvrlfpr6t3f"
+          }
+        },
+        "attachments": {
+          "uris": {
+            "uris": [
+              {
+                "id": "166",
+                "type": "RURI",
+                "phid": "PHID-RURI-ltvvsoydwajbc7wapun7",
+                "fields": {
+                  "repositoryPHID": "PHID-REPO-xue7hkf3jn4fo6lj3a4r",
+                  "uri": {
+                    "raw": "https://id",
+                    "display": "https://we.phorge.it/diffusion/18/devassist.git",
+                    "effective": "https://we.phorge.it/diffusion/18/devassist.git",
+                    "normalized": "<base-uri>/diffusion/18"
+                  },
+                  "io": {
+                    "raw": "default",
+                    "default": "readwrite",
+                    "effective": "readwrite"
+                  },
+                  "display": {
+                    "raw": "default",
+                    "default": "never",
+                    "effective": "never"
+                  },
+                  "credentialPHID": null,
+                  "disabled": false,
+                  "builtin": {
+                    "protocol": "https",
+                    "identifier": "id"
+                  },
+                  "dateCreated": "1779542710",
+                  "dateModified": "1779542710"
+                }
+              },
+              {
+                "id": "165",
+                "type": "RURI",
+                "phid": "PHID-RURI-5dkmjqgnzwrtyvyq6uw7",
+                "fields": {
+                  "repositoryPHID": "PHID-REPO-xue7hkf3jn4fo6lj3a4r",
+                  "uri": {
+                    "raw": "https://shortname",
+                    "display": "https://we.phorge.it/source/devassist.git",
+                    "effective": "https://we.phorge.it/source/devassist.git",
+                    "normalized": "<base-uri>/source/devassist"
+                  },
+                  "io": {
+                    "raw": "default",
+                    "default": "readwrite",
+                    "effective": "readwrite"
+                  },
+                  "display": {
+                    "raw": "default",
+                    "default": "always",
+                    "effective": "always"
+                  },
+                  "credentialPHID": null,
+                  "disabled": false,
+                  "builtin": {
+                    "protocol": "https",
+                    "identifier": "shortname"
+                  },
+                  "dateCreated": "1779542710",
+                  "dateModified": "1779542710"
+                }
+              },
+              {
+                "id": "163",
+                "type": "RURI",
+                "phid": "PHID-RURI-m3soqwk2xgjwirat37pb",
+                "fields": {
+                  "repositoryPHID": "PHID-REPO-xue7hkf3jn4fo6lj3a4r",
+                  "uri": {
+                    "raw": "ssh://id",
+                    "display": "ssh://git@we.phorge.it/diffusion/18/devassist.git",
+                    "effective": "ssh://git@we.phorge.it/diffusion/18/devassist.git",
+                    "normalized": "<base-uri>/diffusion/18"
+                  },
+                  "io": {
+                    "raw": "default",
+                    "default": "readwrite",
+                    "effective": "readwrite"
+                  },
+                  "display": {
+                    "raw": "default",
+                    "default": "never",
+                    "effective": "never"
+                  },
+                  "credentialPHID": null,
+                  "disabled": false,
+                  "builtin": {
+                    "protocol": "ssh",
+                    "identifier": "id"
+                  },
+                  "dateCreated": "1779542710",
+                  "dateModified": "1779542710"
+                }
+              },
+              {
+                "id": "162",
+                "type": "RURI",
+                "phid": "PHID-RURI-ypcjp4ga34vrfrmfehgu",
+                "fields": {
+                  "repositoryPHID": "PHID-REPO-xue7hkf3jn4fo6lj3a4r",
+                  "uri": {
+                    "raw": "ssh://shortname",
+                    "display": "ssh://git@we.phorge.it/source/devassist.git",
+                    "effective": "ssh://git@we.phorge.it/source/devassist.git",
+                    "normalized": "<base-uri>/source/devassist"
+                  },
+                  "io": {
+                    "raw": "default",
+                    "default": "readwrite",
+                    "effective": "readwrite"
+                  },
+                  "display": {
+                    "raw": "default",
+                    "default": "always",
+                    "effective": "always"
+                  },
+                  "credentialPHID": null,
+                  "disabled": false,
+                  "builtin": {
+                    "protocol": "ssh",
+                    "identifier": "shortname"
+                  },
+                  "dateCreated": "1779542710",
+                  "dateModified": "1779542710"
+                }
+              }
+            ]
+          }
+        }
+      }
+    ],
+    "maps": {},
+    "query": {
+      "queryKey": null
+    },
+    "cursor": {
+      "limit": 100,
+      "after": null,
+      "before": null,
+      "order": "oldest"
+    }
+  },
+  "error_code": null,
+  "error_info": null
+}
