@@ -2,8 +2,6 @@
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
 
-from pathlib import Path
-
 import pytest
 
 from swh.lister import __version__
@@ -56,14 +54,6 @@ def test_lister_hgweb_run(
     """Hgweb lister nominal listing case."""
 
     lister = HgwebLister(swh_scheduler, url=url, enable_api=enable_api)
-
-    # FIXME: Workaround for SWH pytest plugin not having a fallback for path=/
-    requests_mock.get(
-        url,
-        complete_qs=True,
-        text=Path(datadir, f"https_{instance}", ",").read_text(),
-        headers={},
-    )
 
     stats = lister.run()
 
