@@ -6,7 +6,6 @@ from collections import defaultdict
 import logging
 import random
 from typing import Any, Dict, Iterator, List, Optional
-from urllib.parse import urljoin
 
 from swh.lister.pattern import CredentialsType, StatelessLister
 from swh.scheduler.interface import SchedulerInterface
@@ -31,7 +30,7 @@ class PhabricatorLister(StatelessLister[PageType]):
     """
 
     LISTER_NAME = "phabricator"
-    API_REPOSITORY_PATH = "/api/diffusion.repository.search"
+    API_REPOSITORY_PATH = "api/diffusion.repository.search"
 
     def __init__(
         self,
@@ -44,15 +43,21 @@ class PhabricatorLister(StatelessLister[PageType]):
         max_pages: Optional[int] = None,
         enable_origins: bool = True,
     ):
+        # FIXME: remove once the scheduler database is updated
+        if url is not None and url.endswith(f"/{self.API_REPOSITORY_PATH}"):
+            url = url.removesuffix(self.API_REPOSITORY_PATH)
+
         super().__init__(
             scheduler=scheduler,
-            url=urljoin(url, self.API_REPOSITORY_PATH),
+            url=url,
             instance=instance,
             credentials=credentials,
             max_origins_per_page=max_origins_per_page,
             max_pages=max_pages,
             enable_origins=enable_origins,
         )
+
+        self.api_url = f"{self.url.removesuffix('/')}/{self.API_REPOSITORY_PATH}"
 
         self.session.headers.update({"Accept": "application/json"})
 
@@ -95,7 +100,7 @@ class PhabricatorLister(StatelessLister[PageType]):
         after: Optional[str] = None
         while True:
             params = self.get_request_params(after)
-            response = self.http_request(self.url, method="POST", data=params)
+            response = self.http_request(self.api_url, method="POST", data=params)
 
             response_data = response.json()
 

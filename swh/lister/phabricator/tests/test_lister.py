@@ -1,4 +1,4 @@
-# Copyright (C) 2019-2024  The Software Heritage developers
+# Copyright (C) 2019-2026  The Software Heritage developers
 # See the AUTHORS file at the top-level directory of this distribution
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
@@ -56,7 +56,7 @@ def test_get_repo_url_undefined_protocol():
 
 def test_lister_url_param(swh_scheduler):
     FORGE_BASE_URL = "https://forge.softwareheritage.org"
-    API_REPOSITORY_PATH = "/api/diffusion.repository.search"
+    API_REPOSITORY_PATH = "api/diffusion.repository.search"
 
     for url in (
         FORGE_BASE_URL,
@@ -68,9 +68,9 @@ def test_lister_url_param(swh_scheduler):
             scheduler=swh_scheduler, url=FORGE_BASE_URL, instance="swh", api_token="foo"
         )
 
-        expected_url = f"{FORGE_BASE_URL}{API_REPOSITORY_PATH}"
+        expected_api_url = f"{FORGE_BASE_URL}/{API_REPOSITORY_PATH}"
 
-        assert lister.url == expected_url
+        assert lister.api_url == expected_api_url
 
 
 def test_lister(
@@ -94,7 +94,7 @@ def test_lister(
         )
 
     requests_mock.post(
-        f"{FORGE_BASE_URL}{lister.API_REPOSITORY_PATH}",
+        f"{FORGE_BASE_URL}/{lister.API_REPOSITORY_PATH}",
         [
             {"json": phabricator_repositories_page1},
             {"json": phabricator_repositories_page2},
@@ -126,7 +126,7 @@ def test_lister_request_error(
     )
 
     requests_mock.post(
-        f"{FORGE_BASE_URL}{lister.API_REPOSITORY_PATH}",
+        f"{FORGE_BASE_URL}/{lister.API_REPOSITORY_PATH}",
         [
             {"status_code": 200, "json": phabricator_repositories_page1},
             {"status_code": 500, "reason": "Internal Server Error"},

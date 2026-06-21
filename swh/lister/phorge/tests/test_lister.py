@@ -32,7 +32,7 @@ def test_lister(
         )
 
     requests_mock.post(
-        url=f"{URL}{lister.API_REPOSITORY_PATH}",
+        url=f"{URL}/{lister.API_REPOSITORY_PATH}",
         status_code=200,
         body=functools.partial(get_response_cb, datadir=datadir),
         additional_matcher=match_request,
