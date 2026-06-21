@@ -182,9 +182,20 @@ class Lister(Generic[StateType, PageType]):
             raise ValueError("Instance should only be a net location.")
         return f"https://{instance}"
 
+    @staticmethod
+    def filter_http_request_params(params: Dict[str, str]) -> Dict[str, str]:
+        """Filter HTTP request parameters before logging them.
+        Override to remove any secrets passed via parameters.
+        """
+        return params
+
     @http_retry(before_sleep=before_sleep_log(logger, logging.WARNING))
     def http_request(self, url: str, method="GET", **kwargs) -> requests.Response:
-        logger.debug("Fetching URL %s with params %s", url, kwargs.get("params"))
+        logger.debug(
+            "Fetching URL %s with params %s",
+            url,
+            self.filter_http_request_params(kwargs.get("params", {})),
+        )
 
         response = self.session.request(method, url, **kwargs)
         if response.status_code not in (200, 304):

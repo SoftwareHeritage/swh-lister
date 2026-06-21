@@ -1,4 +1,4 @@
-# Copyright (C) 2019-2022  The Software Heritage developers
+# Copyright (C) 2019-2026  The Software Heritage developers
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
 
@@ -85,7 +85,7 @@ class PhabricatorLister(StatelessLister[PageType]):
         return base_params
 
     @staticmethod
-    def filter_params(params: Dict[str, str]) -> Dict[str, str]:
+    def filter_http_request_params(params: Dict[str, str]) -> Dict[str, str]:
         """Filter the parameters for debug purposes"""
         return {
             k: (v if k != "api.token" else "**redacted**") for k, v in params.items()
