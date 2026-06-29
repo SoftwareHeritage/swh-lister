@@ -11,56 +11,61 @@ lister_args = {
     "cgit": {
         "url": "https://git.eclipse.org/c/",
     },
-    "phabricator": {
-        "instance": "softwareheritage",
-        "url": "https://forge.softwareheritage.org/api/diffusion.repository.search",
-        "api_token": "bogus",
+    "forgejo": {
+        "instance": "try.next.forgejo.org",
     },
     "gerrit": {"instance": "gerrit-review.googlesource.com"},
     "gitea": {
         "instance": "demo.gitea.com",
     },
-    "forgejo": {
-        "instance": "try.next.forgejo.org",
-    },
-    "heptapod": {
-        "instance": "foss.heptapod.net",
-    },
-    "tuleap": {
-        "url": "https://tuleap.net",
+    "gitiles": {
+        "instance": "gerrit.googlesource.com",
     },
     "gitlab": {
         "instance": "gitlab.ow2.org",
     },
-    "opam": {"url": "https://opam.ocaml.org", "instance": "opam"},
-    "maven": {
-        "url": "https://repo1.maven.org/maven2/",
-        "index_url": "http://indexes/export.fld",
+    "gitweb": {
+        "url": "https://git.distorted.org.uk/~mdw/",
     },
     "gogs": {
         "instance": "try.gogs.io",
         "api_token": "secret",
     },
     "grokmirror": {"instance": "git.kernel.org"},
+    "heptapod": {
+        "instance": "foss.heptapod.net",
+    },
+    "hgweb": {"instance": "repo.mercurial-scm.org"},
+    "maven": {
+        "url": "https://repo1.maven.org/maven2/",
+        "index_url": "http://indexes/export.fld",
+    },
     "nixguix": {
         "url": "https://guix.gnu.org/sources.json",
         "origin_upstream": "https://git.savannah.gnu.org/cgit/guix.git/",
     },
-    "rpm": {"url": "http://opensuse.org", "instance": "openSUSE", "rpm_src_data": []},
+    "opam": {"url": "https://opam.ocaml.org", "instance": "opam"},
     "pagure": {"instance": "pagure.io"},
-    "gitweb": {
-        "url": "https://git.distorted.org.uk/~mdw/",
+    "phabricator": {
+        "url": "https://forge.softwareheritage.org/",
+        "instance": "softwareheritage",
+        "api_token": "bogus",
     },
-    "hgweb": {"instance": "repo.mercurial-scm.org"},
-    "gitiles": {
-        "instance": "gerrit.googlesource.com",
+    "phorge": {
+        "url": "https://we.phorge.it/",
+        "instance": "wephorgeit",
+        "api_token": "bogus",
+    },
+    "rpm": {"url": "http://opensuse.org", "instance": "openSUSE", "rpm_src_data": []},
+    "save-bulk": {
+        "url": "https://example.org/origins/list/",
+        "instance": "example.org",
     },
     "stagit": {
         "url": "https://git.codemadness.org",
     },
-    "save-bulk": {
-        "url": "https://example.org/origins/list/",
-        "instance": "example.org",
+    "tuleap": {
+        "url": "https://tuleap.net",
     },
 }
 
