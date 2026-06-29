@@ -68,6 +68,7 @@ testing = {file = ["requirements-test.txt"]}
 "lister.packagist" = "swh.lister.packagist:register"
 "lister.pagure" = "swh.lister.pagure:register"
 "lister.phabricator" = "swh.lister.phabricator:register"
+"lister.phorge" = "swh.lister.phorge:register"
 "lister.pubdev" = "swh.lister.pubdev:register"
 "lister.puppet" = "swh.lister.puppet:register"
 "lister.pypi" = "swh.lister.pypi:register"
