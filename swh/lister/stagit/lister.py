@@ -1,4 +1,4 @@
-# Copyright (C) 2023-2024  The Software Heritage developers
+# Copyright (C) 2023-2026  The Software Heritage developers
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
 
@@ -81,7 +81,10 @@ class StagitLister(StatelessLister[Repositories]):
             if not link:
                 continue
 
-            repo_description_url = self.url + "/" + link.attrs["href"]
+            repo_description_href = link.attrs["href"]
+            assert isinstance(repo_description_href, str)
+
+            repo_description_url = self.url + "/" + repo_description_href
 
             # This retrieves the date in format "%Y-%m-%d %H:%M"
             tds = tr.select("td")
@@ -124,24 +127,16 @@ class StagitLister(StatelessLister[Repositories]):
             )
             return None
 
-        urls = [
-            a.attrs["href"]
-            for a in [
-                td.select_one("a")
-                for row in bs.select("tr.url")
-                for td in row.select("td")
-                if td.text.startswith("git clone")
-            ]
-            if a is not None
-        ]
+        for row in bs.select("tr.url"):
+            for td in row.select("td"):
+                if td.text.startswith("git clone"):
+                    if a := td.select_one("a[href]"):
+                        href = a.attrs["href"]
+                        assert isinstance(href, str)
+                        if urlparse(href).scheme in ("https", "http", "git"):
+                            return href
 
-        if not urls:
-            return None
-
-        urls = [url for url in urls if urlparse(url).scheme in ("https", "http", "git")]
-        if not urls:
-            return None
-        return urls[0]
+        return None
 
 
 def _parse_date(date: Optional[str]) -> Optional[datetime]:

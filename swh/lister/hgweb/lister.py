@@ -127,6 +127,7 @@ class HgwebLister(StatelessLister[Repositories]):
                     if not link:
                         continue
                     href = link.attrs["href"]
+                    assert isinstance(href, str)
                     if href.startswith("?sort="):
                         # skip headers
                         continue
@@ -164,6 +165,7 @@ class HgwebLister(StatelessLister[Repositories]):
                     if not link:
                         continue
                     href = link.attrs["href"]
+                    assert isinstance(href, str)
                     url = urljoin(self.url, href)
                     if url not in done:
                         todo.add(url)

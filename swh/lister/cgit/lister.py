@@ -1,4 +1,4 @@
-# Copyright (C) 2019-2024  The Software Heritage developers
+# Copyright (C) 2019-2026  The Software Heritage developers
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
 
@@ -103,7 +103,10 @@ class CGitLister(StatelessLister[Repositories]):
                 repo_url = None
                 git_url = None
 
-                base_url = urljoin(self.url, repository_link.attrs["href"]).strip("/")
+                repository_href = repository_link.get("href")
+                assert isinstance(repository_href, str)
+
+                base_url = urljoin(self.url, repository_href).strip("/")
                 if self.base_git_url:  # mapping provided
                     # computing git url
                     git_url = base_url.replace(self.url, self.base_git_url)
@@ -126,14 +129,19 @@ class CGitLister(StatelessLister[Repositories]):
             yield page_results
 
             try:
-                next_page_li = bs_idx.select_one(
-                    "ul.pager li:has(> a.current) + li:has(> a)"
-                )
-                next_page = (
-                    urljoin(self.url, next_page_li.select("a")[0].attrs["href"])
-                    if next_page_li
-                    else None
-                )
+                if (
+                    (
+                        next_page_li := bs_idx.select_one(
+                            "ul.pager li:has(> a.current) + li:has(> a)"
+                        )
+                    )
+                    and (next_page_a := next_page_li.select_one("a[href]"))
+                    and (next_page_href := next_page_a.attrs["href"])
+                ):
+                    assert isinstance(next_page_href, str)
+                    next_page = urljoin(self.url, next_page_href)
+                else:
+                    next_page = None
             except (AttributeError, KeyError):
                 # no pager, or no next page
                 next_page = None
@@ -175,6 +183,7 @@ class CGitLister(StatelessLister[Repositories]):
         summary_a = bs.select_one('table.tabs a:-soup-contains("summary")')
         if summary_a:
             summary_path = summary_a.attrs["href"]
+            assert isinstance(summary_path, str)
             summary_url = urljoin(repository_url, summary_path).strip("/")
 
             if summary_url != repository_url:
@@ -199,11 +208,13 @@ class CGitLister(StatelessLister[Repositories]):
 
         # look for the http/https url, if any, and use it as origin_url
         for url in urls:
+            assert isinstance(url, str)
             if urlparse(url).scheme in ("http", "https"):
                 origin_url = url
                 break
         else:
             # otherwise, choose the first one
+            assert isinstance(urls[0], str)
             origin_url = urls[0]
         return origin_url
 

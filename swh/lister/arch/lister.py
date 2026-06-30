@@ -1,4 +1,4 @@
-# Copyright (C) 2022-2024  The Software Heritage developers
+# Copyright (C) 2022-2026  The Software Heritage developers
 # See the AUTHORS file at the top-level directory of this distribution
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
@@ -137,8 +137,11 @@ class ArchLister(StatelessLister[ArchListerPage]):
         versions = []
 
         for link in links:
+            href = link.get("href")
+            assert isinstance(href, str)
+
             # filename displayed can be cropped if name is too long, get it from href instead
-            filename = unquote(link.attrs["href"])
+            filename = unquote(href)
 
             if filename.endswith((".tar.xz", ".tar.zst")):
                 # Extract arch from filename

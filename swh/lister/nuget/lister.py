@@ -1,4 +1,4 @@
-# Copyright (C) 2022-2023  The Software Heritage developers
+# Copyright (C) 2022-2026  The Software Heritage developers
 # See the AUTHORS file at the top-level directory of this distribution
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
@@ -151,6 +151,8 @@ class NugetLister(Lister[NugetListerState, NugetListerPage]):
                 vcs_url = repo.attrs["url"]
                 vcs_type = repo.attrs["type"]
                 last_update = iso8601.parse_date(elt["commitTimeStamp"])
+                assert isinstance(vcs_url, str)
+                assert isinstance(vcs_type, str)
                 yield ListedOrigin(
                     lister_id=self.lister_obj.id,
                     visit_type=vcs_type,

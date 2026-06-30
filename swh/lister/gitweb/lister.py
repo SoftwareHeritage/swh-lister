@@ -1,4 +1,4 @@
-# Copyright (C) 2023-2024  The Software Heritage developers
+# Copyright (C) 2023-2026  The Software Heritage developers
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
 
@@ -84,7 +84,10 @@ class GitwebLister(StatelessLister[Repositories]):
             if not link:
                 continue
 
-            repo_url = urljoin(self.url, link.attrs["href"]).strip("/")
+            repo_href = link.attrs["href"]
+            assert isinstance(repo_href, str)
+
+            repo_url = urljoin(self.url, repo_href).strip("/")
 
             # Skip this description page which is listed but won't yield any origins to list
             if repo_url.endswith("?o=descr"):
