@@ -3,8 +3,9 @@
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
 
-from importlib.metadata import PackageNotFoundError, entry_points, version
+from importlib.metadata import EntryPoint, PackageNotFoundError, entry_points, version
 import logging
+from typing import Dict
 
 logger = logging.getLogger(__name__)
 
@@ -19,14 +20,14 @@ USER_AGENT_TEMPLATE = (
     " (+https://www.softwareheritage.org/contact)"
 )
 
-LISTERS = {
-    entry_point.name.split(".", 1)[1]: entry_point
-    for entry_point in entry_points().select(group="swh.workers")
-    if entry_point.name.split(".", 1)[0] == "lister"
-}
 
+def get_lister_names() -> Dict[str, EntryPoint]:
+    return {
+        entry_point.name.split(".", 1)[1]: entry_point
+        for entry_point in entry_points().select(group="swh.workers")
+        if entry_point.name.split(".", 1)[0] == "lister"
+    }
 
-SUPPORTED_LISTERS = list(LISTERS)
 
 TARBALL_EXTENSIONS = [
     ".crate",
@@ -71,15 +72,16 @@ def get_lister(lister_name, db_url=None, **conf):
         insert minimum data function)
 
     """
-    if lister_name not in LISTERS:
+    lister_names = get_lister_names()
+    if lister_name not in lister_names:
         raise ValueError(
             "Invalid lister %s: only supported listers are %s"
-            % (lister_name, SUPPORTED_LISTERS)
+            % (lister_name, ", ".join(sorted(lister_names)))
         )
     if db_url:
         conf["lister"] = {"cls": "postgresql", "db": db_url}
 
-    registry_entry = LISTERS[lister_name].load()()
+    registry_entry = lister_names[lister_name].load()()
     lister_cls = registry_entry["lister"]
 
     from swh.lister import pattern

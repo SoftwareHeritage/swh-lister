@@ -1,4 +1,4 @@
-# Copyright (C) 2018-2024  The Software Heritage developers
+# Copyright (C) 2018-2026  The Software Heritage developers
 # See the AUTHORS file at the top-level directory of this distribution
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
@@ -14,7 +14,6 @@ import click
 
 from swh.core.cli import CONTEXT_SETTINGS
 from swh.core.cli import swh as swh_cli_group
-from swh.lister import SUPPORTED_LISTERS, get_lister
 
 logger = logging.getLogger(__name__)
 
@@ -44,24 +43,33 @@ def lister(ctx, config_file):
     ctx.obj["config"] = conf
 
 
-@lister.command(
-    name="run",
-    context_settings=CONTEXT_SETTINGS,
-    help="Trigger a full listing run for a particular forge "
-    "instance. The output of this listing results in "
-    '"oneshot" tasks in the scheduler db with a priority '
-    "defined by the user",
-)
+@lister.command(name="list", context_settings=CONTEXT_SETTINGS)
+@click.pass_context
+def list(ctx):
+    """List all supported listers"""
+    from swh.lister import get_lister_names
+
+    lister_names = "\n".join(sorted(get_lister_names()))
+    click.echo(f"Supported listers:\n\n{lister_names}")
+
+
+@lister.command(name="run", context_settings=CONTEXT_SETTINGS)
 @click.option(
     "--lister",
     "-l",
     help="Lister to run",
-    type=click.Choice(SUPPORTED_LISTERS),
     required=True,
 )
 @click.argument("options", nargs=-1)
 @click.pass_context
 def run(ctx, lister, options):
+    """Trigger a full listing run for a particular forge instance
+
+    To get the list of supported listers, use the following command:
+
+        $ swh lister list
+    """
+    from swh.lister import get_lister
     from swh.scheduler.cli.utils import parse_options
 
     config = deepcopy(ctx.obj["config"])

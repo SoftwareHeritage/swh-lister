@@ -5,7 +5,7 @@
 
 import pytest
 
-from swh.lister.cli import SUPPORTED_LISTERS, get_lister
+from swh.lister import get_lister, get_lister_names
 
 lister_args = {
     "cgit": {
@@ -81,7 +81,7 @@ def test_get_lister_wrong_input():
 def test_get_lister(swh_scheduler_config):
     """Instantiating a supported lister should be ok"""
 
-    for lister_name in SUPPORTED_LISTERS:
+    for lister_name in get_lister_names():
         lst = get_lister(
             lister_name,
             scheduler={"cls": "postgresql", **swh_scheduler_config},
