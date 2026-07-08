@@ -1,4 +1,4 @@
-# Copyright (C) 2022-2023  The Software Heritage developers
+# Copyright (C) 2022-2026  The Software Heritage developers
 # See the AUTHORS file at the top-level directory of this distribution
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
@@ -8,11 +8,10 @@ from datetime import datetime, timezone
 from itertools import product
 import logging
 from string import Template
-from typing import Any, Dict, Iterator, List, Optional, Set, Tuple
+from typing import Any, Dict, Iterator, List, Optional, Set, Tuple, TypedDict
 from urllib.parse import urljoin
 
 import repomd
-from typing_extensions import TypedDict
 
 from swh.lister.pattern import CredentialsType
 from swh.scheduler.interface import SchedulerInterface
