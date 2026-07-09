@@ -345,15 +345,11 @@ Misc files
 
 There are also a few files that need to be modified outside of the lister directory, namely:
 
-* :file:`/setup.py` to add your lister to the end of the list in the *setup* section::
+* :file:`/pyproject.toml` to add your lister to the swh.workers entry-points list sorted by name::
 
-    entry_points="""
-        [swh.cli.subcommands]
-        lister=swh.lister.cli
-        [swh.workers]
-        lister.bitbucket=swh.lister.bitbucket:register
-        lister.cgit=swh.lister.cgit:register
-        ..."""
+    [project.entry-points."swh.workers"]
+    ...
+    "lister.example" = "swh.lister.example:register"
 
 * :file:`/swh/lister/tests/test_cli.py` to get a default set of parameters in scheduler-related tests.
 * :file:`/CONTRIBUTORS` to add your name.
