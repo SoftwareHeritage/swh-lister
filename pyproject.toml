@@ -16,17 +16,10 @@ classifiers = [
 ]
 dynamic = ["version", "dependencies", "optional-dependencies"]
 
-[tool.setuptools.packages.find]
-include = ["swh.*"]
-
-[tool.setuptools.dynamic]
-dependencies = { file = ["requirements.txt", "requirements-swh.txt"] }
-
-[tool.setuptools.dynamic.optional-dependencies]
-testing = { file = ["requirements-test.txt"] }
 
 [project.entry-points."swh.cli.subcommands"]
 "swh.lister" = "swh.lister.cli"
+
 
 [project.entry-points."swh.workers"]
 "lister.arch" = "swh.lister.arch:register"
@@ -78,6 +71,7 @@ testing = { file = ["requirements-test.txt"] }
 "lister.stagit" = "swh.lister.stagit:register"
 "lister.tuleap" = "swh.lister.tuleap:register"
 
+
 [project.urls]
 "Homepage" = "https://gitlab.softwareheritage.org/swh/devel/swh-lister"
 "Bug Reports" = "https://gitlab.softwareheritage.org/swh/devel/swh-lister/-/issues"
@@ -86,11 +80,21 @@ testing = { file = ["requirements-test.txt"] }
 "Source" = "https://gitlab.softwareheritage.org/swh/devel/swh-lister.git"
 
 [build-system]
-requires = ["setuptools", "setuptools-scm"]
-build-backend = "setuptools.build_meta"
+requires = ["hatchling", "hatch-requirements-txt", "hatch-vcs"]
+build-backend = "hatchling.build"
 
-[tool.setuptools_scm]
-fallback_version = "0.0.1"
+[tool.hatch.metadata.hooks.requirements_txt]
+files = ["requirements.txt", "requirements-swh.txt"]
+
+[tool.hatch.metadata.hooks.requirements_txt.optional-dependencies]
+testing = ["requirements-test.txt"]
+
+[tool.hatch.build.targets.wheel]
+packages = ["swh"]
+
+[tool.hatch.version]
+source = "vcs"
+fallback-version = "0.0.1"
 
 [tool.black]
 target-version = ['py311', 'py312', 'py313']
