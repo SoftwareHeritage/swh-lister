@@ -6,14 +6,14 @@
 from copy import deepcopy
 import logging
 
-# WARNING: do not import unnecessary things here to keep cli startup time under
-# control
-import os
-
 import click
 
-from swh.core.cli import CONTEXT_SETTINGS
+from swh.core.cli import CONTEXT_SETTINGS, setup_config
 from swh.core.cli import swh as swh_cli_group
+
+# WARNING: do not import unnecessary things here to keep cli startup time under
+# control
+
 
 logger = logging.getLogger(__name__)
 
@@ -27,20 +27,13 @@ logger = logging.getLogger(__name__)
         exists=True,
         dir_okay=False,
     ),
+    deprecated=True,
     help="Configuration file.",
 )
 @click.pass_context
 def lister(ctx, config_file):
     """Software Heritage Lister tools."""
-    from swh.core import config
-
-    ctx.ensure_object(dict)
-
-    if not config_file:
-        config_file = os.environ.get("SWH_CONFIG_FILENAME")
-    conf = config.read(config_file)
-
-    ctx.obj["config"] = conf
+    setup_config(ctx, config_file)
 
 
 @lister.command(name="list", context_settings=CONTEXT_SETTINGS)
