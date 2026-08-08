@@ -109,8 +109,11 @@ class GitLabLister(Lister[GitLabListerState, PageResult]):
         ignored_project_prefixes: Optional[List[str]] = None,
     ):
         # FIXME: remove once the scheduler database is updated
-        if url is not None and url.endswith(f"/{self.API_BASE}"):
-            url = url.removesuffix(self.API_BASE)
+        if url is not None:
+            if url.endswith(f"/{self.API_BASE}"):
+                url = url.removesuffix(self.API_BASE)
+            elif url.endswith(f"/{self.API_BASE}/"):
+                url = url.removesuffix(f"{self.API_BASE}/")
 
         super().__init__(
             scheduler=scheduler,

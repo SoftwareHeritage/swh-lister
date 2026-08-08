@@ -81,8 +81,11 @@ class GogsLister(Lister[GogsListerState, GogsListerPage]):
         enable_origins: bool = True,
     ):
         # FIXME: remove once the scheduler database is updated
-        if url is not None and url.endswith(f"/{self.API_BASE}"):
-            url = url.removesuffix(self.API_BASE)
+        if url is not None:
+            if url.endswith(f"/{self.API_BASE}"):
+                url = url.removesuffix(self.API_BASE)
+            elif url.endswith(f"/{self.API_BASE}/"):
+                url = url.removesuffix(f"{self.API_BASE}/")
 
         super().__init__(
             scheduler=scheduler,

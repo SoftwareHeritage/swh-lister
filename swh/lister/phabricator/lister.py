@@ -44,8 +44,11 @@ class PhabricatorLister(StatelessLister[PageType]):
         enable_origins: bool = True,
     ):
         # FIXME: remove once the scheduler database is updated
-        if url is not None and url.endswith(f"/{self.API_REPOSITORY_PATH}"):
-            url = url.removesuffix(self.API_REPOSITORY_PATH)
+        if url is not None:
+            if url.endswith(f"/{self.API_REPOSITORY_PATH}"):
+                url = url.removesuffix(self.API_REPOSITORY_PATH)
+            elif url.endswith(f"/{self.API_REPOSITORY_PATH}"):
+                url = url.removesuffix(f"{self.API_REPOSITORY_PATH}/")
 
         super().__init__(
             scheduler=scheduler,
