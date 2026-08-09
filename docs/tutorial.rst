@@ -360,12 +360,9 @@ There are also a few files that need to be modified outside of the lister direct
 Testing your lister
 -------------------
 
-When developing a new lister, it's important to test. For this, add the tests
-(check :file:`swh/lister/*/tests/`) and register the celery tasks in the main
-conftest.py (:file:`swh/lister/core/tests/conftest.py`).
-
-Another important step is to actually run it within the docker-dev
-(:ref:`run-lister-tutorial`).
+When developing a new lister, it's important to test.
+For this, add the tests (check :file:`swh/lister/*/tests/`) and
+run the tests within the docker-dev (:ref:`run-lister-tutorial`).
 
 More about listers
 ------------------
