@@ -1,4 +1,4 @@
-# Copyright (C) 2022-2025  The Software Heritage developers
+# Copyright (C) 2022-2026  The Software Heritage developers
 # See the AUTHORS file at the top-level directory of this distribution
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
@@ -21,7 +21,7 @@ logger = logging.getLogger(__name__)
 CpanListerPage = Set[str]
 
 
-def get_field_value(entry, field_name):
+def get_field_value(entry: Dict[str, Any], field_name: str) -> Optional[Any]:
     """
     Splits ``field_name`` on ``.``, and use it as path in the nested ``entry``
     dictionary. If a value does not exist, returns None.
@@ -43,7 +43,8 @@ def get_field_value(entry, field_name):
     field_value = field_value.get(fields[-1])
     # scrolled results might have field value in a list
     if isinstance(field_value, list):
-        field_value = field_value[0]
+        field_value = field_value[0] if field_value else None
+
     return field_value
 
 
@@ -111,9 +112,14 @@ class CpanLister(StatelessLister[CpanListerPage]):
         def process_authors_page(authors):
             for author in authors:
                 pauseid = get_field_value(author, "pauseid")
+                assert pauseid
                 name = get_field_value(author, "name")
+                assert name
                 email = get_field_value(author, "email")
-                self.author_fullname[pauseid] = f"{name} <{email}>"
+                fullname = name
+                if email:
+                    fullname += f" <{email}>"
+                self.author_fullname[pauseid] = fullname
 
         res = self.http_request(
             endpoint,
@@ -155,6 +161,13 @@ class CpanLister(StatelessLister[CpanListerPage]):
             module_size = get_field_value(entry, "stat.size")
             module_author = get_field_value(entry, "author")
             release_name = get_field_value(entry, "name")
+
+            assert module_name is not None
+            assert module_version is not None
+            assert release_name is not None
+            assert module_download_url is not None
+            assert module_author is not None
+            assert module_date is not None
 
             module_version = get_module_version(
                 module_name, module_version, release_name

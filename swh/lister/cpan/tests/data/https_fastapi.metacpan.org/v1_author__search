@@ -31,7 +31,7 @@
                 "_source": {
                     "asciiname": "",
                     "is_pause_custodial_account": false,
-                    "email": "kryde@cpan.org",
+                    "email": [],
                     "pauseid": "KRYDE",
                     "name": "Kevin Ryde",
                     "updated": "2024-10-01T17:41:11"
