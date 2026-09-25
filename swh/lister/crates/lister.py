@@ -1,4 +1,4 @@
-# Copyright (C) 2022-2025  The Software Heritage developers
+# Copyright (C) 2022-2026  The Software Heritage developers
 # See the AUTHORS file at the top-level directory of this distribution
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
@@ -176,7 +176,7 @@ class CratesLister(Lister[CratesListerState, CratesListerPage]):
         return dict(
             name=entry["name"],
             version=entry["version"],
-            checksum=entry["checksum"],
+            checksum=entry["tar_sha256"].removeprefix("\\x"),
             yanked=True if entry["yanked"] == "t" else False,
             crate_file=crate_file,
             filename=filename,
