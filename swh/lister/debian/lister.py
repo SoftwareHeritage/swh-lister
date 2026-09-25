@@ -1,4 +1,4 @@
-# Copyright (C) 2017-2023  The Software Heritage developers
+# Copyright (C) 2017-2026  The Software Heritage developers
 # See the AUTHORS file at the top-level directory of this distribution
 # License: GNU General Public License version 3, or any later version
 # See top-level LICENSE file for more information
@@ -199,7 +199,10 @@ class DebianLister(Lister[DebianListerState, DebianPageType]):
                 else:
                     sum_name = "md5sum"
                 if field_ in src_pkg:
-                    for entry in src_pkg[field_]:
+                    checksum_entries = src_pkg[field_]
+                    if not isinstance(checksum_entries, list):
+                        checksum_entries = [checksum_entries]
+                    for entry in checksum_entries:
                         if "name" not in entry:
                             continue
                         name = entry["name"]

@@ -18,6 +18,7 @@ Checksums-Sha256:
  9f2203314f0d076e24750fa29f38d1bb49d4124f3e8d8789b751c84473e57ead 2867 git_2.29.2-1.dsc
  f2fc436ebe657821a1360bcd1e5f4896049610082419143d60f6fa13c2f607c1 6187988 git_2.29.2.orig.tar.xz
  ad79671893257ca6205156c7c58d06e265d793f076c0efc8e225e832217f760a 663292 git_2.29.2-1.debian.tar.xz
+Checksums-Sha1:  81775cb4f8881a5d1aab181421e12dcbaebbb16f 2867 git_2.29.2-1.dsc
 Homepage: https://git-scm.com/
 Package-List:
  git deb vcs optional arch=any
