@@ -8,6 +8,7 @@ looseversion
 lxml
 mercurial
 ndjson
+pandas  # pyreadr needs either pandas or polars
 psycopg
 pyreadr
 python_debian
